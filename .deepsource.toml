@@ -7,7 +7,6 @@ exclude_patterns = [
   "assets/css/vendor/**",
   "vendor/**"
 ]
-
 [[analyzers]]
 name = "php"
 enabled = true

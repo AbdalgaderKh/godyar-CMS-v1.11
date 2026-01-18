@@ -1,5 +1,3 @@
-# أنشئ الملف الجديد
-cat > .deepsource.toml << 'EOF'
 version = 1
 
 exclude_patterns = [

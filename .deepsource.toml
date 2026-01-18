@@ -15,33 +15,3 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
-
-# احذف هذين السطرين - غير مدعومين في المجاني:
-# [[analyzers]]
-# name = "yaml"
-# enabled = true
-# 
-# [[analyzers]]
-# name = "json"
-# enabled = true
-
-name: Lint Configuration Files
-
-on: [push, pull_request]
-
-jobs:
-  lint-yaml:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Lint YAML files
-        run: |
-          yamllint . || true
-          
-  lint-json:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Validate JSON files
-        run: |
-          find . -name "*.json" -not -path "./node_modules/*" -exec python3 -m json.tool {} > /dev/null \;

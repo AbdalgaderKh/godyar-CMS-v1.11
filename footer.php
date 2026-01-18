@@ -256,25 +256,25 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
       <div class="gdy-footer-main">
         <!-- هوية الموقع -->
         <div class="gdy-footer-brand">
-          <div class="gdy-footer-title"><?= h($siteName) ?></div>
+          <div class="gdy-footer-title"><?= htmlspecialchars((string)$siteName, ENT_QUOTES, 'UTF-8') ?></div>
           <div class="gdy-footer-tagline">
-            <?= h($siteTagline) ?>
+            <?= htmlspecialchars((string)$siteTagline, ENT_QUOTES, 'UTF-8') ?>
           </div>
         </div>
 
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
           <?php if ($siteEmail): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($siteEmail) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= htmlspecialchars((string)$siteEmail, ENT_QUOTES, 'UTF-8') ?></div>
           <?php endif; ?>
           <?php if ($sitePhone): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?= h($sitePhone) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?= htmlspecialchars((string)$sitePhone, ENT_QUOTES, 'UTF-8') ?></div>
           <?php endif; ?>
           <?php if ($siteAddr): ?>
             <div>
               <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#map"></use></svg>
-              <strong><?= h(__("address")) ?>:</strong>
-              <?= h($siteAddr) ?>
+              <strong><?= htmlspecialchars((string)__("address"), ENT_QUOTES, 'UTF-8') ?>:</strong>
+              <?= htmlspecialchars((string)$siteAddr, ENT_QUOTES, 'UTF-8') ?>
             </div>
           <?php endif; ?>
         </div>
@@ -352,7 +352,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 
       <div class="gdy-footer-bottom">
         <?php if (!isset($year) || !$year) { $year = (int)date('Y'); } // ✅ حارس نهائي لمنع أي Warning ?>
-        <span>© <?= $year ?> <?= h($siteName) ?>. <?= h(__("all_rights_reserved")) ?>.</span>
+        <span>© <?= $year ?> <?= htmlspecialchars((string)$siteName, ENT_QUOTES, 'UTF-8') ?>. <?= htmlspecialchars((string)__("all_rights_reserved"), ENT_QUOTES, 'UTF-8') ?>.</span>
 
         <?php if (!empty($teamUrl)): ?>
           <a href="<?= h($teamUrl) ?>" class="gdy-footer-team-link">

@@ -25,7 +25,7 @@ try {
 		    }
     }
 } catch (Throwable $e) {
-    @error_log('[Trending] settings load error: ' . $e->getMessage());
+    error_log('[Trending] settings load error: ' . $e->getMessage());
 }
 
 function setting(array $settings, string $key, $default = ''): string {
@@ -54,7 +54,7 @@ try {
         $trendingNews = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 } catch (Throwable $e) {
-    @error_log('[Trending] trendingNews load error: ' . $e->getMessage());
+    error_log('[Trending] trendingNews load error: ' . $e->getMessage());
     $trendingNews = [];
 }
 

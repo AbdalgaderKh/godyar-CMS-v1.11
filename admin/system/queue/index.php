@@ -37,13 +37,19 @@ gdy_queue_register('news_scheduler', function (array $payload) use ($pdo): void 
     if (!$pdo) return;
 
     // publish due
-    $pdo->exec("UPDATE news SET status='published', published_at=NOW() \
-               WHERE status IN ('draft','pending') AND publish_at IS NOT NULL AND publish_at <= NOW() \
+    $pdo->exec("UPDATE news
+               SET status='published', published_at=NOW()
+               WHERE status IN ('draft','pending')
+                 AND publish_at IS NOT NULL
+                 AND publish_at <= NOW()
                  AND (deleted_at IS NULL)");
 
     // unpublish due
-    $pdo->exec("UPDATE news SET status='draft' \
-               WHERE status='published' AND unpublish_at IS NOT NULL AND unpublish_at <= NOW() \
+    $pdo->exec("UPDATE news
+               SET status='draft'
+               WHERE status='published'
+                 AND unpublish_at IS NOT NULL
+                 AND unpublish_at <= NOW()
                  AND (deleted_at IS NULL)");
 });
 

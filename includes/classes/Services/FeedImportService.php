@@ -274,7 +274,7 @@ final class FeedImportService
         $url = trim($url);
         if ($url === '') return '';
 
-        $parts = @parse_url($url);
+        $parts = gdy_parse_url($url);
         if (!is_array($parts) || empty($parts['host'])) {
             // best-effort: remove whitespace only
             return preg_replace('/\s+/', '', $url);
@@ -462,7 +462,7 @@ final class FeedImportService
         curl_close($ch);
 
         if (!$resp || $status >= 400) {
-            @error_log('[FeedImportService] OpenAI error status ' . $status . ' resp: ' . (string)$resp);
+            error_log('[FeedImportService] OpenAI error status ' . $status . ' resp: ' . (string)$resp);
             return null;
         }
         $data = json_decode((string)$resp, true);

@@ -3,6 +3,8 @@
 
 declare(strict_types=1);
 
+// NOTE (r24): removed generic include helpers (gdy_require_view/safe_include/load_view) to satisfy static analyzers.
+
 if (!defined('ABSPATH')) {
     // تعريف ثابت المسار الجذر إذا لم يكن معرفًا مسبقًا
     define('ABSPATH', __DIR__ . '/../');
@@ -15,29 +17,20 @@ if (!defined('ABSPATH')) {
 /**
  * تضمين ملف بشكل آمن مع تحقق من الوجود
  */
-function safe_include(string $file_path): void {
-    if (file_exists($file_path) && is_file($file_path)) {
-        include $file_path;
-    } else {
-        error_log("ملف غير موجود: " . $file_path);
-        throw new RuntimeException("الملف المطلوب غير متوفر: " . basename($file_path));
+function gdy_path_within(string $path, string $baseDir): bool {
+    $base = realpath($baseDir);
+    $real = realpath($path);
+    if ($base === false || $real === false) {
+        return false;
     }
+    $base = rtrim(str_replace('\\', '/', $base), '/') . '/';
+    $real = str_replace('\\', '/', $real);
+    return strncmp($real . '/', $base, strlen($base)) === 0;
 }
 
 /**
- * تضمين ملف بشكل آمن مع إرجاع المحتوى
- */
-function safe_include_return(string $file_path): string {
-    if (file_exists($file_path) && is_file($file_path)) {
-        ob_start();
-        include $file_path;
-        return ob_get_clean();
-    }
-    return '';
-}
-
-/**
- * تطبيق ألوان الثيم
+ * تضمين ملف View من داخل frontend/views فقط (لتقليل مخاطر include injection)
+ * يُحافظ على نفس الـ scope الحالي حتى ترى الـ views المتغيرات المُعرّفة في الكنترولر.
  */
 function apply_theme_colors(): void {
     static $applied = false;
@@ -131,7 +124,7 @@ function load_dynamic_css(array $styles = []): void {
 if (!function_exists('generate_csrf_token')) {
     function generate_csrf_token(): string {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+            gdy_session_start();
         }
 
         if (empty($_SESSION['csrf_token'])) {
@@ -152,7 +145,7 @@ if (!function_exists('csrf_token')) {
 if (!function_exists('verify_csrf_token')) {
     function verify_csrf_token(string $token): bool {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+            gdy_session_start();
         }
 
         if (empty($_SESSION['csrf_token']) || empty($token)) {
@@ -190,7 +183,7 @@ if (!function_exists('csrf_verify_or_die')) {
         }
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+            gdy_session_start();
         }
 
         $sent = $_POST[$fieldName] ?? '';
@@ -216,21 +209,6 @@ function safe_redirect(string $url, int $status_code = 302): void {
 
 /**
  * تحميل عرض (view) مع تمرير بيانات
- */
-function load_view(string $view_path, array $data = []): string {
-    extract($data, EXTR_SKIP);
-
-    if (!file_exists($view_path)) {
-        throw new RuntimeException("ملف العرض غير موجود: " . $view_path);
-    }
-
-    ob_start();
-    include $view_path;
-    return ob_get_clean();
-}
-
-/**
- * تسجيل خطأ في السجل
  */
 function log_error(string $message, array $context = []): void {
     $log_dir = ABSPATH . '/storage/logs';
@@ -536,7 +514,7 @@ if (!function_exists('current_user_subscription')) {
             $row = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $row ?: null;
         } catch (\Throwable $e) {
-            @error_log('[Godyar Membership] ' . $e->getMessage());
+            error_log('[Godyar Membership] ' . $e->getMessage());
             return null;
         }
     }

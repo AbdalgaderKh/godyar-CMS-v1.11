@@ -508,10 +508,11 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
 
             <span>المدة:</span>
             <select name="date">
-              <option value="any" <?= $dateFilter==='any'?'selected':'' ?>>أي وقت</option>
-              <option value="1d"  <?= $dateFilter==='1d'?'selected':''  ?>>آخر 24 ساعة</option>
-              <option value="7d"  <?= $dateFilter==='7d'?'selected':''  ?>>آخر 7 أيام</option>
-              <option value="30d" <?= $dateFilter==='30d'?'selected':'' ?>>آخر 30 يومًا</option>
+              <option value="any"  <?= $dateFilter==='any'?'selected':''  ?>>أي وقت</option>
+              <option value="24h"  <?= $dateFilter==='24h'?'selected':''  ?>>آخر 24 ساعة</option>
+              <option value="7d"   <?= $dateFilter==='7d'?'selected':''   ?>>آخر 7 أيام</option>
+              <option value="30d"  <?= $dateFilter==='30d'?'selected':''  ?>>آخر 30 يومًا</option>
+              <option value="year" <?= $dateFilter==='year'?'selected':'' ?>>آخر سنة</option>
             </select>
           </div>
         </form>

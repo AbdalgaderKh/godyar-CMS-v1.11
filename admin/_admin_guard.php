@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
+    gdy_session_start();
 }
 
 $loginUrl = '/admin/login';
@@ -77,7 +77,7 @@ try {
         }
     }
 } catch (Throwable $e) {
-    @error_log('[Admin Guard] ' . $e->getMessage());
+    error_log('[Admin Guard] ' . $e->getMessage());
     if (empty($_SESSION['user']['id'])) {
 		if (defined('GDY_ADMIN_JSON') && GDY_ADMIN_JSON) {
 			if (!headers_sent()) {
@@ -125,7 +125,7 @@ try {
                         echo json_encode(['ok' => false, 'msg' => 'session_expired']);
                         exit;
                     }
-                    @session_destroy();
+                    session_destroy();
                     header('Location: ' . $loginUrl . '?msg=session_expired');
                     exit;
                 }
@@ -133,7 +133,7 @@ try {
         }
     }
 } catch (Throwable $e) {
-    @error_log('[Admin Guard] session_version: ' . $e->getMessage());
+    error_log('[Admin Guard] session_version: ' . $e->getMessage());
 }
 
 
@@ -148,7 +148,7 @@ try {
 if (!function_exists('generate_csrf_token')) {
     function generate_csrf_token(): string {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+            gdy_session_start();
         }
         if (empty($_SESSION['_csrf_token'])) {
             try {
@@ -205,7 +205,7 @@ if (!function_exists('verify_csrf')) {
             return true;
         }
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
+            gdy_session_start();
         }
         // Allow token via POST field or X-CSRF-Token header (for fetch/AJAX).
         $sent = (string)($_POST[$fieldName] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''));

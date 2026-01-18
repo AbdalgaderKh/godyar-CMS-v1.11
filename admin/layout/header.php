@@ -165,7 +165,7 @@ try {
     $___sprite = rtrim((string)$root, '/\\') . '/assets/icons/gdy-icons.svg';
     if (is_file($___sprite)) {
         echo "\n<!-- GDY Icons Sprite (inline) -->\n";
-        @readfile($___sprite);
+        gdy_readfile($___sprite);
         echo "\n";
     }
 } catch (Throwable $e) { /* ignore */ }

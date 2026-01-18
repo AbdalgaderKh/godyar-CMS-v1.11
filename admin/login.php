@@ -26,7 +26,7 @@ if (!function_exists('h')) {
 
 // نتأكد أن الجلسة شغالة (غالبًا البوتستراب شغّلها، لكن للاحتياط)
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
+    gdy_session_start();
 }
 
 // توليد رمز CSRF بسيط
@@ -196,7 +196,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
     } catch (\Throwable $e) {
         $error = $e->getMessage();
-        @error_log('[Godyar Login] '.$e->getMessage());
+        error_log('[Godyar Login] '.$e->getMessage());
     
 
         // ✅ Audit log (failed login)

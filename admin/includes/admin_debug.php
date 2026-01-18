@@ -43,7 +43,13 @@ if (!function_exists('gdy_admin_capture_error')) {
             gdy_mkdir($dir, 0775, true);
         }
         $logFile = $dir . '/admin_debug.log';
-        gdy_file_put_contents($logFile, json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . PHP_EOL, FILE_APPEND);
+        $jsonFlags = JSON_UNESCAPED_UNICODE
+            | JSON_UNESCAPED_SLASHES
+            | JSON_HEX_TAG
+            | JSON_HEX_AMP
+            | JSON_HEX_APOS
+            | JSON_HEX_QUOT;
+        gdy_file_put_contents($logFile, json_encode($payload, $jsonFlags) . PHP_EOL, FILE_APPEND);
 
         // سجل PHP العام (دائمًا)
         error_log('[ADMIN_DEBUG] ' . $context . ' :: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());

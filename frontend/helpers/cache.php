@@ -10,7 +10,7 @@ class Cache {
   }
   public static function put(string $key, string $value) {
     $f = self::file($key);
-    if (!is_dir(dirname($f))) gdy_mkdir(dirname($f), 0775, true);
+    if (!is_dir(dirname($f))) gdy_mkdir(dirname($f), 0755, true);
     gdy_file_put_contents($f, $value);
   }
   public static function remember(string $key, int $ttl, callable $cb) {
@@ -18,5 +18,8 @@ class Cache {
     if ($v !== null) return $v;
     $v = (string)$cb(); self::put($key, $v); return $v;
   }
-  private static function file(string $key){ return rtrim(self::$dir,'/').'/'.md5($key).'.cache'; }
+  private static function file(string $key){
+    $hash = hash('sha256', $key);
+    return rtrim(self::$dir,'/').'/'.$hash.'.cache';
+  }
 }

@@ -70,7 +70,8 @@ if ($pdo instanceof PDO) {
             ORDER BY al.id DESC
             LIMIT 100
         ";
-        $stmt = $pdo->query($sql);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
         $rows = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
     } catch (Throwable $e) {
         $dbError = $e->getMessage();

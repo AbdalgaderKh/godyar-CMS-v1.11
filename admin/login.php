@@ -162,12 +162,18 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
             setcookie('admin_remember_email', $email, [
                 'expires'  => time() + (30 * 24 * 60 * 60),
                 'path'     => '/admin', // ✅ بدل /godyar/admin
-                'secure'   => !empty($_SERVER['HTTPS']),
-                'httponly' => false,
+	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+	            'httponly' => true,
                 'samesite' => 'Lax',
             ]);
         } else {
-            setcookie('admin_remember_email', '', time() - 3600, '/admin');
+	        setcookie('admin_remember_email', '', [
+	            'expires'  => time() - 3600,
+	            'path'     => '/admin',
+	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+	            'httponly' => true,
+	            'samesite' => 'Lax',
+	        ]);
         }
 
         // ملاحظة: بعض قواعد البيانات القديمة لا تحتوي عمود last_login.

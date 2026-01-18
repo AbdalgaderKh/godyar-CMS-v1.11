@@ -86,7 +86,8 @@ try {
             ORDER BY c.id DESC
         ";
 
-        $stmt = $pdo->query($sql);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         $total        = count($categories);

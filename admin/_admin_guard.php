@@ -155,7 +155,8 @@ if (!function_exists('generate_csrf_token')) {
                 $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
             } catch (Throwable $e) {
                 // fallback ضعيف لكن يمنع توقف الصفحة
-                $_SESSION['_csrf_token'] = sha1(uniqid('', true));
+                // توكن CSRF قوي
+                $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
             }
         }
         return (string)$_SESSION['_csrf_token'];

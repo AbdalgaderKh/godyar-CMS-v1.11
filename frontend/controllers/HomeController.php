@@ -107,8 +107,8 @@ final class HomeController
             $rows = $stmt ? $stmt->fetchAll(\PDO::FETCH_ASSOC) : [];
 
             $raw = [];
-            foreach ($rows as $row) {
-                $k = (string)($row['key'] ?? '');
+	            foreach ($rows as $row) {
+	                $k = (string)($row['setting_key'] ?? '');
                 if ($k === '') {
                     continue;
                 }

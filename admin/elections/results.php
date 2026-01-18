@@ -276,15 +276,15 @@ require __DIR__ . '/../layout/sidebar.php';
       </div>
       <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
         <a href="index.php" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')) ?>
         </a>
         <a href="parties.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_e36f3293e2', 'إدارة الأحزاب')) ?>
         </a>
         <a href="regions.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_97493e2ddc', 'إدارة الولايات / المناطق')) ?>
         </a>
       </div>
@@ -411,7 +411,7 @@ require __DIR__ . '/../layout/sidebar.php';
 
         <div class="card-footer d-flex justify-content-end">
           <button type="submit" class="btn btn-primary btn-sm">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_3e28a0143a', 'حفظ ملخص النتائج')) ?>
           </button>
         </div>

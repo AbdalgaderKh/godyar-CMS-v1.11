@@ -211,7 +211,7 @@ html, body{
                   value="1"
                   class="btn btn-outline-danger gdy-danger-outline"
                   data-confirm='هل أنت متأكد من مسح الكاش؟'>
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> مسح الكاش الآن
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> مسح الكاش الآن
           </button>
         </div>
       </div>

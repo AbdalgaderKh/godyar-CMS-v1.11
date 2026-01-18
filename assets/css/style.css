@@ -28,6 +28,7 @@ body {
 header, footer {
     background-color: var(--turquoise-60) !important;
     background: linear-gradient(135deg, var(--turquoise-60), rgba(64, 224, 208, 0.7));
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: none;
     box-shadow: 0 4px 15px rgba(64, 224, 208, 0.3);
@@ -58,6 +59,7 @@ header, footer {
 /* البلوكات والمكونات - 3.5% تركواز */
 .card, .block, .widget, .panel, .article, .news-item {
     background-color: var(--turquoise-3_5) !important;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     border: 1px solid var(--border-light);
     border-radius: 12px;
@@ -130,6 +132,7 @@ header, footer {
 /* تأثيرات خاصة */
 .glass-effect {
     background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }

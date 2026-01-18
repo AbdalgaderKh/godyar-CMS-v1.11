@@ -21,6 +21,27 @@ if (!function_exists('gdy_supported_langs')) {
     }
 }
 
+// RFC-compliant cookie helper (space-separated Expires) for strict linters
+if (!function_exists('gdy_set_cookie_rfc')) {
+    function gdy_set_cookie_rfc(string $name, string $value, int $ttlSeconds, string $path = '/', bool $secure = false, bool $httpOnly = true, string $sameSite = 'Lax'): void
+    {
+        if (headers_sent()) {
+            return;
+        }
+        $ttlSeconds = max(0, $ttlSeconds);
+        $expTs = time() + $ttlSeconds;
+        $expires = gmdate('D, d M Y H:i:s \G\M\T', $expTs);
+        $cookie = $name . '=' . rawurlencode($value)
+            . '; Expires=' . $expires
+            . '; Max-Age=' . $ttlSeconds
+            . '; Path=' . $path
+            . '; SameSite=' . $sameSite
+            . ($secure ? '; Secure' : '')
+            . ($httpOnly ? '; HttpOnly' : '');
+        header('Set-Cookie: ' . $cookie, false);
+    }
+}
+
 if (!function_exists('gdy_lang')) {
     function gdy_lang(): string
     {
@@ -41,13 +62,10 @@ if (!function_exists('gdy_lang')) {
             }
             $_SESSION['lang'] = $lang;
             if (!headers_sent()) {
-                @setcookie('lang', $lang, [
-                    'expires'  => time() + 60 * 60 * 24 * 30,
-                    'path'     => '/',
-                    'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
-                    'httponly' => false,
-                    'samesite' => 'Lax',
-                ]);
+	                $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+	                    || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+	                    || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+	                gdy_set_cookie_rfc('lang', $lang, 60 * 60 * 24 * 30, '/', $isSecure, true, 'Lax');
             }
         } else {
             if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['lang'])) {

@@ -15,7 +15,7 @@ try {
   $cnt=$pdo->prepare("SELECT COUNT(*) FROM news WHERE status='published' AND publish_at BETWEEN :s AND :e");
   $cnt->execute([':s'=>$start,':e'=>$end]); $total=(int)$cnt->fetchColumn();
   $lim=(int)$perPage; $off=(int)$offset;
-  $sql="SELECT id,slug,featured_image,title,excerpt,publish_at FROM news WHERE status='published' AND publish_at BETWEEN :s AND :e ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
+  $sql="SELECT id,slug,COALESCE(featured_image,image_path,image) AS featured_image,title,excerpt,publish_at FROM news WHERE status='published' AND publish_at BETWEEN :s AND :e ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
   // MySQL may not allow native prepared statements for LIMIT/OFFSET.
   // Enable emulation for this statement to ensure consistent behavior.
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);

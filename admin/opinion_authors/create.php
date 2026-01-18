@@ -204,7 +204,7 @@ $breadcrumbs = [
     __('t_7175662e6e', 'كتاب الرأي') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/opinion_authors/index.php',
     __('t_cca6ca220c', 'إضافة كاتب') => null,
 ];
-$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> العودة</a>');
+$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> العودة</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
@@ -261,7 +261,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -270,7 +270,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h($success) ?>
             <div class="mt-2">
                 <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?= h(__('t_1eab5c6c10', 'عرض الكل')) ?></a>
@@ -284,7 +284,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
@@ -432,17 +432,17 @@ require_once __DIR__ . '/../layout/app_start.php';
                         <!-- أزرار الحفظ -->
                         <div class="border-top pt-4">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_20dc5ae016', 'حفظ الكاتب')) ?>
                             </button>
                             
                             <button type="submit" name="save_and_edit" class="btn btn-outline-primary w-100 mb-2">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')) ?>
                             </button>
                             
                             <button type="submit" name="save_and_list" class="btn btn-outline-light w-100">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_e934ff7404', 'حفظ والعودة للقائمة')) ?>
                             </button>
                         </div>
@@ -453,7 +453,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-dark text-light">
                         <h6 class="card-title mb-0">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_fb8f3b0519', 'نصائح سريعة')) ?>
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_fb8f3b0519', 'نصائح سريعة')) ?>
                         </h6>
                     </div>
                     <div class="card-body">

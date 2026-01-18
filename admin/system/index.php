@@ -441,22 +441,22 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <ul class="nav nav-pills mb-3 system-tabs">
     <li class="nav-item">
       <a class="nav-link <?= $tab === 'health' ? 'active' : '' ?>" href="?tab=health">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_63163058e0', 'صحة النظام')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_63163058e0', 'صحة النظام')) ?>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link <?= $tab === 'cache' ? 'active' : '' ?>" href="?tab=cache">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_a10e27b470', 'الكاش')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a10e27b470', 'الكاش')) ?>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link <?= $tab === 'logs' ? 'active' : '' ?>" href="?tab=logs">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b66a827841', 'السجلات')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b66a827841', 'السجلات')) ?>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link <?= $tab === 'maintenance' ? 'active' : '' ?>" href="?tab=maintenance">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?>
       </a>
     </li>
   </ul>
@@ -472,7 +472,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-4">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_6d5c9702b3', 'ملخص سريع')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6d5c9702b3', 'ملخص سريع')) ?></h5>
             <ul class="list-unstyled mb-0 small">
               <li class="mb-1">
                 <span class="badge bg-success me-1"><?= $okCount ?></span> <?= h(__('t_921d6d0ec7', 'عناصر سليمة')) ?>
@@ -532,7 +532,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_cd55756f04', 'إعدادات الكاش')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_cd55756f04', 'إعدادات الكاش')) ?></h5>
             <dl class="row small mb-0">
               <dt class="col-4"><?= h(__('t_1253eb5642', 'الحالة')) ?></dt>
               <dd class="col-8">
@@ -582,7 +582,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_736b931c7c', 'إدارة الكاش')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_736b931c7c', 'إدارة الكاش')) ?></h5>
             <p class="small text-muted">
               <?= h(__('t_ddd3d2ec83', 'يمكنك مسح الكاش بالكامل لإجبار النظام على إعادة تحميل الإعدادات والبيانات من قاعدة البيانات.')) ?>
             </p>
@@ -592,7 +592,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <input type="hidden" name="action" value="flush_cache">
               <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
               <button type="submit" class="btn btn-danger">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_53081a962d', 'مسح الكاش الآن')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_53081a962d', 'مسح الكاش الآن')) ?>
               </button>
             </form>
           </div>
@@ -607,7 +607,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="card glass-card shadow-sm border-0">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title h6 mb-0">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_d5b113d588', 'admin_logs (آخر 100 سجل)')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d5b113d588', 'admin_logs (آخر 100 سجل)')) ?>
             </h5>
           </div>
           <div class="card-body p-0">
@@ -659,7 +659,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="card glass-card shadow-sm border-0">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title h6 mb-0">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_70b4ac3c65', 'ملف أخطاء PHP')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_70b4ac3c65', 'ملف أخطاء PHP')) ?>
             </h5>
             <span class="small text-muted"><?= h(basename($errorLogPath)) ?></span>
           </div>
@@ -689,7 +689,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></h5>
 
             <p class="small text-muted">
               <?= h(__('t_4aff301ed8', 'عند تفعيل وضع الصيانة، يمكن أن تقوم الواجهة الأمامية بعرض صفحة "الموقع تحت الصيانة"
@@ -713,14 +713,14 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
               <?php if ($maintenanceEnabled): ?>
                 <button type="submit" class="btn btn-success">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_1ab11f3d9d', 'إيقاف وضع الصيانة')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_1ab11f3d9d', 'إيقاف وضع الصيانة')) ?>
                 </button>
                 <div class="small text-muted mt-2">
                   <?= h(__('t_a35b25300b', 'عند الإيقاف سيتم')) ?> <strong><?= h(__('t_2caa9c447f', 'مسح الكاش')) ?></strong> <?= h(__('t_5c1edd5e9d', 'تلقائياً لضمان تحديث كل شيء.')) ?>
                 </div>
               <?php else: ?>
                 <button type="submit" class="btn btn-warning text-dark">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
                 </button>
                 <div class="small text-muted mt-2">
                   <?= h(__('t_a051961618', 'تحتاج إضافة فحص ملف')) ?> <code>storage/maintenance.flag</code> <?= h(__('t_e51e911768', 'في الواجهة الأمامية لعرض صفحة الصيانة.')) ?>
@@ -734,7 +734,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_ca1a330b25', 'ملاحظات فنية')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ca1a330b25', 'ملاحظات فنية')) ?></h5>
             <ul class="small text-muted mb-0">
               <li><?= h(__('t_452f8963f9', 'هذا التبويب لا يغيّر الكود الأمامي بنفسه، بل يضع/يحذف ملف علامة في')) ?>
                 <code>storage/maintenance.flag</code>.

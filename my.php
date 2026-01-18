@@ -78,7 +78,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
                   src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
                   class="card-img-top"
                   alt="<?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?>"
-                  onerror="this.style.display='none'">
+                  data-gdy-hide-onerror="1">
               </a>
             <?php endif; ?>
             <div class="card-body">

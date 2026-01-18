@@ -11,6 +11,23 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     @session_start();
 }
 
+if (!function_exists('gdy_set_cookie_rfc')) {
+    function gdy_set_cookie_rfc(string $name, string $value, int $ttlSeconds, string $path = '/', bool $secure = false, bool $httpOnly = true, string $sameSite = 'Lax'): void
+    {
+        if (headers_sent()) return;
+        $ttlSeconds = max(0, $ttlSeconds);
+        $expires = gmdate('D, d M Y H:i:s \G\M\T', time() + $ttlSeconds);
+        $cookie = $name . '=' . rawurlencode($value)
+            . '; Expires=' . $expires
+            . '; Max-Age=' . $ttlSeconds
+            . '; Path=' . $path
+            . '; SameSite=' . $sameSite
+            . ($secure ? '; Secure' : '')
+            . ($httpOnly ? '; HttpOnly' : '');
+        header('Set-Cookie: ' . $cookie, false);
+    }
+}
+
 /** Determine base path */
 $__ADMIN_DIR = __DIR__;
 $__LANG_DIR  = $__ADMIN_DIR . '/lang';
@@ -33,9 +50,13 @@ if (!function_exists('gdy_set_lang')) {
         $lang = strtolower(trim($lang));
         if (!in_array($lang, ['ar','en','fr'], true)) $lang = 'ar';
         $_SESSION['lang'] = $lang;
-        // cookie 30 days
-        @setcookie('gdy_lang', $lang, time() + 60*60*24*30, '/');
-        @setcookie('lang', $lang, time() + 60*60*24*30, '/', '', false, true);
+	        // cookie 30 days (RFC-compliant Expires + HttpOnly)
+	        $ttl = 60*60*24*30;
+	        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+	            || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+	            || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+	        gdy_set_cookie_rfc('gdy_lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
+	        gdy_set_cookie_rfc('lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
     }
 }
 

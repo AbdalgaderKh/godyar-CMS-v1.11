@@ -3,6 +3,31 @@
   function qs(sel, root){ return (root||document).querySelector(sel); }
   function qsa(sel, root){ return Array.from((root||document).querySelectorAll(sel)); }
 
+  // --- Helpers added (Phase MEDIUM) to avoid runtime ReferenceErrors ---
+  function clearChildren(el){
+    if(!el) return;
+    while(el.firstChild){ el.removeChild(el.firstChild); }
+  }
+
+  function extractReadableText(){
+    // Best-effort: extract readable text from the current news/article page.
+    const root = document.querySelector('article') ||
+                 document.querySelector('.news-body') ||
+                 document.querySelector('.post-body') ||
+                 document.querySelector('main') ||
+                 document.body;
+    return (root && root.textContent) ? String(root.textContent) : '';
+  }
+
+  function setPlayButton(btn, state){
+    if(!btn) return;
+    const s = String(state||'').toLowerCase();
+    btn.setAttribute('data-state', s);
+    btn.setAttribute('aria-pressed', s === 'pause' ? 'true' : 'false');
+    btn.setAttribute('aria-label', s === 'pause' ? 'Pause' : 'Play');
+  }
+
+
   const BASE = (window.GDY_BASE || '');
   function api(path){
     if(!BASE) return path;

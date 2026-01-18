@@ -100,7 +100,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
   <div class="card shadow-sm glass-card">
     <div class="card-header">
       <h2 class="h6 mb-0">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> آخر 100 عملية
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> آخر 100 عملية
       </h2>
     </div>
     <div class="card-body p-0">

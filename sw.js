@@ -1,5 +1,3 @@
-/* global clients, self */
-/* global clients */
 /* Godyar Service Worker: offline + push notifications */
 const CACHE_NAME = 'godyar-cache-v16';
 const OFFLINE_URL = '/offline.html';

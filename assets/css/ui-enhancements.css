@@ -676,3 +676,61 @@ body.theme-dark .gdy-btn-primary{
    ===================================== */
 .gdy-inline-flex-gap{display:inline-flex;align-items:center;gap:10px;}
 .hm-newsletter-msg{margin-top:8px;font-size:.95rem;}
+
+/* ================================
+   CSP-safe UI helpers (avoid style attributes)
+   ================================ */
+
+/* Generic hidden utility (use class instead of element.style.display) */
+.gdy-hidden{ display:none !important; }
+
+/* Toast (use class toggles instead of element.style.*) */
+#gdyToast.gdy-toast{
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 99999;
+  background: rgba(15,23,42,.92);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.25);
+  font-size: 14px;
+  max-width: calc(100vw - 32px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+#gdyToast.gdy-toast.gdy-show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Article font scaling via classes on <html> (instead of inline styles) */
+:root{ --gdy-article-font-size: 1.05rem; }
+.gdy-article-body{ font-size: var(--gdy-article-font-size); }
+
+html.gdy-font-80{  --gdy-article-font-size: .90rem; }
+html.gdy-font-90{  --gdy-article-font-size: .98rem; }
+html.gdy-font-100{ --gdy-article-font-size: 1.05rem; }
+html.gdy-font-110{ --gdy-article-font-size: 1.12rem; }
+html.gdy-font-120{ --gdy-article-font-size: 1.20rem; }
+html.gdy-font-130{ --gdy-article-font-size: 1.28rem; }
+html.gdy-font-140{ --gdy-article-font-size: 1.36rem; }
+html.gdy-font-150{ --gdy-article-font-size: 1.44rem; }
+html.gdy-font-160{ --gdy-article-font-size: 1.52rem; }
+
+/* Hint/status text (comments, forms) */
+.gdy-hint-ok{ color:#16a34a !important; }
+.gdy-hint-err{ color:#ef4444 !important; }
+
+/* Clipboard fallback textarea (kept off-screen without inline styles) */
+.gdy-copy-ta{
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}

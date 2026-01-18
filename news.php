@@ -582,28 +582,28 @@ endif;
             <div class="gdy-article-meta">
               <?php if ($catName): ?>
                 <span>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <?= h($catName) ?>
                 </span>
               <?php endif; ?>
 
               <?php if ($createdAt): ?>
                 <span>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <?= h(date('Y-m-d', strtotime((string)$createdAt))) ?>
                 </span>
               <?php endif; ?>
 
               <?php if (!empty($readingTime)): ?>
                 <span>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   قراءة تقريبية <?= (int)$readingTime ?> دقيقة
                 </span>
               <?php endif; ?>
 
               <?php if (!empty($views)): ?>
                 <span>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <?= number_format($views) ?> مشاهدة
                 </span>
               <?php endif; ?>
@@ -641,25 +641,25 @@ endif;
                   <div class="gdy-opinion-author-links">
                     <?php if (!empty($opinionAuthorEmail)): ?>
                       <a href="mailto:<?= h($opinionAuthorEmail) ?>" title="البريد الإلكتروني">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                     <?php endif; ?>
 
                     <?php if (!empty($opinionAuthorWebsite)): ?>
                       <a href="<?= h($opinionAuthorWebsite) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                       </a>
                     <?php endif; ?>
 
                     <?php if (!empty($opinionAuthorTwitter)): ?>
                       <a href="<?= h($opinionAuthorTwitter) ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#x"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                       </a>
                     <?php endif; ?>
 
                     <?php if (!empty($opinionAuthorFacebook)): ?>
                       <a href="<?= h($opinionAuthorFacebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#facebook"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                       </a>
                     <?php endif; ?>
                   </div>
@@ -669,7 +669,7 @@ endif;
 
             <div class="gdy-share-bar">
               <div>
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>شارك الخبر</span>
               </div>
               <div class="gdy-share-btns">

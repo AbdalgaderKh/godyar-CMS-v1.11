@@ -42,7 +42,7 @@
     if (attrs) {
       Object.keys(attrs).forEach(function (k) {
         if (k === "class") node.className = attrs[k];
-        else if (k === "html") node.textContent = String(attrs[k]);
+        else if (k === "text") node.textContent = String(attrs[k]);
         else node.setAttribute(k, attrs[k]);
       });
     }
@@ -69,7 +69,7 @@
     var pvB   = el("button", { type:"button", class: "gdy-attach-btn gdy-attach-preview-btn", "data-action":"preview" }, [document.createTextNode("معاينة")]);
 
     var header = el("div", { class:"gdy-attach-header" }, [
-      el("div", { class:"gdy-attach-title", html: "📎 " + String(name) }),
+      el("div", { class:"gdy-attach-title", text: "📎 " + String(name) }),
       el("div", { class:"gdy-attach-actions" }, [openA, dlA, pvB])
     ]);
 
@@ -125,7 +125,7 @@
     // Explain requirement for Office previews if not public
     if (isOffice(url)) {
       host.appendChild(officeIframe(url));
-      host.appendChild(el("div", { class:"gdy-embed-note", html:"ملاحظة: معاينة Word/Excel تتطلب رابط ملف عام يمكن الوصول له من الإنترنت." }));
+      host.appendChild(el("div", { class:"gdy-embed-note", text: "ملاحظة: معاينة Word/Excel تتطلب رابط ملف عام يمكن الوصول له من الإنترنت." }));
       return;
     }
 
@@ -134,7 +134,7 @@
       return;
     }
 
-    host.appendChild(el("div", { class:"gdy-embed-note", html:"لا توجد معاينة لهذا النوع من الملفات. استخدم فتح/تحميل." }));
+    host.appendChild(el("div", { class:"gdy-embed-note", text: "لا توجد معاينة لهذا النوع من الملفات. استخدم فتح/تحميل." }));
   }
 
   function convertExistingCards(scope) {

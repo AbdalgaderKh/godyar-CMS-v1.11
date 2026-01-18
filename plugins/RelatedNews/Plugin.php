@@ -97,7 +97,7 @@ return new class implements GodyarPluginInterface {
                     </h4>
                     <?php if (!empty($item['created_at'])): ?>
                       <div class="text-muted small mt-1">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <?= htmlspecialchars((string)$item['created_at'], ENT_QUOTES, 'UTF-8') ?>
                       </div>
                     <?php endif; ?>

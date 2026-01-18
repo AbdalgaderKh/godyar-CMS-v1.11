@@ -12,7 +12,7 @@ final class Upload {
     $finfo = @finfo_open(FILEINFO_MIME_TYPE);
     $mime  = $finfo ? finfo_file($finfo, $tmp) : 'application/octet-stream';
     $allowed = ['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp','image/gif'=>'gif'];
-    if (!isset($allowed[$mime])) return null;
+    if (isset($allowed[$mime]) === false) return null;
     $ext = $allowed[$mime];
     $destAbs = rtrim(ROOT_PATH, '/').$destRelDir;
     if (!is_dir($destAbs)) @mkdir($destAbs, 0775, true);

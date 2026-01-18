@@ -85,7 +85,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
     <div class="mt-3 mt-md-0">
       <a href="create.php" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
       </a>
     </div>
   </div>
@@ -137,7 +137,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                   <td><small><?= (int)$row['sort_order'] ?></small></td>
                   <td>
                     <a href="edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-primary">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                   </td>
                 </tr>

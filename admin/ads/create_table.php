@@ -218,7 +218,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_4143dddc4c', 'العودة للإعلانات')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_4143dddc4c', 'العودة للإعلانات')) ?>
             </a>
         </div>
     </div>
@@ -227,7 +227,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="col-lg-8">
             <?php if ($success): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_38f1d57b76', 'تم بنجاح!')) ?></strong> <?= h(__('t_194518b3c3', 'تم إنشاء جدول الإعلانات وإضافة بيانات تجريبية.')) ?>
                     <div class="mt-2">
                         <a href="index.php" class="btn btn-sm btn-success me-2"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></a>
@@ -239,7 +239,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
             <?php if ($error): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_5f1154f94b', 'خطأ:')) ?></strong> <?= h($error) ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -247,7 +247,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
             <?php if ($tableExists && !$success): ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_ad0dcb7f3a', 'معلومة:')) ?></strong> <?= h(__('t_09d28e81fb', 'جدول الإعلانات موجود مسبقاً في قاعدة البيانات.')) ?>
                     <div class="mt-2">
                         <a href="index.php" class="btn btn-sm btn-info"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></a>
@@ -262,7 +262,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <!-- حالة عدم وجود الجدول -->
                         <div class="text-center mb-4">
                             <div class="mb-4">
-                                <svg class="gdy-icon text-warning mb-3" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon text-warning mb-3" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                                 <h3 class="text-white"><?= h(__('t_82a2e9c562', 'جدول الإعلانات غير موجود')) ?></h3>
                                 <p class="text-muted"><?= h(__('t_464951158a', 'يجب إنشاء جدول الإعلانات في قاعدة البيانات لبدء استخدام النظام.')) ?></p>
                             </div>
@@ -273,7 +273,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="card h-100 bg-dark border-secondary">
                                     <div class="card-header">
                                         <h6 class="card-title mb-0 text-white">
-                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_2eed2c3977', 'المميزات المتوفرة')) ?>
+                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_2eed2c3977', 'المميزات المتوفرة')) ?>
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -311,7 +311,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="card h-100 bg-dark border-secondary">
                                     <div class="card-header">
                                         <h6 class="card-title mb-0 text-white">
-                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_aacca2e364', 'تفاصيل الجدول')) ?>
+                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_aacca2e364', 'تفاصيل الجدول')) ?>
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -338,7 +338,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                     <?= h(__('t_b0df462684', 'سيتم إنشاء الجدول مع بيانات تجريبية للبدء فوراً.')) ?>
                                 </p>
                                 <button type="submit" name="create_table" class="btn btn-primary btn-lg">
-                                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     <?= h(__('t_ac6f627f56', 'إنشاء جدول الإعلانات')) ?>
                                 </button>
                                 <div class="form-text mt-2">
@@ -351,7 +351,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <!-- حالة وجود الجدول -->
                         <div class="text-center py-4">
                             <div class="mb-4">
-                                <svg class="gdy-icon text-success mb-3" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon text-success mb-3" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
                                 <h3 class="text-white"><?= h(__('t_47b9a1019c', 'النظام جاهز للاستخدام')) ?></h3>
                                 <p class="text-muted"><?= h(__('t_9ea24d0763', 'جدول الإعلانات موجود ومهيأ في قاعدة البيانات.')) ?></p>
                             </div>
@@ -360,7 +360,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="col-md-4">
                                     <div class="card bg-dark border-success">
                                         <div class="card-body text-center">
-                                            <svg class="gdy-icon text-info mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon text-info mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             <h6 class="text-white"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></h6>
                                             <a href="index.php" class="btn btn-sm btn-outline-info w-100"><?= h(__('t_bf981a1299', 'استعراض')) ?></a>
                                         </div>
@@ -369,7 +369,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="col-md-4">
                                     <div class="card bg-dark border-primary">
                                         <div class="card-body text-center">
-                                            <svg class="gdy-icon text-primary mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon text-primary mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             <h6 class="text-white"><?= h(__('t_2d64a37cdd', 'إعلان جديد')) ?></h6>
                                             <a href="create.php" class="btn btn-sm btn-outline-primary w-100"><?= h(__('t_b9508aa2a9', 'إضافة')) ?></a>
                                         </div>
@@ -378,7 +378,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="col-md-4">
                                     <div class="card bg-dark border-warning">
                                         <div class="card-body text-center">
-                                            <svg class="gdy-icon text-warning mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon text-warning mb-2" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                                             <h6 class="text-white"><?= h(__('t_84b1e0c6ed', 'الإحصائيات')) ?></h6>
                                             <a href="index.php" class="btn btn-sm btn-outline-warning w-100"><?= h(__('t_6e63a5f0af', 'عرض')) ?></a>
                                         </div>
@@ -394,7 +394,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
             <div class="card shadow-sm mt-4 bg-dark border-secondary">
                 <div class="card-header">
                     <h6 class="card-title mb-0 text-white">
-                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_88d313a15e', 'معلومات تقنية')) ?>
+                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_88d313a15e', 'معلومات تقنية')) ?>
                     </h6>
                 </div>
                 <div class="card-body">

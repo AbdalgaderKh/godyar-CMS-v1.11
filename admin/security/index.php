@@ -48,7 +48,7 @@ if (is_file($sidebarPath)) {
     <div class="col-lg-6">
       <div class="card bg-dark border-secondary">
         <div class="card-header border-secondary text-white">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_afd4e6edb4', 'إعدادات الجلسات والكويكز')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_afd4e6edb4', 'إعدادات الجلسات والكويكز')) ?>
         </div>
         <div class="card-body small text-light">
           <ul class="mb-0">
@@ -63,7 +63,7 @@ if (is_file($sidebarPath)) {
     <div class="col-lg-6">
       <div class="card bg-dark border-secondary">
         <div class="card-header border-secondary text-white">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
         </div>
         <div class="card-body small text-light">
           <ul class="mb-0">

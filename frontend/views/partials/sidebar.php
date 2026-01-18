@@ -336,7 +336,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
     <div class="gdy-sidecard-inner">
       <div class="gdy-sidecard-header">
         <span class="gdy-sidecard-title">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إعلانات
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> إعلانات
         </span>
         <span class="gdy-sidecard-badge">إعلان</span>
       </div>
@@ -344,7 +344,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
         <?php if (empty($sidebarAds)): ?>
           <div class="gdy-mini-card">
             <div class="gdy-mini-rank">
-              <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div class="gdy-mini-content">
               <div class="gdy-mini-title">مساحة إعلانية</div>
@@ -357,7 +357,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
           <?php foreach ($sidebarAds as $ad): ?>
             <div class="gdy-mini-card">
               <div class="gdy-mini-rank">
-                <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </div>
               <div class="gdy-mini-content">
                 <?php if (!empty($ad['url'])): ?>
@@ -393,15 +393,15 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
   <div class="gdy-sidecard-inner">
     <div class="gdy-sidecard-header">
       <span class="gdy-sidecard-title">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg> <?= h(__('الأخبار')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> <?= h(__('الأخبار')) ?>
       </span>
 
       <div class="gdy-side-tabs" role="tablist" aria-label="Sidebar News Tabs">
         <button type="button" class="gdy-tab-btn is-active" role="tab" aria-selected="true" data-tab="mostread">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('شائع')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('شائع')) ?>
         </button>
         <button type="button" class="gdy-tab-btn" role="tab" aria-selected="false" data-tab="latest">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('الأحدث')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('الأحدث')) ?>
         </button>
       </div>
     </div>
@@ -428,11 +428,11 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
                 <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
                 <div class="gdy-mini-meta">
                   <?php if (!empty($item['published_at'])): ?>
-                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
                   <?php endif; ?>
                   <?php if (!empty($item['views'])): ?>
-                    — <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= (int)$item['views'] ?> <?= h(__('مشاهدة')) ?>
+                    — <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= (int)$item['views'] ?> <?= h(__('مشاهدة')) ?>
                   <?php endif; ?>
                 </div>
               </div>
@@ -460,7 +460,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
                 <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
                 <div class="gdy-mini-meta">
                   <?php if (!empty($item['published_at'])): ?>
-                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
                   <?php endif; ?>
                 </div>
@@ -479,7 +479,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
     <div class="gdy-sidecard-inner">
       <div class="gdy-sidecard-header">
         <span class="gdy-sidecard-title">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> كتّاب الموقع
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> كتّاب الموقع
         </span>
         <span class="gdy-sidecard-badge">رأي</span>
       </div>
@@ -503,14 +503,10 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
           <?php foreach ($sidebarAuthors as $a): ?>
             <?php $authorUrl = $a['social_website'] ?? $a['social_twitter'] ?? ''; ?>
             <div class="gdy-author-card">
-              <div class="gdy-author-avatar">
-                <?php if (!empty($a['avatar'])): ?>
-                  <img src="<?= h($a['avatar']) ?>" alt="<?= h($a['name'] ?? '') ?>"
-                       style="width:100%;height:100%;object-fit:cover;">
-                <?php else: ?>
-                  <?= h(mb_substr($a['name'] ?? '?', 0, 1, 'UTF-8')) ?>
-                <?php endif; ?>
-              </div>
+              <!-- Requirement: hide author image everywhere except the dedicated "كتّاب الرأي" section. -->
+              <div class="gdy-author-avatar" aria-hidden="true"><?php
+                echo h(mb_substr($a['name'] ?? '?', 0, 1, 'UTF-8'));
+              ?></div>
               <div class="flex-grow-1">
                 <?php if ($authorUrl): ?>
                   <a href="<?= h($authorUrl) ?>" target="_blank" rel="noopener"

@@ -115,7 +115,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
   <div class="page-head" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
     <h1 style="margin:0; font-size: clamp(20px, 4vw, 28px);"><?= h(__('categories')) ?></h1>
     <a class="btn btn-outline" href="<?= h($navBaseUrl) ?>" style="border-radius: 14px; padding: 10px 14px; text-decoration:none;">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg> <?= h(__('home')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?= h(__('home')) ?>
     </a>
   </div>
 
@@ -137,7 +137,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
         <section class="gdy-catcard" data-name="<?= h(mb_strtolower($cat['name'])) ?>" style="border:1px solid rgba(0,0,0,.10); border-radius: 18px; padding: 14px; background: rgba(255,255,255,.9);">
           <a href="<?= h($url) ?>" style="text-decoration:none;color:inherit;display:flex;align-items:center;justify-content:space-between;gap:10px;">
             <strong style="font-size: 16px;"><?= h($cat['name']) ?></strong>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </a>
 
           <?php if (!empty($cat['children'])): ?>

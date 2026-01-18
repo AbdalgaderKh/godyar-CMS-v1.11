@@ -193,7 +193,7 @@ $breadcrumbs = [
     __('t_3aa8578699', 'الرئيسية') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/index.php',
     __('t_06dd6988d0', 'مكتبة الوسائط') => null,
 ];
-$pageActionsHtml = __('t_01e4eb823f', '<a href="upload.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> رفع ملف جديد</a>');
+$pageActionsHtml = __('t_01e4eb823f', '<a href="upload.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> رفع ملف جديد</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 <style>
@@ -471,10 +471,10 @@ require_once __DIR__ . '/../layout/app_start.php';
 
             <div class="col-12 col-md-3 d-flex gap-2">
                 <button type="submit" class="btn btn-primary flex-fill">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?>
                 </button>
                 <a href="index.php" class="btn btn-outline-light flex-fill">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2cb0b85c56', 'إعادة تعيين')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2cb0b85c56', 'إعادة تعيين')) ?>
                 </a>
             </div>
         </form>
@@ -504,11 +504,11 @@ require_once __DIR__ . '/../layout/app_start.php';
     <div class="gdy-media-gallery">
         <?php if (empty($items)): ?>
             <div class="gdy-empty-state">
-                <div class="gdy-empty-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+                <div class="gdy-empty-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></div>
                 <h4 class="text-muted mb-3"><?= h(__('t_bec90f91b5', 'لا توجد ملفات في المكتبة')) ?></h4>
                 <p class="text-muted mb-4"><?= h(__('t_4665f3462c', 'ابدأ برفع أول ملف إلى مكتبة الوسائط')) ?></p>
                 <a href="upload.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_82db4f0e17', 'رفع أول ملف')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#upload"></use></svg><?= h(__('t_82db4f0e17', 'رفع أول ملف')) ?>
                 </a>
             </div>
         <?php else: ?>
@@ -530,24 +530,24 @@ require_once __DIR__ . '/../layout/app_start.php';
                                      alt="<?= h($fileName) ?>"
                                      class="gdy-media-image"
                                      loading="lazy"
-                                     onload="this.style.opacity='1';"
+                                     data-gdy-show-onload="1"
                                      data-img-error="hide-show-next-flex">
                                 <div class="gdy-media-icon" style="display:none;">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 </div>
                             <?php else: ?>
                                 <div class="gdy-media-icon">
-                                    <svg class="gdy-icon <?= h(getFileIcon($fileType)) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                    <svg class="gdy-icon <?= h(getFileIcon($fileType)) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 </div>
                             <?php endif; ?>
 
                             <div class="gdy-media-overlay">
                                 <div class="gdy-media-actions">
                                     <a href="<?= h($filePath) ?>" target="_blank" class="gdy-media-btn" title="<?= h(__('t_b66b00ea74', 'فتح/معاينة')) ?>">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </a>
                                     <button type="button" class="gdy-media-btn copy-link" data-url="<?= h($filePath) ?>" title="<?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?>">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                     <button type="button"
                                             class="gdy-media-btn preview-btn"
@@ -555,7 +555,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                                             data-type="<?= h($fileType) ?>"
                                             data-name="<?= h($fileName) ?>"
                                             title="<?= h(__('t_c9214ed951', 'معاينة مفصلة')) ?>">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                 </div>
                             </div>
@@ -569,7 +569,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                             </div>
                             <?php if ($created): ?>
                                 <div class="gdy-media-date">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($created) ?>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h($created) ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -584,7 +584,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                             class="btn btn-outline-light"
                             data-next-page="<?= (int)($page + 1) ?>"
                             data-total-pages="<?= (int)$totalPages ?>">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg> <?= h(__('t_407bdba777', 'المزيد')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg> <?= h(__('t_407bdba777', 'المزيد')) ?>
                     </button>
                 </div>
 
@@ -614,13 +614,13 @@ require_once __DIR__ . '/../layout/app_start.php';
 
                 <div class="mt-3">
                     <button class="btn btn-outline-light copy-full-link me-2" type="button">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?>
                     </button>
                     <button class="btn btn-outline-info copy-embed me-2" type="button">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_5268d50cb2', 'نسخ كود التضمين')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?= h(__('t_5268d50cb2', 'نسخ كود التضمين')) ?>
                     </button>
                     <a href="#" id="previewDownload" class="btn btn-primary" download>
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_969879d297', 'تحميل')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_969879d297', 'تحميل')) ?>
                     </a>
                 </div>
             </div>
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function flashBtn(btn, ok = true) {
         if (!btn) return;
         const original = btn.innerHTML;
-        btn.innerHTML = ok ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>';
+        btn.innerHTML = ok ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>';
         const oldBg = btn.style.background;
         btn.style.background = ok ? '#10b981' : '#ef4444';
         setTimeout(() => {
@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             html = `
                 <div class="text-center py-4">
-                    <svg class="gdy-icon text-muted mb-3" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon text-muted mb-3" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <p class="text-muted">لا يمكن معاينة هذا النوع من الملفات</p>
                     <a href="${escapeHtml(currentFileUrl)}" target="_blank" class="btn btn-outline-light">
                         فتح في نافذة جديدة
@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!currentFileUrl) return;
             navigator.clipboard.writeText(currentFileUrl).then(() => {
                 const original = this.innerHTML;
-                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>تم النسخ!';
+                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg>تم النسخ!';
                 this.classList.remove('btn-outline-light');
                 this.classList.add('btn-success');
                 setTimeout(() => {
@@ -751,7 +751,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             navigator.clipboard.writeText(embedCode).then(() => {
                 const original = this.innerHTML;
-                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>تم النسخ';
+                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg>تم النسخ';
                 this.classList.remove('btn-outline-info');
                 this.classList.add('btn-success');
                 setTimeout(() => {
@@ -780,11 +780,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const previewHtml = item.is_image
             ? `
                 <img src="${fileUrl}" alt="${fileName}" class="gdy-media-image" loading="lazy"
-                     onload="this.style.opacity='1';"
+                     data-gdy-show-onload="1"
                      data-img-error="hide-show-next-flex">
-                <div class="gdy-media-icon" style="display:none;"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+                <div class="gdy-media-icon" style="display:none;"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></div>
               `
-            : `<div class="gdy-media-icon"><svg class="gdy-icon ${icon}" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>`;
+            : `<div class="gdy-media-icon"><svg class="gdy-icon ${icon}" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></div>`;
 
         return `
             <div class="gdy-media-card" style="animation-delay:${(delayIndex * 0.04).toFixed(2)}s">
@@ -793,14 +793,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="gdy-media-overlay">
                         <div class="gdy-media-actions">
                             <a href="${fileUrl}" target="_blank" class="gdy-media-btn" title="فتح/معاينة">
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </a>
                             <button type="button" class="gdy-media-btn copy-link" data-url="${fileUrl}" title="نسخ الرابط">
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                             <button type="button" class="gdy-media-btn preview-btn"
                                     data-file="${fileUrl}" data-type="${fileType}" data-name="${fileName}" title="معاينة مفصلة">
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                         </div>
                     </div>
@@ -812,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="gdy-media-type">${typeLabel}</span>
                         <span class="gdy-media-size">${sizeLabel}</span>
                     </div>
-                    ${created ? `<div class="gdy-media-date"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ${created}</div>` : ``}
+                    ${created ? `<div class="gdy-media-date"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> ${created}</div>` : ``}
                 </div>
             </div>
         `;
@@ -826,7 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             this.classList.add('is-loading');
             const originalHtml = this.innerHTML;
-            this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> جاري التحميل...';
+            this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> جاري التحميل...';
 
             try {
                 const url = new URL(window.location.href);
@@ -860,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
             } catch (err) {
-                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> فشل التحميل';
+                this.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> فشل التحميل';
                 setTimeout(() => { this.innerHTML = originalHtml; }, 1500);
             } finally {
                 this.classList.remove('is-loading');

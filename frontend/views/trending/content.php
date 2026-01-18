@@ -1,5 +1,17 @@
 <?php
 // /godyar/frontend/views/trending/content.php
+
+// Normalize image paths so they work on nested routes.
+if (!function_exists('gdy_img_src')) {
+    function gdy_img_src(?string $src): string {
+        $src = trim((string)$src);
+        if ($src === '') return '';
+        if (preg_match('~^(https?:)?//~i', $src)) return $src;
+        if (str_starts_with($src, 'data:')) return $src;
+        if ($src[0] === '/') return $src;
+        return '/' . ltrim($src, '/');
+    }
+}
 ?>
 
 <section aria-label="الأخبار الأكثر تداولاً">
@@ -19,7 +31,7 @@
                 <article class="news-card fade-in">
                     <?php if (!empty($row['featured_image'])): ?>
                         <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
-                            <img src="<?= h($row['featured_image']) ?>" alt="<?= h($row['title']) ?>">
+	                            <img src="<?= htmlspecialchars(gdy_img_src($row['featured_image'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                         </a>
                     <?php endif; ?>
                     <div class="news-body">
@@ -43,11 +55,11 @@
                         <?php endif; ?>
                         <div class="news-meta">
                             <span>
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
                             </span>
                             <span>
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= (int)($row['views'] ?? 0) ?> مشاهدة
                             </span>
                         </div>
@@ -58,14 +70,14 @@
     <?php else: ?>
         <div class="side-widget" style="text-align: center; padding: 40px 20px;">
             <div class="side-widget-title">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>لا توجد أخبار شائعة بعد</span>
             </div>
             <p style="color: var(--text-muted); margin-top: 10px;">
                 سيتم عرض الأخبار الأكثر مشاهدة هنا تلقائياً بعد وجود زيارات كافية.
             </p>
             <a href="<?= h($baseUrl) ?>" class="btn-primary" style="margin-top: 15px;">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>العودة للرئيسية</span>
             </a>
         </div>

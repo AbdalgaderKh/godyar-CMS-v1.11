@@ -158,16 +158,16 @@ $slug = $page['slug'] ?? '';
       <!-- عمود المعلومات -->
       <div class="gdy-contact-info">
         <div class="gdy-contact-social">
-          <a href="#" aria-label="YouTube"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#youtube"></use></svg></a>
-          <a href="#" aria-label="Instagram"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#instagram"></use></svg></a>
-          <a href="#" aria-label="LinkedIn"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></a>
-          <a href="#" aria-label="Twitter"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#x"></use></svg></a>
-          <a href="#" aria-label="Facebook"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#facebook"></use></svg></a>
+          <a href="#" aria-label="YouTube"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#youtube"></use></svg></a>
+          <a href="#" aria-label="Instagram"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#instagram"></use></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></a>
+          <a href="#" aria-label="Twitter"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg></a>
+          <a href="#" aria-label="Facebook"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg></a>
         </div>
 
         <div class="gdy-contact-block">
           <div class="gdy-contact-block-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>العنوان</span>
           </div>
           <p>
@@ -178,7 +178,7 @@ $slug = $page['slug'] ?? '';
 
         <div class="gdy-contact-block">
           <div class="gdy-contact-block-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>اتصل معنا عبر</span>
           </div>
           <p>
@@ -189,7 +189,7 @@ $slug = $page['slug'] ?? '';
 
         <div class="gdy-contact-block">
           <div class="gdy-contact-block-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>أرسل بريدك الإلكتروني إلى</span>
           </div>
           <p>
@@ -241,18 +241,18 @@ $slug = $page['slug'] ?? '';
   <div class="fade-in">
     <div class="hero-card" style="margin-bottom:18px;">
       <div class="hero-badge">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <span><?= $pageNotFound ? 'صفحة غير موجودة' : 'صفحة ثابتة' ?></span>
       </div>
       <h1 class="hero-title"><?= h($page['title'] ?? '') ?></h1>
       <div class="hero-meta">
         <span>
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(date('Y-m-d', strtotime($page['created_at'] ?? 'now'))) ?>
         </span>
         <?php if (!empty($page['updated_at']) && $page['updated_at'] !== $page['created_at']): ?>
           <span>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             آخر تحديث: <?= h(date('Y-m-d', strtotime($page['updated_at']))) ?>
           </span>
         <?php endif; ?>

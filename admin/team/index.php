@@ -125,7 +125,7 @@ $breadcrumbs = [
     __('t_3aa8578699', 'الرئيسية') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/index.php',
     __('t_cd54bc26ba', 'فريق العمل') => null,
 ];
-$pageActionsHtml = __('t_0c546f14d9', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إضافة عضو</a>');
+$pageActionsHtml = __('t_0c546f14d9', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> إضافة عضو</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
@@ -250,7 +250,7 @@ require_once __DIR__ . '/../layout/app_start.php';
     </div>
     <div class="col-sm-3">
       <button type="submit" class="btn btn-sm btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_1f53aa4f51', 'تطبيق التصفية')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_1f53aa4f51', 'تطبيق التصفية')) ?>
       </button>
       <a href="index.php" class="btn btn-sm btn-outline-secondary">
         <?= h(__('t_6e666bfed1', 'تصفية جديدة')) ?>
@@ -300,11 +300,11 @@ require_once __DIR__ . '/../layout/app_start.php';
                   <td><?= (int)$r['sort_order'] ?></td>
                   <td>
                     <a href="edit.php?id=<?= (int)$r['id'] ?>" class="btn btn-xs btn-outline-info">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                     <a href="index.php?delete=<?= (int)$r['id'] ?>" class="btn btn-xs btn-outline-danger"
                        data-confirm='حذف هذا العضو؟'>
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                   </td>
                 </tr>

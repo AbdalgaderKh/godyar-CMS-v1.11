@@ -72,12 +72,17 @@ if (!headers_sent()) {
         || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
         || (!empty($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
 
-    // Lax to allow normal browsing; httponly false because UI may read it in JS
-    setcookie('lang', $lang, [
-        'expires'  => time() + 86400 * 365,
-        'path'     => '/',
-        'secure'   => $isSecure,
-        'httponly' => false,
-        'samesite' => 'Lax',
-    ]);
+	    // Use an RFC-compliant Expires format (space-separated) to satisfy strict linters,
+	    // and mark it HttpOnly to reduce XSS risk.
+	    $ttl = 86400 * 365;
+	    $expTs = time() + $ttl;
+	    $expires = gmdate('D, d M Y H:i:s \\G\\M\\T', $expTs);
+	    $cookie = 'lang=' . rawurlencode($lang)
+	        . '; Expires=' . $expires
+	        . '; Max-Age=' . $ttl
+	        . '; Path=/'
+	        . '; SameSite=Lax'
+	        . ($isSecure ? '; Secure' : '')
+	        . '; HttpOnly';
+	    header('Set-Cookie: ' . $cookie, false);
 }

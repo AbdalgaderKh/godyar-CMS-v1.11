@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // حتى لو لم يوجد المستخدم، نُرجع نفس الرسالة لتفادي كشف المستخدمين
-        if (!$user || (!empty($user['status']) && $user['status'] !== 'active')) {
+        if (($user === null || $user === false) || (!empty($user['status']) && $user['status'] !== 'active')) {
             $success = 'تم إرسال رابط استعادة كلمة المرور (إن كان البريد مسجلاً لدينا).';
         } else {
             // نتأكد أن جدول password_resets موجود
@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-card">
       <div class="text-center mb-3">
         <div class="auth-brand">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <h1 class="auth-title mb-1">استعادة كلمة المرور</h1>
         <p class="auth-subtitle mb-0">
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <button type="submit" class="btn btn-auth w-100 mb-2">
-          <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           إرسال رابط الاستعادة
         </button>
 

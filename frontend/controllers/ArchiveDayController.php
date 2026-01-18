@@ -76,7 +76,7 @@ try {
     // جلب المقالات (LIMIT/OFFSET ثابتان رقميًا لتفادي emulated prepares)
     $lim = (int)$perPage;
     $off = (int)$offset;
-    $sql = "SELECT id, slug, title, excerpt, featured_image, publish_at
+    $sql = "SELECT id, slug, title, excerpt, COALESCE(featured_image,image_path,image) AS featured_image, publish_at
             FROM news
             WHERE status='published' AND category_id = :cid
             ORDER BY publish_at DESC

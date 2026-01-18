@@ -263,13 +263,13 @@ html, body{
             </p>
         </div>
         <a href="index.php" class="btn btn-outline-light btn-sm">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
         </a>
     </div>
 
     <?php if ($errors): ?>
         <div class="alert alert-danger">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')) ?>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $e): ?>
@@ -281,7 +281,7 @@ html, body{
 
     <?php if ($success): ?>
         <div class="alert alert-success">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($success) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($success) ?>
         </div>
     <?php endif; ?>
 
@@ -291,7 +291,7 @@ html, body{
             <div class="card video-card border-0">
                 <div class="card-body">
                     <h2 class="h6 mb-3">
-                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <?= $editing ? __('t_3dc5805e67', 'تعديل الفيديو') : __('t_ae2be6f43c', 'إضافة فيديو جديد') ?>
                     </h2>
 
@@ -349,7 +349,7 @@ html, body{
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">
-                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             <?= $editing ? __('t_35f75fe13d', 'تحديث الفيديو') : __('t_417b6442fa', 'حفظ الفيديو') ?>
                         </button>
                     </form>
@@ -362,7 +362,7 @@ html, body{
             <div class="card video-card border-0">
                 <div class="card-body">
                     <h2 class="h6 mb-3">
-                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <?= h(__('t_569c2cfc5d', 'قائمة الفيديوهات')) ?>
                     </h2>
 
@@ -404,12 +404,12 @@ html, body{
                                         </td>
                                         <td class="text-center">
                                             <a href="?edit=<?= (int)$v['id'] ?>" class="btn btn-sm btn-outline-info me-1">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </a>
                                             <a href="?delete=<?= (int)$v['id'] ?>"
                                                class="btn btn-sm btn-outline-danger"
                                                data-confirm='هل أنت متأكد من حذف هذا الفيديو؟'>
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </a>
                                         </td>
                                     </tr>

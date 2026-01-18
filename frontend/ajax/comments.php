@@ -46,7 +46,7 @@ function require_csrf(): void {
     if (!function_exists('verify_csrf_token')) {
         // fallback: accept if session has csrf_token and matches
         $sess = (string)($_SESSION['csrf_token'] ?? '');
-        if ($sess === '' || $token === '' || !hash_equals($sess, $token)) {
+        if ($sess === '' || $token === '' || hash_equals($sess, $token) === false) {
             json_out(['ok'=>false,'error'=>'CSRF'], 403);
         }
         return;
@@ -98,7 +98,16 @@ if ($action === 'list') {
     $nameExpr = "c.name";
     $avatarExpr = "NULL";
     if ($hasUsers) {
-        $nameExpr = "COALESCE(u.display_name, u.username, c.name)";
+        // Schema-safe: لا نُشير إلى u.display_name إذا لم يكن العمود موجوداً
+        $coalesceParts = [];
+        if (in_array('display_name', $usersCols, true)) $coalesceParts[] = 'u.display_name';
+        if (in_array('name', $usersCols, true)) $coalesceParts[] = 'u.name';
+        if (in_array('full_name', $usersCols, true)) $coalesceParts[] = 'u.full_name';
+        if (in_array('fullName', $usersCols, true)) $coalesceParts[] = 'u.fullName';
+        $coalesceParts[] = 'u.username';
+        $coalesceParts[] = 'c.name';
+        $nameExpr = "COALESCE(" . implode(', ', $coalesceParts) . ")";
+
         if (in_array('avatar', $usersCols, true)) {
             $avatarExpr = "u.avatar";
         }

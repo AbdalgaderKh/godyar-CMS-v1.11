@@ -351,7 +351,7 @@ html, body{
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light btn-sm">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('t_5a029c710d', 'العودة لقائمة المستخدمين')) ?>
             </a>
         </div>
@@ -359,7 +359,7 @@ html, body{
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_56df17d34d', 'جدول المستخدمين غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -368,7 +368,7 @@ html, body{
 
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h($success) ?>
             <div class="mt-2">
                 <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?= h(__('t_30997e79c2', 'عرض جميع المستخدمين')) ?></a>
@@ -382,7 +382,7 @@ html, body{
 
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
@@ -449,11 +449,11 @@ html, body{
                                            minlength="8">
                                     <button type="button" class="btn btn-outline-secondary" 
                                             id="togglePassword">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                     <button type="button" class="btn btn-outline-primary" 
                                             id="generatePassword">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                 </div>
                                 <div class="password-strength" id="passwordStrength"></div>
@@ -534,17 +534,17 @@ html, body{
                         <!-- أزرار الحفظ -->
                         <div class="border-top pt-4">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_d876a2e373', 'حفظ المستخدم')) ?>
                             </button>
                             
                             <button type="submit" name="save_and_edit" class="btn btn-outline-primary w-100 mb-2">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')) ?>
                             </button>
                             
                             <button type="submit" name="save_and_list" class="btn btn-outline-light w-100">
-                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_e934ff7404', 'حفظ والعودة للقائمة')) ?>
                             </button>
                         </div>
@@ -555,7 +555,7 @@ html, body{
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-dark text-light">
                         <h6 class="card-title mb-0">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_8111cbf1a9', 'معلومات الأدوار')) ?>
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_8111cbf1a9', 'معلومات الأدوار')) ?>
                         </h6>
                     </div>
                     <div class="card-body">
@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
         passwordConfirm.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>';
+        this.innerHTML = type === 'password' ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>';
     });
 
     // توليد كلمة مرور عشوائية

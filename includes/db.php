@@ -7,7 +7,7 @@ use Godyar\DB;
  * Single source of truth for PDO.
  *
  * - Prefer using Godyar\DB::pdo() directly.
- * - Use gdy_pdo_safe() in legacy scripts that previously relied on ${'GLOBALS'}['pdo'].
+ * - Use gdy_pdo_safe() in legacy scripts that previously relied on $GLOBALS['pdo'].
  */
 
 if (!function_exists('gdy_pdo_safe')) {
@@ -39,13 +39,13 @@ if (!function_exists('gdy_pdo')) {
 
 if (!function_exists('gdy_register_global_pdo')) {
     /**
-     * Deprecated: populate ${'GLOBALS'}['pdo'] for legacy code.
+     * Deprecated: populate $GLOBALS['pdo'] for legacy code.
      *
      * Controlled by env LEGACY_GLOBAL_PDO (default: "1").
      */
     function gdy_register_global_pdo(): void
     {
-        if (isset(${'GLOBALS'}['pdo']) && ${'GLOBALS'}['pdo'] instanceof \PDO) {
+        if (isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof \PDO) {
             return;
         }
 
@@ -64,11 +64,11 @@ if (!function_exists('gdy_register_global_pdo')) {
             return;
         }
 
-        ${'GLOBALS'}['pdo'] = $pdo;
+        $GLOBALS['pdo'] = $pdo;
 
-        if (empty(${'GLOBALS'}['__godyar_warned_global_pdo'])) {
-            ${'GLOBALS'}['__godyar_warned_global_pdo'] = true;
-            @error_log('[DEPRECATED] $GLOBALS[\'pdo\'] is deprecated and used only for backward compatibility. Prefer Godyar\\DB::pdo() / gdy_pdo().');
+        if (empty($GLOBALS['__godyar_warned_global_pdo'])) {
+            $GLOBALS['__godyar_warned_global_pdo'] = true;
+            @error_log('[DEPRECATED] $GLOBALS[\'pdo\'] is enabled for backward compatibility. Prefer Godyar\\DB::pdo() / gdy_pdo().');
         }
     }
 }

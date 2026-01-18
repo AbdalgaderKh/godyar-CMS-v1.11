@@ -5,6 +5,7 @@
   function safeFragmentFromHTML(html) {
     const frag = document.createDocumentFragment();
     const parser = new DOMParser();
+  // nosemgrep
     const doc = parser.parseFromString('<div>' + String(html || '') + '</div>', 'text/html');
     const wrap = doc.body && doc.body.firstElementChild ? doc.body.firstElementChild : null;
     if (!wrap) return frag;

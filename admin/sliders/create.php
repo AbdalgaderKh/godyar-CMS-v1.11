@@ -103,14 +103,14 @@ require_once __DIR__ . '/../layout/sidebar.php';
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg><?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
             </a>
         </div>
     </div>
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_3b529cf8d7', 'جدول السلايدر غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_096b487b25', 'أنشئ الجدول أولاً')) ?></a>
         </div>
@@ -187,7 +187,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary w-100">
-                                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_915ff03e02', 'حفظ الشريحة')) ?>
+                                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#save"></use></svg><?= h(__('t_915ff03e02', 'حفظ الشريحة')) ?>
                                     </button>
                                 </div>
                             </div>

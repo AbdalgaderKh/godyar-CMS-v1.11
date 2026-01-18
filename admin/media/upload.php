@@ -342,15 +342,15 @@ html, body{
         </div>
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <a href="create_folders.php" class="btn btn-warning btn-sm">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_27dac8de6d', 'إنشاء المجلدات')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_27dac8de6d', 'إنشاء المجلدات')) ?>
             </a>
             <?php if (!$tableExists): ?>
                 <a href="../create_media_table.php" class="btn btn-warning btn-sm">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_bd67355239', 'إنشاء جدول الوسائط')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_bd67355239', 'إنشاء جدول الوسائط')) ?>
                 </a>
             <?php endif; ?>
             <a href="index.php" class="btn btn-outline-light btn-sm">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?>
             </a>
         </div>
     </div>
@@ -365,7 +365,7 @@ html, body{
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_97e2efe901', 'جدول الوسائط غير موجود. الملفات سيتم حفظها على السيرفر ولكن لن يتم تسجيلها في قاعدة البيانات.')) ?>
             <a href="../create_media_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -374,7 +374,7 @@ html, body{
 
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?>
             
             <?php if ($uploadedFile): ?>
@@ -414,7 +414,7 @@ html, body{
 
     <?php if (!empty($errors)): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
             <ul class="mb-0 mt-1">
                 <?php foreach ($errors as $err): ?>
@@ -430,7 +430,7 @@ html, body{
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-dark text-light">
                     <h5 class="card-title mb-0">
-                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_f2a2721bcb', 'رفع ملف جديد')) ?>
+                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_f2a2721bcb', 'رفع ملف جديد')) ?>
                     </h5>
                 </div>
                 <div class="card-body">
@@ -442,7 +442,7 @@ html, body{
                             <input type="file" name="file" class="form-control" id="fileInput" required 
                                    accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.mp4,.mp3">
                             <div class="form-text">
-                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 <?= h(__('t_8651df9d1e', 'الحد الأقصى لحجم الملف: 10MB. الأنواع المسموحة: 
                                 JPG, JPEG, PNG, GIF, PDF, DOC, DOCX, MP4, MP3')) ?>
                             </div>
@@ -456,7 +456,7 @@ html, body{
                         </div>
                         
                         <button type="submit" class="btn btn-primary w-100">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_17c92b3f36', 'رفع الملف')) ?>
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#upload"></use></svg><?= h(__('t_17c92b3f36', 'رفع الملف')) ?>
                         </button>
                     </form>
                 </div>
@@ -467,7 +467,7 @@ html, body{
             <div class="card shadow-sm">
                 <div class="card-header bg-dark text-light">
                     <h5 class="card-title mb-0">
-                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_7316dab3a1', 'معلومات الرفع')) ?>
+                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#upload"></use></svg><?= h(__('t_7316dab3a1', 'معلومات الرفع')) ?>
                     </h5>
                 </div>
                 <div class="card-body">
@@ -492,7 +492,7 @@ html, body{
                     
                     <?php if (!is_dir($uploadDir)): ?>
                         <div class="alert alert-danger small mb-0">
-                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             <strong><?= h(__('t_5f1154f94b', 'خطأ:')) ?></strong> <?= h(__('t_b3c0dc4a30', 'مجلد الرفع غير موجود.')) ?> 
                             <a href="create_folders.php" class="alert-link"><?= h(__('t_74748e3ab3', 'انقر هنا لإنشاء المجلدات')) ?></a>
                         </div>

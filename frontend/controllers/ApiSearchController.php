@@ -10,7 +10,7 @@ try {
   $cnt->execute([':q'=>$like]);
   $total = (int)$cnt->fetchColumn();
   $lim=(int)$perPage; $off=(int)$offset;
-  $sql = "SELECT slug,title,excerpt,featured_image,publish_at FROM news WHERE status='published' AND (title LIKE :q OR excerpt LIKE :q OR content LIKE :q) ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
+  $sql = "SELECT slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND (title LIKE :q OR excerpt LIKE :q OR content LIKE :q) ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
   $st = $pdo->prepare($sql);
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

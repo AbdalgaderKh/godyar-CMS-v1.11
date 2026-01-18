@@ -480,7 +480,7 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
         <form class="global-search-form" method="get" action="" id="globalSearchForm">
           <input type="text" name="q" value="<?= h($q) ?>" placeholder="اكتب كلمة البحث (مثال: اقتصاد، سياسة، من نحن...)">
           <button type="submit">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> بحث
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> بحث
           </button>
 
           <div class="engine-toggle w-100">
@@ -508,10 +508,11 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
 
             <span>المدة:</span>
             <select name="date">
-              <option value="any" <?= $dateFilter==='any'?'selected':'' ?>>أي وقت</option>
-              <option value="1d"  <?= $dateFilter==='1d'?'selected':''  ?>>آخر 24 ساعة</option>
-              <option value="7d"  <?= $dateFilter==='7d'?'selected':''  ?>>آخر 7 أيام</option>
-              <option value="30d" <?= $dateFilter==='30d'?'selected':'' ?>>آخر 30 يومًا</option>
+              <option value="any"  <?= $dateFilter==='any'?'selected':''  ?>>أي وقت</option>
+              <option value="24h"  <?= $dateFilter==='24h'?'selected':''  ?>>آخر 24 ساعة</option>
+              <option value="7d"   <?= $dateFilter==='7d'?'selected':''   ?>>آخر 7 أيام</option>
+              <option value="30d"  <?= $dateFilter==='30d'?'selected':''  ?>>آخر 30 يومًا</option>
+              <option value="year" <?= $dateFilter==='year'?'selected':'' ?>>آخر سنة</option>
             </select>
           </div>
         </form>
@@ -545,7 +546,7 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
 
         <?php if (($typeFilter === 'all' || $typeFilter === 'news') && !empty($newsResults)): ?>
           <h2 class="section-title">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg> أخبار
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg> أخبار
             <span class="count">(<?= (int)$counts['news'] ?> نتيجة تقريبًا)</span>
           </h2>
           <div class="grid">
@@ -568,9 +569,9 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
             ?>
             <a href="<?= h($url) ?>" class="card-news">
               <div class="card-meta">
-                <span><?= $date ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>'.h($date) : '' ?></span>
+                <span><?= $date ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>'.h($date) : '' ?></span>
                 <span class="badge-type">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>خبر
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>خبر
                 </span>
               </div>
               <h3 class="card-title"><?= highlight_term($title, $q) ?></h3>
@@ -586,7 +587,7 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
 
         <?php if (($typeFilter === 'all' || $typeFilter === 'pages') && !empty($pageResults)): ?>
           <h2 class="section-title">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> الصفحات الثابتة
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الصفحات الثابتة
             <span class="count">(<?= (int)$counts['pages'] ?> نتيجة تقريبًا)</span>
           </h2>
           <div class="grid">
@@ -609,11 +610,11 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
               <div class="card-meta">
                 <span>
                   <?php if ($upd): ?>
-                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(date('Y-m-d', strtotime($upd))) ?>
+                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(date('Y-m-d', strtotime($upd))) ?>
                   <?php endif; ?>
                 </span>
                 <span class="badge-type badge-type-page">
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>صفحة
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>صفحة
                 </span>
               </div>
               <h3 class="card-title"><?= highlight_term($title, $q) ?></h3>
@@ -629,7 +630,7 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
 
         <?php if (($typeFilter === 'all' || $typeFilter === 'categories') && !empty($catResults)): ?>
           <h2 class="section-title">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> الأقسام
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الأقسام
             <span class="count">(<?= (int)$counts['cats'] ?> نتيجة تقريبًا)</span>
           </h2>
           <div class="grid">
@@ -656,10 +657,10 @@ $totalAll = $counts['news'] + $counts['pages'] + $counts['cats'];
             <a href="<?= h($url) ?>" class="card-cat">
               <div class="card-meta">
                 <span class="badge-type badge-type-cat <?= h($badgeClass) ?>">
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($badgeText) ?>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($badgeText) ?>
                 </span>
                 <span class="text-muted small">
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($slugOrId) ?>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($slugOrId) ?>
                 </span>
               </div>
               <h3 class="card-title"><?= highlight_term($name, $q) ?></h3>

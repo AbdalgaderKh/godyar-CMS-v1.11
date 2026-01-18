@@ -215,7 +215,7 @@ if (!function_exists('gdy_trim_text')) {
 <div class="opinion-block">
     <div class="opinion-block-header">
         <div class="opinion-block-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>آراء وكتاب</span>
         </div>
     </div>
@@ -229,7 +229,7 @@ if (!function_exists('gdy_trim_text')) {
                             <img src="<?= htmlspecialchars($row['author_avatar'], ENT_QUOTES, 'UTF-8') ?>"
                                  alt="<?= htmlspecialchars($row['author_name'], ENT_QUOTES, 'UTF-8') ?>">
                         <?php } else { ?>
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                         <?php } ?>
                     </div>
                     <div class="opinion-author-info">
@@ -244,22 +244,22 @@ if (!function_exists('gdy_trim_text')) {
                         <div class="opinion-author-social">
                             <?php if (!empty($row['author_facebook'])) { ?>
                                 <a href="<?= htmlspecialchars($row['author_facebook'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="فيسبوك">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#facebook"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_email'])) { ?>
                                 <a href="mailto:<?= htmlspecialchars($row['author_email'], ENT_QUOTES, 'UTF-8') ?>" title="البريد الإلكتروني">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_website'])) { ?>
                                 <a href="<?= htmlspecialchars($row['author_website'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="الموقع الشخصي">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_twitter'])) { ?>
                                 <a href="<?= htmlspecialchars($row['author_twitter'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="تويتر">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#x"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                 </a>
                             <?php } ?>
                         </div>
@@ -285,11 +285,11 @@ if (!function_exists('gdy_trim_text')) {
 
                 <div class="opinion-article-meta">
                     <span>
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <?= htmlspecialchars(date('Y-m-d', strtotime((string)$row['published_at'])), ENT_QUOTES, 'UTF-8') ?>
                     </span>
                     <span>
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         قراءة المقال
                     </span>
                 </div>

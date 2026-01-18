@@ -281,7 +281,9 @@ try {
                         // IN placeholders
                         $in = implode(',', array_fill(0, count($tagIds), '?'));
                         $sql = "
-                            SELECT n.id, n.title, n.slug, n.published_at, n.featured_image, n.excerpt,
+	                            SELECT n.id, n.title, n.slug, n.published_at,
+	                                   COALESCE(n.featured_image, n.image_path, n.image) AS featured_image,
+	                                   n.excerpt,
                                    COUNT(*) AS match_score
                             FROM news n
                             INNER JOIN news_tags nt ON nt.news_id = n.id
@@ -304,7 +306,9 @@ try {
                     if (count($related) < $limit && !empty($newsRow['category_id'])) {
                         $need = $limit - count($related);
                         $sql = "
-                            SELECT id, title, slug, published_at, featured_image, excerpt
+	                            SELECT id, title, slug, published_at,
+	                                   COALESCE(featured_image, image_path, image) AS featured_image,
+	                                   excerpt
                             FROM news
                             WHERE status = 'published'
                               AND category_id = :cid
@@ -354,7 +358,9 @@ try {
                                 $params[$k] = '%' . $w . '%';
                             }
                             $sql = "
-                                SELECT id, title, slug, published_at, featured_image, excerpt
+	                                SELECT id, title, slug, published_at,
+	                                       COALESCE(featured_image, image_path, image) AS featured_image,
+	                                       excerpt
                                 FROM news
                                 WHERE status = 'published'
                                   AND id != :id
@@ -383,7 +389,8 @@ try {
                 // أحدث الأخبار
                 $latestNews = [];
                 $stmtLatest = $pdo->query("
-                    SELECT id, title, slug, published_at, featured_image
+	                    SELECT id, title, slug, published_at,
+	                           COALESCE(featured_image, image_path, image) AS featured_image
                     FROM news
                     WHERE status = 'published'
                     ORDER BY published_at DESC
@@ -394,7 +401,8 @@ try {
                 // أكثر الأخبار قراءة
                 $mostReadNews = [];
                 $stmtMostRead = $pdo->query("
-                    SELECT id, title, slug, published_at, views, featured_image
+	                    SELECT id, title, slug, published_at, views,
+	                           COALESCE(featured_image, image_path, image) AS featured_image
                     FROM news
                     WHERE status = 'published'
                     ORDER BY views DESC, published_at DESC
@@ -469,7 +477,9 @@ try {
                 // أخبار ذات صلة
                 if (!empty($news['category_id'])) {
                     $stmtRel = $pdo->prepare("
-                        SELECT id, title, slug, published_at, featured_image, excerpt
+	                        SELECT id, title, slug, published_at,
+	                               COALESCE(featured_image, image_path, image) AS featured_image,
+	                               excerpt
                         FROM news
                         WHERE category_id = :cid
                           AND id != :id
@@ -485,7 +495,8 @@ try {
 
                 // أحدث الأخبار
                 $stmtLatest = $pdo->query("
-                    SELECT id, title, slug, published_at, featured_image
+	                    SELECT id, title, slug, published_at,
+	                           COALESCE(featured_image, image_path, image) AS featured_image
                     FROM news
                     WHERE status = 'published'
                     ORDER BY published_at DESC
@@ -495,7 +506,8 @@ try {
 
                 // أكثر الأخبار قراءة
                 $stmtMostRead = $pdo->query("
-                    SELECT id, title, slug, published_at, views, featured_image
+	                    SELECT id, title, slug, published_at, views,
+	                           COALESCE(featured_image, image_path, image) AS featured_image
                     FROM news
                     WHERE status = 'published'
                     ORDER BY views DESC, published_at DESC

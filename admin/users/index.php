@@ -401,7 +401,7 @@ html, body{
         </div>
         <div class="mt-3 mt-md-0">
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg> <?= h(__('t_480d828737', 'إضافة مستخدم جديد')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h(__('t_480d828737', 'إضافة مستخدم جديد')) ?>
             </a>
         </div>
     </div>
@@ -461,7 +461,7 @@ html, body{
             </div>
             <div class="col-12 col-md-2">
                 <button type="submit" class="btn btn-primary w-100">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(__('t_abe3151c63', 'تطبيق')) ?>
                 </button>
             </div>
@@ -477,7 +477,7 @@ html, body{
         <?php if ($role || $status || $q): ?>
             <div class="mt-3">
                 <a href="index.php" class="btn btn-outline-light btn-sm">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(__('t_abcc7085f3', 'إعادة تعيين الفلتر')) ?>
                 </a>
                 <span class="text-muted small ms-2">
@@ -492,12 +492,12 @@ html, body{
         <?php if (empty($users)): ?>
             <div class="gdy-empty-state">
                 <div class="gdy-empty-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <h4 class="text-muted mb-3"><?= h(__('t_d0852a495b', 'لا توجد مستخدمين')) ?></h4>
                 <p class="text-muted mb-4"><?= h(__('t_aa99d4b434', 'ابدأ بإضافة أول مستخدم إلى النظام')) ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg><?= h(__('t_9e922cf9b6', 'إضافة أول مستخدم')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#user"></use></svg><?= h(__('t_9e922cf9b6', 'إضافة أول مستخدم')) ?>
                 </a>
             </div>
         <?php else: ?>
@@ -509,14 +509,14 @@ html, body{
                             <div class="gdy-user-avatar">
                                 <!-- يمكن إضافة صورة المستخدم هنا -->
                                 <div class="text-muted w-100 h-100 d-flex align-items-center justify-content-center">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                 </div>
                                 <div class="gdy-user-overlay">
                                     <div class="gdy-user-actions">
                                         <a href="edit.php?id=<?= $user['id'] ?>" 
                                            class="gdy-user-btn"
                                            title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <?php if ($user['id'] !== ($currentUser['id'] ?? 0)): ?>
                                             <button class="gdy-user-btn toggle-status" 
@@ -524,17 +524,17 @@ html, body{
                                                     data-status="<?= $user['status'] ?>"
                                                     data-username="<?= h($user['username']) ?>"
                                                     title="<?= $user['status'] === 'active' ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
-                                                <svg class="gdy-icon $user['status'] === 'active' ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon $user['status'] === 'active' ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                             <button class="gdy-user-btn delete-user" 
                                                     data-id="<?= $user['id'] ?>"
                                                     data-username="<?= h($user['username']) ?>"
                                                     title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         <?php else: ?>
                                             <span class="gdy-user-btn" title="<?= h(__('t_2f03db59ec', 'لا يمكن تعديل حسابك')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                             </span>
                                         <?php endif; ?>
                                     </div>
@@ -555,11 +555,11 @@ html, body{
                                 
                                 <div class="gdy-user-meta">
                                     <span class="gdy-user-role">
-                                        <svg class="gdy-icon <?= $roles[$user['role']]['icon'] ?? 'fa-user' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                                        <svg class="gdy-icon <?= $roles[$user['role']]['icon'] ?? 'fa-user' ?>" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                         <?= h($roles[$user['role']]['label'] ?? $user['role']) ?>
                                     </span>
                                     <span class="gdy-user-status <?= $user['status'] ?>">
-                                        <svg class="gdy-icon <?= $statuses[$user['status']]['icon'] ?? 'fa-circle' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon <?= $statuses[$user['status']]['icon'] ?? 'fa-circle' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         <?= h($statuses[$user['status']]['label'] ?? $user['status']) ?>
                                     </span>
                                 </div>

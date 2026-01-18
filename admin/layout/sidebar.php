@@ -154,7 +154,7 @@ if ($menuCount < 5) {
     <header class="admin-sidebar__header">
       <div class="admin-sidebar__brand">
         <div class="admin-sidebar__logo" aria-hidden="true">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
         </div>
         <div class="admin-sidebar__brand-text">
           <div class="admin-sidebar__title">Godyar News</div>
@@ -162,14 +162,14 @@ if ($menuCount < 5) {
         </div>
       </div>
       <button class="admin-sidebar__toggle" type="button" id="sidebarToggle" aria-label="<?= h(__("toggle_sidebar")) ?>">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#menu"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#menu"></use></svg>
       </button>
     </header>
 
     <div class="admin-sidebar__search-wrapper">
       <div class="admin-sidebar__search">
         <input id="sidebarSearch" class="admin-sidebar__search-input" type="search" placeholder="<?= h(__("search_menus")) ?>" autocomplete="off" />
-        <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg>
+        <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
         <div id="sidebarSearchResults" class="admin-sidebar__search-results" role="listbox" aria-label="<?= h(__("search_results")) ?>"></div>
       </div>
     </div>
@@ -177,15 +177,15 @@ if ($menuCount < 5) {
     <?php if (!$isWriter): ?>
       <div class="admin-sidebar__quick" aria-label="<?= h(__("quick_stats")) ?>">
         <div class="admin-sidebar__quick-item" title="<?= h(__("comments")) ?>">
-          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg></div>
           <div class="admin-sidebar__quick-value"><?= (int)($quickStats['comments'] ?? 0) ?></div>
         </div>
         <div class="admin-sidebar__quick-item" title="<?= h(__("users")) ?>">
-          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#users"></use></svg></div>
           <div class="admin-sidebar__quick-value"><?= (int)($quickStats['users'] ?? 0) ?></div>
         </div>
         <div class="admin-sidebar__quick-item" title="<?= h(__("news")) ?>">
-          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg></div>
+          <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
           <div class="admin-sidebar__quick-value"><?= (int)($quickStats['posts'] ?? 0) ?></div>
         </div>
       </div>
@@ -212,13 +212,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card" data-search="<?= h($label) ?>">
           <a class="admin-sidebar__link" href="<?= h($href) ?>">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon h($icon) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#<?= h($icon) ?>"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h($label) ?></div>
                 <?php if ($sub !== ''): ?><div class="admin-sidebar__link-sub"><?= h($sub) ?></div><?php endif; ?>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
       <?php endforeach; ?>
@@ -233,13 +233,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'dashboard' ? 'is-active' : '' ?>" data-search="الرئيسية لوحة التحكم dashboard">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الرئيسية')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('نظرة عامة على أداء النظام')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
 
@@ -248,7 +248,7 @@ if ($menuCount < 5) {
 <div class="admin-sidebar__link-card <?= ($currentPage === 'search') ? 'is-active' : '' ?>" data-search="بحث search global">
   <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/search/index.php">
     <div class="admin-sidebar__link-main">
-      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg></div>
+      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg></div>
       <div class="admin-sidebar__link-text">
         <div class="admin-sidebar__link-label"><?= h(__('بحث شامل')) ?></div>
         <div class="admin-sidebar__link-sub"><?= h(__('ابحث داخل اللوحة')) ?></div>
@@ -260,7 +260,7 @@ if ($menuCount < 5) {
 <div class="admin-sidebar__link-card <?= ($currentPage === 'notifications') ? 'is-active' : '' ?>" data-search="إشعارات notifications">
   <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/notifications/index.php">
     <div class="admin-sidebar__link-main">
-      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#bell"></use></svg></div>
       <div class="admin-sidebar__link-text">
         <div class="admin-sidebar__link-label"><?= h(__('الإشعارات')) ?></div>
         <div class="admin-sidebar__link-sub"><?= h(__('مركز الإشعارات')) ?></div>
@@ -277,7 +277,7 @@ if ($menuCount < 5) {
 <div class="admin-sidebar__link-card <?= ($currentPage === 'analytics') ? 'is-active' : '' ?>" data-search="تحليلات analytics heatmap">
   <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/analytics/heatmap.php">
     <div class="admin-sidebar__link-main">
-      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#map"></use></svg></div>
       <div class="admin-sidebar__link-text">
         <div class="admin-sidebar__link-label"><?= h(__('خريطة النشاط')) ?></div>
         <div class="admin-sidebar__link-sub"><?= h(__('اليوم / الساعة')) ?></div>
@@ -289,7 +289,7 @@ if ($menuCount < 5) {
 <div class="admin-sidebar__link-card" data-search="تصدير export csv excel">
   <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/export.php?entity=news">
     <div class="admin-sidebar__link-main">
-      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+      <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg></div>
       <div class="admin-sidebar__link-text">
         <div class="admin-sidebar__link-label"><?= h(__('تصدير CSV')) ?></div>
         <div class="admin-sidebar__link-sub"><?= h(__('الأخبار (مثال)')) ?></div>
@@ -300,13 +300,13 @@ if ($menuCount < 5) {
 <div class="admin-sidebar__link-card <?= $currentPage === 'reports' ? 'is-active' : '' ?>" data-search="التقارير analytics احصائيات">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/reports/index.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chart"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#chart"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('التقارير')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('لوحة مؤشرات أداء')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
         <?php endif; ?>
@@ -344,7 +344,7 @@ if ($menuCount < 5) {
                   aria-expanded="<?= $newsMenuOpen ? 'true' : 'false' ?>"
                   aria-controls="gdyNewsMenu">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label">
                   <?= h(__('الأخبار')) ?>
@@ -357,7 +357,7 @@ if ($menuCount < 5) {
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة الأخبار والمقالات')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </button>
         </div>
 
@@ -367,13 +367,13 @@ if ($menuCount < 5) {
             <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= in_array($currentPage, ['news','posts'], true) ? 'is-active' : '' ?>" data-search="إدارة الأخبار posts news">
               <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/index.php">
                 <div class="admin-sidebar__link-main">
-                  <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg></div>
+                  <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('إدارة الأخبار')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('قائمة الأخبار والمسودات')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
               </a>
             </div>
 
@@ -383,39 +383,39 @@ if ($menuCount < 5) {
               <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='translations') ? 'is-active' : '' ?>" data-search="ترجمة ترجميات translations language">
                 <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/translations.php">
                   <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg></div>
+                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label"><?= h(__('ترجمات الأخبار')) ?></div>
                       <div class="admin-sidebar__link-sub"><?= h(__('إدارة نسخ اللغات للمقالات')) ?></div>
                     </div>
                   </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
 
               <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='polls') ? 'is-active' : '' ?>" data-search="استطلاع استطلاعات polls vote">
                 <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/polls.php">
                   <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#poll"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label"><?= h(__('استطلاعات الأخبار')) ?></div>
                       <div class="admin-sidebar__link-sub"><?= h(__('إنشاء وإدارة استطلاعات داخل المقال')) ?></div>
                     </div>
                   </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
 
               <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='questions') ? 'is-active' : '' ?>" data-search="اسأل الكاتب أسئلة questions qna">
                 <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/questions.php">
                   <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#question"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label"><?= h(__('أسئلة القرّاء')) ?></div>
                       <div class="admin-sidebar__link-sub"><?= h(__('مراجعة أسئلة اسأل الكاتب والرد عليها')) ?></div>
                     </div>
                   </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
             <?php endif; ?>
@@ -424,7 +424,7 @@ if ($menuCount < 5) {
               <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= in_array($currentPage, ['posts_review','news_review'], true) ? 'is-active' : '' ?>" data-search="مراجعة الأخبار pending review queue">
                 <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/review.php">
                   <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#check"></use></svg></div>
+                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#check"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label">
                         <?= h(__('مراجعة الأخبار')) ?>
@@ -435,7 +435,7 @@ if ($menuCount < 5) {
                       <div class="admin-sidebar__link-sub"><?= h(__('طابور المراجعة والاعتماد')) ?></div>
                     </div>
                   </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
             <?php endif; ?>
@@ -444,13 +444,13 @@ if ($menuCount < 5) {
               <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= $currentPage === 'feeds' ? 'is-active' : '' ?>" data-search="مصادر rss خلاصات feeds import">
                 <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/feeds/index.php">
                   <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#rss"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label"><?= h(__('مصادر RSS')) ?></div>
                       <div class="admin-sidebar__link-sub"><?= h(__('استيراد أخبار كمَسودّات')) ?></div>
                     </div>
                   </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
             <?php endif; ?>
@@ -461,65 +461,65 @@ if ($menuCount < 5) {
           <div class="admin-sidebar__link-card <?= $currentPage === 'categories' ? 'is-active' : '' ?>" data-search="التصنيفات الأقسام categories sections">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/categories/index.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#category"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#category"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('التصنيفات')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('إدارة التصنيفات والأقسام')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
           <div class="admin-sidebar__link-card <?= $currentPage === 'tags' ? 'is-active' : '' ?>" data-search="الوسوم tags">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/tags/index.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#tag"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#tag"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('الوسوم')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('إدارة وسوم الأخبار')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
           <div class="admin-sidebar__link-card <?= $currentPage === 'media' ? 'is-active' : '' ?>" data-search="مكتبة الوسائط media رفع صور">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/media/index.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#image"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#image"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('مكتبة الوسائط')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('رفع وإدارة الصور والملفات')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
           <div class="admin-sidebar__link-card <?= $currentPage === 'videos' ? 'is-active' : '' ?>" data-search="الفيديوهات المميزة فيديو featured videos">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/manage_videos.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#video"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#video"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('الفيديوهات المميزة')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('إدارة فيديوهات الصفحة الرئيسية')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
           <div class="admin-sidebar__link-card <?= $currentPage === 'comments' ? 'is-active' : '' ?>" data-search="التعليقات comments">
             <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/comments/index.php">
               <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#comment"></use></svg></div>
+                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg></div>
                 <div class="admin-sidebar__link-text">
                   <div class="admin-sidebar__link-label"><?= h(__('التعليقات')) ?></div>
                   <div class="admin-sidebar__link-sub"><?= h(__('مراجعة وإدارة التعليقات')) ?></div>
                 </div>
               </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
         <?php endif; ?>
@@ -533,13 +533,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'users' ? 'is-active' : '' ?>" data-search="المستخدمون users">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/users/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#users"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#users"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('المستخدمون')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة الحسابات والصلاحيات')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -550,13 +550,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'roles' ? 'is-active' : '' ?>" data-search="الأدوار roles">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/roles/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الأدوار')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('صلاحيات النظام')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -568,13 +568,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'opinion_authors' ? 'is-active' : '' ?>" data-search="كتاب الرأي opinion authors">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/opinion_authors/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#pen"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#pen"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('كتاب الرأي')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة كتّاب الرأي')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -583,13 +583,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'team' ? 'is-active' : '' ?>" data-search="فريق العمل team">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/team/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#team"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#team"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('فريق العمل')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة صفحة فريق العمل')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -598,13 +598,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'contact' ? 'is-active' : '' ?>" data-search="رسائل التواصل contact">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/contact/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#mail"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('رسائل التواصل')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('قراءة وإدارة رسائل الموقع')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -613,13 +613,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'ads' ? 'is-active' : '' ?>" data-search="الإعلانات ads">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/ads/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#ads"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#ads"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الإعلانات')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة أماكن الإعلانات')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -628,13 +628,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'glossary' ? 'is-active' : '' ?>" data-search="القاموس glossary">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/glossary/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#book"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#book"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('القاموس')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة المصطلحات')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -643,13 +643,13 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'plugins' ? 'is-active' : '' ?>" data-search="الإضافات plugins">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/plugins/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#plugin"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plugin"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الإضافات')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('تفعيل/تعطيل مكونات النظام')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
         <?php endif; ?>
@@ -659,26 +659,26 @@ if ($menuCount < 5) {
         <div class="admin-sidebar__link-card <?= $currentPage === 'settings' ? 'is-active' : '' ?>" data-search="الإعدادات settings">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/settings/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#settings"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الإعدادات')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إعدادات الموقع العامة')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
 
         <div class="admin-sidebar__link-card <?= $currentPage === 'elections' ? 'is-active' : '' ?>" data-search="الانتخابات elections">
           <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/elections/index.php">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#election"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#election"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label"><?= h(__('الانتخابات')) ?></div>
                 <div class="admin-sidebar__link-sub"><?= h(__('إدارة نظام الانتخابات')) ?></div>
               </div>
             </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
 
@@ -695,7 +695,7 @@ if ($menuCount < 5) {
           <?php if ($userAvatar): ?>
             <img src="<?= h($userAvatar) ?>" alt="صورة المستخدم" />
           <?php else: ?>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
           <?php endif; ?>
         </div>
         <div class="admin-sidebar__user-info">
@@ -705,13 +705,13 @@ if ($menuCount < 5) {
       </div>
       <div class="admin-sidebar__footer-actions">
         <a href="<?= h($siteBase) ?>/" class="admin-sidebar__action-btn" title="الموقع الرئيسي" aria-label="الانتقال للموقع الرئيسي" target="_blank" rel="noopener">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
         </a>
         <button class="admin-sidebar__action-btn" id="darkModeToggle" type="button" title="الوضع الليلي" aria-label="تبديل الوضع الليلي">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#moon"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg>
         </button>
         <a href="<?= h($adminBase) ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="تسجيل الخروج" aria-label="تسجيل الخروج">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#logout"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg>
         </a>
       </div>
     </footer>

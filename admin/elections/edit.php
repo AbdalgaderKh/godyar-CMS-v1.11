@@ -188,7 +188,7 @@ $pageTitle   = __('t_b9af904113', 'الانتخابات');
 $pageSubtitle= __('t_c948642bb2', 'تعديل تغطية انتخابية');
 $adminBase = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/admin'), '/');
 $breadcrumbs = [__('t_3aa8578699', 'الرئيسية') => $adminBase.'/index.php', __('t_b9af904113', 'الانتخابات') => null];
-$pageActionsHtml = __('t_21f17dfb3c', '<a href="index.php" class="btn btn-gdy btn-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> رجوع</a>');
+$pageActionsHtml = __('t_21f17dfb3c', '<a href="index.php" class="btn btn-gdy btn-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> رجوع</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 $csrf = generate_csrf_token();
 ?>
@@ -250,12 +250,12 @@ $csrf = generate_csrf_token();
           <a href="/elections.php?election=<?= rawurlencode($slug) ?>"
              target="_blank"
              class="btn btn-sm btn-outline-info">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_9c30b1d339', 'عرض التغطية على الموقع')) ?>
           </a>
         <?php endif; ?>
         <a href="index.php" class="btn btn-sm btn-outline-secondary">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
         </a>
       </div>
     </div>
@@ -353,7 +353,7 @@ $csrf = generate_csrf_token();
               </div>
 
               <button type="submit" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_02f31ae27c', 'حفظ التغييرات')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_02f31ae27c', 'حفظ التغييرات')) ?>
               </button>
               <a href="index.php" class="btn btn-link text-muted">
                 <?= h(__('t_7b0171f92b', 'إلغاء والرجوع للقائمة')) ?>

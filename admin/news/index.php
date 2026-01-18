@@ -595,20 +595,20 @@ html, body {
       </div>
       <div class="d-flex gap-2 flex-wrap">
         <a href="create.php" class="btn btn-primary btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?>
         </a>
         <a href="translations.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg> <?= h('ترجمات') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?= h('ترجمات') ?>
         </a>
         <a href="polls.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h('استطلاعات') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h('استطلاعات') ?>
         </a>
         <a href="questions.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h('أسئلة القرّاء') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h('أسئلة القرّاء') ?>
         </a>
         <?php if (!$isWriter): ?>
         <a href="trash.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_e92d1bf1e5', 'سلة المحذوفات')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_e92d1bf1e5', 'سلة المحذوفات')) ?>
         </a>
         <?php endif; ?>
       </div>
@@ -619,7 +619,7 @@ html, body {
       <div class="gdy-stat-pill">
         <div class="gdy-stat-pill-inner">
           <div class="gdy-stat-pill-icon text-info">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           </div>
           <div>
             <div class="gdy-stat-pill-label"><?= h(__('t_93e37eb4e5', 'إجمالي الأخبار')) ?></div>
@@ -634,7 +634,7 @@ html, body {
       <div class="gdy-stat-pill">
         <div class="gdy-stat-pill-inner">
           <div class="gdy-stat-pill-icon text-success">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
 	            <div class="gdy-stat-pill-label"><?= h(__('t_f23ef521b6', 'الأخبار المنشورة')) ?></div>
@@ -649,7 +649,7 @@ html, body {
       <div class="gdy-stat-pill">
         <div class="gdy-stat-pill-inner">
           <div class="gdy-stat-pill-icon text-warning">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
             <div class="gdy-stat-pill-label"><?= h(__('t_e66db1aa36', 'المسودات')) ?></div>
@@ -664,7 +664,7 @@ html, body {
       <div class="gdy-stat-pill">
         <div class="gdy-stat-pill-inner">
           <div class="gdy-stat-pill-icon text-danger">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
             <div class="gdy-stat-pill-label"><?= h(__('t_0f6db0d92a', 'أخبار اليوم')) ?></div>
@@ -801,14 +801,14 @@ html, body {
 
         <div class="col-auto">
           <button type="submit" class="btn btn-outline-secondary btn-sm">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
           </button>
         <a href="index.php" class="btn btn-outline-light btn-sm" title="<?= h(__('t_2ab2c7a79f', 'إعادة ضبط الفلاتر')) ?>">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </a>
         <?php if (!$isWriter): ?>
         <a href="?<?= h($buildQuery(['export'=>'csv','page'=>1])) ?>" class="btn btn-outline-success btn-sm" title="<?= h(__('t_5bb5d93d1a', 'تصدير CSV')) ?>">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> CSV
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg> CSV
         </a>
         <?php endif; ?>
 
@@ -845,10 +845,10 @@ html, body {
               <?php endforeach; ?>
             </select>
             <button type="button" id="bulkApply" class="btn btn-primary btn-sm" disabled>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_7a5d1d39c4', 'تطبيق')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7a5d1d39c4', 'تطبيق')) ?>
             </button>
             <button type="button" id="bulkClear" class="btn btn-outline-light btn-sm" disabled>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_9b2b5d1c34', 'إلغاء التحديد')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9b2b5d1c34', 'إلغاء التحديد')) ?>
             </button>
             <span class="count ms-auto"><span id="selectedCount">0</span> <?= h(__('t_45d980a7f0', 'محدد')) ?></span>
           </div>
@@ -956,7 +956,7 @@ $imgOk      = ($imgMain !== '');
                     <td class="text-start">
                       <div class="fw-semibold"><?= h($title) ?></div>
                       <div class="small text-muted">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <span><?= h($dateVal) ?></span>
                       </div>
                     </td>
@@ -988,27 +988,27 @@ $imgOk      = ($imgMain !== '');
                       <div class="d-flex justify-content-center gap-1 flex-wrap">
                         <a href="<?= h($frontUrl) ?>" target="_blank"
                            class="btn btn-sm btn-outline-info btn-icon" title="<?= h(__('t_ac5402edac', 'عرض في الموقع')) ?>">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg>
                         </a>
                         <a href="edit.php?id=<?= $id ?>"
                            class="btn btn-sm btn-outline-primary btn-icon" title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg>
                         </a>
                         <?php if (!$isWriter): ?>
                         <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-duplicate-one" data-id="<?= $id ?>" title="نسخ (Duplicate)">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#duplicate"></use></svg>
                         </button>
                         <?php endif; ?>
                         <?php if (!$isWriter): ?>
                         <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-toggle-publish" data-id="<?= $id ?>" title="<?= h(__('t_7df6f1d7d1', 'تبديل نشر/مسودة')) ?>">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg>
                         </button>
                         <?php endif; ?>
                         <?php if (!$isWriter): ?>
                         <a href="delete.php?id=<?= $id ?>"
                            class="btn btn-sm btn-outline-danger btn-icon"
                            data-confirm=<?= json_encode(__('t_ff433bbc04', 'هل أنت متأكد من حذف هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?> title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg>
                         </a>
                         <?php endif; ?>
                         <button
@@ -1016,7 +1016,7 @@ $imgOk      = ($imgMain !== '');
                           class="btn btn-sm btn-outline-secondary btn-icon btn-copy-link"
                           data-url="<?= h($frontUrl) ?>"
                           title="<?= h(__('t_086a81f788', 'نسخ رابط الخبر')) ?>">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#copy"></use></svg>
                         </button>
                       </div>
                     </td>

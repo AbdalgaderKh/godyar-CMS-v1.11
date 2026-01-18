@@ -24,23 +24,23 @@ if (!function_exists('gdy_saved_filters_ui')) {
   <div class="card-body d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2">
     <div class="d-flex align-items-center gap-2 flex-wrap">
       <span class="badge text-bg-dark" style="border:1px solid rgba(148,163,184,.25);">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_saved_filters','Saved Filters'):'Saved Filters') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#save"></use></svg> ' . h(function_exists('__')?__('t_admin_saved_filters','Saved Filters'):'Saved Filters') . '
       </span>
       <select class="form-select form-select-sm" id="gdySavedFiltersSelect" style="min-width:240px;max-width:420px;"></select>
       <button type="button" class="btn btn-sm btn-gdy btn-gdy-outline" id="gdySavedFiltersApply">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_apply','تطبيق'):'تطبيق') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> ' . h(function_exists('__')?__('t_admin_apply','تطبيق'):'تطبيق') . '
       </button>
       <button type="button" class="btn btn-sm btn-gdy btn-gdy-outline" id="gdySavedFiltersSave">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_save_current','حفظ الحالي'):'حفظ الحالي') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#save"></use></svg> ' . h(function_exists('__')?__('t_admin_save_current','حفظ الحالي'):'حفظ الحالي') . '
       </button>
       <button type="button" class="btn btn-sm btn-gdy btn-gdy-outline" id="gdySavedFiltersDefault" style="display:none;">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_make_default','جعله افتراضي'):'جعله افتراضي') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> ' . h(function_exists('__')?__('t_admin_make_default','جعله افتراضي'):'جعله افتراضي') . '
       </button>
       <button type="button" class="btn btn-sm btn-gdy btn-gdy-outline" id="gdySavedFiltersShare">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_copy_link','نسخ الرابط'):'نسخ الرابط') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> ' . h(function_exists('__')?__('t_admin_copy_link','نسخ الرابط'):'نسخ الرابط') . '
       </button>
       <button type="button" class="btn btn-sm btn-gdy btn-gdy-outline text-danger" id="gdySavedFiltersDelete">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(function_exists('__')?__('t_admin_delete','حذف'):'حذف') . '
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> ' . h(function_exists('__')?__('t_admin_delete','حذف'):'حذف') . '
       </button>
     </div>
 

@@ -325,13 +325,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($category_id <= 0) $errors['category_id'] = __('t_96bde08b29', 'يرجى اختيار التصنيف.');
 
     $publishedAtForDb = gdy_dt_local_to_sql($published_at);
+    // If publishing and published_at exists but is empty, set it to now.
+    if (($status === 'published' || $status === 'publish') && isset($newsCols['published_at']) && $publishedAtForDb === null) {
+        $publishedAtForDb = date('Y-m-d H:i:s');
+    }
 
     if (!$errors) {
 
         // ---------------------------------------------------------------------
         // (اختياري) رفع صورة جديدة للخبر — تستبدل الصورة الحالية عند الحفظ
         // ---------------------------------------------------------------------
-        $oldImagePath = (string)($news['image'] ?? '');
+        // Image can live in different columns across installs. Keep the old path for potential cleanup.
+        $oldImagePath = (string)($news['featured_image'] ?? ($news['image_path'] ?? ($news['image'] ?? '')));
         $imagePath = $oldImagePath !== '' ? $oldImagePath : null;
         $uploadedNewImage = false;
 
@@ -426,7 +431,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($newsCols['seo_title'])) $addSet('seo_title', ':seo_title');
             if (isset($newsCols['seo_description'])) $addSet('seo_description', ':seo_description');
             if (isset($newsCols['seo_keywords'])) $addSet('seo_keywords', ':seo_keywords');
-            if (isset($newsCols['image'])) $addSet('image', ':image');
+            // Image columns vary by schema. Store the same uploaded path in every available image column.
+            // Use unique placeholders for PDO compatibility.
+            foreach (['featured_image', 'image_path', 'image'] as $ic) {
+                if (isset($newsCols[$ic])) $addSet($ic, ':' . $ic);
+            }
 
             $sql = "UPDATE news SET " . implode(",\n", $sets) . "\nWHERE id = :id";
             $stmt = $pdo->prepare($sql);
@@ -465,8 +474,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($newsCols['seo_description'])) $stmt->bindValue(':seo_description', $seo_description, PDO::PARAM_STR);
             if (isset($newsCols['seo_keywords'])) $stmt->bindValue(':seo_keywords', $seo_keywords, PDO::PARAM_STR);
 
-            if (isset($newsCols['image'])) {
-                $stmt->bindValue(':image', $imagePath, $imagePath ? PDO::PARAM_STR : PDO::PARAM_NULL);
+            // Bind image placeholders (unique)
+            foreach (['featured_image', 'image_path', 'image'] as $ic) {
+                if (isset($newsCols[$ic])) {
+                    $stmt->bindValue(':' . $ic, $imagePath, $imagePath ? PDO::PARAM_STR : PDO::PARAM_NULL);
+                }
             }
 
             $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -506,9 +518,9 @@ $root = dirname(__DIR__, 2);
             }
 
             // حدّث قيمة الصورة في النسخة الحالية للعرض
-            if (isset($newsCols['image'])) {
-                $news['image'] = $imagePath;
-            }
+            if (isset($newsCols['featured_image'])) $news['featured_image'] = $imagePath;
+            if (isset($newsCols['image_path'])) $news['image_path'] = $imagePath;
+            if (isset($newsCols['image'])) $news['image'] = $imagePath;
 
             try { gdy_sync_news_tags($pdo, $id, (string)$tags_input); }
             catch (Throwable $e) { @error_log('Error syncing tags: ' . $e->getMessage()); }
@@ -616,17 +628,17 @@ html, body { overflow-x: hidden; }
   <div class="container-fluid">
     <div class="gdy-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
       <div>
-        <h1><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_12df53dbfc', 'تعديل الخبر #')) ?><?= (int)$id ?></h1>
-        <p><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg><?= h(__('t_927a001b84', 'عدّل بيانات الخبر ثم احفظ التغييرات')) ?></p>
+        <h1><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_12df53dbfc', 'تعديل الخبر #')) ?><?= (int)$id ?></h1>
+        <p><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= h(__('t_927a001b84', 'عدّل بيانات الخبر ثم احفظ التغييرات')) ?></p>
       </div>
       <div class="gdy-actions">
-        <a href="create.php" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?></a>
-        <a href="index.php" class="gdy-btn gdy-btn-primary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_a4c812b3d4', 'عرض الأخبار')) ?></a>
+        <a href="create.php" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?></a>
+        <a href="index.php" class="gdy-btn gdy-btn-primary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_a4c812b3d4', 'عرض الأخبار')) ?></a>
       </div>
     </div>
 
     <?php if ($updated && empty($errors['general'])): ?>
-      <div class="alert alert-success"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_16e9a82b3b', 'تم حفظ التعديلات بنجاح.')) ?></div>
+      <div class="alert alert-success"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_16e9a82b3b', 'تم حفظ التعديلات بنجاح.')) ?></div>
     <?php endif; ?>
 
     <?php if (!empty($errors['general'])): ?>
@@ -635,7 +647,7 @@ html, body { overflow-x: hidden; }
 
     <div class="gdy-card mb-4">
       <div class="gdy-card-header">
-        <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_6c83766790', 'بيانات الخبر الأساسية')) ?></h2>
+        <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_6c83766790', 'بيانات الخبر الأساسية')) ?></h2>
         <small><?= h(__('t_7e11daf821', 'يمكنك تعديل العنوان والمحتوى والتصنيف وبقية الحقول')) ?></small>
       </div>
 
@@ -686,7 +698,7 @@ html, body { overflow-x: hidden; }
                 <div class="gdy-internal-links mt-2" id="internal-links-panel">
                   <div class="d-flex align-items-center gap-2 flex-wrap">
                     <button type="button" class="btn btn-sm btn-outline-info" id="btn-suggest-links">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_il_suggest','اقتراح روابط داخلية')) ?>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_il_suggest','اقتراح روابط داخلية')) ?>
                     </button>
                     <input type="text" class="form-control form-control-sm" id="internal-link-query"
                       style="max-width: 260px"
@@ -707,7 +719,7 @@ html, body { overflow-x: hidden; }
                 <div id="image-dropzone" class="gdy-dropzone">
                   <input type="file" name="image" id="image-input" accept="image/*" class="d-none">
                   <div class="gdy-dropzone-inner">
-                    <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <p class="mb-1"><?= h(__('t_82302b8afb', 'اسحب وأفلت الصورة هنا أو اضغط للاختيار')) ?></p>
                     <small class="text-muted"><?= h(__('t_5968ccc71d', 'يفضل صور JPG أو PNG أو GIF أو WebP بحجم أقل من 5MB.')) ?></small>
                   </div>
@@ -746,7 +758,7 @@ html, body { overflow-x: hidden; }
               <?php if (!empty($attachments)): ?>
                 <div class="mb-3">
                   <div class="gdy-options-box" style="padding:.85rem;">
-                    <h3 class="mb-2"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_90e8368fd9', 'المرفقات الحالية')) ?></h3>
+                    <h3 class="mb-2"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_90e8368fd9', 'المرفقات الحالية')) ?></h3>
                     <div class="d-flex flex-column gap-2">
                       <?php foreach ($attachments as $att):
                         $attUrl = '/' . ltrim((string)$att['file_path'], '/');
@@ -767,12 +779,12 @@ html, body { overflow-x: hidden; }
                           </div>
 
                           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                            <a class="btn btn-sm btn-outline-light" href="<?= h($attUrl) ?>" target="_blank" title="<?= h(__('t_6e63a5f0af', 'عرض')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></a>
-                            <a class="btn btn-sm btn-outline-info" href="<?= h($attUrl) ?>" download title="<?= h(__('t_969879d297', 'تحميل')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></a>
+                            <a class="btn btn-sm btn-outline-light" href="<?= h($attUrl) ?>" target="_blank" title="<?= h(__('t_6e63a5f0af', 'عرض')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg></a>
+                            <a class="btn btn-sm btn-outline-info" href="<?= h($attUrl) ?>" download title="<?= h(__('t_969879d297', 'تحميل')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#download"></use></svg></a>
                             <button type="submit" name="delete_attachment_id" value="<?= (int)$att['id'] ?>"
                               class="btn btn-sm btn-outline-danger" formnovalidate
                               data-confirm=<?= json_encode(__('t_9bc98bfbb1', 'حذف هذا المرفق؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?> title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                           </div>
                         </div>
@@ -786,7 +798,7 @@ html, body { overflow-x: hidden; }
 
             <div class="col-md-4">
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_cf14329701', 'التصنيف')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_cf14329701', 'التصنيف')) ?></h3>
 
                 <div class="mb-3">
                   <label class="gdy-form-label"><span class="text-danger">*</span><?= h(__('t_cf14329701', 'التصنيف')) ?></label>
@@ -830,7 +842,7 @@ html, body { overflow-x: hidden; }
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_78865bbc36', 'حالة النشر')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_78865bbc36', 'حالة النشر')) ?></h3>
 
                 <div class="mb-2">
                   <label class="gdy-form-label"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
@@ -871,7 +883,7 @@ html, body { overflow-x: hidden; }
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg><?= h(__('t_5584163b0c', 'إعدادات SEO')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg><?= h(__('t_5584163b0c', 'إعدادات SEO')) ?></h3>
                 <div class="mb-2">
                   <label class="gdy-form-label">SEO Title</label>
                   <input type="text" name="seo_title" class="form-control form-control-sm" value="<?= h($seo_title ?? '') ?>" placeholder="<?= h(__('t_439b74907d', 'عنوان لمحركات البحث (اختياري)')) ?>">
@@ -887,7 +899,7 @@ html, body { overflow-x: hidden; }
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_84c1b773c5', 'الوسوم')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_84c1b773c5', 'الوسوم')) ?></h3>
                 <div class="mb-2">
                   <label class="gdy-form-label"><?= h(__('t_51071ad5c6', 'وسوم (Tags)')) ?></label>
                   <textarea name="tags" rows="2" class="form-control form-control-sm tags-input"
@@ -901,7 +913,7 @@ html, body { overflow-x: hidden; }
 <?php if (!empty($relatedNews)): ?>
 <div class="card mb-3">
   <div class="card-body">
-    <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_admin_related_news', 'اقتراحات: أخبار مشابهة')) ?></h3>
+    <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_admin_related_news', 'اقتراحات: أخبار مشابهة')) ?></h3>
     <div class="list-group">
       <?php foreach ($relatedNews as $rn): ?>
         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
@@ -918,7 +930,7 @@ html, body { overflow-x: hidden; }
 <!-- Professional: Pre-publish Checklist -->
           <div class="gdy-card mt-3" id="prepublish-checklist-card">
             <div class="gdy-card-header">
-              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_precheck', 'قائمة التحقق قبل النشر')) ?></h3>
+              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_precheck', 'قائمة التحقق قبل النشر')) ?></h3>
               <span class="badge bg-secondary-subtle text-secondary-emphasis" id="precheck-badge">—</span>
             </div>
             <div class="gdy-card-body">
@@ -937,7 +949,7 @@ html, body { overflow-x: hidden; }
           <!-- Professional: OpenGraph Preview -->
           <div class="gdy-card mt-3" id="og-preview-card">
             <div class="gdy-card-header">
-              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_ogprev','معاينة المشاركة (OpenGraph)')) ?></h3>
+              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_ogprev','معاينة المشاركة (OpenGraph)')) ?></h3>
             </div>
             <div class="gdy-card-body">
               <div class="gdy-og-preview">
@@ -955,7 +967,7 @@ html, body { overflow-x: hidden; }
 
 
               <div class="gdy-options-box mb-3" id="editorial-notes">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_6d5f18f157', 'ملاحظات فريق التحرير')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_6d5f18f157', 'ملاحظات فريق التحرير')) ?></h3>
 
                 <!-- ملاحظة: لا تضع <form> داخل <form> (يسبب تعطل أزرار الحفظ/النشر في المتصفح) -->
                 <div class="mb-2">
@@ -963,7 +975,7 @@ html, body { overflow-x: hidden; }
                   <div class="d-flex justify-content-between align-items-center mt-2">
                     <div class="form-text"><?= h(__('t_ebe14519dc', 'للتعليقات الداخلية بين المحرر والكاتب (لا تظهر للزوار).')) ?></div>
                     <button type="submit" name="add_note" value="1" class="gdy-btn gdy-btn-secondary" formnovalidate>
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b9508aa2a9', 'إضافة')) ?>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_b9508aa2a9', 'إضافة')) ?>
                     </button>
                   </div>
                 </div>
@@ -974,7 +986,7 @@ html, body { overflow-x: hidden; }
                       <div class="p-2 mb-2" style="border:1px solid rgba(148,163,184,.25);border-radius:.75rem;background:rgba(15,23,42,.55)">
                         <div class="d-flex justify-content-between gap-2">
                           <div class="small" style="color:#cbd5e1">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                             <?= h(($n['user_name'] ?? '') ?: '—') ?>
                           </div>
                           <div class="small" style="color:#94a3b8">
@@ -993,7 +1005,7 @@ html, body { overflow-x: hidden; }
               </div>
 
               <div class="gdy-options-box mb-3" id="revision-history">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_caa79d9298', 'سجل التعديلات')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_caa79d9298', 'سجل التعديلات')) ?></h3>
                 <div class="form-text mb-2"><?= h(__('t_f3bc0558d2', 'يمكنك استرجاع نسخة سابقة عند الحاجة.')) ?></div>
 
                 <?php if (!empty($revisionHistory)): ?>
@@ -1002,7 +1014,7 @@ html, body { overflow-x: hidden; }
                       <div class="d-flex justify-content-between align-items-center gap-2 p-2 mb-2" style="border:1px solid rgba(148,163,184,.25);border-radius:.75rem;background:rgba(15,23,42,.55)">
                         <div>
                           <div class="small" style="color:#e5e7eb">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             <?= h($r['action'] ?? 'update') ?>
                           </div>
                           <div class="small" style="color:#94a3b8">
@@ -1020,7 +1032,7 @@ html, body { overflow-x: hidden; }
                           class="gdy-btn gdy-btn-secondary"
                           formnovalidate
                           data-confirm=<?= json_encode(__('t_66f9d119fa', 'هل تريد استرجاع هذه النسخة؟ سيتم حفظ نسخة من الحالة الحالية أيضاً.'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_14c4cb02e3', 'استرجاع')) ?>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_14c4cb02e3', 'استرجاع')) ?>
                         </button>
                       </div>
                     <?php endforeach; ?>
@@ -1032,7 +1044,7 @@ html, body { overflow-x: hidden; }
 
               <?php if (!empty($opinionAuthors)): ?>
                 <div class="gdy-note-box">
-                  <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_db8da3e12f', 'ملاحظة:')) ?></strong>
+                  <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_db8da3e12f', 'ملاحظة:')) ?></strong>
                   <div class="mt-1"><?= h(__('t_b6e2560649', 'تأكد من توافق')) ?><b><?= h(__('t_af47abc07d', 'كاتب الرأي')) ?></b><?= h(__('t_d5a86ca5b4', 'مع التصنيف (مثل تصنيف الرأي).')) ?></div>
                 </div>
               <?php endif; ?>
@@ -1041,37 +1053,37 @@ html, body { overflow-x: hidden; }
           </div>
 
           <div class="gdy-card-header gdy-form-footer mt-3">
-            <div class="small text-muted"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_6297868797', 'تأكد من مراجعة التعديلات قبل الحفظ.')) ?></div>
+            <div class="small text-muted"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_6297868797', 'تأكد من مراجعة التعديلات قبل الحفظ.')) ?></div>
             <div class="d-flex gap-2">
               <button type="submit" name="workflow_action" value="save" class="gdy-btn gdy-btn-primary">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
               </button>
 
               <?php if ($isWriter && $status === 'draft'): ?>
                 <button type="submit" name="workflow_action" value="submit" class="gdy-btn gdy-btn-secondary">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_a04c53724d', 'إرسال للمراجعة')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a04c53724d', 'إرسال للمراجعة')) ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status === 'pending'): ?>
                 <button type="submit" name="workflow_action" value="approve" class="gdy-btn gdy-btn-secondary">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_51cc4e6944', 'اعتماد')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_51cc4e6944', 'اعتماد')) ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status !== 'published'): ?>
                 <button type="submit" name="workflow_action" value="publish" class="gdy-btn gdy-btn-secondary" data-confirm=<?= json_encode(__('t_b5797f62a0', 'هل تريد نشر هذا الخبر الآن؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_1f0a9584a7', 'نشر')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1f0a9584a7', 'نشر')) ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status !== 'archived'): ?>
                 <button type="submit" name="workflow_action" value="archive" class="gdy-btn gdy-btn-secondary" data-confirm=<?= json_encode(__('t_7e6cd317b1', 'هل تريد أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_44e09190ab', 'أرشفة')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_44e09190ab', 'أرشفة')) ?>
                 </button>
               <?php endif; ?>
-              <a href="view.php?id=<?= (int)$id ?>" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_a477d64bb1', 'عرض الخبر')) ?></a>
-              <a href="/preview/news/<?= (int)$id ?>" target="_blank" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_26d308e1c7', 'معاينة في الموقع')) ?></a>
+              <a href="view.php?id=<?= (int)$id ?>" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_a477d64bb1', 'عرض الخبر')) ?></a>
+              <a href="/preview/news/<?= (int)$id ?>" target="_blank" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_26d308e1c7', 'معاينة في الموقع')) ?></a>
             </div>
           </div>
 
@@ -1147,7 +1159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     attachmentsPreview.innerHTML = files.map(f => {
       const kb = Math.round((f.size || 0) / 1024);
       return `<div class="d-flex align-items-center gap-2 mb-1">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <span>${f.name}</span>
         <span class="text-muted">(${kb} KB)</span>
       </div>`;

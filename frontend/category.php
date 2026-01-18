@@ -175,14 +175,14 @@ if (!empty($headerFile) && is_file($headerFile)) {
                                     <h3 class="h6 mb-1"><?= h($title) ?></h3>
                                     <?php if ($date): ?>
                                         <small class="text-muted ms-2">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             <?= h($date) ?>
                                         </small>
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($views !== null): ?>
                                     <small class="text-muted">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         <?= number_format($views) ?> مشاهدة
                                     </small>
                                 <?php endif; ?>

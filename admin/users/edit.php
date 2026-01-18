@@ -279,7 +279,7 @@ html, body{
     </div>
     <div class="mt-2 mt-md-0">
       <a href="index.php" class="btn btn-sm btn-outline-secondary">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5c3059454f', 'الرجوع للقائمة')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5c3059454f', 'الرجوع للقائمة')) ?>
       </a>
     </div>
   </div>
@@ -352,7 +352,7 @@ html, body{
 
         <div class="mt-4">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
           </button>
         </div>
       </form>

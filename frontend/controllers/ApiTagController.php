@@ -8,7 +8,7 @@ try {
   $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC);
   if (!$tag) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
   $lim=min(50,max(1,(int)($_GET['limit']??12)));
-  $sql="SELECT n.slug,n.title,n.excerpt,n.featured_image,n.publish_at
+  $sql="SELECT n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
        FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id
        WHERE nt.tag_id=:tid AND n.status='published'
        ORDER BY n.publish_at DESC

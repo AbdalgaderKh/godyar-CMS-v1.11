@@ -51,27 +51,29 @@ if (!empty($_GET['do']) && !empty($_GET['id'])) {
             $actionMsg = __('t_17a1b66879', 'تم حذف التعليق.');
         }
 
-        // إعادة حساب comments_count للخبر
-        $pdo->prepare("
-            UPDATE news n
-            SET comments_count = (
-              SELECT COUNT(*) FROM news_comments c
-              WHERE c.news_id = n.id AND c.status='approved'
-            )
-            WHERE n.id = :nid
-        ")->execute([':nid' => $nid]);
+        // إعادة حساب comments_count للخبر (استخدم nowdoc لتفادي مشاكل أدوات الإصلاح الآلي)
+        $sqlRecount = <<<'SQL'
+UPDATE news n
+SET comments_count = (
+  SELECT COUNT(*) FROM news_comments c
+  WHERE c.news_id = n.id AND c.status='approved'
+)
+WHERE n.id = :nid
+SQL;
+        $pdo->prepare($sqlRecount)->execute([':nid' => $nid]);
     }
 }
 
 // جلب آخر التعليقات
-$stmt = $pdo->query("
-    SELECT c.id, c.news_id, c.name, c.email, c.body, c.status, c.created_at,
-           n.title AS news_title
-    FROM news_comments c
-    LEFT JOIN news n ON n.id = c.news_id
-    ORDER BY c.created_at DESC
-    LIMIT 200
-");
+$sqlList = <<<'SQL'
+SELECT c.id, c.news_id, c.name, c.email, c.body, c.status, c.created_at,
+       n.title AS news_title
+FROM news_comments c
+LEFT JOIN news n ON n.id = c.news_id
+ORDER BY c.created_at DESC
+LIMIT 200
+SQL;
+$stmt = $pdo->query($sqlList);
 $comments = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
 ?>
 <!doctype html>

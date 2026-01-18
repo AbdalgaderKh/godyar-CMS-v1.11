@@ -104,8 +104,8 @@ class TemplateEngine {
         echo "<!-- TEMPLATE ENGINE DEBUG -->";
         echo "<!-- Total variables: " . count($this->data) . " -->";
         echo "<!-- headerAd exists: " . (isset($this->data['headerAd']) ? 'YES' : 'NO') . " -->";
-        echo "<!-- sidebarTopAd exists: " . (isset($this->data['sidebarTopAd']) ? 'YES' : 'NO') . " -->";
-        echo "<!-- latestNews count: " . (isset($this->data['latestNews']) ? count($this->data['latestNews']) : '0') . " -->";
+        // Debug removed (was leaking internal state).
+echo "<!-- latestNews count: " . (isset($this->data['latestNews']) ? count($this->data['latestNews']) : '0') . " -->";
         
         // عرض الإعلانات مباشرة كحل بديل
         if (isset($this->data['headerAd']) && !empty($this->data['headerAd'])) {

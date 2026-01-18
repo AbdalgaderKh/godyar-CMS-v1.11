@@ -462,14 +462,14 @@ $year = (int)date('Y');
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
           <?php if ($siteEmail): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($siteEmail) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($siteEmail) ?></div>
           <?php endif; ?>
           <?php if ($sitePhone): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($sitePhone) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($sitePhone) ?></div>
           <?php endif; ?>
           <?php if ($siteAddr): ?>
             <div>
-              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <strong>العنوان:</strong>
               <?= h($siteAddr) ?>
             </div>
@@ -531,13 +531,13 @@ $year = (int)date('Y');
             <div class="gdy-footer-apps">
               <?php if ($appAndroid): ?>
                 <a href="<?= h($appAndroid) ?>" target="_blank" rel="noopener noreferrer">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span>تطبيق أندرويد</span>
                 </a>
               <?php endif; ?>
               <?php if ($appIos): ?>
                 <a href="<?= h($appIos) ?>" target="_blank" rel="noopener noreferrer">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span>تطبيق iOS</span>
                 </a>
               <?php endif; ?>
@@ -552,7 +552,7 @@ $year = (int)date('Y');
         <?php if (!empty($teamUrl)): ?>
           <a href="<?= h($teamUrl) ?>" class="gdy-footer-team-link">
             <span class="gdy-social-icon is-team">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <span class="gdy-footer-social-tooltip">فريق العمل</span>
             </span>
             <span>فريق العمل</span>
@@ -568,7 +568,7 @@ $year = (int)date('Y');
 
   <!-- زر العودة للأعلى -->
   <button type="button" class="gdy-scroll-top" aria-label="العودة للأعلى">
-    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
   </button>
 
   <?php if (!empty($extraBodyCode)): ?>

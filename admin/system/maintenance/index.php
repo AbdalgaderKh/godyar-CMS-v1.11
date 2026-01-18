@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <div class="card glass-card mb-3">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_640a46691d', 'حالة النظام')) ?></h2>
+      <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_640a46691d', 'حالة النظام')) ?></h2>
       <span class="badge <?= $isOn ? 'bg-danger' : 'bg-success' ?>">
         <?= $isOn ? __('t_75f027a006', 'وضع الصيانة مفعل') : __('t_6a8de9d74a', 'الموقع يعمل بشكل طبيعي') ?>
       </span>
@@ -66,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($isOn): ?>
           <input type="hidden" name="mode" value="off">
           <button type="submit" class="btn btn-success">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_92c406424e', 'إلغاء وضع الصيانة')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_92c406424e', 'إلغاء وضع الصيانة')) ?>
           </button>
         <?php else: ?>
           <input type="hidden" name="mode" value="on">
           <button type="submit" class="btn btn-danger" data-confirm='سيتم تفعيل وضع الصيانة، متابعة؟'>
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
           </button>
         <?php endif; ?>
       </form>

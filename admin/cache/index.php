@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $cacheSupported) {
 
   <div class="card glass-card mb-3">
     <div class="card-header">
-      <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> مسح الكاش</h2>
+      <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> مسح الكاش</h2>
     </div>
     <div class="card-body">
       <?php if (!$cacheSupported): ?>
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $cacheSupported) {
 
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
           <button type="submit" class="btn btn-danger" data-confirm='تأكيد مسح الكاش بالكامل؟'>
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> مسح الكاش الآن
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> مسح الكاش الآن
           </button>
         </form>
       <?php endif; ?>

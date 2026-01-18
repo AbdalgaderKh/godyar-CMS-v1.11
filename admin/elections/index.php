@@ -268,7 +268,7 @@ $breadcrumbs = [
   __('t_3aa8578699', 'الرئيسية') => $adminBase . '/index.php',
   __('t_b9af904113', 'الانتخابات') => null,
 ];
-$pageActionsHtml = __('t_c0688b58ad', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إضافة تغطية</a>');
+$pageActionsHtml = __('t_c0688b58ad', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> إضافة تغطية</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 
 $csrf = generate_csrf_token();
@@ -304,7 +304,7 @@ $csrf = generate_csrf_token();
         </select>
       </div>
       <div class="col-12 col-md-3 d-flex gap-2">
-        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
+        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
         <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?= h(__('t_ec2ce8be93', 'مسح')) ?></a>
       </div>
     </form>
@@ -363,10 +363,10 @@ $csrf = generate_csrf_token();
               <td class="text-muted small"><?= h((string)$updated) ?></td>
               <td class="text-end">
                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="edit.php?id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="regions.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_745a7a18bc', 'مناطق')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="parties.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_604826c00c', 'أحزاب')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-primary" href="results.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_981d67a249', 'نتائج')) ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="edit.php?id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="regions.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_745a7a18bc', 'مناطق')) ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="parties.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_604826c00c', 'أحزاب')) ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-primary" href="results.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_981d67a249', 'نتائج')) ?></a>
 
                   <div class="dropdown">
                     <button class="btn btn-sm btn-gdy btn-gdy-ghost dropdown-toggle" type="button" data-bs-toggle="dropdown">

@@ -9,7 +9,12 @@ try {
   if (class_exists('Settings')) { $settings = Settings::getAll(); }
   elseif (isset($pdo)) {
     $st = $pdo->query("SELECT setting_key,`value` FROM settings");
-    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) { $settings[$row['key']] = $row['value']; }
+    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $k = (string)($row['setting_key'] ?? '');
+        if ($k !== '') {
+            $settings[$k] = (string)($row['value'] ?? '');
+        }
+    }
   }
 } catch (Throwable $e) { error_log(get_class($e).": ".$e->getMessage()); }
 

@@ -367,9 +367,9 @@ $mkQs = static function(array $extra = []) use ($q,$usageFilter,$sort,$page): st
 };
 
 $pageActionsHtml = '';
-$pageActionsHtml .= __('t_b8a588853d', '<button type="button" class="btn btn-gdy btn-gdy-primary" data-bs-toggle="modal" data-bs-target="#tagCreateModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إضافة وسم</button>');
-$pageActionsHtml .= __('t_7a47a46503', '<button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagMergeModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> دمج وسوم</button>');
-$pageActionsHtml .= '<a class="btn btn-gdy btn-gdy-ghost" href="index.php?' . h($mkQs(['download'=>'csv'])) . __('t_1352c97777', '"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تصدير CSV</a>');
+$pageActionsHtml .= __('t_b8a588853d', '<button type="button" class="btn btn-gdy btn-gdy-primary" data-bs-toggle="modal" data-bs-target="#tagCreateModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> إضافة وسم</button>');
+$pageActionsHtml .= __('t_7a47a46503', '<button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagMergeModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> دمج وسوم</button>');
+$pageActionsHtml .= '<a class="btn btn-gdy btn-gdy-ghost" href="index.php?' . h($mkQs(['download'=>'csv'])) . __('t_1352c97777', '"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg> تصدير CSV</a>');
 
 require_once __DIR__ . '/../layout/app_start.php';
 
@@ -414,7 +414,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
         </select>
       </div>
       <div class="col-12 col-md-2 d-flex gap-2">
-        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
+        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
         <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?= h(__('t_ec2ce8be93', 'مسح')) ?></a>
       </div>
     </form>
@@ -435,7 +435,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
       <form method="post" class="m-0" data-confirm='حذف كل الوسوم غير المستخدمة؟'>
         <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
         <input type="hidden" name="action" value="cleanup_unused">
-        <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_626532ff27', 'تنظيف غير المستخدمة')) ?></button>
+        <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_626532ff27', 'تنظيف غير المستخدمة')) ?></button>
       </form>
     </div>
 
@@ -479,7 +479,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
                   <?php endif; ?>
                   <div class="small mt-1">
                     <a href="<?= h($tagUrl((string)($t['slug'] ?? ''))) ?>" target="_blank" rel="noopener" style="text-decoration:none;">
-                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_7946c4d1dc', 'فتح صفحة الوسم')) ?>
+                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7946c4d1dc', 'فتح صفحة الوسم')) ?>
                     </a>
                   </div>
                 </td>
@@ -494,14 +494,14 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
                 <td class="text-muted small"><?= h($dt) ?></td>
                 <td class="text-end">
                   <div class="d-flex flex-wrap justify-content-end gap-2">
-                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagEditModal<?= $id ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></button>
-                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-copy="<?= h($tagUrl((string)($t['slug'] ?? ''))) ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?></button>
+                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagEditModal<?= $id ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></button>
+                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-copy="<?= h($tagUrl((string)($t['slug'] ?? ''))) ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?></button>
 
                     <form method="post" class="m-0" data-confirm='حذف الوسم؟ سيتم إزالة ربطه من الأخبار أيضاً.'>
                       <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="id" value="<?= $id ?>">
-                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_3b9854e1bb', 'حذف')) ?></button>
+                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_3b9854e1bb', 'حذف')) ?></button>
                     </form>
                   </div>
                 </td>
@@ -556,7 +556,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
         </div>
 
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-sm btn-gdy btn-gdy-danger" data-confirm='حذف الوسوم المحددة؟ سيتم إزالة ربطها من الأخبار.'><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fa91840c47', 'حذف المحدد')) ?></button>
+          <button type="submit" class="btn btn-sm btn-gdy btn-gdy-danger" data-confirm='حذف الوسوم المحددة؟ سيتم إزالة ربطها من الأخبار.'><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_fa91840c47', 'حذف المحدد')) ?></button>
         </div>
 
         <?php if ($totalPages > 1): ?>
@@ -687,8 +687,8 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
       const txt = btn.getAttribute('data-copy') || '';
       try {
         await navigator.clipboard.writeText(txt);
-        btn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تم النسخ';
-        setTimeout(() => btn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> نسخ الرابط', 1400);
+        btn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> تم النسخ';
+        setTimeout(() => btn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> نسخ الرابط', 1400);
       } catch (e) {
         alert('تعذر النسخ. انسخ يدويًا: ' + txt);
       }

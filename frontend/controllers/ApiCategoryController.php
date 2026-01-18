@@ -8,7 +8,7 @@ try {
   $st->execute([':s'=>$slug]); $cat=$st->fetch(PDO::FETCH_ASSOC);
   if (!$cat) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
   $lim=min(50,max(1,(int)($_GET['limit']??12)));
-  $sql="SELECT slug,title,excerpt,featured_image,publish_at FROM news WHERE status='published' AND category_id=".(int)$cat['id']." ORDER BY publish_at DESC LIMIT $lim";
+  $sql="SELECT slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND category_id=".(int)$cat['id']." ORDER BY publish_at DESC LIMIT $lim";
   $items=$pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
   echo json_encode(['ok'=>true,'category'=>$cat,'items'=> $items], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 } catch (Throwable $e){ error_log('API_CAT: '.$e->getMessage()); http_response_code(500); echo json_encode(['ok'=>false,'error'=>'internal']); }

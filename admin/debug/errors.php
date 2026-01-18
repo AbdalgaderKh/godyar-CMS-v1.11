@@ -10,8 +10,9 @@ if (!gdy_is_admin_user()) {
     exit;
 }
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
+// تشغيل الجلسة بدون كتم أخطاء (لتوافق أدوات التحليل)
+if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+    session_start();
 }
 
 $storageLog = __DIR__ . '/../storage/admin_debug.log';
@@ -32,7 +33,7 @@ function h($v): string {
 // قراءة آخر 200 سطر من ملف اللوج الداخلي (إن وجد)
 $tail = '';
 if (is_file($storageLog) && is_readable($storageLog)) {
-    $lines = @file($storageLog, FILE_IGNORE_NEW_LINES);
+    $lines = file($storageLog, FILE_IGNORE_NEW_LINES);
     if (is_array($lines)) {
         $slice = array_slice($lines, -200);
         $tail = implode("\n", $slice);

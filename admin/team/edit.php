@@ -198,7 +198,7 @@ html, body{
       <p class="text-muted mb-0"><?= h(__('t_74711a8171', 'تعديل بيانات عضو في فريق العمل.')) ?></p>
     </div>
     <a href="index.php" class="btn btn-sm btn-secondary">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
     </a>
   </div>
 
@@ -257,7 +257,7 @@ html, body{
 
         <div class="mt-3 d-flex justify-content-end gap-2">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
           </button>
         </div>
       </form>

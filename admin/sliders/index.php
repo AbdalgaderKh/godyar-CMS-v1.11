@@ -236,18 +236,18 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <?php if (!$tableExists): ?>
                 <a href="create_table.php" class="btn btn-warning">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
                 </a>
             <?php endif; ?>
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
             </a>
         </div>
     </div>
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_3b529cf8d7', 'جدول السلايدر غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -285,12 +285,12 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <?php if (empty($sliders)): ?>
             <div class="gdy-empty-state">
                 <div class="gdy-empty-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <h4 class="text-muted mb-3"><?= h(__('t_95b00f88dc', 'لا توجد شرائح عرض')) ?></h4>
                 <p class="text-muted mb-4"><?= h(__('t_1d7ff935eb', 'ابدأ بإضافة أول شريحة عرض إلى السلايدر')) ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_dc654e4e56', 'إضافة أول شريحة')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_dc654e4e56', 'إضافة أول شريحة')) ?>
                 </a>
             </div>
         <?php else: ?>
@@ -308,19 +308,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                         <a href="edit.php?id=<?= $slider['id'] ?>" 
                                            class="gdy-slider-btn"
                                            title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <button class="gdy-slider-btn toggle-slider" 
                                                 data-id="<?= $slider['id'] ?>"
                                                 data-status="<?= $slider['is_active'] ?>"
                                                 title="<?= $slider['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
-                                            <svg class="gdy-icon $slider['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon $slider['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                         <button class="gdy-slider-btn delete-slider" 
                                                 data-id="<?= $slider['id'] ?>"
                                                 data-title="<?= htmlspecialchars($slider['title']) ?>"
                                                 title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                     </div>
                                 </div>

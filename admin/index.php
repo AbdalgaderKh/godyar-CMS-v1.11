@@ -1080,14 +1080,14 @@ html[dir="rtl"] .gdy-activity-bars{
         </div>
         <div class="text-sm text-secondary d-flex align-items-center flex-wrap gap-2">
           <span class="me-2">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg> <?= h(__('t_c2cde46825', 'مدير النظام')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h(__('t_c2cde46825', 'مدير النظام')) ?>
           </span>
           <a class="text-secondary text-decoration-none me-2" href="<?= h($siteBase) ?>/" target="_blank" rel="noopener" title="<?= h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')) ?>">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg> <?= h(__('t_03b57332e5', 'الموقع الرئيسي')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?= h(__('t_03b57332e5', 'الموقع الرئيسي')) ?>
           </a>
           <?php if ($debugMode): ?>
             <span class="badge bg-danger">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_d78fba4389', 'وضع التطوير (display_errors مفعل)')) ?>
             </span>
           <?php endif; ?>
@@ -1110,15 +1110,15 @@ html[dir="rtl"] .gdy-activity-bars{
               </p>
               <div class="gdy-welcome-meta">
                 <span>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span class="gdy-date-value"><?= date('Y-m-d') ?></span>
                 </span>
                 <span>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span class="gdy-time-value"><?= date('H:i:s') ?></span>
                 </span>
                 <span>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                   أخبار اليوم: <?= (int) $stats['today_news'] ?>
                   / تعليقات اليوم: <?= (int) $stats['today_comments'] ?>
                   / رسائل جديدة: <?= (int) $stats['unread_messages'] ?>
@@ -1130,20 +1130,20 @@ html[dir="rtl"] .gdy-activity-bars{
           <!-- شريط المهام السريعة -->
           <div class="col-md-7 text-md-end">
             <div class="gdy-quickbar-title mb-2">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <span><?= h(__('t_5383623868', 'شريط المهام السريعة')) ?></span>
             </div>
             <div class="gdy-quick-actions">
               <?php foreach ($quickLinks as $link): ?>
                 <a href="<?= h($link['href']) ?>" class="gdy-quick-btn">
-                  <svg class="gdy-icon <?= h($link['icon']) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon <?= h($link['icon']) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span><?= h($link['text']) ?></span>
                 </a>
               <?php endforeach; ?>
 
               <!-- زر التحكم في إظهار/إخفاء القائمة الجانبية في الواجهة -->
               <button type="button" id="gdy-sidebar-global-toggle" class="gdy-quick-btn">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span class="gdy-sidebar-global-label"><?= h(__('t_a0c2dca9fc', 'إخفاء القائمة الجانبية في الواجهة')) ?></span>
               </button>
             </div>
@@ -1158,7 +1158,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-stat-label"><?= h(__('t_93e37eb4e5', 'إجمالي الأخبار')) ?></div>
         <div class="gdy-stat-value"><?= number_format($stats['news']) ?></div>
         <div class="gdy-stat-trend">
-          <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
           <span>+<?= (int) $stats['today_news'] ?> خبر جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
@@ -1181,7 +1181,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-stat-label"><?= h(__('t_39d3073371', 'المستخدمون')) ?></div>
         <div class="gdy-stat-value"><?= number_format($stats['users']) ?></div>
         <div class="gdy-stat-trend">
-          <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span>+<?= (int) $stats['today_users'] ?> مستخدم جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
@@ -1193,7 +1193,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-stat-label"><?= h(__('t_422df4da8b', 'التعليقات')) ?></div>
         <div class="gdy-stat-value"><?= number_format($stats['comments']) ?></div>
         <div class="gdy-stat-trend">
-          <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span><?= (int) $stats['today_comments'] ?> تعليق جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
@@ -1206,7 +1206,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-stat-label"><?= h(__('t_1be2ee1784', 'رسائل التواصل الجديدة')) ?></div>
         <div class="gdy-stat-value"><?= number_format($stats['unread_messages']) ?></div>
         <div class="gdy-stat-trend">
-          <svg class="gdy-icon text-danger" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon text-danger" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
           <span><?= h(__('t_af2b984782', 'رسائل من نموذج "اتصل بنا" تحتاج للمراجعة')) ?></span>
         </div>
         <div class="gdy-performance-bar">
@@ -1225,11 +1225,11 @@ html[dir="rtl"] .gdy-activity-bars{
     <div class="gdy-content-card mb-3 gdy-content-card--frameless">
       <div class="gdy-card-header">
         <h3 class="gdy-card-title">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_f850499360', 'تحليلات الزيارات اليوم')) ?>
         </h3>
         <div class="small text-muted">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= date('Y-m-d') ?>
         </div>
       </div>
@@ -1240,15 +1240,15 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- زيارات اليوم -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_1860c23886', 'زيارات اليوم')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1860c23886', 'زيارات اليوم')) ?></div>
               </div>
               <div class="gdy-card-body">
                 <div class="gdy-kpi">
-                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_a5481217bd', 'إجمالي الزيارات')) ?></div>
+                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a5481217bd', 'إجمالي الزيارات')) ?></div>
                   <div class="value"><?= number_format((int)$visitAnalytics['today']) ?></div>
                 </div>
                 <div class="gdy-kpi mb-0">
-                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_da2ae4cedf', 'زوار مميزون')) ?></div>
+                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_da2ae4cedf', 'زوار مميزون')) ?></div>
                   <div class="value"><?= number_format((int)$visitAnalytics['unique_today']) ?></div>
                 </div>
                 <div class="small text-muted mt-2">
@@ -1260,7 +1260,7 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- مصادر الزيارات -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_354b3cc224', 'مصادر الزيارات')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_354b3cc224', 'مصادر الزيارات')) ?></div>
               </div>
               <div class="gdy-card-body">
                 <?php
@@ -1286,7 +1286,7 @@ html[dir="rtl"] .gdy-activity-bars{
                   ?>
                   <div class="gdy-source-row" title="<?= h($name) ?>: <?= $val ?> (<?= $pct ?>%)">
                     <div class="name">
-                      <svg class="gdy-icon <?= h($icon) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon <?= h($icon) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       <span><?= h($name) ?></span>
                     </div>
                     <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
@@ -1303,7 +1303,7 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- الأكثر قراءة اليوم -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f175185d34', 'الأكثر قراءة اليوم')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f175185d34', 'الأكثر قراءة اليوم')) ?></div>
               </div>
               <div class="gdy-card-body">
                 <?php if (!empty($visitAnalytics['top_news'])): ?>
@@ -1340,7 +1340,7 @@ html[dir="rtl"] .gdy-activity-bars{
 	          <!-- نوع النظام اليوم -->
 	          <div class="gdy-analytics-card" data-span="6">
 	            <div class="gdy-card-header">
-	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b6f3b4f0a9', 'نوع النظام')) ?></div>
+	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6f3b4f0a9', 'نوع النظام')) ?></div>
 	            </div>
 	            <div class="gdy-card-body">
 	              <?php $osTotal = (int)array_sum((array)($visitAnalytics['os'] ?? [])); ?>
@@ -1349,7 +1349,7 @@ html[dir="rtl"] .gdy-activity-bars{
 	                  <?php $pct = $osTotal ? (int)round(((int)$v / $osTotal) * 100) : 0; ?>
 	                  <div class="gdy-source-row" title="<?= h((string)$k) ?>: <?= (int)$v ?> (<?= $pct ?>%)">
 	                    <div class="name">
-	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
 	                      <span><?= h((string)$k) ?></span>
 	                    </div>
 	                    <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
@@ -1365,7 +1365,7 @@ html[dir="rtl"] .gdy-activity-bars{
 	          <!-- نوع المتصفح اليوم -->
 	          <div class="gdy-analytics-card" data-span="6">
 	            <div class="gdy-card-header">
-	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg> <?= h(__('t_6f1a3f7d22', 'نوع المتصفح')) ?></div>
+	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?= h(__('t_6f1a3f7d22', 'نوع المتصفح')) ?></div>
 	            </div>
 	            <div class="gdy-card-body">
 	              <?php $brTotal = (int)array_sum((array)($visitAnalytics['browsers'] ?? [])); ?>
@@ -1374,7 +1374,7 @@ html[dir="rtl"] .gdy-activity-bars{
 	                  <?php $pct = $brTotal ? (int)round(((int)$v / $brTotal) * 100) : 0; ?>
 	                  <div class="gdy-source-row" title="<?= h((string)$k) ?>: <?= (int)$v ?> (<?= $pct ?>%)">
 	                    <div class="name">
-	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
 	                      <span><?= h((string)$k) ?></span>
 	                    </div>
 	                    <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
@@ -1402,7 +1402,7 @@ html[dir="rtl"] .gdy-activity-bars{
       <div class="gdy-content-card mb-3">
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_390d8d902c', 'نشاط الأخبار خلال آخر 7 أيام')) ?>
           </h3>
         </div>
@@ -1433,13 +1433,13 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-content-card">
           <div class="gdy-card-header">
             <h3 class="gdy-card-title">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_e610ba581c', 'آخر الأخبار المضافة')) ?>
             </h3>
             <div class="d-flex align-items-center gap-2 flex-wrap">
               <div class="input-group input-group-sm" style="max-width: 230px;">
                 <span class="input-group-text bg-dark border-secondary text-light">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
                 </span>
                 <input type="text"
                        id="recent-news-search"
@@ -1456,19 +1456,19 @@ html[dir="rtl"] .gdy-activity-bars{
               <?php foreach ($recentNews as $news): ?>
                 <div class="gdy-news-item">
                   <div class="gdy-news-icon">
-                    <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                    <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                   </div>
                   <div>
                     <div class="gdy-news-title"><?= h($news['title']) ?></div>
                     <div class="gdy-news-meta">
-                      <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= date('Y-m-d', strtotime($news['created_at'])) ?></span>
+                      <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= date('Y-m-d', strtotime($news['created_at'])) ?></span>
                     </div>
                   </div>
                 </div>
               <?php endforeach; ?>
             <?php else: ?>
               <div class="text-center text-muted py-4">
-                <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                 <p class="mb-0"><?= h(__('t_6b2cba49e9', 'لا توجد أخبار حديثة حالياً.')) ?></p>
               </div>
             <?php endif; ?>
@@ -1480,28 +1480,28 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-content-card">
           <div class="gdy-card-header">
             <h3 class="gdy-card-title">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_640a46691d', 'حالة النظام')) ?>
             </h3>
           </div>
           <div class="gdy-system-indicators">
             <div class="gdy-indicator">
-              <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <div class="gdy-indicator-value"><?= h($systemInfo['php_version']) ?></div>
               <div class="gdy-indicator-label">PHP</div>
             </div>
             <div class="gdy-indicator">
-              <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
               <div class="gdy-indicator-value"><?= h($systemInfo['mysql_version']) ?></div>
               <div class="gdy-indicator-label">MySQL</div>
             </div>
             <div class="gdy-indicator">
-              <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
               <div class="gdy-indicator-value"><?= h($systemInfo['memory_limit']) ?></div>
               <div class="gdy-indicator-label"><?= h(__('t_6e3781c6ec', 'حد الذاكرة')) ?></div>
             </div>
             <div class="gdy-indicator">
-              <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <div class="gdy-indicator-value"><?= h($systemInfo['upload_max_filesize']) ?></div>
               <div class="gdy-indicator-label"><?= h(__('t_eac09e95a8', 'حجم الرفع الأقصى')) ?></div>
             </div>
@@ -1511,14 +1511,14 @@ html[dir="rtl"] .gdy-activity-bars{
             <div class="gdy-performance-indicators">
               <?php if ($memoryUsageMb !== null): ?>
                 <div class="gdy-performance-card">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="gdy-indicator-value"><?= number_format($memoryUsageMb, 1) ?> MB</div>
                   <div class="gdy-indicator-label"><?= h(__('t_11f69e717a', 'استخدام الذاكرة (PHP)')) ?></div>
                 </div>
               <?php endif; ?>
               <?php if ($systemLoad !== null): ?>
                 <div class="gdy-performance-card">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="gdy-indicator-value"><?= number_format($systemLoad, 2) ?></div>
                   <div class="gdy-indicator-label"><?= h(__('t_aa45c9e9a9', 'تحميل النظام')) ?></div>
                 </div>
@@ -1534,7 +1534,7 @@ html[dir="rtl"] .gdy-activity-bars{
       <div class="gdy-content-card">
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_c5bc8cdb85', 'الأخبار الأكثر مشاهدة')) ?>
           </h3>
         </div>
@@ -1543,19 +1543,19 @@ html[dir="rtl"] .gdy-activity-bars{
             <?php foreach ($popularNews as $index => $news): ?>
               <div class="gdy-news-item">
                 <div class="gdy-news-icon">
-                  <svg class="gdy-icon $index < 3 ? 'fire' : 'eye' ?> text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon $index < 3 ? 'fire' : 'eye' ?> text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <div>
                   <div class="gdy-news-title"><?= h($news['title']) ?></div>
                   <div class="gdy-news-meta">
-                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= number_format($news['views']) ?> مشاهدة</span>
+                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= number_format($news['views']) ?> مشاهدة</span>
                   </div>
                 </div>
               </div>
             <?php endforeach; ?>
           <?php else: ?>
             <div class="text-center text-muted py-3">
-              <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <p class="mb-0"><?= h(__('t_565b68e9d9', 'لا توجد بيانات مشاهدات كافية بعد.')) ?></p>
             </div>
           <?php endif; ?>
@@ -1565,14 +1565,14 @@ html[dir="rtl"] .gdy-activity-bars{
       <div class="gdy-content-card">
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_7a8965fe52', 'نصائح الأمان وتنبيهات الإدارة')) ?>
           </h3>
         </div>
         <div class="gdy-news-list">
           <div class="gdy-news-item">
             <div class="gdy-news-icon">
-              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
               <div class="gdy-news-title"><?= h(__('t_80022702ae', 'استخدم كلمات مرور قوية')) ?></div>
@@ -1583,7 +1583,7 @@ html[dir="rtl"] .gdy-activity-bars{
           </div>
           <div class="gdy-news-item">
             <div class="gdy-news-icon">
-              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
               <div class="gdy-news-title"><?= h(__('t_c0679dc67e', 'تحديثات دورية للنظام')) ?></div>
@@ -1594,7 +1594,7 @@ html[dir="rtl"] .gdy-activity-bars{
           </div>
           <div class="gdy-news-item">
             <div class="gdy-news-icon">
-              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
               <div class="gdy-news-title"><?= h(__('t_0bb7a7bb4d', 'نسخ احتياطية منتظمة')) ?></div>
@@ -1607,7 +1607,7 @@ html[dir="rtl"] .gdy-activity-bars{
           <!-- تنبيه جديد عن رسائل التواصل -->
           <div class="gdy-news-item">
             <div class="gdy-news-icon">
-              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
               <div class="gdy-news-title">
@@ -1620,7 +1620,7 @@ html[dir="rtl"] .gdy-activity-bars{
                 <?= h(__('t_1d036d5265', 'راجع رسائل نموذج "اتصل بنا" أولاً بأول لتحسين التفاعل مع القرّاء.')) ?>
                 <a href="<?= h($adminBase) ?>/contact/" class="text-info text-decoration-none ms-1">
                   <?= h(__('t_262e3c1f97', 'الذهاب لصفحة الرسائل')) ?>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </a>
               </div>
             </div>
@@ -1638,11 +1638,11 @@ html[dir="rtl"] .gdy-activity-bars{
         </div>
         <div class="col-md-6 text-md-end">
           <span class="me-2">
-            <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
             <?= h(__('t_0cef8a4c1b', 'النظام يعمل بشكل طبيعي')) ?>
           </span>
           <span>
-            <svg class="gdy-icon text-secondary" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon text-secondary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             Godyar v3.1
           </span>
         </div>

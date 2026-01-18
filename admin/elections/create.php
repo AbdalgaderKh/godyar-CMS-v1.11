@@ -103,7 +103,7 @@ $pageTitle   = __('t_b9af904113', 'الانتخابات');
 $pageSubtitle= __('t_f34c8ad151', 'إضافة تغطية انتخابية جديدة');
 $adminBase = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/admin'), '/');
 $breadcrumbs = [__('t_3aa8578699', 'الرئيسية') => $adminBase.'/index.php', __('t_b9af904113', 'الانتخابات') => null];
-$pageActionsHtml = __('t_5863f7280a', '<a href="index.php" class="btn btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> رجوع</a>');
+$pageActionsHtml = __('t_5863f7280a', '<a href="index.php" class="btn btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> رجوع</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 $csrf = generate_csrf_token();
 ?>
@@ -114,7 +114,7 @@ $csrf = generate_csrf_token();
       <p class="mb-0 small text-muted"><?= h(__('t_e19fe64f2e', 'إضافة قسم مخصص لتغطية انتخابات معينة يمكن إظهاره أو إخفاؤه من القائمة.')) ?></p>
     </div>
     <a href="index.php" class="btn btn-sm btn-outline-secondary">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
     </a>
   </div>
 
@@ -162,7 +162,7 @@ $csrf = generate_csrf_token();
         </div>
 
         <button type="submit" class="btn btn-primary">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_c4e40e27fb', 'حفظ التغطية')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_c4e40e27fb', 'حفظ التغطية')) ?>
         </button>
       </form>
     </div>

@@ -91,13 +91,13 @@ body{
 <body>
 <aside class="sidebar" id="sidebar">
   <div class="brand">
-    <div class="brand-badge"><svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></div>
+    <div class="brand-badge"><svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
     <div class="title"><div class="main">Godyar Pro</div><div class="sub">لوحة التحكم</div></div>
   </div>
   <nav class="nav-list">
     <?php foreach ($menu as $it): $href=rtrim($it['href'],'/'); $active = ($href === $currentPath)?'active':''; ?>
       <a class="nav-item <?= $active ?>" href="<?= h($it['href']) ?>">
-        <svg class="gdy-icon h($it['icon']) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><span><?= h($it['text']) ?></span>
+        <svg class="gdy-icon h($it['icon']) ?>" aria-hidden="true" focusable="false"><use href="#news"></use></svg><span><?= h($it['text']) ?></span>
       </a>
     <?php endforeach; ?>
   </nav>
@@ -106,16 +106,16 @@ body{
 <div class="main">
   <header class="header">
     <div class="d-flex align-items-center gap-2">
-      <button class="btn-icon btn btn-sm d-lg-none" id="toggleSidebar" title="القائمة"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></button>
+      <button class="btn-icon btn btn-sm d-lg-none" id="toggleSidebar" title="القائمة"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg></button>
       <div class="user-chip">
         <div class="user-avatar"><?= h($uInitial) ?></div>
         <div><div class="fw-semibold"><?= h($u['name'] ?? 'Admin') ?></div><div class="text-white-50 small"><?= h($u['role'] ?? 'admin') ?></div></div>
       </div>
     </div>
     <div class="header-actions d-flex align-items-center gap-2">
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/settings" title="الإعدادات"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></a>
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/inbox" title="الرسائل"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></a>
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/logout" title="خروج"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#logout"></use></svg></a>
+      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/settings" title="الإعدادات"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
+      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/inbox" title="الرسائل"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg></a>
+      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/logout" title="خروج"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
     </div>
   </header>
 

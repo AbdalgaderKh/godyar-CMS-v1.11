@@ -535,7 +535,7 @@ $renderOpinionAuthorsBlock = function () use (
     <section id="opinion-authors" class="hm-section hm-opinion-authors" aria-label="<?= h(__('كتّاب الرأي')) ?>">
         <div class="hm-section-header">
             <h2 class="hm-section-title">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('كتّاب الرأي')) ?>
             </h2>
         </div>
@@ -571,7 +571,7 @@ $renderOpinionAuthorsBlock = function () use (
                     <a href="<?= h($authorUrl) ?>" class="hm-opinion-author-avatar">
                         <img src="<?= h($avatar) ?>"
                              alt="<?= h($name) ?>"
-                             onerror="this.src='<?= h($authorImageDefault) ?>';this.onerror=null;">
+                             data-gdy-fallback-src="<?= h($authorImageDefault) ?>">
                     </a>
                     <div class="hm-opinion-author-body">
                         <div class="hm-opinion-author-name">

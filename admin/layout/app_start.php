@@ -93,7 +93,7 @@ try {
     $headerToolsHtml =
       '<div class="dropdown">'
       . '<button class="btn btn-gdy-outline position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="'.h(function_exists('__')?__('t_admin_notifications','الإشعارات'):'الإشعارات').'">'
-      . '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>' . $badge . '</button>'
+      . '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>' . $badge . '</button>'
       . '<div class="dropdown-menu dropdown-menu-end p-0 gdy-notif-menu">'
       . '<div class="p-3 border-bottom" style="border-color:rgba(148,163,184,.18)!important;">'
       .   '<div class="d-flex justify-content-between align-items-center">'

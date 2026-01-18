@@ -275,15 +275,15 @@ require __DIR__ . '/../layout/sidebar.php';
       </div>
       <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
         <a href="index.php" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')) ?>
         </a>
         <a href="parties.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_e36f3293e2', 'إدارة الأحزاب')) ?>
         </a>
         <a href="results.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-success btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_53ffc98339', 'إدارة النتائج العامة')) ?>
         </a>
       </div>
@@ -353,7 +353,7 @@ require __DIR__ . '/../layout/sidebar.php';
 
           <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary btn-sm w-100">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_871a087a1d', 'حفظ')) ?>
             </button>
           </div>
@@ -400,12 +400,12 @@ require __DIR__ . '/../layout/sidebar.php';
                       <a href="regions.php?election_id=<?= (int)$electionId ?>&id=<?= (int)$r['id'] ?>"
                          class="btn btn-outline-primary btn-sm"
                          title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <a href="region_results.php?election_id=<?= (int)$electionId ?>&region_id=<?= (int)$r['id'] ?>"
                          class="btn btn-outline-success btn-sm"
                          title="<?= h(__('t_129a4c31a0', 'نتائج هذه الولاية')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <form method="post"
                             data-confirm='حذف هذه الولاية / المنطقة؟ قد يحذف النتائج المرتبطة بها.'>
@@ -417,7 +417,7 @@ require __DIR__ . '/../layout/sidebar.php';
                         <input type="hidden" name="action" value="delete_region">
                         <input type="hidden" name="region_id" value="<?= (int)$r['id'] ?>">
                         <button type="submit" class="btn btn-outline-danger btn-sm">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </button>
                       </form>
                     </div>

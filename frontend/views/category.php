@@ -625,7 +625,7 @@ html[dir="rtl"] .gdy-sidebar-column {
         <!-- رأس القسم -->
         <header class="gdy-category-header">
             <div class="gdy-breadcrumb">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <a href="<?= h($homeUrl) ?>">الرئيسية</a>
                 <span>›</span>
                 <a href="<?= h($generalNewsUrl) ?>">أخبار عامة</a>
@@ -636,7 +636,7 @@ html[dir="rtl"] .gdy-sidebar-column {
             <div class="gdy-category-title">
                 <h1><?= h($categoryName) ?></h1>
                 <span class="gdy-category-chip">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     قسم: <?= h($categoryName) ?>
                 </span>
             </div>
@@ -652,7 +652,7 @@ html[dir="rtl"] .gdy-sidebar-column {
         <section class="gdy-toolbar">
             <div class="gdy-toolbar-left">
                 <div class="gdy-stats">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                     إجمالي الأخبار: <strong><?= (int)$totalItems ?></strong>
                 </div>
 
@@ -671,13 +671,13 @@ html[dir="rtl"] .gdy-sidebar-column {
                         class="btn btn-outline-dark active"
                         data-view="grid"
                         title="عرض شبكة">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </button>
                 <button type="button"
                         class="btn btn-outline-dark"
                         data-view="list"
                         title="عرض قائمة">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </button>
             </div>
         </section>
@@ -792,18 +792,18 @@ if ($imgUrl === '') {
                                         <?php if ($imgUrl !== ''): ?>
                                             <img src="<?= h($imgUrl) ?>" loading="lazy" decoding="async"
                                                  alt="<?= h($title) ?>"
-                                                 onerror="this.style.display='none'; this.parentElement.classList.add('news-thumb-empty');">
+                                                 data-gdy-hide-onerror="1" data-gdy-hide-parent-class="news-thumb-empty">
                                         <?php else: ?>
                                             <div class="news-thumb-placeholder gdy-skeleton" aria-hidden="true"></div>
                                         <?php endif; ?>
                                         <?php if ($isFeatured): ?>
                                             <div class="gdy-badge gdy-badge--solid news-badge">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> مميز
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> مميز
                                             </div>
                                         <?php endif; ?>
                                         <?php if (!empty($n['is_locked'])): ?>
                                             <div class="news-lock" title="هذا المحتوى للأعضاء فقط">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> للأعضاء
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> للأعضاء
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -812,16 +812,16 @@ if ($imgUrl === '') {
                                         <div class="news-meta">
                                             <span>
                                                 <?php if ($date): ?>
-                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                                     <?= date('Y-m-d', strtotime($date)) ?>
                                                 <?php endif; ?>
                                             </span>
                                             <span>
                                                 <?php if ($views > 0): ?>
-                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                                     <?= number_format($views) ?>
                                                 <?php else: ?>
-                                                    <svg class="gdy-icon gdy-new-dot" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                    <svg class="gdy-icon gdy-new-dot" aria-hidden="true" focusable="false"><use href="#plus"></use></svg>
                                                     جديد
                                                 <?php endif; ?>
                                             </span>
@@ -840,19 +840,19 @@ if ($imgUrl === '') {
                                         <div class="news-footer">
                                             <?php if ($author): ?>
                                                 <div class="news-author">
-                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                                     <span><?= h($author) ?></span>
                                                 </div>
                                             <?php else: ?>
                                                 <div class="news-author">
-                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                                                     <span>فريق التحرير</span>
                                                 </div>
                                             <?php endif; ?>
 
                                             <span class="more-link">
                                                 قراءة المزيد
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </span>
                                         </div>
                                     </div>
@@ -868,7 +868,7 @@ if ($imgUrl === '') {
                                     <li class="page-item">
                                         <a class="page-link"
                                            href="<?= h($makePageUrl($currentPage - 1)) ?>">
-                                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> السابقة
+                                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> السابقة
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -890,7 +890,7 @@ if ($imgUrl === '') {
                                     <li class="page-item">
                                         <a class="page-link"
                                            href="<?= h($makePageUrl($currentPage + 1)) ?>">
-                                            التالية <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            التالية <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#arrow-right"></use></svg>
                                         </a>
                                     </li>
                                 <?php endif; ?>
@@ -901,12 +901,12 @@ if ($imgUrl === '') {
                 <?php else: ?>
                     <div class="empty-state">
                         <div class="empty-state-icon">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </div>
                         <h3 class="h4 mb-2">لا توجد مقالات</h3>
                         <p class="mb-4">لم يتم إضافة أي مقالات في هذا القسم حتى الآن.</p>
                         <a href="<?= h($homeUrl) ?>" class="btn btn-primary">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg> العودة للرئيسية
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#home"></use></svg> العودة للرئيسية
                         </a>
                     </div>
                 <?php endif; ?>

@@ -29,8 +29,16 @@
   let deferredPrompt = null;
 
   window.addEventListener("beforeinstallprompt", function (e) {
-    // Prevent default mini-infobar
-    e.preventDefault();
+    /*
+      ملاحظة مهمة:
+      بعض المتصفحات (Chromium) تعرض تحذير Console مثل:
+      "Banner not shown: beforeinstallpromptevent.preventDefault() called..."
+      إذا تم استدعاء preventDefault() ولم يتم استدعاء prompt() لاحقاً.
+
+      لتجنب هذا التحذير نهائياً، لا نستدعي preventDefault هنا.
+      نترك المتصفح يدير عرض التنبيه تلقائياً، ونستخدم البانر كإرشاد اختياري.
+    */
+
     deferredPrompt = e;
 
     // Don't show if already dismissed recently
@@ -103,11 +111,23 @@
 
     if (installBtn) {
       installBtn.addEventListener("click", function () {
-        if (!deferredPrompt) return;
+        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
+        // عندها نعرض إرشاداً مختصراً للمستخدم.
+        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
+          alert(isIOS
+            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
+            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
+          return;
+        }
+
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function () {
+        if (deferredPrompt.userChoice && typeof deferredPrompt.userChoice.then === 'function') {
+          deferredPrompt.userChoice.then(function () {
+            deferredPrompt = null;
+          });
+        } else {
           deferredPrompt = null;
-        });
+        }
       });
     }
 

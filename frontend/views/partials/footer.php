@@ -265,14 +265,14 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
           <?php if ($siteEmail): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#mail"></use></svg> <?= h($siteEmail) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($siteEmail) ?></div>
           <?php endif; ?>
           <?php if ($sitePhone): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#phone"></use></svg> <?= h($sitePhone) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?= h($sitePhone) ?></div>
           <?php endif; ?>
           <?php if ($siteAddr): ?>
             <div>
-              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <strong><?= h(__("address")) ?>:</strong>
               <?= h($siteAddr) ?>
             </div>
@@ -335,13 +335,13 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
             <div class="gdy-footer-apps">
               <?php if ($appAndroid): ?>
                 <a href="<?= h($appAndroid) ?>" target="_blank" rel="noopener noreferrer">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span><?= h(__("android_app")) ?></span>
                 </a>
               <?php endif; ?>
               <?php if ($appIos): ?>
                 <a href="<?= h($appIos) ?>" target="_blank" rel="noopener noreferrer">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span><?= h(__("ios_app")) ?></span>
                 </a>
               <?php endif; ?>
@@ -357,7 +357,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
         <?php if (!empty($teamUrl)): ?>
           <a href="<?= h($teamUrl) ?>" class="gdy-footer-team-link">
             <span class="gdy-social-icon is-team">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <span class="gdy-footer-social-tooltip"><?= h(__("team")) ?></span>
             </span>
             <span><?= h(__("team")) ?></span>
@@ -371,25 +371,25 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
   <?php $gdyIsUser = (!empty($_SESSION['user']) || !empty($_SESSION['user_id']) || !empty($_SESSION['user_email'])); ?>
   <nav class="gdy-mobile-bar" id="gdyMobileBar" aria-label="التنقل">
     <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/') ?>" data-tab="home" aria-label="الرئيسية">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg><span>الرئيسية</span>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg><span>الرئيسية</span>
     </a>
     <button class="mb-item" type="button" data-action="cats" data-tab="cats" aria-label="الأقسام">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><span>الأقسام</span>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><span>الأقسام</span>
     </button>
     <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/saved') ?>" data-tab="saved" aria-label="محفوظاتي">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><span>محفوظاتي</span>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><span>محفوظاتي</span>
     </a>
     <?php if ($gdyIsUser): ?>
       <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/profile.php') ?>" data-tab="profile" aria-label="حسابي">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg><span>حسابي</span>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg><span>حسابي</span>
       </a>
     <?php else: ?>
       <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/login.php') ?>" data-tab="login" aria-label="دخول">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg><span>دخول</span>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg><span>دخول</span>
       </a>
     <?php endif; ?>
     <button class="mb-item" type="button" data-action="theme" aria-label="الوضع الليلي">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#moon"></use></svg><span>ليلي</span>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg><span>ليلي</span>
     </button>
   </nav>
 
@@ -731,7 +731,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 ?>
 <nav class="gdy-tabbar" aria-label="<?= h(__('navigation')) ?>">
   <a class="gdy-tab" href="<?= h($tabNewest) ?>" data-tab="home" aria-label="<?= h(__('home')) ?>">
-    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
     <span><?= h(__('home')) ?></span>
   </a>
 
@@ -809,5 +809,6 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 </div>
 
   <script src="/assets/js/public-interactions.js" defer></script>
+<script src="<?= h($baseUrl) ?>/assets/js/image_fallback.js" defer></script>
 </body>
 </html>

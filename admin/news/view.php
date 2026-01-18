@@ -114,7 +114,7 @@ html, body {
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
       <h1 class="h4 mb-1 text-white">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
         <?= h(__('t_d87bb21604', 'عرض الخبر / المقال')) ?>
       </h1>
       <p class="text-muted mb-0 small">
@@ -123,10 +123,10 @@ html, body {
     </div>
     <div class="mt-3 mt-md-0 d-flex gap-2">
       <a href="edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
       </a>
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
       </a>
     </div>
   </div>
@@ -137,7 +137,7 @@ html, body {
         <div class="col-md-8">
           <h2 class="h5 mb-1"><?= h($row['title']) ?></h2>
           <div class="small text-muted mb-2">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h($displayDate) ?>
           </div>
           <?php if ($summaryText !== ''): ?>
@@ -170,7 +170,7 @@ html, body {
   <?php if (!empty($attachments)): ?>
     <div class="card glass-card mb-3" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
       <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
-        <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_a2737af54c', 'المرفقات')) ?></h2>
+        <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a2737af54c', 'المرفقات')) ?></h2>
       </div>
       <div class="card-body">
         <div class="d-flex flex-column gap-2">
@@ -194,10 +194,10 @@ html, body {
                   <button class="btn btn-sm btn-outline-light" type="button"
                           data-bs-toggle="collapse" data-bs-target="#<?= h($cid) ?>"
                           aria-expanded="false" aria-controls="<?= h($cid) ?>" title="<?= h(__('t_d6a504f92a', 'مشاهدة داخل الصفحة')) ?>">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </button>
                   <a class="btn btn-sm btn-outline-info" href="<?= h($attUrl) ?>" download title="<?= h(__('t_871a087a1d', 'حفظ')) ?>">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </a>
                 </div>
               </div>

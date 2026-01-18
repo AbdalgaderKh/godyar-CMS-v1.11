@@ -275,7 +275,7 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
         <form method="get" class="d-flex flex-column flex-md-row gap-2 align-items-stretch">
           <input type="text" name="q" class="form-control" placeholder="<?= h(__('t_admin_search_placeholder','ابحث داخل الأخبار والمستخدمين والتعليقات والتصنيفات والوسوم والوسائط')) ?>" value="<?= h($searchTerm) ?>">
           <button class="btn btn-gdy btn-gdy-primary" type="submit">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_admin_search','بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_admin_search','بحث')) ?>
           </button>
         </form>
         <?php if ($error): ?>

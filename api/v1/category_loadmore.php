@@ -123,7 +123,7 @@ try {
         $html .=   '<a href="' . h($newsUrl) . '" class="text-decoration-none text-dark d-block h-100">';
         $html .=     '<div class="news-thumb">';
         if ($imgUrl !== '') {
-            $html .=       '<img src="' . h($imgUrl) . '" alt="' . h($title) . '" loading="lazy" decoding="async" style="opacity:0" onerror="this.style.display=\'none\'; this.parentElement.classList.add(\'news-thumb-empty\');">';
+            $html .=       '<img src="' . h($imgUrl) . '" alt="' . h($title) . '" loading="lazy" decoding="async" style="opacity:0" data-gdy-show-onload="1" data-gdy-hide-onerror="1" data-gdy-hide-parent-class="news-thumb-empty">';
         } else {
             $html .=       '<div class="news-thumb-placeholder gdy-skeleton" aria-hidden="true"></div>';
         }
@@ -133,14 +133,14 @@ try {
         $html .=       '<div class="news-meta">';
         $html .=         '<span>';
         if ($dateStr !== '') {
-            $html .=           '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h($dateStr);
+            $html .=           '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#calendar"></use></svg> ' . h($dateStr);
         }
         $html .=         '</span>';
         $html .=         '<span>';
         if ($views > 0) {
-            $html .=           '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h(number_format($views));
+            $html .=           '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#eye"></use></svg> ' . h(number_format($views));
         } else {
-            $html .=           '<svg class="gdy-icon gdy-new-dot" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> جديد';
+            $html .=           '<svg class="gdy-icon gdy-new-dot" aria-hidden="true" focusable="false"><use href="#spark"></use></svg> جديد';
         }
         $html .=         '</span>';
         $html .=       '</div>';
@@ -152,8 +152,8 @@ try {
         }
 
         $html .=       '<div class="news-footer">';
-        $html .=         '<div class="news-author"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg><span>فريق التحرير</span></div>';
-        $html .=         '<span class="more-link">قراءة المزيد <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></span>';
+        $html .=         '<div class="news-author"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg><span>فريق التحرير</span></div>';
+        $html .=         '<span class="more-link">قراءة المزيد <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg></span>';
         $html .=       '</div>';
 
         $html .=     '</div>';

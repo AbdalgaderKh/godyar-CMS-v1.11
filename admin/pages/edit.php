@@ -307,10 +307,10 @@ html, body {
       </div>
       <div class="d-flex gap-2 flex-wrap">
         <a href="<?= h($previewUrl) ?>" target="_blank" class="btn btn-sm btn-outline-info">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_d051fa8276', 'معاينة الصفحة')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d051fa8276', 'معاينة الصفحة')) ?>
         </a>
         <a href="index.php" class="btn btn-sm btn-secondary">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
         </a>
       </div>
     </div>
@@ -329,17 +329,17 @@ html, body {
       <div class="gdy-page-card-header">
         <div class="d-flex align-items-center gap-2">
           <span class="badge bg-primary-subtle text-light border border-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> صفحة #<?= (int)$id ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة #<?= (int)$id ?>
           </span>
         </div>
         <div>
           <?php if ($status === 'published'): ?>
             <span class="gdy-status-pill published">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_c67d973434', 'منشورة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_c67d973434', 'منشورة')) ?>
             </span>
           <?php else: ?>
             <span class="gdy-status-pill draft">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_9071af8f2d', 'مسودة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9071af8f2d', 'مسودة')) ?>
             </span>
           <?php endif; ?>
         </div>
@@ -347,15 +347,15 @@ html, body {
 
       <div class="gdy-page-meta-strip">
         <div class="gdy-page-meta-item">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span><strong><?= h(__('t_3276131673', 'إنشاء:')) ?></strong> <?= h($created_at ?: __('t_5883c3555c', 'غير متوفر')) ?></span>
         </div>
         <div class="gdy-page-meta-item">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span><strong><?= h(__('t_5385d5784c', 'آخر تعديل:')) ?></strong> <?= h($updated_at ?: __('t_5883c3555c', 'غير متوفر')) ?></span>
         </div>
         <div class="gdy-page-meta-item">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span class="text-truncate" style="max-width:260px;">
             <strong>Slug:</strong> <code class="small"><?= h($slug) ?></code>
           </span>

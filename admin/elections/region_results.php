@@ -291,11 +291,11 @@ require __DIR__ . '/../layout/sidebar.php';
       </div>
       <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
         <a href="regions.php?election_id=<?= (int)$electionId ?>" class="btn btn-outline-secondary btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_735a187184', 'رجوع لقائمة الولايات')) ?>
         </a>
         <a href="results.php?election_id=<?= (int)$electionId ?>" class="btn btn-outline-success btn-sm">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <?= h(__('t_1767d49bf2', 'ملخص النتائج العامة')) ?>
         </a>
       </div>
@@ -398,7 +398,7 @@ require __DIR__ . '/../layout/sidebar.php';
 
           <div class="card-footer d-flex justify-content-end">
             <button type="submit" class="btn btn-primary btn-sm">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_24b2983e9d', 'حفظ نتائج هذه الولاية')) ?>
             </button>
           </div>

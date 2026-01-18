@@ -246,7 +246,7 @@ html, body{
             <h1 class="h4 text-white mb-1">
                 <?= h(__('t_99081e2fc8', 'عرض الرسالة')) ?>
                 <span class="gdy-chip ms-1">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= (int)$row['id'] ?>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= (int)$row['id'] ?>
                 </span>
             </h1>
             <p class="text-muted mb-1 small">
@@ -254,12 +254,12 @@ html, body{
             </p>
             <div class="d-flex flex-wrap gap-2 mt-1">
                 <span class="gdy-chip">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     أرسلت في: <?= h($row['created_at'] ?? '') ?>
                 </span>
                 <?php if (!empty($row['updated_at'])): ?>
                     <span class="gdy-chip">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         آخر تحديث: <?= h($row['updated_at']) ?>
                     </span>
                 <?php endif; ?>
@@ -268,7 +268,7 @@ html, body{
 
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-sm btn-outline-light">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
             </a>
         </div>
     </div>
@@ -351,11 +351,11 @@ html, body{
 
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <h6 class="mb-0 text-white">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(__('t_6a3c8bac29', 'نص الرسالة')) ?>
                 </h6>
                 <button type="button" id="copyMessageBtn" class="btn btn-xs btn-outline-secondary">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fb2df472a1', 'نسخ نص الرسالة')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_fb2df472a1', 'نسخ نص الرسالة')) ?>
                 </button>
             </div>
 
@@ -368,24 +368,24 @@ html, body{
                 <div class="d-flex flex-wrap gap-2">
                     <?php if (!empty($row['email'])): ?>
                         <button type="button" id="copyEmailBtn" class="btn btn-sm btn-outline-light">
-                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_e489e850f9', 'نسخ البريد')) ?>
+                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_e489e850f9', 'نسخ البريد')) ?>
                         </button>
 
                         <a href="mailto:<?= h($row['email']) ?>?subject=<?= rawurlencode(__('t_3435d61012', 'رد على: ') . (string)($row['subject'] ?? '')) ?>"
                            class="btn btn-sm btn-primary">
-                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_8095aeba44', 'الرد عبر البريد')) ?>
+                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_8095aeba44', 'الرد عبر البريد')) ?>
                         </a>
                     <?php endif; ?>
 
                     <a href="reply.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-success">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5ac782ffd1', 'الرد من لوحة التحكم')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5ac782ffd1', 'الرد من لوحة التحكم')) ?>
                     </a>
                 </div>
 
                 <!-- زر الرجوع هنا أيضاً إن حبيت يكون قريب من الأزرار -->
                 <div class="mt-2 mt-md-0">
                     <a href="index.php" class="btn btn-sm btn-outline-light">
-                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
                     </a>
                 </div>
             </div>
@@ -403,9 +403,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = <?= json_encode((string)($row['email'] ?? '')) ?>;
             if (!email) return;
             navigator.clipboard.writeText(email).then(function () {
-                copyEmailBtn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5c43a7b9ec', 'تم النسخ\';
+                copyEmailBtn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_5c43a7b9ec', 'تم النسخ\';
                 setTimeout(function () {
-                    copyEmailBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_79da066ba6', 'نسخ البريد\';
+                    copyEmailBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_79da066ba6', 'نسخ البريد\';
                 }, 1500);
             });
         });
@@ -419,9 +419,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const text = messageContent.innerText || messageContent.textContent || \'\';
             if (!text) return;
             navigator.clipboard.writeText(text).then(function () {
-                copyMessageBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_ce244ff56c', 'تم النسخ\';
+                copyMessageBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_ce244ff56c', 'تم النسخ\';
                 setTimeout(function () {
-                    copyMessageBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_e815215918', 'نسخ نص الرسالة\';
+                    copyMessageBtn.innerHTML = \'')) ?><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_e815215918', 'نسخ نص الرسالة\';
                 }, 1500);
             });
         });

@@ -12,6 +12,25 @@ if (!defined('GDY_SUPPORTED_LANGS')) {
     define('GDY_SUPPORTED_LANGS', ['ar','en','fr']);
 }
 
+if (!function_exists('gdy_set_cookie_rfc')) {
+    function gdy_set_cookie_rfc(string $name, string $value, int $ttlSeconds, string $path = '/', bool $secure = false, bool $httpOnly = true, string $sameSite = 'Lax'): void
+    {
+        if (headers_sent()) {
+            return;
+        }
+        $ttlSeconds = max(0, $ttlSeconds);
+        $expires = gmdate('D, d M Y H:i:s', time() + $ttlSeconds) . ' GMT';
+        $cookie = $name . '=' . rawurlencode($value)
+            . '; Expires=' . $expires
+            . '; Max-Age=' . $ttlSeconds
+            . '; Path=' . $path
+            . '; SameSite=' . $sameSite
+            . ($secure ? '; Secure' : '')
+            . ($httpOnly ? '; HttpOnly' : '');
+        header('Set-Cookie: ' . $cookie, false);
+    }
+}
+
 if (!function_exists('gdy_lang')) {
     function gdy_lang(): string
     {
@@ -25,13 +44,10 @@ if (!function_exists('gdy_lang')) {
             $_SESSION['gdy_lang'] = $q;
 
             if (!headers_sent()) {
-                setcookie('gdy_lang', $q, [
-                    'expires'  => time() + 60*60*24*90,
-                    'path'     => '/',
-                    'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
-                    'httponly' => false,
-                    'samesite' => 'Lax',
-                ]);
+	                $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+	                    || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+	                    || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+	                gdy_set_cookie_rfc('gdy_lang', $q, 60*60*24*90, '/', $isSecure, true, 'Lax');
             }
             return $q;
         }

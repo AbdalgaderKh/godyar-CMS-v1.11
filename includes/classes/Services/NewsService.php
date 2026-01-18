@@ -425,312 +425,542 @@ final class NewsService
         ];
     }
 
-    /**
- * Unified search across news/pages/authors (used by /search).
- *
- * @param string $q
- * @param int $page
- * @param int $perPage
- * @param array{type?:string,category_id?:int,date_from?:string,date_to?:string,match?:string} $filters
- * @return array{items: array<int,array<string,mixed>>, total:int, page:int, per_page:int, total_pages:int, counts: array{news:int,pages:int,authors:int}}
- */
-public function search(string $q, int $page = 1, int $perPage = 12, array $filters = []): array
-{
-    $q = trim($this->decodeIfEncoded($q));
-    $page = max(1, (int)$page);
-    $perPage = max(1, min(100, (int)$perPage));
-
-    $type = (string)($filters['type'] ?? 'all'); // all|news|page|author
-    $categoryId = (int)($filters['category_id'] ?? 0);
-    $dateFrom = (string)($filters['date_from'] ?? '');
-    $dateTo   = (string)($filters['date_to'] ?? '');
-    $match    = (string)($filters['match'] ?? 'all'); // all|any
-
-    // Empty query: return nothing but valid structure.
-    if ($q === '') {
-        return [
-            'items' => [],
-            'total' => 0,
-            'page' => $page,
-            'per_page' => $perPage,
-            'total_pages' => 0,
-            'counts' => ['news' => 0, 'pages' => 0, 'authors' => 0],
-        ];
-    }
-
-    // Tokenize query for "any/all" match. (Unicode-safe split)
-    $qNorm = preg_replace('/\s+/u', ' ', $q);
-    $terms = array_values(array_filter(explode(' ', (string)$qNorm), static fn($t) => $t !== ''));
-
-    // For very long queries, keep it bounded.
-    if (count($terms) > 8) { $terms = array_slice($terms, 0, 8); }
-
-    $counts = ['news' => 0, 'pages' => 0, 'authors' => 0];
-
-    // Helper: build LIKE conditions
-    
-$makeLike = static function (array $cols, array $terms, string $mode, string $pfx, array &$bind): string {
-    $cols = array_values(array_filter($cols, static fn($c) => is_string($c) && $c !== ''));
-    if (!$cols || !$terms) return '1=0';
-
-    $termClauses = [];
-    $tIndex = 0;
-    foreach ($terms as $t) {
-        $tIndex++;
-        $colClauses = [];
-        $cIndex = 0;
-        foreach ($cols as $c) {
-            $cIndex++;
-            // IMPORTANT: PDO MySQL does not allow reusing the same named placeholder multiple times.
-            // Use unique placeholder per (term, column) to avoid HY093 Invalid parameter number.
-            $p = ':' . $pfx . $tIndex . '_' . $cIndex;
-            $bind[$p] = '%' . $t . '%';
-            $colClauses[] = "{$c} LIKE {$p}";
-        }
-        $termClauses[] = '(' . implode(' OR ', $colClauses) . ')';
-    }
-
-    $glue = (strtolower($mode) === 'any') ? ' OR ' : ' AND ';
-    return '(' . implode($glue, $termClauses) . ')';
-};
-
-    $items = [];
-    $totalAll = 0;
-
-    try {
-        // NEWS
-        if ($type === 'all' || $type === 'news') {
-            $bind = [];
-            $where = [];
-            $where[] = $this->publishedWhere('n');
-
-            if ($categoryId > 0 && $this->hasColumn('news', 'category_id')) {
-                $where[] = "n.category_id = :cat";
-                $bind[':cat'] = $categoryId;
-            }
-
-            $dateCol = $this->hasColumn('news', 'published_at') ? 'published_at'
-                : ($this->hasColumn('news', 'created_at') ? 'created_at'
-                : ($this->hasColumn('news', 'date') ? 'date' : ''));
-
-            if ($dateCol !== '' && $dateFrom !== '') {
-                $where[] = "DATE(n.`{$dateCol}`) >= :df";
-                $bind[':df'] = $dateFrom;
-            }
-            if ($dateCol !== '' && $dateTo !== '') {
-                $where[] = "DATE(n.`{$dateCol}`) <= :dt";
-                $bind[':dt'] = $dateTo;
-            }
-
-            $titleCol = $this->hasColumn('news', 'title') ? 'n.title' : ($this->hasColumn('news', 'headline') ? 'n.headline' : 'n.id');
-            $bodyCol  = $this->hasColumn('news', 'content') ? 'n.content'
-                : ($this->hasColumn('news', 'body') ? 'n.body'
-                : ($this->hasColumn('news', 'details') ? 'n.details' : ''));
-
-            $cols = [$titleCol];
-            if ($bodyCol !== '') $cols[] = $bodyCol;
-
-            $where[] = $makeLike($cols, $terms, $match, 'nq', $bind);
-            $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
-
-            // count
-            $st = $this->pdo->prepare("SELECT COUNT(*) FROM news n {$whereSql}");
-            foreach ($bind as $k => $v) {
-                $st->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
-            }
-            $st->execute();
-            $counts['news'] = (int)($st->fetchColumn() ?: 0);
-
-            // fetch (overfetch for later merge, then slice by pagination)
-            $orderCol = ($dateCol !== '') ? "n.`{$dateCol}`" : "n.id";
-            $sql = "SELECT n.* FROM news n {$whereSql} ORDER BY {$orderCol} DESC, n.id DESC LIMIT 200";
-            $st = $this->pdo->prepare($sql);
-            foreach ($bind as $k => $v) {
-                $st->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
-            }
-            $st->execute();
-            $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-            foreach ($rows as $r) {
-                $id = (int)($r['id'] ?? 0);
-                if ($id <= 0) continue;
-
-                $slug = $this->slugById($id);
-                $url = $slug ? ('/news/' . rawurlencode($slug)) : ('/news/id/' . $id);
-
-                $img = '';
-                foreach (['image','cover','thumb','thumbnail','featured_image','og_image'] as $k) {
-                    if (!empty($r[$k])) { $img = (string)$r[$k]; break; }
-                }
-
-                $excerpt = '';
-                if (!empty($r['excerpt'])) {
-                    $excerpt = (string)$r['excerpt'];
-                } else {
-                    $src = '';
-                    foreach (['summary','content','body','details','description'] as $k) {
-                        if (!empty($r[$k])) { $src = (string)$r[$k]; break; }
-                    }
-                    $src = trim(strip_tags($src));
-                    if ($src !== '') {
-                        $excerpt = mb_substr($src, 0, 160, 'UTF-8');
-                    }
-                }
-
-                $created = '';
-                if ($dateCol !== '' && !empty($r[$dateCol])) $created = (string)$r[$dateCol];
-                elseif (!empty($r['created_at'])) $created = (string)$r['created_at'];
-
-                $items[] = [
-                    'kind' => 'news',
-                    'title' => (string)($r['title'] ?? ($r['headline'] ?? '')),
-                    'url' => $url,
-                    'image' => $img,
-                    'excerpt' => $excerpt,
-                    'created_at' => $created,
-                ];
-            }
-        }
-
-        // PAGES
-        if ($type === 'all' || $type === 'page') {
-            if ($this->hasTable('pages')) {
-                $bind = [];
-                $where = [];
-
-                // published only if column exists
-                if ($this->hasColumn('pages', 'status')) {
-                    $where[] = "p.status = 'published'";
-                }
-
-                if ($dateFrom !== '' && $this->hasColumn('pages','created_at')) {
-                    $where[] = "DATE(p.created_at) >= :pdf";
-                    $bind[':pdf'] = $dateFrom;
-                }
-                if ($dateTo !== '' && $this->hasColumn('pages','created_at')) {
-                    $where[] = "DATE(p.created_at) <= :pdt";
-                    $bind[':pdt'] = $dateTo;
-                }
-
-                $cols = ['p.title'];
-                if ($this->hasColumn('pages','content')) $cols[] = 'p.content';
-                $where[] = $makeLike($cols, $terms, $match, 'pq', $bind);
-
-                $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
-
-                $st = $this->pdo->prepare("SELECT COUNT(*) FROM pages p {$whereSql}");
-                foreach ($bind as $k => $v) $st->bindValue($k, $v, PDO::PARAM_STR);
-                $st->execute();
-                $counts['pages'] = (int)($st->fetchColumn() ?: 0);
-
-                $sql = "SELECT id, title, slug, content, created_at FROM pages p {$whereSql} ORDER BY p.id DESC LIMIT 200";
-                $st = $this->pdo->prepare($sql);
-                foreach ($bind as $k => $v) $st->bindValue($k, $v, PDO::PARAM_STR);
-                $st->execute();
-                $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-                foreach ($rows as $r) {
-                    $id = (int)($r['id'] ?? 0);
-                    if ($id <= 0) continue;
-                    $slug = (string)($r['slug'] ?? '');
-                    $url = $slug !== '' ? ('/page/' . rawurlencode($slug)) : ('/page/' . $id);
-
-                    $src = trim(strip_tags((string)($r['content'] ?? '')));
-                    $excerpt = $src !== '' ? mb_substr($src, 0, 160, 'UTF-8') : '';
-
-                    $items[] = [
-                        'kind' => 'page',
-                        'title' => (string)($r['title'] ?? ''),
-                        'url' => $url,
-                        'image' => '',
-                        'excerpt' => $excerpt,
-                        'created_at' => (string)($r['created_at'] ?? ''),
-                    ];
-                }
-            }
-        }
-
-        // AUTHORS (opinion)
-        if ($type === 'all' || $type === 'author') {
-            if ($this->hasTable('authors')) {
-                $bind = [];
-                $where = [];
-
-                $cols = ['a.name'];
-                if ($this->hasColumn('authors','bio')) $cols[] = 'a.bio';
-                $where[] = $makeLike($cols, $terms, $match, 'aq', $bind);
-
-                $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
-
-                $st = $this->pdo->prepare("SELECT COUNT(*) FROM authors a {$whereSql}");
-                foreach ($bind as $k => $v) $st->bindValue($k, $v, PDO::PARAM_STR);
-                $st->execute();
-                $counts['authors'] = (int)($st->fetchColumn() ?: 0);
-
-                $sql = "SELECT id, name, bio, avatar FROM authors a {$whereSql} ORDER BY a.id DESC LIMIT 200";
-                $st = $this->pdo->prepare($sql);
-                foreach ($bind as $k => $v) $st->bindValue($k, $v, PDO::PARAM_STR);
-                $st->execute();
-                $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-                foreach ($rows as $r) {
-                    $id = (int)($r['id'] ?? 0);
-                    if ($id <= 0) continue;
-
-                    // Some installs have slug column; if not, fallback to id
-                    $slug = '';
-                    if (!empty($r['slug'])) $slug = (string)$r['slug'];
-
-                    $base = '/opinion_author.php';
-                    $url = $slug !== '' ? ($base . '?slug=' . rawurlencode($slug)) : ($base . '?id=' . $id);
-
-                    $bio = trim(strip_tags((string)($r['bio'] ?? '')));
-                    $excerpt = $bio !== '' ? mb_substr($bio, 0, 160, 'UTF-8') : '';
-
-                    $items[] = [
-                        'kind' => 'author',
-                        'title' => (string)($r['name'] ?? ''),
-                        'url' => $url,
-                        'image' => (string)($r['avatar'] ?? ''),
-                        'excerpt' => $excerpt,
-                        'created_at' => '',
-                    ];
-                }
-            }
-        }
-
-    } catch (Throwable $e) {
-        @error_log('[NewsService] search: ' . $e->getMessage());
-    }
-
-    // Sort by created_at/id heuristic (best effort)
-    usort($items, static function (array $a, array $b): int {
-        $da = (string)($a['created_at'] ?? '');
-        $db = (string)($b['created_at'] ?? '');
-        $ta = $da !== '' ? strtotime($da) : 0;
-        $tb = $db !== '' ? strtotime($db) : 0;
-        return $tb <=> $ta;
-    });
-
-    $totalAll = (int)($counts['news'] + $counts['pages'] + $counts['authors']);
-
-    // Pagination over merged list
-    $offset = ($page - 1) * $perPage;
-    $pagedItems = array_slice($items, $offset, $perPage);
-
-    return [
-        'items' => $pagedItems,
-        'total' => $totalAll,
-        'page' => $page,
-        'per_page' => $perPage,
-        'total_pages' => (int)ceil($totalAll / max(1, $perPage)),
-        'counts' => $counts,
-    ];
-}
-
-
-public function __version(): string
+    public function __version(): string
     {
         return 'NewsService r7 (archive+mostRead) 2026-01-14';
     }
+
+/**
+ * Get related published news by category.
+ *
+ * Flexible call patterns supported:
+ * - relatedByCategory($categoryId, $excludeId = 0, $limit = 6, $lang = null)
+ * - relatedByCategory($newsRowArray, $limit = 6)
+ *
+ * @return array<int, array<string,mixed>>
+ */
+public function relatedByCategory(...$args): array
+{
+    try {
+        $categoryId = 0;
+        $excludeId  = 0;
+        $limit      = 6;
+        $lang       = null;
+
+        if (isset($args[0]) && is_array($args[0])) {
+            $row = $args[0];
+            $categoryId = (int)($row['category_id'] ?? $row['cat_id'] ?? $row['category'] ?? 0);
+            $excludeId  = (int)($row['id'] ?? $row['news_id'] ?? 0);
+            if (isset($args[1]) && is_numeric($args[1])) $limit = (int)$args[1];
+            if (isset($row['lang']) && is_string($row['lang'])) $lang = $row['lang'];
+        } else {
+            if (isset($args[0]) && is_numeric($args[0])) $categoryId = (int)$args[0];
+            if (isset($args[1]) && is_numeric($args[1])) $excludeId  = (int)$args[1];
+            if (isset($args[2]) && is_numeric($args[2])) $limit      = (int)$args[2];
+            if (isset($args[3]) && (is_string($args[3]) || $args[3] === null)) $lang = $args[3];
+        }
+
+        if ($limit <= 0) $limit = 6;
+        if ($limit > 24) $limit = 24;
+
+        $table = $this->resolveNewsTable();
+        if ($table === '') return [];
+
+        $catCol = $this->resolveCategoryColumn($table);
+        if ($catCol === '') return [];
+        if ($categoryId <= 0) return [];
+
+        // Build SELECT columns that exist in current schema
+        $selectCols = ['id'];
+        foreach (['title','slug','image','thumbnail','excerpt','summary','category_id','cat_id','category','created_at','published_at','updated_at','views','lang'] as $c) {
+            if ($this->hasColumn($table, $c)) $selectCols[] = $c;
+        }
+        $selectCols = array_values(array_unique($selectCols));
+        $select = implode(', ', array_map(static fn($c) => "n.`{$c}`", $selectCols));
+
+        $where = [];
+        $params = [':cid' => $categoryId];
+
+        // Published filters (schema-tolerant)
+        $where[] = $this->publishedWhereForTable($table, 'n');
+
+        // category match
+        $where[] = "n.`{$catCol}` = :cid";
+
+        // exclude current item
+        if ($excludeId > 0) {
+            $where[] = "n.`id` <> :ex";
+            $params[':ex'] = $excludeId;
+        }
+
+        // language if supported
+        if ($lang !== null && $lang !== '' && $this->hasColumn($table, 'lang')) {
+            $where[] = "n.`lang` = :lang";
+            $params[':lang'] = (string)$lang;
+        }
+
+        $orderCol = 'id';
+        foreach (['published_at','created_at','updated_at'] as $c) {
+            if ($this->hasColumn($table, $c)) { $orderCol = $c; break; }
+        }
+
+        // NOTE: table name is trusted internal (resolved from fixed allowlist)
+        $sql = "SELECT {$select}
+                FROM `{$table}` n
+                WHERE " . implode(' AND ', array_filter($where)) . "
+                ORDER BY n.`{$orderCol}` DESC
+                LIMIT " . (int)$limit;
+
+        $st = $this->pdo->prepare($sql);
+        $st->execute($params);
+        $rows = $st->fetchAll(\PDO::FETCH_ASSOC);
+
+        return is_array($rows) ? $rows : [];
+    } catch (\Throwable $e) {
+        @error_log('[NewsService] relatedByCategory: ' . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Resolve the news table name in a schema-tolerant way.
+ * @return string Table name without backticks, or empty string if not found.
+ */
+private function resolveNewsTable(): string
+{
+    foreach (['news','posts','articles'] as $t) {
+        if ($this->hasTable($t)) return $t;
+    }
+    return '';
+}
+
+/**
+ * Resolve category column on the given table.
+ * @return string Column name, or empty string if none found.
+ */
+private function resolveCategoryColumn(string $table): string
+{
+    foreach (['category_id','cat_id','category'] as $c) {
+        if ($this->hasColumn($table, $c)) return $c;
+    }
+    return '';
+}
+
+/**
+ * Published WHERE clause for a given table, tolerant across schemas.
+ */
+private function publishedWhereForTable(string $table, string $alias = 'n'): string
+{
+    // Prefer existing logic for the canonical `news` table when available.
+    if ($table === 'news' && method_exists($this, 'publishedWhere')) {
+        try {
+            /** @phpstan-ignore-next-line */
+            return (string)$this->publishedWhere($alias);
+        } catch (\Throwable) {
+            // fall through
+        }
+    }
+
+    $alias = preg_replace('/[^a-zA-Z0-9_]/', '', $alias) ?: 'n';
+
+    $clauses = ["1=1"];
+
+    if ($this->hasColumn($table, 'status')) {
+        $clauses[] = "{$alias}.`status` IN ('published','publish','active')";
+    } elseif ($this->hasColumn($table, 'is_published')) {
+        $clauses[] = "{$alias}.`is_published` = 1";
+    }
+
+    if ($this->hasColumn($table, 'deleted_at')) {
+        $clauses[] = "{$alias}.`deleted_at` IS NULL";
+    } elseif ($this->hasColumn($table, 'is_deleted')) {
+        $clauses[] = "{$alias}.`is_deleted` = 0";
+    }
+
+    return '(' . implode(' AND ', $clauses) . ')';
+}
+
+    /**
+     * Unified search used by SearchController.
+     *
+     * Returns:
+     *  - items: array of ['kind','title','url','image','excerpt','created_at','category_slug']
+     *  - total: total rows for the selected type
+     *  - total_pages: total pages for the selected type
+     *  - counts: counts by section (news/pages/authors) for the same query/filters
+     *
+     * @param array<string,mixed> $filters
+     * @return array{items: array<int,array<string,mixed>>, total:int, total_pages:int, counts: array<string,int>}
+     */
+    public function search(string $q, int $page = 1, int $perPage = 12, array $filters = []): array
+    {
+        $q = trim((string)$q);
+        $page = max(1, (int)$page);
+        $perPage = max(1, min(50, (int)$perPage));
+
+        $type = (string)($filters['type'] ?? 'all'); // all|news|opinion|page|author
+        $categoryId = (int)($filters['category_id'] ?? 0);
+        $dateFrom = trim((string)($filters['date_from'] ?? ''));
+        $dateTo   = trim((string)($filters['date_to'] ?? ''));
+        $match    = (string)($filters['match'] ?? 'all'); // all|any
+
+        // Normalize query terms
+        $q = preg_replace('/[\x00-\x1F\x7F]/u', '', $q);
+        if (function_exists('mb_substr')) {
+            $q = (string)mb_substr($q, 0, 200, 'UTF-8');
+        } else {
+            $q = (string)substr($q, 0, 200);
+        }
+
+        $terms = preg_split('/\s+/u', $q, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        if (count($terms) > 6) $terms = array_slice($terms, 0, 6);
+
+        $counts = ['news' => 0, 'pages' => 0, 'authors' => 0];
+
+        if ($q === '') {
+            return ['items' => [], 'total' => 0, 'total_pages' => 0, 'counts' => $counts];
+        }
+
+        // Build SELECT blocks
+        $selects = [];
+        $params = [];
+
+        // These lists are also reused to compute counts.
+        $newsCols = [];
+        $pagesCols = [];
+        $authCols = [];
+        $newsDateCol = '';
+
+        $wantNews   = in_array($type, ['all', 'news', 'opinion'], true);
+        $wantPages  = in_array($type, ['all', 'page'], true);
+        $wantAuthor = in_array($type, ['all', 'author'], true);
+
+        // ---------- NEWS / OPINION ----------
+        if ($wantNews && $this->hasTable('news')) {
+            $newsCols = [];
+            foreach (['title','excerpt','content','slug'] as $c) {
+                if ($this->hasColumn('news', $c)) $newsCols[] = "n.`{$c}`";
+            }
+            if (!$newsCols) {
+                $newsCols[] = "n.`id`";
+            }
+
+            $newsWhere = [];
+            $newsWhere[] = $this->publishedWhere('n');
+
+            if ($categoryId > 0 && $this->hasColumn('news', 'category_id')) {
+                $newsWhere[] = 'n.`category_id` = :cat_id';
+                $params[':cat_id'] = $categoryId;
+            }
+
+            if ($type === 'opinion') {
+                if ($this->hasColumn('news', 'opinion_author_id')) {
+                    $newsWhere[] = 'n.`opinion_author_id` IS NOT NULL';
+                } else {
+                    $newsWhere[] = '1=0';
+                }
+            } elseif ($type === 'news') {
+                if ($this->hasColumn('news', 'opinion_author_id')) {
+                    $newsWhere[] = 'n.`opinion_author_id` IS NULL';
+                }
+            }
+
+            $newsDateCol = '';
+            foreach (['published_at','publish_at','created_at','updated_at'] as $dc) {
+                if ($this->hasColumn('news', $dc)) { $newsDateCol = "n.`{$dc}`"; break; }
+            }
+            if ($newsDateCol !== '' && $dateFrom !== '') {
+                $newsWhere[] = "DATE({$newsDateCol}) >= :date_from";
+                $params[':date_from'] = $dateFrom;
+                if ($dateTo !== '') {
+                    $newsWhere[] = "DATE({$newsDateCol}) <= :date_to";
+                    $params[':date_to'] = $dateTo;
+                }
+            }
+
+            $termParts = [];
+            foreach ($terms as $i => $t) {
+                $k = ':nq' . $i;
+                $params[$k] = '%' . $t . '%';
+                $or = [];
+                foreach ($newsCols as $col) {
+                    $or[] = "{$col} LIKE {$k}";
+                }
+                $termParts[] = '(' . implode(' OR ', $or) . ')';
+            }
+            if ($termParts) {
+                $newsWhere[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $termParts) . ')';
+            }
+
+            $imgCols = [];
+            foreach (['featured_image','image_path','image'] as $ic) {
+                if ($this->hasColumn('news', $ic)) $imgCols[] = "n.`{$ic}`";
+            }
+            $imgExpr = $imgCols ? ('COALESCE(' . implode(',', $imgCols) . ", '')") : "''";
+
+            $excerptExpr = $this->hasColumn('news', 'excerpt') ? "n.`excerpt`" : ($this->hasColumn('news', 'content') ? "n.`content`" : "''");
+            $dateExpr = $newsDateCol !== '' ? $newsDateCol : "n.`id`";
+
+            $catSlugExpr = $this->hasColumn('categories', 'slug') ? 'c.slug' : "''";
+            $joinCat = ($this->hasTable('categories') && $this->hasColumn('news', 'category_id'))
+                ? 'LEFT JOIN categories c ON c.id = n.category_id'
+                : "LEFT JOIN (SELECT NULL AS slug, NULL AS id) c ON 1=0";
+
+            $selects[] = "SELECT 'news' AS kind,
+                                 n.`title` AS title,
+                                 CONCAT('/news/id/', n.`id`) AS url,
+                                 {$imgExpr} AS image,
+                                 {$excerptExpr} AS excerpt,
+                                 {$dateExpr} AS created_at,
+                                 {$catSlugExpr} AS category_slug
+                          FROM news n
+                          {$joinCat}
+                          WHERE " . implode(' AND ', $newsWhere);
+        }
+
+        // ---------- PAGES ----------
+        if ($wantPages && $this->hasTable('pages')) {
+            $pagesWhere = [];
+            $pagesCols = [];
+            foreach (['title','content','slug'] as $c) {
+                if ($this->hasColumn('pages', $c)) $pagesCols[] = "p.`{$c}`";
+            }
+            if (!$pagesCols) $pagesCols[] = 'p.`id`';
+
+            $pagesWhere[] = $this->publishedWhereForTable('pages', 'p');
+
+            $termParts = [];
+            foreach ($terms as $i => $t) {
+                $k = ':pq' . $i;
+                $params[$k] = '%' . $t . '%';
+                $or = [];
+                foreach ($pagesCols as $col) {
+                    $or[] = "{$col} LIKE {$k}";
+                }
+                $termParts[] = '(' . implode(' OR ', $or) . ')';
+            }
+            if ($termParts) {
+                $pagesWhere[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $termParts) . ')';
+            }
+
+            $slugCol = $this->hasColumn('pages', 'slug') ? 'p.`slug`' : "p.`id`";
+            $titleCol = $this->hasColumn('pages', 'title') ? 'p.`title`' : "CONCAT('Page #', p.`id`)";
+            $contentCol = $this->hasColumn('pages', 'content') ? 'p.`content`' : "''";
+            $dateCol = $this->hasColumn('pages', 'updated_at') ? 'p.`updated_at`' : ($this->hasColumn('pages', 'created_at') ? 'p.`created_at`' : 'NOW()');
+
+            $selects[] = "SELECT 'page' AS kind,
+                                 {$titleCol} AS title,
+                                 CONCAT('/page/', {$slugCol}) AS url,
+                                 '' AS image,
+                                 {$contentCol} AS excerpt,
+                                 {$dateCol} AS created_at,
+                                 '' AS category_slug
+                          FROM pages p
+                          WHERE " . implode(' AND ', $pagesWhere);
+        }
+
+        // ---------- OPINION AUTHORS ----------
+        if ($wantAuthor && $this->hasTable('opinion_authors')) {
+            $authWhere = [];
+            $authCols = [];
+            foreach (['name','bio','slug','page_title'] as $c) {
+                if ($this->hasColumn('opinion_authors', $c)) $authCols[] = "oa.`{$c}`";
+            }
+            if (!$authCols) $authCols[] = 'oa.`id`';
+
+            if ($this->hasColumn('opinion_authors', 'is_active')) {
+                $authWhere[] = '(oa.`is_active` = 1 OR oa.`is_active` = "1" OR oa.`is_active` = TRUE)';
+            }
+
+            $termParts = [];
+            foreach ($terms as $i => $t) {
+                $k = ':aq' . $i;
+                $params[$k] = '%' . $t . '%';
+                $or = [];
+                foreach ($authCols as $col) {
+                    $or[] = "{$col} LIKE {$k}";
+                }
+                $termParts[] = '(' . implode(' OR ', $or) . ')';
+            }
+            if ($termParts) {
+                $authWhere[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $termParts) . ')';
+            }
+
+            $nameCol = $this->hasColumn('opinion_authors', 'name') ? 'oa.`name`' : "CONCAT('Author #', oa.`id`)";
+            $bioCol  = $this->hasColumn('opinion_authors', 'bio') ? 'oa.`bio`' : "''";
+            $avatarCol = $this->hasColumn('opinion_authors', 'avatar') ? 'oa.`avatar`' : "''";
+            $dateCol = $this->hasColumn('opinion_authors', 'updated_at') ? 'oa.`updated_at`' : ($this->hasColumn('opinion_authors', 'created_at') ? 'oa.`created_at`' : 'NOW()');
+
+            $selects[] = "SELECT 'author' AS kind,
+                                 {$nameCol} AS title,
+                                 '/category/opinion-writers' AS url,
+                                 {$avatarCol} AS image,
+                                 {$bioCol} AS excerpt,
+                                 {$dateCol} AS created_at,
+                                 'opinion-writers' AS category_slug
+                          FROM opinion_authors oa
+                          " . ($authWhere ? ('WHERE ' . implode(' AND ', $authWhere)) : '');
+        }
+
+        if (!$selects) {
+            return ['items' => [], 'total' => 0, 'total_pages' => 0, 'counts' => $counts];
+        }
+
+        // Counts per section (independent of selected type). We compute counts directly (no recursion).
+        try {
+            if ($this->hasTable('news')) {
+                if (!$newsCols) {
+                    foreach (['title','excerpt','content','slug'] as $c) {
+                        if ($this->hasColumn('news', $c)) { $newsCols[] = "n.`{$c}`"; }
+                    }
+                    if (!$newsCols) { $newsCols[] = 'n.`id`'; }
+                }
+                if ($newsDateCol === '') {
+                    foreach (['published_at','publish_at','created_at','updated_at'] as $dc) {
+                        if ($this->hasColumn('news', $dc)) { $newsDateCol = "n.`{$dc}`"; break; }
+                    }
+                }
+
+                $where = [$this->publishedWhere('n')];
+                $p = [];
+                if ($categoryId > 0 && $this->hasColumn('news', 'category_id')) {
+                    $where[] = 'n.`category_id` = :c_cat_id';
+                    $p[':c_cat_id'] = $categoryId;
+                }
+                if ($newsDateCol !== '' && $dateFrom !== '') {
+                    $where[] = "DATE({$newsDateCol}) >= :c_date_from";
+                    $p[':c_date_from'] = $dateFrom;
+                    if ($dateTo !== '') {
+                        $where[] = "DATE({$newsDateCol}) <= :c_date_to";
+                        $p[':c_date_to'] = $dateTo;
+                    }
+                }
+                if ($terms) {
+                    $tParts = [];
+                    foreach ($terms as $i => $t) {
+                        $k = ':c_nq' . $i;
+                        $p[$k] = '%' . $t . '%';
+                        $or = [];
+                        foreach ($newsCols as $col) {
+                            $or[] = "{$col} LIKE {$k}";
+                        }
+                        $tParts[] = '(' . implode(' OR ', $or) . ')';
+                    }
+                    $where[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $tParts) . ')';
+                }
+                $st = $this->pdo->prepare('SELECT COUNT(*) FROM news n WHERE ' . implode(' AND ', $where));
+                foreach ($p as $k => $v) {
+                    $st->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+                }
+                $st->execute();
+                $counts['news'] = (int)($st->fetchColumn() ?: 0);
+            }
+
+            if ($this->hasTable('pages')) {
+                $pCols = $pagesCols;
+                if (!$pCols) {
+                    foreach (['title','content','slug'] as $c) {
+                        if ($this->hasColumn('pages', $c)) { $pCols[] = "p.`{$c}`"; }
+                    }
+                    if (!$pCols) { $pCols[] = 'p.`id`'; }
+                }
+                $where = [$this->publishedWhereForTable('pages', 'p')];
+                $p = [];
+                if ($terms) {
+                    $tParts = [];
+                    foreach ($terms as $i => $t) {
+                        $k = ':c_pq' . $i;
+                        $p[$k] = '%' . $t . '%';
+                        $or = [];
+                        foreach ($pCols as $col) {
+                            $or[] = "{$col} LIKE {$k}";
+                        }
+                        $tParts[] = '(' . implode(' OR ', $or) . ')';
+                    }
+                    $where[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $tParts) . ')';
+                }
+                $st = $this->pdo->prepare('SELECT COUNT(*) FROM pages p WHERE ' . implode(' AND ', $where));
+                foreach ($p as $k => $v) {
+                    $st->bindValue($k, $v, PDO::PARAM_STR);
+                }
+                $st->execute();
+                $counts['pages'] = (int)($st->fetchColumn() ?: 0);
+            }
+
+            if ($this->hasTable('opinion_authors')) {
+                $aCols = $authCols;
+                if (!$aCols) {
+                    foreach (['name','bio','slug','page_title'] as $c) {
+                        if ($this->hasColumn('opinion_authors', $c)) { $aCols[] = "oa.`{$c}`"; }
+                    }
+                    if (!$aCols) { $aCols[] = 'oa.`id`'; }
+                }
+                $where = [];
+                $p = [];
+                if ($this->hasColumn('opinion_authors', 'is_active')) {
+                    $where[] = '(oa.`is_active` = 1 OR oa.`is_active` = "1" OR oa.`is_active` = TRUE)';
+                }
+                if ($terms) {
+                    $tParts = [];
+                    foreach ($terms as $i => $t) {
+                        $k = ':c_aq' . $i;
+                        $p[$k] = '%' . $t . '%';
+                        $or = [];
+                        foreach ($aCols as $col) {
+                            $or[] = "{$col} LIKE {$k}";
+                        }
+                        $tParts[] = '(' . implode(' OR ', $or) . ')';
+                    }
+                    $where[] = '(' . implode($match === 'any' ? ' OR ' : ' AND ', $tParts) . ')';
+                }
+                $sql = 'SELECT COUNT(*) FROM opinion_authors oa' . ($where ? (' WHERE ' . implode(' AND ', $where)) : '');
+                $st = $this->pdo->prepare($sql);
+                foreach ($p as $k => $v) {
+                    $st->bindValue($k, $v, PDO::PARAM_STR);
+                }
+                $st->execute();
+                $counts['authors'] = (int)($st->fetchColumn() ?: 0);
+            }
+        } catch (Throwable) {
+            // ignore
+        }
+
+        $unionSql = implode("\nUNION ALL\n", $selects);
+        $offset = ($page - 1) * $perPage;
+
+        $items = [];
+        $total = 0;
+        $totalPages = 0;
+        try {
+            $st = $this->pdo->prepare("SELECT COUNT(*) FROM ( {$unionSql} ) t");
+            foreach ($params as $k => $v) {
+                $st->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+            $st->execute();
+            $total = (int)($st->fetchColumn() ?: 0);
+            $totalPages = (int)ceil($total / $perPage);
+
+            $st2 = $this->pdo->prepare("SELECT * FROM ( {$unionSql} ) t ORDER BY t.created_at DESC LIMIT :limit OFFSET :offset");
+            foreach ($params as $k => $v) {
+                $st2->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
+            }
+            $st2->bindValue(':limit', $perPage, PDO::PARAM_INT);
+            $st2->bindValue(':offset', $offset, PDO::PARAM_INT);
+            $st2->execute();
+            $items = $st2->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (Throwable $e) {
+            @error_log('[NewsService] search error: ' . $e->getMessage());
+            $items = [];
+            $total = 0;
+            $totalPages = 0;
+        }
+
+        return [
+            'items' => $items,
+            'total' => $total,
+            'total_pages' => $totalPages,
+            'counts' => $counts,
+        ];
+    }
+
 }

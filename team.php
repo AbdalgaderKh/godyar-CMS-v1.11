@@ -384,7 +384,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
   <div class="col-12 col-lg-9">
     <div class="team-section-shell">
       <div class="team-section-title">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <span>فريق العمل التحريري والتقني</span>
       </div>
       <h1 class="h4 mb-2">فريق العمل</h1>
@@ -408,7 +408,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
             <div class="team-card-col">
               <div class="team-card">
                 <div class="team-card-index">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span>#<?= (int)$i ?></span>
                 </div>
 
@@ -417,7 +417,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
                     <img src="<?= h($photo) ?>" alt="<?= h($name) ?>">
                   <?php else: ?>
                     <div class="d-flex align-items-center justify-content-center" style="width:100%;height:100%;">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                     </div>
                   <?php endif; ?>
                 </div>
@@ -429,14 +429,14 @@ require __DIR__ . '/frontend/views/partials/header.php';
 
                   <?php if ($position): ?>
                     <div class="team-position">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       <span><?= h($position) ?></span>
                     </div>
                   <?php endif; ?>
 
                   <?php if ($email): ?>
                     <div class="team-email">
-                      <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       <a href="mailto:<?= h($email) ?>"><?= h($email) ?></a>
                     </div>
                   <?php endif; ?>
@@ -446,7 +446,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
                   <?php endif; ?>
 
                   <div class="team-footer-tag">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <span>عضو ضمن فريق Godyar</span>
                   </div>
                 </div>

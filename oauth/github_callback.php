@@ -124,6 +124,7 @@ $username = trim((string)($u['login'] ?? ''));
 $displayName = trim((string)($u['name'] ?? ''));
 $avatarUrl = trim((string)($u['avatar_url'] ?? ''));
 if ($displayName === '') $displayName = ($username !== '' ? $username : 'GitHub');
+if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = ($username !== '' ? $username : 'GitHub');}
 
 if ($email === '' || $username === '' || $githubId === '') {
     gdy_oauth_fail('بيانات GitHub غير مكتملة (email/login/id).');
@@ -172,10 +173,28 @@ if (!$userRow) {
         $insertVals[] = ':username';
         $bind[':username'] = $username;
     }
-    if (col_exists($cols, 'display_name')) {
+    // display_name/name (schema-safe)
+    // لا نعتمد فقط على $cols لتفادي أي تعارض/كاش على الاستضافة.
+    $hasDisplayName = function_exists('db_column_exists') ? db_column_exists($pdo, 'users', 'display_name') : col_exists($cols, 'display_name');
+    $nameCol = '';
+    if (function_exists('db_column_exists')) {
+        if (db_column_exists($pdo, 'users', 'name')) $nameCol = 'name';
+        elseif (db_column_exists($pdo, 'users', 'full_name')) $nameCol = 'full_name';
+        elseif (db_column_exists($pdo, 'users', 'fullName')) $nameCol = 'fullName';
+    } else {
+        $nameCol = col_exists($cols, 'name') ? 'name' : (col_exists($cols, 'full_name') ? 'full_name' : (col_exists($cols, 'fullName') ? 'fullName' : ''));
+    }
+
+    if ($hasDisplayName) {
         $insertCols[] = 'display_name';
         $insertVals[] = ':display_name';
         $bind[':display_name'] = $displayName;
+    } else {
+        if ($nameCol !== '') {
+            $insertCols[] = $nameCol;
+            $insertVals[] = ':__name';
+            $bind[':__name'] = $displayName;
+        }
     }
     if (col_exists($cols, 'github_id')) {
         $insertCols[] = 'github_id';
@@ -207,8 +226,31 @@ if (!$userRow) {
     }
 
     $sqlIns = "INSERT INTO users (" . implode(',', array_map(fn($c)=>"`{$c}`",$insertCols)) . ") VALUES (" . implode(',', $insertVals) . ")";
-    $ins = $pdo->prepare($sqlIns);
-    $ins->execute($bind);
+	$ins = $pdo->prepare($sqlIns);
+	try {
+		$ins->execute($bind);
+		} catch (PDOException $e) {
+			// بعض تعريفات PDO تُرجع getCode() = HY000 رغم أن الرسالة تحتوي SQLSTATE[42S22]
+			$em = (string)$e->getMessage();
+			$looksLikeMissingDisplayName = (stripos($em, 'display_name') !== false) && (
+				stripos($em, 'Unknown column') !== false || stripos($em, '42S22') !== false
+			);
+			if ($looksLikeMissingDisplayName) {
+			$idx = array_search('display_name', $insertCols, true);
+			if ($idx !== false) {
+				array_splice($insertCols, $idx, 1);
+				array_splice($insertVals, $idx, 1);
+				unset($bind[':display_name']);
+				$sqlIns = "INSERT INTO users (" . implode(',', array_map(fn($c)=>"`{$c}`",$insertCols)) . ") VALUES (" . implode(',', $insertVals) . ")";
+				$ins = $pdo->prepare($sqlIns);
+				$ins->execute($bind);
+			} else {
+				throw $e;
+			}
+		} else {
+			throw $e;
+		}
+	}
     $newId = (int)$pdo->lastInsertId();
 
     $userRow = [

@@ -637,19 +637,19 @@ html, body { overflow-x: hidden; }
 
     <div class="gdy-header">
       <div>
-        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_cdefdef2cf', 'إعدادات الطقس')) ?></h1>
+        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_cdefdef2cf', 'إعدادات الطقس')) ?></h1>
         <p class="mb-0"><?= h(__('t_8a8238d6f6', 'تهيئة ويدجيت الطقس لواجهة الموقع مع قاعدة بيانات مدن + اختبار سريع.')) ?></p>
       </div>
       <div class="gdy-actions">
         <a href="index.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
         </a>
       </div>
     </div>
 
     <?php if ($errors): ?>
       <div class="alert alert-danger">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <ul class="mb-0">
           <?php foreach ($errors as $e): ?>
             <li><?= h($e) ?></li>
@@ -660,13 +660,13 @@ html, body { overflow-x: hidden; }
 
     <?php if ($success): ?>
       <div class="alert alert-success">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($success) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($success) ?>
       </div>
     <?php endif; ?>
 
     <?php if ($locErrors): ?>
       <div class="alert alert-danger">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <ul class="mb-0">
           <?php foreach ($locErrors as $e): ?>
             <li><?= h($e) ?></li>
@@ -677,7 +677,7 @@ html, body { overflow-x: hidden; }
 
     <?php if ($locSuccess): ?>
       <div class="alert alert-success">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($locSuccess) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($locSuccess) ?>
       </div>
     <?php endif; ?>
 
@@ -686,11 +686,11 @@ html, body { overflow-x: hidden; }
       <div class="col-lg-8">
         <div class="gdy-card">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_8af012a71b', 'إعدادات الاتصال وعرض الطقس')) ?></h2>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= h(__('t_8af012a71b', 'إعدادات الاتصال وعرض الطقس')) ?></h2>
             <div class="gdy-summary">
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> الحالة: <?= (int)($current['is_active'] ?? 0) === 1 ? __('t_4759637ebc', 'مفعّل') : __('t_4c64abcbc3', 'غير مفعّل') ?></span>
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> المدينة: <?= h((string)($current['city'] ?? '—')) ?></span>
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تحديث: <?= (int)($current['refresh_minutes'] ?? 30) ?> دقيقة</span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الحالة: <?= (int)($current['is_active'] ?? 0) === 1 ? __('t_4759637ebc', 'مفعّل') : __('t_4c64abcbc3', 'غير مفعّل') ?></span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> المدينة: <?= h((string)($current['city'] ?? '—')) ?></span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تحديث: <?= (int)($current['refresh_minutes'] ?? 30) ?> دقيقة</span>
             </div>
           </div>
 
@@ -704,7 +704,7 @@ html, body { overflow-x: hidden; }
                 <div class="input-group">
                   <input type="password" name="api_key" id="api_key" class="form-control" required value="<?= h((string)($current['api_key'] ?? '')) ?>">
                   <button class="btn btn-outline-light" type="button" id="toggle-key" title="<?= h(__('t_13404a383b', 'إظهار/إخفاء')) ?>">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </button>
                 </div>
                 <div class="form-text">
@@ -775,17 +775,17 @@ html, body { overflow-x: hidden; }
 
               <div class="d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
                 </button>
 
                 <button type="button" class="btn btn-outline-light" id="test-weather">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f09cc50204', 'اختبار الاتصال')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f09cc50204', 'اختبار الاتصال')) ?>
                 </button>
               </div>
 
               <div class="gdy-test-box mt-3">
                 <div class="small text-muted">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <?= h(__('t_df8eebffd0', 'اختبار الاتصال يجرب جلب طقس المدينة الحالية باستخدام OpenWeatherMap (من المتصفح).')) ?>
                 </div>
                 <div id="test-result" class="gdy-test-result"></div>
@@ -799,8 +799,8 @@ html, body { overflow-x: hidden; }
       <div class="col-lg-4">
         <div class="gdy-card mb-4">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_e547f05ec6', 'إضافة مدينة/دولة')) ?></h2>
-            <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= (int)$locActiveCount ?>/<?= (int)$locTotal ?> مفعّلة</span>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_e547f05ec6', 'إضافة مدينة/دولة')) ?></h2>
+            <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= (int)$locActiveCount ?>/<?= (int)$locTotal ?> مفعّلة</span>
           </div>
           <div class="gdy-card-body">
             <form method="post" action="" autocomplete="off">
@@ -829,7 +829,7 @@ html, body { overflow-x: hidden; }
               </div>
 
               <button type="submit" class="btn btn-outline-light btn-sm w-100">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_6b97427299', 'إضافة المدينة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_6b97427299', 'إضافة المدينة')) ?>
               </button>
             </form>
 
@@ -837,9 +837,9 @@ html, body { overflow-x: hidden; }
 
             <div class="mb-2 d-flex align-items-center justify-content-between">
               <div class="small text-muted">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_ce980312f5', 'المدن المسجّلة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ce980312f5', 'المدن المسجّلة')) ?>
               </div>
-              <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= (int)$locTotal ?></span>
+              <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= (int)$locTotal ?></span>
             </div>
 
             <div class="mb-2">
@@ -882,7 +882,7 @@ html, body { overflow-x: hidden; }
                               <input type="hidden" name="action" value="toggle">
                               <input type="hidden" name="location_row_id" value="<?= (int)$loc['id'] ?>">
                               <button type="submit" class="btn btn-sm btn-outline-light" title="<?= h(__('t_47388f3138', 'تفعيل/تعطيل')) ?>">
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                               </button>
                             </form>
 
@@ -892,7 +892,7 @@ html, body { overflow-x: hidden; }
                               <input type="hidden" name="action" value="delete">
                               <input type="hidden" name="location_row_id" value="<?= (int)$loc['id'] ?>">
                               <button type="submit" class="btn btn-sm btn-outline-danger" title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                               </button>
                             </form>
                           </div>
@@ -913,7 +913,7 @@ html, body { overflow-x: hidden; }
 
         <div class="gdy-card">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_d5d2cdc290', 'تحسينات سريعة')) ?></h2>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d5d2cdc290', 'تحسينات سريعة')) ?></h2>
           </div>
           <div class="gdy-card-body">
             <ul class="small text-muted mb-0">
@@ -940,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleKeyBtn.addEventListener('click', function() {
       const isPass = apiKeyInput.getAttribute('type') === 'password';
       apiKeyInput.setAttribute('type', isPass ? 'text' : 'password');
-      toggleKeyBtn.innerHTML = isPass ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>';
+      toggleKeyBtn.innerHTML = isPass ? '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg>' : '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg>';
     });
   }
 
@@ -1025,17 +1025,17 @@ document.addEventListener('DOMContentLoaded', function() {
       const units = getUnitsValue();
 
       if (!key) {
-        showResult('err', '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> يرجى إدخال API key أولاً.');
+        showResult('err', '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> يرجى إدخال API key أولاً.');
         return;
       }
       if (!city) {
-        showResult('err', '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> يرجى تحديد/إدخال المدينة أولاً.');
+        showResult('err', '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> يرجى تحديد/إدخال المدينة أولاً.');
         return;
       }
 
       testBtn.disabled = true;
       const oldHtml = testBtn.innerHTML;
-      testBtn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> جاري الاختبار...';
+      testBtn.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> جاري الاختبار...';
 
       try {
         const q = cc ? encodeURIComponent(city + ',' + cc) : encodeURIComponent(city);
@@ -1046,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (!res.ok) {
           const msg = data && data.message ? data.message : 'تعذر جلب البيانات';
-          showResult('err', `<div><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> فشل الاختبار: <b>${msg}</b></div>
+          showResult('err', `<div><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> فشل الاختبار: <b>${msg}</b></div>
             <div class="small text-muted mt-1">تأكد من صحة المفتاح واسم المدينة ورمز الدولة.</div>`);
         } else {
           const name = data.name || city;
@@ -1055,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const hum  = (data.main && typeof data.main.humidity !== 'undefined') ? data.main.humidity : '';
           const unitLabel = units === 'metric' ? '°C' : '°F';
 
-          showResult('ok', `<div><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> نجح الاختبار!</div>
+          showResult('ok', `<div><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> نجح الاختبار!</div>
             <div class="mt-2">
               <div><b>المدينة:</b> ${name}</div>
               <div><b>الحرارة:</b> ${temp} ${unitLabel}</div>
@@ -1064,7 +1064,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>`);
         }
       } catch (e) {
-        showResult('err', `<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> فشل الاختبار بسبب خطأ بالشبكة أو CORS.`);
+        showResult('err', `<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> فشل الاختبار بسبب خطأ بالشبكة أو CORS.`);
       } finally {
         testBtn.disabled = false;
         testBtn.innerHTML = oldHtml;

@@ -123,6 +123,38 @@
   <symbol id="settings" viewBox="0 0 24 24">
     <path fill="currentColor" d="M19.14 12.94a7.49 7.49 0 0 0 .05-.94 7.49 7.49 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 0h-3.8a.5.5 0 0 0-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 6.48a.5.5 0 0 0 .12.64l2.03 1.58c-.03.31-.05.63-.05.94s.02.63.05.94L2.83 14.52a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.51.4 1.05.71 1.63.94l.36 2.54a.5.5 0 0 0 .49.42h3.8a.5.5 0 0 0 .49-.42l.36-2.54c.58-.23 1.12-.54 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/>
   </symbol>
+
+  <!-- Admin action icons (24x24) -->
+  <symbol id="external-link" viewBox="0 0 24 24">
+    <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z" />
+    <path d="M5 5h6v2H7v10h10v-4h2v6H5V5z" />
+  </symbol>
+
+  <symbol id="edit" viewBox="0 0 24 24">
+    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" />
+    <path d="M20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z" />
+  </symbol>
+
+  <symbol id="copy" viewBox="0 0 24 24">
+    <path d="M16 1H6c-1.1 0-2 .9-2 2v12h2V3h10V1z" />
+    <path d="M18 5H10c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H10V7h8v14z" />
+  </symbol>
+
+  <symbol id="trash" viewBox="0 0 24 24">
+    <path d="M6 7h12l-1 14H7L6 7z" />
+    <path d="M9 4h6l1 2H8l1-2z" />
+    <path d="M4 6h16v2H4V6z" />
+  </symbol>
+
+  <symbol id="duplicate" viewBox="0 0 24 24">
+    <path d="M16 1H6c-1.1 0-2 .9-2 2v12h2V3h10V1z" />
+    <path d="M18 5H10c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H10V7h8v14z" />
+    <path d="M13 10h2v2h2v2h-2v2h-2v-2h-2v-2h2v-2z" />
+  </symbol>
+
+  <symbol id="toggle" viewBox="0 0 24 24">
+    <path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5a5 5 0 0 1-5 5 5 5 0 0 1-4.58-3H5.26A7 7 0 0 0 12 20a7 7 0 0 0 0-14z" />
+  </symbol>
   <symbol id="tag" viewBox="0 0 24 24">
     <path fill="currentColor" d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3H4a1 1 0 0 0-1 1v5.59A2 2 0 0 0 3.83 11l9.59 9.59a2 2 0 0 0 2.83 0l4.34-4.34a2 2 0 0 0 0-2.84zM6.5 8A1.5 1.5 0 1 1 8 6.5 1.5 1.5 0 0 1 6.5 8z"/>
   </symbol>
@@ -237,6 +269,93 @@
     <rect x="3" y="10" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
     <path d="M8 10V7h8v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
     <path d="M12 3l3 3-6 6-3-3 6-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+  </symbol>
+
+  <symbol id="close" viewBox="0 0 24 24">
+    <path d="M18 6L6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="chevron-left" viewBox="0 0 24 24">
+    <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="chevron-right" viewBox="0 0 24 24">
+    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="chevron-up" viewBox="0 0 24 24">
+    <path d="M18 15l-6-6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="arrow-left" viewBox="0 0 24 24">
+    <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M12 19l-7-7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="arrow-right" viewBox="0 0 24 24">
+    <path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="minus" viewBox="0 0 24 24">
+    <path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="save" viewBox="0 0 24 24">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M17 21v-8H7v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M7 3v5h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="link" viewBox="0 0 24 24">
+    <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="filter" viewBox="0 0 24 24">
+    <path d="M4 5h16l-6 7v6l-4 2v-8L4 5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="file-csv" viewBox="0 0 24 24">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M7 13h10M7 17h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="upload" viewBox="0 0 24 24">
+    <path d="M12 3v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M8 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4 17v4h16v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="play" viewBox="0 0 24 24">
+    <path d="M9 7l10 5-10 5V7z" fill="currentColor"/>
+  </symbol>
+  <symbol id="pause" viewBox="0 0 24 24">
+    <path d="M7 6h4v12H7zM13 6h4v12h-4z" fill="currentColor"/>
+  </symbol>
+  <symbol id="unlock" viewBox="0 0 24 24">
+    <rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M8 11V8a4 4 0 0 1 7.5-1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="more-h" viewBox="0 0 24 24">
+    <circle cx="6" cy="12" r="1.8" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
+    <circle cx="18" cy="12" r="1.8" fill="currentColor"/>
+  </symbol>
+  <symbol id="more-v" viewBox="0 0 24 24">
+    <circle cx="12" cy="6" r="1.8" fill="currentColor"/>
+    <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
+    <circle cx="12" cy="18" r="1.8" fill="currentColor"/>
+  </symbol>
+  <symbol id="refresh" viewBox="0 0 24 24">
+    <path d="M20 12a8 8 0 1 1-2.3-5.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path d="M20 4v6h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path d="M12 7v6l4 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+
+  <!-- r17 additions -->
+  <symbol id="bookmark" viewBox="0 0 24 24">
+    <path d="M6 3h12a1 1 0 0 1 1 1v18l-7-4-7 4V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="spark" viewBox="0 0 24 24">
+    <path d="M12 2l2.4 6.7L21 9l-5.2 3.9L17.8 20 12 16.5 6.2 20l2-7.1L3 9l6.6-.3L12 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
   </symbol>
 
 </svg>

@@ -159,10 +159,10 @@ $otherNews  = array_slice($latestNews, 1);
         <h1 class="gdy-main-title"><?= h($title) ?></h1>
         <div class="gdy-main-meta">
           <?php if ($date): ?>
-            <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($date) ?></span>
+            <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($date) ?></span>
           <?php endif; ?>
           <?php if ($views !== null): ?>
-            <span class="ms-3"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= number_format($views) ?> مشاهدة</span>
+            <span class="ms-3"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= number_format($views) ?> مشاهدة</span>
           <?php endif; ?>
         </div>
         <p class="gdy-main-desc">
@@ -199,7 +199,7 @@ $otherNews  = array_slice($latestNews, 1);
             <h3 class="gdy-news-card-title"><?= h($t) ?></h3>
             <?php if ($date): ?>
               <div class="gdy-news-card-meta">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span><?= h($date) ?></span>
               </div>
             <?php endif; ?>

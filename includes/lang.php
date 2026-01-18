@@ -1,37 +1,65 @@
 <?php
-
-/**
- * Fallback: ensure regex wrappers are available even if auto_prepend_file/.user.ini are not applied (common on shared hosting).
- * This prevents fatal errors in i18n loading.
- */
-if (!function_exists('gdy_regex_replace')) {
-    function gdy_regex_replace(string $pattern, string $replacement, $subject, int $limit = -1, ?int &$count = null) {
-        // Basic safety: block legacy eval modifier patterns.
-        if (preg_match('/^(.)(?:\\\\.|(?!\\1).)*\\1([a-zA-Z]*)$/s', $pattern, $m)) {
-            $mods = $m[2] ?? '';
-            if (strpos($mods, 'e') !== false) { $count = 0; return $subject; }
-        }
-        if ($count === null) { return preg_replace($pattern, $replacement, $subject, $limit); }
-        return preg_replace($pattern, $replacement, $subject, $limit, $count);
-    }
-}
-if (!function_exists('gdy_regex_replace_callback')) {
-    function gdy_regex_replace_callback(string $pattern, callable $callback, $subject, int $limit = -1, ?int &$count = null) {
-        if (preg_match('/^(.)(?:\\\\.|(?!\\1).)*\\1([a-zA-Z]*)$/s', $pattern, $m)) {
-            $mods = $m[2] ?? '';
-            if (strpos($mods, 'e') !== false) { $count = 0; return $subject; }
-        }
-        if ($count === null) { return preg_replace_callback($pattern, $callback, $subject, $limit); }
-        return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
-    }
-}
-
-
 // /includes/lang.php
 // i18n helper (Frontend + Admin) - Backward compatible + safe defaults
 
-if (session_status() === PHP_SESSION_NONE) {
-    @session_start();
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    // Avoid @ error suppression to satisfy strict linters.
+    session_start();
+}
+
+/**
+ * Ensure regex wrapper exists (runtime safety).
+ * On some deployments the prepend file may be bypassed; keep this file self-sufficient.
+ */
+if (!function_exists('gdy_regex_replace')) {
+    function gdy_regex_replace($pattern, $replacement, $subject, $limit = -1, &$count = null)
+    {
+        if ($count === null) {
+            return preg_replace($pattern, $replacement, $subject, (int)$limit);
+        }
+        $tmp = 0;
+        $out = preg_replace($pattern, $replacement, $subject, (int)$limit, $tmp);
+        $count = $tmp;
+        return $out;
+    }
+}
+if (!function_exists('gdy_regex_replace_callback')) {
+    function gdy_regex_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = null)
+    {
+        if ($count === null) {
+            return preg_replace_callback($pattern, $callback, $subject, (int)$limit);
+        }
+        $tmp = 0;
+        $out = preg_replace_callback($pattern, $callback, $subject, (int)$limit, $tmp);
+        $count = $tmp;
+        return $out;
+    }
+}
+
+/**
+ * Set a cookie using an RFC-compliant Expires format (space-separated) to satisfy strict linters
+ * and keep headers consistent across environments.
+ */
+if (!function_exists('gdy_set_cookie_rfc')) {
+    function gdy_set_cookie_rfc(string $name, string $value, int $ttlSeconds, string $path = '/', bool $secure = false, bool $httpOnly = true, string $sameSite = 'Lax'): void
+    {
+        if (headers_sent()) {
+            return;
+        }
+        $ttlSeconds = max(0, $ttlSeconds);
+        $expTs = time() + $ttlSeconds;
+        $expires = gmdate('D, d M Y H:i:s \\G\\M\\T', $expTs);
+
+        $cookie = $name . '=' . rawurlencode($value)
+            . '; Expires=' . $expires
+            . '; Max-Age=' . $ttlSeconds
+            . '; Path=' . $path
+            . '; SameSite=' . $sameSite
+            . ($secure ? '; Secure' : '')
+            . ($httpOnly ? '; HttpOnly' : '');
+
+        header('Set-Cookie: ' . $cookie, false);
+    }
 }
 
 /**
@@ -64,10 +92,14 @@ function detect_lang()
         $lang = 'ar';
     }
 
-    ${'_SESSION'}['lang'] = $lang;
-    @setcookie('lang', $lang, time() + (90 * 24 * 60 * 60), '/', '', false, true);
-    // keep admin in sync
-    @setcookie('gdy_lang', $lang, time() + (90 * 24 * 60 * 60), '/', '', false, true);
+	${'_SESSION'}['lang'] = $lang;
+	$isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+	    || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+	    || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+	$ttl = 90 * 24 * 60 * 60;
+	gdy_set_cookie_rfc('lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
+	// keep admin in sync
+	gdy_set_cookie_rfc('gdy_lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
     return $lang;
 }
 
@@ -94,9 +126,13 @@ function gdy_set_lang($lang)
     }
     ${'GLOBALS'}['lang'] = $lang;
     ${'_SESSION'}['lang'] = $lang;
-    @setcookie('lang', $lang, time() + (90 * 24 * 60 * 60), '/', '', false, true);
-    // keep admin in sync
-    @setcookie('gdy_lang', $lang, time() + (90 * 24 * 60 * 60), '/', '', false, true);
+	$isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+	    || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
+	    || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+	$ttl = 90 * 24 * 60 * 60;
+	gdy_set_cookie_rfc('lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
+	// keep admin in sync
+	gdy_set_cookie_rfc('gdy_lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
     return $lang;
 }
 

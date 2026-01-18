@@ -58,9 +58,9 @@ try {
     // Build preview HTML (admin-only; content may include HTML from editor)
     $html = '';
     $html .= '<div class="mb-2 text-muted small" style="direction:ltr;">';
-    $html .= '<span class="me-2"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h($created ?: '—') . '</span>';
+    $html .= '<span class="me-2"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> ' . h($created ?: '—') . '</span>';
     if ($slug !== '') {
-        $html .= '<span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> ' . h($slug) . '</span>';
+        $html .= '<span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> ' . h($slug) . '</span>';
     }
     $html .= '</div>';
 

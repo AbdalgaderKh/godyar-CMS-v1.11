@@ -158,6 +158,22 @@ if (strpos((string)$pageHead, 'admin-ui.css') === false) {
 </head>
 <body>
 
+<?php
+// Inline SVG sprite to avoid external <use> fetch/MIME/CSP issues.
+// This makes <use href="#icon-id"> work reliably across admin pages.
+try {
+    $___sprite = rtrim((string)$root, '/\\') . '/assets/icons/gdy-icons.svg';
+    if (is_file($___sprite)) {
+        echo "\n<!-- GDY Icons Sprite (inline) -->\n";
+        @readfile($___sprite);
+        echo "\n";
+    }
+} catch (Throwable $e) { /* ignore */ }
+?>
+
+
+
+
 <?php // Global CSRF token for admin AJAX (Saved Filters, etc.) ?>
 <?php if (function_exists('csrf_token')): ?>
   <input type="hidden" name="csrf_token" id="gdyGlobalCsrfToken" value="<?= h(csrf_token()) ?>" style="display:none">
@@ -167,7 +183,7 @@ if (strpos((string)$pageHead, 'admin-ui.css') === false) {
 
 <div class="gdy-admin-mobilebar d-lg-none">
   <button type="button" class="gdy-admin-menu-btn" id="gdyAdminMenuBtn" aria-label="القائمة">
-    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
   </button>
 </div>
 <div class="gdy-admin-backdrop" id="gdyAdminBackdrop" hidden></div>

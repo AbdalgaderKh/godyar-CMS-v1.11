@@ -117,7 +117,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
     <div class="mt-3 mt-md-0">
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
       </a>
     </div>
   </div>
@@ -150,7 +150,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                  placeholder="/uploads/slider/slide1.jpg"
                  value="<?= h($data['image_path']) ?>">
           <button type="button" class="btn btn-outline-secondary" data-action="open-media-modal" data-target="slider_image_path">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_443b526a45', 'اختيار من الوسائط')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_443b526a45', 'اختيار من الوسائط')) ?>
           </button>
         </div>
         </div>
@@ -179,7 +179,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
     <div class="card-footer d-flex justify-content-end">
       <button type="submit" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_915ff03e02', 'حفظ الشريحة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_915ff03e02', 'حفظ الشريحة')) ?>
       </button>
     </div>
   </form>

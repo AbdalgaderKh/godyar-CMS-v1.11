@@ -45,7 +45,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
     <header class="admin-sidebar__header">
       <div class="admin-sidebar__brand">
         <div class="admin-sidebar__logo">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
         </div>
         <div class="admin-sidebar__brand-text">
           <div class="admin-sidebar__title">Godyar News</div>
@@ -55,7 +55,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
 
       <!-- زر إظهار/إخفاء في الجوال -->
       <button class="admin-sidebar__toggle" id="sidebarToggle" type="button" aria-label="<?= h(__('t_c21bebe724', 'إظهار/إخفاء القائمة')) ?>">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
       </button>
     </header>
 
@@ -70,7 +70,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
           autocomplete="off"
           aria-label="<?= h(__('t_8b39c16358', 'بحث في عناصر القائمة')) ?>"
         >
-        <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg>
+        <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
         <div class="admin-sidebar__search-results" id="searchResults" role="listbox" aria-label="<?= h(__('t_8dea9c0652', 'نتائج البحث')) ?>"></div>
       </div>
     </div>
@@ -79,7 +79,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
     <div class="admin-sidebar__quick">
       <div class="admin-sidebar__quick-item">
         <div class="admin-sidebar__quick-icon">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
           <div class="admin-sidebar__quick-number"><?= (int)$quickStats['posts'] ?></div>
@@ -88,7 +88,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       </div>
       <div class="admin-sidebar__quick-item">
         <div class="admin-sidebar__quick-icon">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
           <div class="admin-sidebar__quick-number"><?= (int)$quickStats['users'] ?></div>
@@ -97,7 +97,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       </div>
       <div class="admin-sidebar__quick-item">
         <div class="admin-sidebar__quick-icon">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
           <div class="admin-sidebar__quick-number"><?= (int)$quickStats['comments'] ?></div>
@@ -113,7 +113,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="overview">
           <span><?= h(__('t_22daf17224', 'نظرة عامة')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-overview">
           <li class="admin-sidebar__item">
@@ -122,7 +122,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_3aa8578699', 'الرئيسية')) ?></div>
@@ -133,7 +133,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
                   <?php if (!empty($notifications['reports'])): ?>
                     <span class="admin-sidebar__badge"><?= (int)$notifications['reports'] ?></span>
                   <?php endif; ?>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
             </div>
@@ -145,7 +145,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/reports/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_4d4e102c5e', 'التقارير')) ?></div>
@@ -154,7 +154,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
                 </div>
                 <div class="admin-sidebar__link-meta">
                   <span class="admin-sidebar__badge admin-sidebar__badge--pill"><?= h(__('t_c590a35c2d', 'جديد')) ?></span>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
             </div>
@@ -166,7 +166,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="content">
           <span><?= h(__('t_9f3797ed99', 'المحتوى')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-content">
 
@@ -176,7 +176,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/news/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_c6dac40d6a', 'إدارة المحتوى')) ?></div>
@@ -185,7 +185,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
                 </div>
                 <div class="admin-sidebar__link-meta">
                   <span class="admin-sidebar__badge"><?= (int)$quickStats['posts'] ?></span>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
             </div>
@@ -197,14 +197,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/categories/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_c6386f9c0e', 'الأقسام')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_a369c932e0', 'إدارة الأقسام والتصنيفات الرئيسية')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>\n\n</li>
@@ -215,14 +215,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
     <a href="<?= h($adminBase) ?>/elections/index.php" class="admin-sidebar__link">
       <div class="admin-sidebar__link-main">
         <div class="admin-sidebar__link-icon">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__link-text">
           <div class="admin-sidebar__link-label"><?= h(__('t_b9af904113', 'الانتخابات')) ?></div>
           <div class="admin-sidebar__link-sub"><?= h(__('t_01e75f784e', 'إدارة التغطيات الانتخابية (إظهار/إخفاء/أرشفة)')) ?></div>
         </div>
       </div>
-      <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+      <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
     </a>
   </div>
 </li>
@@ -234,14 +234,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/pages/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_0046fa59f3', 'الصفحات الثابتة')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_5fd50a4fd6', 'من نحن، اتصل بنا، الخدمات والسياسات')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -252,14 +252,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/media/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_50442947a8', 'الصور والفيديو والملفات المرفوعة')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -270,14 +270,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/slider/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_58a041f8da', 'السلايدر')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_59a13b7c65', 'شرائح العرض في الصفحة الرئيسية')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -288,14 +288,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/manage_videos.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_8dd4b9c7f3', 'الفيديوهات المميزة')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_ef45c07e19', 'إدارة مقاطع الفيديو المميزة')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -306,14 +306,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/opinion_authors/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_4a173870d1', 'كتّاب الرأي')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_acf979fd60', 'إدارة كتّاب وأعمدة الرأي')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -324,7 +324,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="users">
           <span><?= h(__('t_849cd8703b', 'المستخدمون وفريق العمل')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-users">
           <li class="admin-sidebar__item">
@@ -333,14 +333,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/users/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_39d3073371', 'المستخدمون')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_3ed68c57ce', 'إدارة حسابات المستخدمين والصلاحيات')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -351,14 +351,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/team/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_cd54bc26ba', 'فريق العمل')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_ef3eaa6abd', 'إدارة أعضاء فريق التحرير والإدارة')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -369,7 +369,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="marketing">
           <span><?= h(__('t_be948b3b75', 'الإعلانات والتواصل')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-marketing">
           <li class="admin-sidebar__item">
@@ -378,14 +378,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/ads/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_5750d13d2c', 'الإعلانات')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_aa106ae03d', 'إدارة البانرات والحملات الإعلانية')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -396,7 +396,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/contact/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_cab8942d73', 'رسائل التواصل')) ?></div>
@@ -407,7 +407,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
                   <?php if (!empty($notifications['contact'])): ?>
                     <span class="admin-sidebar__badge"><?= (int)$notifications['contact'] ?></span>
                   <?php endif; ?>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
             </div>
@@ -419,7 +419,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section admin-sidebar__section--quick">
         <button class="admin-sidebar__section-header" type="button" data-section="shortcuts">
           <span><?= h(__('t_f77df0e146', 'روابط سريعة')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-shortcuts">
           <li class="admin-sidebar__item">
@@ -427,7 +427,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/news/create.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?></div>
@@ -444,14 +444,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/categories/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_0a83b235e0', 'إدارة الأقسام')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_f928c160bf', 'الأقسام الرئيسية والفرعية للمحتوى')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -461,14 +461,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/media/upload.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_f8d557e5cd', 'رفع وسائط')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_5f5b0f52d9', 'رفع صورة أو ملف لاستخدامه في الأخبار')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -479,7 +479,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="settings">
           <span><?= h(__('t_1f60020959', 'الإعدادات')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-settings">
           <li class="admin-sidebar__item">
@@ -488,14 +488,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/settings/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_46ce4c91ac', 'الإعدادات العامة')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_22f6a1b54b', 'اسم الموقع، الشعار، اللغة، المنطقة الزمنية')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -506,14 +506,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/weather_settings.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_cdefdef2cf', 'إعدادات الطقس')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_143e81be2c', 'إدارة خدمة الطقس وربط API')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -524,7 +524,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="system">
           <span><?= h(__('t_435013dbc1', 'النظام والصيانة')) ?></span>
-          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+          <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-system">
           <li class="admin-sidebar__item">
@@ -533,14 +533,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/system/health/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_63163058e0', 'صحة النظام')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_e2bee95ee0', 'فحص إعدادات الخادم وقاعدة البيانات')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -551,14 +551,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/system/logs/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_b872dc8c01', 'سجلات النظام')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_b7e04759f6', 'آخر العمليات والأحداث في لوحة التحكم')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -569,14 +569,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/system/cache/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_736b931c7c', 'إدارة الكاش')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_a83e409c10', 'عرض حالة الكاش ومسح الملفات المؤقتة')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -587,14 +587,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/maintenance/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_70cf2cbbb8', 'تفعيل/إلغاء صفحة الصيانة للزوار')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -605,14 +605,14 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
               <a href="<?= h($adminBase) ?>/plugins/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
                     <div class="admin-sidebar__link-label"><?= h(__('t_3be2bf6b96', 'الإضافات البرمجية')) ?></div>
                     <div class="admin-sidebar__link-sub"><?= h(__('t_e41f4eba3b', 'تفعيل وتعطيل مكونات النظام')) ?></div>
                   </div>
                 </div>
-                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </a>
             </div>
           </li>
@@ -628,7 +628,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
           <?php if ($userAvatar): ?>
             <img src="<?= h($userAvatar) ?>" alt="<?= h(__('t_ee37e3b03b', 'صورة المستخدم')) ?>" />
           <?php else: ?>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
           <?php endif; ?>
         </div>
         <div class="admin-sidebar__user-info">
@@ -638,13 +638,13 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
       </div>
       <div class="admin-sidebar__footer-actions">
         <a href="<?= h($siteBase) ?>/" class="admin-sidebar__action-btn" title="<?= h(__('t_03b57332e5', 'الموقع الرئيسي')) ?>" aria-label="<?= h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')) ?>" target="_blank" rel="noopener">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
         </a>
         <button class="admin-sidebar__action-btn" id="darkModeToggle" type="button" title="<?= h(__('t_ccf95e3f4d', 'الوضع الليلي')) ?>" aria-label="<?= h(__('t_53144e5e01', 'تبديل الوضع الليلي')) ?>">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#moon"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg>
         </button>
         <a href="<?= h($adminBase) ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="<?= h(__('t_5c4e4796c0', 'تسجيل الخروج')) ?>" aria-label="<?= h(__('t_5c4e4796c0', 'تسجيل الخروج')) ?>">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#logout"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg>
         </a>
       </div>
     </footer>

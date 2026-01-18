@@ -2,12 +2,12 @@
 declare(strict_types=1);
 
 /**
- * godyar ajax/comments.php
- * - Supports threaded replies via parent_id (0 = top-level)
- * - Works with the `comments` table used by admin/comments/index.php
- *
- * Required columns (minimum):
- *  id, news_id, parent_id, name, email, body, status, created_at
+ * godyar ajax/comments.php (PATCHED)
+ * ---------------------------------
+ * Fixes:
+ * - Matches DB schema: comments(guest_name, guest_email, body, user_id, parent_id, ...)
+ * - Logged-in users are NOT required to provide name/email in POST.
+ * - Keeps list response compatible by returning `name`.
  */
 
 require_once __DIR__ . '/../includes/bootstrap.php';
@@ -20,7 +20,15 @@ header('Content-Type: application/json; charset=utf-8');
 
 function gdy_out(array $payload, int $code = 200): void {
     http_response_code($code);
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+    echo json_encode(
+        $payload,
+        JSON_UNESCAPED_UNICODE
+        | JSON_UNESCAPED_SLASHES
+        | JSON_HEX_TAG
+        | JSON_HEX_AMP
+        | JSON_HEX_APOS
+        | JSON_HEX_QUOT
+    );
     exit;
 }
 
@@ -31,7 +39,6 @@ try {
     if (!isset($pdo) || !$pdo instanceof PDO) {
         throw new Exception('pdo_missing');
     }
-    // Safer defaults
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Throwable $e) {
     gdy_out(['ok' => false, 'error' => 'db', 'detail' => $debug ? $e->getMessage() : null], 500);
@@ -39,37 +46,61 @@ try {
 
 $action = (string)($_GET['action'] ?? $_POST['action'] ?? 'list');
 
-// ---- Identify user/session (support local + OAuth sessions)
-$u = (isset($_SESSION['user']) && is_array($_SESSION['user'])) ? $_SESSION['user'] : [];
-$userId = (int)($_SESSION['user_id'] ?? ($u['id'] ?? 0));
+// ---------------------------
+// Session user detection (robust)
+// ---------------------------
+$u = null;
+if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
+    $u = $_SESSION['user'];
+} elseif (isset($_SESSION['member']) && is_array($_SESSION['member'])) {
+    $u = $_SESSION['member'];
+} elseif (isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])) {
+    $u = $_SESSION['auth_user'];
+}
+if (!is_array($u)) $u = [];
+
+$userId = (int)(
+    $_SESSION['user_id']
+    ?? $_SESSION['member_id']
+    ?? $_SESSION['uid']
+    ?? ($u['id'] ?? 0)
+);
 
 $email = trim((string)(
     $_SESSION['user_email']
+    ?? $_SESSION['member_email']
     ?? $_SESSION['email']
     ?? ($u['email'] ?? '')
 ));
 
 $name = trim((string)(
     $_SESSION['user_name']
-    ?? ($u['display_name'] ?? ($u['username'] ?? ''))
+    ?? $_SESSION['member_name']
+    ?? ($u['display_name'] ?? ($u['username'] ?? ($u['name'] ?? '')))
 ));
 
-// Consider "logged in" if we have a user id OR a known email OR legacy flag
-$isLogged = ($userId > 0) || ($email !== '') || !empty($_SESSION['is_member_logged']) || !empty($u);
+$isLogged = ($userId > 0)
+    || ($email !== '')
+    || !empty($_SESSION['is_member_logged'])
+    || !empty($_SESSION['logged_in'])
+    || !empty($_SESSION['is_logged_in'])
+    || !empty($u);
 
-// Try to hydrate from DB if logged but missing fields
+// Hydrate from DB if logged but missing fields
 if ($isLogged && ($name === '' || $email === '' || $userId === 0)) {
     try {
-        // Best-effort: match by id first, else by email
         if ($userId > 0) {
-            $st = $pdo->prepare("SELECT id, username, display_name, email FROM users WHERE id = :id LIMIT 1");
+            $dnCol = db_column_exists($pdo, 'users', 'display_name') ? 'display_name' : (db_column_exists($pdo, 'users', 'name') ? 'name' : (db_column_exists($pdo, 'users', 'full_name') ? 'full_name' : (db_column_exists($pdo, 'users', 'fullName') ? 'fullName' : 'username')));
+            $st = $pdo->prepare("SELECT id, username, {$dnCol} AS display_name, email FROM users WHERE id = :id LIMIT 1");
             $st->execute([':id' => $userId]);
         } elseif ($email !== '') {
-            $st = $pdo->prepare("SELECT id, username, display_name, email FROM users WHERE email = :em LIMIT 1");
+            $dnCol = db_column_exists($pdo, 'users', 'display_name') ? 'display_name' : (db_column_exists($pdo, 'users', 'name') ? 'name' : (db_column_exists($pdo, 'users', 'full_name') ? 'full_name' : (db_column_exists($pdo, 'users', 'fullName') ? 'fullName' : 'username')));
+            $st = $pdo->prepare("SELECT id, username, {$dnCol} AS display_name, email FROM users WHERE email = :em LIMIT 1");
             $st->execute([':em' => $email]);
         } else {
             $st = null;
         }
+
         if ($st) {
             $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
             if ($userId === 0 && !empty($row['id'])) $userId = (int)$row['id'];
@@ -83,7 +114,7 @@ if ($isLogged && ($name === '' || $email === '' || $userId === 0)) {
 
 $me = $isLogged ? ['id' => $userId, 'name' => $name, 'email' => $email] : null;
 
-// ---- Optional CSRF check (doesn't break if token isn't present)
+// Optional CSRF check
 function gdy_check_csrf(): void {
     $sess = $_SESSION['csrf_token'] ?? '';
     $post = $_POST['csrf_token'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
@@ -94,10 +125,16 @@ function gdy_check_csrf(): void {
     }
 }
 
-// ---- Diagnostics
+// Diagnostics
 if ($action === 'diag') {
     try {
-        $cols = gdy_db_stmt_columns($pdo, 'comments')->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        $cols = [];
+        try {
+            $cols = gdy_db_stmt_columns($pdo, 'comments')->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (Throwable $e) {
+            $cols = [];
+        }
+
         gdy_out([
             'ok' => true,
             'table' => 'comments',
@@ -110,7 +147,9 @@ if ($action === 'diag') {
     }
 }
 
-// ---- List
+// ---------------------------
+// LIST
+// ---------------------------
 if ($action === 'list') {
     $newsId = (int)($_GET['news_id'] ?? 0);
     if ($newsId <= 0) {
@@ -118,13 +157,12 @@ if ($action === 'list') {
     }
 
     try {
-        // Include parent_id for replies
         $st = $pdo->prepare(
-            "SELECT id, news_id, parent_id, name, body, created_at
-             FROM comments
-             WHERE news_id = :nid AND status = 'approved'
-             ORDER BY id ASC
-             LIMIT 500"
+            "SELECT id, news_id, parent_id, COALESCE(guest_name,'') AS name, body, created_at\n"
+            . "FROM comments\n"
+            . "WHERE news_id = :nid AND status = 'approved'\n"
+            . "ORDER BY id ASC\n"
+            . "LIMIT 500"
         );
         $st->execute([':nid' => $newsId]);
         $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
@@ -134,7 +172,9 @@ if ($action === 'list') {
     }
 }
 
-// ---- Add (supports replies via parent_id)
+// ---------------------------
+// ADD (supports replies)
+// ---------------------------
 if ($action === 'add') {
     gdy_check_csrf();
 
@@ -149,10 +189,9 @@ if ($action === 'add') {
         gdy_out(['ok' => false, 'error' => 'validation', 'msg' => 'نص التعليق مطلوب.'], 400);
     }
 
-    // If replying, validate parent exists & belongs to same news
     if ($parentId > 0) {
         try {
-            $st = $pdo->prepare("SELECT id FROM comments WHERE id = :pid AND news_id = :nid LIMIT 1");
+            $st = $pdo->prepare('SELECT id FROM comments WHERE id = :pid AND news_id = :nid LIMIT 1');
             $st->execute([':pid' => $parentId, ':nid' => $newsId]);
             if (!$st->fetchColumn()) {
                 gdy_out(['ok' => false, 'error' => 'validation', 'msg' => 'التعليق الذي تحاول الرد عليه غير موجود.'], 400);
@@ -162,44 +201,58 @@ if ($action === 'add') {
         }
     }
 
-    // Guest requires name/email
-    if (!$isLogged) {
-        $name = trim((string)($_POST['name'] ?? ''));
-        $email = trim((string)($_POST['email'] ?? ''));
-        if ($name === '' || $email === '') {
-            gdy_out(['ok' => false, 'error' => 'name_email_required', 'msg' => 'الاسم والبريد الإلكتروني مطلوبان.'], 400);
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            gdy_out(['ok' => false, 'error' => 'email_invalid', 'msg' => 'البريد الإلكتروني غير صالح.'], 400);
-        }
-    } else {
-        // Logged in: infer name/email if needed
-        if ($name === '') {
-            if ($email !== '' && strpos($email, '@') !== false) {
-                $name = explode('@', $email)[0];
+    $guestName = '';
+    $guestEmail = '';
+    $uid = null;
+
+    if ($isLogged) {
+        $uid = ($userId > 0) ? $userId : null;
+
+        // Logged in: derive name/email without requiring POST fields
+        $guestName = $name;
+        $guestEmail = $email;
+
+        if ($guestName === '') {
+            if ($guestEmail !== '' && strpos($guestEmail, '@') !== false) {
+                $guestName = explode('@', $guestEmail)[0];
             } else {
-                $name = 'Member';
+                $guestName = 'Member';
             }
         }
-        if ($email === '') $email = 'member@local';
+        if ($guestEmail === '') {
+            // To satisfy NOT NULL schemas, use a safe placeholder
+            $guestEmail = 'member@local.invalid';
+        }
+    } else {
+        // Guest requires name/email
+        $guestName = trim((string)($_POST['guest_name'] ?? $_POST['name'] ?? ''));
+        $guestEmail = trim((string)($_POST['guest_email'] ?? $_POST['email'] ?? ''));
+
+        if ($guestName === '' || $guestEmail === '') {
+            gdy_out(['ok' => false, 'error' => 'name_email_required', 'msg' => 'الاسم والبريد الإلكتروني مطلوبان.'], 400);
+        }
+        if (!filter_var($guestEmail, FILTER_VALIDATE_EMAIL)) {
+            gdy_out(['ok' => false, 'error' => 'email_invalid', 'msg' => 'البريد الإلكتروني غير صالح.'], 400);
+        }
     }
 
     $status = $isLogged ? 'approved' : 'pending';
     $ip = $_SERVER['REMOTE_ADDR'] ?? null;
-    $ua = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);
+    $ua = substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255);
 
     try {
         $st = $pdo->prepare(
-            "INSERT INTO comments (news_id, parent_id, name, email, body, status, ip, user_agent)
-             VALUES (:nid, :pid, :name, :email, :body, :status, :ip, :ua)"
+            "INSERT INTO comments (news_id, user_id, guest_name, guest_email, body, status, parent_id, ip, user_agent, created_at, updated_at)\n"
+            . "VALUES (:nid, :uid, :gname, :gemail, :body, :status, :pid, :ip, :ua, NOW(), NOW())"
         );
         $st->execute([
             ':nid' => $newsId,
-            ':pid' => $parentId,
-            ':name' => $name,
-            ':email' => $email,
+            ':uid' => $uid,
+            ':gname' => $guestName,
+            ':gemail' => $guestEmail,
             ':body' => $body,
             ':status' => $status,
+            ':pid' => $parentId,
             ':ip' => $ip,
             ':ua' => $ua,
         ]);

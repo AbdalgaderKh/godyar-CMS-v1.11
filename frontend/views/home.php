@@ -66,8 +66,8 @@ if (!function_exists('godyar_news_card')) {
                 <?php endif; ?>
                 <?php if ($date): ?>
                     <div class="mt-auto d-flex align-items-center justify-content-between text-muted" style="font-size:.75rem;">
-                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?></span>
-                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg><?= h(__('خبر')) ?></span>
+                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
+                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= h(__('خبر')) ?></span>
                     </div>
                 <?php endif; ?>
             </div>
@@ -95,7 +95,7 @@ if (!function_exists('godyar_news_small_item')) {
             </a>
             <?php if ($date): ?>
                 <span class="text-muted" style="font-size:.75rem;">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?>
                 </span>
             <?php endif; ?>
         </div>
@@ -221,11 +221,11 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                 <div class="p-3 p-md-4 d-flex flex-column w-100 position-relative">
                   <div class="mb-2 d-flex align-items-center gap-2 small text-teal-300" style="font-size:.8rem;">
                     <span class="badge rounded-pill bg-dark border border-teal-400" style="border-color:rgba(45,212,191,0.8)!important;">
-                      <svg class="gdy-icon me-1 text-warning" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> خبر مميز
+                      <svg class="gdy-icon me-1 text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg> خبر مميز
                     </span>
                     <?php if ($heroDate): ?>
                       <span class="text-muted">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($heroDate) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($heroDate) ?>
                       </span>
                     <?php endif; ?>
                   </div>
@@ -241,10 +241,10 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                   <?php endif; ?>
                   <div class="mt-auto d-flex align-items-center justify-content-between">
                     <a href="<?= h($heroUrl) ?>" class="btn btn-sm btn-light" style="border-radius:999px;font-size:.8rem;">
-                      اقرأ المزيد <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      اقرأ المزيد <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                     <span class="text-muted" style="font-size:.75rem;">
-                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>Godyar News
+                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg>Godyar News
                     </span>
                   </div>
                 </div>
@@ -258,14 +258,14 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
           <div class="d-flex justify-content-between align-items-baseline mb-2">
             <div>
               <div class="godyar-home-section-title">
-                <svg class="gdy-icon me-1 text-warning" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> أحدث الأخبار
+                <svg class="gdy-icon me-1 text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg> أحدث الأخبار
               </div>
               <div class="godyar-home-section-sub">
                 آخر ما تم نشره في الموقع.
               </div>
             </div>
             <a href="<?= h($baseUrl) ?>/archive" class="text-decoration-none" style="font-size:.8rem;color:#a5b4fc;">
-              أرشيف الأخبار <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              أرشيف الأخبار <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
 
@@ -287,7 +287,7 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
           <div class="d-flex justify-content-between align-items-baseline mb-2">
             <div>
               <div class="godyar-home-section-title">
-                <svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تغطية حسب الأقسام
+                <svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تغطية حسب الأقسام
               </div>
               <div class="godyar-home-section-sub">
                 تصفح الأخبار حسب التصنيف.
@@ -369,7 +369,7 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
         <section class="mb-2">
           <div class="d-flex justify-content-between align-items-baseline mb-1">
             <div class="godyar-home-section-title" style="font-size:.95rem;">
-              <svg class="gdy-icon me-1 text-danger" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> أهم الأخبار
+              <svg class="gdy-icon me-1 text-danger" aria-hidden="true" focusable="false"><use href="#alert"></use></svg> أهم الأخبار
             </div>
           </div>
           <?php if (!empty($importantNews) && is_array($importantNews)): ?>
@@ -393,7 +393,7 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
         <!-- الأكثر قراءة -->
         <aside class="godyar-home-side-box">
           <div class="godyar-home-side-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>الأكثر قراءة</span>
           </div>
           <?php if (!empty($mostRead) && is_array($mostRead)): ?>
@@ -410,7 +410,7 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
         <!-- الأكثر تعليقاً أو مقترحة لك -->
         <aside class="godyar-home-side-box">
           <div class="godyar-home-side-title">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <span>الأكثر تعليقاً / مقترحة لك</span>
           </div>
           <?php

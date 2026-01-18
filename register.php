@@ -182,6 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         // display_name (اسم الظهور) افتراضيًا = username أو الجزء قبل @ من البريد
                         $displayName = $username !== '' ? $username : (string)preg_replace('/@.*/', '', $email);
+if (function_exists('sanitize_display_name')) {                            $displayName = sanitize_display_name($displayName, 2, 50);                        }                        if ($displayName === '') $displayName = ($username !== '' ? $username : 'User');
                         // بناء INSERT ديناميكياً حسب الأعمدة المتاحة
                         $insertCols = [];
                         $insertVals = [];
@@ -200,11 +201,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
 
-                        // display_name (اختياري)
-                        if (col_exists($cols, 'display_name')) {
+                        // display_name (اسم الظهور)
+                        // ملاحظة: بعض قواعد البيانات لا تحتوي عمود display_name وتستخدم name/full_name بدلاً منه.
+                        // لا نعتمد على مصفوفة الأعمدة المجمعة مسبقاً لتجنب أي تعارض/كاش على الاستضافة.
+                        $hasDisplayName = function_exists('db_column_exists') ? db_column_exists($pdo, 'users', 'display_name') : false;
+                        $nameCol = '';
+                        if (function_exists('db_column_exists')) {
+                            if (db_column_exists($pdo, 'users', 'name')) $nameCol = 'name';
+                            elseif (db_column_exists($pdo, 'users', 'full_name')) $nameCol = 'full_name';
+                            elseif (db_column_exists($pdo, 'users', 'fullName')) $nameCol = 'fullName';
+                        }
+
+                        if ($hasDisplayName) {
                             $insertCols[] = 'display_name';
                             $insertVals[] = ':display_name';
                             $bind[':display_name'] = $displayName;
+                        } elseif ($nameCol !== '') {
+                            // fallback: خزّن اسم الظهور في name/full_name إذا لم يوجد display_name
+                            $insertCols[] = $nameCol;
+                            $insertVals[] = ':__name';
+                            $bind[':__name'] = $displayName;
                         }
                         // password
                         $insertCols[] = $passCol;
@@ -233,9 +249,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $insertVals[] = 'NOW()';
                         }
 
-                        $sqlIns = "INSERT INTO users (" . implode(',', array_map(fn($c)=>"`{$c}`",$insertCols)) . ") VALUES (" . implode(',', $insertVals) . ")";
-                        $ins = $pdo->prepare($sqlIns);
-                        $ins->execute($bind);
+						$sqlIns = "INSERT INTO users (" . implode(',', array_map(fn($c)=>"`{$c}`",$insertCols)) . ") VALUES (" . implode(',', $insertVals) . ")";
+						$ins = $pdo->prepare($sqlIns);
+						try {
+							$ins->execute($bind);
+						} catch (PDOException $e) {
+							// Schema-safe hard fallback:
+							// بعض تعريفات PDO تُرجع getCode() = HY000 رغم أن الرسالة تحتوي SQLSTATE[42S22].
+							// لذا نعتمد على نص الرسالة لضمان التوافق.
+							$em = (string)$e->getMessage();
+							$looksLikeMissingDisplayName = (stripos($em, 'display_name') !== false) && (
+								stripos($em, 'Unknown column') !== false || stripos($em, '42S22') !== false
+							);
+							if ($looksLikeMissingDisplayName) {
+								$idx = array_search('display_name', $insertCols, true);
+								if ($idx !== false) {
+									array_splice($insertCols, $idx, 1);
+									array_splice($insertVals, $idx, 1);
+									unset($bind[':display_name']);
+									$sqlIns = "INSERT INTO users (" . implode(',', array_map(fn($c)=>"`{$c}`",$insertCols)) . ") VALUES (" . implode(',', $insertVals) . ")";
+									$ins = $pdo->prepare($sqlIns);
+									$ins->execute($bind);
+								} else {
+									throw $e;
+								}
+							} else {
+								throw $e;
+							}
+						}
 
                         $newId = (int)$pdo->lastInsertId();
 
@@ -459,11 +500,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="text-center">
                 <span class="gdy-badge">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#eye"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#eye"></use></svg>
                     تسجيل آمن
                 </span>
                 <div class="mt-2">
-                    <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                    <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                 </div>
                 <h1 class="gdy-title">إنشاء حساب جديد</h1>
                 <p class="gdy-sub mb-0">أنشئ حسابك للوصول للمفضلة والمزايا المستقبلية.</p>
@@ -471,7 +512,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php if ($errorMessage): ?>
                 <div class="alert alert-danger py-2 mt-3">
-                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                     <?= h($errorMessage) ?>
                 </div>
             <?php endif; ?>
@@ -525,13 +566,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             placeholder="8 أحرف على الأقل"
                         >
                         <button class="btn gdy-icon-btn" type="button" id="togglePass" aria-label="إظهار/إخفاء كلمة المرور">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="/assets/icons/gdy-icons.svg#eye"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="#eye"></use></svg>
                         </button>
                     </div>
                     <div class="mt-2 gdy-pass-meter"><span id="passBar"></span></div>
                     <div class="mt-1 gdy-pass-hint" id="passHint">نصيحة: استخدم حروف كبيرة/صغيرة + أرقام + رموز.</div>
                     <div class="mt-1 small text-warning d-none" id="capsWarn">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg> يبدو أن Caps Lock مفعّل.
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg> يبدو أن Caps Lock مفعّل.
                     </div>
                 </div>
 
@@ -556,7 +597,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit" class="gdy-btn">
-                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                    <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                     إنشاء الحساب
                 </button>
             </form>
@@ -568,7 +609,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </span>
                 <span>
                     <a href="<?= h($baseUrl) ?>/">
-                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg> العودة للرئيسية
+                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#home"></use></svg> العودة للرئيسية
                     </a>
                 </span>
             </div>

@@ -238,7 +238,7 @@ html, body{
     <div class="col-lg-7">
       <div class="card shadow-sm gdy-glass-card mb-3">
         <div class="card-header">
-          <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_4787d5c82a', 'نموذج الرد')) ?></h2>
+          <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_4787d5c82a', 'نموذج الرد')) ?></h2>
         </div>
         <div class="card-body">
           <form method="post" action="">
@@ -270,15 +270,15 @@ html, body{
             <!-- هنا الأزرار الثلاثة بجوار زر إرسال الرد -->
             <div class="d-flex flex-wrap gap-2">
               <button type="submit" class="btn btn-success">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_6498ff15e8', 'إرسال الرد')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6498ff15e8', 'إرسال الرد')) ?>
               </button>
 
               <a href="view.php?id=<?= (int)$row['id'] ?>" class="btn btn-outline-light">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_141defec85', 'الرجوع للرسالة')) ?>
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_141defec85', 'الرجوع للرسالة')) ?>
               </a>
 
               <a href="index.php" class="btn btn-outline-secondary">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5ca9cfef90', 'قائمة الرسائل')) ?>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5ca9cfef90', 'قائمة الرسائل')) ?>
               </a>
             </div>
 
@@ -290,7 +290,7 @@ html, body{
     <div class="col-lg-5">
       <div class="card shadow-sm gdy-glass-card mb-3">
         <div class="card-header">
-          <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_55a71fa0ae', 'معاينة الرسالة الأصلية')) ?></h2>
+          <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_55a71fa0ae', 'معاينة الرسالة الأصلية')) ?></h2>
         </div>
         <div class="card-body small">
           <p class="mb-1"><strong><?= h(__('t_d62578122d', 'العنوان:')) ?></strong> <?= h($row['subject'] ?? '') ?></p>

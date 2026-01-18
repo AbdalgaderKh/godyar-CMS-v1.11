@@ -356,12 +356,12 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
     <div class="gdy-header">
       <div>
-        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($pageTitle) ?></h1>
-        <p><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2c54b3d343', 'راجع الأخبار المستوردة/المكتوبة ثم اعتمدها أو انشرها بسرعة.')) ?></p>
+        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($pageTitle) ?></h1>
+        <p><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2c54b3d343', 'راجع الأخبار المستوردة/المكتوبة ثم اعتمدها أو انشرها بسرعة.')) ?></p>
       </div>
       <div class="d-flex gap-2 flex-wrap">
-        <a class="btn btn-outline-light" href="index.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f2401e0914','قائمة الأخبار')) ?></a>
-        <a class="btn btn-success" href="create.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_0d1f6ecf66','إضافة خبر جديد')) ?></a>
+        <a class="btn btn-outline-light" href="index.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f2401e0914','قائمة الأخبار')) ?></a>
+        <a class="btn btn-success" href="create.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_0d1f6ecf66','إضافة خبر جديد')) ?></a>
       </div>
     </div>
 
@@ -375,7 +375,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="gdy-card">
       <div class="gdy-card-header">
         <div>
-          <div class="fw-bold"><svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_32a45d45a2','الفلاتر')) ?></div>
+          <div class="fw-bold"><svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_32a45d45a2','الفلاتر')) ?></div>
           <div class="text-muted small"><?= h(__('t_0b55c27b0c','إجمالي النتائج:')) ?> <strong><?= (int)$total ?></strong></div>
         </div>
 
@@ -420,7 +420,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           </div>
 
           <div>
-            <button class="btn btn-info btn-sm" type="submit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?></button>
+            <button class="btn btn-info btn-sm" type="submit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?></button>
           </div>
         </form>
       </div>
@@ -440,7 +440,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               </select>
               <input type="text" name="note" class="form-control form-control-sm" style="max-width:360px;" placeholder="<?= h(__('t_6d0ef8a7aa','سبب/ملاحظة (اختياري)…')) ?>" />
               <button type="submit" class="btn btn-success btn-sm" data-confirm=<?= json_encode(__('t_64027a8a52', 'تأكيد تنفيذ الإجراء على العناصر المحددة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?>
               </button>
             </div>
 
@@ -497,29 +497,29 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <?= h((string)($r['slug'] ?? '')) ?>
                       </div>
                     </td>
-                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($cat ?: '—') ?></span></td>
-                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($feed ?: '—') ?></span></td>
+                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($cat ?: '—') ?></span></td>
+                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($feed ?: '—') ?></span></td>
                     <td class="text-center"><span class="gdy-badge gdy-status"><?= h($statusLabel) ?></span></td>
                     <td class="text-center"><span class="small text-muted"><?= h($dt ?: '—') ?></span></td>
                     <td class="text-center">
                       <div class="gdy-actions justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary js-preview" data-id="<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_preview','معاينة')) ?></button>
-                        <a class="btn btn-outline-info" href="edit.php?id=<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_0b90f1a1f7','تعديل')) ?></a>
+                        <button type="button" class="btn btn-outline-secondary js-preview" data-id="<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= h(__('t_preview','معاينة')) ?></button>
+                        <a class="btn btn-outline-info" href="edit.php?id=<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_0b90f1a1f7','تعديل')) ?></a>
 
                         <button class="btn btn-outline-success" type="submit" name="action" value="approve" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_5e19b0c9c7','اعتماد')) ?>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5e19b0c9c7','اعتماد')) ?>
                         </button>
 
                         <button class="btn btn-success" type="submit" name="action" value="publish" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_ecfb62b400','نشر')) ?>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ecfb62b400','نشر')) ?>
                         </button>
 
                         <button class="btn btn-outline-warning" type="submit" name="action" value="draft" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select" data-confirm=<?= json_encode(__('t_44e8416493', 'إرجاع هذا الخبر لمسودة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_9bb6a0a6a2','مسودة')) ?>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9bb6a0a6a2','مسودة')) ?>
                         </button>
 
                         <button class="btn btn-outline-danger" type="submit" name="action" value="archive" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select" data-confirm=<?= json_encode(__('t_c922c6d23e', 'أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </button>
                       </div>
                     </td>
@@ -573,13 +573,13 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="modal-body">
         <div id="previewModalBody">
           <div class="text-center py-5 text-muted">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?>
           </div>
         </div>
       </div>
       <div class="modal-footer" style="border-top:1px solid rgba(148,163,184,.25);">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_close','إغلاق')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_close','إغلاق')) ?>
         </button>
       </div>
     </div>
@@ -626,7 +626,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
   function setLoading(){
     if (!modalBodyEl) return;
-    modalBodyEl.innerHTML = '<div class="text-center py-5 text-muted"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?></div>';
+    modalBodyEl.innerHTML = '<div class="text-center py-5 text-muted"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?></div>';
   }
 
   function escapeHtml(str){

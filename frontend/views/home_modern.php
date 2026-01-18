@@ -1206,6 +1206,8 @@ $nowTime   = date('H:i');
     border:0;
     cursor:pointer;
     background:rgba(255,255,255,.18);
+    /* Safari 9+: requires WebKit prefix */
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     display:flex;
     align-items:center;
@@ -1234,7 +1236,6 @@ $nowTime   = date('H:i');
     overflow-x:auto;
     overflow-y:hidden;
     scroll-snap-type:x mandatory;
-    scrollbar-width:none;
     -ms-overflow-style:none;
   }
   .hm-featured-thumbs::-webkit-scrollbar{ height:0; }
@@ -1406,7 +1407,7 @@ $nowTime   = date('H:i');
           <div class="hm-topbar">
             <div class="hm-topbar-left">
               <span class="hm-topbar-badge">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('اليوم')) ?>
               </span>
               <span class="hm-topbar-text">
@@ -1446,7 +1447,7 @@ $nowTime   = date('H:i');
                  data-default-cc="<?= h((string)($weatherSettings['country_code'] ?? '')) ?>"
                  data-api-url="<?= h(rtrim((string)$baseUrl,'/') . '/api/v1/weather.php') ?>">
               <div class="hm-weather-head">
-                <div class="hm-weather-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('الطقس الآن')) ?></div>
+                <div class="hm-weather-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('الطقس الآن')) ?></div>
                 <div class="hm-weather-controls">
                   <select class="hm-weather-select" id="hmWeatherCitySelect" aria-label="<?= h(__('اختيار المدينة')) ?>">
                     <?php
@@ -1481,27 +1482,27 @@ $nowTime   = date('H:i');
 
               <div class="hm-weather-circles" aria-label="مؤشرات الطقس">
                 <div class="hm-weather-circle">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="v" id="hmWCity">—</div>
                   <div class="l"><?= h(__('المدينة')) ?></div>
                 </div>
                 <div class="hm-weather-circle">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="v" id="hmWTemp">—</div>
                   <div class="l"><?= h(__('الحرارة')) ?></div>
                 </div>
                 <div class="hm-weather-circle">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="v" id="hmWWind">—</div>
                   <div class="l"><?= h(__('سرعة الرياح')) ?></div>
                 </div>
                 <div class="hm-weather-circle">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="v" id="hmWDir">—</div>
                   <div class="l"><?= h(__('اتجاه الرياح')) ?></div>
                 </div>
                 <div class="hm-weather-circle">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <div class="v" id="hmWTime">—</div>
                   <div class="l"><?= h(__('الساعة')) ?></div>
                 </div>
@@ -1712,7 +1713,7 @@ $nowTime   = date('H:i');
                       <?php endif; ?>
                       <div class="hm-hero-main-meta">
                         <?php if ($heroDate): ?>
-                          <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($heroDate) ?></span>
+                          <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($heroDate) ?></span>
                         <?php endif; ?>
                       </div>
                     </div>
@@ -1845,7 +1846,7 @@ $nowTime   = date('H:i');
                                     data-hm-video-src="<?= h($firstVideo['src']) ?>"
                                     aria-label="تشغيل الفيديو">
                               <span class="hm-featured-play__ring"></span>
-                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                           </div>
 
@@ -1860,7 +1861,7 @@ $nowTime   = date('H:i');
                         <!-- شريط المصغرات (السلايدر) -->
                         <div class="hm-featured-thumbs-wrap" data-hm-thumbs-wrap>
                           <button class="hm-featured-thumbs-nav hm-featured-thumbs-nav--prev" type="button" data-hm-thumbs-prev aria-label="السابق">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </button>
 
                           <div class="hm-featured-thumbs" data-hm-thumbs>
@@ -1875,7 +1876,7 @@ $nowTime   = date('H:i');
                                     data-thumb="<?= h($pv['thumb']) ?>">
                               <span class="hm-featured-thumb__img"
                                     style="<?= $pv['thumb'] ? "background-image:url('".h($pv['thumb'])."');" : '' ?>">
-                                <span class="hm-featured-thumb__play"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></span>
+                                <span class="hm-featured-thumb__play"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></span>
                               </span>
                               <span class="hm-featured-thumb__text"><?= h($pv['title']) ?></span>
                             </button>
@@ -1883,7 +1884,7 @@ $nowTime   = date('H:i');
                           </div>
 
                           <button class="hm-featured-thumbs-nav hm-featured-thumbs-nav--next" type="button" data-hm-thumbs-next aria-label="التالي">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </button>
                         </div>
                       </div>
@@ -1988,7 +1989,7 @@ $nowTime   = date('H:i');
                 <!-- آخر الأخبار -->
 	                <div class="hm-latest-right">
 	                  <div class="hm-latest-right-head">
-	                    <h2 class="hm-latest-right-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg> <?= h(__('آخر الأخبار')) ?></h2>
+	                    <h2 class="hm-latest-right-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> <?= h(__('آخر الأخبار')) ?></h2>
 	                  </div>
 	                  <div class="hm-latest-filters">
 	                    <span class="hm-latest-label"><?= h(__('الفترة:')) ?></span>
@@ -2037,7 +2038,7 @@ $nowTime   = date('H:i');
                       <?php endif; ?>
                       <div class="hm-card-meta">
                         <?php if ($date): ?>
-                          <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?></span>
+                          <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
                         <?php endif; ?>
                       </div>
                     </div>
@@ -2195,7 +2196,7 @@ $nowTime   = date('H:i');
 
                             <?php if ($date): ?>
                               <div class="hm-opinion-article-meta">
-                                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?>
+                                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?>
                               </div>
                             <?php endif; ?>
                           </div>
@@ -2205,12 +2206,12 @@ $nowTime   = date('H:i');
                               <a href="<?= h($opinionAuthorUrl) ?>">
                                 <img src="<?= h($avatarFinal) ?>"
                                      alt="<?= h($opinionAuthorName ?: $title) ?>"
-                                     onerror="this.onerror=null;this.src='<?= h($opinionArticleImage) ?>';">
+                                     data-gdy-fallback-src="<?= h($opinionArticleImage) ?>">
                               </a>
                             <?php else: ?>
                               <img src="<?= h($avatarFinal) ?>"
                                    alt="<?= h($opinionAuthorName ?: $title) ?>"
-                                   onerror="this.onerror=null;this.src='<?= h($opinionArticleImage) ?>';">
+                                   data-gdy-fallback-src="<?= h($opinionArticleImage) ?>">
                             <?php endif; ?>
                           </div>
                         </article>
@@ -2251,7 +2252,7 @@ $nowTime   = date('H:i');
                             <?php endif; ?>
                             <div class="hm-card-meta">
                               <?php if ($date): ?>
-                                <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?></span>
+                                <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
                               <?php endif; ?>
                             </div>
                           </div>

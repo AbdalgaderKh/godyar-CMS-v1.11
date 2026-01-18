@@ -228,19 +228,59 @@ if (!function_exists('gdy_prepare_frontend_options')) {
 
         // Feature flags / UI toggles
         $showSidebar = !gdy_setting_bool($settings, 'hide_frontend_sidebar', false);
+// Extended theme / UI strings used by legacy controllers
+$siteTagline = gdy_setting($settings, 'site_tagline', gdy_setting($settings, 'tagline', ''));
+$siteLogo = $logo;
+$primaryColor = gdy_setting($settings, 'primary_color', '#0d6efd');
+$primaryDark  = gdy_setting($settings, 'primary_dark', '#0b5ed7');
+$themeClass   = gdy_setting($settings, 'theme_class', '');
+$searchPlaceholder = gdy_setting($settings, 'search_placeholder', 'بحث...');
+$homeLatestTitle        = gdy_setting($settings, 'home_latest_title', 'الأحدث');
+$homeFeaturedTitle      = gdy_setting($settings, 'home_featured_title', 'مختارات');
+$homeTabsTitle          = gdy_setting($settings, 'home_tabs_title', 'التبويبات');
+$homeMostReadTitle      = gdy_setting($settings, 'home_most_read_title', 'الأكثر قراءة');
+$homeMostCommentedTitle = gdy_setting($settings, 'home_most_commented_title', 'الأكثر تعليقاً');
+$homeRecommendedTitle   = gdy_setting($settings, 'home_recommended_title', 'موصى به');
+$carbonBadgeText        = gdy_setting($settings, 'carbon_badge_text', '');
+$showCarbonBadge        = gdy_setting_bool($settings, 'show_carbon_badge', false);
+return [
+    'settings' => $settings,
 
-        return [
-            'settings' => $settings,
-            'siteName' => $siteName,
-            'siteTitle' => $siteTitle,
-            'siteDescription' => $siteDescription,
-            'baseUrl' => $baseUrl,
-            'assetsUrl' => $assetsUrl,
-            'logo' => $logo,
-            'favicon' => $favicon,
-            'lang' => $lang,
-            'dir' => $dir,
-            'showSidebar' => $showSidebar,
-        ];
+    // Identity / branding
+    'siteName' => $siteName,
+    'siteTitle' => $siteTitle,
+    'siteDescription' => $siteDescription,
+    'siteTagline' => $siteTagline,
+    'logo' => $logo,
+    'siteLogo' => $siteLogo,
+    'favicon' => $favicon,
+
+    // Theme
+    'primaryColor' => $primaryColor,
+    'primaryDark' => $primaryDark,
+    'themeClass' => $themeClass,
+
+    // URLs
+    'baseUrl' => $baseUrl,
+    'assetsUrl' => $assetsUrl,
+
+    // Language
+    'lang' => $lang,
+    'dir' => $dir,
+
+    // UI strings
+    'searchPlaceholder' => $searchPlaceholder,
+    'homeLatestTitle' => $homeLatestTitle,
+    'homeFeaturedTitle' => $homeFeaturedTitle,
+    'homeTabsTitle' => $homeTabsTitle,
+    'homeMostReadTitle' => $homeMostReadTitle,
+    'homeMostCommentedTitle' => $homeMostCommentedTitle,
+    'homeRecommendedTitle' => $homeRecommendedTitle,
+    'carbonBadgeText' => $carbonBadgeText,
+    'showCarbonBadge' => $showCarbonBadge,
+
+    // Feature flags
+    'showSidebar' => $showSidebar,
+];
     }
 }

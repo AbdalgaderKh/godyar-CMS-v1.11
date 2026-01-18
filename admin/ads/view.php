@@ -111,10 +111,10 @@ html, body{
         </div>
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <a href="edit.php?id=<?= (int)$ad['id'] ?>" class="btn btn-primary btn-sm">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
             </a>
             <a href="index.php" class="btn btn-outline-secondary btn-sm">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_8c9f484caa', 'الرجوع')) ?>
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_8c9f484caa', 'الرجوع')) ?>
             </a>
         </div>
     </div>

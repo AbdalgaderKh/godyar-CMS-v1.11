@@ -335,7 +335,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fa678d5458', 'قاعدة البيانات')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_fa678d5458', 'قاعدة البيانات')) ?>
             </h5>
             <?php if ($checks['db_ok']): ?>
               <span class="badge badge-health bg-success mb-2"><?= h(__('t_be7ec211f4', 'متصل')) ?></span>
@@ -366,7 +366,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              PHP <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              PHP <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </h5>
             <table class="table table-sm table-borderless table-health mb-1">
               <tr>
@@ -394,7 +394,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_a58f1e6aeb', 'نظام الكاش')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a58f1e6aeb', 'نظام الكاش')) ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-1">
               <tr>
@@ -419,7 +419,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm mb-3">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <tr>
@@ -449,7 +449,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_1f71f9dd0d', 'معلومات البيئة')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1f71f9dd0d', 'معلومات البيئة')) ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <tr>
@@ -478,7 +478,7 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_6870d42f69', 'الملفات والصلاحيات')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6870d42f69', 'الملفات والصلاحيات')) ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <thead>

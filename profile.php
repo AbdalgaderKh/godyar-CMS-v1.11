@@ -399,7 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // ===== تحديث بيانات الملف الشخصي =====
             elseif ($action === 'update_profile') {
-                $displayName = trim((string)($_POST['display_name'] ?? ''));
+                $displayName = normalize_display_name((string)($_POST['display_name'] ?? ''));
 
                 $phone   = trim((string)($_POST['phone'] ?? ''));
                 $address = trim((string)($_POST['address'] ?? ''));
@@ -436,9 +436,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (mb_strlen($displayName, 'UTF-8') < 2 || mb_strlen($displayName, 'UTF-8') > 50) {
                         throw new RuntimeException('اسم الظهور يجب أن يكون بين 2 و 50 حرف.');
                     }
-                    // نسمح بالحروف (بما فيها العربية) + الأرقام + العلامات (مثل التشكيل) + بعض الرموز الشائعة.
-                    // الهدف: تجنب XSS مع عدم كسر أسماء عربية تحتوي على تشكيل أو فاصلة عليا.
-                    if (!preg_match('/^[\p{L}\p{M}\p{N}._\-\'’]+(?:\s+[\p{L}\p{M}\p{N}._\-\'’]+)*$/u', $displayName)) {
+                    if (!is_valid_display_name($displayName, 2, 50)) {
                         throw new RuntimeException('اسم الظهور يحتوي على رموز غير مسموحة. المسموح: حروف/أرقام/مسافات و . _ - \'');
                     }
                 }
@@ -712,20 +710,20 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
       <div class="cover <?= $coverUi ? 'has-img' : '' ?>" style="<?= $coverUi ? 'background-image:url('.h($coverUi).')' : '' ?>"></div>
       <div class="hero-body">
         <?php if ($avatarUi): ?>
-          <img class="gdy-avatar" src="<?= h($avatarUi) ?>" alt="avatar" onerror="this.style.display='none'">
+          <img class="gdy-avatar" src="<?= h($avatarUi) ?>" alt="avatar" data-gdy-hide-onerror="1">
         <?php else: ?>
-          <div class="gdy-avatar-fallback" aria-hidden="true"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg></div>
+          <div class="gdy-avatar-fallback" aria-hidden="true"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></div>
         <?php endif; ?>
 
         <div class="gdy-hero-meta">
           <h1 class="gdy-hero-name"><?= h($displayNameUi ?: $usernameUi ?: 'حسابي') ?></h1>
           <div class="gdy-hero-sub">
-            <?php if ($emailUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($emailUi) ?></span><?php endif; ?>
-            <?php if ($usernameUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg> <?= h($usernameUi) ?></span><?php endif; ?>
+            <?php if ($emailUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($emailUi) ?></span><?php endif; ?>
+            <?php if ($usernameUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h($usernameUi) ?></span><?php endif; ?>
             <span class="gdy-chip"><strong><?= h($roleLabel) ?></strong></span>
-            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> محفوظات: <strong><?= (int)$stats['bookmarks'] ?></strong></span>
-            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تعليقات: <strong><?= (int)$stats['comments'] ?></strong></span>
-            <a class="gdy-chip" href="<?= h($baseUrl) ?>/my" style="text-decoration:none;color:inherit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> صفحة "لك"</a>
+            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> محفوظات: <strong><?= (int)$stats['bookmarks'] ?></strong></span>
+            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg> تعليقات: <strong><?= (int)$stats['comments'] ?></strong></span>
+            <a class="gdy-chip" href="<?= h($baseUrl) ?>/my" style="text-decoration:none;color:inherit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة "لك"</a>
           </div>
         </div>
       </div>

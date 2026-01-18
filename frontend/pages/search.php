@@ -318,7 +318,7 @@ $currentCount = is_array($results) ? count($results) : 0;
         <form class="search-form-compact" method="get" action="" id="pagesSearchForm">
           <input type="text" name="q" value="<?= h($q) ?>" placeholder="اكتب كلمة البحث داخل الصفحات">
           <button type="submit">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> بحث
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> بحث
           </button>
 
           <div class="search-engine-toggle w-100">
@@ -404,15 +404,15 @@ $currentCount = is_array($results) ? count($results) : 0;
             <div class="page-card-meta">
               <span>
                 <?php if ($updated): ?>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   آخر تحديث: <?= h(date('Y-m-d', strtotime($updated))) ?>
                 <?php elseif ($created): ?>
-                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                  <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <?= h(date('Y-m-d', strtotime($created))) ?>
                 <?php endif; ?>
               </span>
               <span class="page-card-status <?= h($statusClass) ?>">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($statusText) ?>
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($statusText) ?>
               </span>
             </div>
             <h2 class="page-card-title">

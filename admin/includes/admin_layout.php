@@ -392,7 +392,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
   <div class="sb-search">
     <input id="globalSearch" type="search" class="sb-search-input"
            placeholder="<?= h(__("quick_menu_search")) ?>"
-           oninput="window.__filterMenu && window.__filterMenu(this.value)">
+           id="gdyAdminMenuSearch">
   </div>
 
   <ul class="sb-menu">
@@ -416,7 +416,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
           ?>
             <li>
               <a href="<?= h($href) ?>" class="sb-item<?= $isActive ? ' active' : '' ?>">
-                <span class="sb-item-icon"><svg class="gdy-icon h($icon) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></span>
+                <span class="sb-item-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#<?= h($icon) ?>"></use></svg></span>
                 <span><?= h($text) ?></span>
               </a>
             </li>
@@ -436,7 +436,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
         ?>
           <li>
             <a href="<?= h($href) ?>" class="sb-item"<?= $targetAttr ?>>
-              <span class="sb-item-icon"><svg class="gdy-icon h($icon) ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg></span>
+              <span class="sb-item-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#<?= h($icon) ?>"></use></svg></span>
               <span><?= h($text) ?></span>
             </a>
           </li>
@@ -451,7 +451,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
     <div class="header-left">
       <button id="btnToggleSB" class="btn-icon d-inline-flex d-lg-none" type="button"
               aria-label="<?= h(__('t_42ed435ec8', 'تبديل القائمة الجانبية')) ?>" aria-expanded="false">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#menu"></use></svg>
       </button>
       <div class="header-title"><?= h($title) ?></div>
     </div>
@@ -459,7 +459,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
     <div class="header-right">
       <button id="btnMiniSB" class="btn-icon d-none d-lg-inline-flex" type="button"
               aria-label="<?= h(__('t_76b1868c94', 'تصغير / تكبير القائمة الجانبية')) ?>" aria-expanded="true">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
       </button>
 
       <div class="user-pill">
@@ -559,6 +559,14 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
 
   window.__filterMenu = filterMenu;
 
+  // Bind menu search input (no inline handlers; CSP-friendly)
+  const menuSearch = document.getElementById('gdyAdminMenuSearch');
+  if(menuSearch){
+    menuSearch.addEventListener('input', function(){
+      if(window.__filterMenu) window.__filterMenu(this.value);
+    });
+  }
+
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
@@ -574,6 +582,8 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
 })();
 </script>
 
+
+<script src="/assets/js/image_fallback.js" defer></script>
 <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <?php if (function_exists('do_action')) { do_action('admin_footer'); } ?>
 </body>

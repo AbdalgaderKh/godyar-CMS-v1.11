@@ -288,7 +288,7 @@ $breadcrumbs = [
     __('t_5750d13d2c', 'الإعلانات') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/ads/index.php',
     __('t_ad613dea26', 'إنشاء إعلان') => null,
 ];
-$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> العودة</a>');
+$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> العودة</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
@@ -400,7 +400,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($success) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($success) ?>
             <?php if ($adId): ?>
                 <div class="mt-2">
                     <a href="edit.php?id=<?= $adId ?>" class="btn btn-sm btn-success me-2"><?= h(__('t_e656de3c13', 'تعديل الإعلان')) ?></a>
@@ -500,7 +500,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                                         <img src="<?= h($data['image_url']) ?>" alt="<?= h(__('t_529cb8b507', 'معاينة الإعلان')) ?>">
                                     <?php else: ?>
                                         <div class="text-muted text-center">
-                                            <svg class="gdy-icon mb-2 d-block" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon mb-2 d-block" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             <small><?= h(__('t_8700a282e6', 'سيظهر معاينة الصورة هنا')) ?></small>
                                         </div>
                                     <?php endif; ?>
@@ -598,7 +598,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
                         <div class="border-top pt-3 mt-3">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
-                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_9adf67ab83', 'حفظ الإعلان')) ?>
+                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_9adf67ab83', 'حفظ الإعلان')) ?>
                             </button>
                             <button type="submit" name="save_and_edit" class="btn btn-outline-primary w-100 mb-2">
                                 <?= h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')) ?>
@@ -612,7 +612,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-light">
-                        <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_cc272853cb', 'نصائح')) ?></strong>
+                        <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_cc272853cb', 'نصائح')) ?></strong>
                     </div>
                     <div class="card-body small text-muted">
                         <ul class="mb-0">
@@ -677,7 +677,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!url) {
             imagePrev.innerHTML =
                 '<div class="text-muted text-center">' +
-                '<svg class="gdy-icon mb-2 d-block" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>' +
+                '<svg class="gdy-icon mb-2 d-block" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>' +
                 '<small>سيظهر معاينة الصورة هنا</small>' +
                 '</div>';
             return;

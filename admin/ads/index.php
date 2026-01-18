@@ -220,7 +220,7 @@ $breadcrumbs = [
     __('t_3aa8578699', 'الرئيسية') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/index.php',
     __('t_5750d13d2c', 'الإعلانات') => null,
 ];
-$pageActionsHtml = __('t_0c05a7a08b', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إنشاء إعلان</a>');
+$pageActionsHtml = __('t_0c05a7a08b', '<a href="create.php" class="btn btn-gdy btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> إنشاء إعلان</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
@@ -541,7 +541,7 @@ input:checked + .slider:before {
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_c17dd3f8eb', 'جدول الإعلانات غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -550,7 +550,7 @@ input:checked + .slider:before {
 
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h($_SESSION['success_message']) ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -559,7 +559,7 @@ input:checked + .slider:before {
 
     <?php if (isset($_SESSION['error_message'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h($_SESSION['error_message']) ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -569,7 +569,7 @@ input:checked + .slider:before {
     <!-- إعدادات التحكم في البنر الجانبي -->
     <div class="gdy-settings-card">
         <h5 class="text-white mb-3">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_8f4adebed7', 'إعدادات التحكم في البنر الجانبي')) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#settings"></use></svg><?= h(__('t_8f4adebed7', 'إعدادات التحكم في البنر الجانبي')) ?>
         </h5>
         
         <form method="post">
@@ -594,7 +594,7 @@ input:checked + .slider:before {
             
             <div class="mt-3">
                 <button type="submit" name="update_sidebar_setting" class="btn btn-primary">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#save"></use></svg><?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
                 </button>
                 
                 <span class="ms-3 text-muted small">
@@ -660,12 +660,12 @@ input:checked + .slider:before {
             </div>
             <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-primary w-100 mb-2">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(__('t_04d478c0e8', 'تطبيق الفلتر')) ?>
                 </button>
                 <?php if ($status || $location || $search): ?>
                     <a href="index.php" class="btn btn-outline-light w-100">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         <?= h(__('t_2cb0b85c56', 'إعادة تعيين')) ?>
                     </a>
                 <?php endif; ?>
@@ -678,12 +678,12 @@ input:checked + .slider:before {
         <?php if (empty($ads)): ?>
             <div class="gdy-empty-state">
                 <div class="gdy-empty-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <h4 class="text-muted mb-3"><?= h(__('t_95cbfbd50d', 'لا توجد إعلانات')) ?></h4>
                 <p class="text-muted mb-4"><?= h(__('t_d58c55f24d', 'ابدأ بإضافة أول إعلان إلى النظام')) ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_90ce81832d', 'إضافة أول إعلان')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_90ce81832d', 'إضافة أول إعلان')) ?>
                 </a>
             </div>
         <?php else: ?>
@@ -708,14 +708,14 @@ input:checked + .slider:before {
                                         <a href="edit.php?id=<?= (int)$ad['id'] ?>" 
                                            class="gdy-ad-btn"
                                            title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <form method="post" class="d-inline"
                                               data-confirm='هل تريد <?= $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?> هذا الإعلان؟'>
                                             <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
                                             <input type="hidden" name="toggle_id" value="<?= (int)$ad['id'] ?>">
                                             <button type="submit" class="gdy-ad-btn" title="<?= $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
-                                                <svg class="gdy-icon $ad['is_active'] ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon $ad['is_active'] ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         </form>
                                         <form method="post" class="d-inline"
@@ -723,14 +723,14 @@ input:checked + .slider:before {
                                             <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
                                             <input type="hidden" name="delete_id" value="<?= (int)$ad['id'] ?>">
                                             <button type="submit" class="gdy-ad-btn" title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         </form>
                                     </div>
                                 </div>
                                 <?php if (empty($ad['image_url'])): ?>
                                     <div class="text-muted w-100 h-100 d-flex align-items-center justify-content-center">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -742,13 +742,13 @@ input:checked + .slider:before {
                                 </div>
                                 
                                 <div class="gdy-ad-location">
-                                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     <?= h($ad['location']) ?>
                                 </div>
                                 
                                 <?php if (!empty($ad['target_url'])): ?>
                                     <div class="gdy-ad-url">
-                                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         <?= h($ad['target_url']) ?>
                                     </div>
                                 <?php endif; ?>

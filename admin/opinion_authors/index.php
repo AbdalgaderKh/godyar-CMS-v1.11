@@ -41,7 +41,7 @@ $pageTitle   = __('t_4a173870d1', 'كتّاب الرأي');
 $pageSubtitle= __('t_63b4bd9eed', 'إدارة كتّاب الرأي');
 $adminBase = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/admin'), '/');
 $breadcrumbs = [__('t_3aa8578699', 'الرئيسية') => $adminBase.'/index.php', __('t_4a173870d1', 'كتّاب الرأي') => null];
-$pageActionsHtml = __('t_12be96e697', '<a href="create.php" class="btn btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إضافة كاتب</a>');
+$pageActionsHtml = __('t_12be96e697', '<a href="create.php" class="btn btn-gdy-primary"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> إضافة كاتب</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 $csrf = generate_csrf_token();
 ?>
@@ -265,18 +265,18 @@ html, body{ overflow-x:hidden; }
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <?php if (!$tableExists): ?>
                 <a href="create_table.php" class="btn btn-warning">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
                 </a>
             <?php endif; ?>
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_7332c59999', 'إضافة كاتب جديد')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_7332c59999', 'إضافة كاتب جديد')) ?>
             </a>
         </div>
     </div>
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')) ?> 
             <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -319,12 +319,12 @@ html, body{ overflow-x:hidden; }
         <?php if (empty($authors)): ?>
             <div class="gdy-empty-state">
                 <div class="gdy-empty-icon">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <h4 class="text-muted mb-3"><?= h(__('t_cab4c070f1', 'لا توجد كُتاب مسجلين')) ?></h4>
                 <p class="text-muted mb-4"><?= h(__('t_77ef440b11', 'ابدأ بإضافة أول كاتب إلى النظام')) ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('t_d88c3f927a', 'إضافة أول كاتب')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_d88c3f927a', 'إضافة أول كاتب')) ?>
                 </a>
             </div>
         <?php else: ?>
@@ -344,32 +344,32 @@ html, body{ overflow-x:hidden; }
                                         <a href="edit.php?id=<?= $author['id'] ?>" 
                                            class="gdy-author-btn"
                                            title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <!-- ✅ زر كتابة مقال رأي لهذا الكاتب -->
                                         <a href="../news/create.php?opinion_author_id=<?= (int)$author['id'] ?>" 
                                            class="gdy-author-btn" 
                                            title="<?= h(__('t_a327aa077e', 'إضافة مقال رأي جديد لهذا الكاتب')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <button class="gdy-author-btn toggle-author" 
                                                 data-id="<?= $author['id'] ?>"
                                                 data-status="<?= $author['is_active'] ?>"
                                                 title="<?= $author['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
-                                            <svg class="gdy-icon $author['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon $author['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                         <button class="gdy-author-btn delete-author" 
                                                 data-id="<?= $author['id'] ?>"
 
                                                 data-name="<?= htmlspecialchars($author['name']) ?>"
                                                 title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                     </div>
                                 </div>
                                 <?php if (empty($author['avatar'])): ?>
                                     <div class="text-muted">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -413,7 +413,7 @@ html, body{ overflow-x:hidden; }
                                                target="_blank" 
                                                class="text-info"
                                                title="<?= h(__('t_989510d6cd', 'تويتر')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#x"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                             </a>
                                         <?php endif; ?>
                                         <?php if (!empty($author['social_linkedin'])): ?>
@@ -421,7 +421,7 @@ html, body{ overflow-x:hidden; }
                                                target="_blank" 
                                                class="text-primary"
                                                title="<?= h(__('t_d0a32019c9', 'لينكدإن')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </a>
                                         <?php endif; ?>
                                         <?php if (!empty($author['social_website'])): ?>
@@ -429,7 +429,7 @@ html, body{ overflow-x:hidden; }
                                                target="_blank" 
                                                class="text-success"
                                                title="<?= h(__('t_d5b4c8ec57', 'موقع شخصي')) ?>">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg>
+                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                                             </a>
                                         <?php endif; ?>
                                     </div>

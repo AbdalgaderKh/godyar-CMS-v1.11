@@ -360,13 +360,13 @@ html, body{ overflow-x:hidden; background:#020617; }
 
       <div class="col-6 col-md-2 d-grid">
         <button type="submit" class="btn btn-primary">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تطبيق
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تطبيق
         </button>
       </div>
 
       <div class="col-12 col-md-2 d-grid">
         <a href="index.php" class="btn btn-outline-light">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إعادة تعيين
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> إعادة تعيين
         </a>
       </div>
     </form>
@@ -457,7 +457,7 @@ html, body{ overflow-x:hidden; background:#020617; }
                       data-ua="<?= h($ua) ?>"
                       data-details="<?= h($details) ?>"
                     >
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </button>
                   </td>
                 </tr>
@@ -516,7 +516,7 @@ html, body{ overflow-x:hidden; background:#020617; }
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           تفاصيل السجل <span class="badge bg-secondary" id="m_id">#</span>
         </h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -554,10 +554,10 @@ html, body{ overflow-x:hidden; background:#020617; }
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-light" id="m_copy">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> نسخ التفاصيل
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> نسخ التفاصيل
         </button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إغلاق
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> إغلاق
         </button>
       </div>
     </div>
@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!lastPayload) return;
       navigator.clipboard.writeText(lastPayload).then(() => {
         var old = m.copy.innerHTML;
-        m.copy.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تم النسخ';
+        m.copy.innerHTML = '<svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> تم النسخ';
         m.copy.classList.remove('btn-outline-light');
         m.copy.classList.add('btn-success');
         setTimeout(() => {

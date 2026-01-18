@@ -60,10 +60,10 @@ require_once __DIR__ . '/../layout/sidebar.php';
         </div>
         <div class="d-flex gap-2 flex-wrap">
           <button class="btn btn-outline-light btn-sm" id="refreshStats">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_061401dc3f', 'تحديث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_061401dc3f', 'تحديث')) ?>
           </button>
           <button class="btn btn-primary btn-sm" id="exportReport">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2204f96079', 'تصدير تقرير')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2204f96079', 'تصدير تقرير')) ?>
           </button>
         </div>
       </div>
@@ -93,7 +93,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
         </div>
         <div class="col-md-4 text-md-end mt-2 mt-md-4">
           <span class="small text-muted">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <?= h(__('t_46d91e6900', 'آخر تحديث تقريبي: الآن')) ?>
           </span>
         </div>
@@ -111,7 +111,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['users'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -120,7 +120,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../users/" class="card-link">
               <span><?= h(__('t_796c8c5b15', 'عرض المستخدمين')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -135,7 +135,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['news'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -144,7 +144,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../news/" class="card-link">
               <span><?= h(__('t_e06a9f8f17', 'إدارة الأخبار')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -159,7 +159,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['reports'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -168,7 +168,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../reports/" class="card-link">
               <span><?= h(__('t_f741547777', 'عرض التقارير')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -186,7 +186,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['news'] + $stats['pages'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -195,7 +195,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../news/" class="card-link">
               <span><?= h(__('t_c6dac40d6a', 'إدارة المحتوى')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -210,7 +210,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['categories'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -219,7 +219,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../categories/" class="card-link">
               <span><?= h(__('t_6a61e53eba', 'عرض الأقسام')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -234,7 +234,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['pages'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -243,7 +243,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../pages/" class="card-link">
               <span><?= h(__('t_01688690f2', 'عرض الصفحات')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -261,7 +261,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['media'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -270,7 +270,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../media/" class="card-link">
               <span><?= h(__('t_0eecb21bce', 'عرض الوسائط')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -285,7 +285,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['slider'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -294,7 +294,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../slider/" class="card-link">
               <span><?= h(__('t_eafc27904f', 'إدارة السلايدر')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -309,7 +309,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['opinion_authors'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -318,7 +318,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../opinion_authors/" class="card-link">
               <span><?= h(__('t_6996ffff9c', 'عرض الكتّاب')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -336,7 +336,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['team'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -345,7 +345,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../team/" class="card-link">
               <span><?= h(__('t_233ca8e8ec', 'عرض الفريق')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -360,7 +360,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['ads_active'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -369,7 +369,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../ads/" class="card-link">
               <span><?= h(__('t_3d3316a8ed', 'إدارة الإعلانات')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -384,7 +384,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <div class="card-badge"><?= (int)$stats['contacts_new'] ?></div>
             </div>
             <div class="card-icon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
@@ -393,7 +393,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <div class="card-footer">
             <a href="../contact/" class="card-link">
               <span><?= h(__('t_e601e3e5a4', 'عرض الرسائل')) ?></span>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
         </div>
@@ -841,7 +841,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btn = this;
     const originalHTML = btn.innerHTML;
 
-    btn.innerHTML = '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> جاري التحديث...';
+    btn.innerHTML = '<svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> جاري التحديث...';
     btn.disabled = true;
 
     // تأثير اهتزاز للبطاقات

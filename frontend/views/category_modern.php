@@ -65,7 +65,7 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
 
           <div class="cat-breadcrumb mb-2">
             <a href="<?= h(rtrim($baseUrl, '/') . '/') ?>">
-              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
               الرئيسية
             </a>
             <span class="mx-1 text-muted">/</span>
@@ -150,7 +150,7 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                           <div class="cat-card-thumb-overlay"></div>
                           <?php if ($isVideo): ?>
                             <div class="cat-card-badge">
-                              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                              <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                               <span>فيديو</span>
                             </div>
                           <?php endif; ?>
@@ -171,12 +171,12 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                       <div class="cat-card-meta-modern">
                         <?php if ($date): ?>
                           <span>
-                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?>
+                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?>
                           </span>
                         <?php endif; ?>
                         <?php if ($views !== null): ?>
                           <span>
-                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= number_format($views) ?> مشاهدة
+                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($views) ?> مشاهدة
                           </span>
                         <?php endif; ?>
                       </div>
@@ -201,7 +201,7 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
           <?php if (!empty($catTrending)): ?>
             <div class="cat-sidebar-card">
               <div class="cat-sidebar-title">
-                <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                 <span>الأكثر قراءة في هذا التصنيف</span>
               </div>
               <ul class="cat-sidebar-list">
@@ -218,10 +218,10 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                     </a>
                     <div class="cat-sidebar-meta">
                       <?php if ($tDate): ?>
-                        <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($tDate) ?></span>
+                        <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($tDate) ?></span>
                       <?php endif; ?>
                       <?php if ($tViews !== null): ?>
-                        <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= number_format($tViews) ?></span>
+                        <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($tViews) ?></span>
                       <?php endif; ?>
                     </div>
                   </li>

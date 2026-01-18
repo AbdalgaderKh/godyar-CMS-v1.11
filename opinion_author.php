@@ -597,7 +597,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
       </div>
       <div class="oa-author-meta">
         <div class="oa-author-label">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span>كاتب رأي</span>
         </div>
         <h1 class="oa-author-name">
@@ -617,24 +617,24 @@ require __DIR__ . '/frontend/views/partials/header.php';
 
         <div class="oa-author-meta-footer mt-2">
           <?php if ($email !== ''): ?>
-            <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h($email) ?></span>
+            <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($email) ?></span>
           <?php endif; ?>
 
           <?php if ($website !== '' || $twitter !== '' || $facebook !== ''): ?>
             <div class="oa-author-social">
               <?php if ($website !== ''): ?>
                 <a href="<?= h($website) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                 </a>
               <?php endif; ?>
               <?php if ($twitter !== ''): ?>
                 <a href="<?= h($twitter) ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#x"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                 </a>
               <?php endif; ?>
               <?php if ($facebook !== ''): ?>
                 <a href="<?= h($facebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#facebook"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                 </a>
               <?php endif; ?>
             </div>
@@ -686,10 +686,10 @@ require __DIR__ . '/frontend/views/partials/header.php';
               </h3>
               <div class="oa-article-meta">
                 <?php if ($date !== ''): ?>
-                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h($date) ?></span>
+                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
                 <?php endif; ?>
                 <?php if ($views > 0): ?>
-                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= number_format($views) ?> مشاهدة</span>
+                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($views) ?> مشاهدة</span>
                 <?php endif; ?>
               </div>
               <?php if ($excerpt !== ''): ?>

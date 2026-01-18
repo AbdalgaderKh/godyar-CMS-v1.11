@@ -196,7 +196,7 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
           value="<?= h($q) ?>"
         >
         <button class="btn btn-light btn-sm" type="submit">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
           بحث
         </button>
       </form>
@@ -258,7 +258,7 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
                       </h2>
                       <?php if ($created): ?>
                         <div class="news-meta mb-2">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           <span><?= h($created) ?></span>
                         </div>
                       <?php endif; ?>

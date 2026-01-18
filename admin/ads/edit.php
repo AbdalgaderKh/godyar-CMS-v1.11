@@ -260,13 +260,13 @@ html, body{
             <p class="text-muted mb-0 small"><?= h(__('t_e62cc12417', 'تعديل بيانات إعلان حالي.')) ?></p>
         </div>
         <a href="index.php" class="btn btn-outline-light mt-3 mt-md-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
         </a>
     </div>
 
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
@@ -327,7 +327,7 @@ html, body{
 
                 <div class="mt-4 d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
                     </button>
                     <a href="index.php" class="btn btn-outline-secondary"><?= h(__('t_b9568e869d', 'إلغاء')) ?></a>
                 </div>

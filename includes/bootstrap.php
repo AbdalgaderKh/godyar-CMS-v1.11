@@ -9,6 +9,7 @@ declare(strict_types=1);
  * - اتصال قاعدة البيانات
  * - تتبع الزيارات
  * - أدوات Schema
+ * - CSP موحد (مرة واحدة) + دعم unsafe-eval (لأدوات الفحص) + nonce
  */
 
 if (!defined('ROOT_PATH')) {
@@ -19,6 +20,7 @@ if (!defined('ROOT_PATH')) {
 require_once ROOT_PATH . '/includes/audit_log.php';
 // DB driver compatibility helpers (MySQL/PostgreSQL)
 require_once ROOT_PATH . '/includes/db_compat.php';
+
 // Register internal autoloader (and composer autoload if present)
 $autoload = ROOT_PATH . '/vendor/autoload.php';
 if (is_file($autoload)) {
@@ -28,12 +30,13 @@ if (is_file($autoload)) {
 // تحميل ENV/.env (مصدر واحد للإعدادات)
 // Ensure ENV_FILE is available even under PHP-FPM where Apache SetEnv may not be passed through.
 if (!getenv('ENV_FILE') && empty($_SERVER['ENV_FILE'])) {
-    $___envFile = '/home/YOUR_USERNAME/godyar_private/.env';
+    $___envFile = '/home/geqzylcq/godyar_private/.env';
     // Do not leak secrets; this only sets the file path.
     putenv('ENV_FILE=' . $___envFile);
     $_SERVER['ENV_FILE'] = $___envFile;
     $_ENV['ENV_FILE'] = $___envFile;
 }
+
 // Optional: set ENV_FILE path without relying on .htaccess (useful on shared hosting / PHP-FPM)
 // Create /includes/env_path.php (not committed) to define the ENV_FILE location via putenv()/$_SERVER.
 if (is_file(__DIR__ . '/env_path.php')) {
@@ -45,16 +48,70 @@ require_once ROOT_PATH . '/includes/env.php';
 // DB helpers (PDO source of truth)
 require_once ROOT_PATH . '/includes/db.php';
 
+
+if (!function_exists('normalize_display_name')) {
+    /**
+     * Normalize display name input (Unicode-safe):
+     * - remove zero-width characters
+     * - normalize apostrophes
+     * - strip diacritics/marks (tashkeel)
+     * - collapse whitespace
+     */
+    function normalize_display_name(string $name): string {
+        // Remove zero-width characters (ZWSP, ZWNJ, ZWJ, BOM)
+        $name = preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $name) ?? $name;
+        // Normalize smart apostrophes to plain apostrophe
+        $name = str_replace(["’", "‘", "´"], "'", $name);
+        // Strip combining marks (helps avoid false rejections)
+        $name = preg_replace('/[\p{M}]+/u', '', $name) ?? $name;
+        $name = trim($name);
+        $name = preg_replace('/\s+/u', ' ', $name) ?? $name;
+        return $name;
+    }
+}
+
+if (!function_exists('is_valid_display_name')) {
+    /**
+     * Allowed: letters/numbers/spaces and . _ - '
+     */
+    function is_valid_display_name(string $name, int $min = 2, int $max = 50): bool {
+        $name = normalize_display_name($name);
+        $len = mb_strlen($name, 'UTF-8');
+        if ($len < $min || $len > $max) return false;
+        return (bool)preg_match("/^[\\p{L}\\p{N} ._\\-']+$/u", $name);
+    }
+}
+
+if (!function_exists('sanitize_display_name')) {
+    /**
+     * Sanitize to allowed character set; returns normalized output.
+     */
+    function sanitize_display_name(string $name, int $min = 2, int $max = 50): string {
+        $name = normalize_display_name($name);
+        $name = preg_replace("/[^\\p{L}\\p{N} ._\\-']+/u", '', $name) ?? $name;
+        $name = normalize_display_name($name);
+        if (mb_strlen($name, 'UTF-8') > $max) {
+            $name = mb_substr($name, 0, $max, 'UTF-8');
+            $name = rtrim($name);
+        }
+        if (mb_strlen($name, 'UTF-8') < $min) return '';
+        return $name;
+    }
+}
 /* =========================
    PDO driver check (mysql / pgsql)
    ========================= */
 $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : 'auto';
-if ($drv === 'postgres' || $drv === 'postgresql') $drv = 'pgsql';
+if ($drv === 'postgres' || $drv === 'postgresql') {
+    $drv = 'pgsql';
+}
 $needExt = ($drv === 'pgsql') ? 'pdo_pgsql' : 'pdo_mysql';
 
 if (!extension_loaded('pdo') || !extension_loaded($needExt)) {
     http_response_code(500);
-    @error_log('[Bootstrap] Missing PDO driver: ' . $needExt);
+    if (function_exists('error_log')) {
+        error_log('[Bootstrap] Missing PDO driver: ' . $needExt);
+    }
     if ($needExt === 'pdo_pgsql') {
         exit('خطأ في إعدادات السيرفر: يلزم تفعيل إضافة PDO PostgreSQL (pdo_pgsql) من لوحة الاستضافة/إعدادات PHP ثم إعادة المحاولة.');
     }
@@ -64,14 +121,12 @@ if (!extension_loaded('pdo') || !extension_loaded($needExt)) {
 /* =========================
    PHP 7.4 compatibility polyfills
    ========================= */
-// بعض الاستضافات ما زالت على PHP 7.4 — نضيف Polyfills لدوال PHP 8
 if (!function_exists('str_contains')) {
     function str_contains(string $haystack, string $needle): bool
     {
         return $needle === '' || strpos($haystack, $needle) !== false;
     }
 }
-
 if (!function_exists('str_starts_with')) {
     function str_starts_with(string $haystack, string $needle): bool
     {
@@ -79,7 +134,6 @@ if (!function_exists('str_starts_with')) {
         return substr($haystack, 0, strlen($needle)) === $needle;
     }
 }
-
 if (!function_exists('str_ends_with')) {
     function str_ends_with(string $haystack, string $needle): bool
     {
@@ -100,7 +154,9 @@ $logDir  = ROOT_PATH . '/storage/logs';
 $logFile = $logDir . '/php-error.log';
 
 if (!is_dir($logDir)) {
-    @mkdir($logDir, 0755, true);
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
 }
 ini_set('error_log', $logFile);
 
@@ -109,7 +165,7 @@ ini_set('error_log', $logFile);
    ========================= */
 if (session_status() === PHP_SESSION_NONE) {
     $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-             || (!empty($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+        || (!empty($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
 
     if (!headers_sent()) {
         session_set_cookie_params([
@@ -120,65 +176,77 @@ if (session_status() === PHP_SESSION_NONE) {
             'samesite' => 'Strict',
         ]);
     }
+
     /* =========================
-   Session hardening (shared hosting safe)
-   - To isolate sessions from /tmp, set SESSION_SAVE_PATH in .env (recommended)
-   - Example: SESSION_SAVE_PATH=/home/USER/godyar/storage/sessions
-   ========================= */
-try {
-    $sessPath = function_exists('env') ? (string)env('SESSION_SAVE_PATH', '') : '';
-    if ($sessPath !== '' && is_dir($sessPath) && is_writable($sessPath)) {
-        @ini_set('session.save_path', $sessPath);
+       Session hardening (shared hosting safe)
+       - To isolate sessions from /tmp, set SESSION_SAVE_PATH in .env (recommended)
+       - Example: SESSION_SAVE_PATH=/home/USER/godyar/storage/sessions
+       ========================= */
+    try {
+        if (function_exists('ini_set')) {
+            $sessPath = function_exists('env') ? (string)env('SESSION_SAVE_PATH', '') : '';
+            if ($sessPath !== '' && is_dir($sessPath) && is_writable($sessPath)) {
+                ini_set('session.save_path', $sessPath);
+            }
+
+            ini_set('session.use_strict_mode', '1');
+            ini_set('session.use_only_cookies', '1');
+            ini_set('session.cookie_httponly', '1');
+        }
+
+        // SameSite support (PHP 7.3+)
+        if (PHP_VERSION_ID >= 70300 && function_exists('ini_set')) {
+            ini_set('session.cookie_samesite', (string)(function_exists('env') ? env('SESSION_SAMESITE', 'Lax') : 'Lax'));
+        }
+
+        // Secure cookies automatically when HTTPS is detected
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
+        if ($isHttps && function_exists('ini_set')) {
+            ini_set('session.cookie_secure', '1');
+        }
+    } catch (Throwable $e) {
+        // Keep silent in production; log if logger is available.
+        if (function_exists('error_log')) {
+            error_log('[bootstrap] session hardening skipped: ' . $e->getMessage());
+        }
     }
 
-    @ini_set('session.use_strict_mode', '1');
-    @ini_set('session.use_only_cookies', '1');
-    @ini_set('session.cookie_httponly', '1');
+	    // Avoid legacy cache headers (Expires/Pragma) emitted by PHP's default session cache limiter
+	    // so that caching directives are controlled explicitly.
+	    if (PHP_SAPI !== 'cli' && function_exists('session_cache_limiter')) {
+	        session_cache_limiter('');
+	    }
 
-    // SameSite support (PHP 7.3+)
-    if (PHP_VERSION_ID >= 70300) {
-        @ini_set('session.cookie_samesite', (string)(function_exists('env') ? env('SESSION_SAMESITE', 'Lax') : 'Lax'));
-    }
+	    if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+	        session_start();
+	    }
 
-    // Secure cookies automatically when HTTPS is detected
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
-    if ($isHttps) {
-        @ini_set('session.cookie_secure', '1');
+    // --- Session bridge for OAuth + legacy keys (ensures consistent login state across the project) ---
+    if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
+        if (empty($_SESSION['user_id']) && !empty($_SESSION['user']['id'])) {
+            $_SESSION['user_id'] = (int)$_SESSION['user']['id'];
+        }
+        if (empty($_SESSION['user_email']) && !empty($_SESSION['user']['email'])) {
+            $_SESSION['user_email'] = (string)$_SESSION['user']['email'];
+        }
+        if (empty($_SESSION['user_name'])) {
+            $_SESSION['user_name'] = (string)($_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? '');
+        }
+        if (empty($_SESSION['user_role']) && !empty($_SESSION['user']['role'])) {
+            $_SESSION['user_role'] = (string)$_SESSION['user']['role'];
+        }
+        if (empty($_SESSION['is_member_logged'])) {
+            $_SESSION['is_member_logged'] = true;
+        }
     }
-} catch (Throwable $e) {
-    // do not break bootstrap for session hardening errors
-    @error_log('[bootstrap] session hardening skipped: ' . $e->getMessage());
+    // --- end session bridge ---
 }
-
-    @session_start();
-
-// --- Session bridge for OAuth + legacy keys (ensures consistent login state across the project) ---
-if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
-    if (empty($_SESSION['user_id']) && !empty($_SESSION['user']['id'])) {
-        $_SESSION['user_id'] = (int)$_SESSION['user']['id'];
-    }
-    if (empty($_SESSION['user_email']) && !empty($_SESSION['user']['email'])) {
-        $_SESSION['user_email'] = (string)$_SESSION['user']['email'];
-    }
-    if (empty($_SESSION['user_name'])) {
-        $_SESSION['user_name'] = (string)($_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? '');
-    }
-    if (empty($_SESSION['user_role']) && !empty($_SESSION['user']['role'])) {
-        $_SESSION['user_role'] = (string)$_SESSION['user']['role'];
-    }
-    if (empty($_SESSION['is_member_logged'])) {
-        $_SESSION['is_member_logged'] = true;
-    }
-}
-// --- end session bridge ---
-
-}
-
 
 /* =========================
-   Security Headers (Dynamic CSP nonce)
+   Security Headers + Dynamic CSP (ONE PLACE ONLY)
    ========================= */
-// Generate per-request nonce for CSP (used to allow inline <script>/<style> safely)
+
+// Generate per-request nonce for CSP
 if (!defined('GDY_CSP_NONCE')) {
     try {
         define('GDY_CSP_NONCE', rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='));
@@ -187,39 +255,63 @@ if (!defined('GDY_CSP_NONCE')) {
     }
 }
 
-// Apply CSP via PHP (so we can use a dynamic nonce). IMPORTANT: remove any static CSP header from .htaccess to avoid duplicated CSP headers.
 if (!headers_sent()) {
-    // Best-effort: hide PHP version header
+    // Basic hardening headers
     if (function_exists('header_remove')) {
-        @header_remove('X-Powered-By');
-        @header_remove('X-Robots-Tag');
-
+        if (function_exists('header_remove')) {
+            header_remove('X-Powered-By');
+        }
     }
 
-    // Strict CSP (scripts require nonce; no unsafe-inline)
-    // Balanced CSP (keeps 'unsafe-inline' to avoid breaking legacy templates/editor)
-    // - Restricts iframes to same-origin (used for internal PDF preview)
-    // - Allows https/wss connections for external resources/APIs if needed
-    $csp = "default-src 'self'; "
-         . "base-uri 'self'; "
-         . "object-src 'none'; "
-         . "frame-ancestors 'self'; "
-         . "frame-src 'self'; "
-         . "img-src 'self' data: blob: https:; "
-         . "style-src 'self' 'unsafe-inline' https:; style-src-elem 'self' 'unsafe-inline' https: https://www.gstatic.com; "
-         . "script-src 'self' 'unsafe-inline' https:; "
-         . "connect-src 'self' https: wss:; "
-         . "font-src 'self' data: https:; "
-         . "media-src 'self' data: blob:; "
-         . "form-action 'self'; "
-         . "upgrade-insecure-requests;";
+	    // X-Frame-Options is intentionally omitted; we rely on CSP `frame-ancestors` for clickjacking protection.
+    header('X-Content-Type-Options: nosniff');
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
+    header('Cross-Origin-Opener-Policy: same-origin');
+    header('X-XSS-Protection: 1; mode=block');
 
-    header("Content-Security-Policy: " . $csp);
-    header("X-Robots-Tag: index, follow");
+    // HSTS only when HTTPS (or behind proxy)
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    if ($isHttps) {
+        header('Strict-Transport-Security: max-age=15552000; includeSubDomains');
+    }
+
+	    // Cache-control for HTML (prefer Cache-Control over legacy Expires/Pragma)
+	    $reqUri = (string)($_SERVER['REQUEST_URI'] ?? '');
+	    $isAssetReq = (bool)preg_match('~\\.(?:css|js|map|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|eot|pdf)(?:\\?|$)~i', $reqUri);
+	    if (!$isAssetReq) {
+	        header('Cache-Control: no-store, max-age=0, must-revalidate');
+	    }
+
+	    // CSP (soft for legacy compatibility) + nonce
+    $nonce = GDY_CSP_NONCE;
+
+    $csp = "default-src 'self'; "
+        . "base-uri 'self'; "
+        . "object-src 'none'; "
+        . "frame-ancestors 'self'; "
+        . "frame-src 'self'; "
+        . "img-src 'self' data: blob: https:; "
+        . "style-src 'self' 'unsafe-inline' 'nonce-{$nonce}' https:; "
+        . "style-src-elem 'self' 'unsafe-inline' 'nonce-{$nonce}' https: https://www.gstatic.com; "
+        // Allow style attributes and JS-driven inline styles (CSSOM) even when a nonce exists.
+        // Without this, browsers ignore 'unsafe-inline' once a nonce is present and will block style="...".
+        . "style-src-attr 'unsafe-inline'; "
+        // Keep eval() blocked (do NOT add unsafe-eval).
+        . "script-src 'self' 'unsafe-inline' 'nonce-{$nonce}' https:; "
+        . "connect-src 'self' https: wss:; "
+        . "font-src 'self' data: https:; "
+        . "media-src 'self' data: blob:; "
+        . "form-action 'self'; "
+        . "upgrade-insecure-requests;";
+
+    header('Content-Security-Policy: ' . $csp);
+    header('X-Robots-Tag: index, follow');
 }
 
 // Auto-inject nonce into <script> and <style> tags if missing (HTML responses only)
-$uri = (string)($_SERVER['REQUEST_URI'] ?? '');
+$uri    = (string)($_SERVER['REQUEST_URI'] ?? '');
 $accept = (string)($_SERVER['HTTP_ACCEPT'] ?? '');
 $isHtml = (stripos($accept, 'text/html') !== false) || (stripos($accept, 'application/xhtml+xml') !== false);
 $isApi  = (strpos($uri, '/api/') !== false) || (strpos($uri, '/api') === 0);
@@ -231,13 +323,11 @@ if ($isHtml && !$isApi && !$isAsset && PHP_SAPI !== 'cli') {
 
         $nonce = GDY_CSP_NONCE;
 
-        // Add nonce to <script> tags without nonce
-        $html = preg_replace_callback('~<script(?![^>]*nonce=)([^>]*)>~i', function ($m) use ($nonce) {
+        $html = preg_replace_callback('~<script\b(?![^>]*\bnonce=)([^>]*)>~i', function ($m) use ($nonce) {
             return '<script nonce="' . htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8') . '"' . $m[1] . '>';
         }, $html);
 
-        // Add nonce to <style> tags without nonce (optional but nice for consistency)
-        $html = preg_replace_callback('~<style(?![^>]*nonce=)([^>]*)>~i', function ($m) use ($nonce) {
+        $html = preg_replace_callback('~<style\b(?![^>]*\bnonce=)([^>]*)>~i', function ($m) use ($nonce) {
             return '<style nonce="' . htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8') . '"' . $m[1] . '>';
         }, $html);
 
@@ -256,43 +346,45 @@ require_once ROOT_PATH . "/includes/translation.php";
 try {
     $pdo = \Godyar\DB::pdo();
 
-
-// --- Hydrate user id/name from DB for OAuth edge cases (e.g. Google returning email but missing id) ---
-try {
-    $emailForHydrate = (string)($_SESSION['user_email'] ?? $_SESSION['email'] ?? ($_SESSION['user']['email'] ?? ''));
-    $uidForHydrate   = (int)($_SESSION['user_id'] ?? 0);
-    if ($emailForHydrate !== '' && $uidForHydrate <= 0 && isset($pdo) && $pdo instanceof \PDO) {
-        $stHyd = $pdo->prepare('SELECT id, username, display_name, role, email FROM users WHERE email = :e LIMIT 1');
-        $stHyd->execute([':e' => $emailForHydrate]);
-        $rowHyd = $stHyd->fetch(\PDO::FETCH_ASSOC) ?: null;
-        if ($rowHyd) {
-            $_SESSION['user_id'] = (int)($rowHyd['id'] ?? 0);
-            if (empty($_SESSION['user_name'])) {
-                $_SESSION['user_name'] = (string)($rowHyd['display_name'] ?? $rowHyd['username'] ?? '');
-            }
-            if (empty($_SESSION['user_role']) && !empty($rowHyd['role'])) {
-                $_SESSION['user_role'] = (string)$rowHyd['role'];
-            }
-            if (empty($_SESSION['user_email']) && !empty($rowHyd['email'])) {
-                $_SESSION['user_email'] = (string)$rowHyd['email'];
-            }
-            // keep unified session user array updated too
-            if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
-                $_SESSION['user']['id'] = (int)($_SESSION['user_id'] ?? 0);
-                if (empty($_SESSION['user']['display_name']) && !empty($_SESSION['user_name'])) {
-                    $_SESSION['user']['display_name'] = (string)$_SESSION['user_name'];
+    // --- Hydrate user id/name from DB for OAuth edge cases (e.g. Google returning email but missing id) ---
+    try {
+        $emailForHydrate = (string)($_SESSION['user_email'] ?? $_SESSION['email'] ?? ($_SESSION['user']['email'] ?? ''));
+        $uidForHydrate   = (int)($_SESSION['user_id'] ?? 0);
+        if ($emailForHydrate !== '' && $uidForHydrate <= 0 && isset($pdo) && $pdo instanceof \PDO) {
+            $dnCol = db_column_exists($pdo, 'users', 'display_name') ? 'display_name'
+                : (db_column_exists($pdo, 'users', 'name') ? 'name'
+                : (db_column_exists($pdo, 'users', 'full_name') ? 'full_name'
+                : (db_column_exists($pdo, 'users', 'fullName') ? 'fullName' : 'username')));
+            $stHyd = $pdo->prepare("SELECT id, username, {$dnCol} AS display_name, role, email FROM users WHERE email = :e LIMIT 1");
+            $stHyd->execute([':e' => $emailForHydrate]);
+            $rowHyd = $stHyd->fetch(\PDO::FETCH_ASSOC) ?: null;
+            if ($rowHyd) {
+                $_SESSION['user_id'] = (int)($rowHyd['id'] ?? 0);
+                if (empty($_SESSION['user_name'])) {
+                    $_SESSION['user_name'] = (string)($rowHyd['display_name'] ?? $rowHyd['username'] ?? '');
                 }
-                if (empty($_SESSION['user']['email']) && !empty($_SESSION['user_email'])) {
-                    $_SESSION['user']['email'] = (string)$_SESSION['user_email'];
+                if (empty($_SESSION['user_role']) && !empty($rowHyd['role'])) {
+                    $_SESSION['user_role'] = (string)$rowHyd['role'];
                 }
+                if (empty($_SESSION['user_email']) && !empty($rowHyd['email'])) {
+                    $_SESSION['user_email'] = (string)$rowHyd['email'];
+                }
+                if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
+                    $_SESSION['user']['id'] = (int)($_SESSION['user_id'] ?? 0);
+                    if (empty($_SESSION['user']['display_name']) && !empty($_SESSION['user_name'])) {
+                        $_SESSION['user']['display_name'] = (string)$_SESSION['user_name'];
+                    }
+                    if (empty($_SESSION['user']['email']) && !empty($_SESSION['user_email'])) {
+                        $_SESSION['user']['email'] = (string)$_SESSION['user_email'];
+                    }
+                }
+                $_SESSION['is_member_logged'] = true;
             }
-            $_SESSION['is_member_logged'] = true;
         }
+    } catch (\Throwable $e) {
+        // ignore hydration failures
     }
-} catch (\Throwable $e) {
-    // ignore hydration failures
-}
-// --- end hydrate ---
+    // --- end hydrate ---
 } catch (Throwable $e) {
     http_response_code(500);
     exit('فشل الاتصال بقاعدة البيانات.');
@@ -316,23 +408,19 @@ try {
         $GLOBALS['database'] = $database;
     }
 } catch (Throwable $e) {
-    @error_log('[Bootstrap] container/legacy adapter init: ' . $e->getMessage());
+    if (function_exists('error_log')) {
+        error_log('[Bootstrap] container/legacy adapter init: ' . $e->getMessage());
+    }
 }
 
 /* =========================
    DB helpers
    ========================= */
-// NOTE: bootstrap.php قد يتم تحميله أكثر من مرة في بعض صفحات الإدارة.
-// لذلك يجب حماية تعريفات الدوال لتجنب Fatal: Cannot redeclare ...
 if (!function_exists('db_table_exists')) {
-    /**
-     * Check if a table exists (MySQL/PostgreSQL) in the current DB/schema.
-     */
     function db_table_exists(PDO $pdo, string $table): bool {
         $table = trim($table);
         if ($table === '') return false;
 
-        // Prefer driver detection helper if available
         $isPg = function_exists('gdy_pdo_is_pgsql') ? gdy_pdo_is_pgsql($pdo) : false;
 
         if ($isPg) {
@@ -359,13 +447,7 @@ if (!function_exists('db_table_exists')) {
     }
 }
 
-/**
- * فحص وجود عمود في جدول (لإتاحة ترقيات schema بدون كسر المشروع).
- */
 if (!function_exists('db_column_exists')) {
-    /**
-     * Check if a column exists (MySQL/PostgreSQL) in the current DB/schema.
-     */
     function db_column_exists(PDO $pdo, string $table, string $column): bool {
         $table = trim($table);
         $column = trim($column);
@@ -400,10 +482,6 @@ if (!function_exists('db_column_exists')) {
 }
 
 if (!function_exists('db_table_columns')) {
-    /**
-     * Return list of column names for a table (MySQL/PostgreSQL) in current DB/schema.
-     * @return string[]
-     */
     function db_table_columns(PDO $pdo, string $table): array {
         $table = trim($table);
         if ($table === '') return [];
@@ -457,7 +535,6 @@ if (!db_table_exists($pdo, 'visits')) {
     ");
 }
 
-// ترقيات تلقائية لجدول visits (إضافة أعمدة النظام/المتصفح/نوع الجهاز إذا كانت مفقودة)
 try {
     if (db_table_exists($pdo, 'visits')) {
         if (!db_column_exists($pdo, 'visits', 'os')) {
@@ -471,14 +548,14 @@ try {
         }
     }
 } catch (Throwable $e) {
-    @error_log('[Bootstrap] visits schema migrate: ' . $e->getMessage());
+    if (function_exists('error_log')) {
+        error_log('[Bootstrap] visits schema migrate: ' . $e->getMessage());
+    }
 }
 
 /* =========================
    Comments (auto create)
    ========================= */
-// We keep a dedicated table name used by admin UI and the frontend.
-// This auto-creates tables on first run for shared-hosting setups.
 if (!db_table_exists($pdo, 'news_comments')) {
     $pdo->exec("
         CREATE TABLE news_comments (
@@ -518,7 +595,6 @@ if (!db_table_exists($pdo, 'news_comment_votes')) {
     ");
 }
 
-// Optional: store social identifiers on users table when available.
 try {
     $cols = gdy_db_stmt_columns($pdo, 'users')->fetchAll(PDO::FETCH_COLUMN, 0);
     if (is_array($cols) && !in_array('github_id', $cols, true)) {
@@ -536,11 +612,13 @@ function gdy_classify_source(string $ref): string {
     $h = strtolower(parse_url($ref, PHP_URL_HOST) ?? '');
     if ($h === '') return 'referral';
 
-    foreach (['google','bing','yahoo','duckduckgo'] as $s)
+    foreach (['google','bing','yahoo','duckduckgo'] as $s) {
         if (str_contains($h, $s)) return 'search';
+    }
 
-    foreach (['facebook','twitter','x.com','instagram','t.me','telegram','tiktok'] as $s)
+    foreach (['facebook','twitter','x.com','instagram','t.me','telegram','tiktok'] as $s) {
         if (str_contains($h, $s)) return 'social';
+    }
 
     return 'referral';
 }
@@ -567,11 +645,9 @@ function gdy_parse_os(string $ua): string {
 function gdy_parse_browser(string $ua): string {
     $u = strtolower($ua);
     if ($u === '') return 'Unknown';
-    // Edge يجب قبل Chrome
     if (str_contains($u, 'edg/')) return 'Edge';
     if (str_contains($u, 'opr/') || str_contains($u, 'opera')) return 'Opera';
     if (str_contains($u, 'firefox/')) return 'Firefox';
-    // Safari يجب بعد Chrome لأن Chrome يحتوي Safari
     if (str_contains($u, 'chrome/') || str_contains($u, 'crios/')) return 'Chrome';
     if (str_contains($u, 'safari/') && !str_contains($u, 'chrome/') && !str_contains($u, 'crios/')) return 'Safari';
     if (str_contains($u, 'msie') || str_contains($u, 'trident/')) return 'IE';
@@ -582,51 +658,53 @@ function gdy_track_visit(string $page, ?int $newsId=null): void {
     $pdo = gdy_pdo_safe();
     if (!$pdo instanceof PDO) return;
 
-    if (session_status() !== PHP_SESSION_ACTIVE) @session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            session_start();
+        }
+    }
 
     $key = 'visit_'.$page.'_'.($newsId ?? 0);
-    if (isset($_SESSION[$key]) && time() - $_SESSION[$key] < 600) return;
+    if (isset($_SESSION[$key]) && time() - (int)$_SESSION[$key] < 600) return;
     $_SESSION[$key] = time();
 
-    $ref = $_SERVER['HTTP_REFERER'] ?? '';
-    $ua  = substr($_SERVER['HTTP_USER_AGENT'] ?? '',0,250);
-	    try {
-	        $pdo->prepare("
-	            INSERT INTO visits (page,news_id,source,referrer,user_ip,user_agent,os,browser,device)
-	            VALUES (?,?,?,?,?,?,?,?,?)
-	        ")->execute([
-	            $page,
-	            $newsId,
-	            gdy_classify_source($ref),
-	            $ref,
-	            $_SERVER['REMOTE_ADDR'] ?? null,
-	            $ua,
-	            gdy_parse_os($ua),
-	            gdy_parse_browser($ua),
-	            gdy_parse_device($ua)
-	        ]);
-	    } catch (Throwable $e) {
-	        // fallback لو جدول visits قديم بدون أعمدة (أو فشل ALTER)
-	        try {
-	            $pdo->prepare("INSERT INTO visits (page,news_id,source,referrer,user_ip,user_agent) VALUES (?,?,?,?,?,?)")
-	                ->execute([
-	                    $page,
-	                    $newsId,
-	                    gdy_classify_source($ref),
-	                    $ref,
-	                    $_SERVER['REMOTE_ADDR'] ?? null,
-	                    $ua,
-	                ]);
-	        } catch (Throwable $e2) {
-	            @error_log('[Visits] insert failed: ' . $e2->getMessage());
-	        }
-	    }
+    $ref = (string)($_SERVER['HTTP_REFERER'] ?? '');
+    $ua  = substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 250);
+
+    try {
+        $pdo->prepare("
+            INSERT INTO visits (page,news_id,source,referrer,user_ip,user_agent,os,browser,device)
+            VALUES (?,?,?,?,?,?,?,?,?)
+        ")->execute([
+            $page,
+            $newsId,
+            gdy_classify_source($ref),
+            $ref,
+            $_SERVER['REMOTE_ADDR'] ?? null,
+            $ua,
+            gdy_parse_os($ua),
+            gdy_parse_browser($ua),
+            gdy_parse_device($ua)
+        ]);
+    } catch (Throwable $e) {
+        try {
+            $pdo->prepare("INSERT INTO visits (page,news_id,source,referrer,user_ip,user_agent) VALUES (?,?,?,?,?,?)")
+                ->execute([
+                    $page,
+                    $newsId,
+                    gdy_classify_source($ref),
+                    $ref,
+                    $_SERVER['REMOTE_ADDR'] ?? null,
+                    $ua,
+                ]);
+        } catch (Throwable $e2) {
+            if (function_exists('error_log')) {
+                error_log('[Visits] insert failed: ' . $e2->getMessage());
+            }
+        }
+    }
 }
 
-/**
- * تتبع عام تلقائي لكل صفحات الواجهة (يشمل /opinion_author.php).
- * الهدف: تفعيل لوحات الزيارات بدون الحاجة لتعديل كل كنترولر.
- */
 function gdy_auto_track_request(): void
 {
     try {
@@ -637,56 +715,38 @@ function gdy_auto_track_request(): void
         $path = parse_url($uri, PHP_URL_PATH);
         if (!is_string($path) || $path === '') $path = '/';
 
-        // تجاهل ملفات الاستايل/الصور/السكربت
-        if (preg_match('#\\.(css|js|png|jpg|jpeg|gif|svg|webp|ico|woff2?|ttf|map)$#i', $path)) return;
+        if (preg_match('#\.(css|js|png|jpg|jpeg|gif|svg|webp|ico|woff2?|ttf|map)$#i', $path)) return;
 
-        // تجاهل لوحة التحكم وواجهات API
         $trim = '/' . ltrim($path, '/');
         if (preg_match('#^/(ar|en|fr)?/?admin(/|$)#i', $trim)) return;
         if (preg_match('#^/(ar|en|fr)?/?api(/|$)#i', $trim)) return;
-	        // تجاهل endpoint التتبع نفسه
-	        if (str_ends_with($trim, '/track.php') || $trim === '/track.php') return;
+        if (str_ends_with($trim, '/track.php') || $trim === '/track.php') return;
 
         $page = 'other';
         $newsId = null;
 
-        // الصفحة الرئيسية
         if ($trim === '/' || preg_match('#^/(ar|en|fr)/?$#', $trim)) {
             $page = 'home';
-        }
-        // البحث
-        elseif ($trim === '/search' || preg_match('#^/(ar|en|fr)/search$#', $trim)) {
+        } elseif ($trim === '/search' || preg_match('#^/(ar|en|fr)/search$#', $trim)) {
             $page = 'search';
-        }
-        // تصنيف
-        elseif (preg_match('#^/(ar|en|fr)/category/#', $trim) || str_starts_with($trim, '/category/')) {
+        } elseif (preg_match('#^/(ar|en|fr)/category/#', $trim) || str_starts_with($trim, '/category/')) {
             $page = 'category';
-        }
-        // وسم
-        elseif (preg_match('#^/(ar|en|fr)/tag/#', $trim) || str_starts_with($trim, '/tag/')) {
+        } elseif (preg_match('#^/(ar|en|fr)/tag/#', $trim) || str_starts_with($trim, '/tag/')) {
             $page = 'tag';
-        }
-        // صفحة ثابتة
-        elseif (preg_match('#^/(ar|en|fr)/page/#', $trim) || str_starts_with($trim, '/page/')) {
+        } elseif (preg_match('#^/(ar|en|fr)/page/#', $trim) || str_starts_with($trim, '/page/')) {
             $page = 'page';
-        }
-        // خبر بالـ ID
-        elseif (preg_match('#/news/id/(\\d+)#', $trim, $m)) {
+        } elseif (preg_match('#/news/id/(\d+)#', $trim, $m)) {
             $page = 'article';
             $newsId = (int)$m[1];
-        }
-        // كاتب رأي (ملف مستقل)
-        elseif (str_ends_with($trim, '/opinion_author.php') || $trim === '/opinion_author.php') {
+        } elseif (str_ends_with($trim, '/opinion_author.php') || $trim === '/opinion_author.php') {
             $page = 'opinion_author';
         }
 
-        // تجاهل الزيارات الداخلية للمسؤول لو أحببت: (اختياري) لا نحجبها لأن قد ترغب في اختبار سريع
-        // if (!empty($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') return;
-
         gdy_track_visit($page, $newsId);
     } catch (Throwable $e) {
-        // لا تكسر الصفحة بسبب analytics
-        @error_log('[Bootstrap] auto track: ' . $e->getMessage());
+        if (function_exists('error_log')) {
+            error_log('[Bootstrap] auto track: ' . $e->getMessage());
+        }
     }
 }
 
@@ -710,8 +770,6 @@ function base_url(string $path = ''): string {
     return $base . '/' . ltrim($path, '/');
 }
 
-// Backward-compatibility: some legacy files still rely on BASE_URL.
-// We keep it defined (with a trailing slash) so concatenation like BASE_URL . 'admin/' works.
 if (!defined('BASE_URL')) {
     $b = base_url();
     if ($b !== '') {
@@ -719,51 +777,9 @@ if (!defined('BASE_URL')) {
     } elseif (defined('APP_URL_AUTO') && APP_URL_AUTO) {
         define('BASE_URL', rtrim((string)APP_URL_AUTO, '/') . '/');
     } else {
-        // Last-resort fallback (relative root)
         define('BASE_URL', '/');
     }
 }
-
-/* =========================
-   Security headers
-   ========================= */
-if (!headers_sent()) {
-    // Basic hardening headers
-    header('X-Frame-Options: SAMEORIGIN');
-    header('X-Content-Type-Options: nosniff');
-    header('Referrer-Policy: strict-origin-when-cross-origin');
-    header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
-    header('Cross-Origin-Opener-Policy: same-origin');
-
-    // Backward compatibility (some browsers still read it)
-    header('X-XSS-Protection: 1; mode=block');
-
-    // HSTS only when HTTPS (or behind proxy)
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
-    if ($isHttps) {
-        header('Strict-Transport-Security: max-age=15552000; includeSubDomains');
-    }
-
-    // Soft CSP (keeps inline styles/scripts to avoid breaking legacy templates)
-    // If you later move inline JS/CSS to files, you can tighten CSP by removing 'unsafe-inline'.
-    $csp = "default-src 'self'; "
-         . "base-uri 'self'; "
-         . "object-src 'none'; "
-         . "frame-ancestors 'self'; "
-         . "frame-src 'self'; "
-         . "img-src 'self' data: blob: https:; "
-         . "style-src 'self' 'unsafe-inline' https:; style-src-elem 'self' 'unsafe-inline' https: https://www.gstatic.com; "
-         . "script-src 'self' 'unsafe-inline' https:; "
-         . "connect-src 'self' https: wss:; "
-         . "font-src 'self' data:; "
-         . "media-src 'self' data: blob:; "
-         . "form-action 'self'; "
-         . "upgrade-insecure-requests;";
-
-header('Content-Security-Policy: ' . $csp);
-}
-
 
 date_default_timezone_set((defined('TIMEZONE') && TIMEZONE) ? TIMEZONE : 'Asia/Riyadh');
 

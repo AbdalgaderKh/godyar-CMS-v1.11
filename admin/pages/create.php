@@ -177,7 +177,7 @@ html, body {
       <p class="text-muted mb-0"><?= h(__('t_2289e0c577', 'قم بإضافة صفحة ثابتة جديدة للموقع.')) ?></p>
     </div>
     <a href="index.php" class="btn btn-sm btn-secondary">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
     </a>
   </div>
 
@@ -203,11 +203,11 @@ html, body {
                    value="<?= h($title) ?>">
             <div class="gdy-ai-tools">
               <button type="button" class="btn btn-outline-info btn-sm gdy-btn-sm" data-action="ai-suggest-title">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('t_8fcb7c90f2', 'اقتراح عنوان بالذكاء الاصطناعي')) ?>
               </button>
               <span class="gdy-ai-badge">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('t_25fc51906e', 'مساعد ذكي')) ?>
               </span>
             </div>
@@ -224,7 +224,7 @@ html, body {
                       placeholder="<?= h(__('t_e261adf643', 'محتوى الصفحة')) ?>"><?= h($content) ?></textarea>
             <div class="gdy-ai-tools">
               <button type="button" class="btn btn-success btn-sm gdy-btn-sm" data-action="ai-improve-content">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(__('t_a796addf29', 'تحسين النص بالذكاء الاصطناعي')) ?>
               </button>
             </div>
@@ -240,7 +240,7 @@ html, body {
 
         <div class="mt-3 d-flex justify-content-end gap-2">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
           </button>
         </div>
       </form>

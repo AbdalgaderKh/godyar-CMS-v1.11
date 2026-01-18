@@ -390,7 +390,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
       <section class="auth-card">
         <div class="text-center mb-3">
           <div class="gdy-brand-badge mb-2">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="/assets/icons/gdy-icons.svg#eye"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="#eye"></use></svg>
           </div>
           <h1 class="auth-title mb-1"><?= h(__("admin_panel")) ?> Godyar Pro</h1>
           <p class="auth-subtitle text-muted mb-0"><?= h(__("login_to_admin")) ?></p>
@@ -420,7 +420,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
             <label for="password" class="form-label d-flex justify-content-between align-items-center">
               <span><?= h(__("password")) ?></span>
               <button type="button" class="password-toggle-btn" data-action="toggle-password">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
               </button>
             </label>
             <input
@@ -446,7 +446,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
           </div>
 
           <button type="submit" class="btn btn-auth-primary w-100 mb-2">
-            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#login"></use></svg>
+            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#login"></use></svg>
             <?= h(__("login_to_dashboard")) ?>
           </button>
 
@@ -460,11 +460,11 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
       <aside class="auth-side d-none d-md-block">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <span class="auth-chip">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
             <?= h(__("secure_login")) ?>
           </span>
           <span class="auth-chip">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#calendar"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#calendar"></use></svg>
             <?= date('Y-m-d'); ?>
           </span>
         </div>

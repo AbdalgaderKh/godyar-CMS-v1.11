@@ -593,7 +593,7 @@ $btnDisabled = $blockedForNow > 0;
             <div class="gdy-brand">
                 <div class="logo">
                     <div class="logo-badge" aria-hidden="true">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="/assets/icons/gdy-icons.svg#eye"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="#eye"></use></svg>
                     </div>
                     <div class="min-w-0">
                         <div class="title">Godyar News</div>
@@ -601,14 +601,14 @@ $btnDisabled = $blockedForNow > 0;
                     </div>
                 </div>
                 <a class="btn btn-sm btn-outline-light" href="<?= h($baseUrl) ?>/" title="<?= h(__('العودة للموقع')) ?>">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
                 </a>
             </div>
 
             <div class="gdy-welcome" style="margin-top:18px;padding:18px 16px;border-radius:18px;background:rgba(2,6,23,.55);border:1px solid rgba(148,163,184,.18);">
                 <div style="display:flex;gap:12px;align-items:center;margin-bottom:10px;">
                     <div style="width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(14,165,233,.14);border:1px solid rgba(125,211,252,.35);">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                     </div>
                     <div style="min-width:0">
                         <div style="font-weight:900;font-size:1.05rem;letter-spacing:.2px;color:#e2e8f0;">اهلا بكم في Godyar</div>
@@ -630,7 +630,7 @@ $btnDisabled = $blockedForNow > 0;
 
             <div class="text-center mb-3">
                 <div class="mb-2" aria-hidden="true">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                 </div>
                 <div class="gdy-title">
                     <h1><?= h(__('تسجيل دخول الأعضاء')) ?></h1>
@@ -642,7 +642,7 @@ $btnDisabled = $blockedForNow > 0;
 
             <?php if ($errorMessage): ?>
                 <div class="gdy-alert mb-3" role="alert">
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                     <span class="ms-1"><?= $errorMessage ?></span>
                 </div>
             <?php endif; ?>
@@ -653,13 +653,13 @@ $btnDisabled = $blockedForNow > 0;
                 </div>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;">
                     <a class="btn btn-outline-light" href="<?= h($baseUrl) ?>/oauth/google?next=<?= urlencode($next !== '' ? $next : '/') ?>" style="border-radius:14px;">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#google"></use></svg> Google
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#google"></use></svg> Google
                     </a>
                     <a class="btn btn-outline-light" href="<?= h($baseUrl) ?>/oauth/facebook?next=<?= urlencode($next !== '' ? $next : '/') ?>" style="border-radius:14px;">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#facebook"></use></svg> Facebook
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg> Facebook
                     </a>
                     <a class="btn btn-outline-light" href="<?= h($baseUrl) ?>/oauth/github?next=<?= urlencode($next !== '' ? $next : '/') ?>" style="border-radius:14px;">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#github"></use></svg> GitHub
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#github"></use></svg> GitHub
                     </a>
                 </div>
             </div>
@@ -672,7 +672,7 @@ $btnDisabled = $blockedForNow > 0;
                     <label for="login" class="form-label"><?= h(__('البريد الإلكتروني أو اسم المستخدم')) ?></label>
                     <div class="input-group">
                         <span class="input-group-text" aria-hidden="true">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#mail"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg>
                         </span>
                         <input
                             type="text"
@@ -693,7 +693,7 @@ $btnDisabled = $blockedForNow > 0;
                     <label for="password" class="form-label"><?= h(__('كلمة المرور')) ?></label>
                     <div class="input-group">
                         <span class="input-group-text" aria-hidden="true">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#lock"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#lock"></use></svg>
                         </span>
                         <input
                             type="password"
@@ -705,11 +705,11 @@ $btnDisabled = $blockedForNow > 0;
                             placeholder="••••••••"
                         >
                         <button class="btn toggle-pass" type="button" id="togglePass" aria-label="<?= h(__('إظهار/إخفاء كلمة المرور')) ?>">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="/assets/icons/gdy-icons.svg#eye"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="#eye"></use></svg>
                         </button>
                     </div>
                     <div class="caps-hint" id="capsHint">
-                        تنبيه: Caps Lock مفعل <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+                        تنبيه: Caps Lock مفعل <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                     </div>
                 </div>
 
@@ -726,7 +726,7 @@ $btnDisabled = $blockedForNow > 0;
                 </div>
 
                 <button type="submit" class="btn w-100 gdy-btn" id="submitBtn" <?= $btnDisabled ? 'disabled' : '' ?>>
-                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#login"></use></svg>
+                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#login"></use></svg>
                     <span class="ms-1">دخول</span>
                 </button>
 
@@ -745,13 +745,13 @@ $btnDisabled = $blockedForNow > 0;
 
                 <span>
                     <a href="<?= h($baseUrl) ?>/">
-                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg> <?= h(__('العودة للرئيسية')) ?>
+                        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?= h(__('العودة للرئيسية')) ?>
                     </a>
                 </span>
             </div>
 
             <div class="gdy-note mt-3">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#alert"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
                 <?= h(__('إذا فعّلت “تذكرني”، قد تحتاج الاستضافة لضبط إعدادات الجلسة (session.gc_maxlifetime) حتى تعمل بالكامل.')) ?>
             </div>
 
@@ -796,7 +796,7 @@ const capsHint = document.getElementById('capsHint');
         form.addEventListener('submit', function(){
             if (submitBtn.disabled) return;
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<svg class="gdy-icon spin" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#spinner"></use></svg><span class="ms-2">جارٍ التحقق...</span>';
+            submitBtn.innerHTML = '<svg class="gdy-icon spin" aria-hidden="true" focusable="false"><use href="#spinner"></use></svg><span class="ms-2">جارٍ التحقق...</span>';
         });
     }
 })();

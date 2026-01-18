@@ -336,13 +336,13 @@ html, body{
                                     <a href="view.php?id=<?= (int)$r['id'] ?>"
                                        class="btn btn-outline-info btn-gdy-xs"
                                        title="<?= h(__('t_99081e2fc8', 'عرض الرسالة')) ?>">
-                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </a>
                                     <?php if ($status === 'new'): ?>
                                         <a href="index.php?seen=<?= (int)$r['id'] ?>"
                                            class="btn btn-outline-secondary btn-gdy-xs"
                                            title="<?= h(__('t_0eca496ea9', 'تعيين كمقروءة')) ?>">
-                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                     <?php endif; ?>
                                 </td>

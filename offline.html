@@ -39,7 +39,7 @@
       </p>
 
       <div class="row">
-        <button class="btn btn-primary" onclick="location.reload()">إعادة المحاولة</button>
+        <button class="btn btn-primary" id="gdyOfflineReload">إعادة المحاولة</button>
         <a class="btn btn-ghost" href="/">العودة للرئيسية</a>
       </div>
 
@@ -48,23 +48,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    (function(){
-      const el = document.getElementById('netState');
-      function set(){
-        const on = navigator.onLine;
-        el.textContent = on ? 'متصل' : 'غير متصل';
-        el.className = on ? 'online' : 'offline';
-        if (on) {
-          // لو رجع الاتصال، جرب تحدث تلقائيًا بعد قليل
-          setTimeout(()=>location.reload(), 600);
-        }
-      }
-      window.addEventListener('online', set);
-      window.addEventListener('offline', set);
-      set();
-    })();
-  </script>
+<script src="/assets/js/offline.js" defer></script>
 </body>
 </html>

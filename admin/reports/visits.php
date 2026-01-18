@@ -71,7 +71,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="col-6 col-md-3">
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
-          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <h6><?= h(__('t_4a6ec64a15', 'عدد المستخدمين')) ?></h6>
           <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['users'] ?></p>
         </div>
@@ -80,7 +80,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="col-6 col-md-3">
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
-          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           <h6><?= h(__('t_a1d2f1590c', 'عدد الأخبار')) ?></h6>
           <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['news'] ?></p>
         </div>
@@ -89,7 +89,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="col-6 col-md-3">
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
-          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <h6><?= h(__('t_ef63c8093d', 'عدد الصفحات')) ?></h6>
           <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['pages'] ?></p>
         </div>
@@ -98,7 +98,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="col-6 col-md-3">
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
-          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <h6><?= h(__('t_8f564ddff8', 'إعلانات فعّالة')) ?></h6>
           <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['ads_active'] ?></p>
         </div>
@@ -111,7 +111,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
           <h2 class="h6 mb-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?>
           </h2>
         </div>
         <div class="card-body">
@@ -125,7 +125,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
           <h2 class="h6 mb-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_ef4521073d', 'رسائل جديدة من نموذج التواصل')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_ef4521073d', 'رسائل جديدة من نموذج التواصل')) ?>
           </h2>
         </div>
         <div class="card-body">

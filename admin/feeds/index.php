@@ -300,8 +300,8 @@ $mkQs = static function(array $extra = []) use ($q,$status,$catFilter,$dueOnly,$
 };
 
 $pageActionsHtml = '';
-$pageActionsHtml .= __('t_fecda52589', '<button type="button" class="btn btn-gdy btn-gdy-primary" data-bs-toggle="modal" data-bs-target="#feedCreateModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إضافة مصدر</button>');
-$pageActionsHtml .= '<a class="btn btn-gdy btn-gdy-ghost" href="index.php?' . h($mkQs(['download'=>'csv'])) . __('t_1352c97777', '"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تصدير CSV</a>');
+$pageActionsHtml .= __('t_fecda52589', '<button type="button" class="btn btn-gdy btn-gdy-primary" data-bs-toggle="modal" data-bs-target="#feedCreateModal"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> إضافة مصدر</button>');
+$pageActionsHtml .= '<a class="btn btn-gdy btn-gdy-ghost" href="index.php?' . h($mkQs(['download'=>'csv'])) . __('t_1352c97777', '"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg> تصدير CSV</a>');
 
 require_once __DIR__ . '/../layout/app_start.php';
 
@@ -353,7 +353,7 @@ $csrf = csrf_token();
           <?= h(__('t_91900f9b30', 'عرض الجاهز للجلب فقط')) ?>
         </label>
         <div class="ms-auto d-flex gap-2">
-          <button class="btn btn-gdy btn-gdy-primary" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
+          <button class="btn btn-gdy btn-gdy-primary" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
           <a class="btn btn-gdy btn-gdy-ghost" href="index.php"><?= h(__('t_ec2ce8be93', 'مسح')) ?></a>
         </div>
       </div>
@@ -455,22 +455,22 @@ $csrf = csrf_token();
                       <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
                       <input type="hidden" name="action" value="test">
                       <input type="hidden" name="id" value="<?= $id ?>">
-                      <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_52c549f995', 'اختبار')) ?></button>
+                      <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_52c549f995', 'اختبار')) ?></button>
                     </form>
                     <form method="post" class="m-0" data-confirm='جلب يدوي الآن؟ سيتم إنشاء مسودات جديدة إن وجدت عناصر جديدة.'>
                       <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
                       <input type="hidden" name="action" value="fetch_now">
                       <input type="hidden" name="id" value="<?= $id ?>">
-                      <button class="btn btn-sm btn-gdy btn-gdy-primary" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_8dc4612dfd', 'جلب الآن')) ?></button>
+                      <button class="btn btn-sm btn-gdy btn-gdy-primary" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_8dc4612dfd', 'جلب الآن')) ?></button>
                     </form>
 
-                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#feedEditModal<?= $id ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></button>
+                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#feedEditModal<?= $id ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></button>
 
                     <form method="post" class="m-0" data-confirm='حذف المصدر؟'>
                       <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="id" value="<?= $id ?>">
-                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_3b9854e1bb', 'حذف')) ?></button>
+                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_3b9854e1bb', 'حذف')) ?></button>
                     </form>
                   </div>
                 </td>

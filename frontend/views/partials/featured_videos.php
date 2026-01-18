@@ -33,7 +33,7 @@ if (!$videos) {
 <section class="my-4">
   <div class="d-flex justify-content-between align-items-center mb-2">
     <h2 class="h5 mb-0">
-      <svg class="gdy-icon ms-1 text-danger" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+      <svg class="gdy-icon ms-1 text-danger" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
       فيديوهات مميزة
     </h2>
     <span class="small text-muted">لقطات مختارة بعناية من جوديـار</span>
@@ -71,7 +71,7 @@ if (!$videos) {
                    style="object-fit:cover;">
             <?php else: ?>
               <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark d-flex align-items-center justify-content-center text-light">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </div>
             <?php endif; ?>
 
@@ -80,7 +80,7 @@ if (!$videos) {
             </span>
 
             <div class="position-absolute top-50 start-50 translate-middle bg-white bg-opacity-75 rounded-circle p-2">
-              <svg class="gdy-icon text-danger" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon text-danger" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
             </div>
           </div>
           <div class="card-body p-2 p-md-3">
@@ -93,10 +93,10 @@ if (!$videos) {
             <div class="d-flex justify-content-between align-items-center">
               <a href="<?= h($url) ?>" target="_blank" rel="noopener"
                  class="btn btn-sm btn-outline-danger rounded-pill">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تشغيل الفيديو
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تشغيل الفيديو
               </a>
               <span class="small text-muted">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <?= h(date('Y-m-d', strtotime((string)$v['created_at'] ?? 'now'))) ?>
               </span>
             </div>

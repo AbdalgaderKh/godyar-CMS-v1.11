@@ -731,7 +731,7 @@ html, body {
         <div class="gdy-page-header-top">
           <div>
             <div class="gdy-page-kicker">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <?= h(__('t_9efc061dd5', 'لوحة المحتوى')) ?>
             </div>
             <h1 class="gdy-page-title"><?= h($pageTitle) ?></h1>
@@ -741,27 +741,27 @@ html, body {
           </div>
           <div class="gdy-page-header-actions">
             <div class="gdy-pill-meta">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <span><?= h(__('t_cbb2bd24d9', 'إجمالي الأقسام:')) ?> <strong><?= number_format($statsCats['total']) ?></strong></span>
             </div>
             <a href="#category-form" class="btn btn-sm btn-primary">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_27535dee80', 'قسم جديد')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_27535dee80', 'قسم جديد')) ?>
             </a>
           </div>
         </div>
 
         <div class="gdy-page-header-filters">
           <div class="gdy-chip-filter active" data-filter-cats="all">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_6d08f19681', 'الكل')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6d08f19681', 'الكل')) ?>
           </div>
           <div class="gdy-chip-filter" data-filter-cats="root">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> الأقسام الرئيسية فقط (<?= number_format($statsCats['root']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الأقسام الرئيسية فقط (<?= number_format($statsCats['root']) ?>)
           </div>
           <div class="gdy-chip-filter" data-filter-cats="with-news">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg> أقسام تحتوي أخبار (<?= number_format($statsCats['with_news']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> أقسام تحتوي أخبار (<?= number_format($statsCats['with_news']) ?>)
           </div>
           <div class="gdy-chip-filter" data-filter-cats="empty">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> أقسام بدون أخبار (<?= number_format($statsCats['empty']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> أقسام بدون أخبار (<?= number_format($statsCats['empty']) ?>)
           </div>
         </div>
       </div>
@@ -772,7 +772,7 @@ html, body {
       <div class="gdy-cats-stat">
         <div class="gdy-cats-stat-inner">
           <div class="gdy-cats-stat-icon text-info">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
             <div class="gdy-cats-stat-label"><?= h(__('t_47254d4799', 'إجمالي الأقسام')) ?></div>
@@ -785,7 +785,7 @@ html, body {
       <div class="gdy-cats-stat">
         <div class="gdy-cats-stat-inner">
           <div class="gdy-cats-stat-icon text-success">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           </div>
           <div>
             <div class="gdy-cats-stat-label"><?= h(__('t_a932911686', 'أقسام تحتوي أخبار')) ?></div>
@@ -798,7 +798,7 @@ html, body {
       <div class="gdy-cats-stat">
         <div class="gdy-cats-stat-inner">
           <div class="gdy-cats-stat-icon text-warning">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
             <div class="gdy-cats-stat-label"><?= h(__('t_3480ddb507', 'أقسام بدون أخبار')) ?></div>
@@ -845,7 +845,7 @@ html, body {
         </div>
         <div class="col-auto">
           <button type="submit" class="btn btn-outline-secondary btn-sm">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
           </button>
         </div>
         <div class="col-auto ms-auto text-end small text-muted d-none d-md-block">
@@ -937,7 +937,7 @@ html, body {
                 <input class="form-check-input" type="checkbox" name="is_members_only" id="catMembersOnly" value="1"
                        <?= !empty($editRow['is_members_only']) ? 'checked' : '' ?>>
                 <label class="form-check-label" for="catMembersOnly">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg><?= h(__('قسم للأعضاء فقط')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('قسم للأعضاء فقط')) ?>
                 </label>
                 <div class="form-text"><?= h(__('سيظل القسم ظاهرًا للزوار، لكن المقالات ستظهر بعلامة 🔒 وعند فتحها يظهر Paywall.')) ?></div>
               </div>
@@ -1024,7 +1024,7 @@ html, body {
                       <td class="fw-semibold">
                         <?= h($name) ?>
                         <?php if ($hasCatMembersOnly && !empty($cat['is_members_only'])): ?>
-                          <span class="badge bg-dark-subtle text-dark ms-1" title="للأعضاء فقط"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>للأعضاء</span>
+                          <span class="badge bg-dark-subtle text-dark ms-1" title="للأعضاء فقط"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>للأعضاء</span>
                         <?php endif; ?>
                       </td>
                       <td class="text-muted small">
@@ -1042,7 +1042,7 @@ html, body {
                       </td>
                       <td class="count-cell">
                         <span class="badge-count">
-                          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg><?= $countN ?>
+                          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= $countN ?>
                         </span>
                       </td>
                       <td class="actions-cell">
@@ -1050,14 +1050,14 @@ html, body {
                           <a href="<?= h($adminBase) ?>/categories/index.php?edit=<?= $id ?>"
                              class="btn btn-outline-primary btn-sm btn-icon"
                              title="<?= h(__('t_fe87fab237', 'تعديل القسم')) ?>">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </a>
                           <button
                             type="button"
                             class="btn btn-outline-secondary btn-sm btn-icon btn-copy-slug"
                             data-slug="<?= h($slug) ?>"
                             title="<?= h(__('t_b1e8292d82', 'نسخ المعرّف (slug)')) ?>">
-                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </button>
                           <form method="post" action="" class="d-inline"
                                 data-confirm='هل أنت متأكد من حذف هذا القسم؟'>
@@ -1065,7 +1065,7 @@ html, body {
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= $id ?>">
                             <button type="submit" class="btn btn-outline-danger btn-sm btn-icon" title="<?= h(__('t_a8bbe1197c', 'حذف القسم')) ?>">
-                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                           </form>
                         </div>

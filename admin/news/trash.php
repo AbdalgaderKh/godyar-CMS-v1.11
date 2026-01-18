@@ -180,7 +180,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
     <div class="d-flex gap-2 flex-wrap">
       <a href="index.php" class="btn btn-outline-light btn-sm">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_c95e4d9e70', 'عودة لقائمة الأخبار')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_c95e4d9e70', 'عودة لقائمة الأخبار')) ?>
       </a>
     </div>
   </div>
@@ -214,7 +214,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-outline-secondary btn-sm">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
       </button>
     </div>
   </form>
@@ -231,10 +231,10 @@ require_once __DIR__ . '/../layout/sidebar.php';
           <option value="destroy">حذف نهائي</option>
         </select>
         <button type="button" id="bulkApply" class="btn btn-primary btn-sm" disabled>
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> تطبيق
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تطبيق
         </button>
         <button type="button" id="bulkClear" class="btn btn-outline-light btn-sm" disabled>
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> إلغاء التحديد
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> إلغاء التحديد
         </button>
         <span class="ms-auto"><span id="selectedCount">0</span> محدد</span>
       </div>
@@ -315,11 +315,11 @@ require_once __DIR__ . '/../layout/sidebar.php';
                   <td>
                     <div class="actions-wrap">
                       <a href="restore.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-success">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_763957a449', 'استعادة')) ?>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_763957a449', 'استعادة')) ?>
                       </a>
                       <a href="destroy.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-danger"
                          data-confirm=<?= json_encode(__('t_7276017c1d', 'سيتم حذف الخبر نهائياً ولا يمكن التراجع. هل أنت متأكد؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_f0e389eb4c', 'حذف نهائي')) ?>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_f0e389eb4c', 'حذف نهائي')) ?>
                       </a>
                     </div>
                   </td>

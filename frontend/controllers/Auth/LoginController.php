@@ -264,7 +264,7 @@ extract($frontendOptions, EXTR_OVERWRITE);
     <div class="auth-card">
       <div class="text-center mb-3">
         <div class="auth-brand">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
         </div>
         <h1 class="auth-title mb-1">تسجيل الدخول إلى حسابك</h1>
         <p class="auth-subtitle mb-0">
@@ -298,7 +298,7 @@ extract($frontendOptions, EXTR_OVERWRITE);
           <label for="password" class="form-label small d-flex justify-content-between align-items-center">
             <span>كلمة المرور</span>
             <button type="button" class="password-toggle-btn" data-target="password" data-icon="passwordToggleIcon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </button>
           </label>
           <input
@@ -325,7 +325,7 @@ extract($frontendOptions, EXTR_OVERWRITE);
         </div>
 
         <button type="submit" class="btn btn-auth w-100 mb-2">
-          <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#login"></use></svg>
+          <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#login"></use></svg>
           دخول إلى حسابي
         </button>
 

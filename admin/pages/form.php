@@ -69,10 +69,10 @@ require_once __DIR__ . '/../_admin_guard.php';
 
     <div class="d-flex justify-content-between align-items-center">
       <a href="index.php" class="btn btn-outline-secondary btn-sm">
-        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
+        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
       </a>
       <button type="submit" class="btn btn-primary btn-sm">
-        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <?= $mode === 'edit' ? __('t_02f31ae27c', 'حفظ التغييرات') : __('t_1c7c16fd30', 'حفظ الصفحة') ?>
       </button>
     </div>

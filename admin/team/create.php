@@ -124,7 +124,7 @@ $breadcrumbs = [
     __('t_cd54bc26ba', 'فريق العمل') => (function_exists('base_url') ? rtrim(base_url(),'/') : '') . '/admin/team/index.php',
     __('t_c77021cc64', 'إضافة عضو') => null,
 ];
-$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> العودة</a>');
+$pageActionsHtml = __('t_acdad3d9f7', '<a href="index.php" class="btn btn-gdy btn-gdy-outline"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> العودة</a>');
 require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
@@ -214,7 +214,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
         <div class="mt-3 d-flex justify-content-end gap-2">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
           </button>
         </div>
       </form>

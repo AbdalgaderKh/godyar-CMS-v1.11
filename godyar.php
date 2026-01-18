@@ -258,11 +258,11 @@ $featuredImg = $news['featured_image'] ?? '';
 
     <div class="d-flex justify-content-between align-items-center mt-3">
       <a href="news_list.php" class="btn btn-outline-secondary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> رجوع لقائمة الأخبار
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg> رجوع لقائمة الأخبار
       </a>
 
       <button type="submit" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> حفظ التعديلات
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> حفظ التعديلات
       </button>
     </div>
 

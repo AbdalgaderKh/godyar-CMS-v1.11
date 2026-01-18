@@ -371,11 +371,11 @@ html, body {
     </div>
     <div class="d-flex align-items-center gap-2 flex-wrap">
       <div class="badge bg-primary-subtle text-info-emphasis border.border-primary-subtle small px-3 py-2">
-        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <span>إجمالي: <?= number_format($statsPages['total']) ?> صفحة</span>
       </div>
       <a href="create.php" class="btn btn-sm btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg> <?= h(__('t_2a1b455803', 'صفحة جديدة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_2a1b455803', 'صفحة جديدة')) ?>
       </a>
     </div>
   </div>
@@ -385,7 +385,7 @@ html, body {
     <div class="gdy-pages-stat">
       <div class="gdy-pages-stat-inner">
         <div class="gdy-pages-stat-icon text-info">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
           <div class="gdy-pages-stat-label"><?= h(__('t_eb1400e221', 'إجمالي الصفحات')) ?></div>
@@ -398,7 +398,7 @@ html, body {
     <div class="gdy-pages-stat">
       <div class="gdy-pages-stat-inner">
         <div class="gdy-pages-stat-icon text-success">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
           <div class="gdy-pages-stat-label"><?= h(__('t_da9181305e', 'صفحات منشورة')) ?></div>
@@ -411,7 +411,7 @@ html, body {
     <div class="gdy-pages-stat">
       <div class="gdy-pages-stat-inner">
         <div class="gdy-pages-stat-icon text-warning">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
           <div class="gdy-pages-stat-label"><?= h(__('t_7b17ab78a5', 'مسودات')) ?></div>
@@ -519,7 +519,7 @@ html, body {
                   <td class="text-start">
                     <div class="fw-semibold"><?= h($title) ?></div>
                     <div class="small text-muted">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       <span><?= h($dateShown) ?></span>
                     </div>
                   </td>
@@ -538,25 +538,25 @@ html, body {
                       <a href="<?= h($frontUrl) ?>" target="_blank"
                          class="btn btn-sm btn-outline-info btn-icon"
                          title="<?= h(__('t_ac5402edac', 'عرض في الموقع')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <a href="edit.php?id=<?= $id ?>"
                          class="btn btn-sm btn-outline-primary btn-icon"
                          title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <button
                         type="button"
                         class="btn btn-sm btn-outline-secondary btn-icon btn-copy-slug"
                         data-slug="<?= h($slug) ?>"
                         title="<?= h(__('t_2c7a36f6dc', 'نسخ الـ Slug')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </button>
                       <a href="delete.php?id=<?= $id ?>"
                          class="btn btn-sm btn-outline-danger btn-icon"
                          data-confirm='هل أنت متأكد من حذف هذه الصفحة؟'
                          title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#dot"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                     </div>
                   </td>

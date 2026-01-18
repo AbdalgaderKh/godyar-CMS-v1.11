@@ -10,8 +10,8 @@ if (!function_exists('h')) {
 /**
  * قراءة حالة العضو من الجلسة
  */
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
+if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+    session_start();
 }
 
 $currentUser = $_SESSION['user'] ?? null;
@@ -246,6 +246,11 @@ if (empty($headerCategories)) {
 <html lang="<?= h($gdyLang) ?>" dir="<?= $gdyIsRtl ? 'rtl' : 'ltr' ?>" data-theme="light" class="no-js">
 <head>
   <meta charset="utf-8">
+<?php
+// CSP nonce (generated in includes/bootstrap.php). Some inline scripts/styles already reference $cspNonce;
+// ensure it is always defined so nonce is not empty (empty nonce breaks CSP and can't be auto-injected).
+$cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
+?>
   <script>
     (function(){
       try{
@@ -353,7 +358,7 @@ if (empty($headerCategories)) {
   <?php if ($seoAuthor !== ''): ?><meta property="article:author" content="<?= h($seoAuthor) ?>"><?php endif; ?>
 
   <?php if ($seoJsonLd !== ''): ?>
-    <script type="application/ld+json"><?= $seoJsonLd ?></script>
+    <script type="application/ld+json" nonce="<?php echo htmlspecialchars($cspNonce, ENT_QUOTES, 'UTF-8'); ?>"><?= $seoJsonLd ?></script>
   <?php endif; ?>
   <?php if (!gdy_is_rtl()): ?>
     <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/ltr.css">
@@ -361,6 +366,8 @@ if (empty($headerCategories)) {
 
     <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/ui-enhancements.css?v=20260107_8">
     <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/pwa.css?v=20260107_8">
+    <!-- Compatibility fixes (Safari/WebKit) -->
+    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/compat.css?v=20260117_1">
 
     <!-- Theme Core (Front): يجعل تغيير الثيم ينعكس على كل عناصر الواجهة بشكل احترافي -->
     <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/themes/theme-core.css?v=20260107_8">
@@ -486,8 +493,9 @@ if (empty($headerCategories)) {
       border-bottom: 1px solid var(--header-border);
       box-shadow: var(--header-shadow);
 
-      backdrop-filter: blur(10px);
+      /* Safari 9+: WebKit prefix must come first */
       -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
 
       will-change: transform;
     }
@@ -656,8 +664,8 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       font-size: .78rem;
       transition: .2s ease;
       white-space: nowrap;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+	      -webkit-backdrop-filter: blur(10px);
+	      backdrop-filter: blur(10px);
     }
 
     .hdr-dd-btn .gdy-icon,
@@ -689,8 +697,8 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       inset-inline-start: 0;
       min-width: 220px;
       background: rgba(255,255,255,.98);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+	      -webkit-backdrop-filter: blur(12px);
+	      backdrop-filter: blur(12px);
       border: 1px solid rgba(var(--primary-rgb), .20);
       border-radius: 14px;
       padding: 6px;
@@ -733,8 +741,8 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       border-top: 1px solid var(--header-border, rgba(255,255,255,.18));
       padding: 10px 0 12px;
       background: var(--header-secondary-bg, rgba(255,255,255,.08));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+	      -webkit-backdrop-filter: blur(10px);
+	      backdrop-filter: blur(10px);
     }
     .site-header.has-bg .header-secondary{
       background: var(--header-secondary-bg, rgba(255,255,255,.08));
@@ -778,11 +786,12 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
       padding: 2px;
       max-width: 100%;
     }
     .cats-nav::-webkit-scrollbar{ display:none; }
+
+	    /* Firefox-only `scrollbar-width` is intentionally omitted to avoid Safari/webhint compatibility warnings. */
     .cats-item{ position:relative; }
         .cats-link{
       display:inline-flex;
@@ -885,7 +894,7 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       .header-secondary-inner{ flex-direction: column; align-items: stretch; }
       .cats-toggle{ display:flex; }
       /* على الجوال: فئات بشكل شرائح أفقية (Facebook-like tabs) */
-      .cats-nav{ display:none; width:100%; flex-direction: row; flex-wrap: nowrap; align-items: center; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; gap: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .cats-nav{ display:none; width:100%; flex-direction: row; flex-wrap: nowrap; align-items: center; overflow-x: auto; overflow-y: hidden; padding: 8px 2px; gap: 8px; -webkit-overflow-scrolling: touch; }
       .cats-nav::-webkit-scrollbar{ display:none; }
       .cats-nav.open{ display:flex; }
       .cats-item{ width:auto; flex: 0 0 auto; }
@@ -995,6 +1004,18 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 <!-- HEADER_NON_STICKY_MARKER: non-sticky header 2025-12-14 -->
 <?php
   // Ensure the global selected front theme class is always present on <body>
+
+  // Inline SVG sprite to avoid external <use> fetch/MIME/CSP issues.
+  // This makes <use href="#icon-id"> work reliably across the frontend.
+  try {
+      $___sprite = (defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/\\') : rtrim((string)__DIR__, '/\\')) . '/assets/icons/gdy-icons.svg';
+      if (is_file($___sprite)) {
+          echo "\n<!-- GDY Icons Sprite (inline) -->\n";
+          @readfile($___sprite);
+          echo "\n";
+      }
+  } catch (Throwable $e) { /* ignore */ }
+
   // even if some controllers set a different theme class (e.g. theme-ocean).
     $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
   
@@ -1030,7 +1051,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
           <?php if ($siteLogo): ?>
             <img src="<?= h($siteLogo) ?>" alt="<?= h($siteName) ?>">
           <?php else: ?>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           <?php endif; ?>
         </div>
         <div class="brand-text">
@@ -1041,13 +1062,13 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 
       <div class="hdr-utils">
           <button type="button" class="hdr-dd-btn hdr-search-btn" id="gdyMobileSearchBtn" title="<?= h(__('search')) ?>" aria-label="<?= h(__('search')) ?>">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
           </button>
           <div class="hdr-dropdown hdr-lang" id="gdyLangDd">
             <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="Language">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#globe"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
               <span><?= strtoupper(gdy_lang()) ?></span>
-              <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+              <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
             </button>
             <div class="hdr-dd-menu" role="menu" aria-label="Language">
               <a role="menuitem" href="<?= h(gdy_lang_url('ar')) ?>" class="<?= gdy_lang()==='ar' ? 'active' : '' ?>"><span>AR</span><span>العربية</span></a>
@@ -1057,19 +1078,19 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
           </div>
 
           <button type="button" class="hdr-dd-btn hdr-theme-btn" id="gdyThemeToggle" title="الوضع الليلي" aria-pressed="false">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#moon"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg>
           </button>
 
           <div class="hdr-dropdown hdr-user" id="gdyUserDd">
             <?php if (!$isLoggedIn): ?>
               <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                 <span><?= h(__('الحساب')) ?></span>
-                <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+                <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
               </button>
               <div class="hdr-dd-menu" role="menu" aria-label="Account">
-                <a role="menuitem" href="<?= h($baseUrl) ?>/login"><span><?= h(__('تسجيل الدخول')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#login"></use></svg></a>
-                <a role="menuitem" href="<?= h($baseUrl) ?>/register"><span><?= h(__('إنشاء حساب')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg></a>
+                <a role="menuitem" href="<?= h($baseUrl) ?>/login"><span><?= h(__('تسجيل الدخول')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#login"></use></svg></a>
+                <a role="menuitem" href="<?= h($baseUrl) ?>/register"><span><?= h(__('إنشاء حساب')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
               </div>
             <?php else: ?>
               <?php $uLabel = (string)($currentUser['display_name'] ?? ($currentUser['username'] ?? ($currentUser['email'] ?? __('حسابي')))); ?>
@@ -1077,18 +1098,18 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
                 <?php if (!empty($currentUser['avatar'])): ?>
                   <img class="avatar-mini" src="<?= h($baseUrl . '/' . ltrim((string)$currentUser['avatar'], '/')) ?>" alt="avatar">
                 <?php else: ?>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                 <?php endif; ?>
                 <span><?= h($uLabel) ?></span>
-                <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+                <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
               </button>
               <div class="hdr-dd-menu" role="menu" aria-label="Account">
-                <a role="menuitem" href="<?= h($baseUrl) ?>/profile"><span><?= h(__('الملف الشخصي')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#user"></use></svg></a>
+                <a role="menuitem" href="<?= h($baseUrl) ?>/profile"><span><?= h(__('الملف الشخصي')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
                 <?php if ($isAdmin): ?>
-                  <a role="menuitem" href="<?= h($baseUrl) ?>/admin/"><span><?= h(__('لوحة التحكم')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#settings"></use></svg></a>
+                  <a role="menuitem" href="<?= h($baseUrl) ?>/admin/"><span><?= h(__('لوحة التحكم')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
                 <?php endif; ?>
                 <div class="hdr-dd-sep"></div>
-                <a role="menuitem" href="<?= h($baseUrl) ?>/logout"><span><?= h(__('تسجيل الخروج')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#logout"></use></svg></a>
+                <a role="menuitem" href="<?= h($baseUrl) ?>/logout"><span><?= h(__('تسجيل الخروج')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
               </div>
             <?php endif; ?>
           </div>
@@ -1099,12 +1120,12 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
       <div class="container">
         <div class="header-secondary-inner">
           <button type="button" class="cats-toggle" id="gdyCatsToggle" aria-expanded="false" aria-controls="gdyCatsNav">
-            <span class="gdy-inline-flex-gap"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#tag"></use></svg><span><?= h(__('الفئات')) ?></span></span>
-            <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#chevron-down"></use></svg>
+            <span class="gdy-inline-flex-gap"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#tag"></use></svg><span><?= h(__('الفئات')) ?></span></span>
+            <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
           </button>
           <nav id="gdyCatsNav" class="cats-nav" aria-label="أقسام الموقع">
           <a href="<?= h($navBaseUrl) ?>" class="cats-link cats-link--home">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#home"></use></svg>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
             <span><?= h(__('الرئيسية')) ?></span>
           </a>
 
@@ -1268,7 +1289,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 
           <?php else: ?>
             <a href="<?= h($navBaseUrl) ?>/category/general-news" class="cats-link">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#news"></use></svg>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
               <span><?= h(__('أخبار عامة')) ?></span>
             </a>
             <a href="<?= h($navBaseUrl) ?>/category/politics" class="cats-link">
@@ -1288,7 +1309,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 
           <form class="header-search" action="<?= h($navBaseUrl) ?>/search" method="get">
             <input type="search" placeholder="<?= h($searchPlaceholder) ?>" name="q">
-            <span class="header-search-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#search"></use></svg></span>
+            <span class="header-search-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg></span>
           </form>
         </div>
       </div>
@@ -1369,7 +1390,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 });
   </script>
 
-<script>
+<script nonce="<?php echo htmlspecialchars($cspNonce, ENT_QUOTES, 'UTF-8'); ?>">
 (function(){
   function setupDd(id, closeOthers){
     const root = document.getElementById(id);

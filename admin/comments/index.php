@@ -245,12 +245,9 @@ require_once __DIR__ . '/../layout/sidebar.php';
               $badge = $st==='approved'?'success':($st==='rejected'?'danger':'warning');
               $newsTitle = (string)($c['news_title'] ?? '—');
               $newsUrl = '';
-              $slug = (string)($c['news_slug'] ?? '');
-              if ($slug !== '') {
-                  $newsUrl = '../..' . '/news/id/' . (int)$id;
-              } else {
-                  $nid = (int)($c['news_id'] ?? 0);
-                  if ($nid > 0) $newsUrl = '../..' . '/news/id/' . $nid;
+              $nid = (int)($c['news_id'] ?? 0);
+              if ($nid > 0) {
+                  $newsUrl = '../..' . '/news/id/' . $nid;
               }
             ?>
             <tr>

@@ -59,12 +59,8 @@ try {
 }
 
 $newsUrl = function(array $row) use ($baseUrl): string {
-    $slug = isset($row['slug']) ? (string)$row['slug'] : (string)($row['id'] ?? '');
-    $slug = trim($slug);
-    if ($slug === '') {
-        $slug = (string)($row['id'] ?? '');
-    }
-    return $baseUrl . '/news/id/' . (int)$id;
+    $id = (int)($row['id'] ?? 0);
+    return $baseUrl . '/news/id/' . $id;
 };
 
 // Include the header

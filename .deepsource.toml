@@ -1,76 +1,17 @@
 version = 1
 
-# استبعاد المجلدات غير المرغوب فيها
 exclude_patterns = [
   "libs/PHPMailer/**",
   "assets/vendor/**",
   "assets/js/vendor/**",
   "assets/css/vendor/**",
-  "vendor/**",
-  "node_modules/**",
-  "storage/**",
-  "bootstrap/cache/**",
-  "tests/**"
+  "vendor/**"
 ]
-
-# ======================
-# المحللون الأساسيون المجانين
-# ======================
 
 [[analyzers]]
 name = "php"
 enabled = true
 
-[analyzers.php]
-# أهم فحوصات PHP
-enabled_patterns = [
-  "php/security/*",           # الثغرات الأمنية
-  "php/best-practice/*",      # أفضل الممارسات
-  "php/bug-risk/*",          # مخاطر الأخطاء
-  "php/performance/*"        # مشاكل الأداء
-]
-
-# استبعاد الأنماط غير المرغوبة
-disabled_patterns = [
-  "php/code-style/line-length",      # تجاهل طول السطر
-  "php/code-style/function-call-spacing"  # تجاهل المسافات
-]
-
 [[analyzers]]
 name = "javascript"
-enabled = true
-
-[analyzers.javascript]
-# فحوصات JavaScript الأساسية
-enabled_patterns = [
-  "javascript/best-practice/*",
-  "javascript/bug-risk/*"
-]
-
-# استبعاد مكتبات الطرف الثالث
-exclude_patterns = [
-  "**/vendor/**",
-  "**/node_modules/**"
-]
-
-# ======================
-# محلل Docker (إذا كنت تستخدم Docker)
-# ======================
-
-[[analyzers]]
-name = "docker"
-enabled = true
-
-[analyzers.docker]
-enabled_patterns = [
-  "docker/best-practice/*",
-  "docker/bug-risk/*"
-]
-
-# ======================
-# محلل Git (للمستودعات فقط)
-# ======================
-
-[[analyzers]]
-name = "git"
 enabled = true

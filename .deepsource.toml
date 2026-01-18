@@ -1,3 +1,5 @@
+# أنشئ الملف الجديد
+cat > .deepsource.toml << 'EOF'
 version = 1
 
 exclude_patterns = [
@@ -15,3 +17,4 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
+EOF

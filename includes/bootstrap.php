@@ -1,6 +1,36 @@
 <?php
 declare(strict_types=1);
 
+// -------------------------------------------------
+// Global constants used across admin + frontend
+// -------------------------------------------------
+// These are defined early so standalone scripts that only include
+// includes/bootstrap.php can safely rely on them.
+if (!defined('GODYAR_ROOT')) {
+    define('GODYAR_ROOT', dirname(__DIR__));
+}
+
+// Base URL constant used by parts of the admin layer.
+// Prefer APP_URL from the environment; fall back to auto-detected URL.
+if (!defined('GODYAR_BASE_URL')) {
+    $base = '';
+    $envAppUrl = getenv('APP_URL');
+    if (is_string($envAppUrl) && $envAppUrl !== '') {
+        $base = $envAppUrl;
+    } else {
+        $envAuto = getenv('APP_URL_AUTO');
+        if (is_string($envAuto) && $envAuto !== '') {
+            $base = $envAuto;
+        }
+    }
+
+    if ($base === '' && !empty($_SERVER['HTTP_HOST'])) {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $base = $scheme . '://' . $_SERVER['HTTP_HOST'];
+    }
+    define('GODYAR_BASE_URL', rtrim((string)$base, '/'));
+}
+
 /**
  * Godyar - Production Bootstrap (Final & Stable)
  * ----------------------------------------------

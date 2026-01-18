@@ -100,11 +100,21 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
         $ok = false;
 
-        // دعم md5 قديم باستخدام preg_match
+        // سياسة الأمان: رفض كلمات المرور المخزنة بـ MD5/SHA1 أو كنص واضح.
         if (strlen($hash) === 32 && preg_match('/^[0-9a-f]{32}$/i', $hash)) {
-            $ok = (md5($password) === strtolower($hash));
-        } else {
-            $ok = password_verify($password, $hash);
+            throw new Exception('يرجى تحديث كلمة المرور. استخدم إعادة تعيين كلمة المرور أو تواصل مع الإدارة.');
+        }
+
+        if (is_string($hash) && $hash !== '' && password_verify($pass, $hash)) {
+            $ok = true;
+            // ترقية التجزئة إن لزم.
+            if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+                $newHash = password_hash($pass, PASSWORD_DEFAULT);
+                $userId = (int)($user['id'] ?? 0);
+                if ($userId > 0) {
+                    $pdo->prepare('UPDATE users SET password_hash = :h WHERE id = :id')->execute([':h' => $newHash, ':id' => $userId]);
+                }
+            }
         }
 
         if (!$ok) {

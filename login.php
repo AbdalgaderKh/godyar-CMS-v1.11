@@ -174,21 +174,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     } else {
                         $hash = (string)($user['password_hash'] ?? $user['password'] ?? '');
                         $ok   = false;
-                        $verifiedWithPasswordHash = false;
-                        $legacyMatched = false;
 
-                        if ($hash !== '') {
-                            if (password_verify($password, $hash)) {
-                                $ok = true;
-                                $verifiedWithPasswordHash = true;
-                            } elseif (md5($password) === $hash) {
-                                $ok = true;
-                                $legacyMatched = true;
-                            } elseif (sha1($password) === $hash) {
-                                $ok = true;
-                                $legacyMatched = true;
-                            }
-}
+                        // سياسة الأمان: دعم password_hash فقط.
+                        if ($hash !== '' && password_verify($password, $hash)) {
+                            $ok = true;
+                        }
 
                         if (!$ok) {
                             throttle_on_fail();

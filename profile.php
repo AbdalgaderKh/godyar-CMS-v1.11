@@ -199,13 +199,13 @@ function load_user_profile(PDO $pdo, int $uid): array {
     return $out;
 }
 
-function verify_password_compat(string $plain, string $stored): bool {
-    if ($stored === '') return false;
-    if (password_verify($plain, $stored)) return true;
-    if (md5($plain) === $stored) return true;
-    if (sha1($plain) === $stored) return true;
-    if ($plain === $stored) return true;
-    return false;
+function verify_password_compat(string $plain, string $stored): bool
+{
+    // سياسة الأمان: دعم password_hash فقط.
+    if ($stored === '') {
+        return false;
+    }
+    return password_verify($plain, $stored);
 }
 
 /* =========================

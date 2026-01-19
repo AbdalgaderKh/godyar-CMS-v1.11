@@ -6,7 +6,8 @@ class ViewComposer {
         $settings = [];
         try {
             if (class_exists('\\Cache')) {
-                $settings = \Cache::remember('settings_all', 300, function () use ($pdo) {
+                $cache = new \\Cache();
+                $settings = $cache->remember('settings_all', 300, function () use ($pdo) {
                     $out = [];
                     $stmt = $pdo->query("SELECT setting_key,`value` FROM settings");
                     foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row) {
@@ -34,9 +35,10 @@ class ViewComposer {
         $footer_links = $decode('menu_footer');
         if (class_exists('Menus')) {
             try {
-                $maybe = \Menus::get('main');
+                $menus = new \\Menus();
+                $maybe = $menus->get('main');
                 if (is_array($maybe) && $maybe) $main_menu = $maybe;
-                $maybe = \Menus::get('footer');
+                $maybe = $menus->get('footer');
                 if (is_array($maybe) && $maybe) $footer_links = $maybe;
             } catch (\Throwable $e) {}
         }
@@ -48,11 +50,14 @@ class ViewComposer {
         if (class_exists('Categories') && method_exists('Categories','activeWithArticles')) {
             try {
                 if (class_exists('\\Cache')) {
-                    $sections = \Cache::remember('home_sections', 300, function () {
-                        return \Categories::activeWithArticles(limitPerCategory: 8);
+                    $cache = new \\Cache();
+                    $sections = $cache->remember('home_sections', 300, function () {
+                        $categories = new \\Categories();
+                        return $categories->activeWithArticles(limitPerCategory: 8);
                     });
                 } else {
-                    $sections = \Categories::activeWithArticles(limitPerCategory: 8);
+                    $categories = new \\Categories();
+                    $sections = $categories->activeWithArticles(limitPerCategory: 8);
                 }
             } catch (\Throwable $e) { $sections = []; }
         }
@@ -61,11 +66,14 @@ class ViewComposer {
         if (class_exists('Ads') && method_exists('Ads','active')) {
             try {
                 if (class_exists('\\Cache')) {
-                    $ads_between_posts = \Cache::remember('ads_between_posts', 300, function () {
-                        return \Ads::active('between_posts', limit: 2);
+                    $cache = new \\Cache();
+                    $ads_between_posts = $cache->remember('ads_between_posts', 300, function () {
+                        $ads = new \\Ads();
+                        return $ads->active('between_posts', limit: 2);
                     });
                 } else {
-                    $ads_between_posts = \Ads::active('between_posts', limit: 2);
+                    $ads = new \\Ads();
+                    $ads_between_posts = $ads->active('between_posts', limit: 2);
                 }
             } catch (\Throwable $e) { $ads_between_posts = []; }
         }

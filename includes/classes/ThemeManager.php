@@ -52,8 +52,8 @@ class ThemeManager {
                 VALUES (?, ?, ?, ?, ?, NOW())";
         
         $params = [
-            Security::cleanInput($themeData['name']),
-            Security::cleanInput($themeData['description'] ?? ''),
+            (new Security())->cleanInput($themeData['name']),
+            (new Security())->cleanInput($themeData['description'] ?? ''),
             $css,
             json_encode($colors),
             $_SESSION['user_id'] ?? 1

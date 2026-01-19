@@ -1,4 +1,5 @@
-<?php
+    <?php
+    use App\Security\Security;
 // permissive bootstrap: allow direct access by bootstrapping app if needed
 if (!defined('APP_BOOT')) {
     define('APP_BOOT', true);
@@ -57,10 +58,12 @@ class User {
         $hashedPassword = password_hash($userData['password'], PASSWORD_DEFAULT);
         $verificationCode = bin2hex(random_bytes(16));
         
+        $security = new Security();
+        
         $sql = "INSERT INTO {$this->table} (username, email, password_hash, verification_code, created_at) VALUES (?, ?, ?, ?, NOW())";
         $params = [
-            Security::cleanInput($userData['username']),
-            Security::cleanInput($userData['email']),
+            $security->cleanInput($userData['username']),
+            $security->cleanInput($userData['email']),
             $hashedPassword,
             $verificationCode
         ];
@@ -132,7 +135,7 @@ class User {
         foreach ($allowedFields as $field) {
             if (isset($data[$field])) {
                 $updates[] = "{$field} = ?";
-                $params[] = Security::cleanInput($data[$field]);
+                $params[] = (new Security())->cleanInput($data[$field]);
             }
         }
         
@@ -149,7 +152,7 @@ class User {
     // التحقق من وجود البريد الإلكتروني
     private function emailExists($email) {
         $sql = "SELECT id FROM {$this->table} WHERE email = ?";
-        $stmt = $this->db->query($sql, [Security::cleanInput($email)]);
+        $stmt = $this->db->query($sql, [(new Security())->cleanInput($email)]);
         return $stmt->fetch() !== false;
     }
     

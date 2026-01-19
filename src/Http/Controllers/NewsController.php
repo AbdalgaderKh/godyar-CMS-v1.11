@@ -70,7 +70,7 @@ final class NewsController
 
         $useCache = class_exists('Cache') && !$isPreview;
         if ($useCache) {
-            $bundle = \Cache::remember($cacheKey, 300, function () use ($slug) {
+            $bundle = (new \Cache())->remember($cacheKey, 300, function () use ($slug) {
                 $news = $this->news->findBySlugOrId($slug, false);
                 if (!$news) {
                     return ['news' => null, 'related' => [], 'tags' => [], 'latest' => [], 'mostRead' => []];

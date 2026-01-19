@@ -4,7 +4,8 @@ require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/sidebar.php';
 
-\Godyar\Auth::requirePermission('manage_roles');
+$auth = new \Godyar\Auth();
+$auth->requirePermission('manage_roles');
 require_once __DIR__ . '/../../includes/security.php';
 
 $pdo = \Godyar\DB::pdo();

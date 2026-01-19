@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Godyar\Auth;
+
 require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
 require_once __DIR__ . '/../../includes/Auth.php';

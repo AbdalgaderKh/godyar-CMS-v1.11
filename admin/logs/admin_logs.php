@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../_admin_guard.php';
 // admin/logs/admin_logs.php
 
@@ -14,11 +15,12 @@ function h($v) {
     return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
 }
 
-$usersStmt = $pdo->query("
+$usersStmt = $pdo->query(""
     SELECT id, username, name, email
     FROM users
     ORDER BY id ASC
-");
+""
+);
 $users = $usersStmt ? $usersStmt->fetchAll(PDO::FETCH_ASSOC) : [];
 
 $filterUserId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;

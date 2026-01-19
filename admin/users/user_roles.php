@@ -6,7 +6,7 @@ require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/sidebar.php';
 
-\Godyar\Auth::requirePermission('manage_users');
+(new \Godyar\Auth())->requirePermission('manage_users');
 require_once __DIR__ . '/../../includes/security.php';
 
 $pdo = \Godyar\DB::pdo();

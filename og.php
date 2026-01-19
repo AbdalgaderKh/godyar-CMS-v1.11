@@ -120,10 +120,13 @@ function og_ar_shape(string $s): string {
   $chars = og_mb_chars($s);
   if (empty($chars)) return $s;
 
+  // Performance: avoid calling count() repeatedly in loop conditions.
+  $charsCount = count($chars);
+
   $forms = og_ar_forms_map();
   $out = [];
 
-  for ($i=0; $i<count($chars); $i++) {
+  for ($i=0; $i<$charsCount; $i++) {
     $ch = $chars[$i];
 
     // Preserve whitespace and punctuation
@@ -137,9 +140,7 @@ function og_ar_shape(string $s): string {
       $next = $chars[$i+1];
       $lig = og_ar_lam_alef_ligature($next);
       if ($lig[0] !== '') {
-        // Determine if it connects to previous
-        $prev = $out ? end($out) : '';
-        // We need prev original joining; approximated by checking original previous char
+        // Determine if it connects to previous (approximate by checking original previous char)
         $prevOrig = ($i>0) ? $chars[$i-1] : '';
         $prevType = og_ar_join_type($prevOrig);
         $connectPrev = ($prevType === 2); // prev can connect to left
@@ -156,7 +157,7 @@ function og_ar_shape(string $s): string {
     }
 
     $prev = ($i>0) ? $chars[$i-1] : '';
-    $next = ($i+1<count($chars)) ? $chars[$i+1] : '';
+    $next = ($i+1<$charsCount) ? $chars[$i+1] : '';
 
     $prevType = og_ar_join_type($prev);
     $nextType = og_ar_join_type($next);

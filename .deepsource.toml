@@ -1,5 +1,6 @@
 version = 1
 
+<<<<<<< HEAD
 exclude_patterns = [
   "libs/PHPMailer/**",
   "assets/vendor/**",
@@ -15,3 +16,8 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
+=======
+[[analyzers]]
+name = "php"
+enabled = true
+>>>>>>> 858e9981d5c21b3365416f5c21740aafebcdd47d

@@ -7,6 +7,7 @@
   function sanitizeEditorHTML(input){
     try{
       var html = String(input || '');
+      var html = String(input || '');
       // Fast-path: nothing that looks like markup
       if (!/[<>]/.test(html)) return html;
       var doc = new DOMParser().parseFromString('<div>'+html+'</div>', 'text/html');
@@ -15,7 +16,11 @@
       banned.forEach(function(t){
         var els = root.querySelectorAll(t);
         for (var i=0;i<els.length;i++){ els[i].remove(); }
-      });
+      if (action === 'link') {
+        var url = customPrompt('أدخل الرابط:');
+        if (!url) return;
+        exec('createLink', url);
+        return;);
       // Remove event handlers and javascript: URLs
       var all = root.querySelectorAll('*');
       for (var i=0;i<all.length;i++){
@@ -26,11 +31,128 @@
           var a = attrs[j];
           var n = (a.name || '').toLowerCase();
           var v = String(a.value || '');
-          if (n.startsWith('on')) { el.removeAttribute(a.name); continue; }
-          if ((n === 'href' || n === 'src') && /^\s*javascript:/i.test(v)) { el.removeAttribute(a.name); continue; }
-          if (n === 'style') { /* optional: keep style but strip expression/url(javascript) */
+  function humanSize(bytes) {
             if (/expression\s*\(|url\s*\(\s*['"]?\s*javascript:/i.test(v)) { el.removeAttribute('style'); continue; }
-          }
+              // nosemgrep
+      exec('insertHTML', html);
+      return;
+        if (!sel) return;
+        sel.removeAllRanges();
+        sel.addRange(__savedRange);
+      function insertTable() {
+      var r = parseInt(prompt('عدد الصفوف؟', '2') || '0', 10);
+      var c = parseInt(prompt('عدد الأعمدة؟', '2') || '0', 10);
+      if (!r || r < 1 || !c || c < 1) return;
+      r = Math.min(20, r);
+            }
+        var pickedText = selA.toString();
+        var tip = prompt('اكتب الشرح للنص المختار:', '');
+        try {
+          var rangeA = selA.getRangeAt(0);
+          var abbr = document.createElement('abbr');
+          abbr.setAttribute('title', tip);
+          abbr.appendChild(rangeA.extractContents());
+  if (!tip) return; if (sel) text = sel.toString(); } catch (e) {}
+      if (!text) {
+        text = prompt('اكتب الكود:', '');
+    function insertCodeBlock() {
+      var sel = window.getSelection();
+      var text = '';
+      var escText;
+      try { if (sel) text = sel.toString(); } catch (e) {}
+      if (!text) {
+        text = prompt('اكتب الكود:', '');
+      try { if (sel) text = sel.toString(); } catch (e) {}
+      if (!text) {
+    function boot() {
+    var areas = document.querySelectorAll('textarea[data-gdy-editor="1"]');
+    areas.forEach(makeEditor);
+  }
+  } catch (e) {
+        // empty
+if (action === 'imgAlignRight' || action === 'imgAlignCenter' || action === 'imgAlignLeft' || action === 'imgCrop') {
+        var img = getSelectedImage();
+        if (!img) { alert('حدد صورة أولاً.'); return; }
+        if (action === 'imgCrop') { toggleImageCrop(img); syncToTextarea(); return; }
+        if (action === 'imgAlignRight') applyImageAlign(img, 'right');
+      if (action === 'link') {
+        var url = prompt('أدخل الرابط:');
+        if (!url) return;
+        exec('createLink', url);
+        return;
+      function getSelectedImage() {
+      try {
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      // When user clicks an image, mark it as selected so image-tools work consistently.
+    editor.addEventListener('click', function (ev) {
+      try {
+        var t = ev.target;
+        var img = null;
+    function getSelectedImage() { catch (e0) {}
+      try {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
+    function getSelectedImage() {
+      try {
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      function insertTable() {
+      var r = parseInt(prompt('عدد الصفوف؟', '2') || '0', 10);
+      var c = parseInt(prompt('عدد الأعمدة؟', '2') || '0', 10); catch (e0) { // empty }
+      try {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
+      try {
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+          if (!sel) return;
+        sel.removeAllRanges();
+        sel.addRange(__savedRange);
+      function getSelectedImage() {
+          el.removeAttribute('style');
+          el.removeAttribute('bgcolor');
+        if (action === 'link') {
+        var url = customPrompt('أدخل الرابط:');
+        if (!url) return;
+        exec('createLink', url);
+        return;);
+      } catch (e) {
+        // empty
+      }
+    } catch (e) {
+        // empty
+      }
+    } catch (e0) {}
+          el.removeAttribute('style');
+          el.removeAttribute('bgcolor');
+        });
+      } catch (e) {
+        // empty
+      }
+    }
+    } catch (e) {}
+  function exec(cmd, val) {
+    try {
+      document.execCommand(cmd, false, val);
+    } catch (e) {
+      // empty
+  function buildAttachCard(payload) {
+    var url = absUrl(payload.url || payload.path || payload.file_url || '');
+    var name = payload.name || payload.filename || payload.title || (url.split('/').pop() || 'ملف');
+    var size = payload.size || payload.bytes || '';
+    var ext = getExt({name:name}) || (url.split('?')[0].split('#')[0].match(/\.([a-z0-9]+)$/i)||[])[1] || '';
+    ext = String(ext || '').toLowerCase();
+    var meta = [];
+    if (ext) meta.push(ext.toUpperCase());
+    if (size) meta.push(humanSize(size));
+    var metaText = meta.length ? ('<div class="gdy-attach-meta">' + esc(meta.join(' • ')) + '</div>') : '';
+    // NOTE: do NOT store iframe/object in DB (avoid WAF). Preview is done in frontend via scripts.
+    return (
+      '<div class="gdy-attach-card" data-file-url="' + esc(url) + '" data-auto-embed="1">' +
+        '<div class="gdy-attach-header">' +
+          '<div class="gdy-attach-title">📎 ' + esc(name) + '</div>' +
+          '<div class="gdy-attach-actions">' +
+            '<a class="gdy-attach-btn" href="' + esc(url) + '" target="_blank" rel="noopener">فتح</a>' +
+            '<a class="gdy-attach-btn" href="' + esc(url) + '" download>تحميل</a>' +
+          '</div>' +
         }
       }
       return root.innerHTML;
@@ -39,7 +161,6 @@
     }
   }
 
-
   function esc(s) {
     return String(s || '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -47,7 +168,10 @@
       .replace(/'/g, '&#39;');
   }
 
-  function absUrl(url) {
+    if (!url) return '';
+    url = String(url).trim();
+    if (/^https?:\/\//i.test(url)) return url;
+  }
     if (!url) return '';
     url = String(url).trim();
     if (/^https?:\/\//i.test(url)) return url;
@@ -58,26 +182,38 @@
   }
 
   function getExt(file) {
-    var name = (file && (file.name || file.filename || file.title)) || '';
-    var m = String(name).toLowerCase().match(/\.([a-z0-9]+)$/);
+    const name = (file && (file.name || file.filename || file.title)) || '';
+    const m = String(name).toLowerCase().match(/\.([a-z0-9]+)$/);
     return m ? m[1] : '';
   }
 
   function humanSize(bytes) {
     bytes = Number(bytes || 0);
     if (!bytes || bytes < 0) return '';
+    btns.forEach(function (b) {
+      var tag = (b.tag || 'button').toLowerCase();
+      var el = document.createElement(tag);
+      el.className = 'gdy-wysiwyg-btn' + (b.className ? (' ' + b.className) : '') + (b.primary ? ' is-primary' : '');
+      if (b.title) el.title = b.title;
+      if (b.action) el.dataset.action = b.action;
+    btns.forEach(function (b) {
+      var tag = (b.tag || 'button').toLowerCase();
+      var el = document.createElement(tag);
+      el.className = `gdy-wysiwyg-btn${b.className ? ` ${b.className}` : ''}${b.primary ? ' is-primary' : ''}`;
+      if (b.title) el.title = b.title;
+      if (b.action) el.dataset.action = b.action;
     var units = ['B','KB','MB','GB','TB'];
     var i = 0;
     while (bytes >= 1024 && i < units.length - 1) { bytes /= 1024; i++; }
-    return (Math.round(bytes * 10) / 10) + ' ' + units[i];
+    return `${Math.round(bytes * 10) / 10} ${units[i]}`;
   }
 
   // ===== WYSIWYG =====
   function createToolbar(btns) {
-    var tb = document.createElement('div');
+    const tb = document.createElement('div');
     tb.className = 'gdy-wysiwyg-toolbar';
     btns.forEach(function (b) {
-      var tag = (b.tag || 'button').toLowerCase();
+      const tag = (b.tag || 'button').toLowerCase();
       var el = document.createElement(tag);
       el.className = 'gdy-wysiwyg-btn' + (b.className ? (' ' + b.className) : '') + (b.primary ? ' is-primary' : '');
       if (b.title) el.title = b.title;
@@ -86,7 +222,17 @@
       // Attributes (for inputs etc.)
       if (b.attrs) {
         Object.keys(b.attrs).forEach(function (k) {
-          try { el.setAttribute(k, b.attrs[k]); } catch (e) {}
+          if (!tip) return;
+          var rangeA = selA.getRangeAt(0);
+          var abbr = document.createElement('abbr');
+          abbr.setAttribute('title', tip);
+          abbr.appendChild(rangeA.extractContents());
+        if (!tip) return;
+          var rangeA = selA.getRangeAt(0);
+          var abbr = document.createElement('abbr');
+          abbr.setAttribute('title', tip);
+          abbr.appendChild(rangeA.extractContents());
+        if (!tip) return; el.setAttribute(k, b.attrs[k]); } catch (e) {}
         });
       }
 
@@ -107,7 +253,10 @@
     return tb;
   }
 
-  function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection !== 'undefined' && typeof document.createRange !== 'undefined') {
+      var range = document.createRange();
+  }
     el.focus();
     if (typeof window.getSelection !== 'undefined' && typeof document.createRange !== 'undefined') {
       var range = document.createRange();
@@ -119,20 +268,28 @@
     }
   }
 
-  function exec(cmd, val) {
-    try {
-      document.execCommand(cmd, false, val);
-    } catch (e) {}
+  }
   }
 
-  function insertHTML(html){
       html = sanitizeEditorHTML(html);
     // Use execCommand when possible
     try {
+  }
+      html = sanitizeEditorHTML(html);
+    // Use execCommand when possible
+    try {
+    // fallback
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
       // nosemgrep
       exec('insertHTML', html);
       return;
-    } catch (e) {}
+    } catch (e) {
+      // empty
+    }
+    // fallback
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
     // fallback
     var sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
@@ -162,10 +319,16 @@
     var size = payload.size || payload.bytes || '';
     var ext = getExt({name:name}) || (url.split('?')[0].split('#')[0].match(/\.([a-z0-9]+)$/i)||[])[1] || '';
     ext = String(ext || '').toLowerCase();
+    // NOTE: do NOT store iframe/object in DB (avoid WAF). Preview is done in frontend via scripts.
+    return (
+      '<div class="gdy-attach-card" data-file-url="' + esc(url) + '" data-auto-embed="1">' +
+        '<div class="gdy-attach-header">' +
+          '<div class="gdy-attach-title">📎 ' + esc(name) + '</div>' +
+          '<div class="gdy-attach-actions">' +
     var meta = [];
     if (ext) meta.push(ext.toUpperCase());
     if (size) meta.push(humanSize(size));
-    var metaText = meta.length ? ('<div class="gdy-attach-meta">' + esc(meta.join(' • ')) + '</div>') : '';
+    var metaText = meta.length ? `<div class="gdy-attach-meta">${esc(meta.join(' • '))}</div>` : '';
 
     // NOTE: do NOT store iframe/object in DB (avoid WAF). Preview is done in frontend via scripts.
     return (
@@ -253,10 +416,7 @@
       try {
         if (!__savedRange) return;
         var sel = window.getSelection();
-        if (!sel) return;
-        sel.removeAllRanges();
-        sel.addRange(__savedRange);
-      } catch (e) {}
+    }
     }
 
     
@@ -264,27 +424,27 @@
     var __selectedImg = null;
     function setSelectedImage(img) {
       try {
-        if (__selectedImg && __selectedImg !== img) __selectedImg.classList.remove('gdy-img-selected');
-        __selectedImg = img || null;
-        if (__selectedImg) __selectedImg.classList.add('gdy-img-selected');
-      } catch (e) {}
+    }
     }
 
-    // When user clicks an image, mark it as selected so image-tools work consistently.
+        } else {
+          setSelectedImage(null);
+        }
+      } catch (e) {}
     editor.addEventListener('click', function (ev) {
       try {
         var t = ev.target;
         var img = null;
-        if (t && t.tagName === 'IMG') img = t;
-        else if (t && t.closest) img = t.closest('img');
+        if (t?.tagName === 'IMG') img = t;
+        else img = t.closest?.('img');
         if (img && wrapper.contains(img)) {
           setSelectedImage(img);
           // Make sure editor is focused
           editor.focus();
           saveRange();
-        } else {
-          setSelectedImage(null);
-        }
+          el.removeAttribute('style');
+          el.removeAttribute('bgcolor');
+        });
       } catch (e) {}
     });
 editor.addEventListener('mouseup', saveRange);
@@ -313,10 +473,36 @@ editor.addEventListener('mouseup', saveRange);
         var els = container.querySelectorAll('*');
         els.forEach(function (el) {
           if (!wrapper.contains(el)) return;
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      } catch (e0) {}
+      try {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
+        var node = sel.anchorNode;
+        var el = (node?.nodeType === 1) ? node : node?.parentElement;
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      } catch (e0) {}
+      try {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
+        const node = sel.anchorNode;
+        const el = (node?.nodeType === 1) ? node : node?.parentElement;
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      } catch (e0) {}
+      try {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
+    function getSelectedImage() {
+      try {
+        if (__selectedImg && document.contains(__selectedImg) && wrapper.contains(__selectedImg)) return __selectedImg;
+      } catch (e0) { // empty }
+      try {
+        var sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return null;
           el.removeAttribute('style');
           el.removeAttribute('bgcolor');
         });
-      } catch (e) {}
+      } catch (e) { /* empty */ }
     }
 
     function getSelectedImage() {
@@ -327,16 +513,21 @@ editor.addEventListener('mouseup', saveRange);
         var sel = window.getSelection();
         if (!sel || sel.rangeCount === 0) return null;
         var node = sel.anchorNode;
-        var el = (node && node.nodeType === 1) ? node : (node ? node.parentElement : null);
+        var el = (node?.nodeType === 1) ? node : node?.parentElement;
         if (!el) return null;
         var img = null;
         if (el.tagName === 'IMG') img = el;
-        else img = el.closest ? el.closest('img') : null;
+        else img = el.closest?.('img');
         if (img && wrapper.contains(img)) return img;
 
         // Sometimes selection is a range that directly selects an IMG node
         var r = sel.getRangeAt(0);
         if (r && r.startContainer && r.startContainer.nodeType === 1) {
+          var sc = r.startContainer;
+          if (sc.tagName === 'IMG') return sc;
+        }
+        var r = sel.getRangeAt(0);
+        if (r?.startContainer?.nodeType === 1) {
           var sc = r.startContainer;
           if (sc.tagName === 'IMG') return sc;
         }
@@ -347,8 +538,12 @@ editor.addEventListener('mouseup', saveRange);
     function toggleImageFrame(img) {
       if (!img) return;
       var framed = img.getAttribute('data-gdy-frame') === '1';
+    function toggleImageFrame(img) {
+      if (!img) return;
+      var framed, old, oldStyle;
+      framed = img.getAttribute('data-gdy-frame') === '1';
       if (framed) {
-        var old = img.getAttribute('data-gdy-old-style') || '';
+        old = img.getAttribute('data-gdy-old-style') || '';
         img.removeAttribute('data-gdy-frame');
         img.removeAttribute('data-gdy-old-style');
         if (old) img.setAttribute('style', old);
@@ -365,21 +560,19 @@ editor.addEventListener('mouseup', saveRange);
       }
     }
 
-
     function getHighlightColor() {
       return wrapper.dataset.hlColor || '#fde047';
     }
 
     function applyHighlight(color) {
-      var c = color || getHighlightColor();
+      const c = color || getHighlightColor();
       try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
       try { document.execCommand('hiliteColor', false, c); }
       catch (e2) { exec('backColor', c); }
-    }
 
     function insertTable() {
-      var r = parseInt(prompt('عدد الصفوف؟', '2') || '0', 10);
-      var c = parseInt(prompt('عدد الأعمدة؟', '2') || '0', 10);
+      var r = parseInt(customPrompt('عدد الصفوف؟', '2') || '0', 10);
+      var c = parseInt(customPrompt('عدد الأعمدة؟', '2') || '0', 10);
       if (!r || r < 1 || !c || c < 1) return;
       r = Math.min(20, r);
       c = Math.min(12, c);
@@ -401,10 +594,24 @@ editor.addEventListener('mouseup', saveRange);
       if (!text) {
         text = prompt('اكتب الكود:', '');
         if (!text) return;
+      h = Math.min(1200, h);
+      var box = document.createElement('div');
+      box.className = 'gdy-img-crop';
+      box.style.height = h + 'px';
+      img.parentNode.insertBefore(box, img);
+      box.appendChild(img);
+      img.classList.add('gdy-img-cropped');
+      h = Math.min(1200, h);
+      var box = document.createElement('div');
+      box.className = 'gdy-img-crop';
+      box.style.height = ${h}px;
+      img.parentNode.insertBefore(box, img);
+      box.appendChild(img);
+      img.classList.add('gdy-img-cropped');
       }
       // Escape for HTML
       var escText = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      insertHTML('<pre class="gdy-code"><code>' + escText + '</code></pre>');
+      insertHTML(<pre class="gdy-code"><code>${escText}</code></pre>);
     }
 
     function applyImageAlign(img, mode) {
@@ -415,15 +622,26 @@ editor.addEventListener('mouseup', saveRange);
       else img.classList.add('gdy-img-right');
     }
 
-    function toggleImageCrop(img) {
       if (!img) return;
       var crop = img.closest ? img.closest('.gdy-img-crop') : null;
+      if (crop && wrapper.contains(crop)) {
+    }
+      if (!img) return;
+      const crop = img.closest ? img.closest('.gdy-img-crop') : null;
       if (crop && wrapper.contains(crop)) {
         // unwrap
         crop.parentNode.insertBefore(img, crop);
         crop.parentNode.removeChild(crop);
-        return;
-      }
+      // Ensure focus
+      if (action === 'highlight') { applyHighlight(getHighlightColor()); syncToTextarea(); return; }
+            if (action === 'imgResize' || action === 'imgCaption') {
+        var img2 = getSelectedImage();
+        if (!img2) { alert('حدد صورة أولاً.'); return; }
+        if (action === 'imgResize') { resizeImage(img2); syncToTextarea(); return; }
+if (action === 'table') { insertTable(); syncToTextarea(); return; }
+if (action === 'codeBlock') { insertCodeBlock(); syncToTextarea(); return; }
+if (htmlArea.classList.contains('d-none')) editor.focus();
+}
       var h = parseInt(prompt('ارتفاع القص (px):', '320') || '0', 10);
       if (!h || h < 60) return;
       h = Math.min(1200, h);
@@ -433,12 +651,19 @@ editor.addEventListener('mouseup', saveRange);
       img.parentNode.insertBefore(box, img);
       box.appendChild(img);
       img.classList.add('gdy-img-cropped');
+      // Ask for width/height (supports px or %). Leave empty to keep current.
+      var curW = img.style?.width ? img.style.width : '';
+      var curH = img.style?.height ? img.style.height : '';
     }
     function resizeImage(img) {
       if (!img) return;
+      var curW, curH, w, h;
       // Ask for width/height (supports px or %). Leave empty to keep current.
-      var curW = (img.style && img.style.width) ? img.style.width : '';
-      var curH = (img.style && img.style.height) ? img.style.height : '';
+      curW = img.style?.width ? img.style.width : '';
+      curH = img.style?.height ? img.style.height : '';
+      // Ask for width/height (supports px or %). Leave empty to keep current.
+      var curW = img.style?.width ? img.style.width : '';
+      var curH = img.style?.height ? img.style.height : '';
       var w = prompt('العرض (مثال: 600px أو 80%) — اتركه فارغًا للإبقاء كما هو، واكتب 0 لإزالة العرض:', curW);
       if (w === null) return;
       var h = prompt('الارتفاع (مثال: 320px) — اتركه فارغًا للإبقاء كما هو، واكتب 0 لإزالة الارتفاع:', curH);
@@ -461,7 +686,7 @@ editor.addEventListener('mouseup', saveRange);
 
     function editImageCaption(img) {
       if (!img) return;
-      var fig = img.closest ? img.closest('figure.gdy-figure') : null;
+      let fig = img.closest ? img.closest('figure.gdy-figure') : null;
       if (!fig || !wrapper.contains(fig)) {
         // Wrap image in a figure
         fig = document.createElement('figure');
@@ -470,12 +695,16 @@ editor.addEventListener('mouseup', saveRange);
         var parent = img.parentNode;
         var next = img.nextSibling;
         parent.insertBefore(fig, next);
+      var cap = fig.querySelector('figcaption');
+      var cur = cap ? (cap.textContent || '').trim() : '';
+      var txt = prompt('اكتب وصف الصورة (Caption) — اتركه فارغًا لإزالة الوصف:', cur);
+      if (txt === null) return;
         fig.appendChild(img);
       }
 
       var cap = fig.querySelector('figcaption');
       var cur = cap ? (cap.textContent || '').trim() : '';
-      var txt = prompt('اكتب وصف الصورة (Caption) — اتركه فارغًا لإزالة الوصف:', cur);
+      var txt = customPrompt('اكتب وصف الصورة (Caption) — اتركه فارغًا لإزالة الوصف:', cur);
       if (txt === null) return;
       txt = String(txt).trim();
 
@@ -487,8 +716,12 @@ editor.addEventListener('mouseup', saveRange);
           p.insertBefore(img, fig);
           fig.remove();
         }
-        return;
-      }
+      if (action === 'imgFrame') {
+        restoreRange();
+        var img = getSelectedImage();
+        if (!img) {
+  return;
+}
 
       if (!cap) {
         cap = document.createElement('figcaption');
@@ -499,8 +732,6 @@ editor.addEventListener('mouseup', saveRange);
       }
       cap.textContent = txt;
     }
-
-
 
 function syncToTextarea() {
       if (!htmlArea.classList.contains('d-none')) {
@@ -521,12 +752,18 @@ function syncToTextarea() {
     textarea.parentNode.insertBefore(wrapper, textarea);
     wrapper.appendChild(toolbar);
     wrapper.appendChild(editor);
+    // Events
+    editor.addEventListener('input', function () {
+      textarea.value = editor.innerHTML;
+      htmlArea.value = editor.innerHTML;
+    });
     wrapper.appendChild(htmlArea);
 
     // Events
     editor.addEventListener('input', function () {
       textarea.value = editor.innerHTML;
-      htmlArea.value = editor.innerHTML;
+    htmlArea.addEventListener('input', () => {
+      textarea.value = htmlArea.value;
     });
 
     htmlArea.addEventListener('input', function () {
@@ -535,22 +772,23 @@ function syncToTextarea() {
 
     // Toolbar actions
     // Color picker uses input event
-    toolbar.addEventListener('input', function (e) {
-      var el = e.target.closest('.gdy-wysiwyg-btn');
-      if (!el) return;
-      var action = el.dataset.action || '';
+    toolbar.addEventListener('input', (e) => {
       if (action === 'textColor') {
         // restore selection because focusing color input may lose it
-        restoreRange();
+        // Ensure focus
+      if (htmlArea.classList.contains('d-none')) editor.focus();
         var color = el.value || '#000000';
         try { document.execCommand('styleWithCSS', false, true); } catch (e2) {}
         exec('foreColor', color);
         syncToTextarea();
         // keep range
         saveRange();
-        return;
-      }
-
+      if (action === 'link') {
+        var url = prompt('أدخل الرابط:');
+        if (!url) return;
+        exec('createLink', url);
+  return;
+}
       if (action === 'highlightColor') {
         restoreRange();
         var hl = el.value || '#fde047';
@@ -562,12 +800,52 @@ function syncToTextarea() {
         syncToTextarea();
         saveRange();
         return;
-      }  });
+        const config = colorConfig[action];
+        if (!config) return;
+        restoreRange();
+        const color = el.value || config.defaultColor;
+        if (config.dataAttr) wrapper.dataset[config.dataAttr] = color;
+        try { document.execCommand('styleWithCSS', false, true); } catch (e) {}
+        try { document.execCommand(config.command, false, color); }
+        catch (e) {
+          if (config.fallbackCommand) exec(config.fallbackCommand, color);
+        }
+        restoreRange();
+        var color = el.value || '#000000';
+        try { document.execCommand('styleWithCSS', false, true); } catch (e2) {}
+        exec('foreColor', color);
+        syncToTextarea();
+        // keep range
+        saveRange();
+      if (action === 'media') {
+        // Open media picker in a popup; expects picker.php to call window.opener.godyarSelectMedia(...)
+        window.__gdyActiveEditor = { editor: editor, htmlArea: htmlArea, textarea: textarea };
+        var w = Math.min(980, window.screen.width - 40);
+  return;
+}
 
+      if (action === 'highlightColor') {
+        restoreRange();
+        const hl = el.value || '#fde047';
+        wrapper.dataset.hlColor = hl;
+        try { document.execCommand('styleWithCSS', false, true); } catch (e3) {}
+        // Some browsers support hiliteColor; Safari often uses backColor
+        try { document.execCommand('hiliteColor', false, hl); }
     toolbar.addEventListener('click', function (e) {
-      var btn = e.target.closest('.gdy-wysiwyg-btn');
+
+      if (action === 'media') {
+        // Open media picker in a popup; expects picker.php to call window.opener.godyarSelectMedia(...)
+        window.__gdyActiveEditor = { editor, htmlArea, textarea };
+        var w = Math.min(980, window.screen.width - 40);
+        var h = Math.min(720, window.screen.height - 80);
+        var left = Math.max(10, (window.screen.width - w) / 2);
       if (!btn) return;
-      var action = btn.dataset.action;
+      if (action === 'toggleHtml') {
+        var showing = !htmlArea.classList.contains('d-none');
+        if (showing) {
+          // HTML -> WYSIWYG
+          // nosemgrep
+      const action = btn.dataset.action;
 
       if (action === 'toggleHtml') {
         var showing = !htmlArea.classList.contains('d-none');
@@ -589,67 +867,83 @@ function syncToTextarea() {
           htmlArea.focus();
           wrapper.classList.add('is-html');
           setSelectedImage(null);
-        }
-        syncToTextarea();
-        return;
-      }
+      // Ensure focus
+      if (htmlArea.classList.contains('d-none')) editor.focus();
+  }
+  syncToTextarea();
+  return;
+}
 
       // Restore selection (for actions after changing focus)
       restoreRange();
 
-      // Ensure focus
+            }
       if (htmlArea.classList.contains('d-none')) editor.focus();
 
       
-      if (action === 'highlight') { applyHighlight(getHighlightColor()); syncToTextarea(); return; }
+            // Ensure focus
+      if (htmlArea.classList.contains('d-none')) editor.focus();
+      if (action === 'table') { insertTable(); syncToTextarea(); return; }
+if (action === 'highlight') { applyHighlight(getHighlightColor()); syncToTextarea(); return; }
+if (action === 'table') { insertTable(); syncToTextarea(); return; }
+if (action === 'codeBlock') { insertCodeBlock(); syncToTextarea(); return; }
+        const img2 = getSelectedImage();
+        if (!img2) { alert('حدد صورة أولاً.'); return; }
+        if (action === 'imgResize') { resizeImage(img2); syncToTextarea(); return; }
+        if (action === 'imgCaption') { editImageCaption(img2); syncToTextarea(); return; }
+
+            if (action === 'highlight') { applyHighlight(getHighlightColor()); syncToTextarea(); return; }
       if (action === 'table') { insertTable(); syncToTextarea(); return; }
       if (action === 'codeBlock') { insertCodeBlock(); syncToTextarea(); return; }
-
-            if (action === 'imgResize' || action === 'imgCaption') {
         var img2 = getSelectedImage();
-        if (!img2) { alert('حدد صورة أولاً.'); return; }
+        if (!img2) { customAlert('حدد صورة أولاً.'); return; }
         if (action === 'imgResize') { resizeImage(img2); syncToTextarea(); return; }
         if (action === 'imgCaption') { editImageCaption(img2); syncToTextarea(); return; }
       }
 
 if (action === 'imgAlignRight' || action === 'imgAlignCenter' || action === 'imgAlignLeft' || action === 'imgCrop') {
         var img = getSelectedImage();
-        if (!img) { alert('حدد صورة أولاً.'); return; }
+        if (!img) { customAlert('حدد صورة أولاً.'); return; }
         if (action === 'imgCrop') { toggleImageCrop(img); syncToTextarea(); return; }
         if (action === 'imgAlignRight') applyImageAlign(img, 'right');
         if (action === 'imgAlignCenter') applyImageAlign(img, 'center');
-        if (action === 'imgAlignLeft') applyImageAlign(img, 'left');
-        syncToTextarea();
-        return;
-      }
-
 if (action === 'h2') { exec('formatBlock', '<h2>'); return; }
       if (action === 'h3') { exec('formatBlock', '<h3>'); return; }
-      if (action === 'ul') { exec('insertUnorderedList'); return; }
-      if (action === 'ol') { exec('insertOrderedList'); return; }
+  if (action === 'imgAlignLeft') applyImageAlign(img, 'left');
+  syncToTextarea();
+  return;
+}
 
       if (action === 'blockquote') { exec('formatBlock', '<blockquote>'); syncToTextarea(); return; }
-      if (action === 'hr') { insertHTML('<hr>'); syncToTextarea(); return; }
+
+if (action === 'blockquote') { exec('formatBlock', '<blockquote>'); syncToTextarea(); return; }
+if (action === 'hr') { insertHTML('<hr>'); syncToTextarea(); return; }
+if (action === 'cycleAlign') { cycleAlign(); syncToTextarea(); return; }
+if (action === 'clearFormat') { clearFormatting(); syncToTextarea(); return; }
+if (action === 'unlink') { exec('unlink'); syncToTextarea(); return; }
+
+            if (action === 'hr') { insertHTML('<hr>'); syncToTextarea(); return; }
       if (action === 'cycleAlign') { cycleAlign(); syncToTextarea(); return; }
       if (action === 'clearFormat') { clearFormatting(); syncToTextarea(); return; }
-      if (action === 'unlink') { exec('unlink'); syncToTextarea(); return; }
-
       if (action === 'annotate') {
         restoreRange();
         var selA = window.getSelection();
         if (!selA || selA.rangeCount === 0 || selA.isCollapsed) {
           alert('حدد كلمة أو نصًا أولاً لإضافة شرح.');
-          return;
-        }
-        var pickedText = selA.toString();
-        var tip = prompt('اكتب الشرح للنص المختار:', '');
-        if (!tip) return;
+if (action === 'unlink') { exec('unlink'); syncToTextarea(); return; }
+        restoreRange();
+        var selA = window.getSelection();
+        if (!selA || selA.rangeCount === 0 || selA.isCollapsed) {
+          alert('حدد كلمة أو نصًا أولاً لإضافة شرح.');
+        try {
 
         try {
-          var rangeA = selA.getRangeAt(0);
-          var abbr = document.createElement('abbr');
+          const rangeA = selA.getRangeAt(0);
+          const abbr = document.createElement('abbr');
           abbr.setAttribute('title', tip);
           abbr.appendChild(rangeA.extractContents());
+          rangeA.insertNode(abbr);
+          rangeA.insertNode(abbr);
           rangeA.insertNode(abbr);
           // move caret after abbr
           rangeA.setStartAfter(abbr);
@@ -660,46 +954,61 @@ if (action === 'h2') { exec('formatBlock', '<h2>'); return; }
           // fallback
           insertHTML('<abbr title="' + esc(tip) + '">' + esc(pickedText) + '</abbr>');
         }
-        syncToTextarea();
-        saveRange();
-        return;
-      }
-
       if (action === 'imgFrame') {
         restoreRange();
-        var img = getSelectedImage();
-        if (!img) {
-          alert('اختر صورة داخل المحتوى ثم اضغط "إطار".');
-          return;
+  syncToTextarea();
+  saveRange();
+  return;
+}
+
+      }
         }
         toggleImageFrame(img);
-        syncToTextarea();
-        saveRange();
-        return;
-      }
-
-
       if (action === 'link') {
         var url = prompt('أدخل الرابط:');
-        if (!url) return;
-        exec('createLink', url);
-        return;
-      }
+  syncToTextarea();
+  saveRange();
+  return;
+}
 
+if (action === 'media') {
+  // Open media picker in a popup; expects picker.php to call window.opener.godyarSelectMedia(...)
+  window.__gdyActiveEditor = { editor: editor, htmlArea: htmlArea, textarea: textarea };
+  const w = Math.min(980, window.screen.width - 40);
+  const h = Math.min(720, window.screen.height - 80);
+  const left = Math.max(10, (window.screen.width - w) / 2);
+        var top = Math.max(10, (window.screen.height - h) / 2);
       if (action === 'media') {
         // Open media picker in a popup; expects picker.php to call window.opener.godyarSelectMedia(...)
         window.__gdyActiveEditor = { editor: editor, htmlArea: htmlArea, textarea: textarea };
-        var w = Math.min(980, window.screen.width - 40);
-        var h = Math.min(720, window.screen.height - 80);
-        var left = Math.max(10, (window.screen.width - w) / 2);
-        var top = Math.max(10, (window.screen.height - h) / 2);
-        window.open('/admin/media/picker.php?field=content', 'gdy_media_picker', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
-        return;
-      }
+        const w = Math.min(980, window.screen.width - 40);
+        const h = Math.min(720, window.screen.height - 80);
+        const left = Math.max(10, (window.screen.width - w) / 2);
+        const top = Math.max(10, (window.screen.height - h) / 2);
 
+    var url = absUrl(payload.url || payload.path || payload.file_url || '');
+    var name = payload.name || payload.filename || payload.title || (url.split('/').pop() || 'ملف');
+    var size = payload.size || payload.bytes || '';
+    var ext = getExt({name:name}) || (url.split('?')[0].split('#')[0].match(/\.([a-z0-9]+)$/i)||[])[1] || '';
+    ext = String(ext || '').toLowerCase();
+    var meta = [];
+    if (ext) meta.push(ext.toUpperCase());
+    var url = absUrl(payload.url || payload.path || payload.file_url || '');
+    var name = payload.name || payload.filename || payload.title || (url.split('/').pop() || 'ملف');
+    var size = payload.size || payload.bytes || '';
+    var ext = getExt({name}) || (url.split('?')[0].split('#')[0].match(/\.([a-z0-9]+)$/i)||[])[1] || '';
+    ext = String(ext || '').toLowerCase();
+    var meta = [];
+    if (ext) meta.push(ext.toUpperCase());
       exec(action);
       syncToTextarea();
-    });
+  const top = Math.max(10, (window.screen.height - h) / 2);
+  window.open('/admin/media/picker.php?field=content', 'gdy_media_picker', 'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top);
+  return;
+}
+
+    // Hook on form submit
+}
 
     // Hook on form submit
     var form = textarea.closest('form');
@@ -727,13 +1036,15 @@ if (action === 'h2') { exec('formatBlock', '<h2>'); return; }
         if (!active.htmlArea.classList.contains('d-none')) {
           active.htmlArea.classList.add('d-none');
           active.editor.classList.remove('d-none');
-        }
-        active.editor.focus();
+        var htmlCard = buildAttachCard(payload);
+        insertHTML(htmlCard);
 
         var htmlCard = buildAttachCard(payload);
         insertHTML(htmlCard);
 
-        // Sync
+        active.htmlArea.value = active.editor.innerHTML;
+      };
+    }
         active.textarea.value = active.editor.innerHTML;
         active.htmlArea.value = active.editor.innerHTML;
       };

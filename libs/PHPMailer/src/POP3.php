@@ -6,9 +6,9 @@
  *
  * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author    Jim Jagielski (jimjag) <admin@example.com>
+ * @author    Andy Prevost (codeworxtech) <admin@example.com>
  * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -34,10 +34,10 @@ namespace PHPMailer\PHPMailer;
  *   enough to do authentication.
  *   If you want a more complete class there are other POP3 classes for PHP available.
  *
- * @author Richard Davey (original author) <rich@corephp.co.uk>
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author Richard Davey (original author) <admin@example.com>
+ * @author Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author Jim Jagielski (jimjag) <admin@example.com>
+ * @author Andy Prevost (codeworxtech) <admin@example.com>
  */
 class POP3
 {

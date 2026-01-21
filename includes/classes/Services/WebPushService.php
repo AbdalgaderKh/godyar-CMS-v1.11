@@ -58,9 +58,9 @@ final class WebPushService
         );
     }
 
-    public function sendBroadcast(array $payload, int $ttlSeconds = 300, bool $testOnly = false): array
-    {
-        $result = [
+            'ok' => false,
+            'sent' => 0,
+            'failed' => 0,
             'ok' => false,
             'sent' => 0,
             'failed' => 0,
@@ -71,7 +71,8 @@ final class WebPushService
         if ($this->vapidPublic === '' || $this->vapidPrivate === '') {
             $result['errors'][] = 'VAPID keys are missing.';
             return $result;
-        }
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        if ($json === false) $json = '{}';
 
         // Ensure table exists before querying.
         try { $this->ensureTables(); } catch (Throwable $e) { /* ignore */ }
@@ -81,9 +82,36 @@ final class WebPushService
         $result['total'] = is_array($subs) ? count($subs) : 0;
 
         if ($testOnly && $result['total'] > 1) {
+            $endpoint = (string)($row['endpoint'] ?? '');
+            $p256dh   = (string)($row['p256dh'] ?? '');
+            $auth     = (string)($row['auth'] ?? '');
+            if ($endpoint === '' || $p256dh === '' || $auth === '') {
+                $result['failed']++;
+                $result['errors'][] = 'Invalid subscription row (missing fields).';
+                continue;
+            }
+            try {
+                $r = $this->sendToSubscription($endpoint, $p256dh, $auth, $payload, $ttlSeconds);
+                if (!empty($r['ok'])) {
+                    $result['sent']++;
+                } else {
+                    $result['failed']++;
+                    $msg = (string)($r['error'] ?? 'unknown error');
+                    $result['errors'][] = $msg;
+                }
+            } catch (Throwable $e) {
+                $result['failed']++;
+                $result['errors'][] = $e->getMessage();
+            }
+        }
+        $result['ok'] = ($result['sent'] > 0 && $result['failed'] === 0) || ($result['sent'] > 0);
+        return $result;
+    }
             $subs = [ $subs[0] ];
             $result['total'] = 1;
         }
+        return $subs;
+    }
 
         foreach ($subs as $row) {
             $endpoint = (string)($row['endpoint'] ?? '');
@@ -126,6 +154,8 @@ final class WebPushService
 
         $aud = $this->endpointAudience($endpoint);
         if ($aud === '') {
+        $subPublic = self::b64url_decode($p256dh_b64url);
+        $subAuth   = self::b64url_decode($auth_b64url);
             return ['ok'=>false, 'error'=>'Invalid endpoint URL'];
         }
 
@@ -133,17 +163,27 @@ final class WebPushService
         $subAuth   = self::b64url_decode($auth_b64url);
 
         if ($subPublic === '' || strlen($subPublic) < 65 || $subPublic[0] !== "\x04") {
-            return ['ok'=>false, 'error'=>'Invalid p256dh key'];
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        if ($json === false) $json = '{}';
+            return [null, null, 'Invalid p256dh key'];
         }
         if ($subAuth === '' || strlen($subAuth) < 16) {
-            return ['ok'=>false, 'error'=>'Invalid auth secret'];
+            return [null, null, 'Invalid auth secret'];
         }
+        return [$subPublic, $subAuth, null];
+    }
+    private function encodePayload(array $payload): string {
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return $json === false ? '{}' : $json;
+    }
 
         $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         if ($json === false) $json = '{}';
 
-        // Encrypt payload (aes128gcm)
-        $enc = $this->encrypt_aes128gcm($json, $subPublic, $subAuth);
+    private function encodePayload(array $payload): string {
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return $json === false ? '{}' : $json;
+    }
         if (!$enc['ok']) {
             return ['ok'=>false, 'error'=>(string)$enc['error']];
         }

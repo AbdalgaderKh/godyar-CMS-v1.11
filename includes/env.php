@@ -1,86 +1,102 @@
 <?php
-/**
- * includes/env.php — robust .env loader for shared hosting
- * UTF-8 (no BOM), no closing tag.
- */
-
 declare(strict_types=1);
 
-// Prevent double-loading (and constant redefinition warnings) if this file is included twice.
+// Idempotent include
 if (defined('GODY_ENV_LOADED')) {
     return;
 }
 define('GODY_ENV_LOADED', true);
 
-/* ---------- ABSPATH ---------- */
+// Project root (shared hosting)
 if (!defined('ABSPATH')) {
-    define('ABSPATH', str_replace('\\', '/', dirname(__DIR__))); // /public_html
+    define('ABSPATH', str_replace('\\', '/', dirname(__DIR__)));
 }
 
-/* ---------- Helpers ---------- */
 if (!function_exists('gody_env_bool')) {
-    function gody_env_bool($v): bool {
-        if (is_bool($v)) return $v;
+    function gody_env_bool($v): bool
+    {
+        if (is_bool($v)) {
+            return $v;
+        }
         $s = strtolower(trim((string)$v));
-        return in_array($s, ['1', 'true', 'on', 'yes', 'y'], true);
+        return in_array($s, ['1','true','on','yes','y'], true);
     }
 }
 
 if (!function_exists('gody_unquote')) {
-    function gody_unquote(string $v): string {
+    function gody_unquote(string $v): string
+    {
         $v = trim($v);
-        if ($v === '') return $v;
+        if ($v === '') {
+            return $v;
+        }
         $q = $v[0];
         if (($q === '"' || $q === "'") && substr($v, -1) === $q) {
-            $v = substr($v, 1, -1);
+            return substr($v, 1, -1);
         }
         return $v;
     }
 }
 
 if (!function_exists('gody_parse_env_file')) {
-    /**
-     * Safe, tiny .env parser (key=value), supports comments (# …) and quoted values.
-     */
-    function gody_parse_env_file(string $path): array {
-        if (!is_file($path)) return [];
+    function gody_parse_env_file(string $path): array
+    {
+        if (!is_file($path) || !is_readable($path)) {
+            return [];
+        }
+
+        if (function_exists('gdy_file_lines')) {
+            $lines = gdy_file_lines($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if (!is_array($lines)) {
+                $lines = [];
+            }
+        } else {
+            $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+        }
+
         $out = [];
-        $lines = gdy_file_lines($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
         foreach ($lines as $line) {
-            $line = trim($line);
-            if ($line === '' || $line[0] === '#' || $line[0] === ';') continue;
-
-            // Split on first '=' only
+            $line = trim((string)$line);
+            if ($line === '' || $line[0] === '#' || $line[0] === ';') {
+                continue;
+            }
             $pos = strpos($line, '=');
-            if ($pos === false) continue;
-
+            if ($pos === false) {
+                continue;
+            }
             $key = trim(substr($line, 0, $pos));
             $val = trim(substr($line, $pos + 1));
 
-            // Remove inline comments unless quoted
+            // Strip inline comments for unquoted values
             if ($val !== '' && $val[0] !== '"' && $val[0] !== "'") {
                 $hash = strpos($val, '#');
-                if ($hash !== false) $val = trim(substr($val, 0, $hash));
+                if ($hash !== false) {
+                    $val = trim(substr($val, 0, $hash));
+                }
             }
 
             $val = gody_unquote($val);
-            if ($key !== '') $out[$key] = $val;
+            if ($key !== '') {
+                $out[$key] = $val;
+            }
         }
         return $out;
     }
 }
 
 if (!function_exists('env')) {
-    /**
-     * Read env var from (order): $_SERVER/$_ENV/getenv/.env array → default
-     */
-    function env(string $key, $default = null) {
-        if (array_key_exists($key, $_SERVER)) return $_SERVER[$key];
-        if (array_key_exists($key, $_ENV))    return $_ENV[$key];
-
+    function env(string $key, $default = null)
+    {
+        if (array_key_exists($key, $_SERVER)) {
+            return $_SERVER[$key];
+        }
+        if (array_key_exists($key, $_ENV)) {
+            return $_ENV[$key];
+        }
         $g = getenv($key);
-        if ($g !== false) return $g;
-
+        if ($g !== false) {
+            return $g;
+        }
         global $GODYAR_ENV_ARR;
         if (is_array($GODYAR_ENV_ARR) && array_key_exists($key, $GODYAR_ENV_ARR)) {
             return $GODYAR_ENV_ARR[$key];
@@ -89,10 +105,8 @@ if (!function_exists('env')) {
     }
 }
 
-/* ---------- Load .env (shared hosting friendly) ---------- */
+// Load .env
 $GODYAR_ENV_ARR = [];
-
-// Prefer explicit ENV_FILE if provided (via Apache SetEnv / FPM env / bootstrap putenv).
 $explicitEnvFile = getenv('ENV_FILE');
 if ((!is_string($explicitEnvFile) || $explicitEnvFile === '') && isset($_SERVER['ENV_FILE'])) {
     $explicitEnvFile = (string)$_SERVER['ENV_FILE'];
@@ -104,52 +118,56 @@ if (!$explicitEnvFile && defined('ENV_FILE')) {
     $explicitEnvFile = ENV_FILE;
 }
 
-// Try explicit path first (if valid), then ABSPATH/.env, then parent .env (shared hosting patterns).
-$envCandidates = [];
+$candidates = [];
 if (is_string($explicitEnvFile) && $explicitEnvFile !== '') {
-    $envCandidates[] = $explicitEnvFile;
+    $candidates[] = $explicitEnvFile;
 }
-$envCandidates[] = ABSPATH . '/.env';
-$envCandidates[] = dirname(ABSPATH) . '/.env';
+$candidates[] = ABSPATH . '/.env';
+$candidates[] = dirname(ABSPATH) . '/.env';
 
-foreach ($envCandidates as $f) {
+foreach ($candidates as $f) {
     if (is_string($f) && $f !== '' && is_file($f) && is_readable($f)) {
         $GODYAR_ENV_ARR = gody_parse_env_file($f);
         break;
     }
 }
 
-/* ---------- Defaults map (NO secrets here) ---------- */
+$cfg = is_array($GODYAR_ENV_ARR) ? $GODYAR_ENV_ARR : [];
+
+// Defaults map (no secrets)
 $defaults = [
     'APP_ENV'        => 'production',
     'APP_DEBUG'      => 'false',
     'APP_URL'        => '',
-'DB_DRIVER' => 'auto',
-    'DB_HOST'       => 'localhost',
-    'DB_PORT'       => '3306',
-    'DB_DATABASE'   => '',
-    'DB_USERNAME'   => '',
-    'DB_PASSWORD'   => '',
-    'DB_CHARSET'    => 'utf8mb4',
+    'DB_DRIVER'      => 'auto',
+    'DB_HOST'        => 'localhost',
+    'DB_PORT'        => '3306',
+    'DB_DATABASE'    => 'geqzylcq_myar',
+    'DB_USERNAME'    => 'geqzylcq_meera',
+    'DB_PASSWORD'    => 'Myar2018@',
+    'DB_CHARSET'     => 'utf8mb4',
     'DB_COLLATION'   => 'utf8mb4_unicode_ci',
-    'DB_DSN'         => '',          // optional: override full DSN
-
+    'DB_DSN'         => '',
     'TIMEZONE'       => 'Asia/Riyadh',
-    'ENCRYPTION_KEY' => '',
+    'ENCRYPTION_KEY' => '311a8cea10b1b836d566b3e082a0d9570ffb29abd6e387925a61b7dd424e6eae',
 ];
 
-/* ---------- DB naming compatibility (DB_NAME/DB_USER/DB_PASS) ---------- */
-if (!function_exists("gody_env_db")) {
-    function gody_env_db(string $primary, string $alt, $default = ''): string {
+if (!function_exists('gody_env_db')) {
+    function gody_env_db(string $primary, string $alt, $default = ''): string
+    {
         $v = env($primary, null);
-        if ($v !== null && $v !== '') return (string)$v;
+        if ($v !== null && $v !== '') {
+            return (string)$v;
+        }
         $v2 = env($alt, null);
-        if ($v2 !== null && $v2 !== '') return (string)$v2;
+        if ($v2 !== null && $v2 !== '') {
+            return (string)$v2;
+        }
         return (string)$default;
     }
 }
 
-/* ---------- Define constants if not defined ---------- */
+// Define constants if not defined
 foreach ($defaults as $key => $def) {
     if (!defined($key)) {
         if ($key === 'DB_DATABASE') {
@@ -161,6 +179,7 @@ foreach ($defaults as $key => $def) {
         } else {
             $val = env($key, $def);
         }
+
         if ($key === 'APP_DEBUG') {
             define($key, gody_env_bool($val));
         } else {
@@ -169,58 +188,55 @@ foreach ($defaults as $key => $def) {
     }
 }
 
-/* ---------- Build DB_DSN (supports mysql + pgsql) ---------- */
-if (!defined('DB_DSN')) {
-    $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : strtolower((string)($cfg['DB_DRIVER'] ?? 'auto'));
-
-    // Honour explicit DSN if provided (e.g., in config/env).
-    $cfgDsn = $cfg['DB_DSN'] ?? '';
-    if (is_string($cfgDsn) && $cfgDsn !== '') {
-        $dsn = $cfgDsn;
-
-        // Infer driver from DSN prefix when possible.
-        if ($drv === '' || $drv === 'auto') {
-            if (stripos($dsn, 'pgsql:') === 0) $drv = 'pgsql';
-            elseif (stripos($dsn, 'mysql:') === 0) $drv = 'mysql';
-        }
-    } else {
-        // Normalise aliases.
-        if ($drv === 'postgres' || $drv === 'postgresql') $drv = 'pgsql';
-
-        // Auto-detect conservatively: prefer mysql when available.
-        if ($drv === '' || $drv === 'auto') {
-            if (extension_loaded('pdo_mysql')) $drv = 'mysql';
-            elseif (extension_loaded('pdo_pgsql')) $drv = 'pgsql';
-            else $drv = 'mysql';
-        }
-
-        $host = (string)($cfg['DB_HOST'] ?? 'localhost');
-        $port = (string)($cfg['DB_PORT'] ?? ($drv === 'pgsql' ? '5432' : '3306'));
-        $name = (string)($cfg['DB_NAME'] ?? 'godyar');
-
-        if ($drv === 'pgsql') {
-            $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
+// Build DB_DSN if empty
+if (defined('DB_DSN') && DB_DSN === '') {
+    $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : 'auto';
+    $drv = strtolower((string)$drv);
+    if ($drv === 'postgres' || $drv === 'postgresql') {
+        $drv = 'pgsql';
+    }
+    if ($drv === '' || $drv === 'auto') {
+        if (extension_loaded('pdo_mysql')) {
+            $drv = 'mysql';
+        } elseif (extension_loaded('pdo_pgsql')) {
+            $drv = 'pgsql';
         } else {
-            $charset = (string)($cfg['DB_CHARSET'] ?? 'utf8mb4');
-            $dsn = "mysql:host={$host};port={$port};dbname={$name};charset={$charset}";
+            $drv = 'mysql';
         }
     }
 
-    if (!defined('DB_DRIVER')) define('DB_DRIVER', $drv);
-    if (!defined('DB_DSN')) define('DB_DSN', $dsn);
+    $host = (string)(defined('DB_HOST') ? DB_HOST : 'localhost');
+    $port = (string)(defined('DB_PORT') ? DB_PORT : ($drv === 'pgsql' ? '5432' : '3306'));
+    $name = (string)(defined('DB_DATABASE') ? DB_DATABASE : '');
+
+    if ($drv === 'pgsql') {
+        $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
+    } else {
+        $charset = (string)(defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4');
+        $dsn = "mysql:host={$host};port={$port};dbname={$name};charset={$charset}";
+    }
+
+    // Constants already defined, cannot redefine; expose DSN via global for downstream if needed.
+    $cfg['DB_DSN'] = $dsn;
 }
 
-/* ---------- Aliases (preferred naming) ---------- */
-if (!defined('DB_NAME')) define('DB_NAME', defined('DB_DATABASE') ? DB_DATABASE : (string)env('DB_NAME', 'godyar'));
-if (!defined('DB_USER')) define('DB_USER', defined('DB_USERNAME') ? DB_USERNAME : (string)env('DB_USER', 'root'));
-if (!defined('DB_PASS')) define('DB_PASS', defined('DB_PASSWORD') ? DB_PASSWORD : (string)env('DB_PASS', ''));
+// Aliases
+if (!defined('DB_NAME')) {
+    define('DB_NAME', defined('DB_DATABASE') ? DB_DATABASE : (string)env('DB_NAME', ''));
+}
+if (!defined('DB_USER')) {
+    define('DB_USER', defined('DB_USERNAME') ? DB_USERNAME : (string)env('DB_USER', ''));
+}
+if (!defined('DB_PASS')) {
+    define('DB_PASS', defined('DB_PASSWORD') ? DB_PASSWORD : (string)env('DB_PASS', ''));
+}
 
-/* ---------- Timezone ---------- */
+// Timezone
 if (defined('TIMEZONE') && TIMEZONE) {
     date_default_timezone_set(TIMEZONE);
 }
 
-/* ---------- Error reporting per APP_DEBUG ---------- */
+// Error reporting
 if (defined('APP_DEBUG') && APP_DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
@@ -231,52 +247,98 @@ if (defined('APP_DEBUG') && APP_DEBUG) {
     error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 }
 
-/* ---------- Optional: expose pdo factory ---------- */
-if (!function_exists('gody_pdo')) {
-    function gody_pdo(): ?PDO {
-        static $pdo = null;
-        if ($pdo instanceof PDO) return $pdo;
-
-        if (!defined('DB_DSN') || DB_DSN === '') return null;
-
-        $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : '';
+// PDO helpers
+if (!function_exists('gody_determine_pdo_driver')) {
+    function gody_determine_pdo_driver(string $dsn, string $override = ''): string
+    {
+        $drv = strtolower(trim($override));
         if ($drv === '' || $drv === 'auto') {
-            if (stripos(DB_DSN, 'pgsql:') === 0) $drv = 'pgsql';
-            elseif (stripos(DB_DSN, 'mysql:') === 0) $drv = 'mysql';
+            if (stripos($dsn, 'pgsql:') === 0) {
+                $drv = 'pgsql';
+            } elseif (stripos($dsn, 'mysql:') === 0) {
+                $drv = 'mysql';
+            }
         }
-        if ($drv === 'postgres' || $drv === 'postgresql') $drv = 'pgsql';
+        if ($drv === 'postgres' || $drv === 'postgresql') {
+            $drv = 'pgsql';
+        }
+        if ($drv === '') {
+            $drv = 'mysql';
+        }
+        return $drv;
+    }
+}
 
+if (!function_exists('gody_build_pdo_options')) {
+    function gody_build_pdo_options(string $drv): array
+    {
         $opts = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ];
 
-        // MySQL-only connection init.
-        if ($drv !== 'pgsql' && defined('DB_CHARSET') && defined('DB_COLLATION')) {
-            $charset   = DB_CHARSET ?: 'utf8mb4';
-            $collation = DB_COLLATION ?: 'utf8mb4_unicode_ci';
-            $opts[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES {$charset} COLLATE {$collation}";
+        if ($drv === 'mysql') {
+            $charset   = defined('DB_CHARSET') ? (string)DB_CHARSET : 'utf8mb4';
+            $collation = defined('DB_COLLATION') && (string)DB_COLLATION !== '' ? (string)DB_COLLATION : 'utf8mb4_unicode_ci';
+            if (defined('PDO::MYSQL_ATTR_INIT_COMMAND')) {
+                $opts[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET NAMES {$charset} COLLATE {$collation}";
+            }
         }
 
-        try {
-            $pdo = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD, $opts);
+        return $opts;
+    }
+}
 
-            // PostgreSQL-only init.
+if (!function_exists('gody_create_pdo_connection')) {
+    function gody_create_pdo_connection(): ?PDO
+    {
+        $dsn = defined('DB_DSN') ? (string)DB_DSN : '';
+        if ($dsn === '' && isset($GLOBALS['cfg']['DB_DSN'])) {
+            $dsn = (string)$GLOBALS['cfg']['DB_DSN'];
+        }
+        if ($dsn === '' && isset($GLOBALS['cfg']) && is_array($GLOBALS['cfg']) && isset($GLOBALS['cfg']['DB_DSN'])) {
+            $dsn = (string)$GLOBALS['cfg']['DB_DSN'];
+        }
+        if ($dsn === '') {
+            return null;
+        }
+
+        $drv  = gody_determine_pdo_driver($dsn, defined('DB_DRIVER') ? (string)DB_DRIVER : '');
+        $opts = gody_build_pdo_options($drv);
+
+        try {
+            $pdo = new PDO($dsn, DB_USER, DB_PASS, $opts);
+
             if ($drv === 'pgsql') {
-                try { $pdo->exec("SET client_encoding TO 'UTF8'"); } catch (Throwable $e) {}
+                try {
+                    $pdo->exec("SET client_encoding TO 'UTF8'");
+                } catch (Throwable $e) {
+                    // empty
+                }
             }
 
             return $pdo;
         } catch (Throwable $e) {
             if (defined('APP_DEBUG') && APP_DEBUG) {
-                error_log("[PDO] Connection failed: " . $e->getMessage());
+                error_log('[PDO] Connection failed: ' . $e->getMessage());
             }
             return null;
         }
     }
 }
 
-/* ---------- Convenience: APP_URL auto-detect (if empty) ---------- */
+if (!function_exists('gody_pdo')) {
+    function gody_pdo(): ?PDO
+    {
+        static $pdo = null;
+        if (!$pdo instanceof PDO) {
+            $pdo = gody_create_pdo_connection();
+        }
+        return $pdo;
+    }
+}
+
+// Convenience: APP_URL auto-detect (if empty)
 if (defined('APP_URL') && APP_URL === '' && !headers_sent()) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host   = $_SERVER['HTTP_HOST'] ?? '';
@@ -284,6 +346,8 @@ if (defined('APP_URL') && APP_URL === '' && !headers_sent()) {
         $uri  = $_SERVER['REQUEST_URI'] ?? '/';
         $base = (strpos($uri, '/godyar/') !== false) ? '/godyar' : '';
         $auto = $scheme . '://' . $host . $base;
-        if (!defined('APP_URL_AUTO')) define('APP_URL_AUTO', $auto);
+        if (!defined('APP_URL_AUTO')) {
+            define('APP_URL_AUTO', $auto);
+        }
     }
 }

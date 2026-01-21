@@ -28,7 +28,6 @@ if (!is_array($currentUser) && !empty($_SESSION['user_id'])) {
     $_SESSION['user'] = $currentUser;
 }
 
-
 if (!isset($isLoggedIn)) {
     $isLoggedIn = is_array($currentUser) && !empty($currentUser['id']);
 }
@@ -52,7 +51,6 @@ if (class_exists('HomeController')) {
         $siteSettings = [];
     }
 }
-
 
 // Fallback: بعض الصفحات (مثل elections.php / صفحات قديمة) لا تمر عبر HomeController.
 // لضمان أن الثيم/الشعار/الأسماء تعمل في كل الصفحات، نحاول تحميل settings مباشرة من DB بشكل آمن.
@@ -123,9 +121,7 @@ try {
 
 $themeClass   = $themeClass   ?? 'theme-default';
 
-
-// Header background image (from settings)
-$headerBgEnabled = (($siteSettings['theme_header_bg_enabled'] ?? '0') === '1');
+$themeClass   = $themeClass   ?? 'theme-default';
 $headerBgSource  = (string)($siteSettings['theme_header_bg_source'] ?? 'upload');
 $headerBgUrl     = trim((string)($siteSettings['theme_header_bg_url'] ?? ''));
 $headerBgImage   = trim((string)($siteSettings['theme_header_bg_image'] ?? ''));
@@ -146,18 +142,10 @@ $headerCategories  = $headerCategories  ?? [];
 $isLoggedIn        = $isLoggedIn        ?? false;
 $isAdmin           = $isAdmin           ?? false;
 
-// ضبط baseUrl
-if (isset($baseUrl) && $baseUrl !== '') {
-    $baseUrl = rtrim($baseUrl, '/');
-} elseif (function_exists('base_url')) {
-    $baseUrl = rtrim(base_url(), '/');
-} else {
-    $baseUrl = '';
-}
-$baseUrl = preg_replace('#/frontend/controllers$#', '', $baseUrl);
+// Header background image (from settings)
+$headerBgEnabled = (($siteSettings['theme_header_bg_enabled'] ?? '0') === '1');
 
-// تحديد اللغة الحالية
-$_gdyLang = function_exists('gdy_lang') ? (string)gdy_lang() : (isset($GLOBALS['lang']) ? (string)$GLOBALS['lang'] : 'ar');
+$themeClass   = $themeClass   ?? 'theme-default';
 $_gdyLang = trim($_gdyLang, '/');
 if ($_gdyLang === '') { $_gdyLang = 'ar'; }
 
@@ -329,7 +317,6 @@ if (empty($headerCategories)) {
     }
   ?>
 
-
   <?php
     // OpenGraph / Twitter (يظهر عند مشاركة الرابط)
     $ogTitle = $seoTitle;
@@ -371,7 +358,12 @@ if (empty($headerCategories)) {
       // Front-end theme stylesheet (optional)
       // ✅ مهم جداً: لا نحقن --primary في :root إذا كان ملف الثيم موجوداً، حتى لا يطغى اللون الافتراضي.
       // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + theme.front + theme_front
-      $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
+    // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + frontendTheme (camel) + theme.front (legacy)
+  $themeFront = (string)(
+    ($siteSettings['frontend_theme'] ?? null)
+    ?? ($siteSettings['settings.frontend_theme'] ?? null)
+    ?? ($siteSettings['frontendTheme'] ?? null)
+    $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
       $themeFront = (string)(
         $siteSettings['frontend_theme']
           ?? $siteSettings['settings.frontend_theme']
@@ -616,7 +608,6 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       :root{ --logo-size: 54px; }
     }
 
-
     .brand-text { text-align: end; min-width: 0; }
     .brand-title {
       font-size: 1.06rem;
@@ -730,7 +721,6 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       background: rgba(var(--primary-rgb),0.14);
       margin: 6px 6px;
     }
-
 
     /* ===== شريط التصنيفات + البحث (استعادة تنسيق احترافي) ===== */
     .header-secondary{
@@ -902,7 +892,6 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
       .header-search{ width:100%; max-width: none; margin-inline-start: 0; }
     }
 
-
       /* ===== Theme force overrides (keeps site coherent even when some pages have inline CSS) ===== */
       body[class*="theme-"] .section-title,
       body[class*="theme-"] .godyar-home-section-title,
@@ -950,7 +939,6 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
         border-color: var(--primary) !important;
         color: #ffffff !important;
       }
-
 
   </style>
 
@@ -1059,9 +1047,8 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 
       <div class="hdr-utils">
           <button type="button" class="hdr-dd-btn hdr-search-btn" id="gdyMobileSearchBtn" title="<?= h(__('search')) ?>" aria-label="<?= h(__('search')) ?>">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
-          </button>
-          <div class="hdr-dropdown hdr-lang" id="gdyLangDd">
+$headerBgUrl     = trim((string)($siteSettings['theme_header_bg_url'] ?? ''));
+$headerBgImage   = trim((string)($siteSettings['theme_header_bg_image'] ?? ''));
             <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="Language">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
               <span><?= strtoupper(gdy_lang()) ?></span>
@@ -1192,7 +1179,6 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
               $gdyHeaderPath = rtrim($gdyHeaderPath, '/');
               if ($gdyHeaderPath === '') { $gdyHeaderPath = '/'; }
 
-
               $renderHeaderCat = function (array $cat) use (&$renderHeaderCat, &$renderedHeaderCats, $navBaseUrl, $rootUrl, $specialCatStyles, $excludeHeaderCategoryIds, $gdyHeaderPath) {
                   $catId = (int)($cat['id'] ?? 0);
                   if ($catId > 0 && in_array($catId, $excludeHeaderCategoryIds, true)) {
@@ -1316,7 +1302,6 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
   <script>
     // منطق إخفاء/إظهار زر الانتخابات + ضبط ارتفاع الهيدر تلقائياً
     document.addEventListener('DOMContentLoaded', function () {
-
 
       // ✅ ضبط --header-h لمنع دخول المحتوى/السكرول تحت الهيدر
       function setHeaderH(){

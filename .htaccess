@@ -113,6 +113,9 @@ RewriteRule ^register$ /register.php [L,QSA]
 RewriteRule ^profile$ /profile.php [L,QSA]
 RewriteRule ^logout$ /logout.php [L,QSA]
 RewriteRule ^admin/login$ /admin/login.php [L,QSA]
+# Legacy ad-click endpoint (dash) -> canonical underscore
+RewriteRule ^ad-click.php$ /ad_click.php [R=301,L]
+
 
 # ---------------------------------------------------------
 # Block sensitive extensions
@@ -126,13 +129,12 @@ RewriteRule ^admin/login$ /admin/login.php [L,QSA]
 # ---------------------------------------------------------
 # Block non-public dirs (defense-in-depth)
 # ---------------------------------------------------------
-RewriteCond %{REQUEST_URI} ^/install/ [NC]
-RewriteCond %{DOCUMENT_ROOT}/install/install.lock !-f
-RewriteRule ^install(/|$) - [L]
+# install/upgrade/tools are not public in production
+RewriteRule ^install(/|$) - [F,L]
+RewriteRule ^upgrade(/|$) - [F,L]
+RewriteRule ^tools(/|$) - [F,L]
+RewriteRule ^godyar_private(/|$) - [F,L]
 
-RewriteCond %{REQUEST_URI} ^/install/ [NC]
-RewriteCond %{DOCUMENT_ROOT}/install/install.lock -f
-RewriteRule ^install/ - [F,L]
 
 RewriteRule ^_dev_tools/ - [F,L]
 RewriteRule ^logs/ - [F,L]

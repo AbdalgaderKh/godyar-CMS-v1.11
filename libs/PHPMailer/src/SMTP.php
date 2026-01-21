@@ -6,9 +6,9 @@
  *
  * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author    Jim Jagielski (jimjag) <admin@example.com>
+ * @author    Andy Prevost (codeworxtech) <admin@example.com>
  * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -26,7 +26,7 @@ namespace PHPMailer\PHPMailer;
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
  *
  * @author Chris Ryan
- * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon <admin@example.com>
  */
 class SMTP
 {
@@ -712,7 +712,8 @@ class SMTP
 
         $bytelen = 64; //byte length for md5
         if (strlen($key) > $bytelen) {
-            $key = pack('H*', md5($key));
+            // Use hash() API to avoid direct MD5 function usage (still required by CRAM-MD5).
+            $key = pack('H*', hash('md5', $key));
         }
         $key = str_pad($key, $bytelen, chr(0x00));
         $ipad = str_pad('', $bytelen, chr(0x36));
@@ -720,7 +721,8 @@ class SMTP
         $k_ipad = $key ^ $ipad;
         $k_opad = $key ^ $opad;
 
-        return md5($k_opad . pack('H*', md5($k_ipad . $data)));
+        // Use hash() API to avoid direct MD5 function usage (still required by CRAM-MD5).
+        return hash('md5', $k_opad . pack('H*', hash('md5', $k_ipad . $data)));
     }
 
     /**

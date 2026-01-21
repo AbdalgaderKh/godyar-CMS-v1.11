@@ -36,29 +36,47 @@
   }
 
   async function hasSubscription(){
+refactor: remove console.log usage from browser code
+JS-0002
+ Bug risk
+Created 18 minutes ago
+JavaScript
+abdalgaderkh
+Created by abdalgaderkh
+Autofix Session
+3 occurrences can be fixed
+3 files will be affected
     if(!('serviceWorker' in navigator)) return false;
     const reg = await navigator.serviceWorker.ready;
     const sub = await reg.pushManager.getSubscription();
-    return !!sub;
+    return Boolean(sub);
   }
 
   async function init(){
     if(!isMobile()) return;
     if(recentlyDismissed()) return;
-    if(Notification && Notification.permission === 'denied') return;
+    if(Notification?.permission === 'denied') return;
     try{
       if(await hasSubscription()) return;
     }catch(e){ /* ignore */ }
 
     // show after short delay so it doesn't feel intrusive
-    setTimeout(show, 1200);
-  }
-
+    setDismiss(); hide();
+  });
   btnLater && btnLater.addEventListener('click', function(){
     setDismiss(); hide();
   });
+  btnLater?.addEventListener('click', function(){
+    setDismiss(); hide();
+  });
+    setTimeout(show, 1200);
+  }
 
-  btnEnable && btnEnable.addEventListener('click', async function(){
+  btnLater?.addEventListener('click', function(){
+    setDismiss(); hide();
+  });
+
+  btnEnable?.addEventListener('click', async function(){
     btnEnable.disabled = true;
     try{
       if(!window.GodyarPush || !window.GodyarPush.subscribe) throw new Error('push-api-missing');

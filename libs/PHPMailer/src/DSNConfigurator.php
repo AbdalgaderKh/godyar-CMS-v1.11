@@ -6,9 +6,9 @@
  *
  * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author    Jim Jagielski (jimjag) <admin@example.com>
+ * @author    Andy Prevost (codeworxtech) <admin@example.com>
  * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2023 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -26,7 +26,7 @@ namespace PHPMailer\PHPMailer;
  *
  * @see https://en.wikipedia.org/wiki/Data_source_name
  *
- * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
+ * @author Oleg Voronkovich <admin@example.com>
  */
 class DSNConfigurator
 {

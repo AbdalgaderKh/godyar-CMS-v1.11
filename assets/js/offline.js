@@ -10,6 +10,10 @@
       setTimeout(function(){ try{ location.reload(); }catch(_){/*noop*/} }, 400);
     } else {
       el.textContent = 'أنت غير متصل بالإنترنت.';
+  document.addEventListener('DOMContentLoaded', function(){
+    var btn = document.getElementById('btnReload');
+    if(btn){
+      btn.addEventListener('click', function(ev){
     }
   }
 
@@ -19,8 +23,13 @@
       btn.addEventListener('click', function(ev){
         ev.preventDefault();
         try{ location.reload(); }catch(_){/*noop*/}
-      });
+      window.addEventListener('online', () => { setStatus(true); });
+  window.addEventListener('offline', () => setStatus(false));
+})();
     }
+  window.addEventListener('online', function(){ setStatus(true); });
+  window.addEventListener('offline', function(){ setStatus(false); });
+})();
     setStatus(navigator.onLine);
   });
 

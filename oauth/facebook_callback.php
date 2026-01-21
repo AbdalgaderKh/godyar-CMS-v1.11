@@ -111,9 +111,6 @@ if (isset($u['picture']['data']['url'])) {
 if ($displayName === '') {
     $displayName = 'Facebook';
 if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
 }
 
 if ($facebookId === '') {
@@ -137,6 +134,9 @@ if ($username === '') {
 
 $pdo = gdy_pdo_safe();
 if (!($pdo instanceof PDO)) {
+try {
+    $cols = gdy_db_stmt_columns($pdo, 'users')->fetchAll(PDO::FETCH_COLUMN, 0);
+    if (!is_array($cols) || empty($cols)) {
     gdy_oauth_fail_facebook('تعذر الاتصال بقاعدة البيانات.', 500);
 }
 
@@ -304,7 +304,6 @@ if (function_exists('auth_set_user_session')) {
     ];
     $_SESSION['is_member_logged'] = true;
 
-
 // Ensure legacy session keys exist (used by some templates/widgets)
 if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
     $_SESSION['user_id']    = (int)($_SESSION['user_id'] ?? $_SESSION['user']['id'] ?? 0);
@@ -312,7 +311,6 @@ if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
     $_SESSION['user_name']  = (string)($_SESSION['user_name'] ?? $_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? '');
     $_SESSION['user_role']  = (string)($_SESSION['user_role'] ?? $_SESSION['user']['role'] ?? 'user');
     $_SESSION['is_member_logged'] = true;
-}
 }
 
 $next = (string)($_SESSION['oauth_next'] ?? '/');
@@ -323,3 +321,4 @@ if (!str_starts_with($next, '/')) $next = '/';
 
 header('Location: ' . $base . $next, true, 302);
 exit;
+        }

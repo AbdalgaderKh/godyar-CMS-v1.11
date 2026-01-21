@@ -339,13 +339,11 @@ try {
     $st = $pdo->query('SELECT id, name, slug FROM tags ORDER BY name ASC');
     $allTags = $st ? ($st->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
 } catch (Throwable $e) {
-    $allTags = $items;
+    error_log('[tags index] allTags error: ' . $e->getMessage());
+    $allTags = [];
 }
 
 $totalPages = max(1, (int)ceil($totalRows / $perPage));
-
-$currentPage = 'tags';
-$pageTitle = __('t_84c1b773c5', 'الوسوم');
 $pageSubtitle = __('t_6499983c46', 'إدارة وسوم الأخبار (إنشاء، تعديل، دمج، وتنظيف)');
 $savedFiltersPageKey = 'tags';
 $adminBase = (function_exists('base_url') ? rtrim(base_url(), '/') : '') . '/admin';
@@ -372,7 +370,6 @@ $pageActionsHtml .= __('t_7a47a46503', '<button type="button" class="btn btn-gdy
 $pageActionsHtml .= '<a class="btn btn-gdy btn-gdy-ghost" href="index.php?' . h($mkQs(['download'=>'csv'])) . __('t_1352c97777', '"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg> تصدير CSV</a>');
 
 require_once __DIR__ . '/../layout/app_start.php';
-
 
 require_once __DIR__ . '/../includes/saved_filters_ui.php';
 echo gdy_saved_filters_ui('tags');

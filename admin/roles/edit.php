@@ -1,11 +1,12 @@
 <?php
 
 require_once __DIR__ . '/../_admin_guard.php';
-require_once __DIR__ . '/../layout/header.php';
-require_once __DIR__ . '/../layout/sidebar.php';
+\Godyar\Auth::requirePermission('manage_roles');
 
 \Godyar\Auth::requirePermission('manage_roles');
-require_once __DIR__ . '/../../includes/security.php';
+$pdo = \Godyar\DB::pdo();
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/sidebar.php';
 
 $pdo = \Godyar\DB::pdo();
 

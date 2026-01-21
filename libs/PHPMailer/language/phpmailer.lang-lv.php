@@ -3,7 +3,7 @@
 /**
  * Latvian PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Eduards M. <e@npd.lv>
+ * @author Eduards M. <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP kļūda: Autorizācija neizdevās.';

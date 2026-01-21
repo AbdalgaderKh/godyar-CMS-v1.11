@@ -110,32 +110,12 @@ function __gdySetInstallerTheme(t){
          "<div class='step ".($step===2?'on':'')."'>2) قاعدة البيانات</div>".
          "<div class='step ".($step===3?'on':'')."'>3) إنشاء الجداول</div>".
          "</div>";
-    echo "<h2 style='margin:0 0 12px;font-size:18px'>".h($title)."</h2>";
-    echo $body;
-    echo "<hr style='border:0;border-top:1px solid rgba(255,255,255,.10);margin:18px 0'>";
-    echo "<div class='muted'>بعد نجاح التثبيت، سيتم قفل مجلد /install تلقائيًا. يُفضل حذفه.</div>";
-    echo "</div></div><script>
-(function(){
-  var btn = document.getElementById('themeToggle');
-  if(!btn) return;
-  function icon(){
-    var t = document.documentElement.dataset.theme || 'light';
-    btn.textContent = (t === 'dark') ? '☀️' : '🌙';
-  }
-  icon();
-  btn.addEventListener('click', function(){
-    var t = document.documentElement.dataset.theme || 'light';
-    __gdySetInstallerTheme(t === 'dark' ? 'light' : 'dark');
-    icon();
-  });
-})();
-</script></body></html>";
-    exit;
+}
 }
 
 /**
  * Split SQL into statements safely:
- * - strips line comments (--, #) and block comments
+ * - uses strip_sql_comments
  * - splits on semicolons outside strings
  */
 function split_sql_statements(string $sql): array {
@@ -186,6 +166,8 @@ function split_sql_statements(string $sql): array {
         } elseif (!$inS && !$inD && $ch === '`') {
             $inB = !$inB;
         }
+        if ($inS || $inD || $inB) continue;
+        if ($ch === '(') $depth++;
 
         // Split on semicolon when not in quotes
         if (!$inS && !$inD && !$inB && $ch === ';') {

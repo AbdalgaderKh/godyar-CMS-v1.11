@@ -3,8 +3,8 @@
 /**
  * Dutch PHPMailer language file: refer to PHPMailer.php for definitive list.
  * @package PHPMailer
- * @author Tuxion <team@tuxion.nl>
- * @author Robin van der Vliet <info@robinvandervliet.com>
+ * @author Tuxion <admin@example.com>
+ * @author Robin van der Vliet <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP-fout: authenticatie mislukt.';

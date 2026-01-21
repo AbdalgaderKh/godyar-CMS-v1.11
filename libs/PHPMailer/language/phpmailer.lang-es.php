@@ -3,9 +3,9 @@
 /**
  * Spanish PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Matt Sturdy <matt.sturdy@gmail.com>
- * @author Crystopher Glodzienski Cardoso <crystopher.glodzienski@gmail.com>
- * @author Daniel Cruz <danicruz0415@gmail.com>
+ * @author Matt Sturdy <admin@example.com>
+ * @author Crystopher Glodzienski Cardoso <admin@example.com>
+ * @author Daniel Cruz <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Error SMTP: Imposible autentificar.';

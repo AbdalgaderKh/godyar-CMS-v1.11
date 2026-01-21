@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
 require_once __DIR__ . '/../../includes/auth.php';
@@ -296,7 +295,6 @@ html, body{
     margin-bottom:0.75rem;
 }
 
-
 .gdy-form-card {
     background: rgba(15, 23, 42, 0.8);
     backdrop-filter: blur(10px);
@@ -464,7 +462,7 @@ html, body{
                                 <label class="form-label"><?= h(__('t_2436aacc18', 'البريد الإلكتروني')) ?></label>
                                 <input type="email" name="email" class="form-control"
                                        value="<?= h($data['email']) ?>" 
-                                       placeholder="example@email.com">
+                                       placeholder="admin@example.com">
                             </div>
                         </div>
                     </div>

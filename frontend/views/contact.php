@@ -7,7 +7,6 @@ if (!function_exists('h')) {
     }
 }
 
-
 // نتوقع وجود المتغيرات: $page, $pageNotFound, $baseUrl, $themeClass, ...
 $slug = $page['slug'] ?? '';
 ?>
@@ -173,8 +172,13 @@ $slug = $page['slug'] ?? '';
           <p>
             يمكنك هنا وضع عنوان شركتك أو مقر موقعك، مثال:<br>
             Building 3, twofour54 P.O.Box 77866, Abu Dhabi, United Arab Emirates
-          </p>
-        </div>
+<?php
+$baseUrl = $baseUrl ?? '';
+$pageNotFound = $pageNotFound ?? false;
+?>
+        <div class="gdy-contact-block">
+          <div class="gdy-contact-block-title">
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
 
         <div class="gdy-contact-block">
           <div class="gdy-contact-block-title">
@@ -193,7 +197,7 @@ $slug = $page['slug'] ?? '';
             <span>أرسل بريدك الإلكتروني إلى</span>
           </div>
           <p>
-            <a href="mailto:info@example.com">info@example.com</a>
+            <a href="mailto:admin@example.com">admin@example.com</a>
           </p>
         </div>
       </div>

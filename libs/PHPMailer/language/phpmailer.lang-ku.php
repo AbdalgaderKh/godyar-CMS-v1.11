@@ -3,7 +3,7 @@
 /**
  * Kurdish (Sorani) PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Halo Salman <halo@home4t.com>
+ * @author Halo Salman <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'هەڵەی SMTP : نەتوانرا کۆدەکە پشتڕاست بکرێتەوە ';

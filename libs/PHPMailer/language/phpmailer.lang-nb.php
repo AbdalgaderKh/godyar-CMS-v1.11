@@ -3,7 +3,7 @@
 /**
  * Norwegian Bokmål PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Wera AS <wordpress@wera.no>
+ * @author Wera AS <admin@example.com>
  */
 
  $PHPMAILER_LANG['authenticate']         = 'SMTP-feil: Kunne ikke autentisere.';

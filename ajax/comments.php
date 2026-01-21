@@ -221,7 +221,7 @@ if ($action === 'add') {
         }
         if ($guestEmail === '') {
             // To satisfy NOT NULL schemas, use a safe placeholder
-            $guestEmail = 'member@local.invalid';
+            $guestEmail = 'admin@example.com';
         }
     } else {
         // Guest requires name/email

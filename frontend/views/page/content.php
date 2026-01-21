@@ -240,13 +240,14 @@ $contactOld     = $contactOld     ?? [];
             <span>أرسل بريدك الإلكتروني إلى</span>
           </div>
           <p>
-            <a href="mailto:info@example.com">info@example.com</a>
+            <a href="mailto:admin@example.com">admin@example.com</a>
           </p>
         </div>
       </div>
 
-      <!-- عمود النموذج -->
-      <div>
+        <form class="gdy-contact-form" method="post" action="<?= h($baseUrl) ?>
+          <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
+          <div class="row g-2 mb-2">
         <form class="gdy-contact-form" method="post" action="<?= h($baseUrl) ?>
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
           <div class="row g-2 mb-2">
@@ -314,7 +315,10 @@ $contactOld     = $contactOld     ?? [];
     </div>
   </div>
 
-<?php else: ?>
+  <div class="fade-in">
+    <div class="hero-card" style="margin-bottom:18px;">
+    </div>
+  </div>
 
   <div class="fade-in">
     <div class="hero-card" style="margin-bottom:18px;">

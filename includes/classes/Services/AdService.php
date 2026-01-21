@@ -7,28 +7,21 @@ use PDO;
 use Throwable;
 
 /**
- * AdService (Schema-compatible)
- * - يدعم اختلاف أسماء الأعمدة في جدول ads
- * - يعيد HTML جاهز لعرض الإعلان في الواجهة
+ * AdService
+ * --------
+ * خدمة إعلانات متسامحة مع اختلاف أسماء الأعمدة (Schema-tolerant).
+ * الهدف: منع أخطاء التحميل/Parse، وتقديم مخرجات HTML آمنة لعرض إعلان حسب location.
  */
 final class AdService
 {
-    private PDO $pdo;
+    public function __construct(private PDO $pdo) {}
 
-    public function __construct(PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
-
-    /**
-     * Render ad by location.
-     * @param string $location example: home_under_featured_video
-     * @param string $baseUrl  site base URL (for click redirect fallback)
-     */
     public function render(string $location, string $baseUrl = ''): string
     {
         $location = trim($location);
-        if ($location === '') return '';
+        if ($location === '') {
+            return '';
+        }
 
         $baseUrl = rtrim($baseUrl, '/');
 
@@ -39,26 +32,15 @@ final class AdService
 
             $cols = $this->getColumns('ads');
 
-            $colId       = $this->pick($cols, ['id','ad_id']) ?? 'id';
-            $colTitle    = $this->pick($cols, ['title','name','ad_title']) ?? null;
-            $colLocation = $this->pick($cols, ['location','loc','placement','position','slot']) ?? null;
+            $colId       = $this->pick($cols, ['id', 'ad_id']) ?? 'id';
+            $colTitle    = $this->pick($cols, ['title', 'name', 'ad_title']);
+            $colLocation = $this->pick($cols, ['location', 'loc', 'placement', 'position', 'slot']);
+            $colImage    = $this->pick($cols, ['image', 'image_url', 'img', 'banner', 'banner_url', 'picture', 'photo', 'file', 'path']);
+            $colUrl      = $this->pick($cols, ['url', 'target_url', 'link', 'href', 'redirect_url', 'click_url']);
+            $colType     = $this->pick($cols, ['ad_type', 'type', 'content_type']);
+            $colContent  = $this->pick($cols, ['content', 'html', 'html_code', 'code', 'body']);
+            $colActive   = $this->pick($cols, ['is_active', 'active', 'status', 'enabled']);
 
-            // image / url
-            $colImage    = $this->pick($cols, ['image','image_url','img','banner','banner_url','picture','photo','file','path']) ?? null;
-            $colUrl      = $this->pick($cols, ['url','target_url','link','href','redirect_url','click_url']) ?? null;
-
-            // html ads (optional)
-            $colType     = $this->pick($cols, ['ad_type','type','content_type']) ?? null;
-            $colContent  = $this->pick($cols, ['content','html','html_code','code','body']) ?? null;
-
-            // is_active (optional)
-            $colActive   = $this->pick($cols, ['is_active','active','status','enabled']) ?? null;
-
-            // date range (optional)
-            $colStart    = $this->pick($cols, ['starts_at','start_at','start_date','date_start','from_date','campaign_start']) ?? null;
-            $colEnd      = $this->pick($cols, ['ends_at','end_at','end_date','date_end','to_date','campaign_end']) ?? null;
-
-            // Build WHERE
             $where = [];
             $params = [];
 
@@ -68,7 +50,6 @@ final class AdService
             }
 
             if ($colActive) {
-                // common: is_active=1 OR status='active'
                 if ($colActive === 'status') {
                     $where[] = "(`$colActive` = 'active' OR `$colActive` = 1)";
                 } else {
@@ -76,21 +57,18 @@ final class AdService
                 }
             }
 
-            if ($colStart) {
-                $where[] = "(`$colStart` IS NULL OR `$colStart` = '' OR `$colStart` <= NOW())";
+            $sql = 'SELECT * FROM ads';
+            if ($where) {
+                $sql .= ' WHERE ' . implode(' AND ', $where);
             }
-            if ($colEnd) {
-                $where[] = "(`$colEnd` IS NULL OR `$colEnd` = '' OR `$colEnd` >= NOW())";
-            }
-
-            $sql = "SELECT * FROM ads";
-            if ($where) $sql .= " WHERE " . implode(' AND ', $where);
             $sql .= " ORDER BY `$colId` DESC LIMIT 1";
 
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($params);
-            $ad = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$ad) return '';
+            $st = $this->pdo->prepare($sql);
+            $st->execute($params);
+            $ad = $st->fetch(PDO::FETCH_ASSOC);
+            if (!$ad) {
+                return '';
+            }
 
             $title = $colTitle && isset($ad[$colTitle]) ? trim((string)$ad[$colTitle]) : '';
             $image = $colImage && isset($ad[$colImage]) ? trim((string)$ad[$colImage]) : '';
@@ -98,69 +76,80 @@ final class AdService
             $type  = $colType && isset($ad[$colType]) ? strtolower(trim((string)$ad[$colType])) : '';
             $html  = $colContent && isset($ad[$colContent]) ? (string)$ad[$colContent] : '';
 
-            // Normalize image URL (allow relative)
+            // Normalize URLs
             if ($image !== '' && !preg_match('~^https?://~i', $image) && $baseUrl !== '') {
                 $image = $baseUrl . '/' . ltrim($image, '/');
             }
 
-            $safeTitle = $this->h($title !== '' ? $title : 'Advertisement');
-
-            $inner = '';
-            if ($type === 'html' || $type === 'code') {
-                $inner = '<div class="gdy-ad-html">'.$html.'</div>';
-            } else {
-                if ($image === '') return '';
-                $imgTag = '<img src="'.$this->h($image).'" alt="'.$safeTitle.'" loading="lazy" decoding="async">';
-                if ($url !== '') {
-                    $inner = '<a class="gdy-ad-link" href="'.$this->h($url).'" target="_blank" rel="sponsored noopener noreferrer">'.$imgTag.'</a>';
-                } else {
-                    $inner = '<div class="gdy-ad-link">'.$imgTag.'</div>';
-                }
+            if ($url !== '' && !preg_match('~^https?://~i', $url) && $baseUrl !== '') {
+                $url = $baseUrl . '/' . ltrim($url, '/');
             }
 
-            return '<div class="gdy-ad-slot gdy-ad-slot--'.$this->h($location).'">'.$inner.'</div>';
+            // HTML ad
+            if ($type === 'html' && $html !== '') {
+                return $html; // ملاحظة: افترض أن HTML يدخل من لوحة الإدارة فقط.
+            }
+
+            // Image ad
+            if ($image !== '') {
+                $alt = htmlspecialchars($title !== '' ? $title : 'Ad', ENT_QUOTES, 'UTF-8');
+                $imgTag = '<img src="' . htmlspecialchars($image, ENT_QUOTES, 'UTF-8') . '" alt="' . $alt . '" loading="lazy">';
+                if ($url !== '') {
+                    return '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" rel="noopener" target="_blank">' . $imgTag . '</a>';
+                }
+                return $imgTag;
+            }
+
+            return '';
         } catch (Throwable $e) {
-            error_log('[AdService] render error: ' . $e->getMessage());
+            error_log('[AdService] ' . $e->getMessage());
             return '';
         }
     }
 
-    private function pick(array $cols, array $candidates): ?string
+    /** @return array<int,string> */
+    private function getColumns(string $table): array
     {
-        foreach ($candidates as $c) {
-            if (in_array($c, $cols, true)) return $c;
+        try {
+            $st = $this->pdo->prepare('SHOW COLUMNS FROM `' . str_replace('`', '', $table) . '`');
+            $st->execute();
+            $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $cols = [];
+            foreach ($rows as $r) {
+                if (isset($r['Field'])) {
+                    $cols[] = (string)$r['Field'];
+                }
+            }
+            return $cols;
+        } catch (Throwable) {
+            return [];
         }
-        return null;
-    }
-
-    private function h(string $v): string
-    {
-        return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
     }
 
     private function tableExists(string $table): bool
     {
         try {
-            if (function_exists('gdy_db_table_exists')) {
-                return gdy_db_table_exists($this->pdo, $table);
-            }
-            $schemaExpr = function_exists('gdy_db_schema_expr') ? gdy_db_schema_expr($this->pdo) : 'DATABASE()';
-            $st = $this->pdo->prepare("SELECT 1 FROM information_schema.tables WHERE table_schema = {$schemaExpr} AND table_name = :t LIMIT 1");
+            $st = $this->pdo->prepare('SHOW TABLES LIKE :t');
             $st->execute([':t' => $table]);
             return (bool)$st->fetchColumn();
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             return false;
         }
     }
 
-    /** @return string[] */
-    private function getColumns(string $table): array
+    /** @param array<int,string> $cols */
+    private function pick(array $cols, array $candidates): ?string
     {
-        try {
-            $cols = function_exists('gdy_db_table_columns') ? gdy_db_table_columns($this->pdo, $table) : [];
-            return is_array($cols) ? $cols : [];
-        } catch (Throwable $e) {
-            return [];
+        $lookup = [];
+        foreach ($cols as $c) {
+            $lookup[strtolower($c)] = $c;
         }
+        foreach ($candidates as $cand) {
+            $k = strtolower((string)$cand);
+            if (isset($lookup[$k])) {
+                return $lookup[$k];
+            }
+        }
+        return null;
     }
 }

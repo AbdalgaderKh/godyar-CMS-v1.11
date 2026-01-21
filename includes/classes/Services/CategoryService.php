@@ -382,6 +382,16 @@ final class CategoryService
     }
 
     /**
+     * Alias for backward compatibility with legacy controllers.
+     *
+     * بعض الملفات القديمة كانت تستخدم listNews(). نُوحّدها على listPublishedNews().
+     */
+    public function listNews(int $categoryId, int $page = 1, int $perPage = 12, string $sort = 'latest', string $period = 'all'): array
+    {
+        return $this->listPublishedNews($categoryId, $page, $perPage, $sort, $period);
+    }
+
+    /**
      * List published news under a category.
      *
      * @return array{items: array<int,array<string,mixed>>, total: int, total_pages: int, page: int, per_page: int}
@@ -395,6 +405,7 @@ final class CategoryService
         if ($categoryId <= 0 || !$this->hasTable('news')) {
             return ['items' => [], 'total' => 0, 'total_pages' => 1, 'page' => $page, 'per_page' => $perPage];
         }
+
 
         $offset = ($page - 1) * $perPage;
 

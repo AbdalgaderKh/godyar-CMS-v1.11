@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     gdy_session_start();
-}
+$pdo = gdy_pdo_safe();
 
 function gdy_oauth_fail_facebook(string $msg, int $code = 400): void {
     http_response_code($code);
@@ -110,9 +110,6 @@ if (isset($u['picture']['data']['url'])) {
 
 if ($displayName === '') {
     $displayName = 'Facebook';
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
-if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
 if (function_exists('sanitize_display_name')) {    $displayName = sanitize_display_name($displayName, 2, 50);    if ($displayName === '') $displayName = 'Facebook';}
 }
 
@@ -283,9 +280,16 @@ if (!$userRow) {
 session_regenerate_id(true);
 if (function_exists('auth_set_user_session')) {
     auth_set_user_session([
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'id' => (int)($userRow['id'] ?? 0),
         'username' => (string)($userRow['username'] ?? $username),
         'display_name' => (string)($userRow['display_name'] ?? $displayName),
+    $_SESSION['user'] = [
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'email' => (string)($userRow['email'] ?? $email),
         'role' => (string)($userRow['role'] ?? 'user'),
         'status' => (string)($userRow['status'] ?? 'active'),
@@ -304,7 +308,6 @@ if (function_exists('auth_set_user_session')) {
     ];
     $_SESSION['is_member_logged'] = true;
 
-
 // Ensure legacy session keys exist (used by some templates/widgets)
 if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
     $_SESSION['user_id']    = (int)($_SESSION['user_id'] ?? $_SESSION['user']['id'] ?? 0);
@@ -312,7 +315,6 @@ if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
     $_SESSION['user_name']  = (string)($_SESSION['user_name'] ?? $_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? '');
     $_SESSION['user_role']  = (string)($_SESSION['user_role'] ?? $_SESSION['user']['role'] ?? 'user');
     $_SESSION['is_member_logged'] = true;
-}
 }
 
 $next = (string)($_SESSION['oauth_next'] ?? '/');

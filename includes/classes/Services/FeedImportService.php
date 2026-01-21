@@ -49,13 +49,15 @@ final class FeedImportService
                 $link    = self::normalizeLink($linkRaw);
 
                 $title = (string)($it['title'] ?? '');
-                $date  = (string)($it['date'] ?? '');
+                // Hash is based on normalized link; if missing, fall back to a stable fingerprint
+                $hashBase = ($link !== '') ? $link : ($title . '|' . $date . '|' . (string)($feed['id'] ?? '0'));
+                $hash = hash('sha256', $hashBase);
 
                 // Hash is based on normalized link; if missing, fall back to a stable fingerprint
                 $hashBase = ($link !== '') ? $link : ($title . '|' . $date . '|' . (string)($feed['id'] ?? '0'));
                 $hash = hash('sha256', $hashBase);
 
-                // 1) Already imported by hash?
+        curl_close($ch);
                 if ($this->hasImported($hash)) { $skipped++; continue; }
 
                 // 2) Already exists in DB (by link/title)? Mark as imported to prevent future duplicates.
@@ -174,6 +176,9 @@ final class FeedImportService
             return $id > 0 ? $id : 1;
         } catch (\Throwable $e) {
             return 1;
+    /**
+     * Insert news with schema-flexible columns (supports different versions).
+     */
         }
     }
 
@@ -263,7 +268,6 @@ final class FeedImportService
         if (mb_strlen($s,'UTF-8') > 450) $s = mb_substr($s,0,450,'UTF-8').'…';
         return $s;
     }
-
 
     /**
      * Normalize article URL by removing tracking parameters (utm_*, fbclid, gclid, ...).

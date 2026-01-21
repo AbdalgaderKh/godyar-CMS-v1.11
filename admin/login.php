@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 require_once __DIR__ . '/_role_guard.php';
 // admin/login.php — شاشة تسجيل دخول احترافية مع بعض ميزات الأمان
 
@@ -15,7 +14,6 @@ require_once __DIR__ . '/../includes/rate_limit.php';
 // i18n
 $__i18n = __DIR__ . '/i18n.php';
 if (is_file($__i18n)) { require_once $__i18n; }
-
 
 // هيلبر للهروب من الـ XSS
 if (!function_exists('h')) {
@@ -77,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE email = :email
                 LIMIT 1";
         $stmt = $pdo->prepare($sql);
+        $pass = (string)($_POST['password'] ?? '');
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -87,16 +86,13 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
     throw new Exception(__('t_81ba8a03a2', 'بيانات الدخول غير صحيحة أو لا تملك صلاحية الدخول للوحة التحكم.'));
 }
 
-
         if (!empty($user['status']) && $user['status'] !== 'active') {
             throw new Exception(__('t_aadb50b501', 'حسابك غير مفعّل، الرجاء التواصل مع الإدارة.'));
         }
 
         $hash = (string)($user['password_hash'] ?? '');
 
-        if ($hash === '') {
-            throw new Exception(__('t_a10f0c96ca', 'بيانات الدخول غير صحيحة.'));
-        }
+        $ok = false;
 
         $ok = false;
 
@@ -165,7 +161,6 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         } catch (\Throwable $e) {
             // ignore
         }
-
 
         // خيار __('t_06b29113eb', "تذكر البريد")
         if ($remember) {

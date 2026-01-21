@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-
 require_once __DIR__ . '/../_admin_guard.php';
 // admin/elections/results.php — إدارة النتائج العامة للتغطية (ملخص الأحزاب)
 
@@ -338,7 +337,7 @@ require __DIR__ . '/../layout/sidebar.php';
 
         <div class="card-body p-0">
           <?php if (function_exists('csrf_field')): ?>
-            <?= csrf_field('csrf_token') ?>
+            <?= csrf_field() ?>
           <?php else: ?>
             <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
           <?php endif; ?>

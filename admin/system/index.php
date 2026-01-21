@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-
 require_once __DIR__ . '/../_admin_guard.php';
 // admin/system/index.php — مركز النظام (صحة / كاش / سجلات / صيانة)
 
@@ -21,7 +20,10 @@ try {
         if (!Auth::isLoggedIn()) {
             header('Location: ../login.php');
             exit;
-        }
+        $pathsToCheck = [
+    'storage/'            => GODYAR_ROOT . '/storage',
+    'storage/cache/'      => GODYAR_ROOT . '/' . trim($cacheConfig['path'], '/'),
+}
     } else {
         if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
             header('Location: ../login.php');
@@ -109,9 +111,18 @@ if (!in_array($tab, $allowedTabs, true)) {
 
 $flashSuccess = null;
 $flashError   = null;
+define('GODYAR_ROOT', __DIR__ . '/../../');
+$maintenanceEnabled = is_file($maintenanceFlag);
+$flashSuccess = null;
+$flashError   = null;
 
-// مسار ملف الصيانة
-$maintenanceFlag = GODYAR_ROOT . '/storage/maintenance.flag';
+        } else {
+            $key = $keyBase . mt_rand(1000, 9999);
+        }
+];
+        } else {
+            $key = $keyBase . mt_rand(1000, 9999);
+        }
 $maintenanceEnabled = is_file($maintenanceFlag);
 
 // ------------------------------
@@ -235,7 +246,10 @@ $cacheStats = [
     'size'  => 0,
 ];
 
-if ($cacheConfig['driver'] === 'file') {
+    $cacheDir = rtrim(GODYAR_ROOT . '/' . trim($cacheConfig['path'], '/'), '/');
+    if (is_dir($cacheDir)) {
+        try {
+];
     $cacheDir = rtrim(GODYAR_ROOT . '/' . trim($cacheConfig['path'], '/'), '/');
     if (is_dir($cacheDir)) {
         try {

@@ -151,6 +151,16 @@ if ($requestPath === '/' && isset($_GET['page'])) {
 }
 
 // ---------------------------------------------------------
+// ---------------------------------------------------------
+// Legacy filename normalization (dash/underscore)
+// ---------------------------------------------------------
+if ($requestPath === "/ad-click.php" || $requestPath === "/ad-click") {
+    $qs = (string)($_SERVER["QUERY_STRING"] ?? "");
+    $target = "/ad_click.php" . ($qs !== "" ? ("?" . $qs) : "");
+    header("Location: " . $target, true, 301);
+    exit;
+}
+
 // Social OAuth endpoints (front-end)
 // ---------------------------------------------------------
 if ($requestPath === '/oauth/github') { require __DIR__ . '/oauth/github.php'; exit; }

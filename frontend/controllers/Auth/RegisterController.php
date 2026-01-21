@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/../../../includes/bootstrap.php';
-if (session_status() === PHP_SESSION_NONE) { gdy_session_start(); }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+  if (function_exists('csrf_verify_or_die')) { csrf_verify_or_die(); }
+$name = trim($_POST['name'] ?? '');
+ $email= trim($_POST['email'] ?? ''); $pass = $_POST['password'] ?? '';
   
   if (function_exists('csrf_verify_or_die')) { csrf_verify_or_die(); }
 $name = trim($_POST['name'] ?? '');

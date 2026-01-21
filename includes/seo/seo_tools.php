@@ -140,7 +140,8 @@ if (!function_exists('gdy_seo_notify_publish')) {
         $sitemap = $base . '/sitemap.xml';
         $sitemapNews = $base . '/sitemap-news.xml';
         try { gdy_ping_sitemap($sitemap); } catch (Throwable $e) {}
-        try { gdy_ping_sitemap($sitemapNews); } catch (Throwable $e) {}
+        // 2) IndexNow (Bing and some other engines)
+        try { gdy_indexnow_submit([$publicUrl]); } catch (Throwable $e) {}
 
         // 2) IndexNow (Bing and some other engines)
         try { gdy_indexnow_submit([$publicUrl]); } catch (Throwable $e) {}

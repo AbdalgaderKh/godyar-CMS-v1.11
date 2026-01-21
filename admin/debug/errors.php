@@ -8,7 +8,7 @@ if (!gdy_is_admin_user()) {
     http_response_code(403);
     echo "403 Forbidden";
     exit;
-}
+$storageLog = __DIR__ . '/../storage/admin_debug.log';
 
 // تشغيل الجلسة بدون كتم أخطاء (لتوافق أدوات التحليل)
 if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {

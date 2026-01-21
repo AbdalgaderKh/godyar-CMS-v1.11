@@ -1,78 +1,109 @@
 <?php
+require_once dirname(__DIR__) . '/_admin_boot.php';
 
-require_once __DIR__ . '/../_admin_guard.php';
-require_once __DIR__ . '/../layout/header.php';
-require_once __DIR__ . '/../layout/sidebar.php';
+$currentPage  = 'roles';
+$pageTitle    = __('roles_title', 'الأدوار والصلاحيات');
+$pageSubtitle = __('roles_subtitle', 'إدارة الأدوار والصلاحيات المرتبطة بلوحة التحكم.');
 
-\Godyar\Auth::requirePermission('manage_roles');
+$adminBase = (function_exists('base_url') ? rtrim(base_url(), '/') : '') . '/admin';
+$breadcrumbs = [
+    __('home', 'الرئيسية') => $adminBase . '/index.php',
+    __('roles', 'الأدوار')  => null,
+];
 
-$pdo = \Godyar\DB::pdo();
+require_once __DIR__ . '/../layout/app_start.php';
 
-function h($v) {
-    return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+// Permission gate (fallback if Auth permission methods are unavailable)
+try {
+    if (class_exists('Godyar\\Auth') && method_exists('Godyar\\Auth', 'requirePermission')) {
+        \Godyar\Auth::requirePermission('manage_roles');
+    } else {
+        $role = (string)($_SESSION['user']['role'] ?? $_SESSION['admin']['role'] ?? '');
+        if (!in_array($role, ['admin', 'superadmin'], true)) {
+            http_response_code(403);
+            echo '<div class="alert alert-danger">' . h(__('forbidden', 'غير مصرح')) . '</div>';
+            require_once __DIR__ . '/../layout/app_end.php';
+            exit;
+        }
+    }
+} catch (Throwable $e) {
+    http_response_code(403);
+    echo '<div class="alert alert-danger">' . h(__('forbidden', 'غير مصرح')) . '</div>';
+    require_once __DIR__ . '/../layout/app_end.php';
+    exit;
 }
+
+$pdo = (isset($pdo) && $pdo instanceof PDO) ? $pdo : (function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null);
 
 $rolesError = null;
 $roles = [];
-try {
-    $stmt = $pdo->query("SELECT id, name, label, description, is_system, created_at FROM roles ORDER BY is_system DESC, id ASC");
-    $roles = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
-} catch (Throwable $e) {
-    $rolesError = __('t_b2f64f4c64', 'تعذر تحميل الأدوار (قد يكون جدول roles غير موجود أو لا تملك صلاحية).');
-    error_log('[Roles] ' . $e->getMessage());
+
+if (!$pdo instanceof PDO) {
+    $rolesError = __('db_error', 'تعذّر الاتصال بقاعدة البيانات.');
+} else {
+    try {
+        $stmt = $pdo->query("SELECT id, name, label, description, is_system, created_at FROM roles ORDER BY is_system DESC, id ASC");
+        $roles = $stmt ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
+    } catch (Throwable $e) {
+        try {
+            $stmt = $pdo->query("SELECT id, name, label, is_system, created_at FROM roles ORDER BY is_system DESC, id ASC");
+            $roles = $stmt ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
+            foreach ($roles as &$r) { $r['description'] = ''; }
+        } catch (Throwable $e2) {
+            $rolesError = __('roles_load_error', 'تعذر تحميل الأدوار.');
+            error_log('[Roles] ' . $e2->getMessage());
+        }
+    }
 }
 ?>
-<div class="admin-content">
-  <div class="admin-header">
-    <h1><?= h(__('t_9ea11f821b', 'الأدوار والصلاحيات')) ?></h1>
-    <p class="text-muted"><?= h(__('t_f22da810e7', 'إدارة الأدوار والصلاحيات المرتبطة بلوحة التحكم.')) ?></p>
-  </div>
-  <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <h2 class="card-title mb-0"><?= h(__('t_ca35b6077d', 'قائمة الأدوار')) ?></h2>
-    </div>
-    <div class="card-body">
-      <?php if ($rolesError): ?>
-        <div class="alert alert-warning mb-3"><?= h($rolesError) ?></div>
-      <?php endif; ?>
+<div class="card">
+  <div class="card-body">
+    <?php if ($rolesError): ?>
+      <div class="alert alert-warning mb-3"><?= h($rolesError) ?></div>
+    <?php endif; ?>
 
-      <?php if (empty($roles)): ?>
-        <p><?= h(__('t_7df9308347', 'لا توجد أدوار مسجلة.')) ?></p>
-      <?php else: ?>
-        <div class="table-responsive">
-          <table class="table table-striped table-hover text-center">
-            <thead>
+    <?php if (empty($roles)): ?>
+      <p class="mb-0"><?= h(__('no_roles', 'لا توجد أدوار مسجلة.')) ?></p>
+    <?php else: ?>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+          <thead>
+            <tr>
+              <th style="width:70px;">#</th>
+              <th><?= h(__('tech_name', 'الاسم التقني')) ?></th>
+              <th><?= h(__('display_name', 'اسم العرض')) ?></th>
+              <th><?= h(__('desc', 'وصف')) ?></th>
+              <th style="width:110px;" class="text-center"><?= h(__('system', 'نظامي')) ?></th>
+              <th style="width:170px;" class="text-nowrap"><?= h(__('created_at', 'تاريخ الإنشاء')) ?></th>
+              <th style="width:120px;" class="text-center"><?= h(__('actions', 'إجراءات')) ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($roles as $roleRow): ?>
               <tr>
-                <th>#</th>
-                <th><?= h(__('t_cc4eb2df91', 'الاسم التقني')) ?></th>
-                <th><?= h(__('t_f1c779790b', 'اسم العرض')) ?></th>
-                <th><?= h(__('t_ac07b993ab', 'وصف')) ?></th>
-                <th><?= h(__('t_540dd8c862', 'نظامي')) ?></th>
-                <th><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></th>
-                <th><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <td><?= (int)($roleRow['id'] ?? 0) ?></td>
+                <td class="text-nowrap"><code><?= h((string)($roleRow['name'] ?? '')) ?></code></td>
+                <td><?= h((string)($roleRow['label'] ?? '')) ?></td>
+                <td><?= h((string)($roleRow['description'] ?? '')) ?></td>
+                <td class="text-center">
+                  <?php if ((int)($roleRow['is_system'] ?? 0) === 1): ?>
+                    <span class="badge text-bg-secondary"><?= h(__('yes', 'نعم')) ?></span>
+                  <?php else: ?>
+                    <span class="badge text-bg-light"><?= h(__('no', 'لا')) ?></span>
+                  <?php endif; ?>
+                </td>
+                <td class="text-nowrap small text-muted"><?= h((string)($roleRow['created_at'] ?? '')) ?></td>
+                <td class="text-center">
+                  <a class="btn btn-sm btn-outline-secondary" href="edit.php?id=<?= (int)($roleRow['id'] ?? 0) ?>">
+                    <?= h(__('edit', 'تعديل')) ?>
+                  </a>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($roles as $role): ?>
-                <tr>
-                  <td><?= (int)$role['id'] ?></td>
-                  <td><code><?= h($role['name']) ?></code></td>
-                  <td><?= h($role['label']) ?></td>
-                  <td><?= nl2br(h($role['description'] ?? '')) ?></td>
-                  <td><?= $role['is_system'] ? __('t_e1dadf4c7c', 'نعم') : __('t_b27ea934ef', 'لا') ?></td>
-                  <td><?= h($role['created_at']) ?></td>
-                  <td>
-                    <a href="edit.php?id=<?= (int)$role['id'] ?>" class="btn btn-sm btn-outline-primary">
-                      <?= h(__('t_a1a4fdcec2', 'تعديل الصلاحيات')) ?>
-                    </a>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
-        </div>
-      <?php endif; ?>
-    </div>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php endif; ?>
   </div>
 </div>
-<?php require_once __DIR__ . '/../layout/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/app_end.php'; ?>

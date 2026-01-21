@@ -14,7 +14,6 @@ if (!defined('APP_BOOT')) {
     }
     if (!defined('BASE_PATH')) define('BASE_PATH', $__root);
 }
-<?php
 
 class ThemeManager {
     private $db;
@@ -50,6 +49,11 @@ class ThemeManager {
         $css = $this->generateCSS($colors, $themeData);
         
         $sql = "INSERT INTO {$this->table} (name, description, styles, colors, created_by, created_at) 
+        $params = [
+            Security::cleanInput($themeData['name']),
+            Security::cleanInput($themeData['description'] ?? ''),
+            $css,
+            json_encode($colors),
                 VALUES (?, ?, ?, ?, ?, NOW())";
         
         $params = [
@@ -185,4 +189,3 @@ class ThemeManager {
         return $this->currentTheme;
     }
 }
-?>

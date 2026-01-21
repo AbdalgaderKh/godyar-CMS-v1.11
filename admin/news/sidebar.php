@@ -2,7 +2,6 @@
 // admin/layout/sidebar.php
 declare(strict_types=1);
 
-
 require_once __DIR__ . '/../_admin_guard.php';
 if (!function_exists('h')) {
     function h($v): string
@@ -37,8 +36,6 @@ $userName   = $_SESSION['user']['name']   ?? ($_SESSION['user']['email'] ?? __('
 $userRole   = $_SESSION['user']['role']   ?? 'admin';
 $userAvatar = $_SESSION['user']['avatar'] ?? null;
 
-
-
 // تحميل Auth عند الحاجة
 if (!class_exists(\Godyar\Auth::class)) {
         $authFile = __DIR__ . '/../../includes/auth.php';
@@ -47,8 +44,14 @@ if (!class_exists(\Godyar\Auth::class)) {
     }
 }
 
-if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
+// تحميل Auth عند الحاجة
+if (!class_exists(\Godyar\Auth::class)) {
+    if (file_exists(__DIR__ . '/../../includes/auth.php')) {
+        require_once __DIR__ . '/../../includes/auth.php';
+    }
+}
     // Sidebar مبسط للكاتب (إخفاء باقي الخصائص)
+    if (($userRole ?? '') === 'writer') :
     ?>
     <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
       <div class="admin-sidebar__card">
@@ -105,9 +108,8 @@ if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
     </aside>
     <?php
     return;
-}
-
-?>
+    endif;
+    ?>
 <!-- لاحظ: أزلت كلاس col-md-3 col-lg-2 -->
 <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
   <div class="admin-sidebar__card">
@@ -332,7 +334,6 @@ if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
     </a>
   </div>
 </li>
-
 
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card <?= $currentPage === 'pages' ? 'is-active' : '' ?>"
@@ -770,7 +771,6 @@ if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
   --gdy-sidebar-success: #22c55e;
   --gdy-sidebar-danger: #ef4444;
 }
-
 
 .admin-sidebar__section--quick .admin-sidebar__link-card {
   background: radial-gradient(circle at top left, rgba(45,212,191,.12), rgba(15,23,42,.98));

@@ -3,9 +3,9 @@
 /**
  * Traditional Chinese PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author liqwei <liqwei@liqwei.com>
+ * @author liqwei <admin@example.com>
  * @author Peter Dave Hello <@PeterDaveHello/>
- * @author Jason Chiang <xcojad@gmail.com>
+ * @author Jason Chiang <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP 錯誤：登入失敗。';

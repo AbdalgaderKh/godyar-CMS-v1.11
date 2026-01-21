@@ -3,7 +3,7 @@
 /**
  * Malaysian PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Nawawi Jamili <nawawi@rutweb.com>
+ * @author Nawawi Jamili <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Ralat SMTP: Tidak dapat pengesahan.';

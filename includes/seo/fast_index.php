@@ -78,6 +78,11 @@ if (!function_exists('gdy_indexnow_submit')) {
                 'content' => $data,
                 'timeout' => 6,
             ]
+        try {
+            $resp = gdy_file_get_contents('https://api.indexnow.org/indexnow', false, $ctx);
+            // if no error, treat as ok
+            return $resp !== false;
+        } catch (Throwable $e) {
         ]);
 
         try {

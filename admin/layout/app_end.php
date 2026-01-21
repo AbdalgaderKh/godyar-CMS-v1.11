@@ -1,10 +1,12 @@
 <?php
 declare(strict_types=1);
 
-// Shared end wrapper for admin pages.
+// admin/layout/app_end.php
+// Closes tags opened by layout/app_start.php.
 ?>
-
+      </div>
+    </main>
   </div>
-</main>
+</div>
 
 <?php require_once __DIR__ . '/footer.php'; ?>

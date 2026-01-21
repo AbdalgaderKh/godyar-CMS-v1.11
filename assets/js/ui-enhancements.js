@@ -1,6 +1,7 @@
+  const docEl = document.documentElement;
+  const lang = (docEl.getAttribute('lang') || 'ar').toLowerCase();
 /* UI Enhancements (v1) - Theme + BackToTop + Reading progress + Reveal */
 (function(){
-  'use strict';
 
   const docEl = document.documentElement;
   const lang = (docEl.getAttribute('lang') || 'ar').toLowerCase();
@@ -31,8 +32,10 @@
 
   function setTheme(theme){
     docEl.setAttribute('data-theme', theme);
-    try{ localStorage.setItem('gdy_theme', theme); }catch(e){}
-    const btn = document.getElementById('gdyThemeToggle');
+    try{ localStorage.setItem('gdy_theme', theme); }catch(e){ /* empty */ }
+/* UI Enhancements (v1) - Theme + BackToTop + Reading progress + Reveal */
+(function(){
+  'use strict';
     if(btn){
       const isDark = theme === 'dark';
       btn.setAttribute('aria-pressed', String(isDark));
@@ -50,10 +53,24 @@
   function initTheme(){
     let theme = 'light';
     try{
+      const useEl = btn.querySelector('use');
+      if(useEl){
+        const id = isDark ? 'sun' : 'moon';
+        const href = '/assets/icons/gdy-icons.svg#' + id;
+        useEl.setAttribute('href', href);
+        useEl.setAttribute('xlink:href', href);
+      }
+      const useEl = btn.querySelector('use');
+      if(useEl){
+        const id = isDark ? 'sun' : 'moon';
+        const href = /assets/icons/gdy-icons.svg#${id};
+        useEl.setAttribute('href', href);
+        useEl.setAttribute('xlink:href', href);
+      }
       const saved = localStorage.getItem('gdy_theme');
       if(saved === 'dark' || saved === 'light') theme = saved;
       /* prefers-color-scheme disabled: keep default light unless user chose */
-    }catch(e){}
+    }catch(e){ /* empty */ }
     setTheme(theme);
 
     const btn = document.getElementById('gdyThemeToggle');

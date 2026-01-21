@@ -17,7 +17,8 @@ function og_hex_to_rgb(string $hex, array $fallback): array {
   $hex = trim($hex);
   if ($hex === '') return $fallback;
   if ($hex[0] === '#') $hex = substr($hex, 1);
-  if (!preg_match('/^[0-9a-fA-F]{6}$/', $hex)) return $fallback;
+  if (!preg_match('/^[0-9a-fA-F]{6function og_try_render_imagick(string $title, string $siteName, string $tagline, array $og, string $arabicMode): bool {
+  if (!og_imagick_available()) return false;$/', $hex)) return $fallback;
   return [hexdec(substr($hex,0,2)), hexdec(substr($hex,2,2)), hexdec(substr($hex,4,2))];
 }
 
@@ -120,26 +121,31 @@ function og_ar_shape(string $s): string {
   $chars = og_mb_chars($s);
   if (empty($chars)) return $s;
 
+  // Performance: avoid calling count() repeatedly in loop conditions.
+  $charsCount = count($chars);
+
   $forms = og_ar_forms_map();
   $out = [];
 
-  for ($i=0; $i<count($chars); $i++) {
+  for ($i=0; $i<$charsCount; $i++) {
     $ch = $chars[$i];
 
-    // Preserve whitespace and punctuation
+  $forms = og_ar_forms_map();
+  $out = [];
+  $len = count($chars);
+  for ($i=0; $i<$len; $i++) {
+    $ch = $chars[$i];
     if (!og_contains_arabic($ch) && !preg_match('/[A-Za-z0-9]/u', $ch)) {
       $out[] = $ch;
       continue;
-    }
+    // Accent bar
 
     // Lam-Alef ligature
     if ($ch === 'ل' && isset($chars[$i+1])) {
       $next = $chars[$i+1];
       $lig = og_ar_lam_alef_ligature($next);
       if ($lig[0] !== '') {
-        // Determine if it connects to previous
-        $prev = $out ? end($out) : '';
-        // We need prev original joining; approximated by checking original previous char
+        // Determine if it connects to previous (approximate by checking original previous char)
         $prevOrig = ($i>0) ? $chars[$i-1] : '';
         $prevType = og_ar_join_type($prevOrig);
         $connectPrev = ($prevType === 2); // prev can connect to left
@@ -156,7 +162,7 @@ function og_ar_shape(string $s): string {
     }
 
     $prev = ($i>0) ? $chars[$i-1] : '';
-    $next = ($i+1<count($chars)) ? $chars[$i+1] : '';
+    $next = ($i+1<$charsCount) ? $chars[$i+1] : '';
 
     $prevType = og_ar_join_type($prev);
     $nextType = og_ar_join_type($next);
@@ -277,6 +283,9 @@ function og_output_static(string $defaultPath): void {
   header('Content-Type: image/png');
   header('Cache-Control: public, max-age=86400');
   gdy_readfile($defaultPath);
+function og_render_gd(string $title, string $siteName, string $tagline, array $og, string $arabicMode): void {
+  $containsArabic = og_contains_arabic($title);
+  $W = 1200; $H = 630;
   exit;
 }
 
@@ -389,7 +398,19 @@ function og_try_render_imagick(string $title, string $siteName, string $tagline,
     $img = new Imagick();
     $img->newImage($W, $H, new ImagickPixel($bg));
     $img->setImageFormat('png');
-    $img->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
+    // Optional template
+    $template = (string)($og['template_image'] ?? '');
+    if (og_is_local_path($template)) {
+      $tp = og_resolve_local($template);
+      $tpl = og_imagick_safe_read_local($tp);
+      if ($tpl) {
+        $tpl->setImageColorspace(Imagick::COLORSPACE_SRGB);
+        $tpl->cropThumbnailImage($W, $H);
+        $img->compositeImage($tpl, Imagick::COMPOSITE_OVER, 0, 0);
+        $tpl->clear();
+        $tpl->destroy();
+      }
+    }
 
     // Optional template
     $template = (string)($og['template_image'] ?? '');

@@ -3,7 +3,7 @@
 /**
  * Malagasy PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Hackinet <piyushjha8164@gmail.com>
+ * @author Hackinet <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Hadisoana SMTP: Tsy nahomby ny fanamarinana.';

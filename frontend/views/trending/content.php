@@ -1,5 +1,17 @@
+        return '/' . ltrim($src, '/');
+    }
+}
 <?php
 // /godyar/frontend/views/trending/content.php
+/**
+ * @var string $baseUrl
+ * @var callable $newsUrl
+ * @var array $trendingNews
+ */
+$baseUrl = $baseUrl ?? '';
+$newsUrl = $newsUrl ?? function(array $row): string {
+    return $baseUrl;
+};
 
 // Normalize image paths so they work on nested routes.
 if (!function_exists('gdy_img_src')) {
@@ -12,6 +24,16 @@ if (!function_exists('gdy_img_src')) {
         return '/' . ltrim($src, '/');
     }
 }
+<section aria-label="الأخبار الأكثر تداولاً">
+        return '/' . ltrim($src, '/');
+    }
+}
+?>
+<?php
+/** @var string $baseUrl */
+/** @var callable $newsUrl */
+$baseUrl = $baseUrl ?? '';
+$newsUrl = $newsUrl ?? fn($row): string => '';
 ?>
 
 <section aria-label="الأخبار الأكثر تداولاً">

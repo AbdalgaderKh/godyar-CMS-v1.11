@@ -7,7 +7,7 @@
   function clearChildren(el){
     if(!el) return;
     while(el.firstChild){ el.removeChild(el.firstChild); }
-  }
+  async function initQuestions(){
 
   function extractReadableText(){
     // Best-effort: extract readable text from the current news/article page.
@@ -16,7 +16,7 @@
                  document.querySelector('.post-body') ||
                  document.querySelector('main') ||
                  document.body;
-    return (root && root.textContent) ? String(root.textContent) : '';
+    return root?.textContent ? String(root.textContent) : '';
   }
 
   function setPlayButton(btn, state){
@@ -26,7 +26,6 @@
     btn.setAttribute('aria-pressed', s === 'pause' ? 'true' : 'false');
     btn.setAttribute('aria-label', s === 'pause' ? 'Pause' : 'Play');
   }
-
 
   const BASE = (window.GDY_BASE || '');
   function api(path){
@@ -45,6 +44,13 @@
         err.responseText = txt;
         throw err;
       }
+                 document.querySelector('.post-body') ||
+                 document.querySelector('main') ||
+                 document.body;
+    return (root && root.textContent) ? String(root.textContent) : '';
+  }
+    initPoll();
+    initQuestions();
     });
   }
 
@@ -82,6 +88,11 @@
       disagree: { label: 'مختلف',  emoji: '🤔' },
       angry:    { label: 'غاضب',   emoji: '😡' },
       funny:    { label: 'مضحك',   emoji: '😂' }
+    function render(state){
+      const counts = (state && state.counts) || {};
+      const mine = new Set((state && state.mine) || []);
+      clearChildren(wrap);
+      const row = document.createElement('div');
     };
 
     function render(state){
@@ -89,6 +100,7 @@
       const mine = new Set((state && state.mine) || []);
       clearChildren(wrap);
       const row = document.createElement('div');
+      row.className = 'gdy-react-row';
       row.className = 'gdy-react-row';
       Object.keys(reactions).forEach(key => {
         const btn = document.createElement('button');
@@ -111,7 +123,7 @@
           btn.disabled = true;
           try{
             const res = await postForm(api('/api/news/react'), {news_id: newsId, reaction: key});
-            if(res && res.ok){
+            if(res?.ok){
               render({counts: res.counts, mine: res.mine});
             }
           }catch(e){}
@@ -124,21 +136,26 @@
 
     try{
       const res = await getJson(api(`/api/news/reactions?news_id=${encodeURIComponent(newsId)}`));
-      if(res && res.ok) render(res);
+      if(res?.ok) render(res);
     }catch(e){}
   }
 
-  async function initPoll(){
+          // Use the shared API helper and ensure the correct news id is sent.
+          postJson(api('/api/news-poll/vote'), { news_id: newsId, option: opt })
+            .then(renderPoll)
+            .catch(()=>{});
     const el = qs('#gdy-poll');
     if(!el) return;
     const newsId = el.getAttribute('data-news-id');
     if(!newsId) return;
+      if(!poll){
+      clearChildren(el);
     function renderPoll(payload){
       clearChildren(el);
 
-      const poll = payload && payload.poll ? payload.poll : null;
-      const counts = payload && payload.counts ? payload.counts : {};
-      const votedFor = payload ? payload.votedFor : null;
+      const poll = payload?.poll || null;
+      const counts = payload?.counts || {};
+      const votedFor = payload?.votedFor || null;
 
       if(!poll){
         el.style.display='none';
@@ -159,13 +176,12 @@
 
       const options = Array.isArray(poll.options) ? poll.options : [];
       options.forEach((opt) => {
-        const oid = opt && (opt.id ?? opt.value ?? opt.option_id);
-        const label = opt && (opt.label ?? opt.text ?? opt.title ?? '');
-        const pct = opt && (opt.pct ?? opt.percent ?? 0);
-        const votes = opt && (opt.votes ?? counts[oid] ?? 0);
+        const oid = opt?.id ?? opt?.value ?? opt?.option_id;
+        const label = opt?.label ?? opt?.text ?? opt?.title ?? '';
+        const pct = opt?.pct ?? opt?.percent ?? 0;
+        const votes = opt?.votes ?? counts[oid] ?? 0;
 
-        const btn = document.createElement('button');
-        btn.type = 'button';
+      });
         btn.className = 'gdy-poll-opt';
         btn.dataset.option = String(oid ?? '');
         if(votedFor && String(votedFor) === String(oid)) btn.classList.add('is-voted');
@@ -180,48 +196,51 @@
         bar.className = 'bar';
         btn.appendChild(bar);
 
+        const meta = document.createElement('span');
+
         const fill = document.createElement('span');
         fill.className = 'fill';
-        fill.style.width = Math.max(0, Math.min(100, Number(pct)||0)) + '%';
+        fill.style.width = `${Math.max(0, Math.min(100, Number(pct)||0))}%`;
         bar.appendChild(fill);
-
-        const meta = document.createElement('span');
         meta.className = 'meta';
         meta.textContent = (votedFor ? (String((Number(pct)||0).toFixed(0)) + '% · ') : '') + String(votes);
         btn.appendChild(meta);
 
-        optsWrap.appendChild(btn);
+        const meta = document.createElement('span');
+        meta.className = 'meta';
+        meta.textContent = `${votedFor ? `${String((Number(pct)||0).toFixed(0))}% · ` : ''}${String(votes)}`;
+        btn.appendChild(meta);
       });
 
       wrap.appendChild(optsWrap);
 
-      if(!votedFor){
-        const hint = document.createElement('div');
-        hint.className = 'gdy-poll-hint';
+    try{
         hint.textContent = 'اختر خيارًا للتصويت';
         wrap.appendChild(hint);
       }
-
-      el.appendChild(wrap);
 
       // bind vote handlers
       qsa('.gdy-poll-opt', el).forEach(function(btn){
         btn.addEventListener('click', function(){
           const opt = btn.dataset.option || '';
           // Use the shared API helper and ensure the correct news id is sent.
+      el.appendChild(wrap);
+
+      // bind vote handlers
+      qsa('.gdy-poll-opt', el).forEach(btn => {
+        btn.addEventListener('click', () => {
+          const opt = btn.dataset.option || '';
+          // Use the shared API helper and ensure the correct news id is sent.
           postJson(api('/api/news-poll/vote'), { news_id: newsId, option: opt })
             .then(renderPoll)
-            .catch(()=>{});
+            .catch(() => { /* intentionally ignore errors */ });
         });
       });
     }
 
     try{
 
-      const res = await getJson(api(`/api/news/poll?news_id=${encodeURIComponent(newsId)}`));
-      if(res && res.ok) renderPoll(res);
-    }catch(e){}
-  }
+  async function initQuestions(){
 
   async function initQuestions(){
     const box = qs('#gdy-qa');
@@ -305,7 +324,7 @@
         }
         try{
           const res = await postForm(api('/api/news/ask'), {news_id: newsId, name, email, question});
-          if(res && res.ok){
+          if(res?.ok){
             form.reset();
             if(msg) msg.textContent = res.message || 'تم الإرسال.';
             await load();
@@ -317,13 +336,10 @@
             const status = (e && e.status) ? (' (HTTP ' + e.status + ')') : '';
             msg.textContent = 'تعذر الإرسال.' + status;
           }
-        }
-      });
-    }
+  };
 
     await load();
   }
-
 
   function initTts(){
   const playBtn = document.getElementById('gdy-tts-play');
@@ -354,10 +370,10 @@
   };
 
   const normalizeText = (t) => {
-    t = (t||'').replace(/\u00A0/g,' ').replace(/\s+/g,' ').trim();
+    t = (t||'').replace(/\u00A0/gu,' ').replace(/\s+/gu,' ').trim();
     t = mergeSpelledArabic(t);
     // إزالة الرموز المتكررة التي تربك TTS
-    t = t.replace(/[•·•]+/g,' ').replace(/\s+/g,' ').trim();
+    t = t.replace(/[•·•]+/gu,' ').replace(/\s+/gu,' ').trim();
     return t;
   };
 
@@ -385,7 +401,7 @@
     };
 
     paras.forEach(p=>{
-      const parts = p.split(/(?<=[\.\!\؟\?])\s+/);
+      const parts = p.split(/(?<=[.!؟?])\s+/u);
       parts.forEach(pushChunk);
     });
 
@@ -393,7 +409,7 @@
   };
 
   const getLang = () => {
-    const v = (langEl && langEl.value) ? langEl.value : (document.documentElement.lang || 'ar');
+    const v = langEl?.value ? langEl.value : (document.documentElement.lang || 'ar');
     // تحويل قيم بسيطة إلى قيم مناسبة للـ Speech API
     if(v === 'ar') return 'ar-SA';
     if(v === 'en') return 'en-US';
@@ -444,8 +460,10 @@
     isSpeaking = false;
     playBtn.classList.remove('is-playing');
     setPlayButton(playBtn, 'play');
-    updateStatus();
-  };
+  playBtn.addEventListener('click', () => {
+    // Toggle: Play / Pause / Resume
+    if(isSpeaking && !isPaused){
+      isPaused = true;
 
   playBtn.addEventListener('click', function(){
     // Toggle: Play / Pause / Resume
@@ -464,7 +482,7 @@
 
     const raw = normalizeText(extractReadableText());
     if(!raw){
-      alert('لا يوجد نص صالح للقراءة.');
+      customAlert('لا يوجد نص صالح للقراءة.');
       return;
     }
 
@@ -480,6 +498,11 @@
     speakNext();
   });
 
+  if(rateEl){
+    rateEl.addEventListener('change', function(){
+      // لا نغير أثناء التشغيل حتى لا تتقطع القراءة بشكل مزعج
+    });
+  }
   stopBtn.addEventListener('click', stopAll);
 
   if(rateEl){
@@ -489,10 +512,8 @@
   }
 
   // إيقاف TTS عند تغيير الصفحة/المسار
-  window.addEventListener('beforeunload', stopAll);
-}
-
-
+  document.addEventListener('DOMContentLoaded', function(){
+    initReactions();
 
   function escapeHtml(s){
     return String(s||'').replace(/[&<>"']/g, function(c){
@@ -501,9 +522,20 @@
   }
 
   document.addEventListener('DOMContentLoaded', function(){
-    initReactions();
-    initPoll();
-    initQuestions();
+      Object.keys(reactions).forEach(key => {
+        const btn = document.createElement('button');
+        btn.type='button';
+        btn.className = 'gdy-react-btn' + (mine.has(key) ? ' active' : '');
+        btn.setAttribute('data-reaction', key);
+        btn.title = reactions[key].label;
+        btn.setAttribute('aria-label', reactions[key].label);
+      Object.keys(reactions).forEach(key => {
+        const btn = document.createElement('button');
+        btn.type='button';
+        btn.className = gdy-react-btn${mine.has(key) ? ' active' : ''};
+        btn.setAttribute('data-reaction', key);
+        btn.title = reactions[key].label;
+        btn.setAttribute('aria-label', reactions[key].label);
     initTts();
   });
 })();

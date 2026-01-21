@@ -75,7 +75,6 @@ $makePageUrl = function (int $p) use ($categoryUrl, $__queryBase): string {
     return !empty($q) ? ($categoryUrl . '?' . http_build_query($q)) : $categoryUrl;
 };
 
-
 // بيانات الترقيم / العناصر
 $items        = $items        ?? [];
 $totalItems   = $totalItems   ?? count($items);
@@ -97,7 +96,6 @@ if (!empty($newsItems ?? [])) {
         $pages      = (int)ceil($totalItems / $itemsPerPage);
     }
 }
-
 
 // SEO للصفحة (Category)
 $canonicalUrl = $categoryUrl;
@@ -121,7 +119,7 @@ $pageSeo = [
 ];
 $pageSeo['rss'] = rtrim((string)base_url(), '/') . '/rss/category/' . rawurlencode((string)($category['slug'] ?? '')) . '.xml';
 
-if (is_file($header)) {
+if (!defined('GDY_TPL_WRAPPED') && is_file($header)) {
     require $header;
 }
 ?>
@@ -410,7 +408,6 @@ html[dir="rtl"] .gdy-sidebar-column {
     gap: .3rem;
     box-shadow: 0 4px 12px rgba(var(--gdy-primary-rgb), 0.28);
 }
-
 
 /* شارة للأعضاء فقط */
 .news-lock{
@@ -1004,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php
-if (is_file($footer)) {
+if (!defined('GDY_TPL_WRAPPED') && is_file($footer)) {
     require $footer;
 }
 ?>

@@ -17,8 +17,10 @@ self.addEventListener('install', (event) => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(CORE_ASSETS);
   })());
-});
-
+/* Push Notifications (payload should include title/body/icon/url) */
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
 
 self.addEventListener('message', (event) => {
   if (!event.data) return;
@@ -48,7 +50,7 @@ self.addEventListener('fetch', (event) => {
       try {
         const fresh = await fetch(req);
         const cache = await caches.open(CACHE_NAME);
-        cache.put(req, fresh.clone()).catch(() => {});
+        cache.put(req, fresh.clone()).catch(() => { /* intentionally ignore errors */ });
         return fresh;
       } catch (e) {
         const cached = await caches.match(req);
@@ -64,7 +66,7 @@ self.addEventListener('fetch', (event) => {
       const cache = await caches.open(CACHE_NAME);
       const cached = await cache.match(req);
       const fetchPromise = fetch(req).then((resp) => {
-        cache.put(req, resp.clone()).catch(()=>{});
+        cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
         return resp;
       }).catch(() => null);
       return cached || (await fetchPromise) || new Response(JSON.stringify({ok:false, offline:true}), {headers:{'Content-Type':'application/json'}});
@@ -88,7 +90,7 @@ self.addEventListener('fetch', (event) => {
       if (cached) return cached;
       try {
         const resp = await fetch(req);
-        if (resp && resp.ok) cache.put(req, resp.clone()).catch(() => {});
+        if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
         return resp;
       } catch (e) {
         return cached || new Response('', { status: 504 });
@@ -98,7 +100,7 @@ self.addEventListener('fetch', (event) => {
     // CSS/JS: stale-while-revalidate
     if (isCSSJS) {
       const fetchPromise = fetch(req).then((resp) => {
-        if (resp && resp.ok) cache.put(req, resp.clone()).catch(() => {});
+        if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
         return resp;
       }).catch(() => null);
 
@@ -108,7 +110,7 @@ self.addEventListener('fetch', (event) => {
     // Everything else (GET): network-first, fallback cache/offline for documents
     try {
       const resp = await fetch(req);
-      if (resp && resp.ok) cache.put(req, resp.clone()).catch(() => {});
+      if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
       return resp;
     } catch (e) {
       if (cached) return cached;
@@ -121,7 +123,6 @@ self.addEventListener('fetch', (event) => {
     }
   })());
 });
-
 
 /* Push Notifications (payload should include title/body/icon/url) */
 self.addEventListener('push', function (event) {
@@ -138,17 +139,21 @@ self.addEventListener('push', function (event) {
     }
   };
 
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  const urlToOpen = event.notification?.data?.url || '/';
+  event.waitUntil((async () => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener('notificationclick', function (event) {
-  event.notification.close();
-  const urlToOpen = (event.notification && event.notification.data && event.notification.data.url) || '/';
-  event.waitUntil((async () => {
-    const allClients = await clients.matchAll({ includeUncontrolled: true, type: 'window' });
-    for (const client of allClients) {
+});
+  })());
+});
       if (client.url === urlToOpen && 'focus' in client) return client.focus();
     }
     if (clients.openWindow) return clients.openWindow(urlToOpen);
+    return null;
+  })());
+});
   })());
 });

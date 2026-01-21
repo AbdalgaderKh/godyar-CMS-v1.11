@@ -1,5 +1,8 @@
+      // eslint-disable-next-line no-console
+      console.warn('[Godyar] Images missing alt attribute:', missing.length);
+    }
+  } catch (e) {}
 (function () {
-  "use strict";
 
   // 1) Add loading="lazy" + decoding="async" to images missing it (safe default)
   const imgs = Array.from(document.images || []);

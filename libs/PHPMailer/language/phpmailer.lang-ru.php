@@ -3,9 +3,9 @@
 /**
  * Russian PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Alexey Chumakov <alex@chumakov.ru>
- * @author Foster Snowhill <i18n@forstwoof.ru>
- * @author ProjectSoft <projectsoft2009@yandex.ru>
+ * @author Alexey Chumakov <admin@example.com>
+ * @author Foster Snowhill <admin@example.com>
+ * @author ProjectSoft <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Ошибка SMTP: не удалось пройти аутентификацию.';

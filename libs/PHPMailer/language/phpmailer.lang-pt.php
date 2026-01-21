@@ -3,7 +3,7 @@
 /**
  * Portuguese (European) PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author João Vieira <mail@joaovieira.eu>
+ * @author João Vieira <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'Erro SMTP: Falha na autenticação.';

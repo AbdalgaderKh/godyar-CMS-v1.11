@@ -164,7 +164,6 @@ if ($tags_input === '' && isset($news['tags'])) $tags_input = (string)$news['tag
 $relatedNews = [];
 try { $relatedNews = gdy_get_related_news($pdo, $id, 6); } catch (Throwable) { $relatedNews = []; }
 
-
 $publish_at   = isset($news['publish_at']) ? substr(str_replace(' ', 'T', (string)$news['publish_at']), 0, 16) : '';
 $unpublish_at = isset($news['unpublish_at']) ? substr(str_replace(' ', 'T', (string)$news['unpublish_at']), 0, 16) : '';
 
@@ -200,9 +199,6 @@ try { $revisionHistory = gdy_get_news_revisions($pdo, $id, 20); } catch (Throwab
 $errors  = [];
 $updated = false;
 
-// -----------------------------------------------------------------------------
-// معالجة التحديث
-// -----------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['delete_attachment_id'])) {
@@ -321,7 +317,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slug = 'news-' . date('YmdHis') . '-' . random_int(100, 999);
     }
 
-
     if ($category_id <= 0) $errors['category_id'] = __('t_96bde08b29', 'يرجى اختيار التصنيف.');
 
     $publishedAtForDb = gdy_dt_local_to_sql($published_at);
@@ -340,54 +335,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imagePath = $oldImagePath !== '' ? $oldImagePath : null;
         $uploadedNewImage = false;
 
-        if (isset($_FILES['image']) && (($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE)) {
-            if (($_FILES['image']['error'] ?? UPLOAD_ERR_OK) === UPLOAD_ERR_OK) {
-                $tmpName  = $_FILES['image']['tmp_name'] ?? '';
-                $origName = $_FILES['image']['name'] ?? '';
-                $size     = (int)($_FILES['image']['size'] ?? 0);
+		if (isset($_FILES['image']) && (($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE)) {
+			if (($_FILES['image']['error'] ?? UPLOAD_ERR_OK) === UPLOAD_ERR_OK) {
+				try {
+					$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+					$basePath = $baseUrl !== '' ? rtrim((string)(parse_url($baseUrl, PHP_URL_PATH) ?: ''), '/') : '';
+					$urlPrefix = ($basePath !== '' ? $basePath : '') . '/uploads/news';
 
-                $maxSize = 5 * 1024 * 1024;
-                if ($size > $maxSize) {
-                    $errors['image'] = __('t_75a6c044df', 'حجم الصورة أكبر من المسموح (5 ميجابايت).');
-                } else {
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mime  = $finfo ? finfo_file($finfo, $tmpName) : '';
-                    if ($finfo) finfo_close($finfo);
+					$res = \Godyar\SafeUploader::upload($_FILES['image'], [
+						'max_bytes' => 5 * 1024 * 1024,
+						'allowed_ext' => ['jpg','jpeg','png','gif','webp'],
+						'allowed_mime' => [
+							'jpg'  => ['image/jpeg'],
+							'jpeg' => ['image/jpeg'],
+							'png'  => ['image/png'],
+							'gif'  => ['image/gif'],
+							'webp' => ['image/webp'],
+						],
+						'dest_abs_dir' => dirname(__DIR__, 2) . '/uploads/news',
+						'url_prefix'   => $urlPrefix,
+					]);
 
-                    $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-                    if (!in_array($mime, $allowedMimes, true)) {
-                        $errors['image'] = __('t_1d4df6cce9', 'يُسمح فقط برفع صور بصيغ JPG أو PNG أو GIF أو WebP.');
-                    } else {
-                        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-                        if ($ext === '') {
-                            $map = [
-                                'image/jpeg' => 'jpg',
-                                'image/png'  => 'png',
-                                'image/gif'  => 'gif',
-                                'image/webp' => 'webp',
-                            ];
-                            $ext = $map[$mime] ?? 'jpg';
-                        }
-
-                        $uploadDir = __DIR__ . '/../../uploads/news/';
-                        if (!is_dir($uploadDir)) gdy_mkdir($uploadDir, 0755, true);
-
-                        $baseName   = date('Ymd_His') . '_' . bin2hex(random_bytes(4));
-                        $fileName   = $baseName . '.' . $ext;
-                        $targetPath = $uploadDir . $fileName;
-
-                        if (move_uploaded_file($tmpName, $targetPath)) {
-                            $imagePath = 'uploads/news/' . $fileName;
-                            $uploadedNewImage = true;
-                        } else {
-                            $errors['image'] = __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.');
-                        }
-                    }
-                }
-            } else {
-                $errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
-            }
-        }
+					if (!empty($res['ok'])) {
+						$fileName = basename((string)($res['abs_path'] ?? ''));
+						if ($fileName !== '') {
+							$imagePath = 'uploads/news/' . $fileName;
+							$uploadedNewImage = true;
+						} else {
+							$errors['image'] = __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.');
+						}
+					} else {
+						$errors['image'] = (string)($res['error'] ?? __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.'));
+					}
+				} catch (Throwable $e) {
+					$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+				}
+			} else {
+				$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+			}
+		}
 
         if (!$errors) {
             try {
@@ -502,7 +488,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log('[IndexNow] edit ping failed: ' . $e->getMessage());
             }
 
-
             
 
 // SEO cache invalidation (sitemap/rss)
@@ -544,7 +529,8 @@ gdy_unlink($root . '/cache/rss.xml');
             $errors['general'] = __('t_6f622496c6', 'حدث خطأ أثناء حفظ التعديلات. يرجى المحاولة مرة أخرى.');
         }
     }
-    }
+}
+
 }
 
 // -----------------------------------------------------------------------------
@@ -597,7 +583,6 @@ html, body { overflow-x: hidden; }
 .gdy-dropzone-inner i { font-size: 1.6rem; color: #38bdf8; }
 .gdy-image-preview img { max-height: 220px; object-fit: contain; }
 
-
 /* --- Professional additions: Pre-publish checklist + OpenGraph preview + Internal links suggestions --- */
 .gdy-checklist { display: grid; gap: .45rem; }
 .gdy-checklist li { display:flex; align-items:center; gap:.5rem; font-size:.92rem; color: rgba(226,232,240,.92); }
@@ -620,7 +605,6 @@ html, body { overflow-x: hidden; }
 .gdy-internal-links .results a { display:block; padding:.45rem .55rem; border-radius: 10px; border:1px solid rgba(148,163,184,.18); margin-top:.4rem; color: rgba(226,232,240,.95); text-decoration:none; }
 .gdy-internal-links .results a:hover { background: rgba(148,163,184,.12); }
 .gdy-internal-links .results .meta { font-size:.78rem; color: rgba(148,163,184,.95); margin-top:.15rem; direction:ltr; text-align:left; }
-
 
 </style>
 
@@ -707,7 +691,6 @@ html, body { overflow-x: hidden; }
                   </div>
                   <div class="results mt-2" id="internal-links-results"></div>
                 </div>
-
 
                 <div class="form-text"><?= h(__('t_cdab1836ce', 'يمكنك ربط هذا الحقل بمحرر WYSIWYG لاحقاً.')) ?></div>
               </div>
@@ -964,8 +947,6 @@ html, body { overflow-x: hidden; }
             </div>
           </div>
 
-
-
               <div class="gdy-options-box mb-3" id="editorial-notes">
                 <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_6d5f18f157', 'ملاحظات فريق التحرير')) ?></h3>
 
@@ -1148,7 +1129,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-
   const attachmentsInput = document.getElementById('attachments-input');
   const attachmentsPreview = document.getElementById('attachments-preview');
 
@@ -1315,7 +1295,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </script>
 
-
 <!-- GDY Admin Enhancements: WYSIWYG + Safe Preview + Media Picker (v9.6) -->
 <style>
 .gdy-wysiwyg{border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; background:rgba(0,0,0,.08)}
@@ -1345,7 +1324,5 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
   <iframe id="gdy-media-frame" src="../media/picker.php?target=content" style="width:100%;height:calc(90vh - 54px);border:0;"></iframe>
 </div>
-
-
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>

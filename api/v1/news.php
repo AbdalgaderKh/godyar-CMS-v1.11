@@ -6,7 +6,8 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 require_once '../../includes/bootstrap.php';
 require_once '../../includes/security.php';
-require_once '../../includes/classes/News.php';
+$method = $_SERVER['REQUEST_METHOD'];
+$newsManager = new News();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $newsManager = new News();

@@ -1,24 +1,23 @@
+require_once __DIR__ . '/../_admin_guard.php';
+// admin/logs/admin_logs.php
 <?php
 
 require_once __DIR__ . '/../_admin_guard.php';
 // admin/logs/admin_logs.php
 
-require_once __DIR__ . '/../layout/header.php';
-require_once __DIR__ . '/../layout/sidebar.php';
+\Godyar\Auth::requirePermission('manage_security');
 
 \Godyar\Auth::requirePermission('manage_security');
 
-$pdo = \Godyar\DB::pdo();
+    return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+}
 
 function h($v) {
     return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
 }
 
 $usersStmt = $pdo->query("
-    SELECT id, username, name, email
-    FROM users
-    ORDER BY id ASC
-");
+$users = $usersStmt ? $usersStmt->fetchAll(PDO::FETCH_ASSOC) : [];
 $users = $usersStmt ? $usersStmt->fetchAll(PDO::FETCH_ASSOC) : [];
 
 $filterUserId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;
@@ -101,7 +100,6 @@ function format_details(?string $details): string {
     <div class="card-body">
       <form method="get" class="row g-3">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
-
 
         <div class="col-md-4">
           <label class="form-label">المستخدم</label>

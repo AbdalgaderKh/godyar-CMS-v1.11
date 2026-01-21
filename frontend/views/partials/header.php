@@ -168,6 +168,19 @@ if ($_gdyLang === '') { $_gdyLang = 'ar'; }
 //  - $navBaseUrl: جذر الموقع مع بادئة اللغة (للصفحات/الروابط)
 // بعض إعدادات base_url() تعيد الرابط مع /ar، لذلك نزيله من الجذر إن وُجد.
 $rootUrl = $baseUrl;
+
+// Normalize logo path (avoid relative paths breaking on sub-pages / subdirectories)
+if (is_string($siteLogo) && $siteLogo !== '') {
+    $siteLogo = trim($siteLogo);
+    // If not absolute URL, make it absolute to this installation root (without language prefix)
+    if (!preg_match('~^https?://~i', $siteLogo)) {
+        $rootForAssets = $rootUrl;
+        if ($rootForAssets !== '' && preg_match('#/' . preg_quote($_gdyLang, '#') . '$#i', $rootForAssets)) {
+            $rootForAssets = preg_replace('#/' . preg_quote($_gdyLang, '#') . '$#i', '', $rootForAssets);
+        }
+        $siteLogo = rtrim($rootForAssets, '/') . '/' . ltrim($siteLogo, '/');
+    }
+}
 if ($rootUrl !== '' && preg_match('#/' . preg_quote($_gdyLang, '#') . '$#i', $rootUrl)) {
     $rootUrl = preg_replace('#/' . preg_quote($_gdyLang, '#') . '$#i', '', $rootUrl);
 }
@@ -1370,11 +1383,10 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             useEl.setAttribute('href', href);
             useEl.setAttribute('xlink:href', href);
           }
-        }
           try{
             document.dispatchEvent(new CustomEvent('gdy:theme', { detail: { dark: dark } }));
           }catch(e){}
-
+        }
         var saved = null;
         try{ saved = localStorage.getItem(KEY); }catch(e){}
         if(saved === 'dark' || saved === 'light'){

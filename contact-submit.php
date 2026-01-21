@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
 
-
-
 // CSRF protection
 if (function_exists('csrf_verify_or_die')) { csrf_verify_or_die(); }
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -42,6 +40,14 @@ try {
             $stmt = $pdo->prepare("
                 INSERT INTO contact_messages
                     (name, email, subject, message, status, is_read, created_at)
+                VALUES
+    if ($pdo instanceof \PDO) {
+        $chk = function_exists('gdy_db_table_exists') ? (gdy_db_table_exists($pdo, 'contact_messages') ? 1 : 0) : 0;
+        if ($chk) {
+            $stmt = $pdo->prepare(""
+                INSERT INTO contact_messages
+                    (name, email, subject, message, status, is_read, created_at)
+                VALUES
                 VALUES
                     (:name, :email, :subject, :message, 'new', 0, NOW())
             ");

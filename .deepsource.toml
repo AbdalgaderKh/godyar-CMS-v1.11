@@ -15,4 +15,7 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
-EOF
+
+[[analyzers]]
+name = "css"
+enabled = true

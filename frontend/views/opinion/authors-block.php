@@ -266,8 +266,9 @@ if (!function_exists('gdy_trim_text')) {
                     </div>
                 </div>
 
-                <div class="opinion-article-title">
-                    <?php
+                    $slug = !empty($row['slug']) ? $row['slug'] : ('news-' . (int)$row['id']);
+                    $url  = '/news/id/' . (int)$id;
+                    ?>
                     $slug = !empty($row['slug']) ? $row['slug'] : ('news-' . (int)$row['id']);
                     $url  = '/news/id/' . (int)$id;
                     ?>

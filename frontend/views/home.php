@@ -34,12 +34,16 @@ if (!function_exists('godyar_news_card')) {
     function godyar_news_card(array $n, string $baseUrl = ''): void {
         $slug   = $n['slug']   ?? '';
         $title  = $n['title']  ?? '';
+            return; // نحتاج على الأقل slug + title
+        }
         $ex     = $n['excerpt']?? '';
         $img    = $n['featured_image'] ?? ($n['image_url'] ?? '');
         $date   = godyar_news_date($n);
+        $id     = isset($n['id']) ? (int)$n['id'] : 0;
 
-        if (!$slug || !$title) {
-            return; // نحتاج على الأقل slug + title
+        $ex     = $n['excerpt']?? '';
+        $img    = $n['featured_image'] ?? ($n['image_url'] ?? '');
+        $date   = godyar_news_date($n); // نحتاج على الأقل slug + title
         }
 
         $url  = $baseUrl ? rtrim($baseUrl, '/') . '/news/id/' . (int)$id : '/news/id/' . (int)$id;
@@ -79,9 +83,15 @@ if (!function_exists('godyar_news_card')) {
 // دالة عنصر صغير في "الأكثر قراءة / تعليقاً"
 if (!function_exists('godyar_news_small_item')) {
     function godyar_news_small_item(array $n, string $baseUrl = ''): void {
+            return;
+        }
+        if (!$slug || !$title) {
+            return;
         $slug  = $n['slug']   ?? '';
         $title = $n['title']  ?? '';
         $date  = godyar_news_date($n);
+        $id    = (int)($n['id'] ?? 0);
+        $id    = $n['id']      ?? 0;
 
         if (!$slug || !$title) {
             return;

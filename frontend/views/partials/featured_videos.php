@@ -20,15 +20,31 @@ try {
         ORDER BY created_at DESC
         LIMIT 6
     ");
-    $videos = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
-} catch (Throwable $e) {
-    $videos = [];
+}
 }
 
 if (!$videos) {
+<section class="my-4">
+  <div class="d-flex justify-content-between align-items-center mb-2">
     return;
 }
 ?>
+<?php if (!function_exists('gdy_video_thumbnail')) {
+    function gdy_video_thumbnail(string $video_url): ?string {
+        $host = parse_url($video_url, PHP_URL_HOST) ?? '';
+        if (stripos($host, 'youtube.com') !== false || stripos($host, 'youtu.be') !== false) {
+            parse_str(parse_url($video_url, PHP_URL_QUERY) ?? '', $query);
+            if (isset($query['v'])) {
+                return 'https://img.youtube.com/vi/' . $query['v'] . '/hqdefault.jpg';
+            }
+            $path = trim(parse_url($video_url, PHP_URL_PATH), '/');
+            if ($path) {
+                return 'https://img.youtube.com/vi/' . $path . '/hqdefault.jpg';
+            }
+        }
+        return null;
+    }
+} ?>
 
 <section class="my-4">
   <div class="d-flex justify-content-between align-items-center mb-2">

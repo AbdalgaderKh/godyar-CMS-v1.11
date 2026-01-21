@@ -34,7 +34,6 @@ $lang = function_exists('gdy_lang') ? (string)gdy_lang() : (isset($_GET['lang'])
 $navBaseUrl = ($baseUrl !== '' ? $baseUrl : '') . '/' . trim($lang, '/');
 if ($baseUrl === '') { $navBaseUrl = '/' . trim($lang, '/'); }
 
-
 // يجب أن يكون المستخدم مسجلاً
 $currentUser = $_SESSION['user'] ?? null;
 if (!is_array($currentUser) || empty($currentUser['id'])) {

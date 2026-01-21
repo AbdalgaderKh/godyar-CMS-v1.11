@@ -3,7 +3,7 @@
 /**
  * Korean PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author ChalkPE <amato0617@gmail.com>
+ * @author ChalkPE <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP 오류: 인증할 수 없습니다.';

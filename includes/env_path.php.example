@@ -1,14 +1,24 @@
 <?php
+declare(strict_types=1);
+
 /**
- * env_path.php (example)
- * Copy to: /includes/env_path.php  (DO NOT commit)
+ * Optional override for ENV_FILE.
+ * Copy this file to env_path.php and set your absolute path.
  *
- * Use this when SetEnv in .htaccess is not passed to PHP (common with PHP-FPM).
- * Put your absolute path to the .env file (outside the web root).
+ * Example:
+ *   $envFile = '/home/USERNAME/godyar_private/.env';
  */
 
-$envFile = '/home/YOUR_USERNAME/godyar_private/.env';
+$envFile = '';
 
-$_SERVER['ENV_FILE'] = $envFile;
-$_ENV['ENV_FILE'] = $envFile;
-putenv('ENV_FILE=' . $envFile);
+$existing = getenv('ENV_FILE');
+if (is_string($existing) && $existing !== '') { return; }
+
+$serverExisting = $_SERVER['ENV_FILE'] ?? '';
+if (is_string($serverExisting) && $serverExisting !== '') { return; }
+
+if (is_string($envFile) && $envFile !== '' && is_file($envFile)) {
+    putenv('ENV_FILE=' . $envFile);
+    $_SERVER['ENV_FILE'] = $envFile;
+    $_ENV['ENV_FILE'] = $envFile;
+}

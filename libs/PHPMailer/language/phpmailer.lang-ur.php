@@ -3,7 +3,7 @@
 /**
  * Urdu PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Saqib Ali Siddiqui <saqibsra@gmail.com>
+ * @author Saqib Ali Siddiqui <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP خرابی: تصدیق کرنے سے قاصر۔';

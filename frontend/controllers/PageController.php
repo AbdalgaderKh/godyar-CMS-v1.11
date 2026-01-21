@@ -99,7 +99,6 @@ if ($slug === '') {
         $stmt->execute([':slug' => $slug]);
         $page = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 
-
         // Fallback static pages (about/privacy) if not in DB
         if (!$page && in_array($slug, ['about', 'privacy'], true)) {
             $staticDir = realpath(__DIR__ . '/../views/page/static');

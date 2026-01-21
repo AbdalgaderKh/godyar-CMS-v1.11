@@ -40,8 +40,7 @@ final class PluginManager
     /** @var array<string,array> slug => meta */
     private array $meta = [];
 
-    /** @var array<string,array<int,array{int,callable}>> hook => [ [priority, callback], ... ] */
-    private array $hooks = [];
+    private function __construct() {}
 
     private function __construct() {}
 

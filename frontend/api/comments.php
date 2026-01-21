@@ -164,7 +164,7 @@ if ($method === 'POST') {
         // guestEmail can be empty for logged-in if your schema allows; but safer to require if column is NOT NULL.
         if ($guestEmail === '') {
             // last resort: use placeholder to satisfy NOT NULL schemas
-            $guestEmail = 'member@local.invalid';
+            $guestEmail = 'admin@example.com';
         }
     } else {
         // Guest validation: require name+email

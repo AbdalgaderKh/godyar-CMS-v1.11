@@ -2,17 +2,25 @@
  * Adds "تحميل المزيد" buttons for Latest + Category sections on the home page.
  * Requires: /api/v1/home_loadmore.php
  */
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function resolveUrl(path) {
+  function newsUrl(id) {
+    // Keep consistent with server helper: /news/id/{id}
+    return base + '/news/id/' + encodeURIComponent(String(id));
+  }
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path.startsWith('/')) return ${base}${path};
+    return ${base}/${path};
+  }
+ * Requires: /api/v1/home_loadmore.php
+ */
 (function () {
   'use strict';
-
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
-
-  const base = (window.GDY_BASE || '').replace(/\/$/, '');
-  const API_URL = base + '/api/v1/home_loadmore.php';
-
-  function esc(s) {
-    return String(s || '')
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path.startsWith('/')) return ${base}${path};
+    return ${base}/${path};
+  }
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
@@ -20,11 +28,31 @@
       .replace(/'/g, '&#039;');
   }
 
+  const base = (window.GDY_BASE || '').replace(/\/$/, '');
+  const API_URL = base + '/api/v1/home_loadmore.php';
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  const base = (window.GDY_BASE || '').replace(/\/$/, '');
+  const API_URL = base + '/api/v1/home_loadmore.php';
+  const API_URL = base + '/api/v1/home_loadmore.php';
+
+ * Requires: /api/v1/home_loadmore.php
+ */
+(function () {
+  'use strict';
+  const base = (window.GDY_BASE || '').replace(/\/$/, '');
+  const API_URL = base + '/api/v1/home_loadmore.php';
+
   function resolveUrl(path) {
+  function newsUrl(id) {
+    // Keep consistent with server helper: /news/id/{id}
+    return base + '/news/id/' + encodeURIComponent(String(id));
+  }
     if (!path) return '';
     if (/^https?:\/\//i.test(path)) return path;
-    if (path.startsWith('/')) return base + path;
-    return base + '/' + path;
+    if (path.startsWith('/')) return `${base}${path}`;
+    return `${base}/${path}`;
   }
 
   function newsUrl(id) {
@@ -32,21 +60,30 @@
     return base + '/news/id/' + encodeURIComponent(String(id));
   }
 
-  function defaultThumb() {
+  function newsUrl(id) {
+    // Keep consistent with server helper: /news/id/{id}
+    return `${base}/news/id/${encodeURIComponent(String(id))}`;
+  }
+  function cardNode(item, badgeText) {
+    const id = item && item.id ? item.id : 0;
+    const title = (item && item.title) ? String(item.title) : '';
     return base + '/assets/images/placeholder-thumb.jpg';
   }
 
   
   function cardNode(item, badgeText) {
-    const id = item?.id ? item.id : 0;
-    const title = item?.title ? String(item.title) : '';
+    const id = item && item.id ? item.id : 0;
+    const title = (item && item.title) ? String(item.title) : '';
+    const excerpt = (item && item.excerpt) ? String(item.excerpt).trim() : '';
+    const img = (item && item.image) ? resolveUrl(item.image) : defaultThumb();
     const excerpt = item?.excerpt ? String(item.excerpt).trim() : '';
     const img = item?.image ? resolveUrl(item.image) : defaultThumb();
     const url = newsUrl(id);
     const date = item?.date ? String(item.date) : '';
 
-    const article = document.createElement('article');
-    article.className = 'hm-card';
+    const aThumb = document.createElement('a');
+    aThumb.className = 'hm-card-thumb';
+    aThumb.href = url;
 
     const aThumb = document.createElement('a');
     aThumb.className = 'hm-card-thumb';
@@ -97,10 +134,20 @@
     return article;
   }
 
+  refactor: remove unnecessary return await
+JS-0111
+ Performance
+Created a few seconds ago
+JavaScript
+abdalgaderkh
+Created by abdalgaderkh
+Autofix Session
+1 occurrence can be fixed
+1 file will be affected
   async function fetchJSON(url) {
     const r = await fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
     if (!r.ok) throw new Error('HTTP ' + r.status);
-    return await r.json();
+    return r.json();
   }
 
   function getSectionBadge(btn) {
@@ -124,10 +171,11 @@
 
     btn.disabled = true;
     const oldText = btn.textContent;
-    btn.textContent = '...';
-
     try {
       let url = API_URL + '?type=' + encodeURIComponent(type) + '&offset=' + encodeURIComponent(String(offset)) + '&limit=' + encodeURIComponent(String(limit));
+
+    try {
+      let url = ${API_URL}?type=${encodeURIComponent(type)}&offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(limit))};
 
       if (type === 'latest') {
         const period = btn.getAttribute('data-period') || 'today';
@@ -135,6 +183,10 @@
       } else if (type === 'category') {
         const cid = btn.getAttribute('data-category-id') || '';
         url += '&cid=' + encodeURIComponent(cid);
+        url = `${url}&period=${encodeURIComponent(period)}`;
+      } else if (type === 'category') {
+        const cid = btn.getAttribute('data-category-id') || '';
+        url = `${url}&cid=${encodeURIComponent(cid)}`;
       } else {
         throw new Error('Invalid type');
       }
@@ -147,14 +199,17 @@
 
       const badge = (type === 'latest') ? 'خبر' : getSectionBadge(btn);
 
-      const frag = document.createDocumentFragment();
+      data.items.forEach(function (it) {
+        frag.appendChild(cardNode(it, badge));
+      });
 
       data.items.forEach(function (it) {
         frag.appendChild(cardNode(it, badge));
       });
 
-      grid.appendChild(frag);
-// Update offset
+      data.items.forEach(function (it) {
+        frag.appendChild(cardNode(it, badge));
+      });
       const nextOffset = (typeof data.next_offset === 'number') ? data.next_offset : (offset + data.items.length);
       btn.setAttribute('data-offset', String(nextOffset));
 
@@ -175,6 +230,15 @@
   }
 
   function init() {
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        onLoadMoreClick(btn);
+      });
+    });
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        onLoadMoreClick(btn);
+      });
     const buttons = $all('.hm-loadmore-btn[data-loadmore][data-target]');
     if (!buttons.length) return;
 

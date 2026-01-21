@@ -120,10 +120,14 @@ if (!function_exists('gdy_clean_url')) {
     }
 }
 
+    }
+}
 if (!function_exists('gdy_optimize_html_images')) {
     function gdy_optimize_html_images(string $html): string
     {
-        if ($html === '' || stripos($html, '<img') === false) return $html;
+        if ($html === '' || stripos($html, '<img') === false) {
+            return $html;
+        }
 
         $html = preg_replace_callback('/<img\b[^>]*>/i', function($m) {
             $tag = $m[0];
@@ -165,12 +169,49 @@ if (!function_exists('gdy_extract_faq')) {
             if ($q !== null && preg_match('/^(ج\s*[:\-]|جواب\s*[:\-])\s*(.+)$/u', $line, $m)) {
                 $a = trim($m[2]);
                 if ($q !== '' && $a !== '') {
-                    $faqs[] = ['question' => $q, 'answer' => $a];
-                    if (count($faqs) >= $max) break;
+                '@type' => 'Question',
+                'name'  => $q,
+                'acceptedAnswer' => [
+                    '@type' => 'Answer',
+                    'text' => $a,
+                ],
+            ];
+        }
+        return [
+            '@type' => 'FAQPage',
+            '@id'   => $pageUrl . '#faq',
+            'mainEntity' => $main,
+        ];
+    }
+}
+     */
+    function gdy_hreflang_map(string $url = '', ?array $langs = null, string $defaultLang = 'ar'): array
+    {
+        $langs = $langs && is_array($langs) ? $langs : ((isset($GLOBALS['SUPPORTED_LANGS']) && is_array($GLOBALS['SUPPORTED_LANGS'])) ? $GLOBALS['SUPPORTED_LANGS'] : [$defaultLang]);
+                '@type' => 'Question',
+                'name'  => $q,
+                'acceptedAnswer' => [
+                if ($line === '') {
+                    continue;
                 }
-                $q = null;
-                continue;
+                $question = parse_question($line);
+                if ($question !== null) {
+                    $currentQuestion = $question;
+                    continue;
+                }
+                $answer = parse_answer($line);
+                if ($currentQuestion !== null && $answer !== null) {
+                    $faqs[] = ['question' => $currentQuestion, 'answer' => $answer];
+                    $currentQuestion = null;
+                    if (count($faqs) >= $max) {
+                        break;
+                    }
+                }
             }
+        }
+        return $faqs;
+    }
+}
 
             if (preg_match('/^Q\s*[:\-]\s*(.+)$/i', $line, $m)) {
                 $q = trim($m[1]);

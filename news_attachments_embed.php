@@ -19,7 +19,7 @@ declare(strict_types=1);
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
+    function gdy_att_icon(string $filename): string {
 }
 
 if (!function_exists('gdy_starts_with')) {
@@ -52,7 +52,8 @@ function gdy_att_icon(string $filename): string {
     }
 }
 
-function gdy_att_preview_meta(string $filename): array {
+    ];
+}
     $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     return [
         'ext' => $ext,
@@ -67,6 +68,9 @@ function gdy_att_preview_meta(string $filename): array {
  *   - base_url: (string) إذا كان الموقع ليس على نفس الجذر. الافتراضي '/'
  *   - title: (string) عنوان صندوق المرفقات
  */
+    $baseUrl = (string)($options['base_url'] ?? '/');
+    $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
+    $title   = (string)($options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات'));
 function gdy_render_news_attachments_embed(PDO $pdo, int $newsId, array $options = []): void {
     if ($newsId <= 0) return;
 
@@ -74,8 +78,9 @@ function gdy_render_news_attachments_embed(PDO $pdo, int $newsId, array $options
     $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
     $title   = (string)($options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات'));
 
-    // إذا جدول المرفقات غير موجود، لا نعرض شيئاً
-    try {
+    $baseUrl = $options['base_url'] ?? '/';
+    $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
+    $title   = $options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات');
         $exists = function_exists('gdy_db_table_exists') ? (gdy_db_table_exists($pdo, 'news_attachments') ? 1 : 0) : 0;
         if (!$exists) return;
     } catch (Throwable $e) {
@@ -92,7 +97,10 @@ function gdy_render_news_attachments_embed(PDO $pdo, int $newsId, array $options
     $atts = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     if (!$atts) return;
 
-    $uid = 'gdyAtt' . $newsId . '_' . substr(hash('sha256', (string)$newsId . '|' . (string)count($atts)), 0, 6);
+    // CSS بسيط بدون الاعتماد على Bootstrap
+    echo "
+    $atts = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    if (!$atts) return;
 
     // CSS بسيط بدون الاعتماد على Bootstrap
     echo "

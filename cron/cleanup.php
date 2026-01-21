@@ -133,6 +133,7 @@ foreach ($results as $type => $count) {
 }
 
 file_put_contents('../logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
+file_put_contents('../logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
 
 echo "تم تنظيف النظام بنجاح:\n";
 print_r($results);

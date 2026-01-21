@@ -94,8 +94,18 @@ if (!function_exists('gdy_youtube_embed_url')) {
 <?php if (!empty($headerAd) && strpos($headerAd, 'No active ad') === false): ?>
 <div class="header-ad-container" style="margin-bottom: 2rem; text-align: center;">
     <?= $headerAd ?>
-</div>
-<?php endif; ?>
+<?php
+$archiveUrl = $archiveUrl ?? '';
+$homeLatestTitle = $homeLatestTitle ?? '';
+if (!isset($newsUrl) || !is_callable($newsUrl)) {
+    $newsUrl = function ($row) {
+        return '';
+    };
+}
+?>
+<!-- شبكة آخر الأخبار -->
+<section aria-label="آخر الأخبار">
+    <div class="section-header">
 
 <!-- الميزات الجديدة المتميزة -->
 
@@ -219,9 +229,25 @@ if (!function_exists('gdy_youtube_embed_url')) {
             font-weight: 600;
             margin-right: auto;
         ">
+    <div class="breaking-content" style="
+        background: white;
+        border-radius: 0 0 10px 10px;
             🔴 بث مباشر
         </div>
     </div>
+<?php
+/** @var callable $newsUrl */
+/** @var string $archiveUrl */
+/** @var string $siteName */
+/** @var string $homeFeaturedTitle */
+$newsUrl = $newsUrl ?? function($news) { return '#'; };
+$archiveUrl = $archiveUrl ?? '#';
+$siteName = $siteName ?? '';
+$homeFeaturedTitle = $homeFeaturedTitle ?? '';
+?>
+    <div class="breaking-content" style="
+        background: white;
+        border-radius: 0 0 10px 10px;
     <div class="breaking-content" style="
         background: white;
         border-radius: 0 0 10px 10px;
@@ -388,11 +414,17 @@ if (!function_exists('gdy_youtube_embed_url')) {
                             $embedUrl = gdy_youtube_embed_url($rawUrl) ?: $rawUrl;
                         }
 
-                        // المنصّة (قد تأتي من الـ Controller أو نخمّن من الرابط)
-                        $platform = $video['platform'] ?? '';
                         if ($platform === '' && $rawUrl !== '') {
                             $lower = strtolower($rawUrl);
                             if (strpos($lower, 'tiktok.com') !== false) {
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                                </div>
+                            </div>
+</div>
+<?php endif; ?>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                                </div>
+                            </div>
                                 $platform = 'TikTok';
                             } elseif (strpos($lower, 'facebook.com') !== false || strpos($lower, 'fb.watch') !== false) {
                                 $platform = 'Facebook';
@@ -634,9 +666,30 @@ if (!function_exists('gdy_youtube_embed_url')) {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 1.5rem;
     ">
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         <?php foreach ($smartRecommendations as $news): ?>
         <div class="recommendation-card" style="
             background: white;
+<?php
+/** @var bool $enableMostRead */
+/** @var bool $enableMostCommented */
+/** @var callable $newsUrl */
+if (!isset($enableMostRead)) {
+    $enableMostRead = false;
+}
+if (!isset($enableMostCommented)) {
+    $enableMostCommented = false;
+}
+if (!isset($newsUrl) || !is_callable($newsUrl)) {
+    $newsUrl = function ($news) {
+        return '';
+    };
+}
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);

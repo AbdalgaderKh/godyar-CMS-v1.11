@@ -223,59 +223,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // -------------------------------------------------------------------------
     // رفع الصورة (اختياري)
     // -------------------------------------------------------------------------
-    if (empty($errors)) {
-        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-            if ($_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $tmpName = $_FILES['image']['tmp_name'] ?? '';
-                $origName = $_FILES['image']['name'] ?? '';
-                $size = (int)($_FILES['image']['size'] ?? 0);
+    // -------------------------------------------------------------------------
+    // رفع الصورة (اختياري)
+    // -------------------------------------------------------------------------
+    if (empty($errors) && isset($_FILES['image']) && is_array($_FILES['image'])) {
+        $err = (int)($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($err !== UPLOAD_ERR_NO_FILE) {
+            if ($err !== UPLOAD_ERR_OK) {
+                $errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+            } else {
+                require_once __DIR__ . '/../../includes/classes/SafeUploader.php';
+                $SafeUploaderClass = 'Godyar' . chr(92) . 'SafeUploader';
 
+                $destAbs = rtrim((string)ROOT_PATH, '/') . '/uploads/news';
+                $urlPrefix = '/uploads/news';
                 $maxSize = 5 * 1024 * 1024;
-                if ($size > $maxSize) {
-                    $errors['image'] = __('t_75a6c044df', 'حجم الصورة أكبر من المسموح (5 ميجابايت).');
-                } else {
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mime  = $finfo ? finfo_file($finfo, $tmpName) : '';
-                    if ($finfo) {
-                        finfo_close($finfo);
-                    }
 
-                    $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-                    if (!in_array($mime, $allowedMimes, true)) {
-                        $errors['image'] = __('t_1d4df6cce9', 'يُسمح فقط برفع صور بصيغ JPG أو PNG أو GIF أو WebP.');
+                // Make uploads directory non-executable (best effort)
+                if (!is_dir($destAbs)) {
+                    if (function_exists('gdy_mkdir')) {
+                        gdy_mkdir($destAbs, 0755, true);
                     } else {
-                        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-                        if ($ext === '') {
-                            $map = [
-                                'image/jpeg' => 'jpg',
-                                'image/png'  => 'png',
-                                'image/gif'  => 'gif',
-                                'image/webp' => 'webp',
-                            ];
-                            $ext = $map[$mime] ?? 'jpg';
-                        }
-
-                        $uploadDir = __DIR__ . '/../../uploads/news/';
-                        if (!is_dir($uploadDir)) {
-                            gdy_mkdir($uploadDir, 0755, true);
-                        }
-
-                        $baseName = date('Ymd_His') . '_' . bin2hex(random_bytes(4));
-                        $fileName = $baseName . '.' . $ext;
-                        $targetPath = $uploadDir . $fileName;
-
-                        if (move_uploaded_file($tmpName, $targetPath)) {
-                            $imagePath = 'uploads/news/' . $fileName;
-                        } else {
-                            $errors['image'] = __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.');
-                        }
+                        @mkdir($destAbs, 0755, true);
                     }
                 }
-            } else {
-                $errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+                $ht = $destAbs . '/.htaccess';
+                if (is_dir($destAbs) && !is_file($ht)) {
+                    @file_put_contents($ht, "Options -Indexes\n<FilesMatch \"php$\">\n  Require all denied\n</FilesMatch>\n<FilesMatch \"phtml$\">\n  Require all denied\n</FilesMatch>\n<FilesMatch \"phar$\">\n  Require all denied\n</FilesMatch>\n");
+                }
+
+                $res = $SafeUploaderClass::upload($_FILES['image'], [
+                    'dest_abs_dir' => $destAbs,
+                    'url_prefix' => $urlPrefix,
+                    'max_bytes' => $maxSize,
+                    'allowed_ext' => ['jpg','jpeg','png','gif','webp'],
+                    'allowed_mime' => [
+                        'jpg' => ['image/jpeg'],
+                        'jpeg' => ['image/jpeg'],
+                        'png' => ['image/png'],
+                        'gif' => ['image/gif'],
+                        'webp' => ['image/webp'],
+                    ],
+                    'prefix' => 'news_',
+                ]);
+
+                if (($res['success'] ?? false) === true) {
+                    $imagePath = ltrim((string)$res['rel_url'], '/');
+                } else {
+                    $errors['image'] = (string)($res['error'] ?? __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.'));
+                }
             }
         }
     }
+
 
     // -------------------------------------------------------------------------
     // إدخال السجل في قاعدة البيانات

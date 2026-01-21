@@ -33,7 +33,7 @@ foreach ($rii as $file) {
     if (!preg_match('/\.php$/i', $rel)) continue;
 
     $targets[] = [$path, $rel];
-}
+واضح تكرار أقواس وexit(1); عدة مرات. يجب ترك exit(1); مرة واحدة وإغلاق الأقواس بشكل صحيح.
 
 $issues = [];
 foreach ($targets as [$path, $rel]) {

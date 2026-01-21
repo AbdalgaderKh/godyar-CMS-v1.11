@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../_admin_guard.php';
-// admin/pages/delete.php - حذف صفحة ثابتة
+require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
 require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
-use Godyar\Auth;
+require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
 // 1) معلومات الصفحة (ليست مهمة هنا لكن للاتساق)
 $currentPage = 'pages';

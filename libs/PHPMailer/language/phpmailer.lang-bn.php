@@ -3,7 +3,7 @@
 /**
  * Bengali PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Manish Sarkar <manish.n.manish@gmail.com>
+ * @author Manish Sarkar <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP ত্রুটি: প্রমাণীকরণ করতে অক্ষম৷';

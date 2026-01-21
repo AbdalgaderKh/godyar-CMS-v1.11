@@ -6,9 +6,9 @@
  *
  * @see       https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author    Jim Jagielski (jimjag) <admin@example.com>
+ * @author    Andy Prevost (codeworxtech) <admin@example.com>
  * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -26,7 +26,7 @@ namespace PHPMailer\PHPMailer;
  * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
  *
  * @author Chris Ryan
- * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
+ * @author Marcus Bointon <admin@example.com>
  */
 class SMTP
 {

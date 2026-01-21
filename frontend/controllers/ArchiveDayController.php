@@ -1,11 +1,12 @@
 <?php
 // عرض أخطاء مؤقتًا أثناء التشخيص (احذف لاحقًا)
 ini_set('display_errors', 1);
+function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
-function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+error_reporting(E_ALL);
 
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 if ($slug === '') {

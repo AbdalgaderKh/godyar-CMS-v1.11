@@ -19,6 +19,10 @@ class FeedParser
                 'http' => [
                     'timeout'    => 5,
                     'user_agent' => 'GodyarFeedParser/1.0',
+            $xmlString = gdy_file_get_contents($url, false, $context);
+            if ($xmlString === false) {
+                return [];
+            }
                 ],
             ]);
 

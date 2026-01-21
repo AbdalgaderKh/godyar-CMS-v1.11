@@ -327,7 +327,7 @@ require __DIR__ . '/../layout/sidebar.php';
 
         <form method="post">
           <?php if (function_exists('csrf_field')): ?>
-            <?= csrf_field('csrf_token') ?>
+            <?= csrf_field() ?>
           <?php else: ?>
             <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
           <?php endif; ?>

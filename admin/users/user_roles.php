@@ -5,11 +5,13 @@ require_once __DIR__ . '/../_admin_guard.php';
 
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/sidebar.php';
-
-\Godyar\Auth::requirePermission('manage_users');
 require_once __DIR__ . '/../../includes/security.php';
 
-$pdo = \Godyar\DB::pdo();
+require_once __DIR__ . '/../layout/sidebar.php';
+require_once __DIR__ . '/../../includes/security.php';
+
+require_once __DIR__ . '/../layout/header.php';
+require_once __DIR__ . '/../layout/sidebar.php';
 
 function h($v) {
     return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');

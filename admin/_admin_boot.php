@@ -1,86 +1,79 @@
 <?php
-// admin/_admin_boot.php
-declare(strict_types=1);
 
-require_once __DIR__ . '/_admin_guard.php';
-// Bootstrap مشترك لكل صفحات لوحة التحكم
-require_once __DIR__ . '/../includes/bootstrap.php';
-// ---------------------------
-// CSRF enforced (Admin)
-// ---------------------------
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $token = $_POST['csrf_token'] ?? $_POST['csrf'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
-    if (!function_exists('validate_csrf_token') || !validate_csrf_token($token)) {
-        http_response_code(403);
-        $isAjax = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
-               || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
-        if ($isAjax) {
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode(['ok'=>false,'error'=>'CSRF blocked'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-            exit;
-        }
-        exit('CSRF blocked');
-    }
+// Admin bootstrap (stable, no strict_types to avoid BOM/whitespace edge cases)
+
+$__root = realpath(__DIR__ . '/..');
+if ($__root === false) {
+    $__root = dirname(__DIR__);
 }
 
-require_once __DIR__ . '/../includes/auth.php';
-
-use Godyar\Auth;
-
-// اسم الصفحة يمكن ضبطه من الملف المستدعي قبل include
-$currentPage = $currentPage ?? 'dashboard';
-$pageTitle   = $pageTitle   ?? __('t_a06ee671f4', 'لوحة التحكم');
-
-// حماية: التحقق من تسجيل الدخول
-try {
-    if (class_exists(Auth::class) && method_exists(Auth::class, 'isLoggedIn')) {
-        if (!Auth::isLoggedIn()) {
-            header('Location: ' . GODYAR_BASE_URL . '/admin/login');
-            exit;
-        }
-    } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
-            header('Location: ' . GODYAR_BASE_URL . '/admin/login');
-            exit;
-        }
-    }
-} catch (Throwable $e) {
-    error_log('[Godyar Admin Boot] Auth check error: ' . $e->getMessage());
-    if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
-        header('Location: ' . GODYAR_BASE_URL . '/admin/login');
-        exit;
-    }
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', $__root);
 }
 
-// PDO مشترك
-$pdo = gdy_pdo_safe();
-
-// دالة هيلبر للهروب
-if (!function_exists('h')) {
-    function h($v): string {
-        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
+// Start session safely
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    @session_start();
 }
 
-// اسم المستخدم الحالي
-$currentUserName = __('t_ead53a737a', 'مشرف النظام');
-try {
-    if (class_exists(Auth::class)) {
-        if (method_exists(Auth::class, 'userName')) {
-            $currentUserName = (string)Auth::userName();
-        } elseif (method_exists(Auth::class, 'user')) {
-            $u = Auth::user();
-            if (is_array($u)) {
-                $currentUserName = $u['name'] ?? ($u['email'] ?? $currentUserName);
+// Load global bootstrap (DB, helpers, i18n)
+require_once ROOT_PATH . '/includes/bootstrap.php';
+
+// Ensure translation function exists (fallback only)
+if (!function_exists('__')) {
+    function __(string $key, $vars = null, ?string $fallback = null): string {
+        if (is_string($vars) && $fallback === null) {
+            $fallback = $vars;
+            $vars = null;
+        }
+        $text = $fallback ?? $key;
+        if (is_array($vars)) {
+            foreach ($vars as $k => $v) {
+                $text = str_replace('{' . $k . '}', (string)$v, $text);
             }
         }
-    } elseif (!empty($_SESSION['user']['name'])) {
-        $currentUserName = (string)$_SESSION['user']['name'];
+        return $text;
     }
-} catch (Throwable $e) {
-    error_log('[Godyar Admin Boot] currentUserName: ' . $e->getMessage());
 }
 
-// تضمين رأس اللوحة والقائمة الجانبية
-require_once __DIR__ . '/layout/header.php';
-require_once __DIR__ . '/layout/sidebar.php';
+// HTML escape helper
+if (!function_exists('h')) {
+    function h(string $s): string {
+        return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// Provide $pdo if available
+if (!isset($pdo) || !($pdo instanceof PDO)) {
+    if (function_exists('gdy_pdo_safe')) {
+        $pdo = gdy_pdo_safe();
+    } elseif (function_exists('db')) {
+        $pdo = db();
+    }
+}
+
+// Basic admin login gate (do not break if your project uses a different auth shape)
+$__isLogged = false;
+
+// Common session layouts (try both)
+if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
+    $__isLogged = true;
+}
+if (!empty($_SESSION['admin']) && is_array($_SESSION['admin'])) {
+    $__isLogged = true;
+}
+
+if (!$__isLogged) {
+    // Redirect to admin login if exists, else site login
+    $login = '/login';
+    if (is_file(ROOT_PATH . '/admin/login.php')) {
+        $login = '/admin/login.php';
+    } elseif (is_file(ROOT_PATH . '/login.php')) {
+        $login = '/login.php';
+    }
+    header('Location: ' . $login);
+    exit;
+}
+
+// Expose role (optional)
+$userRole = (string)($_SESSION['user']['role'] ?? ($_SESSION['admin']['role'] ?? ''));

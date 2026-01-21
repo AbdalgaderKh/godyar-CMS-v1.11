@@ -152,13 +152,18 @@ try {
 }
 
 // CSRF
-$csrfToken = function_exists('generate_csrf_token')
-    ? generate_csrf_token()
-    : bin2hex(random_bytes(16));
+$csrfToken = function_exists('csrf_token')
+    ? csrf_token()
+    : (function_exists('generate_csrf_token') ? generate_csrf_token() : bin2hex(random_bytes(16)));
 
-// تضمين ترويسة ولوحة جانبية
-require_once __DIR__ . '/layout/header.php';
-require_once __DIR__ . '/layout/sidebar.php';
+// Shell (unified admin layout)
+$pageSubtitle = __('t_8dbe1cbde5', 'إدارة الفيديوهات المميزة من المنصات المختلفة.');
+$adminBase = (function_exists('base_url') ? rtrim(base_url(), '/') : '') . '/admin';
+$breadcrumbs = [
+    __('t_3aa8578699', 'الرئيسية') => $adminBase . '/index.php',
+    __('t_c930ea3a42', 'الفيديوهات') => null,
+];
+require_once __DIR__ . '/layout/app_start.php';
 ?>
 <?php if (!empty($tableMissing)): ?>
   <div class="alert alert-warning" style="margin:12px 18px;border-radius:10px;">
@@ -167,104 +172,13 @@ require_once __DIR__ . '/layout/sidebar.php';
   </div>
 <?php endif; ?>
 
-<style>
-:root{
-    /* نضغط عرض محتوى الصفحة بحيث يكون مريح بجانب السايدبار */
-    --gdy-shell-max: min(880px, 100vw - 360px);
-}
 
-/* منع التمرير الأفقي وتوحيد الخلفية والنص */
-html, body{
-    overflow-x:hidden;
-    background:#020617;
-    color:#e5e7eb;
-}
-
-/* تقليل عرض المحتوى وتوسيطه */
-.admin-content{
-    max-width: var(--gdy-shell-max);
-    width:100%;
-    margin:0 auto;
-}
-
-/* تقليل البادينغ العمودي الافتراضي */
-.admin-content.container-fluid.py-4{
-    padding-top:0.75rem !important;
-    padding-bottom:1rem !important;
-}
-
-/* رأس الصفحة */
-.gdy-page-header{
-    margin-bottom:0.75rem;
-}
-
-/* كروت الفيديو + الجدول بنفس التصميم الناعم */
-.video-card {
-    border-radius: 1.1rem;
-    background: radial-gradient(circle at top, #020617 0, #020617 45%, #020617 100%);
-    border: 1px solid rgba(148,163,184,0.25);
-    box-shadow: 0 16px 40px rgba(15,23,42,0.45);
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.video-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 24px 60px rgba(15,23,42,0.65);
-    border-color:#0ea5e9;
-}
-
-/* شارة الحالة */
-.video-badge-active {
-    background: rgba(16,185,129,.08);
-    color: #4ade80;
-    border-radius: 999px;
-    padding: .15rem .7rem;
-    font-size: .75rem;
-    border:1px solid rgba(34,197,94,0.3);
-}
-.video-badge-inactive {
-    background: rgba(239,68,68,.08);
-    color: #f87171;
-    border-radius: 999px;
-    padding: .15rem .7rem;
-    font-size: .75rem;
-    border:1px solid rgba(248,113,113,0.3);
-}
-
-/* تحسين الجدول */
-.table-dark{
-    --bs-table-bg: rgba(15,23,42,0.95);
-    --bs-table-striped-bg: rgba(15,23,42,0.9);
-    --bs-table-striped-color: #e5e7eb;
-    --bs-table-border-color: rgba(30,64,175,0.35);
-}
-.table thead th{
-    background:#020617;
-    border-bottom-color:rgba(148,163,184,0.4);
-    font-size:0.8rem;
-    color:#9ca3af;
-}
-
-/* استجابة أفضل مع الشاشات الصغيرة */
-@media (max-width: 992px){
-    :root{
-        --gdy-shell-max: 100vw; /* في الشاشات الصغيرة، المحتوى يأخذ العرض كاملاً */
-    }
-}
-</style>
-
-<div class="admin-content container-fluid py-4">
-    <div class="gdy-page-header d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h4 mb-1 text-white"><?= h(__('t_c930ea3a42', 'إدارة الفيديوهات المميزة')) ?></h1>
-            <p class="text-muted mb-0">
-                <?= h(__('t_8dbe1cbde5', 'يمكنك هنا إضافة/تعديل فيديوهات من المنصات المختلفة (YouTube، Facebook، TikTok، Instagram، Snapchat، وغيرها)
-                ليتم عرضها في واجهة الموقع مع خيار المشاهدة داخل الموقع أو الانتقال للمنصة الأصلية.')) ?>
-            </p>
-        </div>
-        <a href="index.php" class="btn btn-outline-light btn-sm">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
-        </a>
-    </div>
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-end mb-3">
+    <a href="index.php" class="btn btn-outline-secondary btn-sm">
+      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
+    </a>
+  </div>
 
     <?php if ($errors): ?>
         <div class="alert alert-danger">
@@ -463,4 +377,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<?php require_once __DIR__ . '/layout/footer.php'; ?>
+<?php require_once __DIR__ . '/layout/app_end.php'; ?>

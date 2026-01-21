@@ -664,8 +664,10 @@ endif;
                     <?php endif; ?>
                   </div>
                 </div>
-              </section>
-            <?php endif; ?>
+            <?php $canonicalUrl = $canonicalUrl ?? ''; ?>
+            <div class="gdy-share-bar">
+              <div>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
 
             <div class="gdy-share-bar">
               <div>

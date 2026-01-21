@@ -1,87 +1,80 @@
 <?php
+declare(strict_types=1);
+
 namespace Godyar;
 
+// Ensure env is loaded (defines DB_* constants from .env)
 require_once dirname(__DIR__) . '/env.php';
 
-class DB {
-    private static $instance = null;
-    private $connection;
-    
+final class DB
+{
+    private static ?self $instance = null;
+    private \PDO $connection;
+
     private function __construct()
     {
-        $host = DB_HOST;
-        $dbname = DB_NAME;
-        $username = DB_USER;
-        $password = DB_PASS;
+        // Required constants (env.php should define them)
+        $host = defined('DB_HOST') ? (string)DB_HOST : 'localhost';
+        $name = defined('DB_NAME') ? (string)DB_NAME : '';
+        $user = defined('DB_USER') ? (string)DB_USER : '';
+        $pass = defined('DB_PASS') ? (string)DB_PASS : '';
+        $port = defined('DB_PORT') ? (string)DB_PORT : '3306';
+        $charset = defined('DB_CHARSET') ? (string)DB_CHARSET : 'utf8mb4';
 
-        $drv = function_exists('gdy_db_driver') ? gdy_db_driver() : (defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : 'mysql');
-        $dsn = (defined('DB_DSN') && is_string(DB_DSN) && DB_DSN !== '') ? DB_DSN : '';
+        // Driver + DSN
+        $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : 'auto';
+        $dsn = (defined('DB_DSN') && is_string(DB_DSN) && DB_DSN !== '') ? (string)DB_DSN : '';
+
+        if ($drv === '' || $drv === 'auto') {
+            if ($dsn !== '' && stripos($dsn, 'pgsql:') === 0) {
+                $drv = 'pgsql';
+            } else {
+                $drv = 'mysql';
+            }
+        }
 
         if ($dsn === '') {
             if ($drv === 'pgsql') {
-                $port = defined('DB_PORT') && DB_PORT !== '' ? DB_PORT : '5432';
-                $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $host, $port, $dbname);
+                $port = $port !== '' ? $port : '5432';
+                $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
             } else {
-                $port = defined('DB_PORT') && DB_PORT !== '' ? DB_PORT : '3306';
-                $charset = defined('DB_CHARSET') && DB_CHARSET !== '' ? DB_CHARSET : 'utf8mb4';
-                $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s', $host, $port, $dbname, $charset);
+                $port = $port !== '' ? $port : '3306';
+                $charset = $charset !== '' ? $charset : 'utf8mb4';
+                $dsn = "mysql:host={$host};port={$port};dbname={$name};charset={$charset}";
             }
         }
 
-        try {
-            $this->connection = new \PDO(
-                $dsn,
-                $username,
-                $password,
-                [
-                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-                    \PDO::ATTR_EMULATE_PREPARES => false,
-                ]
-            );
+        $options = [
+            \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+            \PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
 
-            if ($drv === 'pgsql') {
-                // Ensure UTF-8 for PostgreSQL.
-                $this->connection->exec("SET client_encoding TO 'UTF8'");
-            }
-        } catch (\PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
+        $this->connection = new \PDO($dsn, $user, $pass, $options);
+
+        if ($drv === 'pgsql') {
+            // Ensure UTF-8 for PostgreSQL
+            $this->connection->exec("SET client_encoding TO 'UTF8'");
         }
     }
-    
-    public static function getInstance() {
+
+    public static function getInstance(): self
+    {
         if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;
     }
-    
-    public function getConnection() {
-        return $this->connection;
+
+    public static function pdo(): \PDO
+    {
+        return self::getInstance()->connection;
     }
-    
-    public function query($sql, $params = []) {
+
+    public function query(string $sql, array $params = []): \PDOStatement
+    {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
         return $stmt;
     }
-    
-    public function fetchAll($sql, $params = []) {
-        return $this->query($sql, $params)->fetchAll();
-    }
-    
-    public function fetchOne($sql, $params = []) {
-        return $this->query($sql, $params)->fetch();
-    }
-    
-    public function lastInsertId() {
-        return $this->connection->lastInsertId();
-    }
-/**
- * Return a PDO connection (compat helper for older code that expects DB::pdo()).
- */
-public static function pdo(): \PDO
-{
-    return self::getInstance()->getConnection();
-}
 }

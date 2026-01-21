@@ -16,7 +16,8 @@ foreach ($feeds as $feed) {
     $insert = $pdo->prepare("INSERT INTO news (title, slug, content, featured_image, category_id, status, publish_at, created_at, updated_at)
                              VALUES (:title, :slug, :content, :img, :cat, 'draft', NOW(), NOW(), NOW())");
     foreach ($items as $it) {
-        $slug = substr(preg_replace('~[^\p{L}\p{N}]+~u', '-', mb_strtolower($it['title'])), 0, 180);
+        $slug = substr(preg_replace('~[^\p{L<?php
+use Godyar\Feeds\FeedParser;\p{N}]+~u', '-', mb_strtolower($it['title'])), 0, 180);
         try {
         $insert->execute([
             ':title' => $it['title'],

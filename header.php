@@ -121,8 +121,7 @@ try {
 
 $themeClass   = $themeClass   ?? 'theme-default';
 
-// Header background image (from settings)
-$headerBgEnabled = (($siteSettings['theme_header_bg_enabled'] ?? '0') === '1');
+$themeClass   = $themeClass   ?? 'theme-default';
 $headerBgSource  = (string)($siteSettings['theme_header_bg_source'] ?? 'upload');
 $headerBgUrl     = trim((string)($siteSettings['theme_header_bg_url'] ?? ''));
 $headerBgImage   = trim((string)($siteSettings['theme_header_bg_image'] ?? ''));
@@ -143,18 +142,10 @@ $headerCategories  = $headerCategories  ?? [];
 $isLoggedIn        = $isLoggedIn        ?? false;
 $isAdmin           = $isAdmin           ?? false;
 
-// ضبط baseUrl
-if (isset($baseUrl) && $baseUrl !== '') {
-    $baseUrl = rtrim($baseUrl, '/');
-} elseif (function_exists('base_url')) {
-    $baseUrl = rtrim(base_url(), '/');
-} else {
-    $baseUrl = '';
-}
-$baseUrl = preg_replace('#/frontend/controllers$#', '', $baseUrl);
+// Header background image (from settings)
+$headerBgEnabled = (($siteSettings['theme_header_bg_enabled'] ?? '0') === '1');
 
-// تحديد اللغة الحالية
-$_gdyLang = function_exists('gdy_lang') ? (string)gdy_lang() : (isset($GLOBALS['lang']) ? (string)$GLOBALS['lang'] : 'ar');
+$themeClass   = $themeClass   ?? 'theme-default';
 $_gdyLang = trim($_gdyLang, '/');
 if ($_gdyLang === '') { $_gdyLang = 'ar'; }
 
@@ -367,7 +358,12 @@ if (empty($headerCategories)) {
       // Front-end theme stylesheet (optional)
       // ✅ مهم جداً: لا نحقن --primary في :root إذا كان ملف الثيم موجوداً، حتى لا يطغى اللون الافتراضي.
       // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + theme.front + theme_front
-      $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
+    // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + frontendTheme (camel) + theme.front (legacy)
+  $themeFront = (string)(
+    ($siteSettings['frontend_theme'] ?? null)
+    ?? ($siteSettings['settings.frontend_theme'] ?? null)
+    ?? ($siteSettings['frontendTheme'] ?? null)
+    $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
       $themeFront = (string)(
         $siteSettings['frontend_theme']
           ?? $siteSettings['settings.frontend_theme']
@@ -1051,9 +1047,8 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 
       <div class="hdr-utils">
           <button type="button" class="hdr-dd-btn hdr-search-btn" id="gdyMobileSearchBtn" title="<?= h(__('search')) ?>" aria-label="<?= h(__('search')) ?>">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
-          </button>
-          <div class="hdr-dropdown hdr-lang" id="gdyLangDd">
+$headerBgUrl     = trim((string)($siteSettings['theme_header_bg_url'] ?? ''));
+$headerBgImage   = trim((string)($siteSettings['theme_header_bg_image'] ?? ''));
             <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="Language">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
               <span><?= strtoupper(gdy_lang()) ?></span>

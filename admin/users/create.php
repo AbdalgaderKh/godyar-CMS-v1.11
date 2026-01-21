@@ -429,7 +429,7 @@ html, body{
                                 <label class="form-label fw-semibold"><?= h(__('t_b052caae3b', 'البريد الإلكتروني *')) ?></label>
                                 <input type="email" name="email" class="form-control" 
                                        value="<?= h($data['email']) ?>"
-                                       placeholder="example@domain.com"
+                                       placeholder="admin@example.com"
                                        required>
                             </div>
                         </div>

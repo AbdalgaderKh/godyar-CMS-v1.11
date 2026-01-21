@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../_admin_guard.php';
 $currentPage = 'system_maintenance';
+$flagFile = GODYAR_ROOT . '/storage/maintenance.flag';
+$isOn     = is_file($flagFile);
 $pageTitle   = __('t_f96c99c4d8', 'وضع الصيانة');
 
 require_once __DIR__ . '/../../_admin_boot.php';
 
-$flagFile = GODYAR_ROOT . '/storage/maintenance.flag';
-$isOn     = is_file($flagFile);
+$pageTitle   = __('t_f96c99c4d8', 'وضع الصيانة');
 $message  = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

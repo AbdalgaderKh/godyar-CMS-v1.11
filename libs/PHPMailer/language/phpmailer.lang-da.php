@@ -3,8 +3,8 @@
 /**
  * Danish PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author John Sebastian <jms@iwb.dk>
- * Rewrite and extension of the work by Mikael Stokkebro <info@stokkebro.dk>
+ * @author John Sebastian <admin@example.com>
+ * Rewrite and extension of the work by Mikael Stokkebro <admin@example.com>
  *
  */
 

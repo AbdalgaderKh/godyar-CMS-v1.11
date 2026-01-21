@@ -2,14 +2,48 @@
  * Godyar PWA helper (no inline handlers)
  * - Service Worker registration + update UX
  * - Install prompt banner (Chrome/Edge/Android)
+  // ---------------------------
+  let deferredPrompt = null;
  * - iOS Add-to-Home-Screen tip (Safari)
  */
 (function () {
-  "use strict";
 
-  const ls = {
-    get(key) {
+        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
+        // عندها نعرض إرشاداً مختصراً للمستخدم.
+        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
+          alert(isIOS
+            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
+            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
+          return;
+        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
+        // عندها نعرض إرشاداً مختصراً للمستخدم.
+        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
+          customAlert(isIOS
+            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
+            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
+          return;
       try { return localStorage.getItem(key); } catch (e) { return null; }
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        ls.set("gdy_install_dismissed", "1");
+        banner.remove();
+      // If controller changes, reload once (after user accepted)
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      // We reload only if user already accepted update banner
+      if (ls.get("gdy_sw_reload") === "1") {
+        ls.set("gdy_sw_reload", "0");
+      if (btnLater) {
+      btnLater.addEventListener("click", function () {
+        banner.remove();
+      if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        ls.set("gdy_install_dismissed", "1");
+        banner.remove();
+      });
+    });
+    }
+  }
+    });
     },
     set(key, val) {
       try { localStorage.setItem(key, val); } catch (e) {}
@@ -44,6 +78,14 @@
     // Don't show if already dismissed recently
     if (ls.get("gdy_install_dismissed") === "1") return;
 
+  window.addEventListener("appinstalled", function () {
+    deferredPrompt = null;
+    ls.set("gdy_install_dismissed", "1");
+    const b = document.getElementById("gdyInstallBanner");
+  window.addEventListener("appinstalled", function () {
+    deferredPrompt = null;
+    ls.set("gdy_install_dismissed", "1");
+    const b = document.getElementById("gdyInstallBanner");
     showInstallBanner();
   });
 
@@ -122,7 +164,7 @@
 
         deferredPrompt.prompt();
         if (deferredPrompt.userChoice && typeof deferredPrompt.userChoice.then === 'function') {
-          deferredPrompt.userChoice.then(function () {
+          deferredPrompt.userChoice.then(() => {
             deferredPrompt = null;
           });
         } else {
@@ -214,17 +256,10 @@
   function registerSW() {
     if (!("serviceWorker" in navigator)) return;
 
-    // Prefer root SW for full scope
-    navigator.serviceWorker.register((window.GDY_SW_URL||"/sw.js"), {scope:"/"}).then(function (reg) {
-      // Listen for updates
-      reg.addEventListener("updatefound", function () {
-        const newWorker = reg.installing;
-        if (!newWorker) return;
-        newWorker.addEventListener("statechange", function () {
-          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-            // New version is ready
-            showUpdateBanner(reg);
-          }
+        });
+      });
+    }).catch(function () {
+    if (!("serviceWorker" in navigator)) return;
         });
       });
     }).catch(function () {
@@ -293,6 +328,11 @@
     document.body.appendChild(banner);
 
     const btnNow = document.getElementById("gdyUpdateNow");
+    if (btnNow) {
+      btnNow.addEventListener("click", function () {
+        try {
+          if (reg?.waiting) {
+            ls.set("gdy_sw_reload", "1");
     const btnLater = document.getElementById("gdyUpdateLater");
 
     if (btnNow) {
@@ -320,13 +360,28 @@
 
   // ---------------------------
   // Init
+    if (btnNow) {
+      btnNow.addEventListener("click", function () {
+        try {
+          if (reg && reg.waiting) {
+            ls.set("gdy_sw_reload", "1");
+            reg.waiting.postMessage({ action: "skipWaiting" });
+          } else {
+    if (btnNow) {
+      btnNow.addEventListener("click", function () {
+        try {
+          if (reg?.waiting) {
+            ls.set("gdy_sw_reload", "1");
+            reg.waiting.postMessage({ action: "skipWaiting" });
+          } else {
   // ---------------------------
   function init() {
-    try { showIosTip(); } catch (e) {}
-    try { registerSW(); } catch (e) {}
+    try { showIosTip(); } catch (e) { /* empty */ }
+    try { registerSW(); } catch (e) { /* empty */ }
   }
 
-  if (document.readyState === "loading") {
+  // ---------------------------
+  let deferredPrompt = null;
     document.addEventListener("DOMContentLoaded", init);
   } else {
     init();

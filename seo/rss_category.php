@@ -87,6 +87,10 @@ foreach ($items as $it) {
 
 echo "</channel>\n</rss>";
 $xml = ob_get_clean();
+$cacheFile = '';
+if (is_string($xml) && $xml !== '') {
+    gdy_file_put_contents($cacheFile, $xml, LOCK_EX);
+}
 if (is_string($xml) && $xml !== '') {
     gdy_file_put_contents($cacheFile, $xml, LOCK_EX);
 }

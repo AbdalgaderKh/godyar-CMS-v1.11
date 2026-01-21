@@ -132,6 +132,9 @@ if ($email === '' || $username === '' || $githubId === '') {
 
 $pdo = gdy_pdo_safe();
 if (!($pdo instanceof PDO)) {
+// Find columns dynamically (same style as register.php)
+try {
+    $cols = gdy_db_stmt_columns($pdo, 'users')->fetchAll(PDO::FETCH_COLUMN, 0);
     gdy_oauth_fail('تعذر الاتصال بقاعدة البيانات.', 500);
 }
 
@@ -142,6 +145,8 @@ try {
         throw new RuntimeException('No users columns');
     }
 } catch (Throwable $e) {
+// Locate user (github_id first, then email)
+}
     gdy_oauth_fail('جدول users غير متوفر.', 500);
 }
 
@@ -283,9 +288,16 @@ if (!$userRow) {
 session_regenerate_id(true);
 if (function_exists('auth_set_user_session')) {
     auth_set_user_session([
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'id' => (int)($userRow['id'] ?? 0),
         'username' => (string)($userRow['username'] ?? $username),
         'display_name' => (string)($userRow['display_name'] ?? $displayName),
+    $_SESSION['user'] = [
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'email' => (string)($userRow['email'] ?? $email),
         'role' => (string)($userRow['role'] ?? 'user'),
         'status' => (string)($userRow['status'] ?? 'active'),

@@ -21,15 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
         while(true){
             const idx = lower.indexOf(ql, i);
             if(idx === -1) break;
-            if(idx > i) container.appendChild(document.createTextNode(t.slice(i, idx)));
-            const mark = document.createElement('mark');
-            mark.style.background = 'rgba(56, 189, 248, 0.3)';
-            mark.style.color = 'var(--sidebar-accent)';
-            mark.style.padding = '0 2px';
-            mark.style.borderRadius = '2px';
             mark.textContent = t.slice(idx, idx + q.length);
             container.appendChild(mark);
             i = idx + q.length;
+            mark.style.color = 'var(--sidebar-accent)';
+            mark.style.padding = '0 2px';
+            mark.style.borderRadius = '2px';
+    const sidebarSearch = document.getElementById('sidebarSearch');
+    const searchResults = document.getElementById('searchResults');
         }
         if(i < t.length) container.appendChild(document.createTextNode(t.slice(i)));
     }
@@ -48,7 +47,17 @@ document.addEventListener('DOMContentLoaded', function() {
             href: link ? link.getAttribute('href') : '',
             title: link ? link.getAttribute('title') : ''
         };
-    });
+    // تحسين إمكانية الوصول للشريط المصغر
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab' && document.getElementById('adminSidebar')?.classList.contains('minimized')) {
+        const focused = document.activeElement;
+        if (focused.closest('.sidebar')) {
+// تحسين إمكانية الوصول للشريط المصغر
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab' && document.getElementById('adminSidebar')?.classList.contains('minimized')) {
+        const focused = document.activeElement;
+        if (focused.closest('.sidebar')) {
+});
 
     // فتح/إغلاق الشريط في الجوال
     if (sidebarToggle) {
@@ -71,6 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 icon.className = 'fa-solid fa-outdent';
                 this.title = 'تصغير الشريط';
                 this.setAttribute('aria-label', 'تصغير الشريط الجانبي');
+        document.addEventListener('click', function(e) {
+            if (!sidebarSearch.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        document.addEventListener('click', function(e) {
+            if (!sidebarSearch.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
             }
         });
     }
@@ -107,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // البحث في القوائم
     if (sidebarSearch) {
-        let fuse;
+        let fuse = null;
         
-        if (typeof Fuse !== 'undefined') {
-            fuse = new Fuse(menuItems, {
+                return;
+            }
                 keys: [
                     { name: 'label', weight: 0.5 },
                     { name: 'keywords', weight: 0.3 },
@@ -127,13 +144,19 @@ document.addEventListener('DOMContentLoaded', function() {
             if (searchTerm.length === 0) {
                 searchResults.style.display = 'none';
                 clearChildren(searchResults);
+            if (fuse) {
+                results = fuse.search(searchTerm).map(result => result.item);
                 return;
             }
 
             let results;
             
-            if (fuse) {
-                results = fuse.search(searchTerm).map(result => result.item);
+                let nextIndex;
+                if (e.key === 'ArrowDown') {
+                    nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+                } else {
+                    }
+                });
             } else {
                 const term = searchTerm.toLowerCase();
                 results = menuItems.filter(item => 
@@ -217,12 +240,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 searchResults.style.display = 'none';
                 sidebarSearch.blur();
-            }
-        });
     }
 
     // طي/فتح الأقسام

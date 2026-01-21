@@ -44,8 +44,14 @@ if (!class_exists(\Godyar\Auth::class)) {
     }
 }
 
-if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
+// تحميل Auth عند الحاجة
+if (!class_exists(\Godyar\Auth::class)) {
+    if (file_exists(__DIR__ . '/../../includes/auth.php')) {
+        require_once __DIR__ . '/../../includes/auth.php';
+    }
+}
     // Sidebar مبسط للكاتب (إخفاء باقي الخصائص)
+    if (($userRole ?? '') === 'writer') :
     ?>
     <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
       <div class="admin-sidebar__card">
@@ -102,9 +108,8 @@ if (class_exists(\Godyar\Auth::class) && \Godyar\Auth::isWriter()) {
     </aside>
     <?php
     return;
-}
-
-?>
+    endif;
+    ?>
 <!-- لاحظ: أزلت كلاس col-md-3 col-lg-2 -->
 <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
   <div class="admin-sidebar__card">

@@ -130,6 +130,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($id <= 0) throw new RuntimeException(__('t_17ae6e50d5', 'مصدر غير صالح.'));
                 if ($name === '' || $url === '') throw new RuntimeException(__('t_162058200f', 'الاسم ورابط RSS مطلوبان.'));
                 $st = $pdo->prepare('UPDATE feeds SET name=:n, url=:u, category_id=:c, is_active=:a, fetch_interval_minutes=:i WHERE id=:id');
+            } elseif ($action === 'delete') {
+                $id = (int)($_POST['id'] ?? 0);
+                if ($id <= 0) throw new RuntimeException(__('t_17ae6e50d5', 'مصدر غير صالح.'));
+                $pdo->prepare('DELETE FROM feeds WHERE id=:id')->execute([':id'=>$id]);
+                $flashSuccess = __('t_abf320b86d', 'تم حذف المصدر.');
+            } elseif ($action === 'test') {
+                $id = (int)($_POST['id'] ?? 0);
+                $st = $pdo->prepare('SELECT * FROM feeds WHERE id=:id LIMIT 1');
+                $st->execute([':id'=>$id]);
+                $f = $st->fetch(PDO::FETCH_ASSOC) ?: null;
+                if (!$f) throw new RuntimeException(__('t_69d011164e', 'المصدر غير موجود.'));
+                $items = RssReader::fetch((string)$f['url'], 3);
+                if ($items && is_array($items)) {
+                    $first = (string)($items[0]['title'] ?? '');
+                    $flashSuccess = __('t_abb38a77f7', 'نجح الاتصال بالمصدر. العناصر المقروءة الآن: ') . count($items) . ($first ? __('t_59a1291925', ' — مثال: ') . $first : '');
+                } else {
+                    $flashError = __('t_42903c1300', 'تعذر قراءة RSS. تأكد أن الرابط RSS/Atom صحيح وغير محمي.');
+                }
+            } elseif ($action === 'fetch_now') {
+                $id = (int)($_POST['id'] ?? 0);
+                if ($id <= 0) throw new RuntimeException(__('t_17ae6e50d5', 'مصدر غير صالح.'));
+                $svc = new FeedImportService($pdo);
+                $res = $svc->runForFeedId($id, 12);
+                $flashSuccess = __('t_1d83c69dc2', 'تم الجلب اليدوي: تم استيراد ') . (int)($res['imported'] ?? 0) . __('t_11d6c8485e', ' وتخطي ') . (int)($res['skipped'] ?? 0) . __('t_4e3f8ea82f', ' من العناصر.');
+            } elseif ($action === 'bulk') {
+                $bulkAction = (string)($_POST['bulk_action'] ?? '');
+                $ids = $_POST['ids'] ?? [];
+                if (!is_array($ids)) $ids = [];
+                $idList = array_values(array_filter(array_map('intval', $ids), static fn($v) => $v > 0));
+                if (!$idList) throw new RuntimeException(__('t_19a9ea0660', 'لم يتم تحديد أي مصادر.'));
+                $in = implode(',', array_fill(0, count($idList), '?'));
+                if ($bulkAction === 'enable') {
+                    $pdo->prepare("UPDATE feeds SET is_active=1 WHERE id IN ($in)")->execute($idList);
+                    $flashSuccess = __('t_627469da7c', 'تم تفعيل المصادر المحددة.');
+                } elseif ($bulkAction === 'disable') {
+                    $pdo->prepare("UPDATE feeds SET is_active=0 WHERE id IN ($in)")->execute($idList);
+                    $flashSuccess = __('t_a7b5d66e42', 'تم إيقاف المصادر المحددة.');
+                } elseif ($bulkAction === 'delete') {
+                    $pdo->prepare("DELETE FROM feeds WHERE id IN ($in)")->execute($idList);
+                    $flashSuccess = __('t_8c879e5073', 'تم حذف المصادر المحددة.');
+                } elseif ($bulkAction === 'fetch_now') {
+                    $svc = new FeedImportService($pdo);
+                    $imported = 0; $skipped = 0;
+                    foreach ($idList as $fid) {
+                        $r = $svc->runForFeedId((int)$fid, 12);
+                        $imported += (int)($r['imported'] ?? 0);
+                        $skipped  += (int)($r['skipped'] ?? 0);
+                    }
+                    $flashSuccess = __('t_b96c6d0d02', 'تم الجلب اليدوي للمحدد: استيراد ') . $imported . __('t_11d6c8485e', ' وتخطي ') . $skipped . '.';
+                } else {
+                    throw new RuntimeException(__('t_3742196a8c', 'إجراء جماعي غير صالح.'));
+                }
+            }
+        } catch (Throwable $e) {
+    }
+}
+            $imported += (int)($r['imported'] ?? 0);
+            $skipped  += (int)($r['skipped'] ?? 0);
+        }
+        $flashSuccess = __('t_b96c6d0d02', 'تم الجلب اليدوي للمحدد: استيراد ') . $imported . __('t_11d6c8485e', ' وتخطي ') . $skipped . '.';
+    } else {
+        throw new RuntimeException(__('t_3742196a8c', 'إجراء جماعي غير صالح.'));
+    }
+}
+    }
+}
                 $st->execute([':n'=>$name, ':u'=>$url, ':c'=>$categoryId, ':a'=>$isActive, ':i'=>$interval, ':id'=>$id]);
                 $flashSuccess = __('t_30a2ff105a', 'تم تحديث المصدر.');
 
@@ -154,10 +220,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
             } elseif ($action === 'fetch_now') {
+                    $svc = new FeedImportService($pdo);
+                    $imported = 0; $skipped = 0;
+                    foreach ($idList as $fid) {
+                        $r = $svc->runForFeedId((int)$fid, 12);
+                        $imported += (int)($r['imported'] ?? 0);
+                        $skipped  += (int)($r['skipped'] ?? 0);
+                    }
+                    $svc = new FeedImportService($pdo);
+                    $imported = 0; $skipped = 0;
+                    foreach ($idList as $fid) {
+                        $r = $svc->runForFeed((int)$fid, 12);
+                        $imported += (int)($r['imported'] ?? 0);
+                        $skipped  += (int)($r['skipped'] ?? 0);
+                    }
                 $id = (int)($_POST['id'] ?? 0);
                 if ($id <= 0) throw new RuntimeException(__('t_17ae6e50d5', 'مصدر غير صالح.'));
                 $svc = new FeedImportService($pdo);
-                $res = $svc->runForFeedId($id, 12);
+                $res = $svc->runForFeed($id, 12);
                 $flashSuccess = __('t_1d83c69dc2', 'تم الجلب اليدوي: تم استيراد ') . (int)($res['imported'] ?? 0) . __('t_11d6c8485e', ' وتخطي ') . (int)($res['skipped'] ?? 0) . __('t_4e3f8ea82f', ' من العناصر.');
 
             } elseif ($action === 'bulk') {

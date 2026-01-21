@@ -134,6 +134,9 @@ if ($username === '') {
 
 $pdo = gdy_pdo_safe();
 if (!($pdo instanceof PDO)) {
+try {
+    $cols = gdy_db_stmt_columns($pdo, 'users')->fetchAll(PDO::FETCH_COLUMN, 0);
+    if (!is_array($cols) || empty($cols)) {
     gdy_oauth_fail_facebook('تعذر الاتصال بقاعدة البيانات.', 500);
 }
 
@@ -318,3 +321,4 @@ if (!str_starts_with($next, '/')) $next = '/';
 
 header('Location: ' . $base . $next, true, 302);
 exit;
+        }

@@ -367,6 +367,10 @@ html, body{
                 <div class="d-flex flex-wrap gap-2">
                     <?php if (!empty($row['email'])): ?>
                         <button type="button" id="copyEmailBtn" class="btn btn-sm btn-outline-light">
+                        <a href="mailto:<?= h($row['email']) ?>?subject=<?= rawurlencode(__('t_3435d61012', 'رد على: ') . (string)($row['subject'] ?? '')) ?>"
+                           class="btn btn-sm btn-primary">
+                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_8095aeba44', 'الرد عبر البريد')) ?>
+                        </a>
                             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_e489e850f9', 'نسخ البريد')) ?>
                         </button>
 

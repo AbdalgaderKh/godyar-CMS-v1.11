@@ -17,7 +17,10 @@ self.addEventListener('install', (event) => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(CORE_ASSETS);
   })());
-});
+/* Push Notifications (payload should include title/body/icon/url) */
+self.addEventListener('push', (event) => {
+  let data = {};
+  try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
 
 self.addEventListener('message', (event) => {
   if (!event.data) return;
@@ -136,17 +139,21 @@ self.addEventListener('push', function (event) {
     }
   };
 
-  event.waitUntil(self.registration.showNotification(title, options));
-});
-
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   const urlToOpen = event.notification?.data?.url || '/';
   event.waitUntil((async () => {
-    const allClients = await clients.matchAll({ includeUncontrolled: true, type: 'window' });
-    for (const client of allClients) {
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+});
+  })());
+});
       if (client.url === urlToOpen && 'focus' in client) return client.focus();
     }
     if (clients.openWindow) return clients.openWindow(urlToOpen);
+    return null;
+  })());
+});
   })());
 });

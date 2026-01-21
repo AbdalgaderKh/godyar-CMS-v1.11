@@ -3,8 +3,8 @@
 /**
  * Persian/Farsi PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Ali Jazayeri <jaza.ali@gmail.com>
- * @author Mohammad Hossein Mojtahedi <mhm5000@gmail.com>
+ * @author Ali Jazayeri <admin@example.com>
+ * @author Mohammad Hossein Mojtahedi <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'خطای SMTP: احراز هویت با شکست مواجه شد.';

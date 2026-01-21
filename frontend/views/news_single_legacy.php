@@ -76,14 +76,16 @@ $coverUrl = gdy_image_url($baseUrl, $cover) ?: null;
 
 $categoryUrl = $baseUrl . '/category/' . rawurlencode($categorySlug);
 $homeUrl     = $baseUrl . '/';
-$newsUrl     = $postId > 0 ? $baseUrl . '/news/id/' . $postId : '#';
 
-// تحسين SEO للهيدر الموحد (frontend/views/partials/header.php)
-$seoDesc = $excerpt !== '' ? $excerpt : mb_substr(trim(strip_tags((string)$body)), 0, 160, 'UTF-8');
+// SEO metadata (used by the unified header)
+$newsUrl      = $postId > 0 ? $baseUrl . '/news/id/' . $postId : '#';
+$seoDesc      = $excerpt !== '' ? $excerpt : mb_substr(trim(strip_tags((string)$body)), 0, 160, 'UTF-8');
 $publishedIso = '';
 if ($date !== '') {
     $ts = gdy_strtotime((string)$date);
-    if ($ts) $publishedIso = date('c', $ts);
+    if ($ts) {
+        $publishedIso = date('c', $ts);
+    }
 }
 $pageSeo = [
     'title' => $title !== '' ? ($title . (isset($siteName) && $siteName ? ' - ' . (string)$siteName : '')) : ((string)($siteName ?? '')),
@@ -613,6 +615,12 @@ if (is_file($header)) {
                         <div class="article-body">
                             <?= $body /* يحتوي HTML من لوحة التحكم */ ?>
                         </div>
+
+                        <?php
+                        // بعد عرض المحتوى
+                        $newsId = (int)($post['id'] ?? 0);
+                        g_do_hook('news.after_content', $newsId, $post);
+                        ?>
 
                         <!-- أسفل المقال -->
                         <div class="article-footer-bar">

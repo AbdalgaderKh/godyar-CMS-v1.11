@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../../includes/bootstrap.php';
+<?php
+require_once __DIR__ . '/../../includes/bootstrap.php';
+$pdo = $pdo ?? null;
 
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : null;
 if (!$slug) { 

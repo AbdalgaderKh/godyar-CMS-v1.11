@@ -3,13 +3,18 @@
 /**
  * AdminLogger
  * تسجيل الأحداث الإدارية في جدول admin_logs
+class AdminLogger
+{
  */
-
-use Godyar\DB;
-use PDO;
 
 class AdminLogger
 {
+Autofix Session
+59 occurrences can be fixed
+16 files will be affected
+use PDO;
+
+ */
     private ?PDO $pdo;
 
     public function __construct(?PDO $pdo = null)

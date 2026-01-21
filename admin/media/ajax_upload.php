@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 require_once __DIR__ . '/../../includes/auth.php';
 
 use Godyar\Auth;
+use Godyar\SafeUploader;
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -47,54 +48,135 @@ if ($err !== UPLOAD_ERR_OK) {
     jexit(400, ['ok' => false, 'error' => 'upload_error', 'message' => 'فشل رفع الملف.']);
 }
 
-$tmp = (string)($f['tmp_name'] ?? '');
-$orig = (string)($f['name'] ?? 'image');
-$size = (int)($f['size'] ?? 0);
+$orig = (string)($f['name'] ?? 'file');
 
-$max = 5 * 1024 * 1024;
-if ($size <= 0 || $size > $max) {
-    jexit(400, ['ok' => false, 'error' => 'size', 'message' => 'حجم الصورة غير مسموح (الحد 5MB).']);
+// Upload destination
+$root = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__, 2);
+$destAbs = rtrim((string)$root, "/\\") . '/assets/uploads/media';
+
+// Protect upload directory (no listing, no PHP execution)
+try {
+    if (!is_dir($destAbs)) {
+        if (function_exists('gdy_mkdir')) {
+            gdy_mkdir($destAbs, 0775, true);
+        } else {
+            @mkdir($destAbs, 0775, true);
+        }
+    }
+    $ht = rtrim($destAbs, "/" . chr(92)) . '/.htaccess';
+    if (!is_file($ht)) {
+        $rules = "Options -Indexes\n" .
+                 "<FilesMatch \\\"\\.(php|phtml|php\\d|phar)\\\$\\\">\n" .
+                 "  Deny from all\n" .
+                 "</FilesMatch>\n";
+        @file_put_contents($ht, $rules);
+    }
+} catch (Throwable $e) {
+    // ignore
 }
 
-// Detect MIME
-$mime = '';
-if (function_exists('finfo_open')) {
-    $fi = gdy_finfo_open(FILEINFO_MIME_TYPE);
-    if ($fi) {
-        $mime = (string)gdy_finfo_file($fi, $tmp);
-        gdy_finfo_close($fi);
+// Build URL prefix for this installation (supports subdirectory installs)
+$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+$basePath = '';
+if ($baseUrl !== '') {
+    $bp = parse_url($baseUrl, PHP_URL_PATH);
+    if (is_string($bp) && $bp !== '' && $bp !== '/') {
+        $basePath = rtrim($bp, '/');
     }
 }
-$allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
-if (!isset($allowed[$mime])) {
-    jexit(400, ['ok' => false, 'error' => 'mime', 'message' => 'نوع الصورة غير مسموح.']);
+$urlPrefix = ($basePath !== '' ? $basePath : '') . '/assets/uploads/media';
+
+// Helper: build absolute URL from rel path
+$origin = '';
+if ($baseUrl !== '') {
+    $scheme = parse_url($baseUrl, PHP_URL_SCHEME);
+    $host   = parse_url($baseUrl, PHP_URL_HOST);
+    $port   = parse_url($baseUrl, PHP_URL_PORT);
+    if (is_string($scheme) && $scheme !== '' && is_string($host) && $host !== '') {
+        $origin = $scheme . '://' . $host . ($port ? (':' . (int)$port) : '');
+    }
 }
 
-// Extra validation: ensure it's a real image
-if (gdy_getimagesize($tmp) === false) {
-    jexit(400, ['ok' => false, 'error' => 'bad_image', 'message' => 'الملف ليس صورة صالحة.']);
+// Allowed types (images + documents + audio/video)
+$allowedMime = [
+    // Images
+    'jpg'  => ['image/jpeg'],
+    'jpeg' => ['image/jpeg'],
+    'png'  => ['image/png'],
+    'gif'  => ['image/gif'],
+    'webp' => ['image/webp'],
+
+    // Documents
+    'pdf'  => ['application/pdf'],
+    'doc'  => ['application/msword','application/octet-stream'],
+    'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/zip','application/octet-stream'],
+    'xls'  => ['application/vnd.ms-excel','application/octet-stream'],
+    'xlsx' => ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/zip','application/octet-stream'],
+    'ppt'  => ['application/vnd.ms-powerpoint','application/octet-stream'],
+    'pptx' => ['application/vnd.openxmlformats-officedocument.presentationml.presentation','application/zip','application/octet-stream'],
+    'csv'  => ['text/csv','text/plain','application/octet-stream'],
+    'txt'  => ['text/plain','application/octet-stream'],
+    'rtf'  => ['application/rtf','text/rtf','application/octet-stream'],
+    'zip'  => ['application/zip','application/x-zip-compressed','application/octet-stream'],
+    'rar'  => ['application/x-rar','application/vnd.rar','application/octet-stream'],
+    '7z'   => ['application/x-7z-compressed','application/octet-stream'],
+
+    // Audio/Video
+    'mp4'  => ['video/mp4','application/octet-stream'],
+    'webm' => ['video/webm','application/octet-stream'],
+    'mp3'  => ['audio/mpeg','audio/mp3','application/octet-stream'],
+    'wav'  => ['audio/wav','audio/x-wav','application/octet-stream'],
+    'ogg'  => ['audio/ogg','application/ogg','application/octet-stream'],
+    'm4a'  => ['audio/mp4','application/octet-stream'],
+];
+$allowedExt = array_keys($allowedMime);
+
+try {
+    $res = SafeUploader::upload($f, [
+        'max_bytes'    => 100 * 1024 * 1024,
+        'allowed_ext'  => $allowedExt,
+        'allowed_mime' => $allowedMime,
+        'dest_abs_dir' => $destAbs,
+        'url_prefix'   => $urlPrefix,
+        'prefix'       => 'media_',
+    ]);
+} catch (Throwable $e) {
+    jexit(500, ['ok' => false, 'error' => 'upload', 'message' => 'تعذر رفع الملف.']);
 }
 
-$ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
-if ($ext === '' || !in_array($ext, ['jpg','jpeg','png','gif','webp'], true)) {
-    $ext = $allowed[$mime];
-}
-if ($ext === 'jpeg') $ext = 'jpg';
-
-$root = defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/\\') : rtrim(dirname(__DIR__, 2), '/\\');
-$uploadDir = $root . '/assets/uploads/media/';
-if (!is_dir($uploadDir)) {
-    gdy_mkdir($uploadDir, 0755, true);
+if (empty($res['success'])) {
+    $msg = (string)($res['error'] ?? 'تعذر رفع الملف.');
+    // Improve common message
+    if (str_contains($msg, 'size')) {
+        $msg = 'حجم الملف غير مسموح (الحد 100MB).';
+    }
+    jexit(400, ['ok' => false, 'error' => 'upload', 'message' => $msg]);
 }
 
-$base = date('Ymd_His') . '_' . bin2hex(random_bytes(4));
-$fileName = $base . '.' . $ext;
-$dest = $uploadDir . $fileName;
+$rel = (string)($res['rel_url'] ?? '');
+$mime = (string)($res['mime'] ?? 'application/octet-stream');
+$size = (int)($res['size'] ?? 0);
+$abs  = (string)($res['abs_path'] ?? '');
+$ext  = (string)($res['ext'] ?? '');
 
-if (!gdy_move_uploaded_file($tmp, $dest)) {
-    jexit(500, ['ok' => false, 'error' => 'move', 'message' => 'تعذر حفظ الصورة على السيرفر.']);
+$url = $rel;
+if ($origin !== '' && $rel !== '') {
+    $url = $origin . $rel;
+} elseif ($baseUrl !== '' && $rel !== '') {
+    $url = $baseUrl . $rel;
 }
-gdy_chmod($dest, 0644);
+
+// For images: basic integrity check + optional compression/watermark
+$isImage = in_array($ext, ['jpg','jpeg','png','gif','webp'], true) && str_starts_with($mime, 'image/');
+if ($isImage) {
+    if ($abs === '' || !is_file($abs) || gdy_getimagesize($abs) === false) {
+        // Remove invalid image
+        if ($abs !== '' && is_file($abs)) {
+            @unlink($abs);
+        }
+        jexit(400, ['ok' => false, 'error' => 'bad_image', 'message' => 'الملف ليس صورة صالحة.']);
+    }
+}
 
 // ---- Optional compression + watermark (GD) ----
 function gdy_image_open(string $path, string $mime) {
@@ -237,15 +319,16 @@ function gdy_compress_and_watermark(string $path, string $mime): void {
     imagedestroy($im);
 }
 
-// Process image after upload
-try {
-    gdy_compress_and_watermark($dest, $mime);
-} catch (Throwable $e) {
-    error_log('[ajax_upload process] ' . $e->getMessage());
+// Process image after upload (only for non-GIF images)
+if ($isImage && $ext !== 'gif' && $abs !== '') {
+    try {
+        gdy_compress_and_watermark($abs, $mime);
+    } catch (Throwable $e) {
+        error_log('[ajax_upload process] ' . $e->getMessage());
+    }
 }
 
-$url = rtrim((string)base_url(), '/') . '/assets/uploads/media/' . $fileName;
-$size = (int)(gdy_filesize($dest) ?: $size);
+$size = (int)(($abs !== '' && is_file($abs)) ? (gdy_filesize($abs) ?: $size) : $size);
 
 // Insert into media table if exists
 $pdo = gdy_pdo_safe();

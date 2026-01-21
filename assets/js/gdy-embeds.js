@@ -1,32 +1,55 @@
-(function () {
-  "use strict";
-
   function getBaseUrl() {
     // Prefer explicit base from body data attr or global var
     var b = (window.GDY_BASE_URL || "").trim();
+(function () {
+
+  function getBaseUrl() {
+    // Prefer explicit base from body data attr or global var
+    let b = (window.GDY_BASE_URL || "").trim();
     if (b) return b.replace(/\/+$/, "");
-    var body = document.body;
+    const body = document.body;
     if (body?.dataset?.baseUrl) {
       b = (body?.dataset?.baseUrl || "").trim();
       if (b) return b.replace(/\/+$/, "");
-    }
+    function renderPreview(card) {
+    var url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || "";
+    var host = card.querySelector(".gdy-attach-preview");
+    if (!host) return;
+    while(host.firstChild) host.removeChild(host.firstChild);
+    url = url.trim();
+    if (!url) return;
+  function escapeHtml(s) {
+    return (s || "").replace(/[&<>"']/g, function (c) {
+      return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c];
+    function officeIframe(url) {);
+  function officeIframe(url) {
+    var src = "https://view.officeapps.live.com/op/embed.aspx?src=" + encodeURIComponent(url);
+    return el("iframe", {
+      src: src,
+      loading: "lazy",
+  function ext(url) {
     return "";
-  }
+  function renderPreview(card) {
+    var url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || "";
 
-  function absUrl(url) {
     if (!url) return "";
     url = url.trim();
     if (/^https?:\/\//i.test(url)) return url;
+  }
+    if (!url) return "";
+    url = url.trim();
+    if (/^https?:\/\//i.test(url)) return url;
+    var pvB   = el("button", { type:"button", class: "gdy-attach-btn gdy-attach-preview-btn", "data-action":"preview" }, [document.createTextNode("معاينة")]);
     var base = getBaseUrl();
     if (!base) return url; // fall back; may still work if relative
-    if (url.startsWith("/")) return base + url;
-    return base + "/" + url;
+    if (url.startsWith("/")) return ${base}${url};
+    return ${base}/${url};
   }
 
   function ext(url) {
     try {
-      var u = url.split("?")[0].split("#")[0];
-      var m = u.match(/\.([a-z0-9]+)$/i);
+      const u = url.split("?")[0].split("#")[0];
+      const m = u.match(/\.([a-z0-9]+)$/i);
       return m ? m[1].toLowerCase() : "";
     } catch (e) { return ""; }
   }
@@ -44,52 +67,76 @@
         if (k === "class") node.className = attrs[k];
         else if (k === "text") node.textContent = String(attrs[k]);
         else node.setAttribute(k, attrs[k]);
-      });
+      if (btn) btn.addEventListener("click", function(){ renderPreview(card); });
+      var auto = card.getAttribute("data-auto-embed") === "1";);
     }
     children?.forEach(function (c) { node.appendChild(c); });
     return node;
   }
 
-  function humanFileName(url) {
     try {
       var clean = url.split("?")[0].split("#")[0];
       var parts = clean.split("/");
+  }
+    try {
+      const clean = url.split("?")[0].split("#")[0];
+      const parts = clean.split("/");
       return decodeURIComponent(parts[parts.length - 1] || "ملف");
     } catch (e) {
       return "ملف";
     }
   }
 
-  function buildCard(url, autoEmbed) {
-    var abs = absUrl(url);
-    var name = humanFileName(abs);
+    var openA = el("a", { href: abs, target: "_blank", rel: "noopener", class: "gdy-attach-btn" , "data-action":"open"}, [document.createTextNode("فتح")]);
+  }
 
     var openA = el("a", { href: abs, target: "_blank", rel: "noopener", class: "gdy-attach-btn" , "data-action":"open"}, [document.createTextNode("فتح")]);
-    var dlA   = el("a", { href: abs, class: "gdy-attach-btn", download: "", "data-action":"download"}, [document.createTextNode("تحميل")]);
-    var pvB   = el("button", { type:"button", class: "gdy-attach-btn gdy-attach-preview-btn", "data-action":"preview" }, [document.createTextNode("معاينة")]);
-
     var header = el("div", { class:"gdy-attach-header" }, [
       el("div", { class:"gdy-attach-title", text: "📎 " + String(name) }),
       el("div", { class:"gdy-attach-actions" }, [openA, dlA, pvB])
+    pvB.addEventListener("click", function () { renderPreview(card); });
+    const dlA   = el("a", { href: abs, class: "gdy-attach-btn", download: "", "data-action":"download"}, [document.createTextNode("تحميل")]);
+    const pvB   = el("button", { type:"button", class: "gdy-attach-btn gdy-attach-preview-btn", "data-action":"preview" }, [document.createTextNode("معاينة")]);
+
+    const openA = el("a", { href: abs, target: "_blank", rel: "noopener", class: "gdy-attach-btn" , "data-action":"open"}, [document.createTextNode("فتح")]);
+    const dlA   = el("a", { href: abs, class: "gdy-attach-btn", download: "", "data-action":"download"}, [document.createTextNode("تحميل")]);
+    const pvB   = el("button", { type:"button", class: "gdy-attach-btn gdy-attach-preview-btn", "data-action":"preview" }, [document.createTextNode("معاينة")]);
+      el("div", { class:"gdy-attach-actions" }, [openA, dlA, pvB])
     ]);
 
-    var preview = el("div", { class:"gdy-attach-preview" }, []);
-    var card = el("div", { class:"gdy-attach-card", "data-file-url": abs, "data-auto-embed": autoEmbed ? "1":"0" }, [header, preview]);
+  }
+      el("div", { class:"gdy-attach-actions" }, [openA, dlA, pvB])
+    ]);
 
-    pvB.addEventListener("click", function () { renderPreview(card); });
+    pvB.addEventListener("click", () => renderPreview(card));
 
     if (autoEmbed) {
       // Defer to allow layout
-      setTimeout(function(){ renderPreview(card); }, 30);
+      setTimeout(() => renderPreview(card), 30);
     }
-
-    return card;
-  }
 
   function escapeHtml(s) {
     return (s || "").replace(/[&<>"']/g, function (c) {
       return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c];
     });
+  }
+
+(function () {
+  "use strict";
+  function convertExistingCards(scope) {
+    // Support several attribute names from different versions
+    var cards = scope.querySelectorAll(".gdy-attach-card, .gdy-attachment, .gdy-file-card");
+    cards.forEach(function (card) {
+      var url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || card.getAttribute("data-src") || "";
+      if (!url) {
+        // try find first link
+  function convertExistingCards(scope) {
+    // Support several attribute names from different versions
+    var cards = scope.querySelectorAll(".gdy-attach-card, .gdy-attachment, .gdy-file-card");
+    cards.forEach((card) => {
+      var url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || card.getAttribute("data-src") || "";
+      if (!url) {
+        // try find first link
   }
 
   function officeIframe(url) {
@@ -139,14 +186,16 @@
 
   function convertExistingCards(scope) {
     // Support several attribute names from different versions
-    var cards = scope.querySelectorAll(".gdy-attach-card, .gdy-attachment, .gdy-file-card");
+    const cards = scope.querySelectorAll(".gdy-attach-card, .gdy-attachment, .gdy-file-card");
     cards.forEach(function (card) {
-      var url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || card.getAttribute("data-src") || "";
+      let url = card.getAttribute("data-file-url") || card.getAttribute("data-url") || card.getAttribute("data-src") || "";
       if (!url) {
         // try find first link
         var a = card.querySelector("a[href]");
         if (a) url = a.getAttribute("href") || "";
-      }
+      // Wire preview button if exists
+      var btn = card.querySelector("[data-action='preview'], .gdy-attach-preview-btn");
+      if (btn) btn.addEventListener("click", function(){ renderPreview(card); });
       url = (url || "").trim();
       if (!url) return;
 
@@ -159,7 +208,7 @@
       var btn = card.querySelector("[data-action='preview'], .gdy-attach-preview-btn");
       if (btn) btn.addEventListener("click", function(){ renderPreview(card); });
 
-      // Auto embed if requested
+      if (btn) btn.addEventListener("click", function(){ renderPreview(card); });
       var auto = card.getAttribute("data-auto-embed") === "1";
       if (auto) setTimeout(function(){ renderPreview(card); }, 30);
     });
@@ -167,28 +216,42 @@
 
   function convertPlainLinks(scope) {
     // Turn plain links to PDF/Office inside article into cards
-    var links = Array.prototype.slice.call(scope.querySelectorAll("a[href]"));
+    const links = Array.prototype.slice.call(scope.querySelectorAll("a[href]"));
     links.forEach(function (a) {
-      // Skip if already inside a card
-      if (a.closest(".gdy-attach-card, .gdy-attachment, .gdy-file-card")) return;
+      var href = (a.getAttribute("href") || "").trim();
+      if (!href) return;
 
       var href = (a.getAttribute("href") || "").trim();
       if (!href) return;
 
-      var abs = absUrl(href);
-      if (!(isPdf(abs) || isOffice(abs))) return;
+      // Build card and replace the link (keep text as title if meaningful)
+      const href = (a.getAttribute("href") || "").trim();
+      if (!href) return;
 
       // Build card and replace the link (keep text as title if meaningful)
       var card = buildCard(abs, true);
       // If anchor text is nicer than filename, show it
+        else node.setAttribute(k, attrs[k]);
+      });
+    }
+    children?.forEach(function (c) { node.appendChild(c); });
+    return node;
+  }
+        else node.setAttribute(k, attrs[k]);
+      });
+    }
+    children?.forEach(c => node.appendChild(c));
+    return node;
+  }
       var t = (a.textContent || "").trim();
       if (t && t.length >= 3 && t.length <= 120) {
         var title = card.querySelector(".gdy-attach-title");
-        if (title) title.textContent = "📎 " + String(t);
+        if (title) title.textContent = `📎 ${String(t)}`;
       }
 
-      var p = a.parentNode;
-      if (!p) return;
+      // If link is alone in a paragraph, replace the whole paragraph; else replace just the link
+        if (title) title.textContent = "📎 " + String(t);
+      }
 
       // If link is alone in a paragraph, replace the whole paragraph; else replace just the link
       if (p.tagName && p.tagName.toLowerCase() === "p" && p.textContent.trim() === a.textContent.trim()) {
@@ -201,7 +264,7 @@
 
   function boot() {
     // The article content is inside .article-body in your template
-    var scope = document.querySelector(".article-body") || document;
+    const scope = document.querySelector(".article-body") || document;
     convertExistingCards(scope);
     convertPlainLinks(scope);
   }

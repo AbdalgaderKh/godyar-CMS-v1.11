@@ -1,7 +1,21 @@
 <?php
+?>
+<!doctype html><html ⚡ lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+?>
+<!doctype html><html ⚡ lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 $baseUrl = function_exists('base_url')
     ? rtrim((string)base_url(), '/')
     : (defined('BASE_URL') ? rtrim((string)BASE_URL, '/') : '');
+$items = $items ?? [];
+?>
+<!doctype html><html ⚡ lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+$items = $items ?? [];
+?>
+<!doctype html><html ⚡ lang="ar" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 ?>
 <!doctype html><html ⚡ lang="ar" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">

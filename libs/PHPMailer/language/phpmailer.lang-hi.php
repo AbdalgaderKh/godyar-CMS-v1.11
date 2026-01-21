@@ -3,8 +3,8 @@
 /**
  * Hindi PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Yash Karanke <mr.karanke@gmail.com>
- * Rewrite and extension of the work by Jayanti Suthar <suthar.jayanti93@gmail.com>
+ * @author Yash Karanke <admin@example.com>
+ * Rewrite and extension of the work by Jayanti Suthar <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP त्रुटि: प्रामाणिकता की जांच नहीं हो सका। ';

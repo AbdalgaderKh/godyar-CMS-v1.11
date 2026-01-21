@@ -48,6 +48,14 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH . '/includes/fs.php';
 
+// Start session as early as possible (before any output) so CSRF and plugins work reliably.
+// Some templates render output before widgets run; starting the session here prevents
+// "CSRF validation failed" due to headers already being sent.
+if (function_exists('gdy_session_start')) {
+    gdy_session_start();
+}
+
+
 // Audit log helper
 require_once ROOT_PATH . '/includes/audit_log.php';
 // DB driver compatibility helpers (MySQL/PostgreSQL)
@@ -59,15 +67,17 @@ if (is_file($autoload)) {
     require_once $autoload;
 }
 
+// Internal autoloader (for Godyar\* and App\*)
+require_once ROOT_PATH . '/includes/autoload.php';
+
+// Legacy security helper (global Security class used by some legacy code)
+$legacySec = ROOT_PATH . '/includes/classes/Security.php';
+if (is_file($legacySec)) { require_once $legacySec; }
+
+
+
 // تحميل ENV/.env (مصدر واحد للإعدادات)
-// Ensure ENV_FILE is available even under PHP-FPM where Apache SetEnv may not be passed through.
-if (!getenv('ENV_FILE') && empty($_SERVER['ENV_FILE'])) {
-    $___envFile = '/home/geqzylcq/godyar_private/.env';
-    // Do not leak secrets; this only sets the file path.
-    putenv('ENV_FILE=' . $___envFile);
-    $_SERVER['ENV_FILE'] = $___envFile;
-    $_ENV['ENV_FILE'] = $___envFile;
-}
+// ملاحظة: تحت PHP-FPM قد لا تمرّ متغيرات Apache SetEnv؛ لذلك نحدد ENV_FILE برمجياً إن لزم.
 
 // Optional: set ENV_FILE path without relying on .htaccess (useful on shared hosting / PHP-FPM)
 // Create /includes/env_path.php (not committed) to define the ENV_FILE location via putenv()/$_SERVER.
@@ -75,7 +85,35 @@ if (is_file(__DIR__ . '/env_path.php')) {
     require_once __DIR__ . '/env_path.php';
 }
 
+if (!getenv('ENV_FILE') && empty($_SERVER['ENV_FILE'])) {
+    // Priority order:
+    // 1) <root>/../godyar_private/.env (recommended on shared hosting: godyar_private is sibling of public_html)
+    // 2) <root>/godyar_private/.env (if you keep private folder inside project root)
+    // 3) <root>/.env (fallback)
+    $candidates = [
+        rtrim((string)dirname((string)ROOT_PATH), '/\\') . '/godyar_private/.env',
+        rtrim((string)ROOT_PATH, '/\\') . '/godyar_private/.env',
+        rtrim((string)ROOT_PATH, '/\\') . '/.env',
+    ];
+
+    $found = '';
+    foreach ($candidates as $cand) {
+        if (is_string($cand) && $cand !== '' && is_file($cand)) {
+            $found = $cand;
+            break;
+        }
+    }
+
+    if ($found !== '') {
+        putenv('ENV_FILE=' . $found);
+        $_SERVER['ENV_FILE'] = $found;
+        $_ENV['ENV_FILE'] = $found;
+    }
+}
 require_once ROOT_PATH . '/includes/env.php';
+// i18n loader (single entry): use lang.php for backward compatibility.
+// lang.php provides __()/gdy_lang() and avoids redeclare conflicts if other i18n files are included.
+require_once ROOT_PATH . '/includes/lang.php';
 
 // DB helpers (PDO source of truth)
 require_once ROOT_PATH . '/includes/db.php';
@@ -98,6 +136,17 @@ if (!function_exists('normalize_display_name')) {
         $name = trim($name);
         $name = preg_replace('/\s+/u', ' ', $name) ?? $name;
         return $name;
+    }
+}
+
+if (!function_exists('gdy_auto_track_request')) {
+    function gdy_auto_track_request(): void
+    {
+        try {
+            // empty
+        } catch (Throwable $e) {
+            // empty
+        }
     }
 }
 
@@ -819,3 +868,18 @@ require_once ROOT_PATH . '/includes/indexnow.php';
 
 // Load site settings helpers (frontend options, theme, etc.)
 require_once ROOT_PATH . '/includes/site_settings.php';
+
+
+// -------------------------
+require_once ROOT_PATH . '/includes/functions.php';
+
+// Plugins bootstrap
+// -------------------------
+require_once ROOT_PATH . '/includes/plugins.php';
+
+// Load enabled plugins early so hooks/filters are available to templates and admin.
+try {
+    g_plugins()->loadAll(ROOT_PATH . '/plugins');
+} catch (Throwable $e) {
+    error_log('[Godyar Plugins] loadAll failed: ' . $e->getMessage());
+}

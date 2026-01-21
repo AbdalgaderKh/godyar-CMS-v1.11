@@ -49,44 +49,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($errors)) {
         try {
-            // رفع الصورة
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/godyar/assets/uploads/sliders/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-            
-            $fileName = 'slider_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $filePath = $uploadDir . $fileName;
-            
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $filePath)) {
-                $imageUrl = '/godyar/assets/uploads/sliders/' . $fileName;
-                
-                // حفظ في قاعدة البيانات
-                if ($tableExists) {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO sliders (title, description, image_path, button_text, button_url, display_order, is_active)
-                        VALUES (:title, :description, :image_path, :button_text, :button_url, :display_order, :is_active)
-                    ");
-                    
-                    $stmt->execute([
-                        ':title' => $title,
-                        ':description' => $description,
-                        ':image_path' => $imageUrl,
-                        ':button_text' => $buttonText,
-                        ':button_url' => $buttonUrl,
-                        ':display_order' => $displayOrder,
-                        ':is_active' => $isActive
-                    ]);
-                    
-                    $success = __('t_0f995f1d71', 'تم إضافة الشريحة بنجاح!');
+            require_once __DIR__ . '/../../includes/classes/SafeUploader.php';
+            $SafeUploaderClass = 'Godyar' . chr(92) . 'SafeUploader';
+
+            $destAbs = rtrim((string)ROOT_PATH, '/') . '/assets/uploads/sliders';
+            $urlPrefix = '/assets/uploads/sliders';
+
+            // Make uploads directory non-executable (best effort)
+            if (!is_dir($destAbs)) {
+                if (function_exists('gdy_mkdir')) {
+                    gdy_mkdir($destAbs, 0755, true);
+                } else {
+                    @mkdir($destAbs, 0755, true);
                 }
-            } else {
-                $errors[] = __('t_a579958e8f', 'فشل في رفع الصورة');
             }
-            
+            $ht = $destAbs . '/.htaccess';
+            if (is_dir($destAbs) && !is_file($ht)) {
+                @file_put_contents($ht, "Options -Indexes\n<FilesMatch \"php$\">\n  Require all denied\n</FilesMatch>\n<FilesMatch \"phtml$\">\n  Require all denied\n</FilesMatch>\n<FilesMatch \"phar$\">\n  Require all denied\n</FilesMatch>\n");
+            }
+
+            $res = $SafeUploaderClass::upload($_FILES['image'], [
+                'dest_abs_dir' => $destAbs,
+                'url_prefix' => $urlPrefix,
+                'max_bytes' => 5 * 1024 * 1024,
+                'allowed_ext' => ['jpg','jpeg','png','gif','webp'],
+                'allowed_mime' => [
+                    'jpg' => ['image/jpeg'],
+                    'jpeg' => ['image/jpeg'],
+                    'png' => ['image/png'],
+                    'gif' => ['image/gif'],
+                    'webp' => ['image/webp'],
+                ],
+                'prefix' => 'slider_',
+            ]);
+
+            if (($res['success'] ?? false) !== true) {
+                throw new Exception((string)($res['error'] ?? __('t_a579958e8f', 'فشل في رفع الصورة')));
+            }
+
+            $imageUrl = (string)$res['rel_url'];
+
+            // حفظ في قاعدة البيانات
+            if ($tableExists) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO sliders (title, description, image_path, button_text, button_url, display_order, is_active)
+                    VALUES (:title, :description, :image_path, :button_text, :button_url, :display_order, :is_active)
+                ");
+
+                $stmt->execute([
+                    ':title' => $title,
+                    ':description' => $description,
+                    ':image_path' => $imageUrl,
+                    ':button_text' => $buttonText,
+                    ':button_url' => $buttonUrl,
+                    ':display_order' => $displayOrder,
+                    ':is_active' => $isActive
+                ]);
+
+                $success = __('t_0f995f1d71', 'تم إضافة الشريحة بنجاح!');
+            }
+
         } catch (Exception $e) {
             $errors[] = __('t_44f36bbf4b', 'حدث خطأ أثناء حفظ البيانات: ') . $e->getMessage();
         }
+            
     }
 }
 

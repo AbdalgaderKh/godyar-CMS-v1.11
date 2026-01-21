@@ -9,17 +9,22 @@ declare(strict_types=1);
  * ملاحظة: هذا الحارس مصمم ليكون آمن حتى لو لم توجد بعض الكلاسات/الملفات.
  */
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
-}
+	// Load bootstrap early so helper wrappers (like gdy_session_start) are available.
+	$bootstrap = __DIR__ . '/../includes/bootstrap.php';
+	if (is_file($bootstrap)) {
+	    require_once $bootstrap;
+	}
 
-$loginUrl = '/admin/login';
+	if (session_status() !== PHP_SESSION_ACTIVE) {
+	    // Backward-compatible session start.
+	    if (function_exists('gdy_session_start')) {
+	        gdy_session_start();
+	    } else {
+	        session_start();
+	    }
+	}
 
-// تحميل bootstrap + auth إن وُجدا
-$bootstrap = __DIR__ . '/../includes/bootstrap.php';
-if (is_file($bootstrap)) {
-    require_once $bootstrap;
-}
+	$loginUrl = '/admin/login';
 
 // Language / i18n (Admin)
 $__i18n = __DIR__ . '/i18n.php';

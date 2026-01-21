@@ -36,10 +36,20 @@
   }
 
   async function hasSubscription(){
+refactor: remove console.log usage from browser code
+JS-0002
+ Bug risk
+Created 18 minutes ago
+JavaScript
+abdalgaderkh
+Created by abdalgaderkh
+Autofix Session
+3 occurrences can be fixed
+3 files will be affected
     if(!('serviceWorker' in navigator)) return false;
     const reg = await navigator.serviceWorker.ready;
     const sub = await reg.pushManager.getSubscription();
-    return !!sub;
+    return Boolean(sub);
   }
 
   async function init(){
@@ -51,6 +61,14 @@
     }catch(e){ /* ignore */ }
 
     // show after short delay so it doesn't feel intrusive
+    setDismiss(); hide();
+  });
+  btnLater && btnLater.addEventListener('click', function(){
+    setDismiss(); hide();
+  });
+  btnLater?.addEventListener('click', function(){
+    setDismiss(); hide();
+  });
     setTimeout(show, 1200);
   }
 

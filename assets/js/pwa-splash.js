@@ -1,5 +1,8 @@
+  function hide() {
+    el.classList.add('is-hiding');
+    setTimeout(() => { try { el.remove(); } catch (e) {} }, 320);
+  }
 (function () {
-  "use strict";
 
   function isStandalone() {
     try {
@@ -22,10 +25,13 @@
 
   function hide() {
     el.classList.add('is-hiding');
-    setTimeout(() => { try { el.remove(); } catch (e) {} }, 320);
+    setTimeout(() => { try { el.remove(); } catch (e) { /* empty */ } }, 320);
   }
 
-  window.addEventListener('load', () => {
+  function hide() {
+    el.classList.add('is-hiding');
+    setTimeout(() => { try { el.remove(); } catch (e) {} }, 320);
+  }
     setTimeout(hide, 350);
   });
 

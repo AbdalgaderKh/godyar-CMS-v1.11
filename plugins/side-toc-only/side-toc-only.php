@@ -5,12 +5,68 @@
  * Version: 1.0.0
  * Author: ChatGPT
  * License: GPLv2 or later
- */
-
-if (!defined('ABSPATH')) { exit; }
-
 /**
  * Remove TOC containers from the_content only.
+ * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
+
+function stoc_should_filter_content($content) {
+    if (is_admin()) {
+        return false;
+    }
+    if (!is_string($content) || trim($content) === '') {
+        return false;
+    }
+    if (function_exists('is_singular') && !is_singular()) {
+        return false;
+    }
+    return true;
+}
+function stoc_has_toc_markers($content) {
+    $needles = array('ez-toc-container', 'lwptoc', 'toc_container', 'toc-container', 'rank-math-toc', 'wp-block-lwptoc');
+    foreach ($needles as $needle) {
+        if (stripos($content, $needle) !== false) {
+            return true;
+        }
+    }
+    return false;
+}
+function stoc_wrap_content($content) {
+    return mb_convert_encoding('<div id="stoc-wrapper">'. $content .'</div>', 'HTML-ENTITIES', 'UTF-8');
+}
+function stoc_remove_toc_nodes_from_dom($html) {
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
+    $xpath = new DOMXPath($dom);
+    $classes = array('ez-toc-container', 'toc_container', 'toc-container', 'rank-math-toc', 'wp-block-lwptoc');
+    foreach ($classes as $class) {
+        $nodes = $xpath->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $class ')]");
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
+        }
+    }
+    $ids = array('lwptoc');
+    foreach ($ids as $id) {
+        $nodes = $xpath->query("//*[@id='$id']");
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
+        }
+    }
+    $wrapper = $dom->getElementById('stoc-wrapper');
+    if ($wrapper) {
+        return $dom->saveHTML($wrapper);
+    }
+    return '';
+}
+/**
+ * Remove TOC containers from the_content only.
+ * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
+
+ * Optional: add a CSS fallback to hide TOC blocks inside the post content if any slip through.
+ */
+function stoc_inline_css_fallback() {
+    if (is_admin()) { return; }
+    if (function_exists('is_singular') && !is_singular()) { return; }
  * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
  */
 function stoc_remove_toc_from_content($content) {
@@ -39,8 +95,7 @@ function stoc_remove_toc_from_content($content) {
     // Ensure proper encoding for Arabic/UTF-8 content
     $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 
-    // Load without adding extra <html lang="ar" dir="rtl"><body> in output (flags depend on libxml version)
-    $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+ */
 
     $xpath = new DOMXPath($dom);
 
@@ -86,9 +141,20 @@ function stoc_remove_toc_from_content($content) {
 }
 add_filter('the_content', 'stoc_remove_toc_from_content', 999);
 
+function stoc_inline_css_fallback() {
+    if (is_admin()) { return; }
+    if (function_exists('is_singular') && !is_singular()) { return; }
 /**
  * Optional: add a CSS fallback to hide TOC blocks inside the post content if any slip through.
  */
+if (!function_exists('is_admin')) {
+    function is_admin() {
+        return false;
+    }
+}
+function stoc_inline_css_fallback() {
+    if (is_admin()) { return; }
+    if (function_exists('is_singular') && !is_singular()) { return; }
 function stoc_inline_css_fallback() {
     if (is_admin()) { return; }
     if (function_exists('is_singular') && !is_singular()) { return; }

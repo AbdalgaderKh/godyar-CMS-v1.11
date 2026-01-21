@@ -3,7 +3,7 @@
 /**
  * Esperanto PHPMailer language file: refer to English translation for definitive list
  * @package PHPMailer
- * @author Robin van der Vliet <info@robinvandervliet.com>
+ * @author Robin van der Vliet <admin@example.com>
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP-eraro: Ne eblis aŭtentigi.';

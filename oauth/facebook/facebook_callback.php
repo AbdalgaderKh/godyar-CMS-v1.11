@@ -31,7 +31,13 @@ $tokenUrl = "https://graph.facebook.com/{$ver}/oauth/access_token?" . http_build
     'redirect_uri' => $redirectUri,
     'client_secret' => $appSecret,
     'code' => $code,
-]);
+$tokenJson = gdy_file_get_contents($tokenUrl);
+if (empty($data['access_token'])) {
+    error_log('[FacebookOAuth] token exchange failed: ' . (string)$tokenJson);
+    http_response_code(400);
+    exit("تعذر تسجيل الدخول عبر Facebook.");
+}
+$data = json_decode($tokenJson, true) ?: [];
 
 $tokenJson = gdy_file_get_contents($tokenUrl);
 $data = json_decode((string)$tokenJson, true) ?: [];
@@ -42,21 +48,25 @@ if (empty($data['access_token'])) {
     exit("تعذر تسجيل الدخول عبر Facebook.");
 }
 
-$accessToken = (string)$data['access_token'];
+// Fetch user profile
+$meUrl = "https://graph.facebook.com/{$ver}/me?" . http_build_query([
+    exit("تعذر تسجيل الدخول عبر Facebook.");
+}
 
 // Fetch user profile
 $meUrl = "https://graph.facebook.com/{$ver}/me?" . http_build_query([
     'fields' => 'id,name,email,picture.type(large)',
     'access_token' => $accessToken,
-]);
+$meJson = gdy_file_get_contents($meUrl);
+$me = json_decode((string)$meJson, true) ?: [];
 
 $meJson = gdy_file_get_contents($meUrl);
 $me = json_decode((string)$meJson, true) ?: [];
 
-$email = strtolower(trim((string)($me['email'] ?? '')));
-$name  = trim((string)($me['name'] ?? ''));
-$fid   = (string)($me['id'] ?? '');
-$pic   = (string)($me['picture']['data']['url'] ?? '');
+if ($email === '') {
+    // بعض حسابات فيسبوك ما تعطي email إذا الصلاحية غير مفعلة/غير متاحة
+$meJson = gdy_file_get_contents($meUrl);
+$me = json_decode($meJson, true) ?: [];
 
 if ($email === '') {
     // بعض حسابات فيسبوك ما تعطي email إذا الصلاحية غير مفعلة/غير متاحة

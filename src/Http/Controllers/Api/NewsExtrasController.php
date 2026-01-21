@@ -168,11 +168,10 @@ final class NewsExtrasController
 
     public function tts(): void { $this->json(['ok' => false, 'message' => 'TTS غير مفعّل'], 501); }
 
-    public function pushSubscribe(): void { $this->json(['ok' => true]); }
-    public function pushUnsubscribe(): void { $this->json(['ok' => true]); }
-
     public function __version(): string
     {
         return 'NewsExtrasController safe 2026-01-14';
     }
+    public function pushSubscribe(): void { $this->json(['ok' => true]); }
+    public function pushUnsubscribe(): void { $this->json(['ok' => true]); }
 }

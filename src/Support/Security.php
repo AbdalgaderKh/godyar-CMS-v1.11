@@ -27,12 +27,12 @@ class Security
             && hash_equals($_SESSION['csrf_token'], $token);
     }
 
-    public static function headers(): void
-    {
-        header('X-Frame-Options: SAMEORIGIN');
-        header('X-Content-Type-Options: nosniff');
-        header('Referrer-Policy: strict-origin-when-cross-origin');
-        header('X-XSS-Protection: 1; mode=block');
+        public static function headers(): void
+        {
+            header('X-Frame-Options: SAMEORIGIN');
+            header('X-Content-Type-Options: nosniff');
+            header('Referrer-Policy: strict-origin-when-cross-origin');
+            header('X-XSS-Protection: 1; mode=block');
 
         $strict = getenv('CSP_STRICT') === '1'
             || strtolower((string) getenv('CSP_STRICT')) === 'true';

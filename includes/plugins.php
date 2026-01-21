@@ -40,7 +40,7 @@ final class PluginManager
     /** @var array<string,array> slug => meta */
     private array $meta = [];
 
-    /** @var array<string,array<int,array{int,callable}>> hook => [ [priority, callback], ... ] */
+    /** @var array<string, array<int, array{0:int,1:callable}>> */
     private array $hooks = [];
 
     private function __construct() {}
@@ -122,6 +122,9 @@ final class PluginManager
                 $instance = include $main;
 
                 if ($instance instanceof GodyarPluginInterface) {
+                    // Install/Migrate عند التفعيل (قبل register)
+                    $this->maybeMigratePlugin($slug, $pluginPath, $meta, $instance);
+
                     $this->meta[$slug]    = $meta;
                     $this->plugins[$slug] = $instance;
                     $instance->register($this);
@@ -133,9 +136,209 @@ final class PluginManager
     }
 
     /**
+     * تشغيل migrations يدويًا لإضافة واحدة (حتى لو كانت مُعطّلة) من لوحة الإدارة.
+     * - إذا $force=true: يتم تشغيل migrate من 0 -> schema_version (مفيد عند وجود أعمدة مفقودة رغم تسجيل النسخة).
+     *
+     * @return array{ok:bool,message:string,from?:int,to?:int}
+     */
+    public function runMigrationsFor(string $slug, ?string $baseDir = null, bool $force = false): array
+    {
+        $slug = preg_replace('~[^A-Za-z0-9_\-]~', '', $slug) ?: '';
+        if ($slug === '') {
+            return ['ok' => false, 'message' => 'Invalid slug'];
+        }
+
+        $base = $baseDir ?: dirname(__DIR__) . '/plugins';
+        $pluginPath = rtrim($base, '/\\') . DIRECTORY_SEPARATOR . $slug;
+        if (!is_dir($pluginPath)) {
+            return ['ok' => false, 'message' => 'Plugin folder not found'];
+        }
+
+        $meta = ['slug' => $slug, 'enabled' => true];
+        $metaFile = $pluginPath . '/plugin.json';
+        if (is_file($metaFile)) {
+            $json = gdy_file_get_contents($metaFile);
+            if (is_string($json) && $json !== '') {
+                $decoded = json_decode($json, true);
+                if (is_array($decoded)) {
+                    $meta = array_merge($meta, $decoded);
+                }
+            }
+        }
+
+        $target = (int)($meta['schema_version'] ?? 0);
+        if ($target <= 0) {
+            return ['ok' => false, 'message' => 'No schema_version configured'];
+        }
+
+        $main = $pluginPath . '/Plugin.php';
+        if (!is_file($main)) {
+            return ['ok' => false, 'message' => 'Plugin.php not found'];
+        }
+
+        $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+        if (!$pdo instanceof \PDO) {
+            return ['ok' => false, 'message' => 'DB connection not available'];
+        }
+
+        try {
+            $instance = include $main;
+            if (!$instance instanceof GodyarPluginInterface) {
+                return ['ok' => false, 'message' => 'Plugin does not implement interface'];
+            }
+
+            $this->ensureSchemaTable($pdo);
+            $installed = $this->getInstalledSchemaVersion($pdo, $slug);
+            $from = $force ? 0 : $installed;
+
+            // migrate() preferred
+            if (method_exists($instance, 'migrate')) {
+                $ref = new \ReflectionMethod($instance, 'migrate');
+                $argc = $ref->getNumberOfParameters();
+                $args = [$pdo, $from, $target, $pluginPath, $meta];
+                $ref->invokeArgs($instance, array_slice($args, 0, $argc));
+                $this->setInstalledSchemaVersion($pdo, $slug, $target);
+                return ['ok' => true, 'message' => 'Migrations executed', 'from' => $from, 'to' => $target];
+            }
+
+            // install() fallback (only for fresh installs)
+            if ($from === 0 && method_exists($instance, 'install')) {
+                $ref = new \ReflectionMethod($instance, 'install');
+                $argc = $ref->getNumberOfParameters();
+                $args = [$pdo, $pluginPath, $meta];
+                $ref->invokeArgs($instance, array_slice($args, 0, $argc));
+                $this->setInstalledSchemaVersion($pdo, $slug, $target);
+                return ['ok' => true, 'message' => 'Install executed', 'from' => 0, 'to' => $target];
+            }
+
+            return ['ok' => false, 'message' => 'No migrate/install method found'];
+        } catch (\Throwable $e) {
+            error_log('[Godyar Plugin] manual migrate failed for ' . $slug . ': ' . $e->getMessage());
+            return ['ok' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * تشغيل migrations لكل الإضافات داخل مجلد /plugins.
+     *
+     * @return array<int,array{slug:string,ok:bool,message:string,from?:int,to?:int}>
+     */
+    public function runMigrationsForAll(?string $baseDir = null, bool $force = false): array
+    {
+        $base = $baseDir ?: dirname(__DIR__) . '/plugins';
+        if (!is_dir($base)) return [];
+
+        $out = [];
+        $dirs = scandir($base);
+        if (!is_array($dirs)) return [];
+
+        foreach ($dirs as $dir) {
+            if ($dir === '.' || $dir === '..') continue;
+            if (!is_dir($base . '/' . $dir)) continue;
+            $res = $this->runMigrationsFor($dir, $base, $force);
+            $out[] = array_merge(['slug' => $dir], $res);
+        }
+        return $out;
+    }
+
+
+    /**
      * تسجيل hook
      */
-    public function addHook(string $hook, callable $callback, int $priority = 10): void
+    
+
+/**
+ * تشغيل install/migrate للإضافة (يعمل قبل register).
+ * يعتمد على plugin.json -> schema_version (عدد صحيح).
+ * يتم حفظ النسخة المثبّتة داخل جدول godyar_plugin_schema.
+ */
+private function maybeMigratePlugin(string $slug, string $pluginPath, array $meta, GodyarPluginInterface $instance): void
+{
+    $target = (int)($meta['schema_version'] ?? 0);
+    if ($target <= 0) {
+        return;
+    }
+
+    $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+    if (!$pdo instanceof \PDO) {
+        return;
+    }
+
+    try {
+        $this->ensureSchemaTable($pdo);
+        $from = $this->getInstalledSchemaVersion($pdo, $slug);
+
+        if ($target <= $from) {
+            return; // لا يوجد شيء للتنفيذ
+        }
+
+        // 1) migrate(PDO $pdo, int $from, int $to, string $pluginPath, array $meta)
+        if (method_exists($instance, 'migrate')) {
+            $ref = new \ReflectionMethod($instance, 'migrate');
+            $argc = $ref->getNumberOfParameters();
+            if ($argc >= 2) {
+                // مرونة في تمرير المعاملات حسب التوقيع
+                $args = [$pdo, $from, $target, $pluginPath, $meta];
+                $ref->invokeArgs($instance, array_slice($args, 0, $argc));
+            }
+            $this->setInstalledSchemaVersion($pdo, $slug, $target);
+            return;
+        }
+
+        // 2) install(PDO $pdo, string $pluginPath, array $meta) — ينفذ فقط عند from=0
+        if ($from === 0 && method_exists($instance, 'install')) {
+            $ref = new \ReflectionMethod($instance, 'install');
+            $argc = $ref->getNumberOfParameters();
+            $args = [$pdo, $pluginPath, $meta];
+            $ref->invokeArgs($instance, array_slice($args, 0, $argc));
+            $this->setInstalledSchemaVersion($pdo, $slug, $target);
+        }
+    } catch (\Throwable $e) {
+        // لا نكسر الموقع؛ فقط نسجل الخطأ
+        error_log('[Godyar Plugin] migrate failed for ' . $slug . ': ' . $e->getMessage());
+    }
+}
+
+private function ensureSchemaTable(\PDO $pdo): void
+{
+    // جدول صغير لتتبع نسخ مخطط الإضافات
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS godyar_plugin_schema (
+            slug VARCHAR(120) NOT NULL PRIMARY KEY,
+            schema_version INT NOT NULL DEFAULT 0,
+            updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    ");
+}
+
+private function getInstalledSchemaVersion(\PDO $pdo, string $slug): int
+{
+    try {
+        $st = $pdo->prepare("SELECT schema_version FROM godyar_plugin_schema WHERE slug=? LIMIT 1");
+        $st->execute([$slug]);
+        $v = $st->fetchColumn();
+        return is_numeric($v) ? (int)$v : 0;
+    } catch (\Throwable $e) {
+        return 0;
+    }
+}
+
+private function setInstalledSchemaVersion(\PDO $pdo, string $slug, int $version): void
+{
+    $version = (int)$version;
+    try {
+        $st = $pdo->prepare("
+            INSERT INTO godyar_plugin_schema (slug, schema_version)
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE schema_version=VALUES(schema_version)
+        ");
+        $st->execute([$slug, $version]);
+    } catch (\Throwable $e) {
+        // ignore
+    }
+}
+
+public function addHook(string $hook, callable $callback, int $priority = 10): void
     {
         $this->hooks[$hook][] = [$priority, $callback];
         usort($this->hooks[$hook], static function ($a, $b) {

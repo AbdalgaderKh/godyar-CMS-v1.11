@@ -15,7 +15,7 @@ require_once __DIR__ . '/../_admin_guard.php';
       <?php if (!empty($errors['title'])): ?>
         <div class="invalid-feedback"><?= htmlspecialchars($errors['title'], ENT_QUOTES, 'UTF-8') ?></div>
       <?php endif; ?>
-    </div>
+    <hr>
 
     <div class="mb-3">
       <label class="form-label">
@@ -54,7 +54,9 @@ require_once __DIR__ . '/../_admin_guard.php';
 
     <hr>
 
-    <h6 class="mb-3"><?= h(__('t_5584163b0c', 'إعدادات SEO')) ?></h6>
+      <a href="index.php" class="btn btn-outline-secondary btn-sm">
+        <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
+      </a>
 
     <div class="mb-3">
       <label class="form-label"><?= h(__('t_6267a6f940', 'عنوان الميتا (Meta Title)')) ?></label>

@@ -178,8 +178,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $body = implode("\n", $bodyLines);
 
             // من الأفضل أن يكون الـ From من نفس الدومين (لتقليل نسبة السبام)
-            // يمكنك تعديل no-reply@oddoarabic.com إلى إيميل حقيقي على نفس الدومين
-            $fromEmail = 'no-reply@oddoarabic.com';
+            // يمكنك تعديل admin@example.com إلى إيميل حقيقي على نفس الدومين
+            $fromEmail = 'admin@example.com';
             $fromName  = $siteName ?? 'Godyar';
 
             $headers  = 'From: ' . sprintf('"%s" <%s>', '=?UTF-8?B?' . base64_encode($fromName) . '?=', $fromEmail) . "\r\n";
@@ -220,9 +220,9 @@ $page = [
     'updated_at' => null,
 ];
 
-$pageNotFound = false;
-
 // تجهيز بيانات القالب
+$pageNotFound = $pageNotFound ?? false;
+
 $templateData = [
     // إعدادات الهوية
     'siteName'        => $siteName,

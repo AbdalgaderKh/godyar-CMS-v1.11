@@ -9,6 +9,26 @@
   function clearChildren(el){ while(el?.firstChild) el.removeChild(el.firstChild); }
   function safeSameOriginHref(href){
     try{ const u=new URL(String(href||''), window.location.origin); return (u.origin===window.location.origin) ? (u.pathname+u.search+u.hash) : '#'; }catch(e){ return '#'; }
+        localStorage.setItem(lastKey, String(uid));
+        toast('تمت مزامنة المحفوظات');
+            try{
+          await navigator.share({ title: title, text: title, url: url });
+          return;
+        }catch(e){}
+        localStorage.setItem(lastKey, String(uid));
+        toast('تمت مزامنة المحفوظات');
+      }
+    }catch(e){
+      // empty
+    }
+  }
+    }catch(e){}
+      t.style.opacity = '1';
+      clearTimeout(t.__hide);
+      t.__hide = setTimeout(()=>{ t.style.opacity = '0'; }, 1600);
+    }catch(e){
+      // empty
+    }
   }
 
   const BASE = (window.GDY_BASE || '').replace(/\/$/, '');
@@ -41,10 +61,7 @@
         document.body.appendChild(t);
       }
       t.textContent = msg;
-      t.style.opacity = '1';
-      clearTimeout(t.__hide);
-      t.__hide = setTimeout(()=>{ t.style.opacity = '0'; }, 1600);
-    }catch(e){}
+  }
   }
 
   async function postForm(url, data){
@@ -69,12 +86,21 @@
       const s = localStorage.getItem(LS_KEY);
       const v = s ? JSON.parse(s) : [];
       return Array.isArray(v) ? v : [];
+    const arr = readLocal();
+    return arr.some(x => String(x.news_id) === String(newsId));
+  }
     }catch(e){ return []; }
   }
   function writeLocal(arr){
-    try{ localStorage.setItem(LS_KEY, JSON.stringify(arr||[])); }catch(e){}
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(arr||[])); }catch(e){
+      // empty
+  document.addEventListener('DOMContentLoaded', () => {
+    initShare();
+    initBookmarkBtn();
+    initReaderTools();
+    const arr = readLocal();
+    return arr.some(x => String(x.news_id) === String(newsId));
   }
-  function hasLocal(newsId){
     const arr = readLocal();
     return arr.some(x => String(x.news_id) === String(newsId));
   }
@@ -99,6 +125,11 @@
   }
 
   function setBookmarkBtnState(btn, saved){
+    btn.addEventListener('click', async function(){
+      const url = (location && location.href) ? location.href : '';
+      const titleEl = qs('h1') || qs('title');
+      const title = titleEl ? (titleEl.textContent || document.title || '') : (document.title || '');
+      if(navigator.share){
     if(!btn) return;
     btn.dataset.saved = saved ? '1' : '0';
     const icon = btn.querySelector('i');
@@ -106,13 +137,40 @@
     if(icon){
       icon.classList.remove('fa-regular','fa-solid');
       icon.classList.add(saved ? 'fa-solid' : 'fa-regular');
+    const {auth} = authInfo();
+    if(auth){
+      getJson(api('/api/bookmarks/status?news_id=' + encodeURIComponent(newsId)))
+        .then(j => { if(j?.ok) setBookmarkBtnState(btn, !!j.saved); })
+        .catch(()=>{ setBookmarkBtnState(btn, hasLocal(newsId)); });
+    } else {
+      setBookmarkBtnState(btn, hasLocal(newsId));
+    const {auth} = authInfo();
+    if(auth){
+      getJson(api('/api/bookmarks/status?news_id=' + encodeURIComponent(newsId)))
+        .then(j => { if(j?.ok) setBookmarkBtnState(btn, Boolean(j.saved)); })
+        .catch(()=>{ setBookmarkBtnState(btn, hasLocal(newsId)); });
+    } else {
+      setBookmarkBtnState(btn, hasLocal(newsId));
       icon.classList.add('fa-bookmark');
     }
     if(text) text.textContent = saved ? 'محفوظ' : 'حفظ';
-    btn.classList.toggle('active', !!saved);
+    btn.classList.toggle('active', Boolean(saved));
   }
 
-  async function syncLocalToServer(force){
+    const {auth} = authInfo();
+    if(auth){
+      getJson(api('/api/bookmarks/status?news_id=' + encodeURIComponent(newsId)))
+        .then(j => { if(j?.ok) setBookmarkBtnState(btn, !!j.saved); })
+        .catch(()=>{ setBookmarkBtnState(btn, hasLocal(newsId)); });
+    } else {
+      setBookmarkBtnState(btn, hasLocal(newsId));
+    const {auth} = authInfo();
+    if(auth){
+      getJson(api('/api/bookmarks/status?news_id=' + encodeURIComponent(newsId)))
+        .then(j => { if(j?.ok) setBookmarkBtnState(btn, Boolean(j.saved)); })
+        .catch(()=>{ setBookmarkBtnState(btn, hasLocal(newsId)); });
+    } else {
+      setBookmarkBtnState(btn, hasLocal(newsId));
     const {auth, uid} = authInfo();
     if(!auth || uid <= 0) return;
 
@@ -135,10 +193,32 @@
       });
       const j = await r.json();
       if(j?.ok){
+      }
+      // fallback: copy
+      try{
+        try{
+          await navigator.share({ title: title, text: title, url: url });
+          return;
+        }catch(e){
+          // empty
+        }
+      }
+      // fallback: copy
+      try{
+      }
+      // fallback: copy
+      try{
+        try{
+          await navigator.share({ title: title, text: title, url: url });
+          return;
+        }catch(e){ // empty }
+      }
+      // fallback: copy
+      try{
         localStorage.setItem(lastKey, String(uid));
         toast('تمت مزامنة المحفوظات');
       }
-    }catch(e){}
+    }catch(e){ /* empty */ }
   }
 
   function renderLocalBookmarks(){
@@ -212,7 +292,8 @@
         toast('تمت الإزالة');
         renderLocalBookmarks();
       });
-    });
+  function escapeHtml(s){
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
   function escapeHtml(s){
@@ -223,8 +304,10 @@
   // Share button
   // -----------------------------
   function initShare(){
-    const btn = qs('#gdyShare');
-    if(!btn) return;
+    btn.addEventListener('click', async () => {
+      const url = location?.href ? location.href : '';
+      const titleEl = qs('h1') || qs('title');
+      const title = titleEl ? (titleEl.textContent || document.title || '') : (document.title || '');
 
     btn.addEventListener('click', async function(){
       const url = location?.href ? location.href : '';
@@ -243,7 +326,8 @@
       }catch(e){
         toast('انسخ الرابط من شريط العنوان');
       }
-    });
+  function escapeHtml(s){
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
   // -----------------------------
@@ -263,12 +347,13 @@
         .then(j => { if(j?.ok) setBookmarkBtnState(btn, !!j.saved); })
         .catch(()=>{ setBookmarkBtnState(btn, hasLocal(newsId)); });
     } else {
+      // Build local item (always keep local for offline / cross)
+    }
       setBookmarkBtnState(btn, hasLocal(newsId));
     }
 
-    btn.addEventListener('click', async function(){
-      const {auth} = authInfo();
-      const current = (btn.dataset.saved === '1');
+      // Build local item (always keep local for offline / cross)
+    }
 
       // Build local item (always keep local for offline / cross)
       const item = {
@@ -276,6 +361,14 @@
         title: btn.dataset.title || document.title || '',
         image: btn.dataset.image || '',
         url: btn.dataset.url || ('/news/id/' + newsId),
+      if(auth){
+        try{
+          const res = await postForm(api('/api/bookmarks/toggle'), { news_id: String(newsId), action: 'toggle' });
+          if(res?.ok){
+      if(auth){
+        try{
+          const res = await postForm(api('/api/bookmarks/toggle'), { news_id: String(newsId), action: 'toggle' });
+          if(res?.ok){
         published_at: btn.dataset.publishedAt || ''
       };
 
@@ -307,7 +400,8 @@
           toast('تم الحفظ');
         }
       }
-    });
+  function escapeHtml(s){
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
   // -----------------------------
@@ -322,11 +416,21 @@
 
     const LS_THEME = 'gdy_reading_mode';
     const LS_FONT  = 'gdy_font_scale';
+    function setReadingMode(on){
+      document.body.classList.toggle('gdy-reading-mode', !!on);
+      try{ localStorage.setItem(LS_THEME, on ? '1' : '0'); }catch(e){}
+    }
+    function getReadingMode(){
+    function setReadingMode(on){
+      document.body.classList.toggle('gdy-reading-mode', !!on);
+      try{ localStorage.setItem(LS_THEME, on ? '1' : '0'); }catch(e){}
+    }
+    function getReadingMode(){
     const LS_POS_PREFIX = 'gdy_read_pos_';
 
     function setReadingMode(on){
       document.body.classList.toggle('gdy-reading-mode', !!on);
-      try{ localStorage.setItem(LS_THEME, on ? '1' : '0'); }catch(e){}
+      try{ localStorage.setItem(LS_THEME, on ? '1' : '0'); }catch(e){ /* empty */ }
     }
     function getReadingMode(){
       try{ return localStorage.getItem(LS_THEME) === '1'; }catch(e){ return false; }
@@ -360,10 +464,6 @@
 
     // Progress + save position
     if(progress){
-      const article = qs('article') || qs('.gdy-article-body') || document.body;
-      function updateProgress(){
-        const doc = document.documentElement;
-        const scrollTop = (window.pageYOffset || doc.scrollTop || 0);
         const height = Math.max(1, doc.scrollHeight - window.innerHeight);
         const pct = Math.max(0, Math.min(100, (scrollTop/height)*100));
         progress.style.width = pct.toFixed(2) + '%';
@@ -402,10 +502,18 @@
               chip.style.fontSize = '13px';
               chip.style.boxShadow = '0 10px 30px rgba(0,0,0,.25)';
               document.body.appendChild(chip);
+      }
+    }
+  }
             }
             chip.onclick = ()=>{ window.scrollTo({top: saved-40, behavior:'smooth'}); chip.remove(); };
           }
-        }catch(e){}
+        }catch(e){
+          // empty
+        }
+      }
+    }
+  }
       }
     }
   }
@@ -422,12 +530,8 @@
     // render local
     renderLocalBookmarks();
 
-    const syncBtn = qs('#gdySyncBookmarks');
-    if(syncBtn){
-      syncBtn.addEventListener('click', async function(){
-        await syncLocalToServer(true);
-        // reload to reflect server list
-        try{ location.reload(); }catch(e){}
+    }
+  }
       });
     }
   }

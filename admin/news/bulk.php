@@ -10,13 +10,35 @@ ini_set('log_errors', '1');
 // Buffer output so we can strip accidental output (BOM, notices, etc.) before JSON.
 if (!ob_get_level()) {
     ob_start();
-}
+function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
 
 $__gdy_bulk_warnings = [];
 set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$__gdy_bulk_warnings) {
     if (!(error_reporting() & $errno)) {
         return false;
+    if (((int)($f['no_image'] ?? 0) === 1)) {
+        $where .= " AND (n.image IS NULL OR n.image = '')";
     }
+    if (((int)($f['no_desc'] ?? 0) === 1)) {
+        $where .= " AND (n.seo_description IS NULL OR n.seo_description = '')";
+    }
+    if (((int)($f['no_keywords'] ?? 0) === 1)) {
+        $where .= " AND (n.seo_keywords IS NULL OR n.seo_keywords = '')";
+    }
+    return $where;
+}
+function gdy_exec_in(PDO $pdo, string $sqlBase, array $ids, array $prefixParams = []): bool {
+    if (!$ids) return true;
+    $chunks = array_chunk($ids, 200);
+    foreach ($chunks as $chunk) {
+        $in = implode(',', array_fill(0, count($chunk), '?'));
+        $sql = str_replace('%%IN%%', $in, $sqlBase);
+        $st = $pdo->prepare($sql);
+        $ok = $st->execute(array_merge($prefixParams, $chunk));
+        if (!$ok) return false;
+    }
+    return true;
+}
     // Collect (do not output). Keep it compact.
     $type = match ($errno) {
         E_WARNING => 'WARNING',
@@ -202,7 +224,15 @@ function gdy_exec_in(PDO $pdo, string $sqlBase, array $ids, array $prefixParams 
 }
 
 function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
-    $cols = gdy_db_columns($pdo, 'news');
+    if ($action === 'status') {
+        $to = (string)($extra['to'] ?? '');
+        $allowedStatus = ['published', 'draft', 'pending', 'approved', 'archived'];
+        if (!in_array($to, $allowedStatus, true)) return 0;
+        if ($to === 'published' && isset($cols['published_at'])) {
+            $sql = "UPDATE news SET status=?, published_at=IFNULL(published_at, NOW()) WHERE id IN (%%IN%%)";
+            return gdy_exec_in($pdo, $sql, $ids, [$to]) ? count($ids) : 0;
+        }
+        $sql = "UPDATE news SET status=? WHERE id IN (%%IN%%)";
     if (!$cols) return 0;
 
     $st = $pdo->prepare("SELECT * FROM news WHERE id=? LIMIT 1");
@@ -211,8 +241,13 @@ function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
     if (!$row) return 0;
 
     $now = date('Y-m-d H:i:s');
-    $title = (string)($row['title'] ?? '');
-    $slug  = (string)($row['slug'] ?? '');
+    $newTitle = trim($title . ' (نسخة)');
+    $suffix = '-copy-' . date('ymdHis') . '-' . random_int(100, 999);
+    $newSlug = $slug !== '' ? $slug . $suffix : ('news' . $suffix);
+    // Trim slug if too long
+    if (isset($cols['slug']) && strlen($newSlug) > 180) {
+        $newSlug = substr($newSlug, 0, 180);
+    }
 
     $newTitle = trim($title . ' (نسخة)');
     $suffix = '-copy-' . date('ymdHis') . '-' . random_int(100, 999);
@@ -223,8 +258,7 @@ function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
         $newSlug = substr($newSlug, 0, 180);
     }
 
-    $insert = [];
-    $place = [];
+        if ($c === 'created_at' || $c === 'updated_at') $val = $now;
     $vals  = [];
 
     foreach ($cols as $c => $_) {
@@ -272,8 +306,8 @@ function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
     return $newId;
 }
 
-function gdy_apply_action(PDO $pdo, string $action, array $ids, array $extra): int {
-    if (!$ids) return 0;
+    $cols = gdy_db_columns($pdo, 'news');
+        if ($c === 'created_at' || $c === 'updated_at') $val = $now;
 
     $cols = gdy_db_columns($pdo, 'news');
 
@@ -287,8 +321,7 @@ function gdy_apply_action(PDO $pdo, string $action, array $ids, array $extra): i
             return gdy_exec_in($pdo, $sql, $ids, [$to]) ? count($ids) : 0;
         }
         $sql = "UPDATE news SET status=? WHERE id IN (%%IN%%)";
-        return gdy_exec_in($pdo, $sql, $ids, [$to]) ? count($ids) : 0;
-    }
+    $cols = gdy_db_columns($pdo, 'news');
 
     if ($action === 'delete') {
         if (!isset($cols['deleted_at'])) return 0;

@@ -1,4 +1,4 @@
-<?php
+declare(strict_types=1);
 declare(strict_types=1);
 
 // /godyar/public/news/view.php
@@ -16,6 +16,9 @@ $slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
 
 $news = null;
 if ($pdo instanceof PDO) {
+$news = null;
+if ($pdo instanceof PDO) {
+    $stmt = null;
     try {
         if ($slug !== '') {
             $stmt = $pdo->prepare("SELECT * FROM news WHERE slug = :slug AND status='published' LIMIT 1");

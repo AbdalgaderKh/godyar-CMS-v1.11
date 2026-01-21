@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     gdy_session_start();
-}
+$pdo = gdy_pdo_safe();
 
 function gdy_oauth_fail_facebook(string $msg, int $code = 400): void {
     http_response_code($code);
@@ -280,9 +280,16 @@ if (!$userRow) {
 session_regenerate_id(true);
 if (function_exists('auth_set_user_session')) {
     auth_set_user_session([
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'id' => (int)($userRow['id'] ?? 0),
         'username' => (string)($userRow['username'] ?? $username),
         'display_name' => (string)($userRow['display_name'] ?? $displayName),
+    $_SESSION['user'] = [
+        'email' => (string)($userRow['email'] ?? $email),
+        'role' => (string)($userRow['role'] ?? 'user'),
+        'status' => (string)($userRow['status'] ?? 'active'),
         'email' => (string)($userRow['email'] ?? $email),
         'role' => (string)($userRow['role'] ?? 'user'),
         'status' => (string)($userRow['status'] ?? 'active'),

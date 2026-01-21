@@ -37,6 +37,10 @@ curl_setopt_array($ch, [
     ]),
 ]);
 $res = curl_exec($ch);
+$data = json_decode((string)$res, true) ?: [];
+if ($http >= 400 || empty($data['access_token'])) {
+    error_log('[GitHubOAuth] token exchange failed: HTTP=' . $http . ' RES=' . (string)$res);
+    http_response_code(400);
 $http = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
@@ -47,7 +51,10 @@ if ($http >= 400 || empty($data['access_token'])) {
     exit("تعذر تسجيل الدخول عبر GitHub.");
 }
 
-$token = (string)$data['access_token'];
+// Fetch user
+$ch = curl_init('https://api.github.com/user');
+    exit("تعذر تسجيل الدخول عبر GitHub.");
+}
 
 // Fetch user
 $ch = curl_init('https://api.github.com/user');
@@ -60,16 +67,23 @@ curl_setopt_array($ch, [
     ],
 ]);
 $uRes = curl_exec($ch);
-$uHttp = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
 $u = json_decode((string)$uRes, true) ?: [];
 $login = (string)($u['login'] ?? '');
 $gid   = (string)($u['id'] ?? '');
 $name  = trim((string)($u['name'] ?? $login));
-$avatar= trim((string)($u['avatar_url'] ?? ''));
+$uHttp = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
 
-// Fetch primary email
+$u = json_decode($uRes, true) ?: [];
+$login = $u['login'] ?? '';
+$gid   = $u['id'] ?? '';
+$name  = trim($u['name'] ?? $login);
+$avatar= trim($u['avatar_url'] ?? '');
+
+$login = (string)($u['login'] ?? '');
+$gid   = (string)($u['id'] ?? '');
+$name  = trim((string)($u['name'] ?? $login));
+$avatar= trim((string)($u['avatar_url'] ?? ''));
 $ch = curl_init('https://api.github.com/user/emails');
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,

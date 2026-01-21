@@ -12,9 +12,15 @@ final class RssReader
 {
     /**
      * @return array<int, array{title:string, link:string, date:string, summary:string, image:string}>
+        $url = trim($url);
+        if ($url === '') return [];
      */
     public static function fetch(string $url, int $limit = 10): array
     {
+        $results = [];
+        $url = trim($url);
+        if ($url === '') {
+            return $results;
         $url = trim($url);
         if ($url === '') return [];
 
@@ -23,14 +29,15 @@ final class RssReader
                 'http' => [
                     'timeout'    => 10,
                     'user_agent' => 'GodyarRssReader/1.0 (+https://godyar.org)',
-                ],
-            ]);
+            $xmlString = gdy_file_get_contents($url, false, $context);
+            if ($xmlString === false || trim($xmlString) === '') return [];
 
             $xmlString = gdy_file_get_contents($url, false, $context);
             if ($xmlString === false || trim($xmlString) === '') return [];
 
-            $xml = gdy_simplexml_load_string($xmlString, 'SimpleXMLElement', LIBXML_NOCDATA);
-            if ($xml === false) return [];
+            $items = [];
+            $xmlString = gdy_file_get_contents($url);
+            if ($xmlString === false || trim($xmlString) === '') return [];
 
             $items = [];
 

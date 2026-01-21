@@ -7,10 +7,7 @@ use Godyar\Services\CategoryService;
 
 final class CategoryController
 {
-    /** @var CategoryService */
     private CategoryService $categories;
-
-    /** @var string */
     private string $basePrefix;
 
     public function __construct(CategoryService $categories, string $basePrefix = '')
@@ -19,63 +16,87 @@ final class CategoryController
         $this->basePrefix = rtrim($basePrefix, '/');
     }
 
+    /**
+     * عرض صفحة قسم.
+     *
+     * ملاحظة: هذه الدالة كانت متضررة (Parse Error) بسبب وجود منطق خارج أي دالة.
+     */
     public function show(string $slug, int $page = 1, string $sort = 'latest', string $period = 'all'): void
     {
-        $slug = trim($slug, "/ \t\n\r\0\x0B");
+        $slug = trim((string)$slug);
+        $slug = trim($slug, "/ " . "\t\n\r\0\x0B");
         // منع أي محاولات لتمرير مسارات متعددة
         if ($slug === '' || strpos($slug, '/') !== false) {
             $this->renderMessage(404, 'القسم غير موجود', 'لم يتم تحديد اسم القسم في الرابط.');
         }
 
-        // GDY_PAGE_CACHE_V8 — cache full rendered HTML for guests (category/tag)
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            gdy_session_start();
+        // بدء الجلسة لأن بعض التحقق يعتمد على session
+        if (function_exists('gdy_session_start')) {
+            @gdy_session_start();
+        } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+            @session_start();
         }
-        $isLogged = isset($_SESSION['user']) && is_array($_SESSION['user']);
-        $usePageCache = ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && !$isLogged && class_exists('Cache');
-        $pageCacheKey = 'page:category:' . $slug . ':' . (int)$page . ':' . $sort . ':' . $period;
+
+        // كاش اختياري إن وُجد Cache class
+        $usePageCache = class_exists('Cache');
+        $pageCacheKey = 'cat:' . md5($slug . '|' . $page . '|' . $sort . '|' . $period);
         if ($usePageCache) {
-            $cached = \Cache::get($pageCacheKey);
-            if (is_string($cached) && $cached !== '') {
-                header('X-Godyar-Cache: HIT');
-                echo $cached;
-                exit;
+            try {
+                $cached = \Cache::get($pageCacheKey);
+                if (is_string($cached) && $cached !== '') {
+                    header('X-Godyar-Cache: HIT');
+                    echo $cached;
+                    exit;
+                }
+            } catch (\Throwable $e) {
+                // ignore cache failures
             }
         }
-        if ($slug === '') {
-            $this->renderMessage(404, 'القسم غير موجود', 'لم يتم تحديد اسم القسم في الرابط.');
-        }
 
-        $category = method_exists($this->categories, 'findBySlug')
-            ? $this->categories->findBySlug($slug)
-            : (method_exists($this->categories, 'findBySlugOrId') ? $this->categories->findBySlugOrId($slug) : null);
+        $category = $this->categories->findBySlug($slug);
         if (!$category) {
-            $this->renderMessage(404, 'القسم غير موجود', 'هذا القسم غير موجود.');
-        }
-
-        // is_active=0 => Gone
-        if (array_key_exists('is_active', $category) && $category['is_active'] !== null) {
-            $active = (int)$category['is_active'];
-            if ($active === 0) {
-                $this->renderMessage(410, 'القسم غير متاح', 'هذا القسم غير نشط حالياً.');
-            }
+            $this->renderMessage(404, 'القسم غير موجود', 'لم يتم العثور على القسم المطلوب.');
         }
 
         $categoryId = (int)($category['id'] ?? 0);
         if ($categoryId <= 0) {
-            $this->renderMessage(404, 'القسم غير موجود', 'تعذر تحديد القسم.');
+            $this->renderMessage(404, 'القسم غير موجود', 'القسم غير صالح.');
         }
 
+        $page = max(1, (int)$page);
         $perPage = 12;
-        $result = $this->categories->listPublishedNews($categoryId, $page, $perPage, $sort, $period);
+
+        $sort = strtolower(trim((string)$sort));
+        if (!in_array($sort, ['latest','popular','views'], true)) {
+            $sort = 'latest';
+        }
+
+        $period = strtolower(trim((string)$period));
+        if (!in_array($period, ['all','day','week','month'], true)) {
+            $period = 'all';
+        }
+
+		// توافق: بعض الإصدارات تستخدم listPublishedNews كاسم موحد.
+		if (method_exists($this->categories, 'listPublishedNews')) {
+		    $result = $this->categories->listPublishedNews($categoryId, $page, $perPage, $sort, $period);
+		} else {
+		    $result = $this->categories->listNews($categoryId, $page, $perPage, $sort, $period);
+		}
+        $rows = (array)($result['items'] ?? []);
 
         $baseUrl = $this->baseUrl();
-
         $items = [];
-        foreach (($result['items'] ?? []) as $row) {
+
+        foreach ($rows as $row) {
+            if (!is_array($row)) continue;
+
             $id = (int)($row['id'] ?? 0);
             $newsSlug = (string)($row['slug'] ?? '');
-            $url = $baseUrl . '/news/id/' . $id;
+
+            // توحيد URL الخبر على /news/id/{id}
+            $url = $id > 0
+                ? ($baseUrl . '/news/id/' . $id)
+                : ($baseUrl . '/news/' . rawurlencode($newsSlug));
 
             $catMembersOnly = (int)($category['is_members_only'] ?? 0) === 1;
             $rowMembersOnly = (int)($row['is_members_only'] ?? 0) === 1;
@@ -85,7 +106,7 @@ final class CategoryController
                 'url' => $url,
                 'is_locked' => $isLocked ? 1 : 0,
             ]);
-}
+        }
 
         $subcategories = $this->categories->subcategories($categoryId, 10);
         $parentId = isset($category['parent_id']) ? (int)$category['parent_id'] : null;
@@ -107,7 +128,7 @@ final class CategoryController
             'siblingCategories' => $siblingCategories,
             'totalItems' => (int)($result['total'] ?? 0),
             'itemsPerPage' => $perPage,
-            'currentPage' => max(1, (int)$page),
+            'currentPage' => $page,
             'pages' => (int)($result['total_pages'] ?? 1),
             'baseUrl' => $baseUrl,
             'homeUrl' => $baseUrl . '/',
@@ -125,18 +146,19 @@ final class CategoryController
 
         $viewPath = dirname(__DIR__, 3) . '/frontend/views/category.php';
         if (is_file($viewPath)) {
-            if (!empty($usePageCache)) {
+            if ($usePageCache) {
                 ob_start();
                 extract($viewData, EXTR_SKIP);
                 require $viewPath;
                 $html = ob_get_clean();
                 if (is_string($html) && $html !== '') {
-                    \Cache::put($pageCacheKey, $html, 300);
+                    try { \Cache::put($pageCacheKey, $html, 300); } catch (\Throwable) {}
                     header('X-Godyar-Cache: MISS');
                     echo $html;
                     exit;
                 }
             }
+
             extract($viewData, EXTR_SKIP);
             require $viewPath;
             exit;

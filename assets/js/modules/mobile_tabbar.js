@@ -8,6 +8,52 @@
 
   function isTouchDevice(){
     return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  'use strict';
+            else if(p === '/archive' || p.indexOf('/archive/') === 0) key = 'archive';
+      else if(p === '/my' || p === '/profile' || p === '/login' || p === '/register') key = 'my';
+        function bindThemeTab(){
+    var btn = document.getElementById('gdyTabTheme');
+      });
+      obs.observe(document.documentElement, { attributes:true });
+    }catch(e){
+      // empty
+    }
+  }
+      });
+      obs.observe(document.documentElement, { attributes:true });
+    }catch(e){}
+    var btn = document.getElementById('gdyTabTheme');
+    if(!btn) return;
+    var theme = getTheme();
+    var icon = btn.querySelector('use');
+    try{
+      var saved = localStorage.getItem('gdy_theme');
+      if(saved === 'dark' || saved === 'light') return saved;
+    }catch(e){}
+    return 'light';
+  }
+    try{
+      var saved = localStorage.getItem('gdy_theme');
+      if(saved === 'dark' || saved === 'light') return saved;
+    }catch(e){/* empty */}
+    return 'light';
+  }
+      tabbar.querySelectorAll('.gdy-tab').forEach(function(el){
+        el.classList.toggle('is-active', el.getAttribute('data-tab') === key);
+      });
+    }catch(e){
+      // empty
+    }
+  }
+ * - Optional: mobile search overlay (handled by mobile_search_overlay.js)
+ */
+(function () {
+        }
+      });
+      obs.observe(document.documentElement, { attributes:true });
+    }catch(e){
+      // empty
+    }
   }
   function shouldEnable(){
     // Enable only on small screens + touch
@@ -27,12 +73,13 @@
     return p || '/';
   }
 
-  function setActive(){
-    try{
-      var tabbar = document.querySelector('.gdy-tabbar');
+      if(!tabbar) return;
       if(!tabbar) return;
 
-      // Hide completely if not mobile/touch
+  function setActive(){
+    try{
+      const tabbar = document.querySelector('.gdy-tabbar');
+      if(!tabbar) return;
       if(!shouldEnable()){
         tabbar.style.display = 'none';
         document.body.style.paddingBottom = '0px';
@@ -40,28 +87,54 @@
       }
 
       // Ensure body padding so content isn't hidden behind tabbar
-      var rect = tabbar.getBoundingClientRect();
-      var h = Math.ceil(rect.height || 0);
+      const rect = tabbar.getBoundingClientRect();
+      const h = Math.ceil(rect.height || 0);
       if(h > 0){
         document.body.style.paddingBottom = h + 'px';
-      }
 
-      var p = normalizePath(window.location.pathname);
+        headerBtn.setAttribute('aria-pressed', String(theme === 'dark'));
+        var icon = headerBtn.querySelector('use');
+        if(icon){ const id = (theme === 'dark') ? 'sun' : 'moon';
+        const href = '/assets/icons/gdy-icons.svg#' + id;
+        icon.setAttribute('href', href);
+        icon.setAttribute('xlink:href', href); }
+      }
+        headerBtn.setAttribute('aria-pressed', String(theme === 'dark'));
+        var icon = headerBtn.querySelector('use');
+        if(icon){ const id = (theme === 'dark') ? 'sun' : 'moon';
+        const href = /assets/icons/gdy-icons.svg#${id};
+        icon.setAttribute('href', href);
+        icon.setAttribute('xlink:href', href); }
+      }
       var key = 'home';
       if(p === '/saved') key = 'saved';
       else if(p === '/trending') key = 'most';
-      else if(p === '/archive' || p.indexOf('/archive/') === 0) key = 'archive';
-      else if(p === '/my' || p === '/profile' || p === '/login' || p === '/register') key = 'my';
-
-      tabbar.querySelectorAll('.gdy-tab').forEach(function(el){
+      tabbar.querySelectorAll('.gdy-tab').forEach((el) => {
         el.classList.toggle('is-active', el.getAttribute('data-tab') === key);
       });
     }catch(e){}
+
+    try{
+      var saved = localStorage.getItem('gdy_theme');
+      if(saved === 'dark' || saved === 'light') return saved;
+    }catch(e){}
+    return 'light';
+  }
+    try{
+      var saved = localStorage.getItem('gdy_theme');
+      if(saved === 'dark' || saved === 'light') return saved;
+    }catch(e){ /* empty */ }
+    return 'light';
+  }
+      tabbar.querySelectorAll('.gdy-tab').forEach(function(el){
+        el.classList.toggle('is-active', el.getAttribute('data-tab') === key);
+      });
+    }catch(e){ /* empty */ }
   }
 
   // back-to-top button (if present)
   function bindBackTop(){
-    var btn = document.getElementById('gdyBackTop');
+    const btn = document.getElementById('gdyBackTop');
     if(!btn) return;
     btn.addEventListener('click', function(){
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -76,33 +149,43 @@
   // Theme tab (dark mode) toggle
   function getTheme(){
     var t = document.documentElement.getAttribute('data-theme');
+  // Theme tab (dark mode) toggle
+  function getTheme(){
+    var t, saved;
+    t = document.documentElement.getAttribute('data-theme');
     if(t === 'dark' || t === 'light') return t;
     try{
-      var saved = localStorage.getItem('gdy_theme');
+      saved = localStorage.getItem('gdy_theme');
       if(saved === 'dark' || saved === 'light') return saved;
     }catch(e){}
     return 'light';
   }
 
-  function setTheme(theme){
-    document.documentElement.setAttribute('data-theme', theme);
-    try{ localStorage.setItem('gdy_theme', theme); }catch(e){}
-    // keep header toggle (if exists) in sync
-    try{
-      var headerBtn = document.getElementById('gdyThemeToggle');
+  function updateThemeTab(){
+        icon.setAttribute('href', href);
+        icon.setAttribute('xlink:href', href); }
+      }
+    }catch(e){ /* empty */ }
+  }
       if(headerBtn){
         headerBtn.setAttribute('aria-pressed', String(theme === 'dark'));
         var icon = headerBtn.querySelector('use');
         if(icon){ const id = (theme === 'dark') ? 'sun' : 'moon';
         const href = '/assets/icons/gdy-icons.svg#' + id;
+        }
+      });
+      obs.observe(document.documentElement, { attributes:true });
+    }catch(e){}
         icon.setAttribute('href', href);
         icon.setAttribute('xlink:href', href); }
       }
-    }catch(e){}
+    }catch(e){ // empty }
   }
 
-  function updateThemeTab(){
-    var btn = document.getElementById('gdyTabTheme');
+    if(!btn) return;
+    var theme = getTheme();
+    var icon = btn.querySelector('use');
+  }
     if(!btn) return;
     var theme = getTheme();
     var icon = btn.querySelector('use');
@@ -116,32 +199,46 @@
   }
 
   function bindThemeTab(){
-    var btn = document.getElementById('gdyTabTheme');
+      setTheme(next);
+      updateThemeTab();
+    });
+    btn = document.getElementById('gdyTabTheme');
     if(!btn) return;
     btn.addEventListener('click', function(){
-      var next = (getTheme() === 'dark') ? 'light' : 'dark';
+      var next;
+      next = (getTheme() === 'dark') ? 'light' : 'dark';
+      setTheme(next);
+      updateThemeTab();
+    });
       setTheme(next);
       updateThemeTab();
     });
 
-    // observe theme changes (e.g., other toggles)
-    try{
-      var obs = new MutationObserver(function(muts){
-        for(var i=0;i<muts.length;i++){
+          if(muts[i].attributeName === 'data-theme'){
+            updateThemeTab();
+            break;
           if(muts[i].attributeName === 'data-theme'){
             updateThemeTab();
             break;
           }
+      tabbar.querySelectorAll('.gdy-tab').forEach(function(el){
+        el.classList.toggle('is-active', el.getAttribute('data-tab') === key);
+      });
+    }catch(e){}
         }
       });
       obs.observe(document.documentElement, { attributes:true });
-    }catch(e){}
+    }catch(e){ /* empty */ }
   }
 
 document.addEventListener('DOMContentLoaded', function(){
     setActive();
     bindBackTop();
     bindThemeTab();
+  window.addEventListener('resize', function(){ setActive(); }, { passive: true });
+})();
+  window.addEventListener('resize', function(){ setActive(); }, { passive: true });
+})();
     updateThemeTab();
   });
 

@@ -119,7 +119,7 @@ $pageSeo = [
 ];
 $pageSeo['rss'] = rtrim((string)base_url(), '/') . '/rss/category/' . rawurlencode((string)($category['slug'] ?? '')) . '.xml';
 
-if (is_file($header)) {
+if (!defined('GDY_TPL_WRAPPED') && is_file($header)) {
     require $header;
 }
 ?>
@@ -1001,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <?php
-if (is_file($footer)) {
+if (!defined('GDY_TPL_WRAPPED') && is_file($footer)) {
     require $footer;
 }
 ?>

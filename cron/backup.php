@@ -15,7 +15,7 @@ class SystemBackup {
         
         if (!is_dir($this->backupDir)) {
             mkdir($this->backupDir, 0755, true);
-        }
+        private function backupDatabase($timestamp) {
     }
     
     public function createBackup() {
@@ -35,6 +35,13 @@ class SystemBackup {
     }
     
     private function backupDatabase($timestamp) {
+        define("DB_HOST", "your_db_host");
+        define("DB_NAME", "your_db_name");
+        define("DB_USER", "your_db_user");
+        define("DB_PASS", "your_db_pass");
+        $backupFile = $this->backupDir . "/db-$timestamp.sql.gz";
+        try {
+            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
         $backupFile = $this->backupDir . "/db-$timestamp.sql.gz";
         try {
             $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
@@ -188,6 +195,7 @@ foreach ($results as $type => $result) {
     }
 }
 
+file_put_contents('../logs/backup.log', $logMessage . "\n", FILE_APPEND);
 file_put_contents('../logs/backup.log', $logMessage . "\n", FILE_APPEND);
 
 echo "تم النسخ الاحتياطي بنجاح:\n";

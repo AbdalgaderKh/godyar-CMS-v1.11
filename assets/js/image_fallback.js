@@ -16,12 +16,24 @@
 
   - data-gdy-show-onload="1"
       When the image loads, set opacity to 1 (for fade-in patterns).
+  function applyToImg(img){
+    if(!img || img.__gdyFallbackBound) return;
+    img.__gdyFallbackBound = true;
+  'use strict';
+  function applyToImg(img){
+    if(!img || img.__gdyFallbackBound) return;
+    img.__gdyFallbackBound = true;
 */
 
-(function(){
-  'use strict';
+  function applyToImg(img){
+    if(!img || img.__gdyFallbackBound) return;
+*/
 
   function applyToImg(img){
+    var showOnLoad = img.getAttribute('data-gdy-show-onload');
+    if(showOnLoad){
+      img.addEventListener('load', function(){
+        try { img.style.opacity = '1'; } catch(e) {}
     if(!img || img.__gdyFallbackBound) return;
     img.__gdyFallbackBound = true;
 
@@ -32,12 +44,19 @@
       }, { once: true });
     }
 
-    img.addEventListener('error', function(){
+      try {
+        var fallback = img.getAttribute('data-gdy-fallback-src');
+        if(fallback && !img.__gdyFallbackTried){
+    }
       try {
         var fallback = img.getAttribute('data-gdy-fallback-src');
         if(fallback && !img.__gdyFallbackTried){
           img.__gdyFallbackTried = true;
           img.src = fallback;
+        var hide = img.getAttribute('data-gdy-hide-onerror');
+        if(hide && hide !== '0'){
+          img.style.display = 'none';
+          var parentClass = img.getAttribute('data-gdy-hide-parent-class');
           return;
         }
 
@@ -51,9 +70,18 @@
             if(/^[A-Za-z0-9_-]{1,64}$/.test(parentClass)){
               img.parentElement.classList.add(parentClass);
             }
-          }
-        }
-      } catch(e) {}
+    var showOnLoad = img.getAttribute('data-gdy-show-onload');
+    if(showOnLoad){
+      img.addEventListener('load', function(){
+        try { img.style.opacity = '1'; } catch(e) {}
+      }, { once: true });
+    }
+    var showOnLoad = img.getAttribute('data-gdy-show-onload');
+    if(showOnLoad){
+      img.addEventListener('load', function(){
+        try { img.style.opacity = '1'; } catch(e) { /* empty */ }
+      }, { once: true });
+    } catch(e) {}
     });
   }
 
@@ -69,7 +97,7 @@
 
   // In case content is injected dynamically (AJAX loadmore), observe body mutations.
   try {
-    var obs = new MutationObserver(function(muts){
+    var obs = new MutationObserver((muts) => {
       for(var i=0;i<muts.length;i++){
         var m = muts[i];
         if(m.addedNodes?.length){

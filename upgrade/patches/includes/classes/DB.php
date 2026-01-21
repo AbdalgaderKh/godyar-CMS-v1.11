@@ -5,7 +5,7 @@ require_once dirname(__DIR__) . '/env.php';
 
 class DB {
     private static $instance = null;
-    private $connection;
+    private function __construct() {
 
     private function __construct() {
         try {

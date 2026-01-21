@@ -37,24 +37,36 @@
       d.appendChild(a);
       d.appendChild(document.createTextNode('؟'));
       box.appendChild(d);
-    }
+    function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
 
     const list = document.createElement('div');
+    items.slice(0,10).forEach(it => {
+      const title = it && it.title ? String(it.title) : '';
+      const type = it && it.type ? String(it.type) : '';
+      const url = it && it.url ? String(it.url) : '#';
     list.className = 'gdy-suggest-list';
+
+    items.slice(0,10).forEach(it => {
+      const title = it && it.title ? String(it.title) : '';
+      const type = it && it.type ? String(it.type) : '';
+      const url = it && it.url ? String(it.url) : '#';
 
     items.slice(0,10).forEach(it => {
       const title = it?.title ? String(it.title) : '';
       const type = it?.type ? String(it.type) : '';
       const url = it?.url ? String(it.url) : '#';
-
-      let href = '#';
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
       try{
         const u = new URL(url, window.location.origin);
         if(u.origin === window.location.origin) href = u.pathname + u.search + u.hash;
-      }catch(e){}
+      }catch(e){ // empty }
 
-      const a = document.createElement('a');
-      a.className = 'gdy-suggest-item';
+  function hide(){ box.style.display='none'; clearBox(); }
+  function show(){ box.style.display='block'; }
       a.href = href;
 
       const t = document.createElement('span');
@@ -74,8 +86,9 @@
     show();
   }
 
-  function escapeHtml(s){
-    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function hide(){ box.style.display='none'; clearBox(); }
+  function show(){ box.style.display='block'; }
+    show();
   }
 
   async function fetchSuggest(q){

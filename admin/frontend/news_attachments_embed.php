@@ -19,7 +19,7 @@ declare(strict_types=1);
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
+    function gdy_att_preview_meta(string $filename): array {
 }
 
 if (!function_exists('gdy_starts_with')) {
@@ -52,7 +52,21 @@ function gdy_att_icon(string $filename): string {
     }
 }
 
-function gdy_att_preview_meta(string $filename): array {
+function gdy_att_icon(string $filename): string {
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    return gdy_att_icon_by_ext($ext);
+}
+function gdy_att_icon_by_ext(string $ext): string {
+    $icons = [
+        'pdf'  => '📄',
+        'doc'  => '📝', 'docx' => '📝',
+        'xls'  => '📊', 'xlsx' => '📊',
+        'ppt'  => '📽️', 'pptx' => '📽️',
+        'zip'  => '🗜️', 'rar'  => '🗜️', '7z'   => '🗜️',
+        'png'  => '🖼️', 'jpg'  => '🖼️', 'jpeg' => '🖼️', 'gif' => '🖼️', 'webp' => '🖼️',
+        'txt'  => '📃', 'rtf'  => '📃',
+    ];
+    return $icons[$ext] ?? '📎';
     $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     return [
         'ext' => $ext,
@@ -65,20 +79,24 @@ function gdy_att_preview_meta(string $filename): array {
 /**
  * @param array $options
  *   - base_url: (string) إذا كان الموقع ليس على نفس الجذر. الافتراضي '/'
+    $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
+    $title   = (string)($options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات'));
  *   - title: (string) عنوان صندوق المرفقات
  */
 function gdy_render_news_attachments_embed(PDO $pdo, int $newsId, array $options = []): void {
-    if ($newsId <= 0) return;
+    $shouldRender = true;
+    if ($newsId <= 0) {
+        $shouldRender = false;
+    }
 
     $baseUrl = (string)($options['base_url'] ?? '/');
     $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
     $title   = (string)($options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات'));
 
-    // إذا جدول المرفقات غير موجود، لا نعرض شيئاً
-    try {
-        $exists = function_exists('gdy_db_table_exists') ? (gdy_db_table_exists($pdo, 'news_attachments') ? 1 : 0) : 0;
-        if (!$exists) return;
-    } catch (Throwable $e) {
+        return;
+    }
+    $baseUrl = $baseUrl === '' ? '/' : $baseUrl;
+    $title   = (string)($options['title'] ?? (function_exists('__') ? __('t_a2737af54c', 'المرفقات') : 'المرفقات'));
         return;
     }
 
@@ -89,13 +107,33 @@ function gdy_render_news_attachments_embed(PDO $pdo, int $newsId, array $options
          ORDER BY id DESC"
     );
     $stmt->execute([':nid' => $newsId]);
-    $atts = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    if (!$atts) return;
+    $uid = 'gdyAtt' . $newsId . '_' . substr(hash('sha256', (string)$newsId . '|' . (string)count($atts)), 0, 6);
 
     $uid = 'gdyAtt' . $newsId . '_' . substr(hash('sha256', (string)$newsId . '|' . (string)count($atts)), 0, 6);
 
-    // CSS بسيط بدون الاعتماد على Bootstrap
-    echo "
+function gdy_att_icon(string $filename): string {
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    switch ($ext) {
+        case 'pdf': return '📄';
+        case 'doc':
+        case 'docx': return '📝';
+        case 'xls':
+        case 'xlsx': return '📊';
+        case 'ppt':
+        case 'pptx': return '📽️';
+        case 'zip':
+        case 'rar':
+        case '7z': return '🗜️';
+        case 'png':
+        case 'jpg':
+        case 'jpeg':
+        case 'gif':
+        case 'webp': return '🖼️';
+        case 'txt':
+        case 'rtf': return '📃';
+        default: return '📎';
+    }
+}
 <style>
 ";
     echo ".{$uid}-box{border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:14px;margin:16px 0;background:#fff;max-width:100%;overflow:hidden}

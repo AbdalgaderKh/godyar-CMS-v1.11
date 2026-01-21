@@ -378,7 +378,7 @@ require_once __DIR__ . '/../layout/app_start.php';
                                 <label class="form-label"><?= h(__('t_2436aacc18', 'البريد الإلكتروني')) ?></label>
                                 <input type="email" name="email" class="form-control"
                                        value="<?= h($data['email']) ?>" 
-                                       placeholder="example@email.com">
+                                       placeholder="admin@example.com">
                             </div>
                         </div>
                     </div>

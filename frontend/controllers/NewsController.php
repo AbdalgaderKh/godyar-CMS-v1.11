@@ -43,6 +43,11 @@ function display_ad($location = 'content_top') {
         
         if (!$ad) {
             return "<!-- No active ad found for location: $location -->";
+        if (!empty($ad['target_url'])) {
+            $html .= '<a href="' . $baseUrl . '/track_click.php?ad_id=' . $ad['id'] . '&redirect=' . urlencode($ad['target_url']) . '" 
+                         target="_blank" class="btn btn-primary btn-sm">
+                         انقر هنا للمزيد
+                      </a>';
         }
         
         // بناء HTML الإعلان
@@ -211,13 +216,13 @@ function calculate_reading_time($content) {
 try {
     if ($pdo instanceof PDO) {
 
-        $cacheKey = 'news_show_' . ($isNumeric ? 'id_' . $id : 'slug_' . $slug);
-        $result   = null;
+        $useCache = class_exists('Cache') && !$isPreviewRequested;
 
         $useCache = class_exists('Cache') && !$isPreviewRequested;
 
-        if ($useCache) {
-            $result = Cache::remember($cacheKey, 300, function () use ($pdo, $slug, $id, $isNumeric, $isPreviewRequested, $newsHasStatusColumn) {
+                if ($isNumeric && $id > 0) {
+                    $where = '(n.id = :id OR n.slug = :slug)';
+        $useCache = class_exists('Cache') && !$isPreviewRequested;
 
                 if ($isNumeric && $id > 0) {
                     $where = '(n.id = :id OR n.slug = :slug)';
@@ -237,9 +242,13 @@ try {
                            c.name AS category_name,
                            c.slug AS category_slug
                     FROM news n
+    ];
+}
                     LEFT JOIN categories c ON c.id = n.category_id
                     WHERE {$where}
                     LIMIT 1
+";
+                ";
                 ";
 
                 $stmt = $pdo->prepare($sql);
@@ -536,10 +545,10 @@ try {
             $news         = $result['news']         ?? null;
             $related      = $result['related']      ?? [];
             $tags         = $result['tags']         ?? [];
+];
             $latestNews   = $result['latestNews']   ?? [];
             $mostReadNews = $result['mostReadNews'] ?? [];
         }
-}
 
         // حساب وقت القراءة
         if ($news && !empty($news['content'])) {
@@ -615,5 +624,4 @@ $templateData = [
     'display_ad' => 'display_ad',
 ];
 
-// عرض صفحة الخبر المفرد باستخدام نفس الهيدر/الفوتر
-$template->render(__DIR__ . '/../views/news_detail.php', $templateData);
+];

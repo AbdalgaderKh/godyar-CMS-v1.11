@@ -1,16 +1,19 @@
+}
 <?php
 declare(strict_types=1);
+use Godyar\Auth;
 
 require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
-require_once __DIR__ . '/../../includes/Auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     gdy_session_start();
 }
 
-// يسمح فقط للمدير بالدخول إلى مركز الأمان
-Auth::requireAdmin('../login.php');
+if (!function_exists('h')) {
+    function h($v): string {
+}
 
 if (!function_exists('h')) {
     function h($v): string {

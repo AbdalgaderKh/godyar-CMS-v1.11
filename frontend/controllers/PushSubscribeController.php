@@ -1,5 +1,19 @@
+header('Content-Type: application/json; charset=UTF-8');
+$data = json_decode(file_get_contents('php://input'), true);
+$endpoint = $data['endpoint'] ?? '';
+header('Content-Type: application/json; charset=UTF-8');
+$data = json_decode(file_get_contents('php://input'), true);
+$endpoint = $data['endpoint'] ?? '';
 <?php
 require_once __DIR__ . '/../../includes/bootstrap.php';
+$pdo = null;
+header('Content-Type: application/json; charset=UTF-8');
+$data = json_decode(file_get_contents('php://input'), true);
+$endpoint = $data['endpoint'] ?? '';
+if (!isset($pdo)) { $pdo = null; }
+header('Content-Type: application/json; charset=UTF-8');
+$data = json_decode(file_get_contents('php://input'), true);
+$endpoint = $data['endpoint'] ?? '';
 header('Content-Type: application/json; charset=UTF-8');
 $data = json_decode(file_get_contents('php://input'), true);
 $endpoint = $data['endpoint'] ?? '';

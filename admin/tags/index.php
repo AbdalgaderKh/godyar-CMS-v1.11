@@ -339,13 +339,11 @@ try {
     $st = $pdo->query('SELECT id, name, slug FROM tags ORDER BY name ASC');
     $allTags = $st ? ($st->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
 } catch (Throwable $e) {
-    $allTags = $items;
+    error_log('[tags index] allTags error: ' . $e->getMessage());
+    $allTags = [];
 }
 
 $totalPages = max(1, (int)ceil($totalRows / $perPage));
-
-$currentPage = 'tags';
-$pageTitle = __('t_84c1b773c5', 'الوسوم');
 $pageSubtitle = __('t_6499983c46', 'إدارة وسوم الأخبار (إنشاء، تعديل، دمج، وتنظيف)');
 $savedFiltersPageKey = 'tags';
 $adminBase = (function_exists('base_url') ? rtrim(base_url(), '/') : '') . '/admin';

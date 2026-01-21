@@ -124,9 +124,22 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
 
         <!-- قائمة الأخبار على شكل بطاقات -->
         <div class="cat-content-wrap mt-2">
+              <div class="cat-cards-grid">
+                <?php foreach ($newsList as $row): ?>
+                  <?php
           <!-- قائمة الأخبار -->
           <div class="cat-list">
             <?php if (!empty($newsList)): ?>
+              <?php
+                if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
+                    $buildNewsUrl = function($row) {
+                        return isset($row['url']) ? (string)$row['url'] : '';
+                    };
+                }
+              ?>
+              <div class="cat-cards-grid">
+                <?php foreach ($newsList as $row): ?>
+                  <?php
               <div class="cat-cards-grid">
                 <?php foreach ($newsList as $row): ?>
                   <?php
@@ -202,10 +215,19 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
             <div class="cat-sidebar-card">
               <div class="cat-sidebar-title">
                 <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
+                  <?php
+                    $tTitle  = (string)($row['title'] ?? '');
+                    $tUrl    = $buildNewsUrl($row);
                 <span>الأكثر قراءة في هذا التصنيف</span>
               </div>
               <ul class="cat-sidebar-list">
-                <?php foreach ($catTrending as $row): ?>
+                  <?php if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
+                    $buildNewsUrl = function(array $row): string { return ''; };
+                  } ?>
+                  <?php foreach ($catTrending as $row): ?>
+                  <?php
+                    $tTitle  = (string)($row['title'] ?? '');
+                    $tUrl    = $buildNewsUrl($row);
                   <?php
                     $tTitle  = (string)($row['title'] ?? '');
                     $tUrl    = $buildNewsUrl($row);

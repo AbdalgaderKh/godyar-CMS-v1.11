@@ -1,10 +1,11 @@
-/* Godyar — Category Page UX (grid/list + Load More) */
-(function () {
-  'use strict';
-
   function safeFragmentFromHTML(html) {
     const frag = document.createDocumentFragment();
-    const parser = new DOMParser();
+/* Godyar — Category Page UX (grid/list + Load More) */
+(function () {
+
+    while (wrap.firstChild) frag.appendChild(wrap.firstChild);
+    return frag;
+  }
   // nosemgrep
     const doc = parser.parseFromString('<div>' + String(html || '') + '</div>', 'text/html');
     const wrap = doc.body?.firstElementChild;
@@ -29,7 +30,7 @@
 
   function fadeInImages(scope) {
     const images = (scope || document).querySelectorAll('#gdy-category-page .news-thumb img');
-    images.forEach(function (img) {
+    images.forEach((img) => {
       try {
         img.style.opacity = img.complete ? '1' : '0';
         if (!img.complete) {
@@ -52,14 +53,17 @@
 
     function setView(view) {
       newsGrid.classList.toggle('list-view', view === 'list');
-      viewBtns.forEach(function (btn) {
+      viewBtns.forEach((btn) => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === view);
         btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
       });
       localStorage.setItem(KEY, view);
     }
 
-    setView(savedView);
+    viewBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const view = btn.getAttribute('data-view') || 'grid';
+        setView(view);
 
     viewBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -105,13 +109,26 @@
         credentials: 'same-origin'
       });
 
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const html = data?.html ? String(data.html) : '';
+        credentials: 'same-origin'
+      });
 
       const data = await res.json();
       const html = data?.html ? String(data.html) : '';
 
-      if (html.trim()) {
-        newsGrid.appendChild(safeFragmentFromHTML(html));
+          img.addEventListener('load', function () { img.style.opacity = '1'; }, { once: true });
+          img.addEventListener('error', function () { img.style.opacity = '1'; }, { once: true });
+        }
+      } catch (e) {}
+    });
+  }
+          img.addEventListener('load', function () { img.style.opacity = '1'; }, { once: true });
+          img.addEventListener('error', function () { img.style.opacity = '1'; }, { once: true });
+        }
+      } catch (e) { /* empty */ }
+    });
+  }
         fadeInImages(newsGrid);
       }
 
@@ -139,10 +156,7 @@
 
     if (!btn || !newsGrid || !statusEl) return;
 
-    btn.addEventListener('click', function () {
-      fetchLoadMore(btn, newsGrid, statusEl);
-    });
-  }
+    if (!btn || !newsGrid || !statusEl) return;
 
   document.addEventListener('DOMContentLoaded', function () {
     fadeInImages(document);

@@ -1,5 +1,12 @@
+header('Content-Type: application/json; charset=UTF-8');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); echo json_encode(['ok'=>false]); exit; }
+$payload = json_decode(file_get_contents('php://input'), true);
 <?php
 require_once __DIR__ . '/../../includes/bootstrap.php';
+$pdo = null;
+header('Content-Type: application/json; charset=UTF-8');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); echo json_encode(['ok'=>false]); exit; }
+$payload = json_decode(file_get_contents('php://input'), true);
 header('Content-Type: application/json; charset=UTF-8');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); echo json_encode(['ok'=>false]); exit; }
 $payload = json_decode(file_get_contents('php://input'), true);

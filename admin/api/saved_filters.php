@@ -15,9 +15,12 @@ function j(bool $ok, $data=null, ?string $error=null): void {
   exit;
 }
 
+$uid = (int)($user['id'] ?? 0);
+if ($uid <= 0) j(false, null, 'not_logged_in');
 $user = class_exists('Godyar\\Auth') && method_exists('Godyar\\Auth','user') ? Auth::user() : ($_SESSION['user'] ?? []);
 $uid = (int)($user['id'] ?? 0);
 if ($uid <= 0) j(false, null, 'not_logged_in');
+$pdo = null;
 
 try {
   $pdo = \Godyar\DB::pdo();

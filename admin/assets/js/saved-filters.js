@@ -8,6 +8,11 @@
     u.searchParams.set('action', action);
     if (pageKey) u.searchParams.set('page_key', pageKey);
     return u.toString();
+  function encodeForm(obj) {
+    var parts = [];
+    Object.keys(obj || {}).forEach(function (k) {
+      parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(obj[k] == null ? '' : String(obj[k])));
+    });
   }
 
   function post(url, body) {
@@ -20,11 +25,7 @@
 
   function encodeForm(obj) {
     var parts = [];
-    Object.keys(obj || {}).forEach(function (k) {
-      parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(obj[k] == null ? '' : String(obj[k])));
-    });
-    return parts.join('&');
-  }
+    Object.keys(obj || {}).forEach(k => parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(obj[k] == null ? '' : String(obj[k]))));
 
   function normalizeListResponse(json) {
     if (!json) return { filters: [], supports_default: false, default_id: null };
@@ -44,6 +45,18 @@
         .then(function (json) {
           if (json?.ok) return normalizeListResponse(json);
           return { filters: [], supports_default: false, default_id: null };
+    create: function (pageKey, name, querystring, csrfToken, makeDefault) {
+      return post(apiUrl('create', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
+    create: function (pageKey, name, querystring, csrfToken, makeDefault) {
+      return post(apiUrl('create', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
+    create: function (pageKey, name, querystring, csrfToken, makeDefault) {
+      return post(apiUrl('create', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
         });
     },
 
@@ -54,6 +67,18 @@
         name: name || '',
         querystring: querystring || '',
         make_default: makeDefault ? '1' : '0'
+    setDefault: function (pageKey, id, csrfToken) {
+      return post(apiUrl('set_default', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
+    setDefault: function (pageKey, id, csrfToken) {
+      return post(apiUrl('set_default', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
+    setDefault: function (pageKey, id, csrfToken) {
+      return post(apiUrl('set_default', pageKey), encodeForm({
+        csrf_token: csrfToken || '',
+        page_key: pageKey || '',
       }));
     },
 

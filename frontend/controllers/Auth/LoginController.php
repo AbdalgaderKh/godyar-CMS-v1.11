@@ -1,366 +1,269 @@
 <?php
 declare(strict_types=1);
 
-// /godyar/frontend/controllers/Auth/LoginController.php
+/**
+ * LoginController.php (Hardened)
+ * --------------------------------
+ * أهداف التعديل:
+ * - CSRF Token (موحد)
+ * - Rate limiting (IP + جلسة)
+ * - Redirect آمن بعد الدخول عبر ?next=/path
+ * - فصل العرض في frontend/views/login.php
+ * - دعم تسجيل الدخول بالبريد أو اسم المستخدم مع الحفاظ على التوافق قدر الإمكان.
+ */
 
-require_once __DIR__ . '/../../../includes/bootstrap.php';
-require_once __DIR__ . '/../../../includes/site_settings.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-    gdy_session_start();
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__DIR__, 3));
 }
 
-// هيلبر بسيط للهروب من XSS
+require_once ROOT_PATH . '/includes/bootstrap.php';
+require_once ROOT_PATH . '/includes/rate_limit.php';
+
+// CSRF helpers (إن لم تكن محملة ضمن bootstrap)
+$fn = ROOT_PATH . '/includes/functions.php';
+if (is_file($fn)) {
+    require_once $fn;
+}
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } else {
+        @session_start();
+    }
+}
+
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
-// الرابط الأساسي
-$baseUrl = defined('BASE_URL') ? rtrim(BASE_URL, '/') : '/godyar';
+/**
+ * مسار Redirect آمن:
+ * - يسمح فقط بمسارات داخلية تبدأ بـ /
+ * - يمنع // أو http(s):// أو javascript:
+ */
+function safe_next_path(?string $next): string
+{
+    $next = trim((string)$next);
+    if ($next === '') return '';
+    if (preg_match('~^(https?:)?//~i', $next)) return '';
+    if (preg_match('~^[a-z]+:~i', $next)) return '';
+    if ($next[0] !== '/') return '';
+    if (strpos($next, '//') === 0) return '';
+    return $next;
+}
 
-// لو المستخدم مسجّل دخول بالفعل → رجوع للموقع
+// Base URL helper
+$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+
+$next = safe_next_path($_GET['next'] ?? $_POST['next'] ?? '');
+$redirectAfterLogin = $next !== '' ? ($baseUrl . $next) : ($baseUrl . '/');
+
+// لو المستخدم مسجّل مسبقاً → Redirect
 if (!empty($_SESSION['user']) && is_array($_SESSION['user'])) {
-    header('Location: ' . $baseUrl . '/');
+    header('Location: ' . $redirectAfterLogin);
     exit;
 }
 
-// توليد رمز CSRF خاص بتسجيل الدخول في الواجهة
-if (empty($_SESSION['front_login_csrf'])) {
-    $_SESSION['front_login_csrf'] = bin2hex(random_bytes(16));
+/** @var PDO|null $pdo */
+$pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+
+$errorMessage = '';
+$oldLogin = '';
+
+// Throttle بالجلسة: 5 محاولات فاشلة خلال 10 دقائق → قفل 5 دقائق
+function throttle_state(): array
+{
+    $s = $_SESSION['login_throttle'] ?? null;
+    if (!is_array($s)) {
+        $s = ['count' => 0, 'first' => time(), 'lock_until' => 0];
+    }
+    if (time() - (int)$s['first'] > 600) {
+        $s = ['count' => 0, 'first' => time(), 'lock_until' => 0];
+    }
+    return $s;
 }
-$csrfToken = $_SESSION['front_login_csrf'];
+function throttle_save(array $s): void
+{
+    $_SESSION['login_throttle'] = $s;
+}
+function throttle_blocked_seconds(): int
+{
+    $s = throttle_state();
+    $lockUntil = (int)($s['lock_until'] ?? 0);
+    return ($lockUntil > time()) ? ($lockUntil - time()) : 0;
+}
+function throttle_on_fail(): void
+{
+    $s = throttle_state();
+    $s['count'] = (int)($s['count'] ?? 0) + 1;
 
-// محاولة قراءة البريد من الكوكي لو مفعّل "تذكّرني"
-$rememberedEmail = isset($_COOKIE['front_remember_email'])
-    ? (string)$_COOKIE['front_remember_email']
-    : '';
-
-// اتصال قاعدة البيانات
-$pdo = gdy_pdo_safe();
-$error = null;
-$email = $rememberedEmail;
-
-// رابط إعادة التوجيه بعد تسجيل الدخول (اختياري)
-$redirect = isset($_GET['redirect']) ? (string)$_GET['redirect'] : '';
-if ($redirect !== '' && strpos($redirect, $baseUrl) !== 0) {
-    $redirect = $baseUrl . '/';
+    if ($s['count'] >= 5) {
+        $s['lock_until'] = time() + 300;
+        $s['count'] = 0;
+        $s['first'] = time();
+    }
+    throttle_save($s);
+}
+function throttle_on_success(): void
+{
+    throttle_save(['count' => 0, 'first' => time(), 'lock_until' => 0]);
 }
 
-// معالجة النموذج
+// CSRF token
+$csrfToken = '';
+if (function_exists('generate_csrf_token')) {
+    $csrfToken = generate_csrf_token();
+} else {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        $_SESSION['csrf_time']  = time();
+    }
+    $csrfToken = (string)$_SESSION['csrf_token'];
+}
+
+$blockedFor = throttle_blocked_seconds();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // التحقق من CSRF
-        if (!hash_equals($_SESSION['front_login_csrf'] ?? '', (string)($_POST['csrf_token'] ?? ''))) {
-            throw new Exception('انتهت صلاحية الجلسة، يرجى تحديث الصفحة والمحاولة مرة أخرى.');
+    // IP-based rate limiting (10 attempts / 10 minutes)
+    if (!gody_rate_limit('login', 10, 600)) {
+        $wait = gody_rate_limit_retry_after('login');
+        $errorMessage = 'محاولات كثيرة. حاول بعد ' . (int)$wait . ' ثانية.';
+    }
+
+    $login    = trim((string)($_POST['login'] ?? $_POST['email'] ?? $_POST['username'] ?? ''));
+    $password = (string)($_POST['password'] ?? $_POST['pass'] ?? '');
+    $remember = !empty($_POST['remember']) || !empty($_POST['remember_me']);
+
+    $oldLogin = $login;
+
+    // CSRF validate
+    $postedToken = (string)($_POST['csrf_token'] ?? '');
+    if ($errorMessage === '') {
+        if (function_exists('verify_csrf_token')) {
+            if (!verify_csrf_token($postedToken)) {
+                $errorMessage = 'انتهت صلاحية الجلسة أو حدث خطأ في التحقق. حدّث الصفحة وحاول مرة أخرى.';
+            }
+        } else {
+            if (!hash_equals((string)($_SESSION['csrf_token'] ?? ''), $postedToken)) {
+                $errorMessage = 'انتهت صلاحية الجلسة أو حدث خطأ في التحقق. حدّث الصفحة وحاول مرة أخرى.';
+            }
         }
+    }
 
-        if (!$pdo instanceof PDO) {
-            throw new Exception('لا يمكن الاتصال بقاعدة البيانات حالياً.');
+    // Session throttle
+    if ($errorMessage === '') {
+        $blockedFor = throttle_blocked_seconds();
+        if ($blockedFor > 0) {
+            $errorMessage = 'محاولات كثيرة. الرجاء الانتظار ' . (int)$blockedFor . ' ثانية ثم المحاولة مجدداً.';
         }
+    }
 
-        $email    = trim((string)($_POST['email'] ?? ''));
-        $password = (string)($_POST['password'] ?? '');
-        $remember = isset($_POST['remember']) && $_POST['remember'] === '1';
-        $redirect = isset($_POST['redirect']) ? (string)$_POST['redirect'] : $redirect;
-
-        if ($email === '' || $password === '') {
-            throw new Exception('الرجاء إدخال البريد الإلكتروني وكلمة المرور.');
-        }
-
-        // إعادة التحقق من أمان redirect في POST
-        if ($redirect !== '' && strpos($redirect, $baseUrl) !== 0) {
-            $redirect = $baseUrl . '/';
-        }
-
-        // جلب المستخدم من جدول users
-        $stmt = $pdo->prepare("
-            SELECT id, name, username, email, password_hash, password, role, is_admin, avatar, status
-            FROM users
-            WHERE email = :email
-            LIMIT 1
-        ");
-        $stmt->execute([':email' => $email]);
-        $u = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$u) {
-            throw new Exception('بيانات الدخول غير صحيحة.');
-        }
-
-        if (!empty($u['status']) && $u['status'] !== 'active') {
-            throw new Exception('حسابك غير مفعّل، الرجاء التواصل مع إدارة الموقع.');
-        }
-
-        $hashNew = (string)($u['password_hash'] ?? '');
-        $hashOld = (string)($u['password'] ?? '');
-
-        // سياسة الأمان: نقبل فقط password_hash (bcrypt/argon) عبر password_verify.
-        // إذا كان لديك مستخدمون على نسخ قديمة (MD5/نصّي) يُفضّل تشغيل مسار ترقية/استعادة كلمة المرور.
-        $hashCandidate = $hashNew !== '' ? $hashNew : $hashOld;
-        if ($hashCandidate === '') {
-            throw new Exception('بيانات الدخول غير صحيحة.');
-        }
-
-        $ok = password_verify($password, $hashCandidate);
-        if (!$ok) {
-            throw new Exception('بيانات الدخول غير صحيحة.');
-        }
-
-        // ترقية التجزئة إلى password_hash في حال لزم (وخاصة إذا كان المستخدم قادماً من عمود password القديم)
-        if (password_needs_rehash($hashCandidate, PASSWORD_DEFAULT)) {
-            $newHash = password_hash($password, PASSWORD_DEFAULT);
+    if ($errorMessage === '') {
+        if ($login === '' || $password === '') {
+            $errorMessage = 'يرجى إدخال البريد الإلكتروني / اسم المستخدم وكلمة المرور.';
+        } else {
             try {
-                $upd = $pdo->prepare("UPDATE users SET password_hash = :h WHERE id = :id");
-                $upd->execute([':h' => $newHash, ':id' => (int)$u['id']]);
+                // Prefer existing User model if available
+                $userFile = ROOT_PATH . '/includes/classes/User.php';
+                if (is_file($userFile)) {
+                    require_once $userFile;
+                }
+
+                $loggedIn = false;
+
+                if (class_exists('User') && method_exists('User', 'login')) {
+                    $u = new \User();
+                    $loggedIn = (bool)$u->login($login, $password);
+                } else {
+                    if (!$pdo instanceof PDO) {
+                        $errorMessage = 'لا يمكن الاتصال بقاعدة البيانات حالياً.';
+                    } else {
+                        $stmt = $pdo->prepare(
+                            'SELECT id, username, email, role, status, password_hash, password '
+                            . 'FROM users WHERE (email = :v OR username = :v) LIMIT 1'
+                        );
+                        $stmt->execute([':v' => $login]);
+                        $user = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+                        if (!$user) {
+                            $loggedIn = false;
+                        } else {
+                            $status = (string)($user['status'] ?? 'active');
+                            if (in_array($status, ['blocked', 'banned'], true)) {
+                                $errorMessage = 'حسابك موقوف، يرجى مراجعة إدارة الموقع.';
+                                $loggedIn = false;
+                            } else {
+                                $hash = (string)($user['password_hash'] ?? $user['password'] ?? '');
+                                $loggedIn = ($hash !== '' && password_verify($password, $hash));
+
+                                if ($loggedIn) {
+                                    $_SESSION['user_id'] = (int)($user['id'] ?? 0);
+                                    $_SESSION['user'] = [
+                                        'id' => (int)($user['id'] ?? 0),
+                                        'username' => (string)($user['username'] ?? ''),
+                                        'email' => (string)($user['email'] ?? ''),
+                                        'role' => (string)($user['role'] ?? 'member'),
+                                    ];
+                                    $_SESSION['is_member_logged'] = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($errorMessage === '' && $loggedIn) {
+                    throttle_on_success();
+
+                    // "تذكرني" (آمن): تمديد عمر كوكي الجلسة 30 يوم
+                    if ($remember) {
+                        $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+                        $params = session_get_cookie_params();
+                        setcookie(
+                            session_name(),
+                            session_id(),
+                            [
+                                'expires'  => time() + 60 * 60 * 24 * 30,
+                                'path'     => $params['path'] ?? '/',
+                                'domain'   => $params['domain'] ?? '',
+                                'secure'   => $isSecure,
+                                'httponly' => true,
+                                'samesite' => 'Strict',
+                            ]
+                        );
+                    }
+
+                    header('Location: ' . $redirectAfterLogin);
+                    exit;
+                }
+
+                if ($errorMessage === '' && !$loggedIn) {
+                    throttle_on_fail();
+                    $errorMessage = 'بيانات الدخول غير صحيحة.';
+                }
             } catch (Throwable $e) {
-                // لا نكسر تسجيل الدخول إذا فشلت الترقية
+                throttle_on_fail();
+                error_log('[login] ' . $e->getMessage());
+                $errorMessage = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
             }
         }
-
-        // نجاح الدخول → حفظ المستخدم في الجلسة (مع role حتى يتعرّف الهيدر على حالة الدخول)
-        $_SESSION['user'] = [
-            'id'       => (int)$u['id'],
-            'name'     => $u['name'] ?? ($u['username'] ?? $u['email'] ?? ''),
-            'username' => $u['username'] ?? null,
-            'email'    => $u['email'] ?? null,
-            'role'     => $u['role'] ?? ((int)($u['is_admin'] ?? 0) === 1 ? 'admin' : 'user'),
-            'is_admin' => (int)($u['is_admin'] ?? 0),
-            'avatar'   => $u['avatar'] ?? null,
-            'status'   => $u['status'] ?? null,
-        ];
-
-        // تذكّر البريد إن اختار المستخدم ذلك
-        // Cookie تذكر البريد: اجعلها آمنة (Secure/HttpOnly) + Path صحيح حتى عند التثبيت داخل مجلد.
-        $cookiePath = '/';
-        $parsedPath = parse_url((string)$baseUrl, PHP_URL_PATH);
-        if (is_string($parsedPath) && $parsedPath !== '') {
-            $cookiePath = rtrim($parsedPath, '/');
-            if ($cookiePath === '') {
-                $cookiePath = '/';
-            }
-        }
-        $secureCookie = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-
-        if ($remember) {
-            if (PHP_VERSION_ID >= 70300) {
-                setcookie('front_remember_email', $email, [
-                    'expires'  => time() + (30 * 24 * 60 * 60),
-                    'path'     => $cookiePath,
-                    'secure'   => $secureCookie,
-                    'httponly' => true,
-                    'samesite' => 'Lax',
-                ]);
-            } else {
-                // Fallback signature (بدون SameSite)
-                setcookie('front_remember_email', $email, time() + (30 * 24 * 60 * 60), $cookiePath, '', $secureCookie, true);
-            }
-        } else {
-            if (PHP_VERSION_ID >= 70300) {
-                setcookie('front_remember_email', '', [
-                    'expires'  => time() - 3600,
-                    'path'     => $cookiePath,
-                    'secure'   => $secureCookie,
-                    'httponly' => true,
-                    'samesite' => 'Lax',
-                ]);
-            } else {
-                setcookie('front_remember_email', '', time() - 3600, $cookiePath, '', $secureCookie, true);
-            }
-        }
-
-        // تنظيف CSRF بعد الاستخدام
-        unset($_SESSION['front_login_csrf']);
-
-        // إعادة التوجيه بعد الدخول
-        if ($redirect !== '') {
-            header('Location: ' . $redirect);
-        } else {
-            header('Location: ' . $baseUrl . '/');
-        }
-        exit;
-
-    } catch (Throwable $e) {
-        $error = $e->getMessage();
-        error_log('[Frontend Login] ' . $e->getMessage());
     }
 }
 
-// تحميل إعدادات الهوية للواجهة
-$settings        = gdy_load_settings($pdo);
-$frontendOptions = gdy_prepare_frontend_options($settings);
-extract($frontendOptions, EXTR_OVERWRITE);
+// Render view
+$view = ROOT_PATH . '/frontend/views/login.php';
+if (is_file($view)) {
+    $login_error      = $errorMessage;
+    $login_identifier = $oldLogin;
+    $login_csrf       = $csrfToken;
+    $login_next       = $next;
+    $login_wait       = $blockedFor;
+    require $view;
+    return;
+}
 
-?>
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  
-    <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
-<meta charset="utf-8">
-  <title>تسجيل الدخول — <?= h($siteName ?? 'Godyar'); ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link href="<?= h($baseUrl); ?>/assets/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <link href="<?= h($baseUrl); ?>/assets/css/site.css" rel="stylesheet">
-  <style>
-    body{
-      min-height:100vh;
-      margin:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:radial-gradient(circle at top,#0ea5e9 0,#020617 55%);
-      font-family:'Tajawal','Segoe UI',system-ui,sans-serif;
-      color:#e5e7eb;
-    }
-    .auth-wrapper{
-      width:100%;
-      max-width:420px;
-      padding:1.5rem;
-    }
-    .auth-card{
-      background:rgba(15,23,42,.96);
-      border-radius:20px;
-      border:1px solid rgba(148,163,184,.45);
-      box-shadow:0 24px 60px rgba(0,0,0,.7);
-      padding:1.75rem 1.5rem;
-    }
-    .auth-brand{
-      width:54px;
-      height:54px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,#22c55e,#0ea5e9);
-      color:#0f172a;
-      box-shadow:0 18px 40px rgba(34,197,94,.45);
-      margin-inline:auto;
-      margin-bottom:.75rem;
-    }
-    .auth-title{
-      font-size:1.25rem;
-      font-weight:600;
-    }
-    .auth-subtitle{
-      font-size:.85rem;
-      color:#9ca3af;
-    }
-    .auth-input{
-      background:#020617;
-      border-radius:12px;
-      border:1px solid #1f2937;
-      color:#e5e7eb;
-      font-size:.9rem;
-    }
-    .auth-input::placeholder{ color:#6b7280; }
-    .auth-input:focus{
-      background:#020617;
-      border-color:#22c55e;
-      box-shadow:0 0 0 1px rgba(34,197,94,.6);
-      color:#e5e7eb;
-    }
-    .btn-auth{
-      border-radius:999px;
-      background:linear-gradient(135deg,#22c55e,#0ea5e9);
-      border:0;
-      font-weight:600;
-      font-size:.95rem;
-      padding:.6rem 1rem;
-    }
-    .btn-auth:hover{ filter:brightness(1.05); }
-    .login-meta{
-      font-size:.75rem;
-      color:#9ca3af;
-    }
-    .password-toggle-btn{
-      border-radius:999px;
-      border:0;
-      background:transparent;
-      color:#9ca3af;
-      padding:0 .35rem;
-    }
-    .password-toggle-btn:hover{ color:#e5e7eb; }
-  </style>
-</head>
-<body>
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <div class="text-center mb-3">
-        <div class="auth-brand">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-        </div>
-        <h1 class="auth-title mb-1">تسجيل الدخول إلى حسابك</h1>
-        <p class="auth-subtitle mb-0">
-          أدخل بياناتك للوصول إلى حسابك في موقع <?= h($siteName ?? 'Godyar'); ?>.
-        </p>
-      </div>
-
-      <?php if (!empty($error)): ?>
-        <div class="alert alert-danger py-2 small mb-3"><?= h($error) ?></div>
-      <?php endif; ?>
-
-      <form method="post" action="<?= h($_SERVER['PHP_SELF']); ?>" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
-        <input type="hidden" name="redirect" value="<?= h($redirect) ?>">
-
-        <div class="mb-3">
-          <label for="email" class="form-label small">البريد الإلكتروني</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            class="form-control auth-input"
-            required
-            autocomplete="username"
-            value="<?= h($email) ?>"
-            placeholder="name@example.com"
-          >
-        </div>
-
-        <div class="mb-2">
-          <label for="password" class="form-label small d-flex justify-content-between align-items-center">
-            <span>كلمة المرور</span>
-            <button type="button" class="password-toggle-btn" data-target="password" data-icon="passwordToggleIcon">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            </button>
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            class="form-control auth-input"
-            required
-            autocomplete="current-password"
-          >
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="form-check form-check-sm">
-            <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember"
-              <?= $rememberedEmail ? 'checked' : '' ?>>
-            <label class="form-check-label small" for="remember">
-              تذكّر البريد على هذا الجهاز
-            </label>
-          </div>
-          <span class="small text-muted">
-            نسيت كلمة المرور؟
-          </span>
-        </div>
-
-        <button type="submit" class="btn btn-auth w-100 mb-2">
-          <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#login"></use></svg>
-          دخول إلى حسابي
-        </button>
-
-        <div class="login-meta d-flex justify-content-between align-items-center mt-2">
-          <span>موقع: <?= h($siteName ?? 'Godyar'); ?></span>
-          <span><a href="<?= h($baseUrl); ?>/" class="text-decoration-none" style="color:#9ca3af;">العودة للموقع</a></span>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="<?= h($baseUrl); ?>/assets/js/vendors/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
+// Fallback (should not happen once view exists)
+http_response_code(500);
+echo 'تعذر تحميل واجهة تسجيل الدخول.';

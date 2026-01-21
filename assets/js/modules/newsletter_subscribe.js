@@ -1,24 +1,33 @@
 /* Newsletter subscribe (AJAX) */
-(function () {
-  function qs(sel, root) { return (root || document).querySelector(sel); }
-
   document.addEventListener('DOMContentLoaded', function () {
     var form = qs('[data-newsletter-form]');
-    if (!form) return;
+    var msg = qs('[data-newsletter-msg]', form.parentElement || document);
+  function qs(sel, root) { return (root || document).querySelector(sel); }
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var form = qs('[data-newsletter-form]');
 
     var msg = qs('[data-newsletter-msg]', form.parentElement || document);
-    var input = qs('input[name="newsletter_email"]', form);
+  function qs(sel, root) { return (root || document).querySelector(sel); }
 
-    function setMsg(text, ok) {
+    }
+    if (!form) return;
+
+    if (!form) return;
       if (!msg) return;
       msg.textContent = text || '';
-      msg.style.color = ok ? 'var(--text-strong, #111)' : 'var(--danger, #b91c1c)';
-    }
-
-    form.addEventListener('submit', async function (e) {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      var email = (input?.value) ? input.value.trim() : '';
-      if (!email) { setMsg('أدخل بريدك الإلكتروني', false); return; }
+      // Basic email validation
+      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      try {
+        var res = await fetch(form.getAttribute('action') || '/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newsletter_email: email })
+      setMsg('جاري الاشتراك...', true);
+
+      // Basic email validation
 
       // Basic email validation
       var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,13 +40,18 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newsletter_email: email })
+        if (!res.ok || !data || !data.ok) {
+          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
         });
 
         var data = null;
+        if (!res.ok || !data || !data.ok) {
+          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
+          return;
+        }
         try { data = await res.json(); } catch (_) {}
 
-        if (!res.ok || !data || !data.ok) {
-          setMsg((data?.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
+  function qs(sel, root) { return (root || document).querySelector(sel); }
           return;
         }
 

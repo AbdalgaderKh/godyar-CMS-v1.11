@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE email = :email
                 LIMIT 1";
         $stmt = $pdo->prepare($sql);
+        $pass = (string)($_POST['password'] ?? '');
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -91,9 +92,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
         $hash = (string)($user['password_hash'] ?? '');
 
-        if ($hash === '') {
-            throw new Exception(__('t_a10f0c96ca', 'بيانات الدخول غير صحيحة.'));
-        }
+        $ok = false;
 
         $ok = false;
 

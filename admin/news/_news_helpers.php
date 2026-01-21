@@ -168,8 +168,25 @@ function gdy_db_table_exists(PDO $pdo, string $table): bool {
 
 }
 
-function gdy_ensure_news_attachments_table(PDO $pdo): void {
-    if (gdy_db_table_exists($pdo, 'news_attachments')) return;
+
+// -----------------------------------------------------------------------------
+// Attachments helpers (safe upload + DB)
+// -----------------------------------------------------------------------------
+
+if (!function_exists('gdy_starts_with')) {
+    function gdy_starts_with(string $haystack, string $needle): bool {
+        return $needle === '' || substr($haystack, 0, strlen($needle)) === $needle;
+    }
+}
+
+/**
+ * Ensure news_attachments table exists.
+ */
+function gdy_ensure_news_attachments_table(PDO $pdo): void
+{
+    if (function_exists('gdy_db_table_exists') && gdy_db_table_exists($pdo, 'news_attachments')) {
+        return;
+    }
 
     $sql = "CREATE TABLE IF NOT EXISTS `news_attachments` (
         `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -182,6 +199,7 @@ function gdy_ensure_news_attachments_table(PDO $pdo): void {
         PRIMARY KEY (`id`),
         KEY `idx_news_id` (`news_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
     try {
         $pdo->exec($sql);
     } catch (Throwable $e) {
@@ -189,39 +207,75 @@ function gdy_ensure_news_attachments_table(PDO $pdo): void {
     }
 }
 
-function gdy_normalize_files_array(array $files): array {
-    // supports both single and multiple upload structure
+/**
+ * Fetch attachments for a given news item.
+ *
+ * @return array<int, array{id:int,news_id:int,original_name:string,file_path:string,mime_type:?string,file_size:?int,created_at:string}>
+ */
+function gdy_get_news_attachments(PDO $pdo, int $newsId): array
+{
+    $newsId = (int)$newsId;
+    if ($newsId <= 0) {
+        return [];
+    }
+
+    gdy_ensure_news_attachments_table($pdo);
+
+    try {
+        $st = $pdo->prepare("SELECT id, news_id, original_name, file_path, mime_type, file_size, created_at\n                             FROM news_attachments\n                             WHERE news_id = ?\n                             ORDER BY id DESC");
+        $st->execute([$newsId]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        return is_array($rows) ? $rows : [];
+    } catch (Throwable $e) {
+        error_log('[News Helpers] get attachments failed: ' . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Normalize the $_FILES multi-upload structure.
+ */
+function gdy_normalize_files_array(array $files): array
+{
     $out = [];
-    if (!isset($files['name'])) return $out;
+    if (!isset($files['name'])) {
+        return $out;
+    }
 
     if (is_array($files['name'])) {
         $count = count($files['name']);
         for ($i = 0; $i < $count; $i++) {
             $out[] = [
-                'name' => (string)($files['name'][$i] ?? ''),
-                'type' => (string)($files['type'][$i] ?? ''),
+                'name'     => (string)($files['name'][$i] ?? ''),
+                'type'     => (string)($files['type'][$i] ?? ''),
                 'tmp_name' => (string)($files['tmp_name'][$i] ?? ''),
-                'error' => (int)($files['error'][$i] ?? UPLOAD_ERR_NO_FILE),
-                'size' => (int)($files['size'][$i] ?? 0),
+                'error'    => (int)($files['error'][$i] ?? UPLOAD_ERR_NO_FILE),
+                'size'     => (int)($files['size'][$i] ?? 0),
             ];
         }
     } else {
         $out[] = [
-            'name' => (string)($files['name'] ?? ''),
-            'type' => (string)($files['type'] ?? ''),
+            'name'     => (string)($files['name'] ?? ''),
+            'type'     => (string)($files['type'] ?? ''),
             'tmp_name' => (string)($files['tmp_name'] ?? ''),
-            'error' => (int)($files['error'] ?? UPLOAD_ERR_NO_FILE),
-            'size' => (int)($files['size'] ?? 0),
+            'error'    => (int)($files['error'] ?? UPLOAD_ERR_NO_FILE),
+            'size'     => (int)($files['size'] ?? 0),
         ];
     }
+
     return $out;
 }
 
-function gdy_attachment_icon_class(string $filenameOrExt): string {
+/**
+ * Icon class for attachment type (FontAwesome).
+ */
+function gdy_attachment_icon_class(string $filenameOrExt): string
+{
     $ext = strtolower(pathinfo($filenameOrExt, PATHINFO_EXTENSION));
-    if ($ext === '') $ext = strtolower($filenameOrExt);
+    if ($ext === '') {
+        $ext = strtolower($filenameOrExt);
+    }
 
-    // PHP 7.4 compatibility: avoid "match" (PHP 8+)
     switch ($ext) {
         case 'pdf':
             return 'fa-regular fa-file-pdf';
@@ -241,6 +295,14 @@ function gdy_attachment_icon_class(string $filenameOrExt): string {
         case 'txt':
         case 'rtf':
             return 'fa-regular fa-file-lines';
+        case 'mp3':
+        case 'wav':
+        case 'ogg':
+        case 'm4a':
+            return 'fa-regular fa-file-audio';
+        case 'mp4':
+        case 'webm':
+            return 'fa-regular fa-file-video';
         case 'png':
         case 'jpg':
         case 'jpeg':
@@ -252,72 +314,149 @@ function gdy_attachment_icon_class(string $filenameOrExt): string {
     }
 }
 
-function gdy_save_news_attachments(PDO $pdo, int $newsId, array $files, array &$errors = []): void {
-    gdy_ensure_news_attachments_table($pdo);
+/**
+ * Best-effort protection inside upload directories.
+ */
+function gdy_protect_upload_dir(string $absDir): void
+{
+    try {
+        if (!is_dir($absDir)) {
+            if (function_exists('gdy_mkdir')) {
+                gdy_mkdir($absDir, 0775, true);
+            } else {
+                @mkdir($absDir, 0775, true);
+            }
+        }
 
-    $items = gdy_normalize_files_array($files);
-    if (empty($items)) return;
+        $ht = rtrim($absDir, "/\\") . '/.htaccess';
+        if (!is_file($ht)) {
+            $rules = "Options -Indexes\n" .
+                     "<FilesMatch \\\"\\.(php|phtml|php\d|phar)\\$\\\">\n" .
+                     "  Deny from all\n" .
+                     "</FilesMatch>\n";
+            @file_put_contents($ht, $rules);
+        }
+    } catch (Throwable $e) {
+        // ignore
+    }
+}
 
-    $uploadDir = __DIR__ . '/../../uploads/news/attachments/';
-    if (!is_dir($uploadDir)) {
-        gdy_mkdir($uploadDir, 0755, true);
+/**
+ * Save attachments for a news item (centralised safe upload).
+ *
+ * @param array $files The $_FILES['attachments'] array.
+ * @param array $errors Collects errors under key 'attachments'.
+ */
+function gdy_save_news_attachments(PDO $pdo, int $newsId, array $files, array &$errors): void
+{
+    if ($newsId <= 0) {
+        return;
     }
 
-    // hard limits
-    $maxSize = 20 * 1024 * 1024; // 20MB per file
-    $allowedExt = ['pdf','doc','docx','xls','xlsx','ppt','pptx','zip','rar','7z','txt','rtf','png','jpg','jpeg','gif','webp'];
+    gdy_ensure_news_attachments_table($pdo);
+
+    if (!class_exists('Godyar\\SafeUploader')) {
+        $errors['attachments'] = __('t_556247d5d4', 'مكوّن الرفع الآمن غير متاح حالياً.');
+        return;
+    }
+
+    $items = gdy_normalize_files_array($files);
+    if (empty($items)) {
+        return;
+    }
+
+    // Limits
+    $maxSize = 50 * 1024 * 1024; // 50MB per file (supports mp4)
+
+    // Allow-list types (images + documents + audio/video)
+    $allowedMime = [
+        'pdf'  => ['application/pdf'],
+        'doc'  => ['application/msword', 'application/octet-stream'],
+        'docx' => ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/zip', 'application/octet-stream'],
+        'xls'  => ['application/vnd.ms-excel', 'application/octet-stream'],
+        'xlsx' => ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/zip', 'application/octet-stream'],
+        'ppt'  => ['application/vnd.ms-powerpoint', 'application/octet-stream'],
+        'pptx' => ['application/vnd.openxmlformats-officedocument.presentationml.presentation', 'application/zip', 'application/octet-stream'],
+        'zip'  => ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'],
+        'rar'  => ['application/x-rar', 'application/vnd.rar', 'application/octet-stream'],
+        '7z'   => ['application/x-7z-compressed', 'application/octet-stream'],
+        'txt'  => ['text/plain', 'application/octet-stream'],
+        'rtf'  => ['application/rtf', 'text/rtf', 'application/octet-stream'],
+        'png'  => ['image/png'],
+        'jpg'  => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'gif'  => ['image/gif'],
+        'webp' => ['image/webp'],
+        'mp3'  => ['audio/mpeg', 'audio/mp3', 'application/octet-stream'],
+        'wav'  => ['audio/wav', 'audio/x-wav', 'application/octet-stream'],
+        'ogg'  => ['audio/ogg', 'application/ogg', 'application/octet-stream'],
+        'm4a'  => ['audio/mp4', 'application/octet-stream'],
+        'mp4'  => ['video/mp4', 'application/octet-stream'],
+        'webm' => ['video/webm', 'application/octet-stream'],
+    ];
+    $allowedExt = array_keys($allowedMime);
+
+    // Destination
+    $root = defined('ROOT_PATH') ? (string)ROOT_PATH : (string)dirname(__DIR__, 2);
+    $destAbs = rtrim($root, "/\\") . '/uploads/news/attachments';
+    gdy_protect_upload_dir($destAbs);
+
+    // URL prefix (supports subdirectory installs)
+    $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+    $basePath = '';
+    if ($baseUrl !== '') {
+        $bp = parse_url($baseUrl, PHP_URL_PATH);
+        if (is_string($bp) && $bp !== '' && $bp !== '/') {
+            $basePath = rtrim($bp, '/');
+        }
+    }
+    $urlPrefix = ($basePath !== '' ? $basePath : '') . '/uploads/news/attachments';
 
     $ins = $pdo->prepare("INSERT INTO news_attachments (news_id, original_name, file_path, mime_type, file_size, created_at)
                           VALUES (:news_id, :original_name, :file_path, :mime_type, :file_size, NOW())");
 
     foreach ($items as $f) {
-        $err = (int)$f['error'];
-        if ($err === UPLOAD_ERR_NO_FILE) continue;
-        if ($err !== UPLOAD_ERR_OK) {
-            $errors['attachments'] = __('t_556244d2a1', 'حدث خطأ أثناء رفع أحد المرفقات.');
+        $err = (int)($f['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($err === UPLOAD_ERR_NO_FILE) {
             continue;
         }
 
-        $orig = trim((string)$f['name']);
-        $tmp  = (string)$f['tmp_name'];
-        $size = (int)$f['size'];
+        $res = \Godyar\SafeUploader::upload($f, [
+            'max_bytes'    => $maxSize,
+            'allowed_ext'  => $allowedExt,
+            'allowed_mime' => $allowedMime,
+            'dest_abs_dir' => $destAbs,
+            'url_prefix'   => $urlPrefix,
+            'prefix'       => 'att_',
+        ]);
 
-        if ($orig === '' || $tmp === '') continue;
-        if ($size <= 0 || $size > $maxSize) {
-            $errors['attachments'] = __('t_67b942a769', 'حجم أحد المرفقات أكبر من المسموح (20 ميجابايت).');
+        if (empty($res['success'])) {
+            $errors['attachments'] = (string)($res['error'] ?? __('t_556244d2a1', 'حدث خطأ أثناء رفع أحد المرفقات.'));
             continue;
         }
 
-        $ext = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
-        if ($ext === '' || !in_array($ext, $allowedExt, true)) {
-            $errors['attachments'] = __('t_054b2b5303', 'نوع أحد المرفقات غير مسموح. يُسمح بـ PDF/Word/Excel وغيرها.');
-            continue;
+        // Store DB relative path (without basePath)
+        $relUrl = (string)($res['rel_url'] ?? '');
+        $path = ltrim($relUrl, '/');
+        if ($basePath !== '') {
+            $bpTrim = ltrim($basePath, '/');
+            if ($bpTrim !== '' && gdy_starts_with($path, $bpTrim . '/')) {
+                $path = substr($path, strlen($bpTrim) + 1);
+            }
         }
 
-        $mime = '';
-        try {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime  = $finfo ? (string)finfo_file($finfo, $tmp) : '';
-            if ($finfo) finfo_close($finfo);
-        } catch (Throwable) {}
-
-        $baseName = date('Ymd_His') . '_' . bin2hex(random_bytes(6));
-        $safeName = $baseName . '.' . $ext;
-        $target   = $uploadDir . $safeName;
-
-        if (!move_uploaded_file($tmp, $target)) {
+        if ($path === '') {
             $errors['attachments'] = __('t_7148406c0e', 'تعذر حفظ أحد المرفقات على الخادم.');
             continue;
         }
 
-        $relPath = 'uploads/news/attachments/' . $safeName;
         try {
             $ins->execute([
-                ':news_id' => $newsId,
-                ':original_name' => $orig,
-                ':file_path' => $relPath,
-                ':mime_type' => $mime !== '' ? $mime : null,
-                ':file_size' => $size,
+                ':news_id'       => $newsId,
+                ':original_name' => (string)($res['original_name'] ?? ($f['name'] ?? '')),
+                ':file_path'     => $path,
+                ':mime_type'     => (string)($res['mime'] ?? '') ?: null,
+                ':file_size'     => (int)($res['size'] ?? ($f['size'] ?? 0)) ?: null,
             ]);
         } catch (Throwable $e) {
             error_log('[News Helpers] insert attachment failed: ' . $e->getMessage());
@@ -325,35 +464,38 @@ function gdy_save_news_attachments(PDO $pdo, int $newsId, array $files, array &$
     }
 }
 
-function gdy_get_news_attachments(PDO $pdo, int $newsId): array {
-    if (!gdy_db_table_exists($pdo, 'news_attachments')) return [];
-    try {
-        $stmt = $pdo->prepare("SELECT id, original_name, file_path, mime_type, file_size, created_at
-                               FROM news_attachments
-                               WHERE news_id = ?
-                               ORDER BY id DESC");
-        $stmt->execute([$newsId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-    } catch (Throwable $e) {
-        error_log('[News Helpers] get attachments failed: ' . $e->getMessage());
-        return [];
+/**
+ * Delete an attachment safely (DB + file within uploads/news/attachments).
+ */
+function gdy_delete_news_attachment(PDO $pdo, int $newsId, int $attachmentId): bool
+{
+    if ($newsId <= 0 || $attachmentId <= 0) {
+        return false;
     }
-}
 
-function gdy_delete_news_attachment(PDO $pdo, int $attachmentId, int $newsId): bool {
-    if (gdy_db_table_exists($pdo, 'news_attachments') === false) return false;
+    if (!function_exists('gdy_db_table_exists') || !gdy_db_table_exists($pdo, 'news_attachments')) {
+        return false;
+    }
+
     try {
         $stmt = $pdo->prepare("SELECT file_path FROM news_attachments WHERE id = ? AND news_id = ? LIMIT 1");
         $stmt->execute([$attachmentId, $newsId]);
         $path = (string)($stmt->fetchColumn() ?: '');
+
         if ($path !== '') {
-            $abs = realpath(__DIR__ . '/../../' . ltrim($path, '/'));
-            // only delete inside uploads/news/attachments
-            $root = realpath(__DIR__ . '/../../uploads/news/attachments');
-            if ($abs && $root && str_starts_with($abs, $root)) {
-                gdy_unlink($abs);
+            $root = defined('ROOT_PATH') ? (string)ROOT_PATH : (string)dirname(__DIR__, 2);
+            $uploadsRoot = realpath(rtrim($root, "/\\") . '/uploads/news/attachments');
+            $absCandidate = realpath(rtrim($root, "/\\") . '/' . ltrim($path, '/'));
+
+            if ($uploadsRoot && $absCandidate && gdy_starts_with($absCandidate, $uploadsRoot)) {
+                if (function_exists('gdy_unlink')) {
+                    gdy_unlink($absCandidate);
+                } else {
+                    @unlink($absCandidate);
+                }
             }
         }
+
         $del = $pdo->prepare("DELETE FROM news_attachments WHERE id = ? AND news_id = ? LIMIT 1");
         $del->execute([$attachmentId, $newsId]);
         return true;
@@ -362,8 +504,6 @@ function gdy_delete_news_attachment(PDO $pdo, int $attachmentId, int $newsId): b
         return false;
     }
 }
-
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 // Editorial workflow helpers (notes + revisions)

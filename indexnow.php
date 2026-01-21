@@ -17,9 +17,11 @@ if ($url === '') {
 }
 
 if (!preg_match('#^https?://#i', $url)) {
+echo json_encode(['ok'=>$ok, 'url'=>$url], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
   $url = $base . '/' . ltrim($url, '/');
 }
 
 $ok = gdy_indexnow_submit([$url]);
 
-echo json_encode(['ok'=>$ok, 'url'=>$url], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+  $url = $base . '/' . ltrim($url, '/');
+}

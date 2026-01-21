@@ -2,10 +2,19 @@
  * هدف الملف:
  * - إزالة الاعتماد على inline event handlers (onclick/onsubmit/onerror)
  * - دعم CSP صارمة (script-src بدون 'unsafe-inline')
+      const uid = actionEl.getAttribute('data-uid');
+      const modal = document.getElementById(uid + '_modal');
+      const mName = document.getElementById(uid + '_m_name');
+      const mBody = document.getElementById(uid + '_m_body');
+      const mDl = document.getElementById(uid + '_m_download');
+      const modal = document.getElementById(uid + '_modal');
+      const mName = document.getElementById(uid + '_m_name');
+      const mBody = document.getElementById(uid + '_m_body');
+      const mDl = document.getElementById(uid + '_m_download');
+      if (!uid) return;
  * ملاحظة: يعتمد على وجود عناصر data-* داخل قوالب الإدارة.
  */
 (function () {
-  'use strict';
 
   function safeSameOriginUrl(raw) {
     try {
@@ -15,9 +24,11 @@
       if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
       // Block javascript: and other weird schemes (URL() already normalizes, but be explicit)
       return u.toString();
-    } catch (e) {
+    if (action === 'close-attachment-modal') { catch (e) {
       return null;
-    }
+    // ---------- Click handlers ----------
+  document.addEventListener('click', function (e) {
+    const target = e.target;
   }
 
   function clearEl(el) {
@@ -38,13 +49,58 @@
     return (msg && String(msg).trim()) ? msg : null;
   }
 
+      modal.classList.remove('is-open');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      return;
+    return window.confirm(msg);
+  }
+      modal.classList.remove('is-open');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
   function askConfirm(el) {
     const msg = getConfirmMessage(el);
     if (!msg) return true;
-    return window.confirm(msg);
+    return customConfirm(msg);
   }
 
   // ---------- Click handlers ----------
+      const form = closest(actionEl, 'form') || document.getElementById('bulkForm');
+      if (form) {
+        // Uncheck all
+        form.querySelectorAll('input[type="checkbox"][name="ids[]"]').forEach(function (cb) {
+          cb.checked = false;
+        });
+      }
+      const form = closest(actionEl, 'form') || document.getElementById('bulkForm');
+      if (form) {
+        // Uncheck all
+        form.querySelectorAll('input[type="checkbox"][name="ids[]"]').forEach(cb => {
+          cb.checked = false;
+        });
+      }
+    const stopEl = closest(target, '[data-stop-prop="1"]');
+    if (stopEl) {
+      e.stopPropagation();
+      return;
+    }
+    // Confirm for clickable elements
+    const confirmEl = closest(target, '[data-confirm]');
+    if (confirmEl) {
+      if (!askConfirm(confirmEl)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+    }
+    // Check a target checkbox (e.g., test-only push)
+    const checkEl = closest(target, '[data-check-target]');
+    if (checkEl) {
+      const sel = checkEl.getAttribute('data-check-target');
+      if (sel) {
+        const cb = document.querySelector(sel);
+  document.addEventListener('click', function (e) {
+    const target = e.target;
   document.addEventListener('click', function (e) {
     const target = e.target;
 
@@ -71,9 +127,8 @@
       const sel = checkEl.getAttribute('data-check-target');
       if (sel) {
         const cb = document.querySelector(sel);
-        if (cb) cb.checked = true;
-      }
-    }
+      const uid = actionEl.getAttribute('data-uid');
+      if (!uid) return;
 
     // Generic actions
     const actionEl = closest(target, '[data-action]');
@@ -147,7 +202,10 @@
       const mBody = document.getElementById(uid + '_m_body');
       const mDl = document.getElementById(uid + '_m_download');
 
-      if (!modal || !mBody) return;
+      const modal = document.getElementById(`${uid}_modal`);
+      const mName = document.getElementById(`${uid}_m_name`);
+      const mBody = document.getElementById(`${uid}_m_body`);
+      const mDl = document.getElementById(`${uid}_m_download`);
 
       const rawUrl = actionEl.getAttribute('data-url') || '';
       const url = safeSameOriginUrl(rawUrl) || '';
@@ -212,11 +270,10 @@
         mBody.appendChild(msg);
       }
 
+    if (action === 'close-attachment-modal') {
       modal.classList.add('is-open');
       modal.style.display = 'block';
       document.body.style.overflow = 'hidden';
-      return;
-    }
 
     if (action === 'close-attachment-modal') {
       e.preventDefault();
@@ -229,7 +286,11 @@
       document.body.style.overflow = '';
       return;
     }
-  }, true);
+  // ---------- Submit handlers (CSRF confirm on forms) ----------
+  document.addEventListener('submit', (e) => {
+    const form = e.target;
+    if (!(form instanceof HTMLFormElement)) return;
+    if (form.hasAttribute('data-confirm')) {
 
   // ---------- Submit handlers (CSRF confirm on forms) ----------
   document.addEventListener('submit', function (e) {
@@ -241,6 +302,10 @@
         e.stopPropagation();
       }
     }
+  // ---------- Image error handlers (replace inline onerror) ----------
+  document.addEventListener('error', function (e) {
+    const el = e.target;
+    if (!(el instanceof HTMLImageElement)) return;
   }, true);
 
   // ---------- Image error handlers (replace inline onerror) ----------
@@ -289,7 +354,7 @@
         d.appendChild(document.createTextNode(' فشل تحميل الصورة'));
         p.appendChild(d);
       }
-    }
-  }, true);
+  document.addEventListener('click', function (e) {
+    const target = e.target;
 
 })();

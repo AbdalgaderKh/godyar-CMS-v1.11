@@ -11,7 +11,8 @@ $pageTitle   = __('t_35e98a991a', 'الرد على رسالة تواصل');
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
+    // عنوان افتراضي للرد
+$replySubject = __('t_f05a61edf6', 'رد على رسالتك: ') . (string)($row['subject'] ?? '');
 }
 
 // 1) التحقق من تسجيل الدخول
@@ -20,6 +21,11 @@ try {
         if (!Auth::isLoggedIn()) {
             header('Location: ../login.php');
             exit;
+        if (!$errors) {
+            $to      = (string)($row['email'] ?? '');
+            if ($to === '') {
+                $errors[] = __('t_ef56189125', 'لا يمكن إرسال البريد لأن حقل البريد الإلكتروني فارغ في الرسالة.');
+            } else {
         }
     } else {
         if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
@@ -88,8 +94,20 @@ if (class_exists(Auth::class) && method_exists(Auth::class, 'user')) {
 // عنوان افتراضي للرد
 $replySubject = __('t_f05a61edf6', 'رد على رسالتك: ') . (string)($row['subject'] ?? '');
 
-// 4) معالجة POST (إرسال الرد)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hash_equals($csrfToken, $token)) {
+        $errors[] = __('t_7339ca256b', 'انتهت صلاحية النموذج، يرجى إعادة تحميل الصفحة ثم المحاولة مرة أخرى.');
+    } else {
+        $replyBody = trim((string)($_POST['reply_message'] ?? ''));
+        if ($replyBody === '') {
+            $errors[] = __('t_e2ecaa68d3', 'نص الرد مطلوب.');
+        }
+    if (!hash_equals($csrfToken, $token)) {
+        $errors[] = __('t_7339ca256b', 'انتهت صلاحية النموذج، يرجى إعادة تحميل الصفحة ثم المحاولة مرة أخرى.');
+    } else {
+        $replyBody = trim($_POST['reply_message'] ?? '');
+        if ($replyBody === '') {
+            $errors[] = __('t_e2ecaa68d3', 'نص الرد مطلوب.');
+        }
     $token = $_POST['_token'] ?? '';
     if (!hash_equals($csrfToken, $token)) {
         $errors[] = __('t_7339ca256b', 'انتهت صلاحية النموذج، يرجى إعادة تحميل الصفحة ثم المحاولة مرة أخرى.');
@@ -122,6 +140,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $headers  = "MIME-Version: 1.0\r\n";
                 $headers .= "Content-type: text/plain; charset=UTF-8\r\n";
                 $headers .= 'From: ' . sprintf('"%s" <%s>', mb_encode_mimeheader($fromName, 'UTF-8'), $fromEmail) . "\r\n";
+                // جسم البريد
+                $body  = __('t_7e922ad95c', "السلام عليكم ") . (string)($row['name'] ?? '') . ",\n\n";
+                $body .= $replyBody . "\n\n";
+                $body .= "----------------------\n";
+                $body .= __('t_9e14fb3581', "نسخة من رسالتك الأصلية:\n");
                 $headers .= "Reply-To: " . $fromEmail . "\r\n";
 
                 // جسم البريد

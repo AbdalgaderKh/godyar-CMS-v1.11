@@ -199,15 +199,13 @@ try { $revisionHistory = gdy_get_news_revisions($pdo, $id, 20); } catch (Throwab
 $errors  = [];
 $updated = false;
 
-// -----------------------------------------------------------------------------
-// معالجة التحديث
-// -----------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['delete_attachment_id'])) {
         $delId = (int)($_POST['delete_attachment_id'] ?? 0);
         if ($delId > 0) {
-            gdy_delete_news_attachment($pdo, $delId, $id);
+            // signature: (PDO $pdo, int $newsId, int $attachmentId)
+            gdy_delete_news_attachment($pdo, $id, $delId);
         }
         header('Location: edit.php?id=' . $id . '&att_deleted=1');
         exit;
@@ -338,54 +336,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $imagePath = $oldImagePath !== '' ? $oldImagePath : null;
         $uploadedNewImage = false;
 
-        if (isset($_FILES['image']) && (($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE)) {
-            if (($_FILES['image']['error'] ?? UPLOAD_ERR_OK) === UPLOAD_ERR_OK) {
-                $tmpName  = $_FILES['image']['tmp_name'] ?? '';
-                $origName = $_FILES['image']['name'] ?? '';
-                $size     = (int)($_FILES['image']['size'] ?? 0);
+		if (isset($_FILES['image']) && (($_FILES['image']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE)) {
+			if (($_FILES['image']['error'] ?? UPLOAD_ERR_OK) === UPLOAD_ERR_OK) {
+				try {
+					$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+					$basePath = $baseUrl !== '' ? rtrim((string)(parse_url($baseUrl, PHP_URL_PATH) ?: ''), '/') : '';
+					$urlPrefix = ($basePath !== '' ? $basePath : '') . '/uploads/news';
 
-                $maxSize = 5 * 1024 * 1024;
-                if ($size > $maxSize) {
-                    $errors['image'] = __('t_75a6c044df', 'حجم الصورة أكبر من المسموح (5 ميجابايت).');
-                } else {
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mime  = $finfo ? finfo_file($finfo, $tmpName) : '';
-                    if ($finfo) finfo_close($finfo);
+					$res = \Godyar\SafeUploader::upload($_FILES['image'], [
+						'max_bytes' => 5 * 1024 * 1024,
+						'allowed_ext' => ['jpg','jpeg','png','gif','webp'],
+						'allowed_mime' => [
+							'jpg'  => ['image/jpeg'],
+							'jpeg' => ['image/jpeg'],
+							'png'  => ['image/png'],
+							'gif'  => ['image/gif'],
+							'webp' => ['image/webp'],
+						],
+						'dest_abs_dir' => dirname(__DIR__, 2) . '/uploads/news',
+						'url_prefix'   => $urlPrefix,
+					]);
 
-                    $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-                    if (!in_array($mime, $allowedMimes, true)) {
-                        $errors['image'] = __('t_1d4df6cce9', 'يُسمح فقط برفع صور بصيغ JPG أو PNG أو GIF أو WebP.');
-                    } else {
-                        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-                        if ($ext === '') {
-                            $map = [
-                                'image/jpeg' => 'jpg',
-                                'image/png'  => 'png',
-                                'image/gif'  => 'gif',
-                                'image/webp' => 'webp',
-                            ];
-                            $ext = $map[$mime] ?? 'jpg';
-                        }
-
-                        $uploadDir = __DIR__ . '/../../uploads/news/';
-                        if (!is_dir($uploadDir)) gdy_mkdir($uploadDir, 0755, true);
-
-                        $baseName   = date('Ymd_His') . '_' . bin2hex(random_bytes(4));
-                        $fileName   = $baseName . '.' . $ext;
-                        $targetPath = $uploadDir . $fileName;
-
-                        if (move_uploaded_file($tmpName, $targetPath)) {
-                            $imagePath = 'uploads/news/' . $fileName;
-                            $uploadedNewImage = true;
-                        } else {
-                            $errors['image'] = __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.');
-                        }
-                    }
-                }
-            } else {
-                $errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
-            }
-        }
+					if (!empty($res['ok'])) {
+						$fileName = basename((string)($res['abs_path'] ?? ''));
+						if ($fileName !== '') {
+							$imagePath = 'uploads/news/' . $fileName;
+							$uploadedNewImage = true;
+						} else {
+							$errors['image'] = __('t_6b9a5a9ac9', 'تعذر حفظ ملف الصورة على الخادم.');
+						}
+					} else {
+						$errors['image'] = (string)($res['error'] ?? __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.'));
+					}
+				} catch (Throwable $e) {
+					$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+				}
+			} else {
+				$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+			}
+		}
 
         if (!$errors) {
             try {

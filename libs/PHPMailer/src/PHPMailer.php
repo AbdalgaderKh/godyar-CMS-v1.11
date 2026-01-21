@@ -6,9 +6,9 @@
  *
  * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
  *
- * @author    Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author    Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author    Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author    Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author    Jim Jagielski (jimjag) <admin@example.com>
+ * @author    Andy Prevost (codeworxtech) <admin@example.com>
  * @author    Brent R. Matzelle (original founder)
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
@@ -24,9 +24,9 @@ namespace PHPMailer\PHPMailer;
 /**
  * PHPMailer - PHP email creation and transport class.
  *
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
+ * @author Marcus Bointon (Synchro/coolbru) <admin@example.com>
+ * @author Jim Jagielski (jimjag) <admin@example.com>
+ * @author Andy Prevost (codeworxtech) <admin@example.com>
  * @author Brent R. Matzelle (original founder)
  */
 class PHPMailer
@@ -1444,7 +1444,7 @@ class PHPMailer
      * Alternatively you may pass in a callable to inject your own validator, for example:
      *
      * ```php
-     * PHPMailer::validateAddress('user@example.com', function($address) {
+     * PHPMailer::validateAddress('admin@example.com', function($address) {
      *     return (strpos($address, '@') !== false);
      * });
      * ```
@@ -2576,7 +2576,7 @@ class PHPMailer
      * @param array  $addr An array of recipients,
      *                     where each recipient is a 2-element indexed array with element 0 containing an address
      *                     and element 1 containing a name, like:
-     *                     [['joe@example.com', 'Joe User'], ['zoe@example.com', 'Zoe User']]
+     *                     [['admin@example.com', 'Joe User'], ['admin@example.com', 'Zoe User']]
      *
      * @return string
      */
@@ -2594,7 +2594,7 @@ class PHPMailer
      * Format an address for use in a message header.
      *
      * @param array $addr A 2-element indexed array, element 0 containing an address, element 1 containing a name like
-     *                    ['joe@example.com', 'Joe User']
+     *                    ['admin@example.com', 'Joe User']
      *
      * @return string
      */

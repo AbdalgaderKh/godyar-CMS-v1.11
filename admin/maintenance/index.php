@@ -21,6 +21,10 @@ if (!Auth::isLoggedIn()) {
 if (!function_exists('h')) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
+if (!function_exists('h')) {
+    function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+}
+define('GODYAR_ROOT', __DIR__ . '/../../');
 
 $flagFile = GODYAR_ROOT . '/maintenance.flag';
 $flash    = null;

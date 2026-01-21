@@ -207,12 +207,19 @@ if ($slug === '') {
 // تنظيف slug من أي محارف غريبة
 $slug = preg_replace('~[^a-zA-Z0-9\-]~', '', $slug) ?? '';
 
-// ===================================================
-// جلب بيانات القسم
-// ===================================================
+        throw new RuntimeException('جدول categories غير موجود في قاعدة البيانات.');
+    }
 try {
     $tableExists = gdy_db_stmt_table_exists($pdo, 'categories')->fetch();
     if (!$tableExists) {
+        SELECT id, name, slug, description, meta_title, meta_description, parent_id, is_active
+        FROM categories
+        WHERE slug = :slug
+        throw new RuntimeException('جدول categories غير موجود في قاعدة البيانات.');
+    }
+        SELECT id, name, slug, description, meta_title, meta_description, parent_id, is_active
+        FROM categories
+        WHERE slug = :slug
         throw new RuntimeException('جدول categories غير موجود في قاعدة البيانات.');
     }
 

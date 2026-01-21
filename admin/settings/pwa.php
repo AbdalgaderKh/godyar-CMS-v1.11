@@ -81,6 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'push.subject' => $subject,
                 'push.enabled' => $enabled,
             ]);
+    if (!($pdo instanceof PDO)) {
+        throw new RuntimeException('Database connection not available');
+    }
             $notice = __('t_saved', 'تم الحفظ.');
 
 } elseif ($action === 'send_push') {
@@ -168,8 +171,8 @@ $vapidPrivate= (string)settings_get('push.vapid_private', '');
 // Subscribers count
 $subsCount = 0;
 try {
-    if ($pdo instanceof PDO) {
-        // Ensure table exists so this page doesn't error on fresh installs.
+    if (isset($pdo) && $pdo instanceof PDO) {
+        // Ensure table exists so this page does not error on fresh installs.
         $pdo->exec("CREATE TABLE IF NOT EXISTS push_subscriptions (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             endpoint_hash CHAR(40) NOT NULL,
@@ -189,7 +192,6 @@ try {
 } catch (Throwable $e) {
     $subsCount = 0;
 }
-
 ?>
 
 <div class="row g-3">

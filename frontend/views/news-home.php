@@ -17,9 +17,16 @@ if (!function_exists('h')) {
 
 $latestNews   = is_array($latestNews ?? null) ? $latestNews : [];
 $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
+$sidebarHidden = (bool)($sidebarHidden ?? false);
 
-// تقسيم الأخبار إلى رئيسي + باقي
-$mainNews   = $latestNews[0] ?? null;
+    margin: 0;
+    padding: 0;
+    font-size: .8rem;
+  }
+</style>
+    margin: 0;
+    padding: 0;
+    font-size: .8rem;
 $otherNews  = array_slice($latestNews, 1);
 ?>
 <style>
@@ -141,12 +148,14 @@ $otherNews  = array_slice($latestNews, 1);
     color: #9ca3af;
     font-size: .7rem;
   }
+  <div>
+    <?php if ($mainNews): ?>
 </style>
 
 <div class="gdy-home-layout">
 
-  <div>
-    <?php if ($mainNews): ?>
+$latestNews   = is_array($latestNews ?? null) ? $latestNews : [];
+$trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
       <?php
         $title   = (string)($mainNews['title'] ?? '');
         $dateRaw = $mainNews['published_at'] ?? $mainNews['created_at'] ?? $mainNews['date'] ?? $mainNews['news_date'] ?? null;

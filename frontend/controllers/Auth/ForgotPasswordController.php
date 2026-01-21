@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             required
             autocomplete="email"
             value="<?= h($email) ?>"
-            placeholder="example@domain.com"
+            placeholder="admin@example.com"
           >
         </div>
 

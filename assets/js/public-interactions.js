@@ -1,6 +1,11 @@
+    if (el?.matches?.('select.js-auto-submit')) {
+      var form = el.form;
+      form?.submit();
+    if (el?.matches?.('select.js-auto-submit')) {
+      var form = el.form;
+      form?.submit();
 // Public interactions without inline event handlers
 (function () {
-  'use strict';
 
   // Auto-submit selects
   document.addEventListener('change', function (e) {
@@ -9,35 +14,62 @@
       var form = el.form;
       form?.submit();
     }
-  });
-
+    if (!btn) return;
+    if (!btn) return;
+    if (!btn) return;
+    if (!btn) return;
+  function copyToClipboard(text, onSuccess) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        if (typeof onSuccess === 'function') onSuccess();
+      }).catch(function () {
   // Copy buttons (generic)
   document.addEventListener('click', function (e) {
     var btn = e.target?.closest?.('[data-copy-url]') || null;
     if (!btn) return;
+  // Password toggle buttons
+  document.addEventListener('click', function (e) {
+    var btn = e.target?.closest('.password-toggle-btn');
+    if (!btn) return;
+  });
 
-    var url = btn.getAttribute('data-copy-url') || '';
-    if (!url) return;
+  // Copy buttons (generic)
+  document.addEventListener('click', function (e) {
+    var btn, url;
+    btn = e.target?.closest?.('[data-copy-url]') || null;
+    if (!btn) return;
+
+    copyToClipboard(url, function () {
+    btn = e.target?.closest?.('[data-copy-url]') || null;
+    if (!btn) return;
 
     copyToClipboard(url, function () {
       var okMsg = btn.getAttribute('data-copy-success') || 'تم نسخ الرابط';
-      alert(okMsg);
+      var okMsg = btn.getAttribute('data-copy-success') || 'تم نسخ الرابط';
+      customAlert(okMsg);
     });
   });
 
   // Password toggle buttons
   document.addEventListener('click', function (e) {
-    var btn = e.target?.closest('.password-toggle-btn');
+    var btn, inputId, input, icon;
+    btn = e.target?.closest('.password-toggle-btn');
     if (!btn) return;
 
-    var inputId = btn.getAttribute('data-target') || 'password';
-    var input = document.getElementById(inputId);
-    if (!input) return;
+    var icon = document.getElementById(btn.getAttribute('data-icon') || 'passwordToggleIcon');
+    if (!btn) return;
 
     var icon = document.getElementById(btn.getAttribute('data-icon') || 'passwordToggleIcon');
 
-    if (input.type === 'password') {
-      input.type = 'text';
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+  }
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
       if (icon) icon.className = 'fa-regular fa-eye-slash';
     } else {
       input.type = 'password';

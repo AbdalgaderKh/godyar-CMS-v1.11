@@ -83,25 +83,20 @@ if (!function_exists('gdy_image_url')) {
 if (!function_exists('gdy_plaintext')) {
     function gdy_plaintext(string $html): string
     {
-        $txt = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $txt = (string)$html;
+        if ($txt === '') return '';
 
         // حوّل الوسوم الكتلية إلى أسطر للحفاظ على الفقرات
-        $txt = gdy_regex_replace('~<\s*br\s*/?\s*>~i', "
-", $txt);
-        $txt = gdy_regex_replace('~</\s*(p|div|li|h1|h2|h3|h4|h5|h6|tr|blockquote)\s*>~i', "
-", $txt);
-        $txt = gdy_regex_replace('~<\s*(p|div|li|h1|h2|h3|h4|h5|h6|tr|blockquote)(\s[^>]*)?>~i', '', $txt);
+        $txt = gdy_regex_replace('~<\s*br\s*/?\s*>~i', "\n", $txt);
+        $txt = gdy_regex_replace('~</\s*(p|div|li|h1|h2|h3|h4|h5|h6|tr|blockquote)\s*>~i', "\n", $txt);
 
         $txt = strip_tags($txt);
-        $txt = gdy_regex_replace("/[ 	]+/u", " ", $txt);
-        // وحّد الأسطر
-        $txt = gdy_regex_replace("/
-?/u", "
-", $txt);
-        $txt = gdy_regex_replace("/
-{3,}/u", "
+        $txt = gdy_regex_replace('~[ \t]+~u', ' ', $txt);
 
-", $txt);
+        // وحّد الأسطر
+        $txt = gdy_regex_replace('~\r?\n~u', "\n", $txt);
+        $txt = gdy_regex_replace('~\n{3,}~u', "\n\n", $txt);
+
         return trim($txt);
     }
 }
@@ -413,10 +408,7 @@ try {
     $isPrintMode = false;
 }
 
-// في وضع الطباعة/PDF: نضيف class للجسم لإخفاء هيدر/فوتر الموقع أثناء المعاينة أيضاً
-if ($isPrintMode) {
-    $themeClass = trim(((string)($themeClass ?? 'theme-default')) . ' gdy-print-mode');
-}
+// === Metered/Members Paywall logic moved BEFORE header include (fix headers already sent) ===
 
 // === Metered/Members Paywall logic moved BEFORE header include (fix headers already sent) ===
 $membersOnly = isset($membersOnly)
@@ -439,7 +431,7 @@ $meterCurrentInWindow = false;
 
 $isGuest = !$canReadFull;
 if ($isGuest && !$membersOnly && $postId > 0) {
-    $raw = (string)(${'_COOKIE'}['gdy_meter'] ?? '');
+    $raw = ${'_COOKIE'}['gdy_meter'] ?? '';
     $rawDecoded = $raw !== '' ? rawurldecode($raw) : '';
     $items = [];
     if ($raw !== '') {
@@ -1625,323 +1617,14 @@ body.gdy-reading-mode .gdy-article-body{ font-size: 1.12rem; line-height: 2.05; 
 </div>
   </div>
 
-  <div class="gdy-extras-grid2">
-    <div class="gdy-extras-card" id="gdy-qa" data-news-id="<?php echo  (int)$newsId ?>">
-      <div class="gdy-extras-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo  h(__('اسأل الكاتب')) ?></div>
+  <?php
+// بعد عرض المحتوى: اترك التعليقات/أسئلة القرّاء للإضافات عبر Hook واحد فقط
+$newsIdHook = (int)($newsId ?? ($postId ?? (($post['id'] ?? 0))));
+$newsArr    = is_array($post ?? null) ? $post : [];
+g_do_hook('news.after_content', $newsIdHook, $newsArr);
+?>
 
-      <form id="gdy-ask-form" class="gdy-ask-form">
-        <div class="row g-2">
-          <div class="col-12 col-md-4">
-            <input class="form-control" name="name" placeholder="<?php echo  h(__('الاسم')) ?>" autocomplete="name">
-          </div>
-          <div class="col-12 col-md-4">
-            <input class="form-control" name="email" placeholder="<?php echo  h(__('البريد (اختياري)')) ?>" autocomplete="email">
-          </div>
-          <div class="col-12 col-md-4">
-            <button type="submit" class="btn btn-primary w-100"><?php echo  h(__('إرسال السؤال')) ?></button>
-          </div>
-        </div>
-        <div class="mt-2">
-          <textarea class="form-control" name="question" rows="3" placeholder="<?php echo  h(__('اكتب سؤالك هنا…')) ?>"></textarea>
-        </div>
-        <div id="gdy-ask-msg" class="gdy-ask-msg"></div>
-      </form>
-
-      <div class="gdy-qa-list" id="gdy-qa-list"></div>
-      <div class="text-muted small mt-2"><?php echo  h(__('الأسئلة تُعرض بعد المراجعة.')) ?></div>
-    </div>
-  </div>
-</section>
-
-        <?php
-          // Comments section (internal + optional GitHub giscus)
-          $csrf = function_exists('csrf_token') ? (string)csrf_token() : (string)(${'_SESSION'}['csrf_token'] ?? '');
-          $isMember = (!empty(${'_SESSION'}['is_member_logged'])) || (!empty(${'_SESSION'}['user']) && is_array(${'_SESSION'}['user']) && (!empty(${'_SESSION'}['user']['id']) || !empty(${'_SESSION'}['user']['email']))) || (!empty(${'_SESSION'}['user_id']));
-          $memberName  = (string)(${'_SESSION'}['user_name'] ?? (${'_SESSION'}['user']['display_name'] ?? (${'_SESSION'}['user']['username'] ?? '')));
-          $memberEmail = (string)(${'_SESSION'}['user_email'] ?? (${'_SESSION'}['email'] ?? (${'_SESSION'}['user']['email'] ?? '')));
-          if (($memberName ?? '') === '' && ($memberEmail ?? '') !== '' && strpos((string)$memberEmail, '@') !== false) { $memberName = substr((string)$memberEmail, 0, strpos((string)$memberEmail, '@')); }
-// Optional giscus (GitHub discussions) — enable by setting env vars in .env
-          $giscusRepo = (string)(function_exists('env') ? env('GISCUS_REPO', '') : '');
-          $giscusRepoId = (string)(function_exists('env') ? env('GISCUS_REPO_ID', '') : '');
-          $giscusCategory = (string)(function_exists('env') ? env('GISCUS_CATEGORY', '') : '');
-          $giscusCategoryId = (string)(function_exists('env') ? env('GISCUS_CATEGORY_ID', '') : '');
-          $giscusEnabled = ($giscusRepo !== '' && $giscusRepoId !== '' && $giscusCategoryId !== '');
-          $giscusLang = (string)(function_exists('current_lang') ? current_lang() : (string)(${'_SESSION'}['lang'] ?? 'ar'));
-          if (!in_array($giscusLang, ['ar','en','fr'], true)) $giscusLang = 'en';
-        ?>
-
-        <article class="gdy-card" id="gdyComments" style="margin-top:14px;">
-          <div class="gdy-card-h">
-            <strong><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo  h(__('التعليقات')) ?></strong>
-            <span style="color:#64748b;font-size:.82rem;" id="gdyCommentsCount"></span>
-          </div>
-          <div class="gdy-card-b">
-            <style>
-              .gdy-cmt-wrap{display:grid;gap:14px}
-              .gdy-cmt-item{display:grid;grid-template-columns:46px 1fr;gap:10px;padding:12px;border:1px solid rgba(148,163,184,.25);border-radius:16px;background:rgba(255,255,255,.96)}
-              .gdy-cmt-vote{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 6px;border:1px solid rgba(148,163,184,.25);border-radius:14px;background:rgba(2,6,23,.02)}
-              .gdy-cmt-vote button{border:0;background:transparent;color:#334155;cursor:pointer;font-size:18px;line-height:1}
-              .gdy-cmt-score{font-weight:800;color:#0f172a}
-              .gdy-cmt-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-              .gdy-cmt-author{display:flex;align-items:center;gap:8px;font-weight:800}
-              .gdy-cmt-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid rgba(148,163,184,.55)}
-              .gdy-cmt-time{color:#64748b;font-size:.82rem}
-              .gdy-cmt-body{margin-top:6px;white-space:pre-wrap;line-height:1.85;color:#0f172a}
-              .gdy-cmt-actions{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap}
-              .gdy-cmt-actions button{border:1px solid rgba(148,163,184,.35);background:#fff;border-radius:12px;padding:6px 10px;cursor:pointer;font-weight:700}
-              .gdy-cmt-children{margin-top:12px;display:grid;gap:10px;padding-right:10px;border-right:2px solid rgba(148,163,184,.25)}
-              .gdy-cmt-form{display:grid;gap:10px;padding:12px;border:1px dashed rgba(148,163,184,.45);border-radius:16px;background:rgba(2,6,23,.02)}
-              .gdy-cmt-form textarea{width:100%;min-height:110px;resize:vertical;border:1px solid rgba(148,163,184,.55);border-radius:14px;padding:10px;font:inherit}
-              .gdy-cmt-row{display:flex;gap:10px;flex-wrap:wrap}
-              .gdy-cmt-row input{flex:1;min-width:220px;border:1px solid rgba(148,163,184,.55);border-radius:14px;padding:10px;font:inherit}
-              .gdy-cmt-submit{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-              .gdy-cmt-submit button{border:0;border-radius:14px;padding:10px 14px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer}
-              .gdy-cmt-note{color:#64748b;font-size:.85rem;line-height:1.7}
-              .gdy-cmt-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-              .gdy-cmt-tab{border:1px solid rgba(148,163,184,.35);background:#fff;border-radius:999px;padding:7px 12px;cursor:pointer;font-weight:800}
-              .gdy-cmt-tab.active{background:var(--primary-dark);color:#fff;border-color:rgba(var(--primary-rgb),.35)}
-            </style>
-
-            <div class="gdy-cmt-tabs">
-              <button type="button" class="gdy-cmt-tab active" data-tab="internal"><?php echo  h(__('تعليقات الموقع')) ?></button>
-              <?php if ($giscusEnabled): ?>
-                <button type="button" class="gdy-cmt-tab" data-tab="giscus">GitHub</button>
-              <?php endif; ?>
-            </div>
-
-            <div id="gdyCommentsInternal">
-              <?php if (!$isMember): ?>
-                <div class="gdy-cmt-note" style="margin-bottom:10px;">
-                  <?php echo  h(__('يمكنك التعليق بإدخال الاسم والبريد، أو تسجيل الدخول للتعليق كعضو.')) ?>
-                  <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
-                    <a class="gdy-act" href="<?php echo  h($baseUrl) ?>/login?next=<?php echo  urlencode('/news/id/' . (int)$postId) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#login"></use></svg> <?php echo  h(__('تسجيل الدخول')) ?></a>
-                    <a class="gdy-act" href="<?php echo  h($baseUrl) ?>/oauth/github?next=<?php echo  urlencode('/news/id/' . (int)$postId) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> GitHub</a>
-                    <a class="gdy-act" href="<?php echo  h($baseUrl) ?>/oauth/google?next=<?php echo  urlencode('/news/id/' . (int)$postId) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> Google</a>
-                    <a class="gdy-act" href="<?php echo  h($baseUrl) ?>/oauth/facebook?next=<?php echo  urlencode('/news/id/' . (int)$postId) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg> Facebook</a>
-                  </div>
-                </div>
-              <?php endif; ?>
-
-              <div class="gdy-cmt-form" id="gdyCommentForm">
-                <input type="hidden" id="gdyCmtParent" value="0">
-                <?php if (!$isMember || $memberName==='' || $memberEmail===''): ?>
-                  <div class="gdy-cmt-row">
-                    <input id="gdyCmtName" placeholder="<?php echo  h(__('الاسم')) ?>" value="<?php echo  h($memberName ?? '') ?>">
-                    <input id="gdyCmtEmail" placeholder="<?php echo  h(__('البريد الإلكتروني')) ?>" type="email" value="<?php echo  h($memberEmail ?? '') ?>">
-                  </div>
-                <?php endif; ?>
-                <textarea id="gdyCmtBody" placeholder="<?php echo  h(__('اكتب تعليقك هنا...')) ?>"></textarea>
-                <div class="gdy-cmt-submit">
-                  <button type="button" id="gdyCmtSend"><?php echo  h(__('إرسال')) ?></button>
-                  <div class="gdy-cmt-note" id="gdyCmtHint"></div>
-                </div>
-              </div>
-
-              <div class="gdy-cmt-wrap" id="gdyCmtList" style="margin-top:14px;"></div>
-            </div>
-
-            <?php if ($giscusEnabled): ?>
-              <div id="gdyCommentsGiscus" style="display:none;">
-                <div class="gdy-cmt-note" style="margin-bottom:12px;">
-                  <?php echo  h(__('تعليقات GitHub تحتاج تسجيل الدخول بحساب GitHub.')) ?>
-                </div>
-                <div class="giscus"></div>
-                <script
-                  src="https://giscus.app/client.js"
-                  data-repo="<?php echo  h($giscusRepo) ?>"
-                  data-repo-id="<?php echo  h($giscusRepoId) ?>"
-                  data-category="<?php echo  h($giscusCategory) ?>"
-                  data-category-id="<?php echo  h($giscusCategoryId) ?>"
-                  data-mapping="url"
-                  data-strict="0"
-                  data-reactions-enabled="1"
-                  data-emit-metadata="0"
-                  data-input-position="bottom"
-                  data-theme="preferred_color_scheme"
-                  data-lang="<?php echo  h($giscusLang) ?>"
-                  crossorigin="anonymous"
-                  async>
-                </script>
-              </div>
-            <?php endif; ?>
-
-            <script nonce="<?php echo htmlspecialchars((string)(defined('GDY_CSP_NONCE') ? GDY_CSP_NONCE : ''), ENT_QUOTES, 'UTF-8'); ?>">
-            (function(){
-              const newsId = <?php echo  (int)$postId ?>;
-              const api = '/ajax/comments.php';
-              const csrfEndpoint = '/ajax/csrf.php';
-
-              const listEl  = document.getElementById('gdyCmtList');
-              const countEl = document.getElementById('gdyCommentsCount');
-              const nameEl  = document.getElementById('gdyCmtName');
-              const emailEl = document.getElementById('gdyCmtEmail');
-              const bodyEl  = document.getElementById('gdyCmtBody');
-              const sendBtn = document.getElementById('gdyCmtSend');
-              const hintEl  = document.getElementById('gdyCmtHint');
-
-              let me = null;
-              let csrf = '';
-              let replyTo = 0;
-
-              function esc(s){
-                return (s||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#039;'}[m]));
-              }
-              function fmtTime(s){
-                try{ const d=new Date(String(s).replace(' ', 'T')); return d.toLocaleString(); }catch(e){ return s||''; }
-              }
-
-              async function getCSRF(){
-                try{
-                  const r = await fetch(csrfEndpoint, {credentials:'include'});
-                  const j = await r.json();
-                  if (j && j.ok && j.csrf_token) csrf = j.csrf_token;
-                }catch(e){}
-              }
-
-              function setHint(msg, ok){
-                if(!hintEl) return;
-                hintEl.textContent = msg || '';
-                hintEl.style.color = ok ? '#16a34a' : '#ef4444';
-              }
-
-              function showGuestFields(show){
-                if(!nameEl || !emailEl) return;
-                const row1 = nameEl.closest('.gdy-cmt-row') || nameEl.parentElement;
-                const row2 = emailEl.closest('.gdy-cmt-row') || emailEl.parentElement;
-                if(row1) row1.style.display = show ? '' : 'none';
-                if(row2) row2.style.display = show ? '' : 'none';
-              }
-
-              function renderList(rows){
-                // Build tree by parent_id
-                const byParent = {};
-                rows.forEach(c => {
-                  const pid = Number(c.parent_id||0);
-                  (byParent[pid] ||= []).push(c);
-                });
-
-                function renderNode(c, depth){
-                  const author = esc(c.name || '—');
-                  const body = esc(c.body || '');
-                  const time = fmtTime(c.created_at);
-                  const indent = depth ? ' style="margin-top:10px;margin-right:'+(depth*18)+'px;border-right:2px solid rgba(148,163,184,.45);padding-right:12px;"' : '';
-                  const replyBtn = `<button type="button" class="gdy-cmt-reply" data-id="${c.id}" style="border:1px solid rgba(148,163,184,.45);background:#fff;border-radius:12px;padding:6px 10px;cursor:pointer;font-weight:700;"><?php echo  h(__('رد')) ?></button>`;
-                  let html = `<div class="gdy-cmt-item"${indent}>
-                      <div class="gdy-cmt-head">
-                        <div class="gdy-cmt-author">👤 ${author}</div>
-                        <div class="gdy-cmt-time">${esc(time)}</div>
-                      </div>
-                      <div class="gdy-cmt-body">${body}</div>
-                      <div class="gdy-cmt-actions">${replyBtn}</div>
-                    </div>`;
-                  const kids = byParent[Number(c.id)] || [];
-                  kids.forEach(k => { html += renderNode(k, depth+1); });
-                  return html;
-                }
-
-                const roots = byParent[0] || [];
-                listEl.innerHTML = roots.length ? roots.map(c => renderNode(c, 0)).join('') :
-                  `<div class="gdy-cmt-note"><?php echo  h(__('لا توجد تعليقات بعد.')) ?></div>`;
-              }
-
-              async function load(){
-                try{
-                  const r = await fetch(`${api}?action=list&news_id=${encodeURIComponent(newsId)}`, {credentials:'include'});
-                  const j = await r.json();
-                  if(!j || !j.ok){ throw new Error((j && (j.msg||j.error)) || 'error'); }
-                  me = j.me || null;
-                  // Show guest fields only if NOT logged
-                  showGuestFields(!me);
-                  const rows = Array.isArray(j.comments) ? j.comments : [];
-                  if(countEl) countEl.textContent = rows.length ? `(${rows.length})` : '';
-                  renderList(rows);
-                }catch(e){
-                  if(listEl) listEl.innerHTML = `<div class="gdy-cmt-note" style="color:#ef4444;"><?php echo  h(__('تعذر تحميل التعليقات.')) ?></div>`;
-                }
-              }
-
-              async function send(){
-                setHint('', true);
-                const body = (bodyEl && bodyEl.value ? bodyEl.value.trim() : '');
-                if(!body){ setHint('<?php echo  h(__('نص التعليق مطلوب.')) ?>', false); return; }
-
-                const payload = new FormData();
-                payload.append('action','add');
-                payload.append('news_id', String(newsId));
-                payload.append('body', body);
-                payload.append('parent_id', String(replyTo||0));
-                if(csrf) payload.append('csrf_token', csrf);
-
-                // guest
-                if(!me){
-                  const n = (nameEl && nameEl.value ? nameEl.value.trim() : '');
-                  const em = (emailEl && emailEl.value ? emailEl.value.trim() : '');
-                  if(!n || !em){ setHint('<?php echo  h(__('الاسم والبريد الإلكتروني مطلوبان.')) ?>', false); return; }
-                  payload.append('name', n);
-                  payload.append('email', em);
-                }
-
-                sendBtn && (sendBtn.disabled = true);
-
-                try{
-                  const r = await fetch(api, {method:'POST', body: payload, credentials:'include'});
-                  const j = await r.json().catch(()=>null);
-
-                  if(!r.ok || !j || !j.ok){
-                    // Retry once if CSRF
-                    if(j && j.error === 'csrf'){
-                      await getCSRF();
-                      if(csrf){ payload.set('csrf_token', csrf); }
-                      const r2 = await fetch(api, {method:'POST', body: payload, credentials:'include'});
-                      const j2 = await r2.json().catch(()=>null);
-                      if(r2.ok && j2 && j2.ok){
-                        bodyEl.value = '';
-                        replyTo = 0;
-                        setHint('<?php echo  h(__('تم نشر التعليق.')) ?>', true);
-                        await load();
-                        return;
-                      }
-                    }
-                    const msg = (j && (j.msg||j.detail)) ? (j.msg||j.detail) : '<?php echo  h(__('حدث خطأ.')) ?>';
-                    setHint(msg, false);
-                    return;
-                  }
-
-                  bodyEl.value = '';
-                  replyTo = 0;
-                  setHint('<?php echo  h(__('تم نشر التعليق.')) ?>', true);
-                  await load();
-                }catch(e){
-                  setHint('<?php echo  h(__('تعذر الإرسال (مشكلة اتصال).')) ?>', false);
-                }finally{
-                  sendBtn && (sendBtn.disabled = false);
-                }
-              }
-
-              document.addEventListener('click', function(ev){
-                const btn = ev.target && ev.target.closest ? ev.target.closest('.gdy-cmt-reply') : null;
-                if(!btn) return;
-                const id = Number(btn.getAttribute('data-id')||0);
-                if(!id) return;
-                replyTo = id;
-                setHint('<?php echo  h(__('أنت ترد على تعليق. اكتب ردك ثم اضغط إرسال.')) ?>', true);
-                if(bodyEl) bodyEl.focus();
-              });
-
-              if(sendBtn) sendBtn.addEventListener('click', send);
-
-              (async function init(){
-                await getCSRF();
-                await load();
-              })();
-            })();
-            </script>
-          </div>
-        </article>
-
-      </section>
-
-      <aside class="gdy-right gdy-sidebar">
+<aside class="gdy-right gdy-sidebar">
         
         <div class="gdy-card">
           <div class="gdy-card-h">

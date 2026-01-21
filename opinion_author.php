@@ -10,7 +10,7 @@ $pdo = gdy_pdo_safe();
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
+    @media (max-width: 768px) {
 }
 
 /**
@@ -563,6 +563,9 @@ require __DIR__ . '/frontend/views/partials/header.php';
     background: #f9fafb;
     border: 1px dashed #d1d5db;
     color: #6b7280;
+  @media (max-width: 768px) {
+<?php if ($mode === 'single'): ?>
+    .oa-author-card {
     font-size: .9rem;
   }
 

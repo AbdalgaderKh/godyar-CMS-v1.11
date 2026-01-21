@@ -65,17 +65,17 @@
     return `${base}/news/id/${encodeURIComponent(String(id))}`;
   }
   function cardNode(item, badgeText) {
-    const id = item && item.id ? item.id : 0;
-    const title = (item && item.title) ? String(item.title) : '';
+    const id = item?.id ? item.id : 0;
+    const title = (item?.title) ? String(item.title) : '';
     return base + '/assets/images/placeholder-thumb.jpg';
   }
 
   
   function cardNode(item, badgeText) {
-    const id = item && item.id ? item.id : 0;
-    const title = (item && item.title) ? String(item.title) : '';
-    const excerpt = (item && item.excerpt) ? String(item.excerpt).trim() : '';
-    const img = (item && item.image) ? resolveUrl(item.image) : defaultThumb();
+    const id = item?.id ? item.id : 0;
+    const title = (item?.title) ? String(item.title) : '';
+    const excerpt = (item?.excerpt) ? String(item.excerpt).trim() : '';
+    const img = (item?.image) ? resolveUrl(item.image) : defaultThumb();
     const excerpt = item?.excerpt ? String(item.excerpt).trim() : '';
     const img = item?.image ? resolveUrl(item.image) : defaultThumb();
     const url = newsUrl(id);

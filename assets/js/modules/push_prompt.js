@@ -63,7 +63,7 @@ Autofix Session
     // show after short delay so it doesn't feel intrusive
     setDismiss(); hide();
   });
-  btnLater && btnLater.addEventListener('click', function(){
+  btnLater?.addEventListener('click', function(){
     setDismiss(); hide();
   });
   btnLater?.addEventListener('click', function(){

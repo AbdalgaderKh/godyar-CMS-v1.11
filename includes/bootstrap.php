@@ -48,6 +48,14 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH . '/includes/fs.php';
 
+// Start session as early as possible (before any output) so CSRF and plugins work reliably.
+// Some templates render output before widgets run; starting the session here prevents
+// "CSRF validation failed" due to headers already being sent.
+if (function_exists('gdy_session_start')) {
+    gdy_session_start();
+}
+
+
 // Audit log helper
 require_once ROOT_PATH . '/includes/audit_log.php';
 // DB driver compatibility helpers (MySQL/PostgreSQL)
@@ -860,3 +868,18 @@ require_once ROOT_PATH . '/includes/indexnow.php';
 
 // Load site settings helpers (frontend options, theme, etc.)
 require_once ROOT_PATH . '/includes/site_settings.php';
+
+
+// -------------------------
+require_once ROOT_PATH . '/includes/functions.php';
+
+// Plugins bootstrap
+// -------------------------
+require_once ROOT_PATH . '/includes/plugins.php';
+
+// Load enabled plugins early so hooks/filters are available to templates and admin.
+try {
+    g_plugins()->loadAll(ROOT_PATH . '/plugins');
+} catch (Throwable $e) {
+    error_log('[Godyar Plugins] loadAll failed: ' . $e->getMessage());
+}

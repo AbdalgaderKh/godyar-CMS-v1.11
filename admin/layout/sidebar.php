@@ -402,18 +402,63 @@ if ($menuCount < 5) {
                 </a>
               </div>
 
-              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='questions') ? 'is-active' : '' ?>" data-search="اسأل الكاتب أسئلة questions qna">
-                <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/questions.php">
-                  <div class="admin-sidebar__link-main">
-                    <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#question"></use></svg></div>
-                    <div class="admin-sidebar__link-text">
-                      <div class="admin-sidebar__link-label"><?= h(__('أسئلة القرّاء')) ?></div>
-                      <div class="admin-sidebar__link-sub"><?= h(__('مراجعة أسئلة اسأل الكاتب والرد عليها')) ?></div>
-                    </div>
-                  </div>
-                  <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
-                </a>
-              </div>
+              <?php
+// عناصر قائمة لوحة التحكم التي تضيفها الإضافات
+$adminMenu = [];
+if (function_exists('g_do_hook')) {
+    g_do_hook('admin.menu', $adminMenu);
+}
+// روابط ثابتة لإدارة إضافات التعليقات/أسئلة القرّاء (حتى لو لم تُسجّل عبر hook لأي سبب)
+$staticPluginLinks = [
+    [
+        'title' => 'التعليقات',
+        'url'   => '/admin/plugins/comments/index.php',
+        'icon'  => 'bi-chat',
+    ],
+    [
+        'title' => 'أسئلة القرّاء',
+        'url'   => '/admin/plugins/reader_questions/index.php',
+        'icon'  => 'bi-question-circle',
+    ],
+];
+foreach ($staticPluginLinks as $it) {
+    // لا نكرر العنصر إذا كان موجودًا مسبقًا من hook
+    $exists = false;
+    foreach ($adminMenu as $mIt) {
+        if (is_array($mIt) && ($mIt['url'] ?? '') === ($it['url'] ?? '')) { $exists = true; break; }
+    }
+    if (!$exists) $adminMenu[] = $it;
+}
+?>
+<?php if (!empty($adminMenu) && is_array($adminMenu)): ?>
+  <div class="admin-sidebar__section-title"><?= h(__('الإضافات')) ?></div>
+  <?php foreach ($adminMenu as $item): ?>
+    <?php
+      if (!is_array($item)) continue;
+      $title = (string)($item['title'] ?? '');
+      $url   = (string)($item['url'] ?? '#');
+      $icon  = (string)($item['icon'] ?? 'puzzle');
+      $key   = (string)($item['key'] ?? ('plugin_' . preg_replace('~[^a-z0-9_]+~i', '_', strtolower($title))));
+      $href  = (preg_match('~^https?://~i', $url)) ? $url : (rtrim((string)$siteBase, '/') . '/' . ltrim($url, '/'));
+      $active = ($currentPage === $key);
+    ?>
+    <div class="admin-sidebar__link-card <?= $active ? 'is-active' : '' ?>" data-search="<?= h($title) ?>">
+      <a class="admin-sidebar__link" href="<?= h($href) ?>">
+        <div class="admin-sidebar__link-main">
+          <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#<?= h($icon) ?>"></use></svg></div>
+          <div class="admin-sidebar__link-text">
+            <div class="admin-sidebar__link-label"><?= h($title) ?></div>
+            <?php if (!empty($item['sub'])): ?>
+              <div class="admin-sidebar__link-sub"><?= h((string)$item['sub']) ?></div>
+            <?php endif; ?>
+          </div>
+        </div>
+        <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
+      </a>
+    </div>
+  <?php endforeach; ?>
+<?php endif; ?>
+
             <?php endif; ?>
 
             <?php if (!$isWriter): ?>
@@ -506,18 +551,8 @@ if ($menuCount < 5) {
             </a>
           </div>
 
-          <div class="admin-sidebar__link-card <?= $currentPage === 'comments' ? 'is-active' : '' ?>" data-search="التعليقات comments">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/comments/index.php">
-              <div class="admin-sidebar__link-main">
-                <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg></div>
-                <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('التعليقات')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('مراجعة وإدارة التعليقات')) ?></div>
-                </div>
-              </div>
-              <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
-            </a>
-          </div>
+          
+
         <?php endif; ?>
       </div>
 

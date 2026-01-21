@@ -616,6 +616,12 @@ if (is_file($header)) {
                             <?= $body /* يحتوي HTML من لوحة التحكم */ ?>
                         </div>
 
+                        <?php
+                        // بعد عرض المحتوى
+                        $newsId = (int)($post['id'] ?? 0);
+                        g_do_hook('news.after_content', $newsId, $post);
+                        ?>
+
                         <!-- أسفل المقال -->
                         <div class="article-footer-bar">
                             <div class="article-tags">

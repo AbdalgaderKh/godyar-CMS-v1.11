@@ -208,6 +208,31 @@ function gdy_ensure_news_attachments_table(PDO $pdo): void
 }
 
 /**
+ * Fetch attachments for a given news item.
+ *
+ * @return array<int, array{id:int,news_id:int,original_name:string,file_path:string,mime_type:?string,file_size:?int,created_at:string}>
+ */
+function gdy_get_news_attachments(PDO $pdo, int $newsId): array
+{
+    $newsId = (int)$newsId;
+    if ($newsId <= 0) {
+        return [];
+    }
+
+    gdy_ensure_news_attachments_table($pdo);
+
+    try {
+        $st = $pdo->prepare("SELECT id, news_id, original_name, file_path, mime_type, file_size, created_at\n                             FROM news_attachments\n                             WHERE news_id = ?\n                             ORDER BY id DESC");
+        $st->execute([$newsId]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+        return is_array($rows) ? $rows : [];
+    } catch (Throwable $e) {
+        error_log('[News Helpers] get attachments failed: ' . $e->getMessage());
+        return [];
+    }
+}
+
+/**
  * Normalize the $_FILES multi-upload structure.
  */
 function gdy_normalize_files_array(array $files): array

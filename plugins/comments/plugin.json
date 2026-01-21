@@ -1,0 +1,9 @@
+{
+  "name": "Comments",
+  "slug": "comments",
+  "enabled": true,
+  "version": "1.0.3",
+  "description": "News comments (moderation + anti-spam basics).",
+  "author": "Godyar",
+  "schema_version": 5
+}

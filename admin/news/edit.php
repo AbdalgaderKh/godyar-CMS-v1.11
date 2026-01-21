@@ -204,7 +204,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['delete_attachment_id'])) {
         $delId = (int)($_POST['delete_attachment_id'] ?? 0);
         if ($delId > 0) {
-            gdy_delete_news_attachment($pdo, $delId, $id);
+            // signature: (PDO $pdo, int $newsId, int $attachmentId)
+            gdy_delete_news_attachment($pdo, $id, $delId);
         }
         header('Location: edit.php?id=' . $id . '&att_deleted=1');
         exit;

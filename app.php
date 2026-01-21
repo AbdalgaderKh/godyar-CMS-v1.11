@@ -432,10 +432,7 @@ $router->get('#^/api/news/react/?$#', fn() => $extrasApi->react());
 $router->get('#^/api/news/poll/?$#', fn() => $extrasApi->poll());
 $router->get('#^/api/news/poll/vote/?$#', fn() => $extrasApi->pollVote());
 
-// Q&A
-$router->get('#^/api/news/questions/?$#', fn() => $extrasApi->questions());
-$router->get('#^/api/news/ask/?$#', fn() => $extrasApi->ask());
-
+// Q&A (moved to plugins)
 // Translation + TTS
 $router->get('#^/api/news/tts/?$#', fn() => $extrasApi->tts());
 

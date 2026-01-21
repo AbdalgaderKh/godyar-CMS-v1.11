@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'toggl
     $slug = $_POST['slug'] ?? '';
     $slug = preg_replace('~[^A-Za-z0-9_\-]~', '', $slug); // تنظيف بسيط
 
-    $pluginsDir = __DIR__;
+    $pluginsDir = GODYAR_ROOT . '/plugins';
     $pluginsBase = realpath($pluginsDir) ?: $pluginsDir;
     // plugins live under /admin/plugins/*/plugin.json
     $pluginDir = $pluginsBase . '/' . $slug;
@@ -55,8 +55,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'toggl
     exit;
 }
 
+// تشغيل migrations يدويًا من لوحة الإضافات
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && in_array(($_POST['action'] ?? ''), ['run_migrations','run_migrations_all'], true)) {
+    $token = (string)($_POST['csrf_token'] ?? '');
+    if (!function_exists('verify_csrf_token') || !verify_csrf_token($token)) {
+        $_SESSION['plugins_flash'] = ['type' => 'danger', 'msg' => 'فشل التحقق الأمني. حدّث الصفحة وحاول مجددًا.'];
+        header('Location: index.php');
+        exit;
+    }
+
+    $pluginsDir = GODYAR_ROOT . '/plugins';
+
+    $force = !empty($_POST['force']);
+    $action = (string)($_POST['action'] ?? '');
+
+    if ($action === 'run_migrations_all') {
+        $results = function_exists('g_plugins') ? g_plugins()->runMigrationsForAll($pluginsDir, $force) : [];
+        $ok = 0; $fail = 0;
+        foreach ($results as $r) {
+            if (!empty($r['ok'])) $ok++; else $fail++;
+        }
+        $_SESSION['plugins_flash'] = [
+            'type' => ($fail === 0 ? 'success' : 'warning'),
+            'msg'  => 'تم تشغيل migrations لكل الإضافات. نجاح: ' . $ok . ' — فشل: ' . $fail,
+        ];
+        header('Location: index.php');
+        exit;
+    }
+
+    // run_migrations (single)
+    $slug = (string)($_POST['slug'] ?? '');
+    $slug = preg_replace('~[^A-Za-z0-9_\-]~', '', $slug);
+    if ($slug === '') {
+        $_SESSION['plugins_flash'] = ['type' => 'danger', 'msg' => 'Slug غير صالح.'];
+        header('Location: index.php');
+        exit;
+    }
+
+    $res = function_exists('g_plugins') ? g_plugins()->runMigrationsFor($slug, $pluginsDir, $force) : ['ok'=>false,'message'=>'Plugin manager unavailable'];
+    $_SESSION['plugins_flash'] = [
+        'type' => (!empty($res['ok']) ? 'success' : 'danger'),
+        'msg'  => (!empty($res['ok']) ? 'تم تشغيل migrations للإضافة: ' . $slug : ('فشل migrations للإضافة: ' . $slug . ' — ' . (string)($res['message'] ?? ''))),
+    ];
+    header('Location: index.php');
+    exit;
+}
+
 // قراءة الإضافات من مجلد /plugins
-$pluginsDir = __DIR__;
+$pluginsDir = GODYAR_ROOT . '/plugins';
     // plugins live under /admin/plugins/*/plugin.json
 $pluginRows = [];
 
@@ -143,6 +189,23 @@ $csrf = generate_csrf_token();
     </div>
   </div>
 
+  <?php if (!empty($_SESSION['plugins_flash']) && is_array($_SESSION['plugins_flash'])): $f=$_SESSION['plugins_flash']; unset($_SESSION['plugins_flash']); ?>
+    <div class="alert alert-<?= h($f['type'] ?? 'info') ?> mb-2"><?= h($f['msg'] ?? '') ?></div>
+  <?php endif; ?>
+
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="text-muted small">يمكنك تشغيل migrations يدويًا عند الحاجة (مثلاً بعد تحديث الإضافة).</div>
+    <form method="post" class="d-flex gap-2 align-items-center m-0">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+      <input type="hidden" name="action" value="run_migrations_all">
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" role="switch" id="force_all" name="force" value="1">
+        <label class="form-check-label small" for="force_all">Force</label>
+      </div>
+      <button type="submit" class="btn btn-sm btn-outline-light">Run Migrations (All)</button>
+    </form>
+  </div>
+
   <div class="card glass-card gdy-card mb-3">
     <div class="card-body">
 
@@ -206,7 +269,15 @@ $csrf = generate_csrf_token();
                        class="btn btn-sm btn-outline-info">
                       <?= h(__('t_1f60020959', 'الإعدادات')) ?>
                     </a>
-                  </td>
+                  
+                    <form method="post" class="d-inline ms-1">
+                      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                      <input type="hidden" name="action" value="run_migrations">
+                      <input type="hidden" name="slug" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                      <input type="hidden" name="force" value="1">
+                      <button type="submit" class="btn btn-sm btn-outline-light">Run Migrations</button>
+                    </form>
+</td>
                 </tr>
               <?php endforeach; ?>
             </tbody>
@@ -249,6 +320,13 @@ $csrf = generate_csrf_token();
                   </form>
 
                   <a href="settings.php?slug=<?= urlencode($slug) ?>" class="btn btn-sm btn-outline-info"><?= h(__('t_1f60020959', 'الإعدادات')) ?></a>
+                  <form method="post" class="d-inline">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="action" value="run_migrations">
+                    <input type="hidden" name="slug" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="force" value="1">
+                    <button type="submit" class="btn btn-sm btn-outline-light">Run Migrations</button>
+                  </form>
                 </div>
 
                 <div class="small text-muted mt-2">

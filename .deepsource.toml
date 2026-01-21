@@ -16,6 +16,7 @@ enabled = true
 name = "javascript"
 enabled = true
 
-[[analyzers]]
-name = "css"
-enabled = true
+# إذا كان هناك محلل CSS، إزله أو عطّله
+# [[analyzers]]
+# name = "css"
+# enabled = false

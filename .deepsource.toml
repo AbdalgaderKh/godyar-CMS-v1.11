@@ -16,6 +16,7 @@ enabled = true
 name = "javascript"
 enabled = true
 
-[[analyzers]]
-name = "css"
-enabled = true
+# CSS analyzer doesn't exist - either remove this or disable it:
+# [[analyzers]]
+# name = "css"
+# enabled = false

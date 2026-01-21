@@ -363,7 +363,7 @@
     if (btnNow) {
       btnNow.addEventListener("click", function () {
         try {
-          if (reg?.waiting) {
+          if (reg && reg.waiting) {
             ls.set("gdy_sw_reload", "1");
             reg.waiting.postMessage({ action: "skipWaiting" });
           } else {

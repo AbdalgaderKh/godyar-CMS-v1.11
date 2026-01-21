@@ -99,7 +99,7 @@ if (!function_exists('gdy_ping_sitemap')) {
 }
 
 if (!function_exists('gdy_indexnow_submit')) {
-    function gdy_indexnow_submit(array $urls): array
+    function gdy_indexnow_submit(array $urls, ?string $baseOverride = null): array
     {
         $urls = array_values(array_unique(array_filter(array_map('trim', $urls))));
         if (!$urls) return ['ok' => false, 'error' => 'no_urls'];
@@ -141,9 +141,6 @@ if (!function_exists('gdy_seo_notify_publish')) {
         $sitemapNews = $base . '/sitemap-news.xml';
         try { gdy_ping_sitemap($sitemap); } catch (Throwable $e) {}
         // 2) IndexNow (Bing and some other engines)
-        try { gdy_indexnow_submit([$publicUrl]); } catch (Throwable $e) {}
-
-        // 2) IndexNow (Bing and some other engines)
-        try { gdy_indexnow_submit([$publicUrl]); } catch (Throwable $e) {}
+        try { gdy_indexnow_submit([$publicUrl], $base); } catch (Throwable $e) {}
     }
 }

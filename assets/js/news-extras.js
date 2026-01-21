@@ -47,7 +47,7 @@
                  document.querySelector('.post-body') ||
                  document.querySelector('main') ||
                  document.body;
-    return (root?.textContent) ? String(root.textContent) : '';
+    return (root && root.textContent) ? String(root.textContent) : '';
   }
     initPoll();
     initQuestions();
@@ -89,15 +89,15 @@
       angry:    { label: 'غاضب',   emoji: '😡' },
       funny:    { label: 'مضحك',   emoji: '😂' }
     function render(state){
-      const counts = state?.counts || {};
-      const mine = new Set(state?.mine || []);
+      const counts = (state && state.counts) || {};
+      const mine = new Set((state && state.mine) || []);
       clearChildren(wrap);
       const row = document.createElement('div');
     };
 
     function render(state){
-      const counts = state?.counts || {};
-      const mine = new Set(state?.mine || []);
+      const counts = (state && state.counts) || {};
+      const mine = new Set((state && state.mine) || []);
       clearChildren(wrap);
       const row = document.createElement('div');
       row.className = 'gdy-react-row';
@@ -326,14 +326,14 @@
           const res = await postForm(api('/api/news/ask'), {news_id: newsId, name, email, question});
           if(res?.ok){
             form.reset();
-            if(msg) msg.textContent = res?.message || 'تم الإرسال.';
+            if(msg) msg.textContent = res.message || 'تم الإرسال.';
             await load();
           }else{
-            if(msg) msg.textContent = (res?.error) ? res.error : 'تعذر الإرسال.';
+            if(msg) msg.textContent = (res && res.error) ? res.error : 'تعذر الإرسال.';
           }
         }catch(e){
           if(msg) {
-            const status = (e?.status) ? (' (HTTP ' + e.status + ')') : '';
+            const status = (e && e.status) ? (' (HTTP ' + e.status + ')') : '';
             msg.textContent = 'تعذر الإرسال.' + status;
           }
   };

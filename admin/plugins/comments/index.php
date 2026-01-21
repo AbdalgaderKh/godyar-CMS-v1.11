@@ -211,7 +211,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
                 <td><small class="text-muted"><?= h((string)($r['created_at'] ?? '')) ?></small></td>
                 <td>
                   <form method="post" class="d-flex gap-1 flex-wrap">
-                    <?php csrf_field('csrf_token'); ?>
+                    <?php csrf_field(); ?>
                     <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                     <?php if ($status !== 'approved'): ?>
                       <button class="btn btn-sm btn-success" name="action" value="approve" type="submit">موافقة</button>
@@ -227,7 +227,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
                   <details class="mt-2">
                     <summary style="cursor:pointer;font-weight:700">رد الإدارة</summary>
                     <form method="post" class="mt-2">
-                      <?php csrf_field('csrf_token'); ?>
+                      <?php csrf_field(); ?>
                       <input type="hidden" name="action" value="admin_reply">
                       <input type="hidden" name="news_id" value="<?= (int)$r['news_id'] ?>">
                       <input type="hidden" name="parent_id" value="<?= (int)$r['id'] ?>">

@@ -1,16 +1,20 @@
 <?php
 
-use Godyar\DB;
-
 /**
  * AdminLogger
- *
- * تسجيل الأحداث الإدارية في جدول admin_logs.
- *
- * ملاحظة: الملف ليس داخل namespace، لذلك لا نستخدم `use PDO;` (غير لازم).
- */
+ * تسجيل الأحداث الإدارية في جدول admin_logs
 class AdminLogger
 {
+ */
+
+class AdminLogger
+{
+Autofix Session
+59 occurrences can be fixed
+16 files will be affected
+use PDO;
+
+ */
     private ?PDO $pdo;
 
     public function __construct(?PDO $pdo = null)
@@ -25,21 +29,15 @@ class AdminLogger
      * @param string|null $entityType  نوع الكيان (news, user, settings)
      * @param int|null    $entityId    رقم الكيان
      * @param array|null  $extra       بيانات إضافية (مثلاً ['title' => '...', 'status' => 'published'])
-     * @param PDO|null    $pdo         اتصال PDO (اختياري)
      */
-    public static function log(
-        string $action,
-        ?string $entityType = null,
-        ?int $entityId = null,
-        ?array $extra = null,
-        ?PDO $pdo = null
-    ): void {
+    public static function log(string $action, ?string $entityType = null, ?int $entityId = null, ?array $extra = null, ?PDO $pdo = null): void
+    {
         // Support DI (preferred): pass $pdo from caller.
         // Backward compatibility: if not passed, we use the unified DB layer.
         if (!$pdo instanceof PDO) {
             try {
                 $pdo = DB::pdo();
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 error_log('[AdminLogger] PDO not available: ' . $e->getMessage());
                 return;
             }
@@ -47,18 +45,14 @@ class AdminLogger
 
         // نحاول نجيب المستخدم الحالي من الجلسة
         if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            if (function_exists('gdy_session_start')) {
-                gdy_session_start();
-            } else {
-                @session_start();
-            }
+            gdy_session_start();
         }
 
         $userId = null;
         if (!empty($_SESSION['user_id'])) {
-            $userId = (int) $_SESSION['user_id'];
+            $userId = (int)$_SESSION['user_id'];
         } elseif (!empty($_SESSION['user']['id'])) {
-            $userId = (int) $_SESSION['user']['id'];
+            $userId = (int)$_SESSION['user']['id'];
         }
 
         $ip        = $_SERVER['REMOTE_ADDR']     ?? null;
@@ -67,15 +61,7 @@ class AdminLogger
         // نحول extra إلى JSON لو موجود
         $details = null;
         if (!empty($extra)) {
-            $details = json_encode(
-                $extra,
-                JSON_UNESCAPED_UNICODE
-                | JSON_UNESCAPED_SLASHES
-                | JSON_HEX_TAG
-                | JSON_HEX_AMP
-                | JSON_HEX_APOS
-                | JSON_HEX_QUOT
-            );
+            $details = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         }
 
         try {
@@ -84,15 +70,16 @@ class AdminLogger
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                ':user_id'     => $userId,
-                ':action'      => $action,
-                ':entity_type' => $entityType,
-                ':entity_id'   => $entityId,
-                ':ip'          => $ip,
-                ':ua'          => $userAgent,
-                ':details'     => $details,
+                ':user_id'    => $userId,
+                ':action'     => $action,
+                ':entity_type'=> $entityType,
+                ':entity_id'  => $entityId,
+                ':ip'         => $ip,
+                ':ua'         => $userAgent,
+                ':details'    => $details,
             ]);
-        } catch (Throwable $e) {
+
+        } catch (\Throwable $e) {
             error_log('[AdminLogger] log error: ' . $e->getMessage());
         }
     }

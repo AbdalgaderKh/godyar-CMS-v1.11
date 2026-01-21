@@ -43,15 +43,15 @@
 
     const list = document.createElement('div');
     items.slice(0,10).forEach(it => {
-      const title = it?.title ? String(it.title) : '';
-      const type = it?.type ? String(it.type) : '';
-      const url = it?.url ? String(it.url) : '#';
+      const title = it && it.title ? String(it.title) : '';
+      const type = it && it.type ? String(it.type) : '';
+      const url = it && it.url ? String(it.url) : '#';
     list.className = 'gdy-suggest-list';
 
     items.slice(0,10).forEach(it => {
-      const title = it?.title ? String(it.title) : '';
-      const type = it?.type ? String(it.type) : '';
-      const url = it?.url ? String(it.url) : '#';
+      const title = it && it.title ? String(it.title) : '';
+      const type = it && it.type ? String(it.type) : '';
+      const url = it && it.url ? String(it.url) : '#';
 
     items.slice(0,10).forEach(it => {
       const title = it?.title ? String(it.title) : '';

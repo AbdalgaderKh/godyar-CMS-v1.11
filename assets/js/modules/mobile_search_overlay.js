@@ -49,7 +49,7 @@ Autofix Session
     overlay.hidden = false;
     document.documentElement.classList.add('gdy-search-open');
     document.body.classList.add('gdy-search-open');
-    setTimeout(function(){ try{ input?.focus(); }catch(e){} }, 60);
+    setTimeout(function(){ try{ input && input.focus(); }catch(e){} }, 60);
     if(!list || list.childElementCount === 0){
       loadLatest();
     }
@@ -70,16 +70,16 @@ Autofix Session
   function renderItems(items) {
     // clear
     (items || []).forEach(it => {
-      const title = (it?.title) ? String(it.title) : '';
-      const url = (it?.url) ? String(it.url) : '#';
+      const title = (it && it.title) ? String(it.title) : '';
+      const url = (it && it.url) ? String(it.url) : '#';
 
     (items || []).forEach(it => {
       const title = (it?.title) ? String(it.title) : '';
       const url = (it?.url) ? String(it.url) : '#';
 
     (items || []).forEach(it => {
-      const title = (it?.title) ? String(it.title) : '';
-      const url = (it?.url) ? String(it.url) : '#';
+      const title = (it && it.title) ? String(it.title) : '';
+      const url = (it && it.url) ? String(it.url) : '#';
       let href = '#';
     document.body.classList.remove('gdy-search-open');
   }

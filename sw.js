@@ -93,7 +93,7 @@ self.addEventListener('fetch', (event) => {
         if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
         return resp;
       } catch (e) {
-        return cached ?? new Response('', { status: 504 });
+        return cached || new Response('', { status: 504 });
       }
     }
 

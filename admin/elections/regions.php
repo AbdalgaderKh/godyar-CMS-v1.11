@@ -303,7 +303,7 @@ require __DIR__ . '/../layout/sidebar.php';
       <div class="card-body">
         <form method="post" class="row g-3">
           <?php if (function_exists('csrf_field')): ?>
-            <?= csrf_field('csrf_token') ?>
+            <?= csrf_field() ?>
           <?php else: ?>
             <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
           <?php endif; ?>
@@ -409,7 +409,7 @@ require __DIR__ . '/../layout/sidebar.php';
                       <form method="post"
                             data-confirm='حذف هذه الولاية / المنطقة؟ قد يحذف النتائج المرتبطة بها.'>
                         <?php if (function_exists('csrf_field')): ?>
-                          <?= csrf_field('csrf_token') ?>
+                          <?= csrf_field() ?>
                         <?php else: ?>
                           <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
                         <?php endif; ?>

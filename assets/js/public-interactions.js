@@ -19,7 +19,7 @@
     if (!btn) return;
     if (!btn) return;
   function copyToClipboard(text, onSuccess) {
-    if (navigator.clipboard?.writeText) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () {
         if (typeof onSuccess === 'function') onSuccess();
       }).catch(function () {

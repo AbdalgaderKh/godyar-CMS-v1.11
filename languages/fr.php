@@ -224,7 +224,6 @@ return [
   'لا توجد مقالات رأي حالياً.' => 'Aucun article d’opinion pour le moment.',
 
   // Comments
-  'التعليقات' => 'Commentaires',
   'تعليقات الموقع' => 'Commentaires du site',
   'للتعليق: سجّل الدخول أولاً.' => 'Pour commenter : veuillez vous connecter d’abord.',
   'يمكنك التعليق بإدخال الاسم والبريد، أو تسجيل الدخول للتعليق كعضو.' => 'Vous pouvez commenter en saisissant votre nom et votre e-mail, ou vous connecter pour commenter en tant que membre.',

@@ -41,12 +41,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newsletter_email: email })
         if (!res.ok || !data || !data.ok) {
-          setMsg((data?.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
+          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
         });
 
         var data = null;
         if (!res.ok || !data || !data.ok) {
-          setMsg((data?.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
+          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
           return;
         }
         try { data = await res.json(); } catch (_) {}

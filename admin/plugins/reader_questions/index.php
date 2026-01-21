@@ -179,7 +179,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
                     <small class="text-muted">تمت الإجابة: <?= h((string)($r['answered_at'] ?? '')) ?></small>
                   <?php else: ?>
                     <form method="post">
-                      <?php csrf_field('csrf_token'); ?>
+                      <?php csrf_field(); ?>
                       <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                       <input type="hidden" name="action" value="answer">
                       <textarea class="form-control form-control-sm" name="answer" rows="3" maxlength="2000" placeholder="اكتب الرد (نص فقط)"></textarea>
@@ -191,7 +191,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
                 <td><small class="text-muted"><?= h((string)($r['created_at'] ?? '')) ?></small></td>
                 <td>
                   <form method="post" class="d-flex gap-1 flex-wrap">
-                    <?php csrf_field('csrf_token'); ?>
+                    <?php csrf_field(); ?>
                     <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                     <?php if ($status !== 'approved' && $status !== 'answered'): ?>
                       <button class="btn btn-sm btn-success" name="action" value="approve" type="submit">موافقة</button>

@@ -522,7 +522,7 @@ editor.addEventListener('mouseup', saveRange);
 
         // Sometimes selection is a range that directly selects an IMG node
         var r = sel.getRangeAt(0);
-        if (r?.startContainer?.nodeType === 1) {
+        if (r && r.startContainer && r.startContainer.nodeType === 1) {
           var sc = r.startContainer;
           if (sc.tagName === 'IMG') return sc;
         }

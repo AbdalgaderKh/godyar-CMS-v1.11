@@ -81,7 +81,7 @@ $comments = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
   <meta charset="utf-8">
   <title><?= h(__('t_08a0cc810c', 'إدارة التعليقات')) ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css">
 </head>
 <body class="bg-light">
 <div class="container my-4">

@@ -126,7 +126,7 @@
 
   function setBookmarkBtnState(btn, saved){
     btn.addEventListener('click', async function(){
-      const url = (location?.href) ? location.href : '';
+      const url = (location && location.href) ? location.href : '';
       const titleEl = qs('h1') || qs('title');
       const title = titleEl ? (titleEl.textContent || document.title || '') : (document.title || '');
       if(navigator.share){

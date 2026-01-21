@@ -70,13 +70,18 @@ $verify_csrf = function(string $token) use ($localCsrf): bool {
 
 // rate limit بسيط بالـ IP (fallback)
 $rate_limit = function(string $bucket, int $limit, int $windowSec): bool {
-    if (function_exists('gdy_rate_limit')) {
-        try { return (bool)gdy_rate_limit($bucket, $limit, $windowSec); } catch (\Throwable $e) {}
-    }
     $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
-    $key = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $bucket . '_' . $ip);
-    $dir = sys_get_temp_dir() . '/gdy_rl';
-    if (!is_dir($dir)) @mkdir($dir, 0777, true);
+
+if (function_exists('gdy_rate_limit')) {
+    try {
+        return (bool)gdy_rate_limit($bucket, $ip, $limit, $windowSec);
+    } catch (\Throwable $e) {
+    }
+}
+
+$key = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $bucket . '_' . $ip);
+$dir = sys_get_temp_dir() . '/gdy_rl';
+if (!is_dir($dir)) @mkdir($dir, 0777, true);
     $file = $dir . '/' . $key . '.json';
     $now = time();
     $data = ['t' => $now, 'c' => 0];

@@ -210,9 +210,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="alert alert-success py-2 small mb-3"><?= h($success) ?></div>
       <?php endif; ?>
 
-      <form method="post" action="<?= h($_SERVER['PHP_SELF']); ?>?token=<?= urlencode($token) ?>" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
-        <input type="hidden" name="token" value="<?= h($token) ?>">
+      <form method="post" action="<?= htmlspecialchars(filter_input(INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_URL), ENT_QUOTES, 'UTF-8'); ?>?token=<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>" novalidate>
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+        <input type="hidden" name="token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="mb-3">
           <label for="password" class="form-label">كلمة المرور الجديدة</label>

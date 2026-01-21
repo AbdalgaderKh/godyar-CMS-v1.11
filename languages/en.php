@@ -224,7 +224,6 @@ return [
   'لا توجد مقالات رأي حالياً.' => 'No opinion articles at the moment.',
 
   // Comments
-  'التعليقات' => 'Comments',
   'تعليقات الموقع' => 'Site comments',
   'للتعليق: سجّل الدخول أولاً.' => 'To comment: please sign in first.',
   'يمكنك التعليق بإدخال الاسم والبريد، أو تسجيل الدخول للتعليق كعضو.' => 'You can comment by entering your name and email, or sign in to comment as a member.',

@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $u = new \User();
                     $loggedIn = (bool)$u->login($login, $password);
                 } else {
-                    if (!$pdo instanceof PDO) {
+                    if (($pdo instanceof PDO) === false) {
                         $errorMessage = 'لا يمكن الاتصال بقاعدة البيانات حالياً.';
                     } else {
                         $stmt = $pdo->prepare(

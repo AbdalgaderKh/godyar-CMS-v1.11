@@ -9,7 +9,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // ✅ Audit log
-if (function_exists('gody_audit_log')) {
+if (function_exists('gody_audit_log') === true) {
     gody_audit_log('admin_logout');
 }
 // تنظيف بيانات الجلسة

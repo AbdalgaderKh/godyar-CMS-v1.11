@@ -1,7 +1,7 @@
 <?php
 // /frontend/views/topic.php
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h(?string $v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -54,7 +54,7 @@ if ($cover !== '') {
     </div>
   </div>
 
-  <?php if (!empty($best)): ?>
+  <?php if (empty($best) === false): ?>
     <section class="mb-4">
       <div class="d-flex align-items-center justify-content-between mb-2">
         <h2 class="h6 mb-0"><?= h(__('الأكثر قراءة في هذا الموضوع')) ?></h2>

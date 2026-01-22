@@ -20,7 +20,7 @@ spl_autoload_register(function (string $class) {
 
         foreach ((array)$baseDirs as $baseDir) {
             $file = rtrim($baseDir, '/\\') . DIRECTORY_SEPARATOR . $relativePath;
-            if (is_file($file)) {
+            if (is_file($file) === true) {
                 require_once $file;
                 return;
             }

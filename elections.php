@@ -11,13 +11,13 @@ require_once __DIR__ . '/admin/elections/_elections_lib.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!($pdo instanceof PDO)) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo 'تعذّر الاتصال بقاعدة البيانات.';
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -58,9 +58,9 @@ if (!$allElections) {
 
 // دعم ?election= و ?slug= للروابط القديمة
 $requestedSlug = '';
-if (!empty($_GET['election'])) {
+if (empty($_GET['election']) === false) {
     $requestedSlug = trim((string)$_GET['election']);
-} elseif (!empty($_GET['slug'])) {
+} elseif (empty($_GET['slug']) === false) {
     $requestedSlug = trim((string)$_GET['slug']);
 }
 
@@ -177,7 +177,7 @@ try {
     foreach ($rows as $row) {
         $rid = (int)$row['region_id'];
 
-        if (!isset($regions[$rid])) {
+        if (isset($regions[$rid]) === false) {
             $regions[$rid] = [
                 'id'          => $rid,
                 'name_ar'     => $row['name_ar'],
@@ -328,7 +328,7 @@ require __DIR__ . '/frontend/templates/header.php';
           <h1 class="h4 mb-1">
             نتائج الانتخابات – <?= h($currentElection['title']) ?>
           </h1>
-          <?php if (!empty($currentElection['description'])): ?>
+          <?php if (empty($currentElection['description']) === false): ?>
             <p class="mb-0 small text-muted">
               <?= nl2br(h($currentElection['description'])) ?>
             </p>

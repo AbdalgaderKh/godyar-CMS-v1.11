@@ -11,7 +11,7 @@ use Godyar\Auth;
 $currentPage = 'system_health';
 $pageTitle   = __('t_63163058e0', 'صحة النظام');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -72,7 +72,7 @@ if ($pdo instanceof PDO) {
 }
 
 // الكاش
-if (class_exists('Cache')) {
+if (class_exists('Cache') === true) {
     $checks['cache_driver'] = 'file';
     try {
         Cache::put('_health_test', 'ok', 60);
@@ -98,7 +98,7 @@ $appEnv   = 'production';
 $appDebug = false;
 $appUrl   = '';
 
-if (function_exists('env')) {
+if (function_exists('env') === true) {
     $appEnv   = (string)env('APP_ENV', $appEnv);
     $appDebug = (bool)env('APP_DEBUG', false);
     $appUrl   = (string)env('APP_URL', '');
@@ -119,7 +119,7 @@ $dirsToCheck = [
 ];
 
 foreach ($dirsToCheck as $label => $path) {
-    if (is_dir($path)) {
+    if (is_dir($path) === true) {
         $fsChecks[] = [
             'label'    => $label,
             'path'     => $path,

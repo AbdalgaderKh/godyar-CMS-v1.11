@@ -9,7 +9,7 @@ declare(strict_types=1);
  * - Identifier handling is strict to prevent injection via table/column names.
  */
 
-if (!function_exists('gdy_db_driver')) {
+if (function_exists('gdy_db_driver') === false) {
     function gdy_db_driver(): string
     {
         $drv = defined('DB_DRIVER') ? strtolower((string)DB_DRIVER) : 'auto';
@@ -35,7 +35,7 @@ if (!function_exists('gdy_db_driver')) {
     }
 }
 
-if (!function_exists('gdy_pdo_is_pgsql')) {
+if (function_exists('gdy_pdo_is_pgsql') === false) {
     function gdy_pdo_is_pgsql(PDO $pdo): bool
     {
         try {
@@ -46,7 +46,7 @@ if (!function_exists('gdy_pdo_is_pgsql')) {
     }
 }
 
-if (!function_exists('gdy_db_quote_ident')) {
+if (function_exists('gdy_db_quote_ident') === false) {
     function gdy_db_quote_ident(string $name, ?string $drv = null): string
     {
         if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name)) {
@@ -57,7 +57,7 @@ if (!function_exists('gdy_db_quote_ident')) {
     }
 }
 
-if (!function_exists('gdy_db_schema_expr')) {
+if (function_exists('gdy_db_schema_expr') === false) {
     function gdy_db_schema_expr(PDO $pdo): string
     {
         // These are constant SQL expressions, not user-controlled.
@@ -65,7 +65,7 @@ if (!function_exists('gdy_db_schema_expr')) {
     }
 }
 
-if (!function_exists('gdy_db_table_exists')) {
+if (function_exists('gdy_db_table_exists') === false) {
     function gdy_db_table_exists(PDO $pdo, string $table): bool
     {
         // Validate table name strictly.
@@ -78,7 +78,7 @@ if (!function_exists('gdy_db_table_exists')) {
     }
 }
 
-if (!function_exists('gdy_db_table_columns')) {
+if (function_exists('gdy_db_table_columns') === false) {
     /** @return string[] */
     function gdy_db_table_columns(PDO $pdo, string $table): array
     {
@@ -92,7 +92,7 @@ if (!function_exists('gdy_db_table_columns')) {
     }
 }
 
-if (!function_exists('gdy_db_column_exists')) {
+if (function_exists('gdy_db_column_exists') === false) {
     function gdy_db_column_exists(PDO $pdo, string $table, string $column): bool
     {
         gdy_db_quote_ident($table, gdy_pdo_is_pgsql($pdo) ? 'pgsql' : 'mysql');
@@ -105,7 +105,7 @@ if (!function_exists('gdy_db_column_exists')) {
     }
 }
 
-if (!function_exists('gdy_db_is_duplicate_exception')) {
+if (function_exists('gdy_db_is_duplicate_exception') === false) {
     function gdy_db_is_duplicate_exception(PDOException $e, PDO $pdo): bool
     {
         $state = (string)($e->getCode() ?? '');
@@ -126,7 +126,7 @@ if (!function_exists('gdy_db_is_duplicate_exception')) {
     }
 }
 
-if (!function_exists('gdy_db_exec_ignore_duplicate')) {
+if (function_exists('gdy_db_exec_ignore_duplicate') === false) {
     /**
      * Execute a prepared statement and ignore duplicate-key errors.
      * Returns true if the statement executed successfully, false if skipped due to duplicate.
@@ -146,7 +146,7 @@ if (!function_exists('gdy_db_exec_ignore_duplicate')) {
     }
 }
 
-if (!function_exists('gdy_db_upsert')) {
+if (function_exists('gdy_db_upsert') === false) {
     /**
      * Portable upsert: INSERT, and if a duplicate occurs, run UPDATE.
      *
@@ -202,7 +202,7 @@ if (!function_exists('gdy_db_upsert')) {
         }
 
         foreach ($uniqueKeys as $k) {
-            if (!array_key_exists((string)$k, $data)) {
+            if (array_key_exists((string)$k, $data) === false) {
                 throw new InvalidArgumentException('Missing unique key value for: ' . (string)$k);
             }
         }
@@ -230,7 +230,7 @@ if (!function_exists('gdy_db_upsert')) {
     }
 }
 
-if (!function_exists('gdy_db_stmt_table_exists')) {
+if (function_exists('gdy_db_stmt_table_exists') === false) {
     /**
      * Return a PDOStatement compatible with legacy patterns that used table-existence checks.
      * The statement returns a single scalar (1) when the table exists.
@@ -246,7 +246,7 @@ if (!function_exists('gdy_db_stmt_table_exists')) {
     }
 }
 
-if (!function_exists('gdy_db_stmt_columns')) {
+if (function_exists('gdy_db_stmt_columns') === false) {
     /**
      * Return a PDOStatement compatible with legacy column listing code.
      * Provides a result set with a 'Field' column.
@@ -262,7 +262,7 @@ if (!function_exists('gdy_db_stmt_columns')) {
     }
 }
 
-if (!function_exists('gdy_db_stmt_column_like')) {
+if (function_exists('gdy_db_stmt_column_like') === false) {
     /**
      * Return a PDOStatement compatible with legacy "single column exists" checks.
      * Provides a result set with a 'Field' column.

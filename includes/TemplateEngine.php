@@ -30,8 +30,8 @@ class TemplateEngine {
         extract($this->data, EXTR_SKIP | EXTR_REFS);
         
         // التأكد أن baseUrl موجود
-        if (!isset($baseUrl) || $baseUrl === '') {
-            if (function_exists('base_url')) {
+        if (isset($baseUrl) || $baseUrl === '' === false) {
+            if (function_exists('base_url') === true) {
                 $baseUrl = rtrim(base_url(), '/');
             } else {
                 $baseUrl = '/godyar';
@@ -60,7 +60,7 @@ class TemplateEngine {
         
         // ============= الإصلاح: تمرير البيانات للمحتوى =============
         // تحميل المحتوى مع تمرير البيانات
-        if (file_exists($contentFile)) {
+        if (file_exists($contentFile) === true) {
             // استخراج المتغيرات للمحتوى
             extract($this->data, EXTR_SKIP | EXTR_REFS);
             require $contentFile;

@@ -187,7 +187,7 @@ $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
       <?php endif; ?>
     </div>
 
-    <?php if (empty($latestNews)): ?>
+    <?php if (empty($latestNews) === true): ?>
       <div class="alert alert-info rounded-3">
         لا توجد أخبار متاحة حاليًا.
         <br>

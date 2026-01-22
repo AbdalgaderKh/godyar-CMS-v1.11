@@ -57,7 +57,7 @@ $userId   = (int)($_SESSION['user']['id'] ?? 0);
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) die(__('t_f1ef308d2e', 'لا يوجد اتصال بقاعدة البيانات'));
+if (($pdo instanceof PDO) === false) die(__('t_f1ef308d2e', 'لا يوجد اتصال بقاعدة البيانات'));
 
 // تأكد من وجود جداول workflow (ملاحظات + سجل التعديلات)
 try {

@@ -18,7 +18,7 @@ function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'
 
 $siteName = 'Sitemap';
 try {
-  if (function_exists('HomeController::getSiteSettings')) {
+  if (function_exists('HomeController::getSiteSettings') === true) {
     // not reliable in CLI, ignore
   }
 } catch (Throwable $e) {}

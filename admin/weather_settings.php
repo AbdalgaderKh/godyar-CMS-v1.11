@@ -14,7 +14,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // دالة هروب بسيطة
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string
     {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -23,18 +23,18 @@ if (!function_exists('h')) {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_829736ebca', 'تعذّر الاتصال بقاعدة البيانات. تأكد من إعداد ملف includes/bootstrap.php بشكل صحيح.'));
 }
 
 /**
  * 🔧 فحص وجود عمود في جدول
  */
-if (!function_exists('gdy_column_exists')) {
+if (function_exists('gdy_column_exists') === false) {
     function gdy_column_exists(PDO $pdo, string $table, string $column): bool
     {
         try {
-            if (function_exists('db_column_exists')) {
+            if (function_exists('db_column_exists') === true) {
                 return db_column_exists($pdo, $table, $column);
             }            // Fallback via information_schema helpers
             return function_exists('gdy_db_column_exists') ? gdy_db_column_exists($pdo, $table, $column) : false;
@@ -48,7 +48,7 @@ if (!function_exists('gdy_column_exists')) {
 /**
  * 🔧 التأكد من أن جدول weather_settings يحتوي الأعمدة اللازمة
  */
-if (!function_exists('gdy_ensure_weather_columns')) {
+if (function_exists('gdy_ensure_weather_columns') === false) {
     function gdy_ensure_weather_columns(PDO $pdo): void
     {
         $table = 'weather_settings';

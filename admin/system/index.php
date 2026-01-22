@@ -43,7 +43,7 @@ try {
 // ------------------------------
 $pdo = gdy_pdo_safe();
 
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     // DB is required for this page.
     header('Location: index.php?dberror=1');
     exit;
@@ -52,7 +52,7 @@ if (!$pdo instanceof PDO) {
 // ------------------------------
 // 3) Helpers
 // ------------------------------
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($enable && !$maintenanceEnabled) {
                 // تفعيل وضع الصيانة
                 $dir = dirname($maintenanceFlag);
-                if (!is_dir($dir)) {
+                if (is_dir($dir) === false) {
                     gdy_mkdir($dir, 0775, true);
                 }
                 gdy_file_put_contents($maintenanceFlag, date('c'));

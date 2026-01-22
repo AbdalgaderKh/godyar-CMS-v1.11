@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $pdo = gdy_pdo_safe();
 $authorId = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 
-if (!$pdo instanceof PDO || $authorId <= 0) {
+if (($pdo instanceof PDO) === false || $authorId <= 0) {
     echo json_encode(['success' => false, 'message' => __('t_0cd2c37448', 'بيانات غير صالحة')]);
     exit;
 }

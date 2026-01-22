@@ -36,7 +36,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'clear_ratelimit') {
 // Export settings as JSON
 if (isset($_GET['action']) && $_GET['action'] === 'export') {
     try {
-        if (!$pdo instanceof PDO) {
+        if (($pdo instanceof PDO) === false) {
             throw new RuntimeException('DB not available');
         }
         $rows = $pdo->query("SELECT setting_key, value FROM settings ORDER BY setting_key ASC")->fetchAll(PDO::FETCH_ASSOC);
@@ -89,7 +89,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $notice = __('t_2b91fb1389', 'تم مسح الكاش بنجاح.') . ' (' . $deleted . ')';
 
         } elseif ($action === 'import_settings') {
-            if (!$pdo instanceof PDO) {
+            if (($pdo instanceof PDO) === false) {
                 throw new RuntimeException('DB not available');
             }
 

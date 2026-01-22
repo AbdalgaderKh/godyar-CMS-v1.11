@@ -47,7 +47,7 @@ if (in_array($role, ['writer','author'], true)) {
 
 // 🔌 الاتصال بقاعدة البيانات
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     error_log('[Godyar News] delete.php: PDO not available');
     header('Location: index.php?error=db');
     exit;

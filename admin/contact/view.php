@@ -38,7 +38,7 @@ try {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database connection not available.');
 }
 

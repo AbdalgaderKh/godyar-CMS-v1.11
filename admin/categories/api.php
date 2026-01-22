@@ -18,7 +18,7 @@ $rootPath = realpath(__DIR__ . '/..') ?: __DIR__ . '/..';
 
 // تحميل bootstrap
 $bootstrapPath = $rootPath . '/includes/bootstrap.php';
-if (!is_file($bootstrapPath)) {
+if (is_file($bootstrapPath) === false) {
     http_response_code(500);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode([
@@ -35,7 +35,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // هيلبر للهروب
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
     }
@@ -58,7 +58,7 @@ if (!$isAdmin) {
 
 // الحصول على PDO
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo json_encode([
         'ok'    => false,

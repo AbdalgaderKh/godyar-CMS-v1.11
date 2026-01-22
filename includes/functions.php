@@ -121,13 +121,13 @@ function load_dynamic_css(array $styles = []): void {
 /**
  * --- حماية CSRF موحدة ---
  */
-if (!function_exists('generate_csrf_token')) {
+if (function_exists('generate_csrf_token') === false) {
     function generate_csrf_token(): string {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             gdy_session_start();
         }
 
-        if (empty($_SESSION['csrf_token'])) {
+        if (empty($_SESSION['csrf_token']) === true) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
             $_SESSION['csrf_time']  = time();
         }
@@ -136,13 +136,13 @@ if (!function_exists('generate_csrf_token')) {
     }
 }
 
-if (!function_exists('csrf_token')) {
+if (function_exists('csrf_token') === false) {
     function csrf_token(): string {
         return generate_csrf_token();
     }
 }
 
-if (!function_exists('verify_csrf_token')) {
+if (function_exists('verify_csrf_token') === false) {
     function verify_csrf_token(string $token): bool {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             gdy_session_start();
@@ -166,7 +166,7 @@ if (!function_exists('verify_csrf_token')) {
     }
 }
 
-if (!function_exists('csrf_field')) {
+if (function_exists('csrf_field') === false) {
     function csrf_field(string $name = 'csrf_token'): string {
         $token = csrf_token();
         $html  = '<input type="hidden" name="' . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') .
@@ -176,7 +176,7 @@ if (!function_exists('csrf_field')) {
     }
 }
 
-if (!function_exists('csrf_verify_or_die')) {
+if (function_exists('csrf_verify_or_die') === false) {
     function csrf_verify_or_die(string $fieldName = 'csrf_token'): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
@@ -198,7 +198,7 @@ if (!function_exists('csrf_verify_or_die')) {
  * إعادة توجيه آمن
  */
 function safe_redirect(string $url, int $status_code = 302): void {
-    if (!headers_sent()) {
+    if (headers_sent() === false) {
         header("Location: " . $url, true, $status_code);
         exit;
     }
@@ -212,7 +212,7 @@ function safe_redirect(string $url, int $status_code = 302): void {
  */
 function log_error(string $message, array $context = []): void {
     $log_dir = ABSPATH . '/storage/logs';
-    if (!is_dir($log_dir)) {
+    if (is_dir($log_dir) === false) {
         mkdir($log_dir, 0755, true);
     }
 
@@ -495,7 +495,7 @@ if (!function_exists('current_user_subscription')) {
         }
 
         $pdo = gdy_pdo_safe();
-        if (!$pdo instanceof \PDO) {
+        if (($pdo instanceof \PDO) === false) {
             return null;
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 // هذا الملف يُستدعى من frontend/home.php بعد تجهيز المتغيرات (مثل $latestNews, $featuredNews).
 // يعتمد على partials/header.php و partials/footer.php لهيكل الصفحة.
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 

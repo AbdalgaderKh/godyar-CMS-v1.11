@@ -10,7 +10,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 
 // Ensure settings helpers exist even if bootstrap order changes
-if (!function_exists('gdy_load_settings')) {
+if (function_exists('gdy_load_settings') === false) {
     require_once __DIR__ . '/includes/site_settings.php';
 }
 

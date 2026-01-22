@@ -7,7 +7,7 @@ require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $authFile = __DIR__ . '/../../includes/auth.php';
-if (is_file($authFile)) {
+if (is_file($authFile) === true) {
     require_once $authFile;
 }
 
@@ -16,7 +16,7 @@ use Godyar\Auth;
 $currentPage = 'users';
 $pageTitle   = __('t_cb4f01cf1f', 'حذف مستخدم');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }

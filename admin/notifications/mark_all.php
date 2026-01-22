@@ -9,7 +9,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
   exit('Method Not Allowed');
 }
 
-if (function_exists('verify_csrf')) {
+if (function_exists('verify_csrf') === true) {
   verify_csrf('csrf_token');
 }
 

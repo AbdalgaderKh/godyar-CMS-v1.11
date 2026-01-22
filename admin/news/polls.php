@@ -21,7 +21,7 @@ $currentPage = 'polls';
 $pageTitle   = 'إدارة الاستطلاعات';
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database not available');
 }
 
@@ -94,7 +94,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                     } catch (Throwable $e) {
                         $ok = false;
                     }
-                    if (!$ok) {
+                    if ($ok === false) {
                         try {
                             $st = $pdo->prepare('SELECT 1 FROM news WHERE id=:id AND user_id=:u LIMIT 1');
                             $st->execute([':id'=>$newsId, ':u'=>$userId]);

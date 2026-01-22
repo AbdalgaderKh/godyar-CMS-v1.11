@@ -34,19 +34,19 @@ if (!function_exists('site_settings_load')) {
 
         // If caller passed (false, PDO) by mistake, accept it.
         $args = func_get_args();
-        if (!$pdo instanceof \PDO && isset($args[1]) && $args[1] instanceof \PDO) {
+        if (($pdo instanceof \PDO) === false && isset($args[1]) && $args[1] instanceof \PDO) {
             $pdo = $args[1];
         }
 
         // Fallback to globals/helpers
-        if (!$pdo instanceof \PDO) {
+        if (($pdo instanceof \PDO) === false) {
             $pdo = $GLOBALS['pdo'] ?? null;
         }
-        if (!$pdo instanceof \PDO && function_exists('gdy_pdo_safe')) {
+        if (($pdo instanceof \PDO) === false && function_exists('gdy_pdo_safe')) {
             $pdo = gdy_pdo_safe();
         }
 
-        if (!$pdo instanceof \PDO) {
+        if (($pdo instanceof \PDO) === false) {
             $GLOBALS['site_settings'] = [];
             return [];
         }

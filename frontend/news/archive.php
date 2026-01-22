@@ -7,7 +7,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 $to = base_url('/archive');
-if (!headers_sent()) {
+if (headers_sent() === false) {
     header('Location: ' . $to, true, 301);
     exit;
 }

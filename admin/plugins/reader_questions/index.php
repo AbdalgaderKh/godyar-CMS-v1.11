@@ -9,7 +9,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     exit('DB unavailable');
 }

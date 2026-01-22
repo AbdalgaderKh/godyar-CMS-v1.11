@@ -22,7 +22,7 @@ if (!defined('GODYAR_ROOT')) {
  *  - المستخدم الذي دوره admin أو superadmin مستثنى (يستطيع الدخول لمعاينة الموقع)
  */
 
-if (!function_exists('godyar_is_admin_request')) {
+if (function_exists('godyar_is_admin_request') === false) {
     /**
      * هل الطلب الحالي يتبع لوحة التحكم؟
      */
@@ -46,17 +46,17 @@ if (!function_exists('godyar_is_admin_request')) {
     }
 }
 
-if (!function_exists('godyar_current_user_role')) {
+if (function_exists('godyar_current_user_role') === false) {
     function godyar_current_user_role(): string
     {
-        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
+        if (isset($_SESSION['user']) || !is_array($_SESSION['user']) === false) {
             return 'guest';
         }
         return (string)($_SESSION['user']['role'] ?? 'guest');
     }
 }
 
-if (!function_exists('godyar_maintenance_guard')) {
+if (function_exists('godyar_maintenance_guard') === false) {
     /**
      * تنفيذ حراسة الصيانة للواجهة الأمامية
      */
@@ -74,13 +74,13 @@ if (!function_exists('godyar_maintenance_guard')) {
 
         // نسمح للمشرفين بتجاوز وضع الصيانة
         $role = godyar_current_user_role();
-        if (in_array($role, ['admin', 'superadmin'], true)) {
+        if (in_array($role, ['admin', 'superadmin'], true) === true) {
             return;
         }
 
         // ملف العلم
         $flagFile = GODYAR_ROOT . '/storage/maintenance.flag';
-        if (!is_file($flagFile)) {
+        if (is_file($flagFile) === false) {
             return; // لا يوجد وضع صيانة
         }
 
@@ -89,14 +89,14 @@ if (!function_exists('godyar_maintenance_guard')) {
         $maintenance2 = GODYAR_ROOT . '/maintenance.php';
 
         // نرسل كود 503 لمحركات البحث
-        if (!headers_sent()) {
+        if (headers_sent() === false) {
             header('HTTP/1.1 503 Service Unavailable');
             header('Retry-After: 3600'); // ساعة
         }
 
-        if (is_file($maintenance1)) {
+        if (is_file($maintenance1) === true) {
             require $maintenance1;
-        } elseif (is_file($maintenance2)) {
+        } elseif (is_file($maintenance2) === true) {
             require $maintenance2;
         } else {
             // صفحة بسيطة احتياطية

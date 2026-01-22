@@ -19,14 +19,14 @@ Auth::requirePermission('posts.edit');
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(503);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(['ok' => false, 'error' => 'db_unavailable'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 

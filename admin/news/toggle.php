@@ -21,7 +21,7 @@ if (function_exists('verify_csrf_token') && !verify_csrf_token($csrf)) {
 }
 
 $role = $_SESSION['user']['role'] ?? 'guest';
-if (!in_array($role, ['admin', 'superadmin'], true)) {
+if (in_array($role, ['admin', 'superadmin'], true) === false) {
     http_response_code(403);
     echo json_encode(['ok' => false, 'msg' => 'forbidden']);
     exit;

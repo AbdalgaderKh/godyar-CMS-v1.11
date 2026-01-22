@@ -10,7 +10,7 @@ if (!function_exists('admin_log')) {
     {
         try {
             $pdo = gdy_pdo_safe();
-            if (!$pdo instanceof \PDO) {
+            if (($pdo instanceof \PDO) === false) {
                 return;
             }
 

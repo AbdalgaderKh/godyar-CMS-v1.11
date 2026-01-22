@@ -32,7 +32,7 @@ $pageTitle = 'سجل النشاط (Audit Log)';
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="m-0"><?= h($pageTitle) ?></h4>
       <div class="d-flex gap-2">
-        <?php if (is_file($logFile)): ?>
+        <?php if (is_file($logFile) === true): ?>
           <a class="btn btn-sm btn-outline-primary" href="/admin/settings/audit_download.php" target="_blank" rel="noopener">تحميل الملف</a>
         <?php endif; ?>
         <a class="btn btn-sm btn-secondary" href="/admin/settings/tools.php">رجوع</a>
@@ -52,7 +52,7 @@ $pageTitle = 'سجل النشاط (Audit Log)';
       </div>
     </form>
 
-    <?php if (!is_file($logFile)): ?>
+    <?php if (is_file($logFile) === false): ?>
       <div class="alert alert-warning mb-0">لا يوجد ملف audit.log حتى الآن. سيتم إنشاؤه تلقائيًا عند تسجيل دخول/خروج أو أي أحداث تدعم السجل.</div>
     <?php else: ?>
       <div style="max-height:65vh; overflow:auto; background:#0b1220; color:#e5e7eb; border-radius:12px; padding:12px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; font-size:12px;">

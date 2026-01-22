@@ -12,7 +12,7 @@ use Godyar\Auth;
 $currentPage = 'ads';
 $pageTitle   = __('t_b7f9df8a7e', 'عرض إعلان');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -35,7 +35,7 @@ try {
 }
 
 $id = (int)($_GET['id'] ?? 0);
-if ($id <= 0 || !$pdo instanceof PDO) {
+if ($id <= 0 || ($pdo instanceof PDO) === false) {
     header('Location: index.php');
     exit;
 }

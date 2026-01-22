@@ -274,7 +274,7 @@ if (in_array($requestPath, ['/article.php', '/category.php', '/page.php', '/arch
 
 // Shared instances
 $container = $GLOBALS['container'] ?? null;
-if (!$container instanceof \Godyar\Container) {
+if (($container instanceof \Godyar\Container) === false) {
     $container = new \Godyar\Container(\Godyar\DB::pdo());
 }
 
@@ -450,7 +450,7 @@ $router->get('#^/search/?$#', fn() => $searchController->index());
 
 // /api/newsletter/subscribe (POST)
 $router->post('#^/api/newsletter/subscribe/?$#', function () use ($pdo): void {
-    if (!$pdo instanceof PDO) {
+    if (($pdo instanceof PDO) === false) {
         http_response_code(500);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode(['ok' => false, 'message' => 'PDO غير متاح'], JSON_UNESCAPED_UNICODE);

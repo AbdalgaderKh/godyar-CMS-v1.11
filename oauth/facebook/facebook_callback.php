@@ -74,7 +74,7 @@ if ($email === '') {
     exit("تعذر تسجيل الدخول عبر Facebook: البريد الإلكتروني غير متاح من الحساب.");
 }
 
-if (!isset($pdo) || !$pdo instanceof PDO) {
+if (!isset($pdo) || ($pdo instanceof PDO) === false) {
     http_response_code(500);
     exit('لا يمكن الاتصال بقاعدة البيانات حالياً.');
 }

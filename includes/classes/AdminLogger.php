@@ -34,7 +34,7 @@ use PDO;
     {
         // Support DI (preferred): pass $pdo from caller.
         // Backward compatibility: if not passed, we use the unified DB layer.
-        if (!$pdo instanceof PDO) {
+        if (($pdo instanceof PDO) === false) {
             try {
                 $pdo = DB::pdo();
             } catch (\Throwable $e) {

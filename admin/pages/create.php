@@ -9,7 +9,7 @@ use Godyar\Auth;
 $currentPage = 'pages';
 $pageTitle   = __('t_0db7b2425d', 'إنشاء صفحة جديدة');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -37,7 +37,7 @@ try {
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database connection not available.');
 }
 
@@ -46,7 +46,7 @@ function godyar_slugify(string $str): string {
     $str = trim($str);
     $str = preg_replace('~[^\p{Arabic}A-Za-z0-9]+~u', '-', $str);
     $str = trim($str, '-');
-    if (function_exists('mb_strtolower')) {
+    if (function_exists('mb_strtolower') === true) {
         $str = mb_strtolower($str, 'UTF-8');
     } else {
         $str = strtolower($str);

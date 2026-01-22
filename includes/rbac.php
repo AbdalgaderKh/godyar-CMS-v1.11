@@ -6,9 +6,9 @@ use Godyar\Auth;
 /**
  * فحص هل المستخدم يملك دور معيّن
  */
-if (!function_exists('g_is')) {
+if (function_exists('g_is') === false) {
     function g_is(string $role): bool {
-        if (!class_exists(Auth::class)) {
+        if (class_exists(Auth::class) === false) {
             return false;
         }
         return Auth::hasRole($role);
@@ -18,7 +18,7 @@ if (!function_exists('g_is')) {
 /**
  * فحص هل المستخدم يملك صلاحية معيّنة
  */
-if (!function_exists('g_can')) {
+if (function_exists('g_can') === false) {
     function g_can(string $permission): bool {
         if (!class_exists(Auth::class)) {
             return false;

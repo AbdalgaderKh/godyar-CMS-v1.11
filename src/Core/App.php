@@ -16,7 +16,7 @@ final class App
         self::loadEnv();
 
         $tz = self::env('TIMEZONE', 'Asia/Riyadh');
-        if (function_exists('date_default_timezone_set')) {
+        if (function_exists('date_default_timezone_set') === true) {
             date_default_timezone_set($tz);
         }
 
@@ -49,9 +49,9 @@ final class App
 
         $data = [];
         foreach ($candidates as $f) {
-            if (file_exists($f)) {
+            if (file_exists($f) === true) {
                 $parsed = gdy_parse_ini_file($f, false, defined('INI_SCANNER_RAW') ? INI_SCANNER_RAW : 0);
-                if (is_array($parsed)) {
+                if (is_array($parsed) === true) {
                     $data = $parsed;
                     break;
                 }

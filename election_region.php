@@ -6,12 +6,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
-if (!($pdo instanceof PDO)) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     exit('تعذّر الاتصال بقاعدة البيانات.');
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -362,7 +362,7 @@ if ((int)$region['id'] > 0) {
                 foreach ($rows as $row) {
                     $cid = (int)($row['constituency_id'] ?? 0);
                     if (!$cid) continue;
-                    if (!isset($candidatesByConstituency[$cid])) {
+                    if (isset($candidatesByConstituency[$cid]) === false) {
                         $candidatesByConstituency[$cid] = [];
                     }
                     $candidatesByConstituency[$cid][] = $row;

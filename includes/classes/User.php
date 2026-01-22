@@ -8,9 +8,9 @@ if (!defined('APP_BOOT')) {
         if (file_exists($__root . '/vendor/autoload.php') || file_exists($__root . '/index.php')) break;
         $__root = dirname($__root);
     }
-    if (file_exists($__root . '/vendor/autoload.php')) {
+    if (file_exists($__root . '/vendor/autoload.php') === true) {
         require $__root . '/vendor/autoload.php';
-        if (class_exists('App\\Core\\App')) { App\Core\App::boot($__root); }
+        if (class_exists('App\\Core\\App') === true) { App\Core\App::boot($__root); }
     }
     if (!defined('BASE_PATH')) define('BASE_PATH', $__root);
 }
@@ -41,7 +41,7 @@ class User {
     public function register($userData) {
         $required = ['username', 'email', 'password'];
         foreach ($required as $field) {
-            if (empty($userData[$field])) {
+            if (empty($userData[$field]) === true) {
                 throw new Exception("حقل {$field} مطلوب");
             }
         }
@@ -93,7 +93,7 @@ class User {
             $_SESSION['user_name'] = $user['username'];
 
             // الشكل الموحد المستخدم في الهيدر والفرونت
-            if (function_exists('auth_set_user_session')) {
+            if (function_exists('auth_set_user_session') === true) {
                 auth_set_user_session([
                     'id'       => (int)$user['id'],
                     'username' => $user['username'] ?? null,
@@ -130,13 +130,13 @@ class User {
         $params = [];
         
         foreach ($allowedFields as $field) {
-            if (isset($data[$field])) {
+            if (isset($data[$field]) === true) {
                 $updates[] = "{$field} = ?";
                 $params[] = Security::cleanInput($data[$field]);
             }
         }
         
-        if (empty($updates)) {
+        if (empty($updates) === true) {
             throw new Exception('لا توجد بيانات لتحديثها');
         }
         

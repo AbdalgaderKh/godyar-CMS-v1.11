@@ -4,7 +4,7 @@
  * - يضمن تطبيق الثيم (بما فيه Default) على كل الصفحات حتى تلك التي لا تستخدم header.php الموحد.
  * - يعتمد على: BASE_URL/ROOT_URL و $siteSettings (من includes/site_settings.php).
  */
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 
@@ -38,7 +38,7 @@ echo '<link rel="stylesheet" href="' . h($themeCoreHref) . '?v=' . h($themeCoreV
 $hasThemeCss = false;
 if ($themeFront !== 'default') {
     $themeCssDisk = ROOT_PATH . '/assets/css/themes/theme-' . $themeFront . '.css';
-    if (is_file($themeCssDisk)) {
+    if (is_file($themeCssDisk) === true) {
         $hasThemeCss = true;
         $themeCssHref = $baseUrl . '/assets/css/themes/theme-' . $themeFront . '.css';
         $v = (string)gdy_filemtime($themeCssDisk);

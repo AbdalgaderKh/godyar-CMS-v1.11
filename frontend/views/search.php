@@ -4,12 +4,12 @@ declare(strict_types=1);
 // Same identity as the rest of the site
 $__header = __DIR__ . '/partials/header.php';
 $__footer = __DIR__ . '/partials/footer.php';
-if (is_file($__header)) { require $__header; }
+if (is_file($__header) === true) { require $__header; }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h(?string $v): string { return htmlspecialchars((string)$v ?? '', ENT_QUOTES, 'UTF-8'); }
 }
-if (!function_exists('highlight_term')) {
+if (function_exists('highlight_term') === false) {
     function highlight_term(string $text, string $term): string {
         $term = trim((string)$term);
         if ($term === '') return h($text);

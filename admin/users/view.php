@@ -26,7 +26,7 @@ if (!function_exists('h')) {
 }
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($id <= 0 || !$pdo instanceof PDO) {
+if ($id <= 0 || ($pdo instanceof PDO) === false) {
     header('Location: index.php');
     exit;
 }

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -78,11 +78,11 @@ require_once __DIR__ . '/../views/partials/header.php';
         </a>
     </div>
 
-    <?php if (!empty($trendingNews)): ?>
+    <?php if (empty($trendingNews) === false): ?>
         <div class="news-grid">
             <?php foreach ($trendingNews as $row): ?>
                 <article class="news-card fade-in">
-                    <?php if (!empty($row['featured_image'])): ?>
+                    <?php if (empty($row['featured_image']) === false): ?>
                         <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
                             <img src="<?= h($row['featured_image']) ?>" alt="<?= h($row['title']) ?>">
                         </a>
@@ -97,7 +97,7 @@ require_once __DIR__ . '/../views/partials/header.php';
                                 ?>
                             </h2>
                         </a>
-                        <?php if (!empty($row['excerpt'])): ?>
+                        <?php if (empty($row['excerpt']) === false): ?>
                             <p class="news-excerpt">
                                 <?php
                                     $ex = (string)$row['excerpt'];

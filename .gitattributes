@@ -1,29 +1,31 @@
-# Normalize text files; keep LF in repo
-* text=auto
+# Normalize line endings (avoid CRLF/LF noise)
+* text=auto eol=lf
 
-# Common source/text files forced to LF in repository
-*.php        text eol=lf
-*.js         text eol=lf
-*.css        text eol=lf
-*.md         text eol=lf
-*.txt        text eol=lf
-*.htaccess   text eol=lf
-*.html       text eol=lf
-*.json       text eol=lf
-*.yml        text eol=lf
-*.yaml       text eol=lf
+# Source
+*.php text eol=lf
+*.js  text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.htm text eol=lf
+*.svg text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
 
-# Binary assets (no line ending conversion)
-*.png        binary
-*.jpg        binary
-*.jpeg       binary
-*.webp       binary
-*.gif        binary
-*.svg        binary
-*.ico        binary
-*.zip        binary
-*.pdf        binary
-*.woff       binary
-*.woff2      binary
-*.ttf        binary
-*.eot        binary
+# Scripts
+*.sh  text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary

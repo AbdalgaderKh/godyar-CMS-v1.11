@@ -18,22 +18,22 @@ if (empty($_SESSION['user']['id']) || empty($_SESSION['user']['role']) || $_SESS
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 // CSRF helpers
-if (!function_exists('generate_csrf_token')) {
+if (function_exists('generate_csrf_token') === false) {
     function generate_csrf_token(): string {
-        if (empty($_SESSION['csrf_token'])) {
+        if (empty($_SESSION['csrf_token']) === true) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
         return $_SESSION['csrf_token'];
     }
 }
-if (!function_exists('verify_csrf_token')) {
+if (function_exists('verify_csrf_token') === false) {
     function verify_csrf_token(?string $token): bool {
         return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], (string)$token);
     }
@@ -41,7 +41,7 @@ if (!function_exists('verify_csrf_token')) {
 $csrfToken = generate_csrf_token();
 
 // دالة بسيطة لإنشاء slug
-if (!function_exists('slugify')) {
+if (function_exists('slugify') === false) {
     function slugify(string $str): string {
         $str = trim($str);
         $str = preg_replace('/[^\p{Arabic}a-zA-Z0-9]+/u', '-', $str);
@@ -86,9 +86,9 @@ if ($pdo instanceof PDO) {
             $colsStmt = gdy_db_stmt_columns($pdo, 'news');
             $cols = $colsStmt ? $colsStmt->fetchAll(PDO::FETCH_COLUMN) : [];
 
-            if (in_array('category_id', $cols, true)) {
+            if (in_array('category_id', $cols, true) === true) {
                 $newsJoinMode = 'by_id';
-            } elseif (in_array('category_slug', $cols, true)) {
+            } elseif (in_array('category_slug', $cols, true) === true) {
                 $newsJoinMode = 'by_slug';
             } else {
                 $newsJoinMode = 'none';
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!verify_csrf_token($token)) {
         $errors[] = __('t_5cf4890bdd', 'رمز الحماية (CSRF) غير صالح، الرجاء تحديث الصفحة والمحاولة مرة أخرى.');
-    } elseif (!$pdo instanceof PDO) {
+    } elseif (($pdo instanceof PDO) === false) {
         $errors[] = __('t_ed202270ee', 'قاعدة البيانات غير متاحة حالياً.');
     } else {
         try {

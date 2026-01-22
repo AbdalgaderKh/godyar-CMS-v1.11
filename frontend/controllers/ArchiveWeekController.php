@@ -14,7 +14,7 @@ $end = $dto->format('Y-m-d 23:59:59');
 $page=max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
 
 $items=[]; $total=0;
-if (!($pdo instanceof \PDO)) { http_response_code(500); exit('Database connection not available'); }
+if (($pdo instanceof \PDO) === false) { http_response_code(500); exit('Database connection not available'); }
 
 try {
   $cnt=$pdo->prepare("SELECT COUNT(*) FROM news WHERE status='published' AND publish_at BETWEEN :s AND :e");

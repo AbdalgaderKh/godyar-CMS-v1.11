@@ -3,7 +3,7 @@
 
 $pdo = $pdo ?? gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -340,7 +340,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
         <span class="gdy-sidecard-badge">إعلان</span>
       </div>
       <div class="gdy-sidecard-body">
-        <?php if (empty($sidebarAds)): ?>
+        <?php if (empty($sidebarAds) === true): ?>
           <div class="gdy-mini-card">
             <div class="gdy-mini-rank">
               <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -359,15 +359,15 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
                 <svg class="gdy-icon gdy-mini-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               </div>
               <div class="gdy-mini-content">
-                <?php if (!empty($ad['url'])): ?>
+                <?php if (empty($ad['url']) === false): ?>
                   <a href="<?= h($ad['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none">
                 <?php endif; ?>
 
-                <?php if (!empty($ad['title'])): ?>
+                <?php if (empty($ad['title']) === false): ?>
                   <div class="gdy-mini-title"><?= h($ad['title']) ?></div>
                 <?php endif; ?>
 
-                <?php if (!empty($ad['image'])): ?>
+                <?php if (empty($ad['image']) === false): ?>
                   <div class="gdy-mini-image">
                     <img src="<?= h($ad['image']) ?>" alt="<?= h($ad['title'] ?? '') ?>">
                   </div>
@@ -408,7 +408,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
     <div class="gdy-sidecard-body">
       <!-- شائع -->
       <div class="gdy-tab-panel is-active" role="tabpanel" data-panel="mostread">
-        <?php if (empty($mostReadNews)): ?>
+        <?php if (empty($mostReadNews) === true): ?>
           <div class="gdy-mini-card">
             <div class="gdy-mini-rank">1</div>
             <div class="gdy-mini-content">
@@ -426,7 +426,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
               <div class="gdy-mini-content">
                 <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
                 <div class="gdy-mini-meta">
-                  <?php if (!empty($item['published_at'])): ?>
+                  <?php if (empty($item['published_at']) === false): ?>
                     <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
                   <?php endif; ?>

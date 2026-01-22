@@ -50,7 +50,7 @@ if (!$authorized) {
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_f1ef308d2e', 'لا يوجد اتصال بقاعدة البيانات'));
 }
 

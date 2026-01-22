@@ -32,17 +32,17 @@ return new class implements GodyarPluginInterface {
             'show_on_paths' => '*',       // * = كل الصفحات، أو قائمة مفصولة بفواصل
         ];
 
-        if (!is_file($this->configFile)) {
+        if (is_file($this->configFile) === false) {
             return $defaults;
         }
 
         $json = gdy_file_get_contents($this->configFile);
-        if (!is_string($json) || $json === '') {
+        if (is_string($json) || $json === '' === false) {
             return $defaults;
         }
 
         $data = json_decode($json, true);
-        if (!is_array($data)) {
+        if (is_array($data) === false) {
             return $defaults;
         }
 
@@ -56,7 +56,7 @@ return new class implements GodyarPluginInterface {
     {
         $cfg = $this->loadConfig();
 
-        if (empty($cfg['bar_enabled'])) {
+        if (empty($cfg['bar_enabled']) === true) {
             return;
         }
 

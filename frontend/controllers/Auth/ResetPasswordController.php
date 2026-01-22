@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('انتهت صلاحية الجلسة، يرجى تحديث الصفحة والمحاولة مرة أخرى.');
         }
 
-        if (!$pdo instanceof PDO) {
+        if (($pdo instanceof PDO) === false) {
             throw new Exception('لا يمكن الاتصال بقاعدة البيانات حالياً.');
         }
 

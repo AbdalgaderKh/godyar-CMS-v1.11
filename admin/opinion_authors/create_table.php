@@ -13,7 +13,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // دالة هروب بسيطة
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -86,7 +86,7 @@ if ($pdo instanceof PDO) {
 
   <h1 class="h4 mb-4"><?= h(__('t_58f5f1e43d', 'إنشاء جدول كُتّاب الرأي (opinion_authors)')) ?></h1>
 
-  <?php if ($success): ?>
+  <?php if ($success === true): ?>
     <div class="alert alert-success">
       <?= h(__('t_d4975cae6d', '✅ تم إنشاء جدول')) ?> <strong>opinion_authors</strong> <?= h(__('t_bea7cfeb79', 'بنجاح (أو كان موجودًا بالفعل).')) ?>
     </div>

@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_gdy_comments_submit'
         $flash = ['type'=>'danger','msg'=>'فشل التحقق الأمني. حدّث الصفحة وحاول مجددًا.'];
     } elseif (!$rate_limit('comments_create', 5, 60)) {
         $flash = ['type'=>'danger','msg'=>'محاولات كثيرة. حاول لاحقًا.'];
-    } elseif (!$pdo instanceof PDO) {
+    } elseif (($pdo instanceof PDO) === false) {
         $flash = ['type'=>'danger','msg'=>'قاعدة البيانات غير متاحة.'];
     } else {
         $name  = trim((string)($_POST['author_name'] ?? ''));

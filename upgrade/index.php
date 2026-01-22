@@ -22,7 +22,7 @@ if ($root === false) {
 
 // Refuse to run if already completed
 $lockFile = $root . '/upgrade.lock';
-if (is_file($lockFile)) {
+if (is_file($lockFile) === true) {
     http_response_code(403);
     echo "<h2>✅ تم تنفيذ الترقية مسبقاً</h2><p>إذا تحتاج إعادة، احذف ملف <code>upgrade.lock</code> (بحذر) ثم أعد المحاولة.</p>";
     exit;
@@ -54,7 +54,7 @@ $written = false;
 if ($action === 'apply' && $canApply) {
     // 1) Backup existing DB.php
     $backupDir = $root . '/storage/backups';
-    if (!is_dir($backupDir)) {
+    if (is_dir($backupDir) === false) {
         gdy_mkdir($backupDir, 0755, true);
     }
     $ts = date('Ymd_His');
@@ -82,7 +82,7 @@ if ($action === 'apply' && $canApply) {
         $root . '/db_patch.php',
     ];
     foreach ($toRemove as $f) {
-        if (is_file($f)) {
+        if (is_file($f) === true) {
             if (gdy_unlink($f)) $removed[] = basename($f);
         }
     }
@@ -127,7 +127,7 @@ if ($action === 'apply' && $canApply) {
       <li>وجود ملف الترقيعة: <?= $checks['patch_db'] ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
     </ul>
 
-    <?php if (!empty($warnings)): ?>
+    <?php if (empty($warnings) === false): ?>
       <p class="bad"><strong>ملاحظات:</strong></p>
       <ul>
         <?php foreach ($warnings as $w): ?><li class="bad"><?= h($w) ?></li><?php endforeach; ?>
@@ -148,7 +148,7 @@ if ($action === 'apply' && $canApply) {
         <p class="ok">✅ نسخة احتياطية: <code><?= h(str_replace($root, '', $backedUp)) ?></code></p>
       <?php endif; ?>
 
-      <?php if (!empty($removed)): ?>
+      <?php if (empty($removed) === false): ?>
         <p class="ok">✅ تم حذف ملفات تطوير/تشخيص: <code><?= h(implode(', ', $removed)) ?></code></p>
       <?php endif; ?>
 

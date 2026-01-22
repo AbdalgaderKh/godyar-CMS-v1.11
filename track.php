@@ -7,7 +7,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/bootstrap.php';
 
 // منع الكاش
-if (!headers_sent()) {
+if (headers_sent() === false) {
     header('Content-Type: application/json; charset=utf-8');
     header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
@@ -26,7 +26,7 @@ try {
     $raw = (string)file_get_contents('php://input');
     if ($raw !== '' && str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
         $decoded = json_decode($raw, true);
-        if (is_array($decoded)) {
+        if (is_array($decoded) === true) {
             $payload = $decoded;
         }
     }
@@ -34,7 +34,7 @@ try {
     $payload = [];
 }
 
-if (empty($payload)) {
+if (empty($payload) === true) {
     $payload = $_POST ?? [];
     if (!is_array($payload)) $payload = [];
 }
@@ -45,7 +45,7 @@ $page = preg_replace('/[^a-z0-9_]/i', '', $pageRaw);
 if ($page === '') $page = 'other';
 
 $newsId = null;
-if (isset($payload['news_id'])) {
+if (isset($payload['news_id']) === true) {
     $newsId = (int)$payload['news_id'];
     if ($newsId <= 0) $newsId = null;
 }
@@ -68,7 +68,7 @@ if (isset($_SESSION[$key]) && time() - (int)$_SESSION[$key] < 600) {
 $_SESSION[$key] = time();
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'No DB'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     exit;

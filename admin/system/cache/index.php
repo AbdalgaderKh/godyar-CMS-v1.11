@@ -17,7 +17,7 @@ if (!Auth::isLoggedIn()) {
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -32,7 +32,7 @@ $cacheInfo = [
 ];
 
 // معلومات عن الكاش + اختبار بسيط
-if (class_exists('Cache')) {
+if (class_exists('Cache') === true) {
     // تجربة كتابة/قراءة للتأكد من عمل الكاش
     try {
         Cache::put('_admin_cache_test', 'ok', 60);
@@ -46,7 +46,7 @@ if (class_exists('Cache')) {
 
     // محاولة معرفة المسار من الكلاس
     try {
-        if (method_exists('Cache', 'getPath')) {
+        if (method_exists('Cache', 'getPath') === true) {
             /** @noinspection PhpUndefinedMethodInspection */
             $cacheInfo['path'] = (string) Cache::getPath();
         } else {
@@ -166,7 +166,7 @@ html, body{
 
   <div class="card gdy-glass-card mb-3">
     <div class="card-body">
-      <?php if (!class_exists('Cache')): ?>
+      <?php if (class_exists('Cache') === false): ?>
         <p class="mb-0" style="color:#fca5a5;">
           كلاس <code>Cache</code> غير محمّل. تأكد من وجود الملف <code>includes/Cache.php</code> واستدعائه من <code>bootstrap.php</code>.
         </p>
@@ -193,7 +193,7 @@ html, body{
     </div>
   </div>
 
-  <?php if (class_exists('Cache')): ?>
+  <?php if (class_exists('Cache') === true): ?>
     <form method="post" class="card gdy-glass-card">
     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
 

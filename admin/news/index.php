@@ -24,7 +24,7 @@ $currentPage = 'posts';
 $pageTitle   = __('t_e06a9f8f17', 'إدارة الأخبار');
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database not available');
 }
 

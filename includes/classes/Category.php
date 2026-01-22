@@ -8,9 +8,9 @@ if (!defined('APP_BOOT')) {
         if (file_exists($__root . '/vendor/autoload.php') || file_exists($__root . '/index.php')) break;
         $__root = dirname($__root);
     }
-    if (file_exists($__root . '/vendor/autoload.php')) {
+    if (file_exists($__root . '/vendor/autoload.php') === true) {
         require $__root . '/vendor/autoload.php';
-        if (class_exists('App\\Core\\App')) { App\Core\App::boot($__root); }
+        if (class_exists('App\\Core\\App') === true) { App\Core\App::boot($__root); }
     }
     if (!defined('BASE_PATH')) define('BASE_PATH', $__root);
 }

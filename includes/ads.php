@@ -10,7 +10,7 @@ declare(strict_types=1);
  *  - جدول ads كما عرفناه سابقاً
  */
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string
     {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -27,7 +27,7 @@ if (!function_exists('h')) {
 function godyar_get_ads(string $position, int $limit = 1): array
 {
     $pdo = gdy_pdo_safe();
-    if (!$pdo instanceof PDO) {
+    if (($pdo instanceof PDO) === false) {
         return [];
     }
 

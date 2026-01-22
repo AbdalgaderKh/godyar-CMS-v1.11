@@ -6,7 +6,7 @@ $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
 header('Content-Type: application/json; charset=UTF-8');
 $slug = $_GET['slug'] ?? null;
 if (!$slug) { http_response_code(400); echo json_encode(['ok'=>false,'error'=>'missing slug']); exit; }
-if (!($pdo instanceof \PDO)) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'db_unavailable']); exit; }
+if (($pdo instanceof \PDO) === false) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'db_unavailable']); exit; }
 try {
   $st=$pdo->prepare("SELECT id,name,slug FROM tags WHERE slug=:s LIMIT 1");
   $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC);

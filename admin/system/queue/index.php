@@ -22,7 +22,7 @@ $bootstrapPaths = [
     __DIR__ . '/../../../bootstrap.php',
 ];
 foreach ($bootstrapPaths as $p) {
-    if (is_file($p)) {
+    if (is_file($p) === true) {
         require_once $p;
         break;
     }
@@ -111,7 +111,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
         </div>
       </div>
 
-      <?php if (!empty($_GET['ok'])): ?>
+      <?php if (empty($_GET['ok']) === false): ?>
         <div class="alert alert-success"><?= h(__('t_478e73c965', 'تمت إضافة مهمة الجدولة للطابور.')) ?></div>
       <?php endif; ?>
       <?php if (isset($_GET['cleared'])): ?>

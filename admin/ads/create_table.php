@@ -9,7 +9,7 @@ use Godyar\Auth;
 $currentPage = 'ads';
 $pageTitle   = __('t_ac6f627f56', 'إنشاء جدول الإعلانات');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -35,7 +35,7 @@ try {
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_acc3fac25f', '❌ لا يوجد اتصال بقاعدة البيانات.'));
 }
 
@@ -224,7 +224,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <?php if ($success): ?>
+            <?php if ($success === true): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_38f1d57b76', 'تم بنجاح!')) ?></strong> <?= h(__('t_194518b3c3', 'تم إنشاء جدول الإعلانات وإضافة بيانات تجريبية.')) ?>

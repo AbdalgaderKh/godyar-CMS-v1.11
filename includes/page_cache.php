@@ -8,12 +8,12 @@ class PageCache
 {
     public static function serveIfCached(string $key): bool
     {
-        if (!class_exists('Cache')) {
+        if (class_exists('Cache') === false) {
             return false;
         }
 
         $html = Cache::get('page_' . $key);
-        if (!is_string($html) || $html === '') {
+        if (is_string($html) || $html === '' === false) {
             return false;
         }
 

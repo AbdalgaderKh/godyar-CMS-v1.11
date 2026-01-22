@@ -31,7 +31,7 @@ final class FrontendRenderer
         $footer = $this->rootDir . '/frontend/templates/footer.php';
         $view   = $this->rootDir . '/' . ltrim($viewRelative, '/');
 
-        if (!is_file($view)) {
+        if (is_file($view) === false) {
             http_response_code(500);
             echo 'View not found.';
             exit;
@@ -49,11 +49,11 @@ final class FrontendRenderer
                     ${$k} = $v;
                 }
             }
-            if (is_file($header)) {
+            if (is_file($header) === true) {
                 require $header;
             }
             require $view;
-            if (is_file($footer)) {
+            if (is_file($footer) === true) {
                 require $footer;
             }
         })($header, $view, $footer, $vars);

@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     @media (max-width: 768px) {
@@ -95,7 +95,7 @@ $id   = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
 
 // التحقق من الاتصال
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo 'تعذر الاتصال بقاعدة البيانات.';
     exit;

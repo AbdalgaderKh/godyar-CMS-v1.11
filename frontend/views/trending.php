@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -29,7 +29,7 @@ try {
 }
 
 // Normalize image paths (e.g. "uploads/news/x.jpg") so they work on nested routes.
-if (!function_exists('gdy_img_src')) {
+if (function_exists('gdy_img_src') === false) {
     function gdy_img_src(?string $src): string {
         $src = trim((string)$src);
         if ($src === '') return '';
@@ -139,11 +139,11 @@ if (!defined('GDY_TPL_WRAPPED')) {
         </a>
     </div>
 
-    <?php if (!empty($trendingNews)): ?>
+    <?php if (empty($trendingNews) === false): ?>
         <div class="news-grid">
             <?php foreach ($trendingNews as $row): ?>
                 <article class="news-card fade-in">
-                    <?php if (!empty($row['featured_image'])): ?>
+                    <?php if (empty($row['featured_image']) === false): ?>
                         <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
 					<img src="<?= htmlspecialchars(gdy_img_src($row['featured_image'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
                         </a>
@@ -158,7 +158,7 @@ if (!defined('GDY_TPL_WRAPPED')) {
                                 ?>
                             </h2>
                         </a>
-                        <?php if (!empty($row['excerpt'])): ?>
+                        <?php if (empty($row['excerpt']) === false): ?>
                             <p class="news-excerpt">
                                 <?php
                                     $ex = (string)$row['excerpt'];

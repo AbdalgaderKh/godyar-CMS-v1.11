@@ -9,7 +9,7 @@ use Godyar\Auth;
 
 $entity = strtolower(trim((string)($_GET['entity'] ?? '')));
 $allowed = ['news','users','comments','tags','categories','media'];
-if (!in_array($entity, $allowed, true)) {
+if (in_array($entity, $allowed, true) === false) {
   http_response_code(400);
   echo "Invalid entity";
   exit;

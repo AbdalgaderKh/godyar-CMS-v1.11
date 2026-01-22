@@ -33,7 +33,7 @@ $canonicalUrl = (preg_match('~^https?://~i', $canonicalPath))
     <h1><?= htmlspecialchars($news['title'] ?? '') ?></h1>
 	    <?php $d = $news['published_at'] ?? ($news['publish_at'] ?? ($news['created_at'] ?? 'now')); ?>
 	    <div class="meta"><?= htmlspecialchars(date('Y-m-d', strtotime((string)$d))) ?></div>
-    <?php if (!empty($news['featured_image'])): ?>
+    <?php if (empty($news['featured_image']) === false): ?>
 	      <amp-img src="<?= htmlspecialchars(rtrim($baseUrl, '/') . '/img.php?src=' . rawurlencode((string)$news['featured_image']) . '&w=1200') ?>"
                width="1200" height="675" layout="responsive"
                alt="<?= htmlspecialchars($news['title'] ?? '') ?>"></amp-img>

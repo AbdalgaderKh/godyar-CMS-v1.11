@@ -83,7 +83,7 @@ $newsIdOrSlug = $_GET['id'] ?? null;
 $article      = null;
 $notFound     = false;
 
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo 'تعذر الاتصال بقاعدة البيانات.';
     exit;

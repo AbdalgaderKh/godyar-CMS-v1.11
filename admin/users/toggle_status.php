@@ -8,13 +8,13 @@ require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $authFile = __DIR__ . '/../../includes/auth.php';
-if (is_file($authFile)) {
+if (is_file($authFile) === true) {
     require_once $authFile;
 }
 
 use Godyar\Auth;
 
-if (!headers_sent()) {
+if (headers_sent() === false) {
     header('Content-Type: application/json; charset=utf-8');
 }
 
@@ -45,7 +45,7 @@ if ((int)($currentUser['id'] ?? 0) === $userId) {
     exit;
 }
 
-if (!($pdo instanceof PDO)) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'خطأ في الاتصال بقاعدة البيانات']);
     exit;

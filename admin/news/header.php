@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../_admin_guard.php';
-if (!isset($pageTitle)) {
+if (isset($pageTitle) === false) {
     $pageTitle = __('t_a06ee671f4', 'لوحة التحكم');
 }
 ?>

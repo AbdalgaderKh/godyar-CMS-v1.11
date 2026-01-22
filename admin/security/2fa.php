@@ -14,7 +14,7 @@ if (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
     $pdo = gdy_pdo_safe();
 }
 
-if (!$pdo instanceof PDO || $uid <= 0) {
+if (($pdo instanceof PDO) === false || $uid <= 0) {
     http_response_code(500);
     die('DB not available');
 }

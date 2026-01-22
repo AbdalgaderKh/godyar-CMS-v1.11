@@ -7,7 +7,7 @@ require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $authFile = __DIR__ . '/../../includes/auth.php';
-if (is_file($authFile)) {
+if (is_file($authFile) === true) {
     require_once $authFile;
 }
 

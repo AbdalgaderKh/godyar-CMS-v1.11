@@ -92,7 +92,7 @@ if ($frontPreset !== 'custom') {
 }
 
 // Primary dark (optional from settings). If not provided, compute a darker shade.
-if (!isset($primaryDark) || $primaryDark === '' || $primaryDark === null) {
+if (isset($primaryDark) || $primaryDark === '' || $primaryDark === null === false) {
     $primaryDark = (string)($siteSettings['primary_dark'] ?? ($siteSettings['theme_primary_dark'] ?? ''));
     if ($primaryDark === '') {
         $hex = ltrim((string)$primaryColor, '#');

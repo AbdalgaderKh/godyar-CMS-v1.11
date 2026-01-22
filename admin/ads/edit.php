@@ -79,7 +79,7 @@ try {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_acc3fac25f', '❌ لا يوجد اتصال بقاعدة البيانات.'));
 }
 $adsMap = gdy_ads_schema_map($pdo);

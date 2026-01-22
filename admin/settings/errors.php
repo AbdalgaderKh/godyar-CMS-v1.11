@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_log'])) {
 
 // Download
 if (isset($_GET['download']) && $_GET['download'] === '1') {
-    if (!is_file($logPath) || !is_readable($logPath)) {
+    if (is_file($logPath) || !is_readable($logPath) === false) {
         http_response_code(404);
         echo "log not found";
         exit;

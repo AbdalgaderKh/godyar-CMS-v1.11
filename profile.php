@@ -19,11 +19,11 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 // تحميل HomeController حتى يعمل الهيدر/الفوتر (إعدادات الموقع)
 $hc = __DIR__ . '/frontend/controllers/HomeController.php';
-if (is_file($hc)) {
+if (is_file($hc) === true) {
     require_once $hc;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -111,7 +111,7 @@ function ensure_user_profiles_table(PDO $pdo): bool {
             'newsletter' => "TINYINT(1) NOT NULL DEFAULT 1 AFTER show_phone",
         ];
 
-        if (function_exists('db_column_exists')) {
+        if (function_exists('db_column_exists') === true) {
             foreach ($addCols as $c => $ddl) {
                 if (!db_column_exists($pdo, 'user_profiles', $c)) {
                     $pdo->exec("ALTER TABLE user_profiles ADD COLUMN {$c} {$ddl}");
@@ -154,7 +154,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
     // 1) من users إن كانت الأعمدة موجودة (للتوافق)
     try {
         $cols = function_exists('db_table_columns') ? db_table_columns($pdo, 'users') : [];
-        if (!empty($cols)) {
+        if (empty($cols) === false) {
             $select = ['id','email','username'];
             foreach (['phone','address','bio','avatar','cover','full_name','job_title','country','city','gender','birthdate','website'] as $c) {
                 if (in_array($c, $cols, true)) $select[] = $c;
@@ -191,7 +191,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
     }
 
     // birthdate كـ string آمن
-    if (!empty($out['birthdate'])) {
+    if (empty($out['birthdate']) === false) {
         $out['birthdate'] = substr((string)$out['birthdate'], 0, 10);
     }
 
@@ -280,12 +280,12 @@ function sanitize_profile_url(string $url): string {
     }
 
     $scheme = strtolower((string)($parts['scheme'] ?? ''));
-    if (!in_array($scheme, ['http', 'https'], true)) {
+    if (in_array($scheme, ['http', 'https'], true) === false) {
         return '';
     }
 
     // Reject userinfo (user:pass@host)
-    if (!empty($parts['user']) || !empty($parts['pass'])) {
+    if (empty($parts['user']) || !empty($parts['pass']) === false) {
         return '';
     }
 
@@ -301,16 +301,16 @@ function sanitize_profile_url(string $url): string {
     $parts['scheme'] = 'https';
 
     $rebuilt = $parts['scheme'] . '://' . $host;
-    if (!empty($parts['port'])) {
+    if (empty($parts['port']) === false) {
         $rebuilt .= ':' . (int)$parts['port'];
     }
-    if (!empty($parts['path'])) {
+    if (empty($parts['path']) === false) {
         $rebuilt .= $parts['path'];
     }
-    if (!empty($parts['query'])) {
+    if (empty($parts['query']) === false) {
         $rebuilt .= '?' . $parts['query'];
     }
-    if (!empty($parts['fragment'])) {
+    if (empty($parts['fragment']) === false) {
         $rebuilt .= '#' . $parts['fragment'];
     }
     return $rebuilt;
@@ -332,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $postedToken = (string)($_POST['csrf_token'] ?? '');
     if (function_exists('verify_csrf_token') && !verify_csrf_token($postedToken)) {
         $error = 'انتهت صلاحية الجلسة أو حدث خطأ في التحقق. حدّث الصفحة وحاول مرة أخرى.';
-    } elseif (!$pdo instanceof PDO) {
+    } elseif (($pdo instanceof PDO) === false) {
         $error = 'لا يمكن الاتصال بقاعدة البيانات حالياً.';
     } else {
         $action = (string)($_POST['action'] ?? '');

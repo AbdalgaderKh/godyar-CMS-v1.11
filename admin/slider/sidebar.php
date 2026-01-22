@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../_admin_guard.php';
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string
     {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -129,7 +129,7 @@ $userAvatar = $_SESSION['user']['avatar'] ?? null;
                   </div>
                 </div>
                 <div class="admin-sidebar__link-meta">
-                  <?php if (!empty($notifications['reports'])): ?>
+                  <?php if (empty($notifications['reports']) === false): ?>
                     <span class="admin-sidebar__badge"><?= (int)$notifications['reports'] ?></span>
                   <?php endif; ?>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

@@ -177,13 +177,13 @@ final class PluginManager
         }
 
         $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
-        if (!$pdo instanceof \PDO) {
+        if (($pdo instanceof \PDO) === false) {
             return ['ok' => false, 'message' => 'DB connection not available'];
         }
 
         try {
             $instance = include $main;
-            if (!$instance instanceof GodyarPluginInterface) {
+            if (($instance instanceof GodyarPluginInterface) === false) {
                 return ['ok' => false, 'message' => 'Plugin does not implement interface'];
             }
 
@@ -260,7 +260,7 @@ private function maybeMigratePlugin(string $slug, string $pluginPath, array $met
     }
 
     $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
-    if (!$pdo instanceof \PDO) {
+    if (($pdo instanceof \PDO) === false) {
         return;
     }
 

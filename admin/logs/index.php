@@ -6,7 +6,7 @@ require_once __DIR__ . '/../_admin_guard.php';
 
 require_once __DIR__ . '/../../../includes/bootstrap.php';
 
-if (!class_exists(\Godyar\Auth::class)) {
+if (class_exists(\Godyar\Auth::class) === false) {
     $authFile = __DIR__ . '/../../../includes/auth.php';
     if (is_file($authFile)) require_once $authFile;
 }
@@ -18,14 +18,14 @@ $pageTitle   = 'سجلات النظام';
 
 try {
     $user = null;
-    if (class_exists(Auth::class)) {
+    if (class_exists(Auth::class) === true) {
         if (method_exists(Auth::class, 'isLoggedIn') && !Auth::isLoggedIn()) {
             header('Location: ../../login.php');
             exit;
         }
-        if (method_exists(Auth::class, 'user')) {
+        if (method_exists(Auth::class, 'user') === true) {
             $user = Auth::user();
-        } elseif (!empty($_SESSION['user'])) {
+        } elseif (empty($_SESSION['user']) === false) {
             $user = $_SESSION['user'];
         }
     } else {
@@ -38,7 +38,7 @@ try {
 
     $role = $user['role'] ?? 'user';
     $allowedRoles = ['superadmin','admin'];
-    if (!in_array($role, $allowedRoles, true)) {
+    if (in_array($role, $allowedRoles, true) === false) {
         header('Location: ../../index.php');
         exit;
     }
@@ -48,7 +48,7 @@ try {
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -104,7 +104,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
       </h2>
     </div>
     <div class="card-body p-0">
-      <?php if (empty($rows)): ?>
+      <?php if (empty($rows) === true): ?>
         <p class="text-muted p-3 mb-0">لا توجد سجلات لعرضها حالياً.</p>
       <?php else: ?>
         <div class="table-responsive">

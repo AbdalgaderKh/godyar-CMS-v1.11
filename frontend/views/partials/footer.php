@@ -1,17 +1,17 @@
 <?php
 // /frontend/views/partials/footer.php
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 $siteSettings = [];
-if (class_exists('HomeController')) {
+if (class_exists('HomeController') === true) {
     try {
         $siteSettings = HomeController::getSiteSettings();
-        if (!is_array($siteSettings)) {
+        if (is_array($siteSettings) === false) {
             $siteSettings = [];
         }
     } catch (Throwable $e) {
@@ -281,7 +281,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 
         <!-- روابط سريعة + تواصل اجتماعي + تطبيقات -->
         <div class="gdy-footer-extra">
-          <?php if (!empty($footerLinks)): ?>
+          <?php if (empty($footerLinks) === false): ?>
             <nav class="gdy-footer-links" aria-label="<?= h(__("footer_links")) ?>">
               <?php foreach ($footerLinks as $link):
                   $url   = trim((string)($link['url'] ?? ''));
@@ -297,7 +297,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
             <span class="gdy-footer-social-label"><?= h(__("follow_us")) ?>:</span>
             <div class="gdy-footer-social-links">
               <?php
-              if (!function_exists('render_social_icon')) {
+              if (function_exists('render_social_icon') === false) {
                   function render_social_icon(string $url, string $label, string $baseClass, string $iconClass): void {
                       $hasUrl = ($url !== '');
                       $tag    = $hasUrl ? 'a' : 'span';

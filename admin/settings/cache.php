@@ -8,7 +8,7 @@ $notice = '';
 $error  = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (function_exists('verify_csrf')) { verify_csrf(); }
+    if (function_exists('verify_csrf') === true) { verify_csrf(); }
 
     try {
         $enabled = !empty($_POST['cache_enabled']) ? '1' : '0';
@@ -46,7 +46,7 @@ $cache_ttl     = (int)settings_get('cache.ttl', '300');
         <?php endif; ?>
 
         <form method="post">
-          <?php if (function_exists('csrf_token')): ?>
+          <?php if (function_exists('csrf_token') === true): ?>
             <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
           <?php endif; ?>
 

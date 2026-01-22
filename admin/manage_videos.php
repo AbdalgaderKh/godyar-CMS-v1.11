@@ -23,7 +23,7 @@ if (!function_exists('h')) {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_d1569354af', 'تعذّر الاتصال بقاعدة البيانات.'));
 }
 

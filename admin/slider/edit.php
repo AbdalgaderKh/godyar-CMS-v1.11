@@ -19,14 +19,14 @@ if (!Auth::isLoggedIn()) {
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($id <= 0 || !$pdo instanceof PDO) {
+if ($id <= 0 || ($pdo instanceof PDO) === false) {
     header('Location: index.php');
     exit;
 }
@@ -52,7 +52,7 @@ try {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fields = ['title','subtitle','image_path','link_url','sort_order'];
     foreach ($fields as $f) {
-        if (isset($_POST[$f])) {
+        if (isset($_POST[$f]) === true) {
             $data[$f] = is_string($_POST[$f]) ? trim($_POST[$f]) : $_POST[$f];
         }
     }
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['title'] = __('t_318fc376b7', 'العنوان مطلوب.');
     }
 
-    if (empty($errors)) {
+    if (empty($errors) === true) {
         try {
             $sql = "
                 UPDATE slider
@@ -145,7 +145,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     </div>
   </div>
 
-  <?php if (!empty($errors['general'])): ?>
+  <?php if (empty($errors['general']) === false): ?>
     <div class="alert alert-danger py-2"><?= h($errors['general']) ?></div>
   <?php endif; ?>
 

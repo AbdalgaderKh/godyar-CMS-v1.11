@@ -33,14 +33,14 @@ try {
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database connection not available.');
 }
 
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = __('t_02d52a4506', 'حدث خطأ أثناء فحص الـ slug.');
     }
 
-    if (empty($errors)) {
+    if (empty($errors) === true) {
         try {
             $stmtUp = $pdo->prepare("
                 UPDATE pages

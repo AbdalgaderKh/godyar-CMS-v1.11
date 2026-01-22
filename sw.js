@@ -1,159 +1,127 @@
-/* Godyar Service Worker: offline + push notifications */
-const CACHE_NAME = 'godyar-cache-v16';
+/* Service Worker for Godyar CMS - offline cache + push notifications */
+/* eslint-disable no-restricted-globals */
+
+const CACHE_VERSION = 'v1';
+const CACHE_NAME = `godyar-cache-${CACHE_VERSION}`;
 const OFFLINE_URL = '/offline.html';
+
 const CORE_ASSETS = [
+  '/',
   OFFLINE_URL,
-  '/manifest.webmanifest?lang=ar',
-  '/manifest.webmanifest',
-  '/assets/css/ui-enhancements.css',
-  '/assets/js/ui-enhancements.js',
-  '/assets/js/modules/mobile_tabbar.js',
-  '/assets/js/modules/mobile_search_overlay.js',
-  '/assets/js/news-extras.js',
+  '/assets/vendor/bootstrap/css/bootstrap.rtl.min.css',
+  '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js',
+  '/assets/css/app.css',
+  '/assets/js/app.js',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
 ];
 
+/** Pre-cache core assets */
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll(CORE_ASSETS);
   })());
-/* Push Notifications (payload should include title/body/icon/url) */
-self.addEventListener('push', (event) => {
-  let data = {};
-  try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
-
-self.addEventListener('message', (event) => {
-  if (!event.data) return;
-  if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
+  self.skipWaiting();
 });
 
+/** Cleanup old caches */
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.map(k => (k !== CACHE_NAME) ? caches.delete(k) : Promise.resolve()));
-    self.clients.claim();
+    await Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)));
+    await self.clients.claim();
   })());
 });
 
+/**
+ * Fetch strategy:
+ * - HTML navigations: network-first with offline fallback
+ * - Other GET same-origin: cache-first then network; cache successful responses
+ */
 self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  const url = new URL(req.url);
+  const request = event.request;
 
-  // Only handle same-origin
+  // Only handle GET and same-origin
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Navigation requests → network first, fallback offline
-  if (req.mode === 'navigate') {
+  const accept = request.headers.get('accept') || '';
+  const isNavigation = request.mode === 'navigate' || accept.includes('text/html');
+
+  if (isNavigation) {
     event.respondWith((async () => {
       try {
-        const fresh = await fetch(req);
+        const response = await fetch(request);
         const cache = await caches.open(CACHE_NAME);
-        cache.put(req, fresh.clone()).catch(() => { /* intentionally ignore errors */ });
-        return fresh;
+        cache.put(request, response.clone());
+        return response;
       } catch (e) {
-        const cached = await caches.match(req);
-        return cached || caches.match(OFFLINE_URL);
+        const cache = await caches.open(CACHE_NAME);
+        return (await cache.match(request)) || (await cache.match(OFFLINE_URL));
       }
     })());
     return;
   }
-
-  // API/latest: stale-while-revalidate
-  if (url.pathname === '/api/latest') {
-    event.respondWith((async () => {
-      const cache = await caches.open(CACHE_NAME);
-      const cached = await cache.match(req);
-      const fetchPromise = fetch(req).then((resp) => {
-        cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
-        return resp;
-      }).catch(() => null);
-      return cached || (await fetchPromise) || new Response(JSON.stringify({ok:false, offline:true}), {headers:{'Content-Type':'application/json'}});
-    })());
-    return;
-  }
-
-  // Runtime caching (GET only)
-  if (req.method !== 'GET') return;
 
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(req);
+    const cached = await cache.match(request);
+    if (cached) return cached;
 
-    const isCSSJS = req.destination === 'style' || req.destination === 'script' || /\.(css|js)$/i.test(url.pathname);
-    const isImage = req.destination === 'image' || /\.(png|jpe?g|gif|webp|svg|ico)$/i.test(url.pathname);
-    const isFont  = req.destination === 'font'  || /\.(woff2?|ttf|otf|eot)$/i.test(url.pathname);
-
-    // Images / fonts: cache-first
-    if (isImage || isFont) {
-      if (cached) return cached;
-      try {
-        const resp = await fetch(req);
-        if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
-        return resp;
-      } catch (e) {
-        return cached || new Response('', { status: 504 });
-      }
-    }
-
-    // CSS/JS: stale-while-revalidate
-    if (isCSSJS) {
-      const fetchPromise = fetch(req).then((resp) => {
-        if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
-        return resp;
-      }).catch(() => null);
-
-      return cached || (await fetchPromise) || new Response('', { status: 504 });
-    }
-
-    // Everything else (GET): network-first, fallback cache/offline for documents
     try {
-      const resp = await fetch(req);
-      if (resp?.ok) cache.put(req, resp.clone()).catch(() => { /* intentionally ignore errors */ });
-      return resp;
-    } catch (e) {
-      if (cached) return cached;
-      // If the browser is requesting an HTML page, show offline page
-      const accept = req.headers.get('accept') || '';
-      if (accept.includes('text/html')) {
-        return cache.match(OFFLINE_URL);
+      const response = await fetch(request);
+      if (response && response.ok) {
+        cache.put(request, response.clone());
       }
+      return response;
+    } catch (e) {
       return new Response('', { status: 504 });
     }
   })());
 });
 
 /* Push Notifications (payload should include title/body/icon/url) */
-self.addEventListener('push', function (event) {
+self.addEventListener('push', (event) => {
   let data = {};
-  try { data = event.data ? event.data.json() : {}; } catch (e) { data = {}; }
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+    data = {};
+  }
 
   const title = data.title || 'Godyar News';
   const options = {
     body: data.body || 'خبر جديد',
     icon: data.icon || '/icons/icon-192x192.png',
     badge: data.badge || '/icons/badge-72x72.png',
-    data: {
-      url: data.url || '/',
-    }
+    data: { url: data.url || '/' },
   };
 
-self.addEventListener('notificationclick', function (event) {
-  event.notification.close();
-  const urlToOpen = event.notification?.data?.url || '/';
-  event.waitUntil((async () => {
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-});
-  })());
-});
-      if (client.url === urlToOpen && 'focus' in client) return client.focus();
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const urlToOpen = (event.notification && event.notification.data && event.notification.data.url)
+    ? event.notification.data.url
+    : '/';
+
+  event.waitUntil((async () => {
+    const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+
+    for (const client of allClients) {
+      try {
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      } catch (e) {}
     }
-    if (clients.openWindow) return clients.openWindow(urlToOpen);
-    return null;
-  })());
-});
+
+    if (clients.openWindow) {
+      return clients.openWindow(urlToOpen);
+    }
   })());
 });

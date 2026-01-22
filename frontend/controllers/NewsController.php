@@ -144,7 +144,7 @@ try {
             error_log('[News] categories columns error: ' . $e->getMessage());
         }
 
-        if (!in_array('name', $cols, true)) {
+        if (in_array('name', $cols, true) === false) {
             if (in_array('category_name', $cols, true)) {
                 $catNameColumn = 'category_name';
             } elseif (in_array('cat_name', $cols, true)) {

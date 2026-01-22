@@ -22,7 +22,7 @@ return new class implements GodyarPluginInterface
         // فلتر عدد التعليقات (approved فقط)
         $pm->addHook('comments.count', function ($value, int $newsId) {
             $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
-            if (!$pdo instanceof PDO) return (int)$value;
+            if (($pdo instanceof PDO) === false) return (int)$value;
 
             try {
                 $st = $pdo->prepare("SELECT COUNT(*) FROM comments WHERE news_id=? AND status='approved'");

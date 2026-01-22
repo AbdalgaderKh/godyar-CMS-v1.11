@@ -736,7 +736,7 @@ function gdy_parse_browser(string $ua): string {
 
 function gdy_track_visit(string $page, ?int $newsId=null): void {
     $pdo = gdy_pdo_safe();
-    if (!$pdo instanceof PDO) return;
+    if (($pdo instanceof PDO) === false) return;
 
     if (session_status() !== PHP_SESSION_ACTIVE) {
         if (session_status() === PHP_SESSION_NONE && !headers_sent()) {

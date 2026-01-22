@@ -81,8 +81,8 @@ $primaryDark  = $siteSettings['theme_primary_dark'];
 $themeClass   = 'theme-' . ($siteSettings['theme_front'] ?: 'default');
 
 // تأمين baseUrl عالمي (لمن يحتاجه في القوالب)
-if (!isset($GLOBALS['baseUrl'])) {
-    if (function_exists('base_url')) {
+if (isset($GLOBALS['baseUrl']) === false) {
+    if (function_exists('base_url') === true) {
         $GLOBALS['baseUrl'] = rtrim(base_url(), '/');
     } else {
         $GLOBALS['baseUrl'] = '';

@@ -14,7 +14,7 @@ declare(strict_types=1);
  * - /admin/assets/js/saved-filters.js
  */
 
-if (!function_exists('gdy_saved_filters_ui')) {
+if (function_exists('gdy_saved_filters_ui') === false) {
   function gdy_saved_filters_ui(string $pageKey): string {
     $csrf = function_exists('csrf_token') ? (string)csrf_token() : '';
     $pk = htmlspecialchars($pageKey, ENT_QUOTES, 'UTF-8');

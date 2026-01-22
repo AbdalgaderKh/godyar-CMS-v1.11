@@ -12,7 +12,7 @@ $uid = (int)($_SESSION['user']['id'] ?? 0);
 $pdo = null;
 if (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
     $pdo = \Godyar\DB::pdo();
-} elseif (function_exists('gdy_pdo_safe')) {
+} elseif (function_exists('gdy_pdo_safe') === true) {
     $pdo = gdy_pdo_safe();
 }
 
@@ -25,7 +25,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $pdo->prepare("UPDATE users SET session_version = COALESCE(session_version,0) + 1 WHERE id = ? LIMIT 1")
                 ->execute([$uid]);
 
-            if (function_exists('admin_audit_db')) {
+            if (function_exists('admin_audit_db') === true) {
                 admin_audit_db('logout_all_devices');
             }
 

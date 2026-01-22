@@ -19,7 +19,7 @@ if (!Auth::isLoggedIn()) {
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }

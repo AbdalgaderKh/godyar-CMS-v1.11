@@ -38,7 +38,7 @@ $pdo = (isset($pdo) && $pdo instanceof PDO) ? $pdo : (function_exists('gdy_pdo_s
 $rolesError = null;
 $roles = [];
 
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     $rolesError = __('db_error', 'تعذّر الاتصال بقاعدة البيانات.');
 } else {
     try {

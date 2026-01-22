@@ -31,14 +31,14 @@ try {
     exit;
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database connection not available.');
 }
 
@@ -47,7 +47,7 @@ $statusFilter = isset($_GET['status']) ? (string)$_GET['status'] : 'all';
 $search       = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
 
 $allowedStatuses = ['all', 'published', 'draft'];
-if (!in_array($statusFilter, $allowedStatuses, true)) {
+if (in_array($statusFilter, $allowedStatuses, true) === false) {
     $statusFilter = 'all';
 }
 

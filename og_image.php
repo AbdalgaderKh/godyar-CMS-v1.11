@@ -6,7 +6,7 @@ declare(strict_types=1);
  * URL: /og_image.php?type=category|tag|news&title=...&subtitle=...
  */
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
 }
 
@@ -32,7 +32,7 @@ try {
     $boot = __DIR__ . '/includes/bootstrap.php';
     if (is_file($boot)) require_once $boot;
 
-    if (function_exists('get_site_settings')) {
+    if (function_exists('get_site_settings') === true) {
         $s = get_site_settings();
         if (!empty($s['site_name'])) $siteName = (string)$s['site_name'];
         if (!empty($s['theme_primary'])) $primary = (string)$s['theme_primary'];

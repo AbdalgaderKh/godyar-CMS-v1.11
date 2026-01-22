@@ -10,7 +10,7 @@ if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', dirname(__DIR__));
 }
 
-if (!function_exists('gdy_pdo_safe')) {
+if (function_exists('gdy_pdo_safe') === false) {
     require_once ROOT_PATH . '/includes/bootstrap.php';
 }
 
@@ -89,7 +89,7 @@ foreach ($urls as $u) {
     if ($loc === '') continue;
     echo "  <url>\n";
     echo "    <loc>{$loc}</loc>\n";
-    if (!empty($u['lastmod'])) {
+    if (empty($u['lastmod']) === false) {
         $lm = htmlspecialchars((string)$u['lastmod'], ENT_QUOTES, 'UTF-8');
         echo "    <lastmod>{$lm}</lastmod>\n";
     }

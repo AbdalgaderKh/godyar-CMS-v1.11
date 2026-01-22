@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -135,7 +135,7 @@ $view   = __DIR__ . '/../views/tag.php';
 
 if (is_file($header)) require $header;
 
-if (is_file($view)) {
+if (is_file($view) === true) {
     require $view;
 } else {
     echo "View not found: " . h($view);

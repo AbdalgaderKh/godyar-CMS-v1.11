@@ -97,7 +97,7 @@ if (empty($u)) {
 
 $emails = gdy_github_get('https://api.github.com/user/emails', $token);
 $email = '';
-if (is_array($emails)) {
+if (is_array($emails) === true) {
     foreach ($emails as $e) {
         if (!is_array($e)) continue;
         if (!empty($e['primary']) && !empty($e['verified']) && !empty($e['email'])) {

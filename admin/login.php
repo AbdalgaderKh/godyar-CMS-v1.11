@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception(__('t_f23e5752ec', 'انتهت صلاحية الجلسة، يرجى تحديث الصفحة والمحاولة من جديد.'));
         }
 
-        if (!$pdo instanceof PDO) {
+        if (($pdo instanceof PDO) === false) {
             throw new Exception(__('t_f761e3cdf2', 'لا يمكن الاتصال بقاعدة البيانات حالياً.'));
         }
 
@@ -86,7 +86,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
     throw new Exception(__('t_81ba8a03a2', 'بيانات الدخول غير صحيحة أو لا تملك صلاحية الدخول للوحة التحكم.'));
 }
 
-        if (!empty($user['status']) && $user['status'] !== 'active') {
+        if (empty($user['status']) && $user['status'] !== 'active' === false) {
             throw new Exception(__('t_aadb50b501', 'حسابك غير مفعّل، الرجاء التواصل مع الإدارة.'));
         }
 
@@ -113,7 +113,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
             }
         }
 
-        if (!$ok) {
+        if ($ok === false) {
             throw new Exception(__('t_a10f0c96ca', 'بيانات الدخول غير صحيحة.'));
         }
 

@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 
 /** @var \PDO|null $pdo */
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
-if (!($pdo instanceof \PDO)) {
+if (($pdo instanceof \PDO) === false) {
     http_response_code(500);
     exit('Database connection not available');
 }

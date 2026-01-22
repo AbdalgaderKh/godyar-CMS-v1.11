@@ -29,7 +29,7 @@ $pageTitle   = __('t_9b72a3d4a9', 'مراجعة الأخبار');
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     exit('Database not available');
 }
@@ -43,7 +43,7 @@ try {
 }
 
 // Helpers
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 
@@ -53,10 +53,10 @@ $flashError   = '';
 $csrfToken = function_exists('generate_csrf_token') ? (string)generate_csrf_token() : '';
 
 $checkCsrf = function (string $token): bool {
-    if (function_exists('verify_csrf_token')) {
+    if (function_exists('verify_csrf_token') === true) {
         return (bool)verify_csrf_token($token);
     }
-    if (function_exists('validate_csrf_token')) {
+    if (function_exists('validate_csrf_token') === true) {
         return (bool)validate_csrf_token($token);
     }
     return true; // fallback
@@ -97,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $note = trim((string)($_POST['note'] ?? ''));
 
         $allowedActions = ['approve','publish','draft','archive'];
-        if (!in_array($action, $allowedActions, true)) {
+        if (in_array($action, $allowedActions, true) === false) {
             $flashError = __('t_39b2b1f2a8', 'إجراء غير صالح.');
-        } elseif (empty($ids)) {
+        } elseif (empty($ids) === true) {
             $flashError = __('t_4b7d2f5f3c', 'اختر خبرًا واحدًا على الأقل.');
         } else {
             $okCount = 0;
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // capture revision قبل أي تغيير
                     try {
                         $tagStr = '';
-                        if (function_exists('gdy_get_news_tags_string')) {
+                        if (function_exists('gdy_get_news_tags_string') === true) {
                             $tagStr = (string)gdy_get_news_tags_string($pdo, (int)$nid);
                         }
                         gdy_capture_news_revision($pdo, (int)$nid, $userId > 0 ? $userId : null, $action, $row, $tagStr);
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sets = [];
                     $params = [':id' => $nid];
 
-                    if (isset($newsCols['status'])) {
+                    if (isset($newsCols['status']) === true) {
                         $sets[] = "status = :status";
                         $params[':status'] = $newStatus;
                     }
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($action === 'publish') {
                         if ($hasPublishedAt) {
                             $sets[] = "published_at = NOW()";
-                        } elseif (isset($newsCols['publish_at'])) {
+                        } elseif (isset($newsCols['publish_at']) === true) {
                             $sets[] = "publish_at = NOW()";
                         }
                     }

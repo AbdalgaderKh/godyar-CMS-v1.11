@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // No subscribers yet: not an error, show a helpful notice.
             $sendRes['ok'] = true;
             $notice = __('t_push_no_subs', 'لا يوجد مشتركين للإشعارات حتى الآن. افتح الموقع من الجوال وفعّل الإشعارات أولاً ثم أعد الإرسال.') . ' 📲';
-        } elseif (!empty($sendRes['ok'])) {
+        } elseif (empty($sendRes['ok']) === false) {
             $notice = __('t_push_sent', 'تم إرسال الإشعار. ') . '✅';
         } else {
             $errs = implode(' | ', array_slice((array)($sendRes['errors'] ?? []), 0, 3));

@@ -78,7 +78,7 @@ try {
 $passwordCol = null;
 if (!empty($userCols)) {
     foreach (['password_hash','pass_hash','password','passwd','password_digest'] as $c) {
-        if (in_array($c, $userCols, true)) { $passwordCol = $c; break; }
+        if (in_array($c, $userCols, true) === true) { $passwordCol = $c; break; }
     }
 }
 

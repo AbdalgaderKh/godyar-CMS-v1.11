@@ -31,7 +31,7 @@ $breadcrumbs = [
 ];
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database not available');
 }
 

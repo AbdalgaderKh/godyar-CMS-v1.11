@@ -14,7 +14,7 @@ $newsUrl = $newsUrl ?? function(array $row): string {
 };
 
 // Normalize image paths so they work on nested routes.
-if (!function_exists('gdy_img_src')) {
+if (function_exists('gdy_img_src') === false) {
     function gdy_img_src(?string $src): string {
         $src = trim((string)$src);
         if ($src === '') return '';

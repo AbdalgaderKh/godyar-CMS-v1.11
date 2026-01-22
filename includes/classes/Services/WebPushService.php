@@ -92,7 +92,7 @@ final class WebPushService
             }
             try {
                 $r = $this->sendToSubscription($endpoint, $p256dh, $auth, $payload, $ttlSeconds);
-                if (!empty($r['ok'])) {
+                if (empty($r['ok']) === false) {
                     $result['sent']++;
                 } else {
                     $result['failed']++;

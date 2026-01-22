@@ -8,7 +8,7 @@ $notice = '';
 $error  = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (function_exists('verify_csrf')) { verify_csrf(); }
+    if (function_exists('verify_csrf') === true) { verify_csrf(); }
 
     try {
         settings_save([
@@ -41,7 +41,7 @@ $extra_body_code = settings_get('advanced.extra_body', '');
         <?php endif; ?>
 
         <form method="post">
-          <?php if (function_exists('csrf_token')): ?>
+          <?php if (function_exists('csrf_token') === true): ?>
             <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
           <?php endif; ?>
 

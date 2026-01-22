@@ -9,7 +9,7 @@ use Godyar\Auth;
 $currentPage = 'team';
 $pageTitle   = __('t_cd54bc26ba', 'فريق العمل');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -36,7 +36,7 @@ try {
 }
 
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die('Database connection not available.');
 }
 
@@ -81,7 +81,7 @@ if (isset($_GET['delete']) && ctype_digit((string)$_GET['delete'])) {
 
 // جلب الفريق مع دعم التصفية والبحث
 $filterStatus = $_GET['status'] ?? 'all';
-if (!in_array($filterStatus, ['all','active','hidden'], true)) {
+if (in_array($filterStatus, ['all','active','hidden'], true) === false) {
     $filterStatus = 'all';
 }
 $search = trim((string)($_GET['q'] ?? ''));
@@ -222,11 +222,11 @@ require_once __DIR__ . '/../layout/app_start.php';
 
 <!-- content starts -->
 
-  <?php if (!empty($_GET['saved'])): ?>
+  <?php if (empty($_GET['saved']) === false): ?>
     <div class="alert alert-success py-2"><?= h(__('t_b9b21964e8', 'تم حفظ البيانات بنجاح.')) ?></div>
-  <?php elseif (!empty($_GET['deleted'])): ?>
+  <?php elseif (empty($_GET['deleted']) === false): ?>
     <div class="alert alert-success py-2"><?= h(__('t_d05889192d', 'تم حذف العضو بنجاح.')) ?></div>
-  <?php elseif (!empty($_GET['error'])): ?>
+  <?php elseif (empty($_GET['error']) === false): ?>
     <div class="alert alert-danger py-2"><?= h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')) ?></div>
   <?php endif; ?>
 

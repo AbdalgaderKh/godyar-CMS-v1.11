@@ -14,7 +14,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 $container = $GLOBALS['container'] ?? null;
-if (!$container instanceof \Godyar\Container) {
+if (($container instanceof \Godyar\Container) === false) {
     try { $container = new \Godyar\Container(\Godyar\DB::pdo()); } catch (\Throwable $e) { $container = null; }
 }
 

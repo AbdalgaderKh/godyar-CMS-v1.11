@@ -20,7 +20,7 @@ function h($v): string {
 try {
     /** @var PDO $pdo */
     $pdo = $GLOBALS['pdo'] ?? null;
-    if (!$pdo instanceof PDO) {
+    if (($pdo instanceof PDO) === false) {
         throw new RuntimeException('DB not ready');
     }
 

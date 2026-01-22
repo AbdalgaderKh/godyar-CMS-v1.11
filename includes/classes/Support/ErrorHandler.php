@@ -8,7 +8,7 @@ class ErrorHandler
 {
     public static function register(bool $debug = false): void
     {
-        if ($debug) {
+        if ($debug === true) {
             // Show all but deprecation notices in production-like env
             error_reporting(E_ALL & ~E_DEPRECATED);
             ini_set('display_errors', '1');
@@ -35,7 +35,7 @@ class ErrorHandler
     public static function handleError(int $errno, string $errstr, string $errfile, int $errline): bool
     {
         // Respect error_reporting level
-        if (!(error_reporting() & $errno)) {
+        if ((error_reporting() & $errno) === false) {
             return false;
         }
         error_log("PHP Error [$errno]: $errstr in $errfile:$errline");

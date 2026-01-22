@@ -107,7 +107,7 @@ if (!function_exists('gdy_finfo_file')) {
     }
 }
 
-if (!function_exists('gdy_finfo_close')) {
+if (function_exists('gdy_finfo_close') === false) {
     function gdy_finfo_close($finfo): bool {
         return (bool)gdy_suppress_errors(static function () use ($finfo) {
             return finfo_close($finfo);
@@ -202,7 +202,7 @@ if (!function_exists('gdy_getimagesize')) {
     }
 }
 
-if (!function_exists('gdy_move_uploaded_file')) {
+if (function_exists('gdy_move_uploaded_file') === false) {
     function gdy_move_uploaded_file(string $from, string $to): bool {
         return (bool)gdy_suppress_errors(static function () use ($from, $to) {
             return move_uploaded_file($from, $to);

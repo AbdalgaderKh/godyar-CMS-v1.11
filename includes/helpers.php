@@ -4,14 +4,14 @@
 
 declare(strict_types=1);
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
 // polyfill بسيط في حال السيرفر لا يدعم str_starts_with (احتياطاً)
-if (!function_exists('str_starts_with')) {
+if (function_exists('str_starts_with') === false) {
     function str_starts_with(string $haystack, string $needle): bool
     {
         return $needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
@@ -20,7 +20,7 @@ if (!function_exists('str_starts_with')) {
 
 // محاولة تحميل إعدادات الذكاء الاصطناعي لو الملف موجود
 $gdyAiConfigFile = __DIR__ . '/ai_config.php';
-if (is_file($gdyAiConfigFile)) {
+if (is_file($gdyAiConfigFile) === true) {
     require_once $gdyAiConfigFile;
 }
 
@@ -30,7 +30,7 @@ if (is_file($gdyAiConfigFile)) {
  * - يضيف span مع data-definition ليظهر التلميح في الواجهة
  * هذا هو الوضع اليدوي القديم (يمكن الإبقاء عليه أو تجاهله إذا اعتمدت على الذكاء الاصطناعي فقط).
  */
-if (!function_exists('gdy_apply_glossary')) {
+if (function_exists('gdy_apply_glossary') === false) {
     function gdy_apply_glossary(PDO $pdo, string $html): string
     {
         static $cache = null;
@@ -84,7 +84,7 @@ if (!function_exists('gdy_apply_glossary')) {
  * استدعاء ChatGPT لاستخراج المصطلحات + تعريفاتها من نص عربي
  * يعمل تلقائياً بدون أي تدخل يدوي من لوحة التحكم
  */
-if (!function_exists('gdy_ai_glossary_suggest_terms')) {
+if (function_exists('gdy_ai_glossary_suggest_terms') === false) {
     function gdy_ai_glossary_suggest_terms(string $plainText): array
     {
         $plainText = trim($plainText);
@@ -174,7 +174,7 @@ if (!function_exists('gdy_ai_glossary_suggest_terms')) {
         }
 
         $terms = json_decode($content, true);
-        if (!is_array($terms)) {
+        if (is_array($terms) === false) {
             error_log('[gdy_ai_glossary] JSON decode failed: ' . $content);
             return [];
         }
@@ -202,7 +202,7 @@ if (!function_exists('gdy_ai_glossary_suggest_terms')) {
  * يلفّ المصطلحات داخل HTML المقال باستخدام النتائج القادمة من ChatGPT
  * بدون أي تدخل يدوي
  */
-if (!function_exists('gdy_ai_glossary_annotate')) {
+if (function_exists('gdy_ai_glossary_annotate') === false) {
     function gdy_ai_glossary_annotate(string $html): string
     {
         $html  = (string)$html;

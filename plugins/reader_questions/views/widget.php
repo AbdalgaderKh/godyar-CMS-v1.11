@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gdy_questions_action'
         if (function_exists('gody_rate_limit') && !gody_rate_limit('questions_create:' . $newsId . ':' . $ip, 5, 60)) {
             $flash = 'تم تجاوز حد المحاولات. حاول بعد دقيقة.';
             $flashType = 'danger';
-        } elseif (!$pdo instanceof PDO) {
+        } elseif (($pdo instanceof PDO) === false) {
             $flash = 'تعذّر الاتصال بقاعدة البيانات.';
             $flashType = 'danger';
         } else {
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gdy_questions_action'
         if (function_exists('gody_rate_limit') && !gody_rate_limit('questions_update:' . $newsId . ':' . $ip, 5, 60)) {
             $flash = 'تم تجاوز حد المحاولات. حاول بعد دقيقة.';
             $flashType = 'danger';
-        } elseif (!$pdo instanceof PDO) {
+        } elseif (($pdo instanceof PDO) === false) {
             $flash = 'تعذّر الاتصال بقاعدة البيانات.';
             $flashType = 'danger';
         } else {

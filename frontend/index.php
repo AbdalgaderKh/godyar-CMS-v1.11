@@ -10,12 +10,12 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 // نتأكد من تحميل البوتستراب
 if (!defined('ROOT_PATH')) {
     $bootstrapPath = __DIR__ . '/../includes/bootstrap.php';
-    if (is_file($bootstrapPath)) {
+    if (is_file($bootstrapPath) === true) {
         require_once $bootstrapPath;
     }
 }
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string
     {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -26,7 +26,7 @@ if (!function_exists('h')) {
 $siteName    = 'Godyar News';
 $siteTagline = 'منصة إخبارية متكاملة';
 
-if (function_exists('settings_get')) {
+if (function_exists('settings_get') === true) {
     $siteName    = settings_get('site.name', $siteName);
     $siteTagline = settings_get('site.desc', $siteTagline);
 } elseif (isset($GLOBALS['site_settings']) && is_array($GLOBALS['site_settings'])) {
@@ -43,7 +43,7 @@ $footerFile = __DIR__ . '/views/partials/footer.php';
 $homeFile   = __DIR__ . '/home.php';
 
 // =================== الهيدر ===================
-if (is_file($headerFile)) {
+if (is_file($headerFile) === true) {
     // الهيدر يستخدم $siteName و $siteTagline و $baseUrl إن وُجدت
     require $headerFile;
 } else {
@@ -63,7 +63,7 @@ if (is_file($headerFile)) {
 }
 
 // =================== محتوى الصفحة الرئيسية ===================
-if (is_file($homeFile)) {
+if (is_file($homeFile) === true) {
     require $homeFile;   // هذا الملف يطبع <div class="row ..."> فقط (بدون <html> إلخ)
 } else {
     ?>
@@ -74,7 +74,7 @@ if (is_file($homeFile)) {
 }
 
 // =================== الفوتر ===================
-if (is_file($footerFile)) {
+if (is_file($footerFile) === true) {
     require $footerFile;
 } else {
     // إغلاق العلامات في حال الهيدر البديل

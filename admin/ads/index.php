@@ -9,7 +9,7 @@ use Godyar\Auth;
 $currentPage = 'ads';
 $pageTitle   = __('t_3d3316a8ed', 'إدارة الإعلانات');
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
@@ -36,7 +36,7 @@ try {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     die(__('t_acc3fac25f', '❌ لا يوجد اتصال بقاعدة البيانات.'));
 }
 
@@ -80,7 +80,7 @@ if ($pdo instanceof PDO) {
 // معالجة POST (إعداد البنر + حذف + تفعيل/تعطيل)
 // ========================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (function_exists('verify_csrf')) {
+    if (function_exists('verify_csrf') === true) {
         try {
             verify_csrf();
         } catch (Throwable $e) {

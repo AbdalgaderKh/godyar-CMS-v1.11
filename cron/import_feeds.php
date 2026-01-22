@@ -11,7 +11,7 @@ use Godyar\Services\FeedImportService;
 
 /** @var PDO|null $pdo */
 $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : ($GLOBALS['pdo'] ?? null);
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     fwrite(STDERR, "DB not available\n");
     exit(1);
 }

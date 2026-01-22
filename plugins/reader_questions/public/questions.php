@@ -88,7 +88,7 @@ function json_error(string $code, int $http = 400): void {
 }
 
 $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     json_error('db_unavailable', 500);
 }
 ensure_reader_questions_tables($pdo);

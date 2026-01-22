@@ -35,7 +35,7 @@ try {
 
 // 3) تهيئة PDO
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     header('Location: index.php?dberror=1');
     exit;
 }

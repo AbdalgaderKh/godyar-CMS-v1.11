@@ -8,13 +8,13 @@ $notice = '';
 $error  = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (function_exists('verify_csrf')) { verify_csrf(); }
+    if (function_exists('verify_csrf') === true) { verify_csrf(); }
 
     try {
         
     // رفع شعار الموقع (اختياري)
     $logoUrl = settings_get('site.logo', '');
-    if (isset($_POST['remove_logo'])) {
+    if (isset($_POST['remove_logo']) === true) {
         $logoUrl = '';
     }
     if (isset($_FILES['site_logo']) && is_array($_FILES['site_logo']) && (int)($_FILES['site_logo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('حجم الشعار أكبر من 2MB.');
             }
             $mime = '';
-            if (function_exists('finfo_open')) {
+            if (function_exists('finfo_open') === true) {
                 $fi = gdy_finfo_open(FILEINFO_MIME_TYPE);
                 if ($fi) {
                     $mime = (string)gdy_finfo_file($fi, $tmp);
@@ -34,12 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $allowed = ['image/png'=>'png','image/jpeg'=>'jpg','image/webp'=>'webp','image/gif'=>'gif','image/svg+xml'=>'svg'];
-            if (!isset($allowed[$mime])) {
+            if (isset($allowed[$mime]) === false) {
                 throw new RuntimeException('صيغة الشعار غير مدعومة.');
             }
             $root = defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/\\') : rtrim(dirname(__DIR__, 2), '/\\');
             $dir = $root . '/assets/uploads/site/';
-            if (!is_dir($dir)) { gdy_mkdir($dir, 0755, true); }
+            if (is_dir($dir) === false) { gdy_mkdir($dir, 0755, true); }
             $ext = $allowed[$mime];
             $fn = 'logo_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
             $dest = $dir . $fn;
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // رفع Favicon (اختياري)
     $faviconUrl = settings_get('site.favicon', '');
-    if (isset($_POST['remove_favicon'])) {
+    if (isset($_POST['remove_favicon']) === true) {
         $faviconUrl = '';
     }
     if (isset($_FILES['site_favicon']) && is_array($_FILES['site_favicon']) && (int)($_FILES['site_favicon']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {

@@ -22,7 +22,7 @@ return new class implements GodyarPluginInterface
         // فلتر عدد الأسئلة المنشورة (approved/answered)
         $pm->addHook('questions.count', function ($value, int $newsId) {
             $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
-            if (!$pdo instanceof PDO) return (int)$value;
+            if (($pdo instanceof PDO) === false) return (int)$value;
 
             try {
                 $st = $pdo->prepare("SELECT COUNT(*) FROM reader_questions WHERE news_id=? AND status IN ('approved','answered')");

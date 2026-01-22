@@ -331,7 +331,7 @@ if (!function_exists('gody_pdo')) {
     function gody_pdo(): ?PDO
     {
         static $pdo = null;
-        if (!$pdo instanceof PDO) {
+        if (($pdo instanceof PDO) === false) {
             $pdo = gody_create_pdo_connection();
         }
         return $pdo;

@@ -15,7 +15,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
-if (!$pdo instanceof PDO) {
+if (($pdo instanceof PDO) === false) {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'db_unavailable']);
     exit;

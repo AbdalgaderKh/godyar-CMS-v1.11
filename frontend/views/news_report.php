@@ -70,7 +70,7 @@ if (!function_exists('gdy_image_url')) {
             $p = parse_url($url, PHP_URL_PATH);
             if (is_string($p) && $p !== '' && str_starts_with($p, '/uploads/')) {
                 $local = rtrim((string)ROOT_PATH, '/ ') . $p;
-                if (!is_file($local)) {
+                if (is_file($local) === false) {
                     return null;
                 }
             }

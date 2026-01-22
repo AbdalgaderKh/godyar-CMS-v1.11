@@ -24,10 +24,10 @@ if ($root === false) {
 $bootstrap = $root . '/includes/bootstrap.php';
 $authFile  = $root . '/includes/auth.php';
 
-if (is_file($bootstrap)) {
+if (is_file($bootstrap) === true) {
     require_once $bootstrap;
 }
-if (is_file($authFile)) {
+if (is_file($authFile) === true) {
     require_once $authFile;
 }
 
@@ -76,7 +76,7 @@ function godyar_ai_call(string $systemPrompt, string $userPrompt, int $maxTokens
         return null;
     }
 
-    if (!function_exists('curl_init')) {
+    if (function_exists('curl_init') === false) {
         return null;
     }
 

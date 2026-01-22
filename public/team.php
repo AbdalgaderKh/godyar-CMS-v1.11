@@ -6,7 +6,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 
@@ -39,7 +39,7 @@ if ($pdo instanceof PDO) {
 <div class="container py-4">
   <h1 class="h3 mb-4">فريق العمل</h1>
   <div class="row g-3">
-    <?php if (empty($members)): ?>
+    <?php if (empty($members) === true): ?>
       <p class="text-muted">لم يتم إضافة أعضاء فريق العمل بعد.</p>
     <?php else: ?>
       <?php foreach ($members as $m): ?>
@@ -49,7 +49,7 @@ if ($pdo instanceof PDO) {
               <div class="mb-2">
                 <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
                      style="width:72px;height:72px;background:#e5e7eb;overflow:hidden;">
-                  <?php if (!empty($m['photo'])): ?>
+                  <?php if (empty($m['photo']) === false): ?>
                     <img src="<?= h($m['photo']) ?>" alt="<?= h($m['name']) ?>"
                          style="width:100%;height:100%;object-fit:cover;">
                   <?php else: ?>
@@ -59,21 +59,21 @@ if ($pdo instanceof PDO) {
               </div>
               <h2 class="h6 mb-1"><?= h($m['name']) ?></h2>
               <div class="small text-muted mb-2"><?= h($m['position']) ?></div>
-              <?php if (!empty($m['bio'])): ?>
+              <?php if (empty($m['bio']) === false): ?>
                 <p class="small"><?= nl2br(h($m['bio'])) ?></p>
               <?php endif; ?>
             </div>
             <div class="card-footer small">
-              <?php if (!empty($m['social_twitter'])): ?>
+              <?php if (empty($m['social_twitter']) === false): ?>
                 <a href="<?= h($m['social_twitter']) ?>" target="_blank" class="me-1">X</a>
               <?php endif; ?>
-              <?php if (!empty($m['social_facebook'])): ?>
+              <?php if (empty($m['social_facebook']) === false): ?>
                 <a href="<?= h($m['social_facebook']) ?>" target="_blank" class="me-1">F</a>
               <?php endif; ?>
-              <?php if (!empty($m['social_instagram'])): ?>
+              <?php if (empty($m['social_instagram']) === false): ?>
                 <a href="<?= h($m['social_instagram']) ?>" target="_blank" class="me-1">IG</a>
               <?php endif; ?>
-              <?php if (!empty($m['social_linkedin'])): ?>
+              <?php if (empty($m['social_linkedin']) === false): ?>
                 <a href="<?= h($m['social_linkedin']) ?>" target="_blank" class="me-1">IN</a>
               <?php endif; ?>
             </div>

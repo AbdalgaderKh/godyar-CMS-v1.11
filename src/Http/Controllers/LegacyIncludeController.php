@@ -26,7 +26,7 @@ final class LegacyIncludeController
         }
 
         $file = $this->baseDir . '/' . ltrim($relativeFile, '/');
-        if (!is_file($file)) {
+        if (is_file($file) === false) {
             http_response_code(500);
             echo 'Controller not found.';
             exit;

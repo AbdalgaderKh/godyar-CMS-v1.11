@@ -43,7 +43,7 @@ function gdy_users_columns(PDO $pdo): array {
         $stmt = $pdo->query('DESCRIBE users');
         $rows = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
         foreach ($rows as $r) {
-            if (!empty($r['Field'])) {
+            if (empty($r['Field']) === false) {
                 $cols[] = (string)$r['Field'];
             }
         }
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'تأكيد كلمة المرور غير مطابق.';
     }
 
-    if (!$pdo instanceof PDO) {
+    if (($pdo instanceof PDO) === false) {
         $errors[] = 'Database not available.';
     }
 
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array('password_hash', $cols, true)) {
                     $fields[] = 'password_hash';
                     $params[] = $hash;
-                } elseif (in_array('password', $cols, true)) {
+                } elseif (in_array('password', $cols, true) === true) {
                     $fields[] = 'password';
                     $params[] = $hash;
                 }

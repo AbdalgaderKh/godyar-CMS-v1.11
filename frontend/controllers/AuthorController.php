@@ -6,8 +6,8 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 // Load settings (class or PDO fallback)
 $settings = [];
 try {
-  if (class_exists('Settings')) { $settings = Settings::getAll(); }
-  elseif (isset($pdo)) {
+  if (class_exists('Settings') === true) { $settings = Settings::getAll(); }
+  elseif (isset($pdo) === true) {
     $st = $pdo->query("SELECT setting_key,`value` FROM settings");
     foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $k = (string)($row['setting_key'] ?? '');

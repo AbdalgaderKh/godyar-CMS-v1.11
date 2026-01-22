@@ -4,13 +4,13 @@ declare(strict_types=1);
 // /godyar/frontend/views/archive.php
 // محتوى صفحة الأرشيف (الهيدر/الفوتر يتم تضمينهما عبر FrontendRenderer)
 
-if (!function_exists('h')) {
+if (function_exists('h') === false) {
     function h(?string $v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
     }
 }
 
-if (!function_exists('archive_card')) {
+if (function_exists('archive_card') === false) {
     /**
      * كرت خبر داخل الأرشيف
      * @param array<string,mixed> $n
@@ -52,7 +52,7 @@ $year  = isset($year) ? (int)$year : null;
 $month = isset($month) ? (int)$month : null;
 
 // تجهيز baseUrl (لو احتجناه مستقبلاً)
-if (!isset($baseUrl)) {
+if (isset($baseUrl) === false) {
     $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
 }
 
@@ -71,7 +71,7 @@ if ($year) {
     <p class="text-muted mb-0">أرشيف الأخبار حسب الفترات الزمنية.</p>
   </header>
 
-  <?php if (empty($items)): ?>
+  <?php if (empty($items) === true): ?>
     <p class="text-muted">لا توجد أخبار في هذه الفترة الزمنية حالياً.</p>
   <?php else: ?>
     <div class="row g-3">

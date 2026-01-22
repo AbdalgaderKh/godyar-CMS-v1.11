@@ -121,7 +121,7 @@ if ($email === '') {
     exit("تعذر تسجيل الدخول عبر GitHub: لم نستطع الحصول على البريد الإلكتروني (تأكد من أن بريدك غير مخفي).");
 }
 
-if (!isset($pdo) || !$pdo instanceof PDO) {
+if (!isset($pdo) || ($pdo instanceof PDO) === false) {
     http_response_code(500);
     exit('لا يمكن الاتصال بقاعدة البيانات حالياً.');
 }

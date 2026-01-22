@@ -1,46 +1,29 @@
-# اجعل Git يتعامل مع الملفات النصية كـ text ويُطبعها في المستودع بنهايات LF
-* text=auto eol=lf
+# Normalize text files; keep LF in repo
+* text=auto
 
-# نصوص شائعة
-*.php  text eol=lf
-*.phtml text eol=lf
-*.inc  text eol=lf
-*.js   text eol=lf
-*.mjs  text eol=lf
-*.css  text eol=lf
-*.html text eol=lf
-*.htm  text eol=lf
-*.json text eol=lf
-*.xml  text eol=lf
-*.yml  text eol=lf
-*.yaml text eol=lf
-*.md   text eol=lf
-*.txt  text eol=lf
-*.env  text eol=lf
-*.sql  text eol=lf
+# Common source/text files forced to LF in repository
+*.php        text eol=lf
+*.js         text eol=lf
+*.css        text eol=lf
+*.md         text eol=lf
+*.txt        text eol=lf
+*.htaccess   text eol=lf
+*.html       text eol=lf
+*.json       text eol=lf
+*.yml        text eol=lf
+*.yaml       text eol=lf
 
-# سكربتات
-*.sh   text eol=lf
-*.bash text eol=lf
-
-# ملفات ويندوز النصية (لو عندك batch/ps1 وتريدها CRLF محلياً وداخل الريبو)
-# إذا تفضّل تثبيتها كـ LF أيضاً، غيّر eol=crlf إلى eol=lf
-*.bat  text eol=crlf
-*.cmd  text eol=crlf
-*.ps1  text eol=crlf
-
-# ثنائيات (لا يحاول Git تطبيعها)
-*.png  binary
-*.jpg  binary
-*.jpeg binary
-*.gif  binary
-*.webp binary
-*.ico  binary
-*.pdf  binary
-*.zip  binary
-*.gz   binary
-*.7z   binary
-*.woff  binary
-*.woff2 binary
-*.ttf   binary
-*.eot   binary
+# Binary assets (no line ending conversion)
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.webp       binary
+*.gif        binary
+*.svg        binary
+*.ico        binary
+*.zip        binary
+*.pdf        binary
+*.woff       binary
+*.woff2      binary
+*.ttf        binary
+*.eot        binary

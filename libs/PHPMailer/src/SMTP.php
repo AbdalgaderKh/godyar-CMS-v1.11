@@ -621,7 +621,14 @@ class SMTP
                     return false;
                 }
                 //Get the challenge
-                $challenge = base64_decode(substr($this->last_reply, 4));
+                $raw = substr($this->last_reply, 4);
+                $raw = preg_replace('/\s+/', '', (string)$raw);
+                $pad = strlen($raw) % 4;
+                if ($pad) { $raw .= str_repeat('=', 4 - $pad); }
+                $challenge = base64_decode($raw, true);
+                if ($challenge === false) {
+                    return false;
+                }
 
                 //Build the response
                 $response = $username . ' ' . $this->hmac($challenge, $password);

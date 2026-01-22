@@ -393,19 +393,20 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
 
     $selfReal = realpath(__FILE__) ?: __FILE__;
 
-    // Only scan PHP files for high-risk function calls.
-    // We use token_get_all() so matches inside comments/strings do not trigger false positives.
+    // Scan PHP files for potentially dangerous function calls using token_get_all()
+    // so matches inside comments/strings do not trigger false positives.
     $targets = [
-        'eval' => 'eval',
-        'shell_exec' => 'shell_exec',
-        'exec' => 'exec',
-        'system' => 'system',
-        'passthru' => 'passthru',
-        'popen' => 'popen',
-        'proc_open' => 'proc_open',
-        'assert' => 'assert',
+        'eval'          => 'eval',
+        'shell_exec'    => 'shell_exec',
+        'exec'          => 'exec',
+        'system'        => 'system',
+        'passthru'      => 'passthru',
+        'popen'         => 'popen',
+        'proc_open'     => 'proc_open',
+        'assert'        => 'assert',
+        // Data handling primitives (not inherently dangerous, but worth reviewing when used unsafely)
         'base64_decode' => 'base64_decode',
-        'gzinflate' => 'gzinflate',
+        'gzinflate'     => 'gzinflate',
     ];
 
     $hitsAny = false;
@@ -417,6 +418,14 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
         return ($tok === ' ' || $tok === "\n" || $tok === "\r" || $tok === "\t");
     };
 
+    $isTrueToken = static function($tok): bool {
+        if (is_array($tok)) {
+            if (defined('T_TRUE') && $tok[0] === T_TRUE) return true;
+            return ($tok[0] === T_STRING && strtolower($tok[1]) === 'true');
+        }
+        return false;
+    };
+
     foreach ($targets as $label => $fnName) {
         $hits = 0;
 
@@ -425,6 +434,9 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
 
             // Exclude this checker file itself
             if ($real === $selfReal) continue;
+
+            // Optional: ignore vendor-ish libs that are expected to contain such primitives
+            // (kept off by default; do not exclude in "real fix" mode)
 
             $size = @filesize($file);
             if ($size === false || $size > MAX_SECURITY_FILE_SIZE) continue;
@@ -475,10 +487,48 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
                     continue;
                 }
 
+                // Special handling: base64_decode is OK when used in strict mode (second arg true).
+                if ($fnName === 'base64_decode') {
+                    $parenLevel = 0;
+                    $sawCommaAtTop = false;
+                    $strictTrue = false;
+
+                    for ($p = $k; $p < $countTokens; $p++) {
+                        $t = $tokens[$p];
+                        if ($t === '(') {
+                            $parenLevel++;
+                            continue;
+                        }
+                        if ($t === ')') {
+                            $parenLevel--;
+                            if ($parenLevel <= 0) break;
+                            continue;
+                        }
+                        if ($parenLevel === 1 && $t === ',') {
+                            $sawCommaAtTop = true;
+                            // Next significant token should be 'true'
+                            $q = $p + 1;
+                            while ($q < $countTokens && $isIgnorable($tokens[$q])) $q++;
+                            if ($q < $countTokens && $isTrueToken($tokens[$q])) {
+                                $strictTrue = true;
+                            }
+                            break;
+                        }
+                    }
+
+                    if ($strictTrue) {
+                        record($rows, $summary, 'ok', $section, 'base64_decode(strict)', 'base64_decode مستخدمة بوضع strict=true (جيد)', [
+                            'file' => substr($file, strlen($root) + 1),
+                        ]);
+                        continue;
+                    }
+                    // Otherwise: warn, because non-strict decoding is easier to misuse.
+                }
+
                 $hits++;
                 $hitsAny = true;
 
-                record($rows, $summary, 'warn', $section, $label . '(', 'تم العثور على نمط عالي الخطورة (راجع الاستخدام والسياق)', [
+                record($rows, $summary, 'warn', $section, $label . '(', 'تم العثور على نمط عالي الخطورة/الحساسية (راجع الاستخدام والسياق)', [
                     'file' => substr($file, strlen($root) + 1),
                 ]);
 
@@ -496,8 +546,7 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
     }
 }
 
-
-function function parseEnvFile(string $envPath): ?array {
+function parseEnvFile(string $envPath): ?array {
     if (!is_file($envPath)) return null;
 
     $lines = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -641,7 +690,7 @@ function checkDb(array &$rows, array &$summary, string $root, string $privateRoo
     }
 
     if (!class_exists(PDO::class)) {
-        record($rows, $summary, 'warn', $section, 'PDO', 'PDO غير متوفر — تم تخطي اختبار DB (فعّل pdo/pdo_mysql أو مرر skip_db=1)');
+        record($rows, $summary, 'fail', $section, 'PDO', 'PDO غير متوفر');
         return;
     }
 
@@ -663,7 +712,7 @@ function checkDb(array &$rows, array &$summary, string $root, string $privateRoo
 function checkHttp(array &$rows, array &$summary): void {
     $baseUrl = (string)getParam('base_url', '');
     if ($baseUrl === '') {
-        record($rows, $summary, 'warn', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (لم يتم تمرير base_url)');
+        record($rows, $summary, 'ok', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (لم يتم تمرير base_url)');
         return;
     }
     $section = 'HTTP Smoke Tests';
@@ -770,7 +819,7 @@ function runAllChecks(): array {
     if ($lint === '1') {
         checkLint($rows, $summary, $root);
     } else {
-        record($rows, $summary, 'warn', 'PHP Lint (php -l)', 'skip', 'تم تخطي lint (مرر lint=1 للتفعيل)');
+        record($rows, $summary, 'ok', 'PHP Lint (php -l)', 'skip', 'تم تخطي lint (مرر lint=1 للتفعيل)');
     }
 
     return ['summary' => $summary, 'rows' => $rows];

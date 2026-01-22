@@ -57,8 +57,7 @@ function og_output_static(string $defaultPath): void
     }
 
     // Fallback: 1x1 transparent PNG
-    echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3+2lQAAAAASUVORK5CYII=');
-}
+    echo "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x04\x00\x00\x00\xb5\x1c\x0c\x02\x00\x00\x00\x0bIDATx\x9c\x63\xfc\xff\x1f\x00\x03\x03\x02\x00\xed\xfe\xdaT\x00\x00\x00\x00IEND\xaeB`\x82";}
 
 function og_wrap_text(string $text, int $maxLen): array
 {

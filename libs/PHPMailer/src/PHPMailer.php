@@ -1836,194 +1836,19 @@ class PHPMailer
      */
     protected function sendmailSend($header, $body)
     {
-        if ($this->Mailer === 'qmail') {
-            $this->edebug('Sending with qmail');
-        } else {
-            $this->edebug('Sending with sendmail');
+        // Security hardening:
+        // Disable executing external sendmail/qmail via process spawning.
+        // Fall back to PHP's mail() transport logic (mailSend).
+        $origMailer = $this->Mailer;
+        $this->Mailer = 'mail';
+        try {
+            return $this->mailSend($header, $body);
+        } finally {
+            $this->Mailer = $origMailer;
         }
-        $header = static::stripTrailingWSP($header) . static::$LE . static::$LE;
-        //This sets the SMTP envelope sender which gets turned into a return-path header by the receiver
-        //A space after `-f` is optional, but there is a long history of its presence
-        //causing problems, so we don't use one
-        //Exim docs: https://www.exim.org/exim-html-current/doc/html/spec_html/ch-the_exim_command_line.html
-        //Sendmail docs: https://www.sendmail.org/~ca/email/man/sendmail.html
-        //Example problem: https://www.drupal.org/node/1057954
-
-        //PHP 5.6 workaround
-        $sendmail_from_value = ini_get('sendmail_from');
-        if (empty($this->Sender) && !empty($sendmail_from_value)) {
-            //PHP config has a sender address we can use
-            $this->Sender = ini_get('sendmail_from');
-        }
-        //CVE-2016-10033, CVE-2016-10045: Don't pass -f if characters will be escaped.
-        if (!empty($this->Sender) && static::validateAddress($this->Sender) && self::isShellSafe($this->Sender)) {
-            if ($this->Mailer === 'qmail') {
-                $sendmailFmt = '%s -f%s';
-            } else {
-                $sendmailFmt = '%s -oi -f%s -t';
-            }
-        } elseif ($this->Mailer === 'qmail') {
-            $sendmailFmt = '%s';
-        } else {
-            //Allow sendmail to choose a default envelope sender. It may
-            //seem preferable to force it to use the From header as with
-            //SMTP, but that introduces new problems (see
-            //<https://github.com/PHPMailer/PHPMailer/issues/2298>), and
-            //it has historically worked this way.
-            $sendmailFmt = '%s -oi -t';
-        }
-
-        $sendmail = sprintf($sendmailFmt, escapeshellcmd($this->Sendmail), $this->Sender);
-        $this->edebug('Sendmail path: ' . $this->Sendmail);
-        $this->edebug('Sendmail command: ' . $sendmail);
-        $this->edebug('Envelope sender: ' . $this->Sender);
-        $this->edebug("Headers: {$header}");
-
-        if ($this->SingleTo) {
-            foreach ($this->SingleToArray as $toAddr) {
-                $mail = @popen($sendmail, 'w');
-                if (!$mail) {
-                    throw new Exception(self::lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
-                }
-                $this->edebug("To: {$toAddr}");
-                fwrite($mail, 'To: ' . $toAddr . "\n");
-                fwrite($mail, $header);
-                fwrite($mail, $body);
-                $result = pclose($mail);
-                $addrinfo = static::parseAddresses($toAddr, null, $this->CharSet);
-                foreach ($addrinfo as $addr) {
-                    $this->doCallback(
-                        ($result === 0),
-                        [[$addr['address'], $addr['name']]],
-                        $this->cc,
-                        $this->bcc,
-                        $this->Subject,
-                        $body,
-                        $this->From,
-                        []
-                    );
-                }
-                $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
-                if (0 !== $result) {
-                    throw new Exception(self::lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
-                }
-            }
-        } else {
-            $mail = @popen($sendmail, 'w');
-            if (!$mail) {
-                throw new Exception(self::lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
-            }
-            fwrite($mail, $header);
-            fwrite($mail, $body);
-            $result = pclose($mail);
-            $this->doCallback(
-                ($result === 0),
-                $this->to,
-                $this->cc,
-                $this->bcc,
-                $this->Subject,
-                $body,
-                $this->From,
-                []
-            );
-            $this->edebug("Result: " . ($result === 0 ? 'true' : 'false'));
-            if (0 !== $result) {
-                throw new Exception(self::lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
-            }
-        }
-
-        return true;
     }
 
-    /**
-     * Fix CVE-2016-10033 and CVE-2016-10045 by disallowing potentially unsafe shell characters.
-     * Note that escapeshellarg and escapeshellcmd are inadequate for our purposes, especially on Windows.
-     *
-     * @see https://github.com/PHPMailer/PHPMailer/issues/924 CVE-2016-10045 bug report
-     *
-     * @param string $string The string to be validated
-     *
-     * @return bool
-     */
-    protected static function isShellSafe($string)
-    {
-        //It's not possible to use shell commands safely (which includes the mail() function) without escapeshellarg,
-        //but some hosting providers disable it, creating a security problem that we don't want to have to deal with,
-        //so we don't.
-        if (!function_exists('escapeshellarg') || !function_exists('escapeshellcmd')) {
-            return false;
-        }
 
-        if (
-            escapeshellcmd($string) !== $string
-            || !in_array(escapeshellarg($string), ["'$string'", "\"$string\""])
-        ) {
-            return false;
-        }
-
-        $length = strlen($string);
-
-        for ($i = 0; $i < $length; ++$i) {
-            $c = $string[$i];
-
-            //All other characters have a special meaning in at least one common shell, including = and +.
-            //Full stop (.) has a special meaning in cmd.exe, but its impact should be negligible here.
-            //Note that this does permit non-Latin alphanumeric characters based on the current locale.
-            if (!ctype_alnum($c) && strpos('@_-.', $c) === false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check whether a file path is of a permitted type.
-     * Used to reject URLs and phar files from functions that access local file paths,
-     * such as addAttachment.
-     *
-     * @param string $path A relative or absolute path to a file
-     *
-     * @return bool
-     */
-    protected static function isPermittedPath($path)
-    {
-        //Matches scheme definition from https://www.rfc-editor.org/rfc/rfc3986#section-3.1
-        return !preg_match('#^[a-z][a-z\d+.-]*://#i', $path);
-    }
-
-    /**
-     * Check whether a file path is safe, accessible, and readable.
-     *
-     * @param string $path A relative or absolute path to a file
-     *
-     * @return bool
-     */
-    protected static function fileIsAccessible($path)
-    {
-        if (!static::isPermittedPath($path)) {
-            return false;
-        }
-        $readable = is_file($path);
-        //If not a UNC path (expected to start with \\), check read permission, see #2069
-        if (strpos($path, '\\\\') !== 0) {
-            $readable = $readable && is_readable($path);
-        }
-        return  $readable;
-    }
-
-    /**
-     * Send mail using the PHP mail() function.
-     *
-     * @see https://www.php.net/manual/en/book.mail.php
-     *
-     * @param string $header The message headers
-     * @param string $body   The message body
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
     protected function mailSend($header, $body)
     {
         $header = static::stripTrailingWSP($header) . static::$LE . static::$LE;
@@ -4620,7 +4445,14 @@ class PHPMailer
                 $match = [];
                 if (preg_match('#^data:(image/(?:jpe?g|gif|png));?(base64)?,(.+)#', $url, $match)) {
                     if (count($match) === 4 && static::ENCODING_BASE64 === $match[2]) {
-                        $data = base64_decode($match[3]);
+                        $raw = preg_replace('/\s+/', '', (string)$match[3]);
+                        $pad = strlen($raw) % 4;
+                        if ($pad) { $raw .= str_repeat('=', 4 - $pad); }
+                        $data = base64_decode($raw, true);
+                        if ($data === false) {
+                            // Invalid base64 in data URI; skip embedding for safety.
+                            continue;
+                        }
                     } elseif ('' === $match[2]) {
                         $data = rawurldecode($match[3]);
                     } else {

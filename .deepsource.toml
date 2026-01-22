@@ -15,5 +15,3 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
-
-# CSS analyzer removed - DeepSeek doesn't support CSS analysis

@@ -7,10 +7,10 @@ require_once __DIR__ . '/includes/bootstrap.php';
 
 $pdo = gdy_pdo_safe();
 
-if (function_exists('h') === false) {
+if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    @media (max-width: 768px) {
+    }
 }
 
 /**
@@ -563,29 +563,12 @@ require __DIR__ . '/frontend/views/partials/header.php';
     background: #f9fafb;
     border: 1px dashed #d1d5db;
     color: #6b7280;
-  @media (max-width: 768px) {
-<?php if ($mode === 'single'): ?>
-    .oa-author-card {
-    font-size: .9rem;
   }
-
   @media (max-width: 768px) {
-<?php if ($mode === 'single'): ?>
-    .oa-author-card {
-      padding: 1.2rem 1rem;
-    }
-    .oa-author-avatar-wrap {
-      flex: 0 0 100px;
-      max-width: 100px;
-    }
-    .oa-author-avatar {
-      width: 100px;
-      height: 100px;
-    }
-    .oa-author-name {
-      font-size: 1.3rem;
-    }
-<?php endif; ?>
+    .oa-author-card { padding: 1.2rem 1rem; }
+    .oa-author-avatar-wrap { flex: 0 0 100px; max-width: 100px; }
+    .oa-author-avatar { width: 100px; height: 100px; }
+    .oa-author-name { font-size: 1.3rem; }
   }
 </style>
 

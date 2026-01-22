@@ -2,26 +2,39 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
-require_once __DIR__ . '/includes/seo/fast_index.php';
+
+// Optional: fast indexing helper
+$fast = __DIR__ . '/includes/seo/fast_index.php';
+if (is_file($fast)) {
+    require_once $fast;
+}
 
 header('Content-Type: application/json; charset=utf-8');
 
-$base = function_exists('gdy_base_url') ? gdy_base_url() : '';
+$base = function_exists('gdy_base_url') ? (string)gdy_base_url() : (defined('GODYAR_BASE_URL') ? (string)GODYAR_BASE_URL : '');
 $base = rtrim($base, '/');
 
 $url = trim((string)($_GET['url'] ?? ''));
 if ($url === '') {
-  http_response_code(400);
-  echo json_encode(['ok'=>false,'error'=>'missing url'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-  exit;
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'missing url'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
 }
 
 if (!preg_match('#^https?://#i', $url)) {
-echo json_encode(['ok'=>$ok, 'url'=>$url], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-  $url = $base . '/' . ltrim($url, '/');
+    $url = $base !== '' ? ($base . '/' . ltrim($url, '/')) : $url;
 }
 
-$ok = gdy_indexnow_submit([$url]);
+if (!function_exists('gdy_indexnow_submit')) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'indexnow not available'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
 
-  $url = $base . '/' . ltrim($url, '/');
+try {
+    $ok = (bool)gdy_indexnow_submit([$url]);
+    echo json_encode(['ok' => $ok, 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => $e->getMessage(), 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }

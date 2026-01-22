@@ -1,440 +1,300 @@
 <?php
 declare(strict_types=1);
 
-// IMPORTANT: this endpoint is called via fetch(). Any PHP warning/notice printed to output
-// will break JSON parsing and the UI shows "Bulk failed".
-ini_set('display_errors', '0');
-ini_set('html_errors', '0');
-ini_set('log_errors', '1');
-
-// Buffer output so we can strip accidental output (BOM, notices, etc.) before JSON.
-if (!ob_get_level()) {
-    ob_start();
-function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
-
-$__gdy_bulk_warnings = [];
-set_error_handler(function ($errno, $errstr, $errfile, $errline) use (&$__gdy_bulk_warnings) {
-    if (!(error_reporting() & $errno)) {
-        return false;
-    if (((int)($f['no_image'] ?? 0) === 1)) {
-        $where .= " AND (n.image IS NULL OR n.image = '')";
-    }
-    if (((int)($f['no_desc'] ?? 0) === 1)) {
-        $where .= " AND (n.seo_description IS NULL OR n.seo_description = '')";
-    }
-    if (((int)($f['no_keywords'] ?? 0) === 1)) {
-        $where .= " AND (n.seo_keywords IS NULL OR n.seo_keywords = '')";
-    }
-    return $where;
-}
-function gdy_exec_in(PDO $pdo, string $sqlBase, array $ids, array $prefixParams = []): bool {
-    if (!$ids) return true;
-    $chunks = array_chunk($ids, 200);
-    foreach ($chunks as $chunk) {
-        $in = implode(',', array_fill(0, count($chunk), '?'));
-        $sql = str_replace('%%IN%%', $in, $sqlBase);
-        $st = $pdo->prepare($sql);
-        $ok = $st->execute(array_merge($prefixParams, $chunk));
-        if (!$ok) return false;
-    }
-    return true;
-}
-    // Collect (do not output). Keep it compact.
-    $type = match ($errno) {
-        E_WARNING => 'WARNING',
-        E_NOTICE => 'NOTICE',
-        E_DEPRECATED => 'DEPRECATED',
-        default => 'ERROR',
-    };
-    $__gdy_bulk_warnings[] = $type . ': ' . $errstr . ' @' . basename((string)$errfile) . ':' . (int)$errline;
-    return true;
-});
-
-// Ensure fatal errors still return JSON.
-register_shutdown_function(function () use (&$__gdy_bulk_warnings) {
-    $err = error_get_last();
-    if (!$err) return;
-    $fatals = [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR];
-    if (!in_array((int)$err['type'], $fatals, true)) return;
-    if (ob_get_level()) {
-        (ob_get_level()>0 ? ob_clean() : null);
-    }
-    if (!headers_sent()) {
-        header('Content-Type: application/json; charset=utf-8');
-    }
-    http_response_code(500);
-    echo json_encode([
-        'ok' => false,
-        'msg' => 'fatal',
-        'detail' => [
-            'type' => (int)$err['type'],
-            'message' => (string)$err['message'],
-            'file' => basename((string)$err['file']),
-            'line' => (int)$err['line'],
-        ],
-        // kept for debugging; frontend ignores.
-        'warnings' => $__gdy_bulk_warnings,
-    ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-});
-
-function gdy_bulk_json(array $payload, int $code = 200): void {
-    if (ob_get_level()) {
-        (ob_get_level()>0 ? ob_clean() : null);
-    }
-    if (!headers_sent()) {
-        header('Content-Type: application/json; charset=utf-8');
-    }
-    http_response_code($code);
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-    exit;
-}
-
-// GDY_BUILD: v9
-
-// Tell the guard this is a JSON (AJAX) endpoint (avoid HTML redirects that break fetch JSON).
-if (!defined('GDY_ADMIN_JSON')) {
-    define('GDY_ADMIN_JSON', true);
-}
 require_once __DIR__ . '/../_admin_guard.php';
-$BASE_DIR = dirname(__DIR__, 2);
-// bootstrap loaded by _admin_guard.php; keep require_once to avoid redeclare fatals
-require_once $BASE_DIR . '/includes/bootstrap.php';
-require_once __DIR__ . '/_news_helpers.php';
+require_once __DIR__ . '/../../includes/bootstrap.php';
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
+$pageTitle   = __('t_f1e9d2a3a3', 'إدارة جماعية للأخبار');
+$currentPage = 'news';
+
+if (!function_exists('h')) {
+    function h($v): string
+    {
+        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+    }
 }
 
-if (!headers_sent()) {
-    header('Content-Type: application/json; charset=utf-8');
-}
-
-// CSRF
-$csrf = (string)($_POST['csrf_token'] ?? '');
-if (function_exists('verify_csrf_token') && !verify_csrf_token($csrf)) {
-    gdy_bulk_json(['ok' => false, 'msg' => 'CSRF failed'], 400);
-}
-
-$role = $_SESSION['user']['role'] ?? 'guest';
-if (!in_array($role, ['admin', 'superadmin'], true)) {
-    gdy_bulk_json(['ok' => false, 'msg' => 'forbidden'], 403);
-}
-
-$pdo = $pdo ?? null;
+/** @var PDO|null $pdo */
+$pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 if (!($pdo instanceof PDO)) {
-    gdy_bulk_json(['ok' => false, 'msg' => 'no db'], 500);
+    http_response_code(500);
+    die('Database connection not available.');
 }
 
-$allowedStatus = ['published', 'draft', 'pending', 'approved', 'archived'];
-
-$action = (string)($_POST['action'] ?? '');
-$scope  = (string)($_POST['scope'] ?? 'ids'); // ids | all
-$cursor = (int)($_POST['cursor'] ?? 0);
-$batchSize = 200;
-
-$extra = [
-    'to' => (string)($_POST['to'] ?? ''),
-    'category_id' => (int)($_POST['category_id'] ?? 0),
-];
-
-if ($action === '') {
-    gdy_bulk_json(['ok' => false, 'msg' => 'missing action'], 400);
+// CSRF support (if present in the project)
+if (session_status() !== PHP_SESSION_ACTIVE && function_exists('gdy_session_start')) {
+    gdy_session_start();
+} elseif (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
 }
 
-// normalize status:<value>
-if (str_starts_with($action, 'status:')) {
-    $to = substr($action, 7);
-    $action = 'status';
-    $extra['to'] = $to;
+$csrfToken = $_SESSION['news_bulk_csrf'] ?? '';
+if (!is_string($csrfToken) || $csrfToken === '') {
+    $csrfToken = bin2hex(random_bytes(16));
+    $_SESSION['news_bulk_csrf'] = $csrfToken;
 }
 
-function gdy_decode_filters($raw): array {
-    if (is_array($raw)) return $raw;
-    if (!is_string($raw) || trim($raw) === '') return [];
-    $data = json_decode($raw, true);
-    return is_array($data) ? $data : [];
-}
-
-function gdy_build_where_from_filters(array $f, array &$params): string {
-    $where = '1=1';
-
-    $trash = ((int)($f['trash'] ?? 0) === 1);
-    $where .= $trash ? ' AND n.deleted_at IS NOT NULL' : ' AND (n.deleted_at IS NULL)';
-
-    $q = trim((string)($f['q'] ?? ''));
-    $inContent = ((int)($f['in_content'] ?? 0) === 1);
-    if ($q !== '') {
-        if ($inContent) {
-            $where .= " AND (n.title LIKE :q OR n.slug LIKE :q OR n.excerpt LIKE :q OR n.content LIKE :q)";
-        } else {
-            $where .= " AND (n.title LIKE :q OR n.slug LIKE :q)";
+function news_columns(PDO $pdo): array
+{
+    try {
+        $cols = [];
+        $st = $pdo->query('DESCRIBE news');
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $r) {
+            $cols[(string)$r['Field']] = true;
         }
-        $params[':q'] = '%' . $q . '%';
+        return $cols;
+    } catch (Throwable $e) {
+        return [];
     }
-
-    $status = trim((string)($f['status'] ?? ''));
-    $allowed = ['', 'published', 'draft', 'pending', 'approved', 'archived'];
-    if ($status !== '' && in_array($status, $allowed, true)) {
-        $where .= " AND n.status = :status";
-        $params[':status'] = $status;
-    }
-
-    $cid = (int)($f['category_id'] ?? 0);
-    if ($cid > 0) {
-        $where .= " AND n.category_id = :cid";
-        $params[':cid'] = (string)$cid;
-    }
-
-    $dateRe = '/^\d{4}-\d{2}-\d{2}$/';
-    $df = (string)($f['from'] ?? '');
-    $dt = (string)($f['to'] ?? '');
-    if ($df !== '' && preg_match($dateRe, $df)) {
-        $where .= " AND DATE(n.created_at) >= :df";
-        $params[':df'] = $df;
-    }
-    if ($dt !== '' && preg_match($dateRe, $dt)) {
-        $where .= " AND DATE(n.created_at) <= :dt";
-        $params[':dt'] = $dt;
-    }
-
-    if (((int)($f['no_image'] ?? 0) === 1)) {
-        $where .= " AND (n.image IS NULL OR n.image = '')";
-    }
-    if (((int)($f['no_desc'] ?? 0) === 1)) {
-        $where .= " AND (n.seo_description IS NULL OR n.seo_description = '')";
-    }
-    if (((int)($f['no_keywords'] ?? 0) === 1)) {
-        $where .= " AND (n.seo_keywords IS NULL OR n.seo_keywords = '')";
-    }
-
-    return $where;
 }
 
-function gdy_exec_in(PDO $pdo, string $sqlBase, array $ids, array $prefixParams = []): bool {
-    if (!$ids) return true;
-    $chunks = array_chunk($ids, 200);
-    foreach ($chunks as $chunk) {
+function exec_in(PDO $pdo, string $sqlBase, array $ids, array $prefixParams = []): int
+{
+    if (!$ids) return 0;
+    $updated = 0;
+    foreach (array_chunk($ids, 200) as $chunk) {
         $in = implode(',', array_fill(0, count($chunk), '?'));
         $sql = str_replace('%%IN%%', $in, $sqlBase);
         $st = $pdo->prepare($sql);
         $ok = $st->execute(array_merge($prefixParams, $chunk));
-        if (!$ok) return false;
+        if ($ok) {
+            $updated += count($chunk);
+        }
     }
-    return true;
+    return $updated;
 }
 
-function gdy_duplicate_one(PDO $pdo, int $id, int $userId): int {
-    if ($action === 'status') {
-        $to = (string)($extra['to'] ?? '');
-        $allowedStatus = ['published', 'draft', 'pending', 'approved', 'archived'];
-        if (!in_array($to, $allowedStatus, true)) return 0;
-        if ($to === 'published' && isset($cols['published_at'])) {
-            $sql = "UPDATE news SET status=?, published_at=IFNULL(published_at, NOW()) WHERE id IN (%%IN%%)";
-            return gdy_exec_in($pdo, $sql, $ids, [$to]) ? count($ids) : 0;
-        }
-        $sql = "UPDATE news SET status=? WHERE id IN (%%IN%%)";
-    if (!$cols) return 0;
-
-    $st = $pdo->prepare("SELECT * FROM news WHERE id=? LIMIT 1");
-    $st->execute([$id]);
-    $row = $st->fetch(PDO::FETCH_ASSOC);
-    if (!$row) return 0;
-
-    $now = date('Y-m-d H:i:s');
-    $newTitle = trim($title . ' (نسخة)');
-    $suffix = '-copy-' . date('ymdHis') . '-' . random_int(100, 999);
-    $newSlug = $slug !== '' ? $slug . $suffix : ('news' . $suffix);
-    // Trim slug if too long
-    if (isset($cols['slug']) && strlen($newSlug) > 180) {
-        $newSlug = substr($newSlug, 0, 180);
+function str_limit(string $s, int $n): string
+{
+    $s = trim($s);
+    if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+        return mb_strlen($s, 'UTF-8') <= $n ? $s : (mb_substr($s, 0, $n - 1, 'UTF-8') . '…');
     }
+    return strlen($s) <= $n ? $s : (substr($s, 0, $n - 1) . '…');
+}
 
-    $newTitle = trim($title . ' (نسخة)');
-    $suffix = '-copy-' . date('ymdHis') . '-' . random_int(100, 999);
-    $newSlug = $slug !== '' ? $slug . $suffix : ('news' . $suffix);
+function slugify(string $s): string
+{
+    $s = trim(mb_strtolower($s, 'UTF-8'));
+    $s = preg_replace('~[^\pL\pN]+~u', '-', $s) ?? '';
+    $s = trim($s, '-');
+    $s = preg_replace('~[^a-z0-9\-\_]+~i', '', $s) ?? '';
+    return $s !== '' ? $s : 'news';
+}
 
-    // Trim slug if too long
-    if (isset($cols['slug']) && strlen($newSlug) > 180) {
-        $newSlug = substr($newSlug, 0, 180);
-    }
+$cols = news_columns($pdo);
 
-        if ($c === 'created_at' || $c === 'updated_at') $val = $now;
-    $vals  = [];
+$flashSuccess = '';
+$flashError   = '';
 
-    foreach ($cols as $c => $_) {
-        if ($c === 'id') continue;
+// Handle POST actions
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    $token = (string)($_POST['_token'] ?? '');
+    if (!hash_equals($csrfToken, $token)) {
+        $flashError = __('t_7339ca256b', 'انتهت صلاحية النموذج، يرجى إعادة تحميل الصفحة ثم المحاولة مرة أخرى.');
+    } else {
+        $action = (string)($_POST['action'] ?? '');
+        $ids = $_POST['ids'] ?? [];
+        if (!is_array($ids)) $ids = [];
+        $idList = array_values(array_filter(array_map('intval', $ids), static fn($v) => $v > 0));
 
-        // default: copy
-        $val = $row[$c] ?? null;
-
-        // overrides
-        if ($c === 'title') $val = $newTitle;
-        if ($c === 'slug') $val = $newSlug;
-
-        if ($c === 'status') $val = 'draft';
-        if ($c === 'deleted_at') $val = null;
-        if ($c === 'published_at') $val = null;
-        if ($c === 'views') $val = 0;
-        if ($c === 'view_count') $val = 0;
-
-        if ($c === 'author_id') $val = $userId;
-
-        if ($c === 'created_at' || $c === 'updated_at') $val = $now;
-
-        $insert[] = "`$c`";
-        $place[] = "?";
-        $vals[] = $val;
-    }
-
-    $sql = "INSERT INTO news (" . implode(',', $insert) . ") VALUES (" . implode(',', $place) . ")";
-    $pdo->prepare($sql)->execute($vals);
-    $newId = (int)$pdo->lastInsertId();
-
-    // Copy tags if exists
-    if ($newId > 0 && gdy_db_table_exists($pdo, 'news_tags')) {
-        $t = $pdo->prepare("SELECT tag_id FROM news_tags WHERE news_id=?");
-        $t->execute([$id]);
-        $tags = $t->fetchAll(PDO::FETCH_COLUMN);
-        if ($tags) {
-            $ins = $pdo->prepare("INSERT INTO news_tags (news_id, tag_id) VALUES (?, ?)");
-            foreach ($tags as $tagId) {
-                $ins->execute([$newId, (int)$tagId]);
+        try {
+            if (!$idList) {
+                throw new RuntimeException(__('t_19a9ea0660', 'لم يتم تحديد أي عناصر.'));
             }
+
+            if ($action === 'status') {
+                $to = (string)($_POST['to_status'] ?? '');
+                $allowed = ['published', 'draft', 'pending', 'approved', 'archived'];
+                if (!in_array($to, $allowed, true)) {
+                    throw new RuntimeException(__('t_3742196a8c', 'إجراء غير صالح.'));
+                }
+                $sql = 'UPDATE news SET status=? WHERE id IN (%%IN%%)';
+                $n = exec_in($pdo, $sql, $idList, [$to]);
+                $flashSuccess = 'تم تحديث الحالة لـ ' . $n . ' عنصر.';
+
+            } elseif ($action === 'delete') {
+                if (isset($cols['deleted_at'])) {
+                    $sql = 'UPDATE news SET deleted_at=NOW() WHERE id IN (%%IN%%)';
+                    $n = exec_in($pdo, $sql, $idList);
+                    $flashSuccess = 'تم الحذف (Soft Delete) لـ ' . $n . ' عنصر.';
+                } else {
+                    $sql = 'DELETE FROM news WHERE id IN (%%IN%%)';
+                    $n = exec_in($pdo, $sql, $idList);
+                    $flashSuccess = 'تم حذف ' . $n . ' عنصر.';
+                }
+
+            } elseif ($action === 'set_category') {
+                $cat = (int)($_POST['category_id'] ?? 0);
+                if ($cat <= 0 || !isset($cols['category_id'])) {
+                    throw new RuntimeException('فئة غير صالحة.');
+                }
+                $sql = 'UPDATE news SET category_id=? WHERE id IN (%%IN%%)';
+                $n = exec_in($pdo, $sql, $idList, [$cat]);
+                $flashSuccess = 'تم تحديث الفئة لـ ' . $n . ' عنصر.';
+
+            } elseif ($action === 'duplicate') {
+                // Duplicate rows one by one (schema-flexible)
+                $duplicated = 0;
+                foreach ($idList as $id) {
+                    $st = $pdo->prepare('SELECT * FROM news WHERE id=? LIMIT 1');
+                    $st->execute([$id]);
+                    $row = $st->fetch(PDO::FETCH_ASSOC);
+                    if (!$row) continue;
+
+                    $now = date('Y-m-d H:i:s');
+                    $title = (string)($row['title'] ?? '');
+                    $slug  = (string)($row['slug'] ?? '');
+
+                    $newTitle = trim(($title !== '' ? $title : 'خبر') . ' (نسخة)');
+                    $suffix = '-copy-' . date('ymdHis') . '-' . random_int(100, 999);
+                    $newSlug = ($slug !== '' ? $slug : slugify($newTitle)) . $suffix;
+
+                    // Build insert using available columns
+                    $fields = [];
+                    $params = [];
+                    foreach ($row as $k => $v) {
+                        $k = (string)$k;
+                        if ($k === 'id') continue;
+                        if (!isset($cols[$k])) continue;
+
+                        // overrides
+                        if ($k === 'title') $v = $newTitle;
+                        if ($k === 'slug')  $v = $newSlug;
+                        if ($k === 'status') $v = 'draft';
+                        if (in_array($k, ['views','view_count'], true)) $v = 0;
+                        if (in_array($k, ['published_at','publish_at','deleted_at'], true)) $v = null;
+                        if (in_array($k, ['created_at','updated_at'], true)) $v = $now;
+
+                        $fields[] = $k;
+                        $params[':' . $k] = $v;
+                    }
+
+                    if (!$fields) continue;
+                    $sql = 'INSERT INTO news (' . implode(',', $fields) . ') VALUES (' . implode(',', array_map(fn($f) => ':' . $f, $fields)) . ')';
+                    $pdo->prepare($sql)->execute($params);
+                    $duplicated++;
+                }
+                $flashSuccess = 'تم نسخ ' . $duplicated . ' عنصر.';
+
+            } else {
+                throw new RuntimeException(__('t_3742196a8c', 'إجراء غير صالح.'));
+            }
+
+        } catch (Throwable $e) {
+            $flashError = $e->getMessage();
         }
     }
-
-    return $newId;
 }
 
-    $cols = gdy_db_columns($pdo, 'news');
-        if ($c === 'created_at' || $c === 'updated_at') $val = $now;
-
-    $cols = gdy_db_columns($pdo, 'news');
-
-    if ($action === 'status') {
-        $to = (string)($extra['to'] ?? '');
-        $allowedStatus = ['published', 'draft', 'pending', 'approved', 'archived'];
-        if (!in_array($to, $allowedStatus, true)) return 0;
-
-        if ($to === 'published' && isset($cols['published_at'])) {
-            $sql = "UPDATE news SET status=?, published_at=IFNULL(published_at, NOW()) WHERE id IN (%%IN%%)";
-            return gdy_exec_in($pdo, $sql, $ids, [$to]) ? count($ids) : 0;
-        }
-        $sql = "UPDATE news SET status=? WHERE id IN (%%IN%%)";
-    $cols = gdy_db_columns($pdo, 'news');
-
-    if ($action === 'delete') {
-        if (!isset($cols['deleted_at'])) return 0;
-        $sql = "UPDATE news SET deleted_at = NOW() WHERE id IN (%%IN%%)";
-        return gdy_exec_in($pdo, $sql, $ids) ? count($ids) : 0;
-    }
-
-    if ($action === 'restore') {
-        if (!isset($cols['deleted_at'])) return 0;
-        $sql = "UPDATE news SET deleted_at = NULL WHERE id IN (%%IN%%)";
-        return gdy_exec_in($pdo, $sql, $ids) ? count($ids) : 0;
-    }
-
-    if ($action === 'destroy') {
-        // Remove related records if tables exist
-        if (gdy_db_table_exists($pdo, 'news_tags')) {
-            gdy_exec_in($pdo, "DELETE FROM news_tags WHERE news_id IN (%%IN%%)", $ids);
-        }
-        if (gdy_db_table_exists($pdo, 'news_attachments')) {
-            gdy_exec_in($pdo, "DELETE FROM news_attachments WHERE news_id IN (%%IN%%)", $ids);
-        }
-        if (gdy_db_table_exists($pdo, 'news_notes')) {
-            gdy_exec_in($pdo, "DELETE FROM news_notes WHERE news_id IN (%%IN%%)", $ids);
-        }
-        if (gdy_db_table_exists($pdo, 'news_revisions')) {
-            gdy_exec_in($pdo, "DELETE FROM news_revisions WHERE news_id IN (%%IN%%)", $ids);
-        }
-        $sql = "DELETE FROM news WHERE id IN (%%IN%%)";
-        return gdy_exec_in($pdo, $sql, $ids) ? count($ids) : 0;
-    }
-
-    if ($action === 'move_category') {
-        $cid = (int)($extra['category_id'] ?? 0);
-        if ($cid <= 0) return 0;
-        $sql = "UPDATE news SET category_id=? WHERE id IN (%%IN%%)";
-        return gdy_exec_in($pdo, $sql, $ids, [$cid]) ? count($ids) : 0;
-    }
-
-    if ($action === 'duplicate') {
-        $userId = (int)($_SESSION['user']['id'] ?? 0);
-        $count = 0;
-        foreach ($ids as $id) {
-            $newId = gdy_duplicate_one($pdo, (int)$id, $userId);
-            if ($newId > 0) $count++;
-        }
-        return $count;
-    }
-
-    return 0;
-}
-
+// Load categories (optional)
+$categories = [];
 try {
-    $processed = 0;
-
-    
-if ($scope === 'all') {
-        $filters = gdy_decode_filters($_POST['filters'] ?? '');
-        $excluded = $_POST['excluded_ids'] ?? [];
-        $excluded = array_values(array_filter(array_map('intval', (array)$excluded)));
-
-        $params = [];
-        $where = gdy_build_where_from_filters($filters, $params);
-
-        // Exclude unchecked ids when selecting all results (named placeholders only)
-        if ($excluded) {
-            $exNames = [];
-            foreach ($excluded as $i => $exId) {
-                $n = ':ex' . $i;
-                $exNames[] = $n;
-                $params[$n] = (int)$exId;
-            }
-            $where .= " AND n.id NOT IN (" . implode(',', $exNames) . ")";
-        }
-
-        $sql = "SELECT n.id
-                FROM news n
-                WHERE $where AND n.id > :cursor
-                ORDER BY n.id ASC
-                LIMIT :lim";
-        $stmt = $pdo->prepare($sql);
-
-        foreach ($params as $k => $v) {
-            $stmt->bindValue($k, $v, is_int($v) ? PDO::PARAM_INT : PDO::PARAM_STR);
-        }
-        $stmt->bindValue(':cursor', $cursor, PDO::PARAM_INT);
-        $stmt->bindValue(':lim', $batchSize, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $ids = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
-
-        if (!$ids) {
-            gdy_bulk_json(['ok' => true, 'processed' => 0, 'continue' => false, 'next_cursor' => $cursor]);
-        }
-
-        $processed = gdy_apply_action($pdo, $action, $ids, $extra);
-        $nextCursor = (int)end($ids);
-
-        gdy_bulk_json([
-            'ok' => true,
-            'processed' => $processed,
-            'continue' => (count($ids) === $batchSize),
-            'next_cursor' => $nextCursor,
-        ]);
-    }// scope: ids
-    $ids = $_POST['ids'] ?? [];
-    $ids = array_values(array_filter(array_map('intval', (array)$ids)));
-    if (!$ids) {
-        gdy_bulk_json(['ok' => false, 'msg' => 'no ids'], 400);
-    }
-
-    $processed = gdy_apply_action($pdo, $action, $ids, $extra);
-    gdy_bulk_json(['ok' => true, 'processed' => $processed]);
+    $st = $pdo->query('SELECT id, name FROM categories ORDER BY name ASC');
+    $categories = $st ? $st->fetchAll(PDO::FETCH_ASSOC) : [];
 } catch (Throwable $e) {
-    error_log('[Admin News bulk] ' . $e->getMessage());
-    gdy_bulk_json(['ok' => false, 'msg' => 'server error'], 500);
+    $categories = [];
 }
+
+// Load recent news (for selection UI)
+$newsRows = [];
+try {
+    $newsRows = $pdo->query('SELECT id, title, status, created_at FROM news ORDER BY id DESC LIMIT 100')->fetchAll(PDO::FETCH_ASSOC) ?: [];
+} catch (Throwable $e) {
+    $newsRows = [];
+}
+
+require_once __DIR__ . '/../layout/app_start.php';
+?>
+
+<?php if ($flashSuccess): ?>
+  <div class="alert alert-success"><?= h($flashSuccess) ?></div>
+<?php endif; ?>
+<?php if ($flashError): ?>
+  <div class="alert alert-danger"><?= h($flashError) ?></div>
+<?php endif; ?>
+
+<div class="card p-3">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="mb-0">إدارة جماعية</h5>
+    <a class="btn btn-sm btn-outline-secondary" href="index.php">العودة لقائمة الأخبار</a>
+  </div>
+
+  <form method="post">
+    <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+
+    <div class="row g-2 align-items-end mb-3">
+      <div class="col-md-4">
+        <label class="form-label">الإجراء</label>
+        <select class="form-select" name="action" required>
+          <option value="status">تغيير الحالة</option>
+          <option value="set_category">تغيير الفئة</option>
+          <option value="duplicate">نسخ</option>
+          <option value="delete">حذف</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">إلى حالة</label>
+        <select class="form-select" name="to_status">
+          <option value="published">منشور</option>
+          <option value="draft">مسودة</option>
+          <option value="pending">قيد المراجعة</option>
+          <option value="approved">معتمد</option>
+          <option value="archived">مؤرشف</option>
+        </select>
+        <div class="form-text">يستخدم فقط عند اختيار "تغيير الحالة".</div>
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">الفئة</label>
+        <select class="form-select" name="category_id">
+          <option value="0">—</option>
+          <?php foreach ($categories as $c): ?>
+            <option value="<?= (int)($c['id'] ?? 0) ?>"><?= h((string)($c['name'] ?? '')) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <div class="form-text">يستخدم فقط عند اختيار "تغيير الفئة".</div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th style="width:34px"><input type="checkbox" onclick="document.querySelectorAll('input[name=\"ids[]\"]').forEach(cb=>cb.checked=this.checked)"></th>
+            <th>العنوان</th>
+            <th style="width:110px">الحالة</th>
+            <th style="width:140px">التاريخ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($newsRows as $n): ?>
+            <?php
+              $id = (int)($n['id'] ?? 0);
+              $title = (string)($n['title'] ?? '');
+              $status = (string)($n['status'] ?? '');
+              $date = !empty($n['created_at']) ? date('Y-m-d', strtotime((string)$n['created_at'])) : '';
+            ?>
+            <tr>
+              <td><input type="checkbox" name="ids[]" value="<?= $id ?>"></td>
+              <td><?= h(str_limit($title, 90)) ?></td>
+              <td><span class="badge bg-secondary"><?= h($status) ?></span></td>
+              <td><?= h($date) ?></td>
+            </tr>
+          <?php endforeach; ?>
+          <?php if (!$newsRows): ?>
+            <tr><td colspan="4" class="text-muted">لا توجد بيانات.</td></tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary" type="submit">تطبيق</button>
+    </div>
+  </form>
+</div>
+
+<?php
+require_once __DIR__ . '/../layout/app_end.php';

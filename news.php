@@ -624,39 +624,32 @@ endif;
                 <div class="gdy-opinion-author-main">
                   <div class="gdy-opinion-author-name">
                     <?php if (!empty($opinionAuthorUrl)): ?>
-                      <a href="<?= h($opinionAuthorUrl) ?>">
-                        <?= h($opinionAuthorName) ?>
-                      </a>
+                      <a href="<?= h($opinionAuthorUrl) ?>"><?= h($opinionAuthorName) ?></a>
                     <?php else: ?>
                       <?= h($opinionAuthorName) ?>
                     <?php endif; ?>
                   </div>
 
                   <?php if (!empty($opinionAuthorPageTitle)): ?>
-                    <div class="gdy-opinion-author-meta">
-                      <?= h($opinionAuthorPageTitle) ?>
-                    </div>
+                    <div class="gdy-opinion-author-meta"><?= h($opinionAuthorPageTitle) ?></div>
                   <?php endif; ?>
 
                   <div class="gdy-opinion-author-links">
                     <?php if (!empty($opinionAuthorEmail)): ?>
                       <a href="mailto:<?= h($opinionAuthorEmail) ?>" title="البريد الإلكتروني">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg>
                       </a>
                     <?php endif; ?>
-
                     <?php if (!empty($opinionAuthorWebsite)): ?>
                       <a href="<?= h($opinionAuthorWebsite) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                       </a>
                     <?php endif; ?>
-
                     <?php if (!empty($opinionAuthorTwitter)): ?>
                       <a href="<?= h($opinionAuthorTwitter) ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                       </a>
                     <?php endif; ?>
-
                     <?php if (!empty($opinionAuthorFacebook)): ?>
                       <a href="<?= h($opinionAuthorFacebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
@@ -664,25 +657,25 @@ endif;
                     <?php endif; ?>
                   </div>
                 </div>
-            <?php $canonicalUrl = $canonicalUrl ?? ''; ?>
-            <div class="gdy-share-bar">
-              <div>
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+              </section>
+            <?php endif; ?>
 
+            <?php $canonicalUrl = $canonicalUrl ?? ''; ?>
             <div class="gdy-share-bar">
               <div>
                 <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>شارك الخبر</span>
               </div>
               <div class="gdy-share-btns">
-              <button type="button" class="gdy-share-native" aria-label="مشاركة">
-                <span class="gdy-ico" aria-hidden="true">⤴</span>
-                <span>مشاركة</span>
-              </button>
-              <button type="button" class="gdy-share-copy" data-copy-url="<?= h($canonicalUrl) ?>" aria-label="نسخ الرابط">
-                <span class="gdy-ico" aria-hidden="true">⧉</span>
-                <span>نسخ الرابط</span>
-              </button>
+                <button type="button" class="gdy-share-native" aria-label="مشاركة">
+                  <span class="gdy-ico" aria-hidden="true">⤴</span>
+                  <span>مشاركة</span>
+                </button>
+                <button type="button" class="gdy-share-copy" data-copy-url="<?= h($canonicalUrl) ?>" aria-label="نسخ الرابط">
+                  <span class="gdy-ico" aria-hidden="true">⧉</span>
+                  <span>نسخ الرابط</span>
+                </button>
+              </div>
             </div>
 
             <div class="gdy-article-body">

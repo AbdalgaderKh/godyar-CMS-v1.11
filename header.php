@@ -355,40 +355,45 @@ if (empty($headerCategories)) {
     <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/themes/theme-core.css?v=20260107_8">
 
     <?php
-      // Front-end theme stylesheet (optional)
-      // ✅ مهم جداً: لا نحقن --primary في :root إذا كان ملف الثيم موجوداً، حتى لا يطغى اللون الافتراضي.
-      // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + theme.front + theme_front
-    // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + frontendTheme (camel) + theme.front (legacy)
+  // Front-end theme stylesheet (optional)
+  // Important: do NOT inject --primary fallback if a theme CSS file exists.
+  // Supported keys (new + legacy):
+  // - frontend_theme
+  // - settings.frontend_theme
+  // - frontendTheme
+  // - theme_front
+  // - theme.front
+
+  $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
+
   $themeFront = (string)(
-    ($siteSettings['frontend_theme'] ?? null)
-    ?? ($siteSettings['settings.frontend_theme'] ?? null)
-    ?? ($siteSettings['frontendTheme'] ?? null)
-    $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
-      $themeFront = (string)(
-        $siteSettings['frontend_theme']
-          ?? $siteSettings['settings.frontend_theme']
-          ?? ($rawSettings['frontend_theme'] ?? '')
-          ?? $siteSettings['theme_front']
-          ?? ($rawSettings['theme.front'] ?? '')
-          ?? ($siteSettings['theme.front'] ?? 'default')
-      );
+      ($siteSettings['frontend_theme'] ?? null)
+      ?? ($siteSettings['settings.frontend_theme'] ?? null)
+      ?? ($siteSettings['frontendTheme'] ?? null)
+      ?? ($rawSettings['frontend_theme'] ?? null)
+      ?? ($siteSettings['theme_front'] ?? null)
+      ?? ($rawSettings['theme.front'] ?? null)
+      ?? ($siteSettings['theme.front'] ?? null)
+      ?? 'default'
+  );
 
-      $themeFront = strtolower(trim($themeFront)) ?: 'default';
-      // Allow values like theme-red
-      $themeFront = preg_replace('/^theme-/', '', $themeFront);
-      $themeFront = preg_replace('/[^a-z0-9_-]/', '', $themeFront) ?: 'default';
+  $themeFront = strtolower(trim($themeFront)) ?: 'default';
+  // Allow values like theme-red
+  $themeFront = preg_replace('/^theme-/', '', $themeFront);
+  $themeFront = preg_replace('/[^a-z0-9_-]/', '', $themeFront) ?: 'default';
 
-      $hasThemeCss = false;
-      if ($themeFront !== 'default') {
-        $themeCssDisk = dirname(__DIR__, 3) . '/assets/css/themes/theme-' . $themeFront . '.css';
-        if (is_file($themeCssDisk)) {
+  $hasThemeCss = false;
+  if ($themeFront !== 'default') {
+      // header.php is in the project root => assets is at ROOT_PATH/assets
+      $themeCssDisk = rtrim((string)ROOT_PATH, '/\\') . '/assets/css/themes/theme-' . $themeFront . '.css';
+      if (is_file($themeCssDisk)) {
           $hasThemeCss = true;
           $themeCssHref = rtrim((string)($rootUrl ?? ''), '/') . '/assets/css/themes/theme-' . $themeFront . '.css';
-          $v = (string)gdy_filemtime($themeCssDisk);
+          $v = (string)(function_exists('gdy_filemtime') ? gdy_filemtime($themeCssDisk) : filemtime($themeCssDisk));
           echo '<link rel="stylesheet" href="' . h($themeCssHref) . ($v !== '' ? ('?v=' . h($v)) : '') . '">' . "\n";
-        }
       }
-    ?>
+  }
+?>
 
   <?php if (!empty($siteSettings['extra_head_code'])): ?>
     <?= $siteSettings['extra_head_code'] . "\n" ?>

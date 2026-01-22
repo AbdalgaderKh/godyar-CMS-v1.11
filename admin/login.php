@@ -85,8 +85,8 @@ $allowedRoles = ['admin', 'editor', 'writer', 'author', 'super_admin'];
 if (!$user || !in_array($role, $allowedRoles, true)) {
     throw new Exception(__('t_81ba8a03a2', 'بيانات الدخول غير صحيحة أو لا تملك صلاحية الدخول للوحة التحكم.'));
 }
-
-        if (empty($user['status']) && $user['status'] !== 'active' === false) {
+        $status = strtolower(trim((string)($user['status'] ?? 'active')));
+        if ($status !== '' && $status !== 'active') {
             throw new Exception(__('t_aadb50b501', 'حسابك غير مفعّل، الرجاء التواصل مع الإدارة.'));
         }
 

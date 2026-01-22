@@ -1,5 +1,5 @@
 # =========================================================
-# Godyar CMS — Front Controller & Pretty URLs (NO-LOOP) — IMPROVED
+# Godyar CMS — Front Controller & Pretty URLs (NO-LOOP) — IMPROVED (v2)
 # Apache / LiteSpeed
 #
 # Goals:
@@ -12,15 +12,23 @@
 RewriteEngine On
 RewriteBase /
 
+Options -Indexes
+ServerSignature Off
+
 # ---------------------------------------------------------
 # Hardening: deny sensitive files (defense-in-depth)
+# - Apache 2.4+: Require all denied
+# - Apache 2.2 (legacy): Order/Deny
 # ---------------------------------------------------------
 <FilesMatch "(^\.env$|\.ini$|\.log$|\.sql$|\.bak|\.bak_|\.swp$|\.dist$)">
-  Require all denied
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </FilesMatch>
-
-Options -Indexes
-
 
 # ---------------------------------------------------------
 # MIME + Charset
@@ -41,17 +49,17 @@ Options -Indexes
 <IfModule mod_headers.c>
   Header always unset X-Powered-By
   Header unset X-Powered-By
+
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
   Header always set X-XSS-Protection "1; mode=block"
-  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # HSTS: send only on HTTPS (avoid issues on plain HTTP)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
   # (CSP intentionally omitted)
 </IfModule>
-
-Options -Indexes
-ServerSignature Off
 
 # ---------------------------------------------------------
 # Production env
@@ -113,28 +121,30 @@ RewriteRule ^register$ /register.php [L,QSA]
 RewriteRule ^profile$ /profile.php [L,QSA]
 RewriteRule ^logout$ /logout.php [L,QSA]
 RewriteRule ^admin/login$ /admin/login.php [L,QSA]
+
 # Legacy ad-click endpoint (dash) -> canonical underscore
-RewriteRule ^ad-click.php$ /ad_click.php [R=301,L]
-
+RewriteRule ^ad-click\.php$ /ad_click.php [R=301,L]
 
 # ---------------------------------------------------------
-# Block sensitive extensions
+# Block sensitive extensions (defense-in-depth)
 # ---------------------------------------------------------
-<IfModule mod_authz_core.c>
-  <FilesMatch "\.(log|ini|env|sql|bak|old|swp)$">
+<FilesMatch "\.(log|ini|env|sql|bak|old|swp)$">
+  <IfModule mod_authz_core.c>
     Require all denied
-  </FilesMatch>
-</IfModule>
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
 
 # ---------------------------------------------------------
 # Block non-public dirs (defense-in-depth)
 # ---------------------------------------------------------
-# install/upgrade/tools are not public in production
 RewriteRule ^install(/|$) - [F,L]
 RewriteRule ^upgrade(/|$) - [F,L]
 RewriteRule ^tools(/|$) - [F,L]
 RewriteRule ^godyar_private(/|$) - [F,L]
-
 
 RewriteRule ^_dev_tools/ - [F,L]
 RewriteRule ^logs/ - [F,L]

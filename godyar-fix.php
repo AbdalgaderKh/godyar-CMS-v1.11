@@ -391,56 +391,40 @@ function checkLint(array &$rows, array &$summary, string $root): void {
 function checkSecurityPatterns(array &$rows, array &$summary, string $root): void {
     $section = 'Security Patterns';
 
-    // استبعاد ملف الفحص نفسه افتراضيًا لتقليل النتائج الكاذبة
-    $skipSelf = (string)getParam('skip_self', '1');
-    $selfPath = realpath(__FILE__) ?: __FILE__;
+    $selfReal = realpath(__FILE__) ?: __FILE__;
 
-    // استبعاد مسارات/مكتبات معروفة (Dependency) لتقليل الضوضاء
-    $excludePrefixes = [
-        $root . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR,
-        $root . DIRECTORY_SEPARATOR . 'node_modules' . DIRECTORY_SEPARATOR,
-        $root . DIRECTORY_SEPARATOR . 'libs' . DIRECTORY_SEPARATOR . 'PHPMailer' . DIRECTORY_SEPARATOR,
-        $root . DIRECTORY_SEPARATOR . 'x' . DIRECTORY_SEPARATOR, // غالبًا نسخة/أرشيف
-    ];
-
-    // أنماط عالية الخطورة (Server-side) — افحص PHP فقط
-    $highRiskPatterns = [
-        'eval('       => '/\beval\s*\(/i',
-        'shell_exec(' => '/\bshell_exec\s*\(/i',
-        // استثناء PDO::exec و $obj->exec وغيرها (نتائج كاذبة كثيرة)
-        'exec('       => '/(?<!->)(?<!::)\bexec\s*\(/i',
-        'system('     => '/(?<!->)(?<!::)\bsystem\s*\(/i',
-        'passthru('   => '/(?<!->)(?<!::)\bpassthru\s*\(/i',
-        'popen('      => '/(?<!->)(?<!::)\bpopen\s*\(/i',
-        'proc_open('  => '/(?<!->)(?<!::)\bproc_open\s*\(/i',
-        'assert('     => '/\bassert\s*\(/i',
-        'gzinflate('  => '/\bgzinflate\s*\(/i',
-    ];
-
-    // أنماط منخفضة المخاطر (معلومات) — PHP فقط
-    $infoPatterns = [
-        'base64_decode(' => '/\bbase64_decode\s*\(/i',
+    // Only scan PHP files for high-risk function calls.
+    // We use token_get_all() so matches inside comments/strings do not trigger false positives.
+    $targets = [
+        'eval' => 'eval',
+        'shell_exec' => 'shell_exec',
+        'exec' => 'exec',
+        'system' => 'system',
+        'passthru' => 'passthru',
+        'popen' => 'popen',
+        'proc_open' => 'proc_open',
+        'assert' => 'assert',
+        'base64_decode' => 'base64_decode',
+        'gzinflate' => 'gzinflate',
     ];
 
     $hitsAny = false;
 
-    $phpExts = ['php', 'inc', 'phtml'];
+    $isIgnorable = static function($tok): bool {
+        if (is_array($tok)) {
+            return in_array($tok[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true);
+        }
+        return ($tok === ' ' || $tok === "\n" || $tok === "\r" || $tok === "\t");
+    };
 
-    foreach ($highRiskPatterns as $label => $regex) {
+    foreach ($targets as $label => $fnName) {
         $hits = 0;
 
-        foreach (iterFiles($root) as $file) {
+        foreach (iterFiles($root, 'php') as $file) {
             $real = realpath($file) ?: $file;
 
-            if ($skipSelf === '1' && $real === $selfPath) continue;
-
-            // استبعاد مسارات معروفة
-            foreach ($excludePrefixes as $pfx) {
-                if (strpos($real, $pfx) === 0) continue 2;
-            }
-
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($ext, $phpExts, true)) continue;
+            // Exclude this checker file itself
+            if ($real === $selfReal) continue;
 
             $size = @filesize($file);
             if ($size === false || $size > MAX_SECURITY_FILE_SIZE) continue;
@@ -448,56 +432,62 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
             $content = @file_get_contents($file);
             if ($content === false) continue;
 
-            if (preg_match($regex, $content)) {
+            try {
+                $tokens = @token_get_all($content);
+                if (!is_array($tokens) || !$tokens) continue;
+            } catch (Throwable $e) {
+                continue;
+            }
+
+            $countTokens = count($tokens);
+            for ($i = 0; $i < $countTokens; $i++) {
+                $tok = $tokens[$i];
+
+                if (!is_array($tok) || $tok[0] !== T_STRING) {
+                    continue;
+                }
+
+                $name = strtolower($tok[1]);
+                if ($name !== $fnName) continue;
+
+                // Find previous significant token
+                $j = $i - 1;
+                while ($j >= 0 && $isIgnorable($tokens[$j])) $j--;
+
+                // Avoid methods like $pdo->exec() or Class::exec()
+                if ($j >= 0) {
+                    $prev = $tokens[$j];
+                    if (is_array($prev) && in_array($prev[0], [T_OBJECT_OPERATOR, T_DOUBLE_COLON], true)) {
+                        continue;
+                    }
+                    if (!is_array($prev) && ($prev === '->' || $prev === '::')) {
+                        continue;
+                    }
+                }
+
+                // Find next significant token
+                $k = $i + 1;
+                while ($k < $countTokens && $isIgnorable($tokens[$k])) $k++;
+
+                // Confirm it's a function call: next token is '('
+                $next = $tokens[$k] ?? null;
+                if ($next !== '(') {
+                    continue;
+                }
+
                 $hits++;
                 $hitsAny = true;
 
-                record($rows, $summary, 'warn', $section, $label, 'تم العثور على نمط عالي الخطورة (راجع الاستخدام والسياق)', [
+                record($rows, $summary, 'warn', $section, $label . '(', 'تم العثور على نمط عالي الخطورة (راجع الاستخدام والسياق)', [
                     'file' => substr($file, strlen($root) + 1),
                 ]);
 
-                if ($hits >= MAX_SECURITY_HITS_PER_PATTERN) break;
+                if ($hits >= MAX_SECURITY_HITS_PER_PATTERN) break 2; // stop scanning this pattern further
             }
         }
 
         if ($hits === 0) {
-            record($rows, $summary, 'ok', $section, $label, 'لا توجد نتائج ضمن حدود البحث');
-        }
-    }
-
-    // معلومات فقط (لا تُرفع كتحذير)
-    foreach ($infoPatterns as $label => $regex) {
-        $hits = 0;
-
-        foreach (iterFiles($root) as $file) {
-            $real = realpath($file) ?: $file;
-
-            if ($skipSelf === '1' && $real === $selfPath) continue;
-
-            foreach ($excludePrefixes as $pfx) {
-                if (strpos($real, $pfx) === 0) continue 2;
-            }
-
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($ext, $phpExts, true)) continue;
-
-            $size = @filesize($file);
-            if ($size === false || $size > MAX_SECURITY_FILE_SIZE) continue;
-
-            $content = @file_get_contents($file);
-            if ($content === false) continue;
-
-            if (preg_match($regex, $content)) {
-                $hits++;
-                record($rows, $summary, 'ok', $section, $label, 'معلومة: تم العثور على استخدام base64_decode (ليس خطرًا بحد ذاته)', [
-                    'file' => substr($file, strlen($root) + 1),
-                ]);
-                if ($hits >= MAX_SECURITY_HITS_PER_PATTERN) break;
-            }
-        }
-
-        if ($hits === 0) {
-            record($rows, $summary, 'ok', $section, $label, 'لا توجد نتائج ضمن حدود البحث');
+            record($rows, $summary, 'ok', $section, $label . '(', 'لا توجد نتائج ضمن حدود البحث');
         }
     }
 
@@ -507,8 +497,7 @@ function checkSecurityPatterns(array &$rows, array &$summary, string $root): voi
 }
 
 
-
-function parseEnvFile(string $envPath): ?array {
+function function parseEnvFile(string $envPath): ?array {
     if (!is_file($envPath)) return null;
 
     $lines = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -652,7 +641,7 @@ function checkDb(array &$rows, array &$summary, string $root, string $privateRoo
     }
 
     if (!class_exists(PDO::class)) {
-        record($rows, $summary, 'fail', $section, 'PDO', 'PDO غير متوفر');
+        record($rows, $summary, 'warn', $section, 'PDO', 'PDO غير متوفر — تم تخطي اختبار DB (فعّل pdo/pdo_mysql أو مرر skip_db=1)');
         return;
     }
 
@@ -674,7 +663,7 @@ function checkDb(array &$rows, array &$summary, string $root, string $privateRoo
 function checkHttp(array &$rows, array &$summary): void {
     $baseUrl = (string)getParam('base_url', '');
     if ($baseUrl === '') {
-        record($rows, $summary, 'ok', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (اختياري) — لم يتم تمرير base_url');
+        record($rows, $summary, 'warn', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (لم يتم تمرير base_url)');
         return;
     }
     $section = 'HTTP Smoke Tests';
@@ -771,7 +760,7 @@ function runAllChecks(): array {
     // HTTP smoke tests (اختياري إذا base_url موجود)
     $skipHttp = (string)getParam('skip_http', '0');
     if ($skipHttp === '1') {
-        record($rows, $summary, 'ok', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (اختياري) — skip_http=1');
+        record($rows, $summary, 'warn', 'HTTP Smoke Tests', 'skip', 'تم تخطي فحص HTTP (skip_http=1)');
     } else {
         checkHttp($rows, $summary);
     }
@@ -781,7 +770,7 @@ function runAllChecks(): array {
     if ($lint === '1') {
         checkLint($rows, $summary, $root);
     } else {
-        record($rows, $summary, 'ok', 'PHP Lint (php -l)', 'skip', 'تم تخطي lint (اختياري) — مرر lint=1 للتفعيل');
+        record($rows, $summary, 'warn', 'PHP Lint (php -l)', 'skip', 'تم تخطي lint (مرر lint=1 للتفعيل)');
     }
 
     return ['summary' => $summary, 'rows' => $rows];

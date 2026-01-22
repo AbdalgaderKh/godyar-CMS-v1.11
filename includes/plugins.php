@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * Godyar Plugin Framework — برو
+ * Godyar Plugin System (برو)
  * Path: /godyar/includes/plugins.php
  *
  * - كل إضافة توضع داخل /godyar/plugins/{PluginFolder}

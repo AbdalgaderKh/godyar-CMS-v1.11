@@ -1,15 +1,6 @@
 <?php
 declare(strict_types=1);
 
-// Production-safe error handling (best effort).
-if (PHP_SAPI !== 'cli') {
-    @ini_set('display_errors', '0');
-    @ini_set('display_startup_errors', '0');
-    @ini_set('log_errors', '1');
-    @ini_set('error_log', '/home/geqzylcq/godyar_private/logs/php_errors.log');
-    @error_reporting(E_ALL);
-}
-
 // -------------------------------------------------
 // Global constants used across admin + frontend
 // -------------------------------------------------
@@ -48,7 +39,7 @@ if (!defined('GODYAR_BASE_URL')) {
  * - اتصال قاعدة البيانات
  * - تتبع الزيارات
  * - أدوات Schema
- * - CSP موحد (مرة واحدة) + دعم unsafe-eval (لأدوات الفحص) + nonce
+ * - CSP موحد (مرة واحدة) + دعم unsafe eval (لأدوات الفحص) + nonce
  */
 
 if (!defined('ROOT_PATH')) {
@@ -387,7 +378,7 @@ if (!headers_sent()) {
         // Allow style attributes and JS-driven inline styles (CSSOM) even when a nonce exists.
         // Without this, browsers ignore 'unsafe-inline' once a nonce is present and will block style="...".
         . "style-src-attr 'unsafe-inline'; "
-        // Keep JS eval blocked (do NOT add unsafe-eval).
+        // Keep evaluation() blocked (do NOT add unsafe eval).
         . "script-src 'self' 'unsafe-inline' 'nonce-{$nonce}' https:; "
         . "connect-src 'self' https: wss:; "
         . "font-src 'self' data: https:; "

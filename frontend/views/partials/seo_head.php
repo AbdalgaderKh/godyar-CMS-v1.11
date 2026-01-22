@@ -9,10 +9,10 @@ $canonical = $canonical ?? ($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST
 <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>" />
 <meta property="og:title" content="<?= htmlspecialchars($seo_title) ?>">
 <meta property="og:description" content="<?= htmlspecialchars($seo_description) ?>">
-<?php if ($seo_image): ?><meta property="og:image" content="<?= htmlspecialchars($seo_image) ?>"><?php endif; ?>
+<?php if ((empty($seo_image) === false)): ?><meta property="og:image" content="<?= htmlspecialchars($seo_image) ?>"><?php endif; ?>
 <meta property="og:url" content="<?= htmlspecialchars($canonical) ?>">
 <meta property="og:type" content="article">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="<?= htmlspecialchars($seo_title) ?>">
 <meta name="twitter:description" content="<?= htmlspecialchars($seo_description) ?>">
-<?php if ($seo_image): ?><meta name="twitter:image" content="<?= htmlspecialchars($seo_image) ?>"><?php endif; ?>
+<?php if ((empty($seo_image) === false)): ?><meta name="twitter:image" content="<?= htmlspecialchars($seo_image) ?>"><?php endif; ?>

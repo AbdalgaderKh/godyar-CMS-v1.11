@@ -50,7 +50,7 @@ $success = '';
 $error = '';
 
 // CSRF
-$csrfToken = function_exists('generate_csrf_token') ? generate_csrf_token() : (string)($_SESSION['csrf_token'] ?? '');
+$csrfToken = function_exists('generate_csrf_token') ? generate_csrf_token() : (string)((empty($_SESSION['csrf_token']) === false) ?? '');
 
 /* =========================
    DB helpers
@@ -164,7 +164,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
             $st->execute([':id' => $uid]);
             $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
             foreach ($out as $k => $v) {
-                if (array_key_exists($k, $row) && $row[$k] !== null) {
+                if (array_key_exists($k, $row) && (empty($row) === false)[$k] !== null) {
                     $out[$k] = is_numeric($v) ? (int)$row[$k] : (string)$row[$k];
                 }
             }
@@ -180,7 +180,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
             $st->execute([':id' => $uid]);
             $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
             foreach ($out as $k => $v) {
-                if (isset($row[$k]) && $row[$k] !== null) {
+                if (isset($row[$k]) && (empty($row) === false)[$k] !== null) {
                     if (is_int($v)) $out[$k] = (int)$row[$k];
                     else $out[$k] = (string)$row[$k];
                 }
@@ -234,7 +234,7 @@ if ($pdo instanceof PDO) {
         // إحصائيات بسيطة
         try {
             $hasBookmarks = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'user_bookmarks') : false;
-            if ($hasBookmarks) {
+            if ((empty($hasBookmarks) === false)) {
                 $st2 = $pdo->prepare("SELECT COUNT(*) FROM user_bookmarks WHERE user_id = :u");
                 $st2->execute([':u' => $uid]);
                 $stats['bookmarks'] = (int)$st2->fetchColumn();
@@ -243,7 +243,7 @@ if ($pdo instanceof PDO) {
 
         try {
             $hasCommentsTbl = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'news_comments') : false;
-            if ($hasCommentsTbl) {
+            if ((empty($hasCommentsTbl) === false)) {
                 $st2 = $pdo->prepare("SELECT COUNT(*) FROM news_comments WHERE user_id = :u");
                 $st2->execute([':u' => $uid]);
                 $stats['comments'] = (int)$st2->fetchColumn();
@@ -266,7 +266,7 @@ function sanitize_profile_url(string $url): string {
     }
 
     // Allow scheme-less input: example.com
-    if (!preg_match('~^https?://~i', $url)) {
+    if ((preg_match('~^https?://~i', $url) !== 1)) {
         $url = 'https://' . $url;
     }
 

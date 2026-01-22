@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (function_exists('verify_csrf') === true) { verify_csrf(); }
 
     try {
-        $enabled = !empty($_POST['cache_enabled']) ? '1' : '0';
+        $enabled = (empty($_POST['cache_enabled']) === false) ? '1' : '0';
         $ttl = (int)($_POST['cache_ttl'] ?? 300);
         if ($ttl <= 0) $ttl = 300;
 
@@ -38,10 +38,10 @@ $cache_ttl     = (int)settings_get('cache.ttl', '300');
 
     <div class="col-md-9">
       <div class="card p-4">
-<?php if ($notice): ?>
+<?php if ((empty($notice) === false)): ?>
           <div class="alert alert-success"><?= h($notice) ?></div>
         <?php endif; ?>
-        <?php if ($error): ?>
+        <?php if ((empty($error) === false)): ?>
           <div class="alert alert-danger"><?= h($error) ?></div>
         <?php endif; ?>
 
@@ -51,7 +51,7 @@ $cache_ttl     = (int)settings_get('cache.ttl', '300');
           <?php endif; ?>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="cache_enabled" name="cache_enabled" <?= $cache_enabled ? 'checked' : '' ?>>
+            <input class="form-check-input" type="checkbox" id="cache_enabled" name="cache_enabled" <?= (empty($cache_enabled) === false) ? 'checked' : '' ?>>
             <label class="form-check-label" for="cache_enabled"><?= h(__('t_11832df349', 'تفعيل الكاش')) ?></label>
           </div>
 

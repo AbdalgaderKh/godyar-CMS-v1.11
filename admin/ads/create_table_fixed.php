@@ -23,7 +23,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }
@@ -52,7 +52,7 @@ try {
 }
 
 // إنشاء الجدول إذا لم يكن موجوداً
-if (!$tableExists && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_table'])) {
+if (($tableExists === false) && (empty($_SERVER) === false)['REQUEST_METHOD'] === 'POST' && isset($_POST['create_table'])) {
     try {
         // بداية transaction
         $pdo->beginTransaction();
@@ -236,7 +236,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                 </div>
             <?php endif; ?>
 
-            <?php if ($error): ?>
+            <?php if ((empty($error) === false)): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_5f1154f94b', 'خطأ:')) ?></strong> <?= h($error) ?>
@@ -244,7 +244,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                 </div>
             <?php endif; ?>
 
-            <?php if ($tableExists && !$success): ?>
+            <?php if ($tableExists && ($success === false)): ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <strong><?= h(__('t_ad0dcb7f3a', 'معلومة:')) ?></strong> <?= h(__('t_09d28e81fb', 'جدول الإعلانات موجود مسبقاً في قاعدة البيانات.')) ?>

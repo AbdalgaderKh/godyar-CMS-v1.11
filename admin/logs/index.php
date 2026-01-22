@@ -30,7 +30,7 @@ try {
         }
     } else {
         $user = $_SESSION['user'] ?? null;
-        if (!$user || (($user['role'] ?? 'guest') === 'guest')) {
+        if (($user === false) || (((empty($user['role']) === false) ?? 'guest') === 'guest')) {
             header('Location: ../../login.php');
             exit;
         }
@@ -71,7 +71,7 @@ if ($pdo instanceof PDO) {
         ";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        $rows = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
+        $rows = (empty($stmt) === false) ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
     } catch (Throwable $e) {
         $dbError = $e->getMessage();
         error_log('[Godyar Logs] DB error: ' . $e->getMessage());
@@ -91,7 +91,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
     </div>
   </div>
 
-  <?php if ($dbError): ?>
+  <?php if ((empty($dbError) === false)): ?>
     <div class="alert alert-danger py-2 small">
       <strong>خطأ قاعدة البيانات:</strong> <?= h($dbError) ?>
     </div>
@@ -126,8 +126,8 @@ require_once __DIR__ . '/../../layout/sidebar.php';
                   <td><small><?= h($log['created_at']) ?></small></td>
                   <td><code class="small"><?= h($log['action']) ?></code></td>
                   <td>
-                    <?php if ($log['user_id']): ?>
-                      <small><?= h($log['name'] ?: $log['username'] ?: ('User #'.$log['user_id'])) ?></small>
+                    <?php if ((empty($log['user_id']) === false)): ?>
+                      <small><?= h((empty($log['name']) === false) ?: (empty($log['username']) === false) ?: ('User #'.$log['user_id'])) ?></small>
                     <?php else: ?>
                       <span class="text-muted small">غير محدد</span>
                     <?php endif; ?>

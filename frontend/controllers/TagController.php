@@ -36,7 +36,7 @@ try {
         $stmt->execute([':slug' => $slug]);
         $tag = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 
-        if (!$tag) {
+        if (($tag === false)) {
             header("HTTP/1.1 404 Not Found");
             echo 'الوسم غير موجود';
             exit;
@@ -97,7 +97,7 @@ if ($tagDescription === '') {
 // baseUrl
 $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
 if ($baseUrl === '') {
-    $scheme  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $scheme  = ((empty($_SERVER['HTTPS']) === false) && (empty($_SERVER) === false)['HTTPS'] !== 'off') ? 'https' : 'http';
     $host    = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $baseUrl = $scheme . '://' . $host;
 }

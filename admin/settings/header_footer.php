@@ -33,10 +33,10 @@ $extra_body_code = settings_get('advanced.extra_body', '');
 
     <div class="col-md-9">
       <div class="card p-4">
-<?php if ($notice): ?>
+<?php if ((empty($notice) === false)): ?>
           <div class="alert alert-success"><?= h($notice) ?></div>
         <?php endif; ?>
-        <?php if ($error): ?>
+        <?php if ((empty($error) === false)): ?>
           <div class="alert alert-danger"><?= h($error) ?></div>
         <?php endif; ?>
 

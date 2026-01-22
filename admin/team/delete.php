@@ -23,7 +23,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }

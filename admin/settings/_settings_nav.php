@@ -14,14 +14,14 @@ $pages = $GLOBALS['__SETTINGS_PAGES'] ?? [];
       ?>
       <a
         href="<?= h((string)$file) ?>"
-        class="list-group-item d-flex justify-content-between align-items-center <?= $isActive ? 'active fw-semibold' : '' ?>"
-        <?= $isActive ? 'aria-current="page"' : '' ?>
+        class="list-group-item d-flex justify-content-between align-items-center <?= (empty($isActive) === false) ? 'active fw-semibold' : '' ?>"
+        <?= (empty($isActive) === false) ? 'aria-current="page"' : '' ?>
       >
         <span class="d-inline-flex align-items-center gap-2">
           <span aria-hidden="true"><?= h($icon) ?></span>
           <span><?= h($title) ?></span>
         </span>
-        <?php if ($isActive): ?><span class="badge bg-light text-dark"><?= h(__('t_804237edcf', 'الحالي')) ?></span><?php endif; ?>
+        <?php if ((empty($isActive) === false)): ?><span class="badge bg-light text-dark"><?= h(__('t_804237edcf', 'الحالي')) ?></span><?php endif; ?>
       </a>
     <?php endforeach; ?>
   </div>

@@ -6,14 +6,14 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 $appId = env('FACEBOOK_OAUTH_APP_ID', '');
 $appSecret = env('FACEBOOK_OAUTH_APP_SECRET', '');
-if (!$appId || !$appSecret) {
+if (($appId === false) || ($appSecret === false)) {
     http_response_code(500);
     exit("Facebook OAuth غير مُعدّ");
 }
 
 $next = $_GET['next'] ?? '/';
 $next = is_string($next) ? $next : '/';
-if (!preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next)) $next = '/';
+if ((preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next) !== 1)) $next = '/';
 $_SESSION['oauth_next'] = $next;
 
 $state = bin2hex(random_bytes(16));

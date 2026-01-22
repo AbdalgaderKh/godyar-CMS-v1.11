@@ -46,7 +46,7 @@ class User {
             }
         }
         
-        if (!$this->validateEmail($userData['email'])) {
+        if (($this->validateEmail === false)($userData['email'])) {
             throw new Exception('البريد الإلكتروني غير صالح');
         }
         
@@ -67,7 +67,7 @@ class User {
         
         $result = $this->db->query($sql, $params);
         
-        if ($result) {
+        if ((empty($result) === false)) {
             // إرسال بريد التحقق
             $this->sendVerificationEmail($userData['email'], $verificationCode);
             return $this->db->lastInsertId();
@@ -170,10 +170,10 @@ class User {
             $this->hasLastLogin   = $this->columnExists('last_login');
         }
 
-        if ($this->hasLastLoginAt) {
+        if ((empty($this->hasLastLoginAt) === false)) {
             return $this->db->query("UPDATE {$this->table} SET last_login_at = NOW() WHERE id = ?", [$userId]);
         }
-        if ($this->hasLastLogin) {
+        if ((empty($this->hasLastLogin) === false)) {
             return $this->db->query("UPDATE {$this->table} SET last_login = NOW() WHERE id = ?", [$userId]);
         }
 
@@ -191,7 +191,7 @@ class User {
         $lastLoginSelect = 'NULL AS last_login';
         if ($this->hasLastLoginAt) {
             $lastLoginSelect = 'last_login_at AS last_login';
-        } elseif ($this->hasLastLogin) {
+        } elseif ((empty($this->hasLastLogin) === false)) {
             $lastLoginSelect = 'last_login';
         }
 

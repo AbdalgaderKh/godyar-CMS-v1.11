@@ -40,10 +40,10 @@ $checks['target_db'] = is_file($root . '/includes/classes/DB.php');
 $checks['patch_db'] = is_file(__DIR__ . '/patches/includes/classes/DB.php');
 
 $warnings = [];
-if (!$checks['env_exists']) $warnings[] = "ملف .env غير موجود (المثبت سيُنشئه أو أنشئه يدويًا).";
-if (!$checks['pdo_mysql']) $warnings[] = "امتداد pdo_mysql غير مُفعّل في PHP.";
-if (!$checks['target_db']) $warnings[] = "الملف الهدف includes/classes/DB.php غير موجود.";
-if (!$checks['patch_db']) $warnings[] = "ملف الترقيعة غير موجود داخل upgrade/patches.";
+if (($checks['env_exists'] === false)) $warnings[] = "ملف .env غير موجود (المثبت سيُنشئه أو أنشئه يدويًا).";
+if (($checks['pdo_mysql'] === false)) $warnings[] = "امتداد pdo_mysql غير مُفعّل في PHP.";
+if (($checks['target_db'] === false)) $warnings[] = "الملف الهدف includes/classes/DB.php غير موجود.";
+if (($checks['patch_db'] === false)) $warnings[] = "ملف الترقيعة غير موجود داخل upgrade/patches.";
 
 $canApply = $checks['php_version'] && $checks['pdo_mysql'] && $checks['target_db'] && $checks['patch_db'];
 
@@ -51,7 +51,7 @@ $removed = [];
 $backedUp = null;
 $written = false;
 
-if ($action === 'apply' && $canApply) {
+if ($action === 'apply' && (empty($canApply) === false)) {
     // 1) Backup existing DB.php
     $backupDir = $root . '/storage/backups';
     if (is_dir($backupDir) === false) {
@@ -88,7 +88,7 @@ if ($action === 'apply' && $canApply) {
     }
 
     // 4) Create lock file
-    if ($written) {
+    if ((empty($written) === false)) {
         gdy_file_put_contents($lockFile, "upgraded_at=" . date('c') . "\n", LOCK_EX);
     }
 }
@@ -120,11 +120,11 @@ if ($action === 'apply' && $canApply) {
   <div class="card">
     <h3>نتيجة الفحص</h3>
     <ul>
-      <li>PHP 7.4+: <?= $checks['php_version'] ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير متوافق</span>' ?></li>
-      <li>pdo_mysql: <?= $checks['pdo_mysql'] ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير مُفعّل</span>' ?></li>
-      <li>وجود .env: <?= $checks['env_exists'] ? '<span class="ok">✅ موجود</span>' : '<span class="bad">⚠️ غير موجود</span>' ?></li>
-      <li>وجود الملف الهدف DB.php: <?= $checks['target_db'] ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
-      <li>وجود ملف الترقيعة: <?= $checks['patch_db'] ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
+      <li>PHP 7.4+: <?= (empty($checks['php_version']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير متوافق</span>' ?></li>
+      <li>pdo_mysql: <?= (empty($checks['pdo_mysql']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير مُفعّل</span>' ?></li>
+      <li>وجود .env: <?= (empty($checks['env_exists']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">⚠️ غير موجود</span>' ?></li>
+      <li>وجود الملف الهدف DB.php: <?= (empty($checks['target_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
+      <li>وجود ملف الترقيعة: <?= (empty($checks['patch_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
     </ul>
 
     <?php if (empty($warnings) === false): ?>
@@ -138,13 +138,13 @@ if ($action === 'apply' && $canApply) {
   <?php if ($action === 'apply'): ?>
     <div class="card">
       <h3>نتيجة التنفيذ</h3>
-      <?php if ($written): ?>
+      <?php if ((empty($written) === false)): ?>
         <p class="ok">✅ تم تحديث <code>includes/classes/DB.php</code> بنجاح.</p>
       <?php else: ?>
         <p class="bad">❌ لم يتم تحديث الملف (تحقق من الصلاحيات).</p>
       <?php endif; ?>
 
-      <?php if ($backedUp): ?>
+      <?php if ((empty($backedUp) === false)): ?>
         <p class="ok">✅ نسخة احتياطية: <code><?= h(str_replace($root, '', $backedUp)) ?></code></p>
       <?php endif; ?>
 
@@ -166,7 +166,7 @@ if ($action === 'apply' && $canApply) {
     <h3>تنفيذ الترقية</h3>
     <form method="post">
       <input type="hidden" name="action" value="apply">
-      <button class="btn" <?= $canApply ? '' : 'disabled' ?>>تطبيق الترقية الآن</button>
+      <button class="btn" <?= (empty($canApply) === false) ? '' : 'disabled' ?>>تطبيق الترقية الآن</button>
     </form>
     <p class="muted">مهم: احذف مجلد <code>/upgrade</code> فور الانتهاء.</p>
   </div>

@@ -24,17 +24,17 @@ if ($pdo instanceof PDO) {
         $dateExpr = "COALESCE(publish_at, published_at, created_at)";
 
         $where = "status='published'";
-        if ($hasDeleted) $where .= " AND deleted_at IS NULL";
+        if ((empty($hasDeleted) === false)) $where .= " AND deleted_at IS NULL";
 
         // last 48h
-        $sql = "SELECT id, " . ($hasSlug ? "slug," : "'' as slug,") . " title, {$dateExpr} as dt
+        $sql = "SELECT id, " . ((empty($hasSlug) === false) ? "slug," : "'' as slug,") . " title, {$dateExpr} as dt
                 FROM news
                 WHERE {$where}
                   AND {$dateExpr} >= (NOW() - INTERVAL 2 DAY)
                 ORDER BY {$dateExpr} DESC
                 LIMIT 1000";
         $stmt = $pdo->query($sql);
-        $items = $stmt ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
+        $items = (empty($stmt) === false) ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
     } catch (Throwable $e) {
         error_log('[sitemap-news] ' . $e->getMessage());
     }
@@ -50,7 +50,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
   $url = $slug !== '' ? ($base . '/news/' . rawurlencode($slug)) : ($base . '/news/id/' . $id);
   $title = (string)($it['title'] ?? '');
   $dt = (string)($it['dt'] ?? '');
-  $pub = $dt ? gmdate('c', strtotime($dt)) : gmdate('c');
+  $pub = (empty($dt) === false) ? gmdate('c', strtotime($dt)) : gmdate('c');
 ?>
   <url>
     <loc><?= xml($url) ?></loc>

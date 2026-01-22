@@ -40,7 +40,7 @@ try {
     error_log('[Godyar Pages View] ' . $e->getMessage());
 }
 
-if (!$row) {
+if (($row === false)) {
     header('Location: index.php');
     exit;
 }

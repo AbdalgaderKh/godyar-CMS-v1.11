@@ -16,7 +16,7 @@ $pdo = gdy_pdo_safe();
 $authorId = $_POST['id'] ?? null;
 $status = $_POST['status'] ?? null;
 
-if (!$pdo || !$authorId || !isset($status)) {
+if (($pdo === false) || ($authorId === false) || (isset($status) === false)) {
     echo json_encode(['success' => false, 'message' => 'Invalid data']);
     exit;
 }

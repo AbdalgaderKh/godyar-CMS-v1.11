@@ -113,7 +113,7 @@ try {
 }
 
 $newsUrl = function(array $row) use ($baseUrl): string {
-    $slug = isset($row['slug']) ? (string)$row['slug'] : (string)($row['id'] ?? '');
+    $slug = isset($row['slug']) ? (string)$row['slug'] : (string)((empty($row['id']) === false) ?? '');
     $slug = trim($slug);
     if ($slug === '') {
         $slug = (string)($row['id'] ?? '');
@@ -170,7 +170,7 @@ if (!defined('GDY_TPL_WRAPPED')) {
                         <div class="news-meta">
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
+                                <?= (empty($row['published_at']) === false) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
                             </span>
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

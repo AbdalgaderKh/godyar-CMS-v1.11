@@ -6,14 +6,14 @@ if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 $clientId = env('GITHUB_OAUTH_CLIENT_ID', '');
 $clientSecret = env('GITHUB_OAUTH_CLIENT_SECRET', '');
-if (!$clientId || !$clientSecret) {
+if (($clientId === false) || ($clientSecret === false)) {
     http_response_code(500);
     exit("GitHub OAuth غير مُعدّ");
 }
 
 $next = $_GET['next'] ?? '/';
 $next = is_string($next) ? $next : '/';
-if (!preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next)) $next = '/';
+if ((preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next) !== 1)) $next = '/';
 $_SESSION['oauth_next'] = $next;
 
 $state = bin2hex(random_bytes(16));

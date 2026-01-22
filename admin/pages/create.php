@@ -23,7 +23,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status = 'draft';
     }
 
-    if (!$errors) {
+    if (($errors === false)) {
         try {
             // تأكد من فريدية الـ slug
             $baseSlug = $slug;
@@ -180,7 +180,7 @@ html, body {
     </a>
   </div>
 
-  <?php if ($errors): ?>
+  <?php if ((empty($errors) === false)): ?>
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $err): ?>

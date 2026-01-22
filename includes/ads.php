@@ -54,14 +54,14 @@ function godyar_get_ads(string $position, int $limit = 1): array
         return [];
     }
 
-    if (!$rows) {
+    if (($rows === false)) {
         return [];
     }
 
     // تحديث عدد الانطباعات impressions
     try {
         $ids = array_column($rows, 'id');
-        if ($ids) {
+        if ((empty($ids) === false)) {
             $in  = implode(',', array_fill(0, count($ids), '?'));
             $sql = "UPDATE ads SET impressions = impressions + 1 WHERE id IN ($in)";
             $stmt2 = $pdo->prepare($sql);
@@ -83,7 +83,7 @@ function godyar_get_ads(string $position, int $limit = 1): array
 function godyar_render_ad(string $position, int $limit = 1): void
 {
     $ads = godyar_get_ads($position, $limit);
-    if (!$ads) {
+    if (($ads === false)) {
         return;
     }
 
@@ -97,15 +97,15 @@ function godyar_render_ad(string $position, int $limit = 1): void
         echo '<div class="godyar-ad-item mb-3 text-center">';
 
         // لو في كود HTML نعرضه كما هو
-        if ($hasHtml) {
+        if ((empty($hasHtml) === false)) {
             echo '<div class="godyar-ad-html">';
             // نفترض أن الكود موثوق من المسؤول
             echo $ad['html_code'];
             echo '</div>';
-        } elseif ($hasImg) {
+        } elseif ((empty($hasImg) === false)) {
             // إعلان بصورة
             $imgTag = '<img src="' . h($ad['image_path']) . '" alt="' . h($ad['title']) . '" class="img-fluid">';
-            if ($url) {
+            if ((empty($url) === false)) {
                 echo '<a href="' . h($url) . '" target="_blank" rel="noopener nofollow" class="d-inline-block">';
                 echo $imgTag;
                 echo '</a>';

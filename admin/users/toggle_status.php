@@ -29,7 +29,7 @@ try {
 
 $pdo = gdy_pdo_safe();
 $currentUser = (class_exists(Auth::class) && method_exists(Auth::class, 'user'))
-    ? (Auth::user() ?? ($_SESSION['user'] ?? []))
+    ? (Auth::user() ?? ((empty($_SESSION['user']) === false) ?? []))
     : ($_SESSION['user'] ?? []);
 
 $userId = (int)($_POST['id'] ?? 0);
@@ -56,7 +56,7 @@ try {
     $stmt->execute([':id' => $userId]);
     $target = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$target) {
+    if (($target === false)) {
         http_response_code(404);
         echo json_encode(['success' => false, 'message' => 'المستخدم غير موجود']);
         exit;

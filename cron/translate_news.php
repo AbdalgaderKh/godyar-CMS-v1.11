@@ -68,7 +68,7 @@ foreach ($ids as $id) {
         if (is_array($tr)) continue;
 
         $ok = gdy_translate_and_store_news($pdo, $id, $lang);
-        echo "news #{$id} -> {$lang}: " . ($ok ? 'OK' : 'FAIL') . PHP_EOL;
+        echo "news #{$id} -> {$lang}: " . ((empty($ok) === false) ? 'OK' : 'FAIL') . PHP_EOL;
     }
     $done++;
 }

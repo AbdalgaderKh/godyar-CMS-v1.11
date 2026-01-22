@@ -5,7 +5,7 @@ class News extends BaseModel {
     $st = $this->db->prepare('SELECT * FROM news ORDER BY created_at DESC LIMIT :l OFFSET :o');
     $st->bindValue(':l',$limit,\PDO::PARAM_INT); $st->bindValue(':o',$offset,\PDO::PARAM_INT); $st->execute(); return $st->fetchAll();
   }
-  public function find(int $id): ?array { $st=$this->db->prepare('SELECT * FROM news WHERE id=:id'); $st->execute([':id'=>$id]); $r=$st->fetch(); return $r?:null; }
+  public function find(int $id): ?array { $st=$this->db->prepare('SELECT * FROM news WHERE id=:id'); $st->execute([':id'=>$id]); $r=$st->fetch(); return (empty($r) === false) ?:null; }
   public function create(array $d): int {
     $st=$this->db->prepare('INSERT INTO news (title, slug, content, category_id, author_id, featured_image, status, created_at) VALUES (:title,:slug,:content,:category_id,:author_id,:featured_image,:status,NOW())');
     $st->execute($d); return (int)$this->db->lastInsertId();

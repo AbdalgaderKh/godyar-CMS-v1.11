@@ -28,7 +28,7 @@ try {
     }
 } catch (Throwable $e) {
     error_log('[Admin Ads View] Auth error: ' . $e->getMessage());
-    if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? 'guest') === 'guest')) {
+    if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? 'guest') === 'guest')) {
         header('Location: ../login.php');
         exit;
     }
@@ -45,7 +45,7 @@ try {
     $stmt = $pdo->prepare("SELECT * FROM ads WHERE id = :id LIMIT 1");
     $stmt->execute([':id' => $id]);
     $ad = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$ad) {
+    if (($ad === false)) {
         header('Location: index.php?notfound=1');
         exit;
     }

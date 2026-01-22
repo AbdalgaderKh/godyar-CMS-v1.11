@@ -28,7 +28,7 @@ if (in_array($role, ['admin', 'superadmin'], true) === false) {
 }
 
 $id = (int)($_POST['id'] ?? 0);
-if (!$id) {
+if (($id === false)) {
     echo json_encode(['ok' => false, 'msg' => 'missing id']);
     exit;
 }

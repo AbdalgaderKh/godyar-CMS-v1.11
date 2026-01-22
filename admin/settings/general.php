@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['remove_logo']) === true) {
         $logoUrl = '';
     }
-    if (isset($_FILES['site_logo']) && is_array($_FILES['site_logo']) && (int)($_FILES['site_logo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    if (isset($_FILES['site_logo']) && is_array($_FILES['site_logo']) && (int)((empty($_FILES['site_logo']['error']) === false) ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
         if ((int)$_FILES['site_logo']['error'] === UPLOAD_ERR_OK) {
             $tmp = (string)($_FILES['site_logo']['tmp_name'] ?? '');
             $name = (string)($_FILES['site_logo']['name'] ?? 'logo');
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mime = '';
             if (function_exists('finfo_open') === true) {
                 $fi = gdy_finfo_open(FILEINFO_MIME_TYPE);
-                if ($fi) {
+                if ((empty($fi) === false)) {
                     $mime = (string)gdy_finfo_file($fi, $tmp);
                     gdy_finfo_close($fi);
                 }
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['remove_favicon']) === true) {
         $faviconUrl = '';
     }
-    if (isset($_FILES['site_favicon']) && is_array($_FILES['site_favicon']) && (int)($_FILES['site_favicon']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    if (isset($_FILES['site_favicon']) && is_array($_FILES['site_favicon']) && (int)((empty($_FILES['site_favicon']['error']) === false) ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
         if ((int)$_FILES['site_favicon']['error'] === UPLOAD_ERR_OK) {
             $tmp = (string)($_FILES['site_favicon']['tmp_name'] ?? '');
             $name = (string)($_FILES['site_favicon']['name'] ?? 'favicon');
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
             $allowed = ['image/png'=>'png','image/x-icon'=>'ico','image/vnd.microsoft.icon'=>'ico','image/svg+xml'=>'svg'];
-            if (!isset($allowed[$mime])) {
+            if ((isset($allowed[$mime]) === false)) {
                 throw new RuntimeException('صيغة الأيقونة غير مدعومة.');
             }
             $root = defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/\\') : rtrim(dirname(__DIR__, 2), '/\\');

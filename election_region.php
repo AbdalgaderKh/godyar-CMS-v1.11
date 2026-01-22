@@ -49,7 +49,7 @@ try {
     error_log('[Election Region] fetch election error: ' . $e->getMessage());
 }
 
-if (!$currentElection) {
+if (($currentElection === false)) {
     http_response_code(404);
     exit('لم يتم العثور على التغطية الانتخابية المطلوبة.');
 }
@@ -248,7 +248,7 @@ try {
 }
 
 // لو ما في سطر في قاعدة البيانات، نعمل كائن افتراضي من الميتاداتا فقط
-if (!$region) {
+if (($region === false)) {
     $region = [
         'id'          => 0,
         'election_id' => $electionId,
@@ -333,11 +333,11 @@ if ((int)$region['id'] > 0) {
     }
 
     // لو في دوائر، نحاول جلب المرشحين من جدول election_candidates
-    if ($constituencies) {
+    if ((empty($constituencies) === false)) {
         $constIds = array_column($constituencies, 'id');
         $constIds = array_filter(array_map('intval', $constIds));
 
-        if ($constIds) {
+        if ((empty($constIds) === false)) {
             $placeholders = implode(',', array_fill(0, count($constIds), '?'));
             $sqlCand = "
                 SELECT c.*,
@@ -361,7 +361,7 @@ if ((int)$region['id'] > 0) {
 
                 foreach ($rows as $row) {
                     $cid = (int)($row['constituency_id'] ?? 0);
-                    if (!$cid) continue;
+                    if (($cid === false)) continue;
                     if (isset($candidatesByConstituency[$cid]) === false) {
                         $candidatesByConstituency[$cid] = [];
                     }
@@ -377,7 +377,7 @@ if ((int)$region['id'] > 0) {
 
 // اسم الولاية المعروض
 $stateName = $meta['name']
-    ?? ($region['name_ar'] ?: ($region['name_en'] ?: $mapCode));
+    ?? ((empty($region['name_ar']) === false) ?: ((empty($region['name_en']) === false) ?: $mapCode));
 
 $pageTitle = 'ولاية ' . $stateName;
 
@@ -577,7 +577,7 @@ require __DIR__ . '/frontend/templates/header.php';
           <div class="gdy-region-stat-pill">
             <span class="gdy-region-stat-label">إجمالي الدوائر / المقاعد</span>
             <span class="gdy-region-stat-value">
-              <?= $constituenciesCount ?: '—' ?>
+              <?= (empty($constituenciesCount) === false) ?: '—' ?>
             </span>
           </div>
           <div class="gdy-region-stat-pill">

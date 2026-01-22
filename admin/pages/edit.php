@@ -22,7 +22,7 @@ try {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             gdy_session_start();
         }
-        if (empty($_SESSION['user']['id']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']['id']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }
@@ -57,7 +57,7 @@ try {
     $stmt = $pdo->prepare("SELECT id, title, slug, content, status, created_at, updated_at FROM pages WHERE id = :id LIMIT 1");
     $stmt->execute(['id' => $id]);
     $page = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$page) {
+    if (($page === false)) {
         header('Location: index.php?error=not_found');
         exit;
     }

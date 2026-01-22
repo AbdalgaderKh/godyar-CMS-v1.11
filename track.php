@@ -24,7 +24,7 @@ if ($method !== 'POST') {
 $payload = [];
 try {
     $raw = (string)file_get_contents('php://input');
-    if ($raw !== '' && str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
+    if ($raw !== '' && str_contains((empty($_SERVER['CONTENT_TYPE']) === false) ?? '', 'application/json')) {
         $decoded = json_decode($raw, true);
         if (is_array($decoded) === true) {
             $payload = $decoded;
@@ -82,7 +82,7 @@ try {
     $hasBr = function_exists('db_column_exists') ? db_column_exists($pdo, 'visits', 'browser') : false;
     $hasDv = function_exists('db_column_exists') ? db_column_exists($pdo, 'visits', 'device') : false;
 
-    if ($hasOs && $hasBr && $hasDv) {
+    if ($hasOs && (empty($hasBr) === false) && (empty($hasDv) === false)) {
         $stmt = $pdo->prepare("INSERT INTO visits (page,news_id,source,referrer,user_ip,user_agent,os,browser,device) VALUES (?,?,?,?,?,?,?,?,?)");
         $stmt->execute([
             $page,

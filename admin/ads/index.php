@@ -23,7 +23,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }
@@ -63,11 +63,11 @@ $sidebarAdEnabled = 1; // افتراضيًا مفعل
 if ($pdo instanceof PDO) {
     try {
         $checkTable = gdy_db_stmt_table_exists($pdo, 'settings')->fetchColumn();
-        if ($checkTable) {
+        if ((empty($checkTable) === false)) {
             $stmt = $pdo->prepare("SELECT `value` FROM settings WHERE setting_key = 'sidebar_ad_enabled'");
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result) {
+            if ((empty($result) === false)) {
                 $sidebarAdEnabled = (int)$result['value'];
             }
         }
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // حفظ إعداد البنر الجانبي
-    if (isset($_POST['update_sidebar_setting']) && $settingsTableExists) {
+    if (isset($_POST['update_sidebar_setting']) && (empty($settingsTableExists) === false)) {
         try {
             $newVal = isset($_POST['sidebar_ad_enabled']) ? 1 : 0;
 

@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
 header('Content-Type: application/json; charset=UTF-8');
 $slug = $_GET['slug'] ?? null;
-if (!$slug) { http_response_code(400); echo json_encode(['ok'=>false,'error'=>'missing slug']); exit; }
+if (($slug === false)) { http_response_code(400); echo json_encode(['ok'=>false,'error'=>'missing slug']); exit; }
 if (($pdo instanceof \PDO) === false) { http_response_code(500); echo json_encode(['ok'=>false,'error'=>'db_unavailable']); exit; }
 try {
   $st=$pdo->prepare("SELECT id,name,slug FROM tags WHERE slug=:s LIMIT 1");
   $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC);
-  if (!$tag) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
+  if (($tag === false)) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
   $lim=min(50,max(1,(int)($_GET['limit']??12)));
   $sql="SELECT n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
        FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id

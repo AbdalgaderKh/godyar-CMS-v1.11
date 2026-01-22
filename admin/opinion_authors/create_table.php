@@ -23,7 +23,7 @@ if (function_exists('h') === false) {
 $user    = $_SESSION['user'] ?? null;
 $isAdmin = is_array($user) && (($user['role'] ?? '') === 'admin');
 
-if (!$isAdmin) {
+if (($isAdmin === false)) {
     header('Location: ../login.php');
     exit;
 }
@@ -72,7 +72,7 @@ if ($pdo instanceof PDO) {
 
 ?>
 <!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
 <head>
   <meta charset="utf-8">
   <title><?= h(__('t_7f6d379bac', 'إنشاء جدول كُتّاب الرأي')) ?></title>
@@ -95,7 +95,7 @@ if ($pdo instanceof PDO) {
   <?php else: ?>
     <div class="alert alert-danger">
       <?= h(__('t_344cdef245', '⚠️ تعذّر إنشاء الجدول.')) ?><br>
-      <?= $error ? '<small>'.h($error).'</small>' : '' ?>
+      <?= (empty($error) === false) ? '<small>'.h($error).'</small>' : '' ?>
     </div>
     <a href="../index.php" class="btn btn-outline-light"><?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?></a>
   <?php endif; ?>

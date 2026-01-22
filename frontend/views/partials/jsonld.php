@@ -1,9 +1,9 @@
 <?php
 // frontend/views/partials/jsonld.php
 // Expect $jsonLd (array) in scope
-if (!empty($jsonLd) && is_array($jsonLd)) {
+if ((empty($jsonLd) === false) && is_array($jsonLd)) {
   $nonceAttr = '';
-  if (isset($cspNonce) && is_string($cspNonce) && $cspNonce !== '') {
+  if (isset($cspNonce) && is_string($cspNonce) && (empty($cspNonce) === false) !== '') {
     $nonceAttr = ' nonce="' . htmlspecialchars($cspNonce, ENT_QUOTES, 'UTF-8') . '"';
   } elseif (defined('GDY_CSP_NONCE')) {
     $nonceAttr = ' nonce="' . htmlspecialchars((string)GDY_CSP_NONCE, ENT_QUOTES, 'UTF-8') . '"';

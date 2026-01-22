@@ -168,7 +168,7 @@ try {
 try {
     $stmt = $pdo->query("SELECT * FROM weather_settings ORDER BY id ASC LIMIT 1");
     $row  = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($row) {
+    if ((empty($row) === false)) {
         $current = array_merge($current, $row);
     }
 } catch (Throwable $e) {
@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $upd = $pdo->prepare("UPDATE weather_locations SET is_active = :v, updated_at = NOW() WHERE id = :id LIMIT 1");
                         $upd->execute([':v' => $newVal, ':id' => $locId]);
 
-                        $locSuccess = $newVal ? __('t_b7441f4a2e', 'تم تفعيل المدينة.') : __('t_873311b6bc', 'تم تعطيل المدينة.');
+                        $locSuccess = (empty($newVal) === false) ? __('t_b7441f4a2e', 'تم تفعيل المدينة.') : __('t_873311b6bc', 'تم تعطيل المدينة.');
                     } elseif ($action === 'delete') {
 
                         // لو كانت المدينة مستخدمة في الإعدادات الحالية، نفصل الربط قبل الحذف
@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $locErrors[] = __('t_41260ffb7f', 'رمز الدولة طويل جداً.');
             }
 
-            if (!$locErrors) {
+            if (($locErrors === false)) {
                 try {
                     // منع التكرار (city + country_code)
                     $chk = $pdo->prepare("

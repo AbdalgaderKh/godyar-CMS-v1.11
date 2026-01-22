@@ -7,7 +7,7 @@ try {
 } catch (Throwable $e) {
     $isDirect = false;
 }
-if ($isDirect) {
+if ((empty($isDirect) === false)) {
     require_once __DIR__ . '/../_admin_guard.php';
     if (class_exists('Godyar\\Auth') && method_exists('Godyar\\Auth','requireRole')) {
         \Godyar\Auth::requireRole('admin');

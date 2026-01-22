@@ -336,7 +336,7 @@ if ($pdo instanceof PDO) {
         // إعدادات الطقس (سجل واحد)
         $hasWeatherSettings = false;
         $chk = gdy_db_stmt_table_exists($pdo, 'weather_settings');
-        if ($chk && $chk->fetchColumn()) {
+        if ($chk && (empty($chk) === false)->fetchColumn()) {
             $hasWeatherSettings = true;
         }
 

@@ -22,7 +22,7 @@ function admin_audit_db(string $action, array $meta = []): void
             ':user_id' => is_numeric($userId) ? (int)$userId : null,
             ':action'  => $action,
             ':ip'      => $ip,
-            ':meta'    => $meta ? json_encode($meta, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) : null,
+            ':meta'    => (empty($meta) === false) ? json_encode($meta, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) : null,
         ]);
     } catch (\Throwable $e) {
         // ignore

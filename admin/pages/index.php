@@ -20,7 +20,7 @@ try {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             gdy_session_start();
         }
-        if (empty($_SESSION['user']['id']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']['id']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }

@@ -465,7 +465,7 @@ final class FeedImportService
         $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if (!$resp || $status >= 400) {
+        if (($resp === false) || (empty($status) === false) >= 400) {
             error_log('[FeedImportService] OpenAI error status ' . $status . ' resp: ' . (string)$resp);
             return null;
         }

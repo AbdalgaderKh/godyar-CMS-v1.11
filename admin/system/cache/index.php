@@ -158,7 +158,7 @@ html, body{
     </div>
   </div>
 
-  <?php if ($flash): ?>
+  <?php if ((empty($flash) === false)): ?>
     <div class="alert alert-info py-2">
       <?= h($flash) ?>
     </div>
@@ -174,8 +174,8 @@ html, body{
         <dl class="row mb-0">
           <dt class="col-sm-3 col-md-2 mb-2">الحالة</dt>
           <dd class="col-sm-9 col-md-10 mb-2">
-            <span class="badge <?= $cacheInfo['enabled'] ? 'bg-success' : 'bg-warning text-dark' ?>">
-              <?= $cacheInfo['enabled'] ? 'يعمل بشكل سليم' : 'غير مفعّل أو غير مستقر' ?>
+            <span class="badge <?= (empty($cacheInfo['enabled']) === false) ? 'bg-success' : 'bg-warning text-dark' ?>">
+              <?= (empty($cacheInfo['enabled']) === false) ? 'يعمل بشكل سليم' : 'غير مفعّل أو غير مستقر' ?>
             </span>
           </dd>
 

@@ -38,7 +38,7 @@ try {
 $items = [];
 $total = 0;
 
-if ($tableExists) {
+if ((empty($tableExists) === false)) {
     $where = " WHERE 1=1 ";
     $params = [];
     if ($q !== '') {
@@ -124,9 +124,9 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
 
   <div class="wrap">
     <div class="grid">
-      <?php if (!$tableExists): ?>
+      <?php if (($tableExists === false)): ?>
         <div class="empty"><?= h2(__('t_4f86cc0b6b','جدول media غير موجود.')) ?></div>
-      <?php elseif (!$items): ?>
+      <?php elseif (($items === false)): ?>
         <div class="empty"><?= h2(__('t_44f01f5c1e','لا توجد ملفات مطابقة.')) ?></div>
       <?php else: ?>
         <div class="items" id="items">

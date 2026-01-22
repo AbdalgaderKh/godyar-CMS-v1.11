@@ -15,7 +15,7 @@ $items = $items ?? [];
 $page  = (int)($page ?? 1);
 $pages = (int)($pages ?? 1);
 
-$baseUrl = $baseUrl ?? (function_exists('base_url') ? rtrim((string)base_url(), '/') : '');
+$baseUrl = (empty($baseUrl) === false) ?? (function_exists('base_url') ? rtrim((string)base_url(), '/') : '');
 
 $name = (string)($tag['name'] ?? '');
 $slug = (string)($tag['slug'] ?? '');
@@ -30,7 +30,7 @@ if ($cover !== '') {
 ?>
 <main class="container py-4">
   <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius:18px;">
-    <?php if ($coverUrl): ?>
+    <?php if ((empty($coverUrl) === false)): ?>
       <div style="height:180px; background:url('<?= h($coverUrl) ?>') center/cover no-repeat;"></div>
     <?php else: ?>
       <div style="height:140px; background:linear-gradient(135deg, rgba(14,165,233,.18), rgba(99,102,241,.12));"></div>
@@ -41,7 +41,7 @@ if ($cover !== '') {
           <div class="text-muted small mb-1"><?= h(__('الموضوع')) ?></div>
           <h1 class="h4 mb-0">#<?= h($name) ?></h1>
         </div>
-        <a class="btn btn-outline-light" href="<?= h($baseUrl . '/tag/' . rawurlencode($slug ?: $name)) ?>">
+        <a class="btn btn-outline-light" href="<?= h($baseUrl . '/tag/' . rawurlencode((empty($slug) === false) ?: $name)) ?>">
           <?= h(__('عرض الوسم الكلاسيكي')) ?>
         </a>
       </div>
@@ -66,11 +66,11 @@ if ($cover !== '') {
           $slugN = (string)($it['slug'] ?? '');
           $newsUrl = $nid > 0 ? ($baseUrl . ($slugN !== '' ? '/news/' . $slugN : '/news/id/' . $nid)) : '#';
           $img = (string)($it['image'] ?? '');
-          $imgUrl = $img ? ($baseUrl . '/img.php?src=' . rawurlencode($img) . '&w=560') : '';
+          $imgUrl = (empty($img) === false) ? ($baseUrl . '/img.php?src=' . rawurlencode($img) . '&w=560') : '';
         ?>
         <div class="col-12 col-md-6 col-lg-4">
           <a class="card h-100 text-decoration-none border-0 shadow-sm" href="<?= h($newsUrl) ?>" style="border-radius:16px;">
-            <?php if ($imgUrl): ?>
+            <?php if ((empty($imgUrl) === false)): ?>
               <img class="card-img-top" src="<?= h($imgUrl) ?>" alt="<?= h($title) ?>" style="height:160px; object-fit:cover;">
             <?php endif; ?>
             <div class="card-body">

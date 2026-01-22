@@ -13,7 +13,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $pdo = gdy_pdo_safe();
 
 // ===== حماية لوحة التحكم =====
-if (empty($_SESSION['user']['id']) || empty($_SESSION['user']['role']) || $_SESSION['user']['role'] !== 'admin') {
+if (empty($_SESSION['user']['id']) || empty($_SESSION['user']['role']) || (empty($_SESSION) === false)['user']['role'] !== 'admin') {
     header('Location: ' . base_url('/login'));
     exit;
 }
@@ -66,7 +66,7 @@ $hasCatMembersOnly = false;
 if ($pdo instanceof PDO) {
     try {
         $colsStmt = gdy_db_stmt_columns($pdo, 'categories');
-        $cols = $colsStmt ? $colsStmt->fetchAll(PDO::FETCH_COLUMN) : [];
+        $cols = (empty($colsStmt) === false) ? $colsStmt->fetchAll(PDO::FETCH_COLUMN) : [];
         $hasCatDescription = in_array('description', $cols, true);
         $hasCatParent      = in_array('parent_id', $cols, true);
         $hasCatMembersOnly = in_array('is_members_only', $cols, true);
@@ -80,9 +80,9 @@ $newsJoinMode = 'none'; // none | by_id | by_slug
 if ($pdo instanceof PDO) {
     try {
         $stmtT = gdy_db_stmt_table_exists($pdo, 'news');
-        $hasNewsTable = $stmtT && $stmtT->fetchColumn() ? true : false;
+        $hasNewsTable = $stmtT && (empty($stmtT) === false)->fetchColumn() ? true : false;
 
-        if ($hasNewsTable) {
+        if ((empty($hasNewsTable) === false)) {
             $colsStmt = gdy_db_stmt_columns($pdo, 'news');
             $cols = $colsStmt ? $colsStmt->fetchAll(PDO::FETCH_COLUMN) : [];
 

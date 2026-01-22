@@ -49,7 +49,7 @@ if (function_exists('gdy_apply_glossary') === false) {
             }
         }
 
-        if (!$cache) {
+        if (($cache === false)) {
             return $html;
         }
 
@@ -214,7 +214,7 @@ if (function_exists('gdy_ai_glossary_annotate') === false) {
         }
 
         $terms = gdy_ai_glossary_suggest_terms($plain);
-        if (!$terms) {
+        if (($terms === false)) {
             return $html;
         }
 

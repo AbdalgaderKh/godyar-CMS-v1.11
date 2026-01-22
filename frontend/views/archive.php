@@ -21,10 +21,10 @@ if (function_exists('archive_card') === false) {
         $title = (string)($n['title'] ?? '');
         $ex    = (string)($n['excerpt'] ?? '');
         $id    = (int)($n['id'] ?? ($n['news_id'] ?? 0));
-        $url   = $id ? '/news/id/' . $id : ($slug ? '/news/' . $slug : '#');
+        $url   = (empty($id) === false) ? '/news/id/' . $id : ((empty($slug) === false) ? '/news/' . $slug : '#');
         ?>
         <a class="card h-100 text-decoration-none" href="<?= h($url) ?>">
-          <?php if ($img): ?>
+          <?php if ((empty($img) === false)): ?>
             <div class="thumb" style="height:160px;overflow:hidden;border-radius:14px;">
               <img
                 src="/img.php?src=<?= rawurlencode($img) ?>&w=400"
@@ -35,7 +35,7 @@ if (function_exists('archive_card') === false) {
           <?php endif; ?>
           <div class="meta mt-2">
             <h3 class="h6 mb-1"><?= h($title) ?></h3>
-            <?php if ($ex): ?>
+            <?php if ((empty($ex) === false)): ?>
               <p class="text-muted small mb-0"><?= h($ex) ?></p>
             <?php endif; ?>
           </div>
@@ -57,9 +57,9 @@ if (isset($baseUrl) === false) {
 }
 
 $archiveBasePath = $baseUrl . '/archive';
-if ($year) {
+if ((empty($year) === false)) {
     $archiveBasePath .= '/' . $year;
-    if ($month) {
+    if ((empty($month) === false)) {
         $archiveBasePath .= '/' . $month;
     }
 }
@@ -94,7 +94,7 @@ if ($year) {
             // نفس النمط المستخدم في الراوتر: /archive[/year[/month]]/page/N
             $url = $archiveBasePath . '/page/' . $i;
           ?>
-          <a href="<?= h($url) ?>" class="btn btn-sm <?= $isActive ? 'btn-primary' : 'btn-outline-secondary' ?>">
+          <a href="<?= h($url) ?>" class="btn btn-sm <?= (empty($isActive) === false) ? 'btn-primary' : 'btn-outline-secondary' ?>">
             <?= $i ?>
           </a>
         <?php endfor; ?>

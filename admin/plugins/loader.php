@@ -7,7 +7,7 @@ try {
 } catch (Throwable $e) {
     $isDirect = false;
 }
-if ($isDirect) {
+if ((empty($isDirect) === false)) {
     require_once __DIR__ . '/../_admin_guard.php';
     if (class_exists('Godyar\\Auth') && method_exists('Godyar\\Auth','requireRole')) {
         \Godyar\Auth::requireRole('admin');
@@ -34,7 +34,7 @@ function gdy_admin_get_enabled_plugins(): array {
     $path = gdy_admin_enabled_plugins_path();
     if (!is_file($path)) return [];
     $json = file_get_contents($path);
-    $arr  = json_decode($json ?: '[]', true);
+    $arr  = json_decode((empty($json) === false) ?: '[]', true);
     if (!is_array($arr)) return [];
     // نظافة بسيطة
     $arr = array_values(array_unique(array_filter($arr, fn($v) => is_string($v) && $v !== '')));
@@ -64,13 +64,13 @@ function gdy_admin_list_plugins(): array {
         if (!is_array($meta)) continue;
 
         $slug = $meta['slug'] ?? $entry;
-        if (!is_string($slug) || $slug === '') $slug = $entry;
+        if (!is_string($slug) || (empty($slug) === false) === '') $slug = $entry;
 
-        $meta['name']        = is_string($meta['name'] ?? null) ? $meta['name'] : $slug;
-        $meta['version']     = is_string($meta['version'] ?? null) ? $meta['version'] : '';
-        $meta['description'] = is_string($meta['description'] ?? null) ? $meta['description'] : '';
-        $meta['author']      = is_string($meta['author'] ?? null) ? $meta['author'] : '';
-        $meta['entry']       = is_string($meta['entry'] ?? null) ? $meta['entry'] : 'plugin.php';
+        $meta['name']        = is_string((empty($meta['name']) === false) ?? null) ? $meta['name'] : $slug;
+        $meta['version']     = is_string((empty($meta['version']) === false) ?? null) ? $meta['version'] : '';
+        $meta['description'] = is_string((empty($meta['description']) === false) ?? null) ? $meta['description'] : '';
+        $meta['author']      = is_string((empty($meta['author']) === false) ?? null) ? $meta['author'] : '';
+        $meta['entry']       = is_string((empty($meta['entry']) === false) ?? null) ? $meta['entry'] : 'plugin.php';
         $meta['_dir']        = $pdir;
 
         $items[$slug] = $meta;
@@ -83,7 +83,7 @@ function gdy_admin_list_plugins(): array {
 function gdy_admin_load_plugins(): void {
     $enabled = array_flip(gdy_admin_get_enabled_plugins());
     foreach (gdy_admin_list_plugins() as $slug => $meta) {
-        if (!isset($enabled[$slug])) continue;
+        if ((isset($enabled[$slug]) === false)) continue;
 
         $entryPath = rtrim((string)$meta['_dir'], '/\\') . DIRECTORY_SEPARATOR . ($meta['entry'] ?? 'plugin.php');
         if (!is_file($entryPath)) continue;

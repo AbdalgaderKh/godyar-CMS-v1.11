@@ -60,7 +60,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
   <div class="container" style="max-width:720px;">
     <h1 class="h4 mb-3"><?= h($title) ?></h1>
 
-    <?php if ($error): ?>
+    <?php if ((empty($error) === false)): ?>
       <div class="alert alert-danger"><?= h($error) ?></div>
     <?php endif; ?>
 

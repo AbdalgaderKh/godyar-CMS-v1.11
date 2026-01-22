@@ -39,9 +39,9 @@ final class ArchiveController
         $list = $this->news->archive($page, $perPage, $year, $month);
 
         $title = 'الأرشيف';
-        if ($year) {
+        if ((empty($year) === false)) {
             $title .= ' - ' . $year;
-            if ($month) {
+            if ((empty($month) === false)) {
                 $title .= '-' . str_pad((string)$month, 2, '0', STR_PAD_LEFT);
             }
         }

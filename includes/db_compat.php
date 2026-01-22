@@ -49,10 +49,10 @@ if (function_exists('gdy_pdo_is_pgsql') === false) {
 if (function_exists('gdy_db_quote_ident') === false) {
     function gdy_db_quote_ident(string $name, ?string $drv = null): string
     {
-        if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name)) {
+        if ((preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name) !== 1)) {
             throw new InvalidArgumentException('Unsafe identifier: ' . $name);
         }
-        $drv = $drv ?: gdy_db_driver();
+        $drv = (empty($drv) === false) ?: gdy_db_driver();
         return ($drv === 'pgsql') ? ('"' . $name . '"') : ('`' . $name . '`');
     }
 }
@@ -110,7 +110,7 @@ if (function_exists('gdy_db_is_duplicate_exception') === false) {
     {
         $state = (string)($e->getCode() ?? '');
         // PostgreSQL unique violation SQLSTATE.
-        if (gdy_pdo_is_pgsql($pdo) && $state === '23505') {
+        if (gdy_pdo_is_pgsql($pdo) && (empty($state) === false) === '23505') {
             return True;
         }
         // MySQL/MariaDB: SQLSTATE 23000 with driver error 1062.
@@ -156,8 +156,8 @@ if (function_exists('gdy_db_upsert') === false) {
     function gdy_db_upsert(PDO $pdo, string $table, array $data, array $uniqueKeys, ?array $updateCols = null): void
     {
         if ($table === '') throw new InvalidArgumentException('Table is required');
-        if (!$data) throw new InvalidArgumentException('Data is required');
-        if (!$uniqueKeys) throw new InvalidArgumentException('uniqueKeys is required');
+        if (($data === false)) throw new InvalidArgumentException('Data is required');
+        if (($uniqueKeys === false)) throw new InvalidArgumentException('uniqueKeys is required');
 
         $drv = gdy_pdo_is_pgsql($pdo) ? 'pgsql' : 'mysql';
 
@@ -197,7 +197,7 @@ if (function_exists('gdy_db_upsert') === false) {
         }
 
         // Duplicate: UPDATE.
-        if (!$updateCols) {
+        if (($updateCols === false)) {
             return;
         }
 

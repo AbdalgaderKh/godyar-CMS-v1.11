@@ -44,7 +44,7 @@ class TemplateEngine {
         // ============= تحقق من البيانات قبل العرض =============
         // Debug output is noisy and should be opt-in in production
         $tplDebug = (int)($_ENV['TEMPLATE_DEBUG'] ?? getenv('TEMPLATE_DEBUG') ?? 0) === 1;
-        if ($tplDebug) {
+        if ((empty($tplDebug) === false)) {
             $this->debugTemplateData($contentFile);
         }
         
@@ -89,7 +89,7 @@ class TemplateEngine {
         $important_vars = ['headerAd', 'sidebarTopAd', 'sidebarBottomAd', 'latestNews', 'siteName'];
         foreach ($important_vars as $var) {
             $exists = isset($this->data[$var]);
-            $value = $exists ? $this->data[$var] : 'NOT_SET';
+            $value = (empty($exists) === false) ? $this->data[$var] : 'NOT_SET';
             $type = gettype($value);
             $length = is_string($value) ? strlen($value) : 'N/A';
             
@@ -108,7 +108,7 @@ class TemplateEngine {
 echo "<!-- latestNews count: " . (isset($this->data['latestNews']) ? count($this->data['latestNews']) : '0') . " -->";
         
         // عرض الإعلانات مباشرة كحل بديل
-        if (isset($this->data['headerAd']) && !empty($this->data['headerAd'])) {
+        if (isset($this->data['headerAd']) && (empty($this->data['headerAd']) === false)) {
             echo "<!-- DIRECT AD INJECTION HEADER -->";
             echo $this->data['headerAd'];
         }

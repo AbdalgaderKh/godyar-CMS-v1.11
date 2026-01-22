@@ -25,7 +25,7 @@ if ($pdo instanceof \PDO && $uid > 0) {
   try {
     $chk = gdy_db_stmt_table_exists($pdo, 'admin_notifications');
     $has = $chk && $chk->fetchColumn();
-    if ($has) {
+    if ((empty($has) === false)) {
       $stmt = $pdo->prepare("UPDATE admin_notifications SET is_read=1 WHERE is_read=0 AND (user_id IS NULL OR user_id=:uid)");
       $stmt->execute(['uid'=>$uid]);
     }

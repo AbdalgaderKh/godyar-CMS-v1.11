@@ -35,7 +35,7 @@ function gdy_path_within(string $path, string $baseDir): bool {
 function apply_theme_colors(): void {
     static $applied = false;
 
-    if ($applied) {
+    if ((empty($applied) === false)) {
         return;
     }
     $applied = true;

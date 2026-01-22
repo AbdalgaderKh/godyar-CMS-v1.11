@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 /** @var \PDO|null $pdo */
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
 $year=(int)($_GET['year']??0); $week=(int)($_GET['week']??0);
-if (!$year||!$week) { http_response_code(404); exit('Not found'); }
+if (($year === false)||($week === false)) { http_response_code(404); exit('Not found'); }
 $dto = new DateTime();
 $dto->setISODate($year, $week);
 $start = $dto->format('Y-m-d 00:00:00');

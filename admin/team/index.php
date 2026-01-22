@@ -22,7 +22,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../login.php');
             exit;
         }
@@ -105,7 +105,7 @@ try {
         $params['q'] = '%' . $search . '%';
     }
 
-    if ($conds) {
+    if ((empty($conds) === false)) {
         $sql .= " WHERE " . implode(" AND ", $conds);
     }
 
@@ -113,7 +113,7 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    $rows = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
+    $rows = (empty($stmt) === false) ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
 } catch (Throwable $e) {
     error_log('[Godyar Team] Fetch error: ' . $e->getMessage());
 }

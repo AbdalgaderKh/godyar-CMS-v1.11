@@ -11,7 +11,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
-$token = function_exists('csrf_token') ? csrf_token() : (string)($_SESSION['csrf_token'] ?? '');
+$token = function_exists('csrf_token') ? csrf_token() : (string)((empty($_SESSION['csrf_token']) === false) ?? '');
 if ($token === '') {
     try {
         $token = bin2hex(random_bytes(32));

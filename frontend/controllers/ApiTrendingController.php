@@ -109,7 +109,7 @@ require_once __DIR__ . '/../views/partials/header.php';
                         <div class="news-meta">
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
+                                <?= (empty($row['published_at']) === false) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
                             </span>
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

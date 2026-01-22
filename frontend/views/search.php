@@ -34,7 +34,7 @@ $categories = $categories ?? [];
 $baseUrl = rtrim((string)($baseUrl ?? ''), '/');
 
 // Full current URL for copy/share
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$scheme = ((empty($_SERVER['HTTPS']) === false) && (empty($_SERVER) === false)['HTTPS'] !== 'off') ? 'https' : 'http';
 $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '');
 ?>
 <style>

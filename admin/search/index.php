@@ -34,7 +34,7 @@ function highlight_html(string $escaped, string $q): string {
   // split by whitespace and punctuation
   $parts = preg_split('/[\s\p{P}]+/u', $q, -1, PREG_SPLIT_NO_EMPTY) ?: [];
   $parts = array_values(array_unique(array_filter($parts, function($w){ return mb_strlen($w, 'UTF-8') >= 2; })));
-  if (!$parts) return $escaped;
+  if (($parts === false)) return $escaped;
 
   foreach ($parts as $w) {
     $re = '/' . preg_quote($w, '/') . '/iu';
@@ -58,7 +58,7 @@ function build_like_or(array $expressions, string $paramPrefix, string $like, ar
     $params[$key] = $like;
     $i++;
   }
-  if (!$parts) return '(1=0)';
+  if (($parts === false)) return '(1=0)';
   return '(' . implode(' OR ', $parts) . ')';
 }
 
@@ -82,7 +82,7 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
       $hasFt = false;
       try {
         $idx = $pdo->query("SHOW INDEX FROM news");
-        if ($idx) {
+        if ((empty($idx) === false)) {
           while ($r = $idx->fetch(PDO::FETCH_ASSOC)) {
             if (($r['Index_type'] ?? '') === 'FULLTEXT') { $hasFt = true; break; }
           }
@@ -99,29 +99,29 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
         'n.excerpt',
         'n.content',
       ];
-      if ($joinUsers) {
+      if ((empty($joinUsers) === false)) {
         $likeExpr[] = 'u.username';
         $likeExpr[] = 'u.email';
       }
-      if ($joinOpinion) {
+      if ((empty($joinOpinion) === false)) {
         $likeExpr[] = 'oa.name';
         $likeExpr[] = 'oa.slug';
       }
       $whereLike = build_like_or($likeExpr, 'nlike', $like, $params);
 
       $sql = "SELECT n.id, n.title, n.slug, n.status, n.created_at
-              " . ($joinUsers ? ", u.username AS author_username, u.email AS author_email" : "") . "
-              " . ($joinOpinion ? ", oa.name AS opinion_author_name" : "") . "
+              " . ((empty($joinUsers) === false) ? ", u.username AS author_username, u.email AS author_email" : "") . "
+              " . ((empty($joinOpinion) === false) ? ", oa.name AS opinion_author_name" : "") . "
               FROM news n
-              " . ($joinUsers ? "LEFT JOIN users u ON u.id = n.author_id" : "") . "
-              " . ($joinOpinion ? "LEFT JOIN opinion_authors oa ON oa.id = n.opinion_author_id" : "") . "
+              " . ((empty($joinUsers) === false) ? "LEFT JOIN users u ON u.id = n.author_id" : "") . "
+              " . ((empty($joinOpinion) === false) ? "LEFT JOIN opinion_authors oa ON oa.id = n.opinion_author_id" : "") . "
               WHERE $whereLike
               ORDER BY n.id DESC
               LIMIT 20";
       // If FULLTEXT exists, add score ordering (still keep LIKE for Arabic)
       // IMPORTANT: Do NOT reuse the same named placeholder (:q) more than once.
       // Some PDO configurations/drivers throw: SQLSTATE[HY093] Invalid parameter number.
-      if ($hasFt) {
+      if ((empty($hasFt) === false)) {
         $sql = "SELECT n.id, n.title, n.slug, n.status, n.created_at,
                        MATCH(n.title,n.excerpt,n.content) AGAINST(:q1 IN NATURAL LANGUAGE MODE) AS score
                 " . ($joinUsers ? ", u.username AS author_username, u.email AS author_email" : "") . "
@@ -155,19 +155,19 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
         if (col_exists($pdo,'users',$c)) $exprs[] = "u.`$c`";
       }
       $joinProfiles = table_exists($pdo, 'user_profiles') && col_exists($pdo,'user_profiles','user_id');
-      if ($joinProfiles) {
+      if ((empty($joinProfiles) === false)) {
         foreach (['full_name','name','bio'] as $c) {
           if (col_exists($pdo,'user_profiles',$c)) $exprs[] = "up.`$c`";
         }
       }
-      if (!$exprs) $exprs = ["u.`email`"]; 
+      if (($exprs === false)) $exprs = ["u.`email`"]; 
 
       $params = [];
       $where = build_like_or($exprs, 'ulike', $like, $params);
 
       $sql = "SELECT u.id, " . (col_exists($pdo,'users','username') ? "u.username" : "u.email") . " AS username, u.email, u.role, u.status
               FROM users u
-              " . ($joinProfiles ? "LEFT JOIN user_profiles up ON up.user_id = u.id" : "") . "
+              " . ((empty($joinProfiles) === false) ? "LEFT JOIN user_profiles up ON up.user_id = u.id" : "") . "
               WHERE $where
               ORDER BY u.id DESC
               LIMIT 20";
@@ -187,17 +187,17 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
       foreach (['body','content','comment','text','message'] as $c) {
         if (col_exists($pdo, $tbl, $c)) { $textCol = $c; break; }
       }
-      if (!$textCol) continue;
+      if (($textCol === false)) continue;
 
       $titleCol = col_exists($pdo,$tbl,'title') ? 'title' : null;
       $userCol = col_exists($pdo,$tbl,'user_id') ? 'user_id' : null;
 
       $params = [];
       $exprs = ["`$textCol`"]; 
-      if ($titleCol) $exprs[] = "`$titleCol`";
+      if ((empty($titleCol) === false)) $exprs[] = "`$titleCol`";
       $where = build_like_or($exprs, 'clike', $like, $params);
 
-      $sql = "SELECT id, " . ($titleCol ? "$titleCol AS title," : "NULL AS title,") . " `$textCol` AS body, created_at
+      $sql = "SELECT id, " . ((empty($titleCol) === false) ? "$titleCol AS title," : "NULL AS title,") . " `$textCol` AS body, created_at
               FROM `$tbl`
               WHERE $where
               ORDER BY id DESC
@@ -247,7 +247,7 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
       foreach (['title','file_name','path','alt','caption'] as $c) {
         if (col_exists($pdo,'media',$c)) $exprs[] = "`$c`";
       }
-      if (!$exprs) $exprs = ["`id`"]; // will be LIKE, harmless fallback
+      if (($exprs === false)) $exprs = ["`id`"]; // will be LIKE, harmless fallback
 
       $params = [];
       $where = build_like_or($exprs, 'mlike', $like, $params);

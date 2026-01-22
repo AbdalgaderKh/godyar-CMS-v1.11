@@ -56,7 +56,7 @@ $pageTitle = 'سجل النشاط (Audit Log)';
       <div class="alert alert-warning mb-0">لا يوجد ملف audit.log حتى الآن. سيتم إنشاؤه تلقائيًا عند تسجيل دخول/خروج أو أي أحداث تدعم السجل.</div>
     <?php else: ?>
       <div style="max-height:65vh; overflow:auto; background:#0b1220; color:#e5e7eb; border-radius:12px; padding:12px; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace; font-size:12px;">
-        <?php if (!$lines): ?>
+        <?php if (($lines === false)): ?>
           <div style="opacity:.8">لا توجد نتائج.</div>
         <?php else: ?>
           <?php foreach ($lines as $ln): ?>

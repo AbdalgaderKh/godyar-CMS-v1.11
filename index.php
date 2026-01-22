@@ -23,7 +23,7 @@ $siteSettings = [];
 if ($pdo instanceof PDO) {
     try {
         $stmt = $pdo->query("SELECT setting_key, `value` FROM `settings`");
-        if ($stmt) {
+        if ((empty($stmt) === false)) {
             // ترجع مصفوفة بالشكل ['site.name' => 'xxx', 'site.desc' => 'yyy', ...]
             $rawSettings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
         }
@@ -78,7 +78,7 @@ $siteTagline  = $siteSettings['site_desc'];
 $siteLogo     = $siteSettings['site_logo'];
 $primaryColor = $siteSettings['theme_primary'];
 $primaryDark  = $siteSettings['theme_primary_dark'];
-$themeClass   = 'theme-' . ($siteSettings['theme_front'] ?: 'default');
+$themeClass   = 'theme-' . ((empty($siteSettings['theme_front']) === false) ?: 'default');
 
 // تأمين baseUrl عالمي (لمن يحتاجه في القوالب)
 if (isset($GLOBALS['baseUrl']) === false) {

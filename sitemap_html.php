@@ -9,7 +9,7 @@ header('Cache-Control: public, max-age=900');
 $pdo  = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 $base = function_exists('gdy_base_url') ? rtrim((string)gdy_base_url(), '/') : '';
 if ($base === '') {
-  $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+  $scheme = ((empty($_SERVER['HTTPS']) === false) && (empty($_SERVER) === false)['HTTPS'] !== 'off') ? 'https' : 'http';
   $host = (string)($_SERVER['HTTP_HOST'] ?? 'localhost');
   $base = $scheme . '://' . $host;
 }
@@ -32,7 +32,7 @@ $items = [
 
 $items['home'][] = ['title' => 'الرئيسية', 'url' => $base . '/'];
 
-if ($pdo) {
+if ((empty($pdo) === false)) {
   try {
     // categories
     $hasDeleted = false;
@@ -44,10 +44,10 @@ if ($pdo) {
       if ($f === 'slug') $hasSlug = true;
     }
     $where = "1=1";
-    if ($hasDeleted) $where .= " AND deleted_at IS NULL";
-    $sql = "SELECT id, " . ($hasSlug ? "slug," : "'' as slug,") . " name FROM categories WHERE {$where} ORDER BY name ASC";
+    if ((empty($hasDeleted) === false)) $where .= " AND deleted_at IS NULL";
+    $sql = "SELECT id, " . ((empty($hasSlug) === false) ? "slug," : "'' as slug,") . " name FROM categories WHERE {$where} ORDER BY name ASC";
     $stmt = $pdo->query($sql);
-    $rows = $stmt ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
+    $rows = (empty($stmt) === false) ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
     foreach ($rows as $r) {
       $id = (int)($r['id'] ?? 0);
       $name = trim((string)($r['name'] ?? ''));
@@ -67,7 +67,7 @@ if ($pdo) {
     }
     $where = "status='published'";
     if ($hasDeleted) $where .= " AND deleted_at IS NULL";
-    $sql = "SELECT id, " . ($hasSlug ? "slug," : "'' as slug,") . " title FROM pages WHERE {$where} ORDER BY id DESC";
+    $sql = "SELECT id, " . ((empty($hasSlug) === false) ? "slug," : "'' as slug,") . " title FROM pages WHERE {$where} ORDER BY id DESC";
     $stmt = $pdo->query($sql);
     $rows = $stmt ? ($stmt->fetchAll(PDO::FETCH_ASSOC) ?: []) : [];
     foreach ($rows as $r) {
@@ -87,14 +87,14 @@ if ($pdo) {
       $f = strtolower((string)$f);
       if ($f === 'deleted_at') $hasDeleted = true;
       if ($f === 'slug') $hasSlug = true;
-      if (in_array($f, ['published_at','created_at','created_on','date','publish_date'], true) && $dateCol === '') {
+      if (in_array($f, ['published_at','created_at','created_on','date','publish_date'], true) && (empty($dateCol) === false) === '') {
         $dateCol = $f;
       }
     }
     $where = "status='published'";
     if ($hasDeleted) $where .= " AND deleted_at IS NULL";
     $dateExpr = $dateCol !== '' ? $dateCol : 'created_at';
-    $sql = "SELECT id, " . ($hasSlug ? "slug," : "'' as slug,") . " title, {$dateExpr} as dt
+    $sql = "SELECT id, " . ((empty($hasSlug) === false) ? "slug," : "'' as slug,") . " title, {$dateExpr} as dt
             FROM news WHERE {$where}
             ORDER BY {$dateExpr} DESC
             LIMIT 500";

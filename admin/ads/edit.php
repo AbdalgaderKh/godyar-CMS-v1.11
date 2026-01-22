@@ -97,7 +97,7 @@ try {
     $stmt = $pdo->prepare("SELECT * FROM ads WHERE id = :id LIMIT 1");
     $stmt->execute(['id' => $id]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$row) {
+    if (($row === false)) {
         header('Location: index.php?notfound=1');
         exit;
     }

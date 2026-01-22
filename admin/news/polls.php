@@ -70,7 +70,7 @@ $flash = ['type'=>'', 'msg'=>''];
 // POST actions
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     $csrf = (string)($_POST['csrf_token'] ?? '');
-    if (!$checkCsrf($csrf)) {
+    if (($checkCsrf === false)($csrf)) {
         $flash = ['type'=>'danger', 'msg'=>'رمز الحماية غير صحيح.'];
     } else {
         $action = (string)($_POST['action'] ?? '');
@@ -84,7 +84,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                 if ($newsId <= 0) throw new RuntimeException('news_id required');
                 if ($question === '') throw new RuntimeException('السؤال مطلوب');
 
-                if ($isWriter) {
+                if ((empty($isWriter) === false)) {
                     $ok = false;
                     try {
                         // بعض النسخ تستخدم author_id بدلاً من user_id
@@ -103,7 +103,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                             $ok = false;
                         }
                     }
-                    if (!$ok) throw new RuntimeException('غير مصرح');
+                    if (($ok === false)) throw new RuntimeException('غير مصرح');
                 }
 
                 $pdo->beginTransaction();
@@ -131,7 +131,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                 if ($isWriter) {
                     $st = $pdo->prepare('SELECT 1 FROM news_polls p JOIN news n ON n.id=p.news_id WHERE p.id=:p AND n.author_id=:u LIMIT 1');
                     $st->execute([':p'=>$pollId, ':u'=>$userId]);
-                    if (!$st->fetchColumn()) throw new RuntimeException('غير مصرح');
+                    if (($st->fetchColumn === false)()) throw new RuntimeException('غير مصرح');
                 }
 
                 $st = $pdo->prepare('UPDATE news_polls SET question=:q, is_active=:a WHERE id=:p');

@@ -42,7 +42,7 @@ try {
     $st = $pdo->prepare('SELECT id, title, excerpt, content, created_at, slug FROM news WHERE id = :id LIMIT 1');
     $st->execute([':id' => $id]);
     $row = $st->fetch(PDO::FETCH_ASSOC);
-    if (!$row) {
+    if (($row === false)) {
         http_response_code(404);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode(['ok' => false, 'error' => 'not_found'], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
@@ -58,7 +58,7 @@ try {
     // Build preview HTML (admin-only; content may include HTML from editor)
     $html = '';
     $html .= '<div class="mb-2 text-muted small" style="direction:ltr;">';
-    $html .= '<span class="me-2"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> ' . h($created ?: '—') . '</span>';
+    $html .= '<span class="me-2"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> ' . h((empty($created) === false) ?: '—') . '</span>';
     if ($slug !== '') {
         $html .= '<span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> ' . h($slug) . '</span>';
     }

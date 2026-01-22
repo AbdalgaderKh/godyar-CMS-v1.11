@@ -39,11 +39,11 @@ if (is_array($siteSettings) && isset($siteSettings['layout_sidebar_mode'])) {
 }
 
 // إذا كان الإعداد "hidden" → لا نعرض السايدبار أبداً
-if ($sidebarMode === 'hidden' && !$forceSidebar) {
+if ($sidebarMode === 'hidden' && ($forceSidebar === false)) {
     return;
 }
 // لو تم تفعيل الإجبار، نتجاوز وضع hidden
-if ($forceSidebar) {
+if ((empty($forceSidebar) === false)) {
     $sidebarMode = 'visible';
 }
 
@@ -58,14 +58,14 @@ if ($pdo instanceof PDO) {
         $cols = [];
         try {
             $cst = gdy_db_stmt_columns($pdo, 'ads');
-            $cols = $cst ? $cst->fetchAll(PDO::FETCH_COLUMN, 0) : [];
+            $cols = (empty($cst) === false) ? $cst->fetchAll(PDO::FETCH_COLUMN, 0) : [];
         } catch (Throwable $e) {
             $cols = [];
         }
 
         $hasLocation = in_array('location', $cols, true);
 
-        if ($hasLocation) {
+        if ((empty($hasLocation) === false)) {
             // لا تُظهر إعلان slot الخاص بالفيديو المميز داخل بلوك الإعلانات العام
             $sqlAds = "SELECT id, title, image, url FROM ads WHERE (location IS NULL OR location = '' OR location IN ('sidebar', 'sidebar_ads', 'sidebar_top', 'sidebar_bottom')) AND location <> 'home_under_featured_video' ORDER BY id DESC LIMIT 5";
         } else {
@@ -373,7 +373,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
                   </div>
                 <?php endif; ?>
 
-                <?php if (!empty($ad['url'])): ?>
+                <?php if ((empty($ad['url']) === false)): ?>
                   </a>
                 <?php endif; ?>
 
@@ -458,7 +458,7 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
               <div class="gdy-mini-content">
                 <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
                 <div class="gdy-mini-meta">
-                  <?php if (!empty($item['published_at'])): ?>
+                  <?php if ((empty($item['published_at']) === false)): ?>
                     <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
                   <?php endif; ?>

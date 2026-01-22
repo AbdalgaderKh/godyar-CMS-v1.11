@@ -22,7 +22,7 @@ final class App
 
         $debug = self::env('APP_DEBUG', 'false');
         $isDebug = ($debug === 'true' || $debug === true || $debug === 1 || $debug === '1');
-        if ($isDebug) {
+        if ((empty($isDebug) === false)) {
             ini_set('display_errors', '1');
             ini_set('display_startup_errors', '1');
             error_reporting(E_ALL & ~E_DEPRECATED);

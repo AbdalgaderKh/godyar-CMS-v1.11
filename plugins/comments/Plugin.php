@@ -131,6 +131,22 @@ private function upgradeToV4(PDO $pdo): void
     }
 }
 
+	private function upgradeToV5(PDO $pdo): void
+	{
+	    // V5: لا تغييرات كاسرة مطلوبة للبيانات، لكن نضيف فهارس مفيدة إن لم تكن موجودة.
+	    // جميع الأوامر أدناه Best-effort حتى لا يفشل ترحيل الإصدارات في بيئات مختلفة.
+	    try {
+	        $pdo->exec("ALTER TABLE comments ADD INDEX idx_comments_news_status (news_id, status)");
+	    } catch (Throwable $e) {
+	        // ignore (قد يكون موجودًا)
+	    }
+	    try {
+	        $pdo->exec("ALTER TABLE comments ADD INDEX idx_comments_news_created (news_id, created_at)");
+	    } catch (Throwable $e) {
+	        // ignore (قد يكون موجودًا)
+	    }
+	}
+
 private function columnExists(PDO $pdo, string $table, string $column): bool
     {
         try {

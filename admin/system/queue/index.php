@@ -34,7 +34,7 @@ $pdo = gdy_pdo_safe();
 // تسجيل مهمة جدولة الأخبار
 // -----------------------------------------------------------------------------
 gdy_queue_register('news_scheduler', function (array $payload) use ($pdo): void {
-    if (!$pdo) return;
+    if (($pdo === false)) return;
 
     // publish due
     $pdo->exec("UPDATE news

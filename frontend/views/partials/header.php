@@ -91,8 +91,9 @@ if ($frontPreset !== 'custom') {
     $primaryRgb   = '17,17,17';
 }
 
-// Primary dark (optional from settings). If not provided, compute a darker shade.
-if (isset($primaryDark) || $primaryDark === '' || $primaryDark === null === false) {
+// Primary dark (optional from settings). If not provided (unset/empty/null), compute a darker shade.
+// NOTE: Avoid chained strict-comparisons like "$x === null === false" which cause PHP parse errors.
+if (!isset($primaryDark) || $primaryDark === '' || $primaryDark === null) {
     $primaryDark = (string)($siteSettings['primary_dark'] ?? ($siteSettings['theme_primary_dark'] ?? ''));
     if ($primaryDark === '') {
         $hex = ltrim((string)$primaryColor, '#');

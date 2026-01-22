@@ -47,7 +47,7 @@ $isAdmin = is_array($user) && (($user['role'] ?? '') === 'admin');
 
 header('Content-Type: application/json; charset=utf-8');
 
-if (!$isAdmin) {
+if (($isAdmin === false)) {
     http_response_code(403);
     echo json_encode([
         'ok'    => false,

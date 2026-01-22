@@ -39,7 +39,7 @@ try {
     error_log('[Elections] fetch all elections error: ' . $e->getMessage());
 }
 
-if (!$allElections) {
+if (($allElections === false)) {
     require __DIR__ . '/frontend/templates/header.php';
     ?>
     <div class="gdy-elections-page">
@@ -74,7 +74,7 @@ if ($requestedSlug !== '') {
         }
     }
 }
-if (!$currentElection) {
+if (($currentElection === false)) {
     $currentElection = $allElections[0];
     $requestedSlug   = (string)$currentElection['slug'];
 }
@@ -193,7 +193,7 @@ try {
             $regions[$rid]['parties'][] = [
                 'party_id'      => (int)$row['party_id'],
                 'short_name'    => $row['party_short_name'],
-                'color_hex'     => $row['party_color_hex'] ?: '#94a3b8',
+                'color_hex'     => (empty($row['party_color_hex']) === false) ?: '#94a3b8',
                 'seats_won'     => (int)($row['seats_won'] ?? 0),
                 'seats_leading' => (int)($row['seats_leading'] ?? 0),
                 'votes'         => (int)($row['votes'] ?? 0),
@@ -246,7 +246,7 @@ try {
 
             // نستخدم $code (حروف كبيرة) كمفتاح ثابت لكي يتطابق مع أكواد الخريطة والصفحة التفصيلية
             $regionsMapPayload[$code] = [
-                'name'             => $region['name_ar'] ?: $region['name_en'],
+                'name'             => (empty($region['name_ar']) === false) ?: $region['name_en'],
                 'map_code'         => $rawCode,
                 'leading_party'    => $region['leading_party_short'],
                 'leading_party_id' => $region['leading_party_id'],

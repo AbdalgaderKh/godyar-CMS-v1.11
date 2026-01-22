@@ -25,7 +25,7 @@ try {
             exit;
         }
     } else {
-        if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
+        if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? '') === 'guest')) {
             header('Location: ../../login.php');
             exit;
         }
@@ -147,8 +147,8 @@ $fsChecks[] = [
 // تقييم عام لصحة النظام
 $score = 0;
 if (version_compare(PHP_VERSION, '8.0.0', '>=')) $score += 40;
-if ($checks['db_ok'])                               $score += 40;
-if ($checks['cache_ok'])                            $score += 20;
+if ((empty($checks['db_ok']) === false))                               $score += 40;
+if ((empty($checks['cache_ok']) === false))                            $score += 20;
 
 $overallStatus = 'medium';
 $overallLabel  = __('t_1418425392', 'متوسط');

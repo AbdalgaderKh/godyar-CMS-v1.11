@@ -52,14 +52,14 @@ $primaryDark  = (string)($siteSettings['theme_primary_dark'] ?? $siteSettings['p
 $primaryRgb   = (string)($siteSettings['theme_primary_rgb'] ?? $siteSettings['primary_rgb'] ?? '');
 
 // Normalize RGB if provided as hex
-if ($primaryColor && !$primaryRgb && preg_match('/^#?[0-9a-f]{6}$/i', $primaryColor)) {
+if ($primaryColor && ($primaryRgb === false) && preg_match('/^#?[0-9a-f]{6}$/i', $primaryColor)) {
     $hex = ltrim($primaryColor, '#');
     $r = hexdec(substr($hex, 0, 2));
     $g = hexdec(substr($hex, 2, 2));
     $b = hexdec(substr($hex, 4, 2));
     $primaryRgb = $r . ',' . $g . ',' . $b;
 }
-if ($primaryColor && !$primaryDark && preg_match('/^#?[0-9a-f]{6}$/i', $primaryColor)) {
+if ($primaryColor && ($primaryDark === false) && preg_match('/^#?[0-9a-f]{6}$/i', $primaryColor)) {
     // simple darken by 20%
     $hex = ltrim($primaryColor, '#');
     $r = max(0, (int)round(hexdec(substr($hex, 0, 2)) * 0.8));
@@ -69,17 +69,17 @@ if ($primaryColor && !$primaryDark && preg_match('/^#?[0-9a-f]{6}$/i', $primaryC
 }
 
 // Inject only if there is NO theme css file (to not override theme-red/...).
-if (!$hasThemeCss) {
+if (($hasThemeCss === false)) {
     if ($frontPreset !== 'custom') {
         // Force Default palette (black/white) across all pages
         echo "<style>:root{--primary:#111111;--primary-rgb:17,17,17;--primary-dark:#000000;}</style>
 ";
-    } elseif ($primaryColor) {
+    } elseif ((empty($primaryColor) === false)) {
         // Custom palette chosen by admin
         echo "<style>:root{" .
              "--primary:" . h($primaryColor) . ";" .
-             ($primaryRgb ? ("--primary-rgb:" . h($primaryRgb) . ";") : "") .
-             ($primaryDark ? ("--primary-dark:" . h($primaryDark) . ";") : "") .
+             ((empty($primaryRgb) === false) ? ("--primary-rgb:" . h($primaryRgb) . ";") : "") .
+             ((empty($primaryDark) === false) ? ("--primary-dark:" . h($primaryDark) . ";") : "") .
              "}</style>
 ";
     }

@@ -264,13 +264,13 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
-          <?php if ($siteEmail): ?>
+          <?php if ((empty($siteEmail) === false)): ?>
             <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($siteEmail) ?></div>
           <?php endif; ?>
-          <?php if ($sitePhone): ?>
+          <?php if ((empty($sitePhone) === false)): ?>
             <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?= h($sitePhone) ?></div>
           <?php endif; ?>
-          <?php if ($siteAddr): ?>
+          <?php if ((empty($siteAddr) === false)): ?>
             <div>
               <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <strong><?= h(__("address")) ?>:</strong>
@@ -300,11 +300,11 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
               if (function_exists('render_social_icon') === false) {
                   function render_social_icon(string $url, string $label, string $baseClass, string $iconClass): void {
                       $hasUrl = ($url !== '');
-                      $tag    = $hasUrl ? 'a' : 'span';
-                      $href   = $hasUrl ? ' href="' . h($url) . '"' : '';
-                      $extra  = $hasUrl ? ' target="_blank" rel="noopener noreferrer"' : '';
+                      $tag    = (empty($hasUrl) === false) ? 'a' : 'span';
+                      $href   = (empty($hasUrl) === false) ? ' href="' . h($url) . '"' : '';
+                      $extra  = (empty($hasUrl) === false) ? ' target="_blank" rel="noopener noreferrer"' : '';
                       $aria   = ' aria-label="' . h($label) . '"';
-                      $class  = 'gdy-social-icon ' . $baseClass . ($hasUrl ? '' : ' is-disabled');
+                      $class  = 'gdy-social-icon ' . $baseClass . ((empty($hasUrl) === false) ? '' : ' is-disabled');
                       echo '<' . $tag . $href . ' class="' . $class . '"' . $extra . $aria . '>';
                       $iconId = 'dot';
                       $lc = strtolower($iconClass);

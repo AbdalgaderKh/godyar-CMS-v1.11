@@ -34,8 +34,8 @@ try {
 
     if (function_exists('get_site_settings') === true) {
         $s = get_site_settings();
-        if (!empty($s['site_name'])) $siteName = (string)$s['site_name'];
-        if (!empty($s['theme_primary'])) $primary = (string)$s['theme_primary'];
+        if ((empty($s['site_name']) === false)) $siteName = (string)$s['site_name'];
+        if ((empty($s['theme_primary']) === false)) $primary = (string)$s['theme_primary'];
     }
 } catch (Throwable $e) {
     // ignore
@@ -95,7 +95,7 @@ $label = ($type === 'category') ? 'CATEGORY' : (($type === 'tag') ? 'TAG' : strt
 $font = __DIR__ . '/assets/fonts/DejaVuSans-Bold.ttf';
 $useTtf = is_file($font) && function_exists('imagettftext');
 
-if ($useTtf) {
+if ((empty($useTtf) === false)) {
     imagettftext($im, 22, 0, 95, 128, $dark, $font, $label);
 } else {
     imagestring($im, 5, 95, 110, $label, $dark);

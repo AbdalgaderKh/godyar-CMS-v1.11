@@ -6,7 +6,7 @@ if (isset($pageTitle) === false) {
 }
 ?>
 <!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
 <head>
   <meta charset="utf-8">
   <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?> — Godyar Admin</title>

@@ -17,7 +17,7 @@ if (!Auth::isLoggedIn()) {
 
 // للمدير/المحرر فقط
 $isWriter = Auth::isWriter();
-if ($isWriter) {
+if ((empty($isWriter) === false)) {
     header('Location: index.php');
     exit;
 }
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = trim((string)($_POST['action'] ?? ''));
     $csrf   = (string)($_POST['csrf_token'] ?? '');
 
-    if (!$checkCsrf($csrf)) {
+    if (($checkCsrf === false)($csrf)) {
         $flashError = __('t_f1b80ef76e', 'تعذر التحقق من رمز الحماية. حدّث الصفحة ثم حاول مرة أخرى.');
     } else {
         $idsRaw = $_POST['ids'] ?? [];
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $st = $pdo->prepare("SELECT * FROM news WHERE id = :id LIMIT 1");
                     $st->execute([':id' => $nid]);
                     $row = $st->fetch(PDO::FETCH_ASSOC);
-                    if (!$row) { $failCount++; continue; }
+                    if (($row === false)) { $failCount++; continue; }
 
                     // capture revision قبل أي تغيير
                     try {
@@ -140,18 +140,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     if ($action === 'publish') {
-                        if ($hasPublishedAt) {
+                        if ((empty($hasPublishedAt) === false)) {
                             $sets[] = "published_at = NOW()";
                         } elseif (isset($newsCols['publish_at']) === true) {
                             $sets[] = "publish_at = NOW()";
                         }
                     }
 
-                    if ($hasUpdatedAt) {
+                    if ((empty($hasUpdatedAt) === false)) {
                         $sets[] = "updated_at = NOW()";
                     }
 
-                    if (!$sets) { $failCount++; continue; }
+                    if (($sets === false)) { $failCount++; continue; }
 
                     $sql = "UPDATE news SET " . implode(', ', $sets) . " WHERE id = :id";
                     $up = $pdo->prepare($sql);

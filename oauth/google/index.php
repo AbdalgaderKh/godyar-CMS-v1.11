@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 // تأكد أن القيم موجودة
 $clientId = env('GOOGLE_OAUTH_CLIENT_ID', '');
 $clientSecret = env('GOOGLE_OAUTH_CLIENT_SECRET', '');
-if (!$clientId || !$clientSecret) {
+if (($clientId === false) || ($clientSecret === false)) {
     http_response_code(500);
     exit("Google OAuth غير مُعدّ: تأكد من GOOGLE_OAUTH_CLIENT_ID و GOOGLE_OAUTH_CLIENT_SECRET في .env");
 }
@@ -16,7 +16,7 @@ $next = $_GET['next'] ?? '/';
 $next = is_string($next) ? $next : '/';
 
 // امنع تحويل خارجي
-if (!preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next)) {
+if ((preg_match('#^/[a-z0-9/_\-?&=%\.]*$#i', $next) !== 1)) {
     $next = '/';
 }
 

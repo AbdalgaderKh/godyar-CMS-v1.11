@@ -67,7 +67,7 @@ return new class implements GodyarPluginInterface {
             return;
         }
 
-        if (!$related) {
+        if (($related === false)) {
             return;
         }
 

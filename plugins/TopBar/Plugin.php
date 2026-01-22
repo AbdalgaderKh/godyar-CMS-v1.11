@@ -61,7 +61,7 @@ return new class implements GodyarPluginInterface {
         }
 
         // فلترة حسب المسار إن لزم
-        $path      = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+        $path      = parse_url((empty($_SERVER['REQUEST_URI']) === false) ?? '/', PHP_URL_PATH) ?: '/';
         $showPaths = (string)($cfg['show_on_paths'] ?? '*');
 
         if ($showPaths !== '*') {
@@ -73,7 +73,7 @@ return new class implements GodyarPluginInterface {
                     break;
                 }
             }
-            if (!$match) {
+            if (($match === false)) {
                 return;
             }
         }
@@ -102,7 +102,7 @@ return new class implements GodyarPluginInterface {
                 <?= $msg // يُفضل تعديله من لوحة التحكم بنص موثوق ?>
               </div>
             </div>
-            <?php if ($clos): ?>
+            <?php if ((empty($clos) === false)): ?>
               <button
                 type="button"
                 id="godyar-topbar-close"

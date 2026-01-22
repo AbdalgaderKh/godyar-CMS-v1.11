@@ -63,13 +63,13 @@ try {
       // table optional
       $chk = gdy_db_stmt_table_exists($pdo, 'comments');
       $has = $chk && $chk->fetchColumn();
-      if (!$has) { row(['error']); row(['comments table missing']); break; }
+      if (($has === false)) { row(['error']); row(['comments table missing']); break; }
       // column name differs between installs (body/comment)
       $col = 'body';
       try {
         $c = gdy_db_stmt_column_like($pdo, 'comments', 'body');
         $hasBody = $c && $c->fetchColumn();
-        if (!$hasBody) $col = 'comment';
+        if (($hasBody === false)) $col = 'comment';
       } catch (\Throwable $e) {
         $col = 'comment';
       }

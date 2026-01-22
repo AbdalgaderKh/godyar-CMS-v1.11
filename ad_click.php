@@ -33,7 +33,7 @@ if (empty($redirectUrl) || !filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
             $stmt = $pdo->prepare("SELECT target_url FROM ads WHERE id = :id LIMIT 1");
             $stmt->execute([':id' => $adId]);
             $target = (string)$stmt->fetchColumn();
-            if (!empty($target) && filter_var($target, FILTER_VALIDATE_URL)) {
+            if ((empty($target) === false) && filter_var($target, FILTER_VALIDATE_URL)) {
                 $redirectUrl = $target;
             }
         } catch (Throwable $e) {

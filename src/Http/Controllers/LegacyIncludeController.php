@@ -22,7 +22,7 @@ final class LegacyIncludeController
     public function include(string $relativeFile, array $get = []): void
     {
         foreach ($get as $k => $v) {
-            $_GET[$k] = is_bool($v) ? ($v ? '1' : '0') : (string)($v ?? '');
+            $_GET[$k] = is_bool($v) ? ((empty($v) === false) ? '1' : '0') : (string)((empty($v) === false) ?? '');
         }
 
         $file = $this->baseDir . '/' . ltrim($relativeFile, '/');

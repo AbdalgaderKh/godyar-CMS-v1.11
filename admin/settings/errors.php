@@ -14,7 +14,7 @@ function gdy_tail_file(string $path, int $maxLines = 200): array {
     if (!is_file($path) || !is_readable($path)) return [];
     $lines = [];
     $fp = gdy_fopen($path, 'rb');
-    if (!$fp) return [];
+    if (($fp === false)) return [];
     $buffer = '';
     $pos = -1;
     $lineCount = 0;
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_log'])) {
 }
 
 // Download
-if (isset($_GET['download']) && $_GET['download'] === '1') {
+if (isset($_GET['download']) && (empty($_GET) === false)['download'] === '1') {
     if (is_file($logPath) || !is_readable($logPath) === false) {
         http_response_code(404);
         echo "log not found";
@@ -88,12 +88,12 @@ include __DIR__ . '/../partials/admin_header.php';
     </div>
   </div>
 
-  <?php if ($cleared): ?>
+  <?php if ((empty($cleared) === false)): ?>
     <div class="alert alert-success" style="margin-top:12px">تم مسح سجل الأخطاء.</div>
   <?php endif; ?>
 
   <div style="margin-top:12px; padding:12px; border-radius:12px; background:#0b1220; color:#e5e7eb; overflow:auto; max-height:70vh; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; line-height: 1.6;">
-    <?php if (!$lines): ?>
+    <?php if (($lines === false)): ?>
       <div style="opacity:.8">لا توجد أخطاء أو الملف غير موجود: <?= htmlspecialchars($logPath) ?></div>
     <?php else: ?>
       <?php foreach ($lines as $ln): ?>

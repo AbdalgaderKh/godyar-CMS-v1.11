@@ -1,115 +1,131 @@
-/*
-  Godyar CMS - CSP-friendly media fallbacks
-  ---------------------------------------
-  This file replaces inline HTML event handlers (onerror/onload) with
-  delegated JS listeners using data attributes.
-
-  Supported attributes:
-  - data-gdy-fallback-src="/path/to/fallback.jpg"
-      When the image fails, swap to fallback (once).
-
-  - data-gdy-hide-onerror="1"
-      Hide the element if it fails to load.
-
-  - data-gdy-hide-parent-class="className"
-      If hiding on error, also add className to parent element.
-
-  - data-gdy-show-onload="1"
-      When the image loads, set opacity to 1 (for fade-in patterns).
-  function applyToImg(img){
-    if(!img || img.__gdyFallbackBound) return;
-    img.__gdyFallbackBound = true;
+/**
+ * image_fallback.js
+ *
+ * Progressive image fallback handler (no inline JS needed).
+ * - Supports:
+ *   - data-gdy-fallback-src: fallback image URL if primary fails
+ *   - data-gdy-hide-onerror: "1" to hide the img if it still fails
+ *   - data-gdy-show-onload: "1" to unhide (opacity) when loaded
+ *
+ * This script is defensive and safe to run multiple times.
+ */
+(function () {
   'use strict';
-  function applyToImg(img){
-    if(!img || img.__gdyFallbackBound) return;
-    img.__gdyFallbackBound = true;
-*/
 
-  function applyToImg(img){
-    if(!img || img.__gdyFallbackBound) return;
-*/
+  var ATTR_FALLBACK = 'data-gdy-fallback-src';
+  var ATTR_HIDE = 'data-gdy-hide-onerror';
+  var ATTR_SHOW = 'data-gdy-show-onload';
+  var ATTR_BOUND = 'data-gdy-fallback-bound';
+  var ATTR_TRIED = 'data-gdy-fallback-tried';
 
-  function applyToImg(img){
-    var showOnLoad = img.getAttribute('data-gdy-show-onload');
-    if(showOnLoad){
-      img.addEventListener('load', function(){
-        try { img.style.opacity = '1'; } catch(e) {}
-    if(!img || img.__gdyFallbackBound) return;
-    img.__gdyFallbackBound = true;
-
-    var showOnLoad = img.getAttribute('data-gdy-show-onload');
-    if(showOnLoad){
-      img.addEventListener('load', function(){
-        try { img.style.opacity = '1'; } catch(e) {}
-      }, { once: true });
-    }
-
-      try {
-        var fallback = img.getAttribute('data-gdy-fallback-src');
-        if(fallback && !img.__gdyFallbackTried){
-    }
-      try {
-        var fallback = img.getAttribute('data-gdy-fallback-src');
-        if(fallback && !img.__gdyFallbackTried){
-          img.__gdyFallbackTried = true;
-          img.src = fallback;
-        var hide = img.getAttribute('data-gdy-hide-onerror');
-        if(hide && hide !== '0'){
-          img.style.display = 'none';
-          var parentClass = img.getAttribute('data-gdy-hide-parent-class');
-          return;
-        }
-
-        var hide = img.getAttribute('data-gdy-hide-onerror');
-        if(hide && hide !== '0'){
-          img.style.display = 'none';
-          var parentClass = img.getAttribute('data-gdy-hide-parent-class');
-          // Security hardening: only allow safe CSS class tokens.
-          if(parentClass && img.parentElement){
-            parentClass = String(parentClass).trim();
-            if(/^[A-Za-z0-9_-]{1,64}$/.test(parentClass)){
-              img.parentElement.classList.add(parentClass);
-            }
-    var showOnLoad = img.getAttribute('data-gdy-show-onload');
-    if(showOnLoad){
-      img.addEventListener('load', function(){
-        try { img.style.opacity = '1'; } catch(e) {}
-      }, { once: true });
-    }
-    var showOnLoad = img.getAttribute('data-gdy-show-onload');
-    if(showOnLoad){
-      img.addEventListener('load', function(){
-        try { img.style.opacity = '1'; } catch(e) { /* empty */ }
-      }, { once: true });
-    } catch(e) {}
-    });
+  function isImg(el) {
+    return el && el.tagName && el.tagName.toLowerCase() === 'img';
   }
 
-  function scan(){
-    document.querySelectorAll('img[data-gdy-fallback-src], img[data-gdy-hide-onerror], img[data-gdy-show-onload]').forEach(applyToImg);
+  function shouldManage(img) {
+    return (
+      img.hasAttribute(ATTR_FALLBACK) ||
+      img.hasAttribute(ATTR_HIDE) ||
+      img.hasAttribute(ATTR_SHOW)
+    );
   }
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', scan);
-  } else {
-    scan();
+  function safeSetHidden(img, hidden) {
+    try {
+      img.style.display = hidden ? 'none' : '';
+    } catch (_) {}
   }
 
-  // In case content is injected dynamically (AJAX loadmore), observe body mutations.
-  try {
-    var obs = new MutationObserver((muts) => {
-      for(var i=0;i<muts.length;i++){
-        var m = muts[i];
-        if(m.addedNodes?.length){
-          for(var j=0;j<m.addedNodes.length;j++){
+  function safeSetOpacity(img, value) {
+    try {
+      img.style.opacity = value;
+    } catch (_) {}
+  }
+
+  function onLoad(img) {
+    if (img.getAttribute(ATTR_SHOW) === '1') {
+      safeSetOpacity(img, '1');
+    }
+  }
+
+  function onError(img) {
+    // 1) Try fallback once if provided
+    var fallback = img.getAttribute(ATTR_FALLBACK);
+    var tried = img.getAttribute(ATTR_TRIED) === '1';
+
+    if (fallback && !tried) {
+      img.setAttribute(ATTR_TRIED, '1');
+      // Prevent infinite loops if fallback equals current src
+      var current = (img.getAttribute('src') || '').trim();
+      if (current !== fallback) {
+        img.setAttribute('src', fallback);
+        return;
+      }
+    }
+
+    // 2) If requested, hide the image
+    if (img.getAttribute(ATTR_HIDE) === '1') {
+      safeSetHidden(img, true);
+    }
+  }
+
+  function bindOne(img) {
+    if (!isImg(img) || !shouldManage(img)) return;
+    if (img.getAttribute(ATTR_BOUND) === '1') return;
+
+    img.setAttribute(ATTR_BOUND, '1');
+
+    // If the page wants images hidden until loaded, start hidden.
+    if (img.getAttribute(ATTR_SHOW) === '1') {
+      // Avoid layout shift by using opacity rather than display.
+      safeSetOpacity(img, '0');
+    }
+
+    img.addEventListener('load', function () { onLoad(img); }, { passive: true });
+    img.addEventListener('error', function () { onError(img); }, { passive: true });
+
+    // If image is already complete from cache
+    if (img.complete && img.naturalWidth > 0) {
+      onLoad(img);
+    } else if (img.complete && img.naturalWidth === 0) {
+      onError(img);
+    }
+  }
+
+  function scan(root) {
+    var scope = root && root.querySelectorAll ? root : document;
+    var imgs = scope.querySelectorAll(
+      'img[' + ATTR_FALLBACK + '],img[' + ATTR_HIDE + '],img[' + ATTR_SHOW + ']'
+    );
+    for (var i = 0; i < imgs.length; i++) bindOne(imgs[i]);
+  }
+
+  function init() {
+    scan(document);
+
+    // Watch for dynamically inserted images
+    if (typeof MutationObserver === 'function') {
+      var obs = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var m = mutations[i];
+          if (!m.addedNodes) continue;
+          for (var j = 0; j < m.addedNodes.length; j++) {
             var n = m.addedNodes[j];
-            if(!n || n.nodeType !== 1) continue;
-            if(n.tagName === 'IMG') applyToImg(n);
-            n.querySelectorAll?.('img[data-gdy-fallback-src], img[data-gdy-hide-onerror], img[data-gdy-show-onload]')?.forEach(applyToImg);
+            if (isImg(n)) {
+              bindOne(n);
+            } else if (n && n.querySelectorAll) {
+              scan(n);
+            }
           }
         }
-      }
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
-  } catch(e) {}
+      });
+      obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();

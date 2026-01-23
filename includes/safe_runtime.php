@@ -124,14 +124,58 @@ if (!function_exists('gdy_mail')) {
 }
 
 if (!function_exists('gdy_setcookie')) {
+    /**
+     * Secure cookie helper.
+     *
+     * Supports both signatures:
+     *  - setcookie(name, value, optionsArray)
+     *  - setcookie(name, value, expires, path, domain, secure, httponly)
+     *
+     * Defaults:
+     *  - HttpOnly = true
+     *  - Secure   = auto when HTTPS is detected
+     *  - SameSite = Lax
+     */
     function gdy_setcookie(...$args): bool {
         if (headers_sent()) return false;
+
         return (bool)gdy_suppress_errors(static function () use ($args) {
-            return setcookie(...$args);
+            if (count($args) < 1) return false;
+
+            $name = (string)$args[0];
+            $value = (string)($args[1] ?? '');
+
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || ((string)($_SERVER['SERVER_PORT'] ?? '') === '443');
+
+            // Normalize to options array (PHP 7.3+)
+            $options = [];
+            if (isset($args[2]) && is_array($args[2])) {
+                $options = $args[2];
+            } else {
+                $options = [
+                    'expires'  => (int)($args[2] ?? 0),
+                    'path'     => (string)($args[3] ?? '/'),
+                    'domain'   => (string)($args[4] ?? ''),
+                    'secure'   => (bool)($args[5] ?? false),
+                    'httponly' => (bool)($args[6] ?? true),
+                ];
+            }
+
+            if (!array_key_exists('httponly', $options)) $options['httponly'] = true;
+            if (!array_key_exists('secure', $options))   $options['secure'] = $isHttps;
+            if (!array_key_exists('samesite', $options)) $options['samesite'] = 'Lax';
+
+            // SameSite=None must be Secure (modern browsers)
+            $ss = strtolower((string)($options['samesite'] ?? ''));
+            if ($ss === 'none') {
+                $options['secure'] = true;
+            }
+
+            return setcookie($name, $value, $options);
         });
     }
 }
-
 if (!function_exists('gdy_ob_clean')) {
     function gdy_ob_clean(): bool {
         if (ob_get_level() <= 0) return false;

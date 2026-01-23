@@ -190,14 +190,7 @@ $needExt = ($drv === 'pgsql') ? 'pdo_pgsql' : 'pdo_mysql';
 if (!extension_loaded('pdo') || !extension_loaded($needExt)) {
     http_response_code(500);
     if (function_exists('error_log')) {
-        if (!defined('GODYAR_BOOTSTRAP_PDO_MISSING_LOGGED')) {
-            define('GODYAR_BOOTSTRAP_PDO_MISSING_LOGGED', 1);
-            $drivers = [];
-            if (class_exists(PDO::class)) {
-                try { $drivers = PDO::getAvailableDrivers(); } catch (Throwable $e) { $drivers = []; }
-            }
-            error_log('[Bootstrap] Missing PDO driver: ' . $needExt . ' | available=' . implode(',', $drivers));
-        }
+        error_log('[Bootstrap] Missing PDO driver: ' . $needExt);
     }
     if ($needExt === 'pdo_pgsql') {
         exit('خطأ في إعدادات السيرفر: يلزم تفعيل إضافة PDO PostgreSQL (pdo_pgsql) من لوحة الاستضافة/إعدادات PHP ثم إعادة المحاولة.');

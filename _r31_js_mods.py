@@ -3,18 +3,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 
-def apply(rel, subs):
-    p = ROOT / rel
-    if not p.exists():
-        print(f"SKIP {rel}")
+def apply(file_rel_path, substitutions):
+    file_path = ROOT / file_rel_path
+    if not file_path.exists():
+        print(f"SKIP {file_rel_path}")
         return
-    s = p.read_text(encoding='utf-8')
-    orig = s
-    for pat, repl, flags in subs:
-        s = re.sub(pat, repl, s, flags=flags)
-    if s != orig:
-        p.write_text(s, encoding='utf-8')
-        print(f"UPDATED {rel}")
+    content = file_path.read_text(encoding='utf-8')
+    original_content = content
+    for pattern, replacement, flags in substitutions:
+        content = re.sub(pattern, replacement, content, flags=flags)
+    if content != original_content:
+        file_path.write_text(content, encoding='utf-8')
+        print(f"UPDATED {file_rel_path}")
 
 # Generic utility substitutions
 CATCH_EMPTY = [
@@ -187,14 +187,14 @@ for rel in [
 # Post-process news-extras normalizeText and unicode regex flags using simple replacements
 p = ROOT / "assets/js/news-extras.js"
 if p.exists():
-    s = p.read_text(encoding='utf-8')
-    orig = s
+    text = path.read_text(encoding='utf-8')
+    original_text = text
     # normalizeText: add /u flags
     s = s.replace("replace(/\u00A0/g", "replace(/\\u00A0/gu")
     s = s.replace("replace(/\\s+/g", "replace(/\\s+/gu")
     s = s.replace("replace(/[•·•]+/g", "replace(/[•·•]+/gu")
     # sentence split: add unicode flag
     s = s.replace("p.split(/(?<=[\\.\\!\\؟\\?])\\s+/)", "p.split(/(?<=[\\.\\!\\؟\\?])\\s+/u)")
-    if s != orig:
-        p.write_text(s, encoding='utf-8')
+    if text != original_text:
+        path.write_text(text, encoding='utf-8')
         print("UPDATED assets/js/news-extras.js (post)")

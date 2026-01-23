@@ -20,22 +20,6 @@ assets/uploads/
 Thumbs.db
 *.swp
 *.bak
-
-# PHPMailer OAuth tokens (do not commit)
-libs/PHPMailer/tokens/
-libs/PHPMailer/tokens/*.json
-
-# Runtime files
-error_log
-cache/sitemap.xml
-
-# PHPMailer OAuth tokens (do not commit)
-libs/PHPMailer/tokens/
-libs/PHPMailer/tokens/*.json
-
-# Runtime files
-error_log
-cache/sitemap.xml
-
-# Editor backups
-*.save
+godyar-fix.php
+*.csv
+*.log

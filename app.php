@@ -31,12 +31,9 @@ use App\Http\Controllers\Api\NewsExtrasController;
 // ---------------------------------------------------------
 // ✅ Language prefix router (NO output, NO redirects) BEFORE bootstrap
 // ---------------------------------------------------------
-// ---------------------------------------------------------
-// ✅ Language prefix router (NO output, NO redirects) BEFORE bootstrap
-// ---------------------------------------------------------
-$lpFile = __DIR__ . '/language_prefix_router.php';
-if (is_file($lpFile)) {
-    require_once $lpFile;
+$lp = __DIR__ . '/language_prefix_router.php';
+if (is_file($lp)) {
+    require_once $lp;
 }
 
 // Now load bootstrap (it loads lang_prefix.php/lang.php/translation.php)
@@ -44,40 +41,6 @@ require_once __DIR__ . '/includes/bootstrap.php';
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
     gdy_session_start();
-}
-
-// ---------------------------------------------------------
-// Input helpers (reduce direct superglobal access & harden)
-// ---------------------------------------------------------
-if (!function_exists('gdy_qs_int')) {
-    function gdy_qs_int(string $key, int $default = 0): int {
-        $v = $_GET[$key] ?? null;
-        if ($v === null) return $default;
-        $s = is_scalar($v) ? (string)$v : '';
-        return (ctype_digit($s) ? (int)$s : $default);
-    }
-}
-if (!function_exists('gdy_qs_str')) {
-    function gdy_qs_str(string $key, string $default = ''): string {
-        $v = $_GET[$key] ?? null;
-        if ($v === null) return $default;
-        return is_scalar($v) ? trim((string)$v) : $default;
-    }
-}
-if (!function_exists('gdy_allowlist')) {
-    function gdy_allowlist(string $value, array $allowed, string $default): string {
-        return in_array($value, $allowed, true) ? $value : $default;
-    }
-}
-if (!function_exists('gdy_slug_clean')) {
-    function gdy_slug_clean(string $slug, int $maxLen = 190): string {
-        $slug = trim($slug);
-        if ($slug === '') return '';
-        // allow letters/numbers/hyphen/underscore only (unicode-safe)
-        $slug = preg_replace('/[^\pL\pN\-_]/u', '', $slug) ?? '';
-        if (strlen($slug) > $maxLen) $slug = substr($slug, 0, $maxLen);
-        return $slug;
-    }
 }
 
 if (!function_exists('godyar_route_base_prefix')) {
@@ -111,12 +74,14 @@ if (!function_exists('godyar_render_404')) {
     {
         http_response_code(404);
 
+        $header = __DIR__ . '/frontend/templates/header.php';
+        $footer = __DIR__ . '/frontend/templates/footer.php';
+
         $siteTitle = '404 - الصفحة غير موجودة';
         $siteDescription = 'الصفحة التي طلبتها غير موجودة.';
 
-        $headerFile = __DIR__ . '/frontend/templates/header.php';
-        if (is_file($headerFile)) {
-            require __DIR__ . '/frontend/templates/header.php';
+        if (is_file($header)) {
+            require $header;
         }
 
         echo '<main class="container my-5">';
@@ -126,9 +91,8 @@ if (!function_exists('godyar_render_404')) {
         echo '<p><a href="' . htmlspecialchars($home ?: '/', ENT_QUOTES, 'UTF-8') . '">العودة للصفحة الرئيسية</a></p>';
         echo '</main>';
 
-        $footerFile = __DIR__ . '/frontend/templates/footer.php';
-        if (is_file($footerFile)) {
-            require __DIR__ . '/frontend/templates/footer.php';
+        if (is_file($footer)) {
+            require $footer;
         }
 
         exit;
@@ -234,7 +198,7 @@ if (in_array($requestPath, ['/article.php', '/category.php', '/page.php', '/arch
                 exit;
             }
             if (!empty($_GET['slug'])) {
-        $slug = gdy_slug_clean((string)$_GET['slug']);
+                $slug = (string)$_GET['slug'];
                 header('Location: ' . $base . '/news/' . rawurlencode($slug) . '?preview=1', true, 302);
                 exit;
             }
@@ -244,7 +208,7 @@ if (in_array($requestPath, ['/article.php', '/category.php', '/page.php', '/arch
         }
 
         if (!empty($_GET['slug'])) {
-        $slug = gdy_slug_clean((string)$_GET['slug']);
+            $slug = (string)$_GET['slug'];
             header('Location: ' . $base . '/news/' . rawurlencode($slug) . ($qs !== '' ? ('?' . $qs) : ''), true, 301);
             exit;
         }
@@ -262,7 +226,7 @@ if (in_array($requestPath, ['/article.php', '/category.php', '/page.php', '/arch
 
     if ($requestPath === '/category.php') {
         if (!empty($_GET['slug'])) {
-        $slug = gdy_slug_clean((string)$_GET['slug']);
+            $slug = (string)$_GET['slug'];
             if (!empty($_GET['page']) && ctype_digit((string)$_GET['page'])) {
                 $page = (int)$_GET['page'];
                 header('Location: ' . $base . '/category/' . rawurlencode($slug) . '/page/' . $page . ($qs !== '' ? ('?' . $qs) : ''), true, 301);
@@ -284,7 +248,7 @@ if (in_array($requestPath, ['/article.php', '/category.php', '/page.php', '/arch
 
     if ($requestPath === '/page.php') {
         if (!empty($_GET['slug'])) {
-        $slug = gdy_slug_clean((string)$_GET['slug']);
+            $slug = (string)$_GET['slug'];
             header('Location: ' . $base . '/page/' . rawurlencode($slug) . ($qs !== '' ? ('?' . $qs) : ''), true, 301);
             exit;
         }
@@ -360,25 +324,25 @@ $router = new Router();
 // SEO endpoints
 $router->get('#^/sitemap\.xml$#', function () : void { require __DIR__ . '/seo/sitemap.php'; });
 $router->get('#^/rss\.xml$#', function () : void { require __DIR__ . '/seo/rss.php'; });
-$router->get('#^/rss/category/([^/]+)\.xml$#', function (array $m) : void { $slug = rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_category.php'; });
-$router->get('#^/rss/category/([^/]+)\.xml$#', function (array $m) : void { $slug = rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_category.php'; });
-$router->get('#^/rss/tag/([^/]+)\.xml$#', function (array $m) : void { $slug = rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_tag.php'; });
-$router->get('#^/rss/tag/([^/]+)\.xml$#', function (array $m) : void { $slug = rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_tag.php'; });
+$router->get('#^/rss/category/([^/]+)\.xml$#', function (array $m) : void { $_GET['slug']=rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_category.php'; });
+$router->get('#^/rss/category/([^/]+)/?$#', function (array $m) : void { $_GET['slug']=rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_category.php'; });
+$router->get('#^/rss/tag/([^/]+)\.xml$#', function (array $m) : void { $_GET['slug']=rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_tag.php'; });
+$router->get('#^/rss/tag/([^/]+)/?$#', function (array $m) : void { $_GET['slug']=rawurldecode((string)$m[1]); require __DIR__ . '/seo/rss_tag.php'; });
 
 $router->get('#^/og/news/([0-9]+)\.png$#', function (array $m) : void {
-    $id = (int)$m[1];
+    $_GET['id'] = (int)$m[1];
     require __DIR__ . '/og_news.php';
 });
 
 // /category/{slug}[/page/{n}]
 $router->get('#^/category/([^/]+)/page/([0-9]+)/?$#', function (array $m) use ($categoryController): void {
-    $sort = gdy_allowlist(gdy_qs_str('sort', 'latest'), ['latest','oldest','popular'], 'latest');
-    $period = gdy_allowlist(gdy_qs_str('period', 'all'), ['all','day','week','month','year'], 'all');
+    $sort = isset($_GET['sort']) ? (string)$_GET['sort'] : 'latest';
+    $period = isset($_GET['period']) ? (string)$_GET['period'] : 'all';
     $categoryController->show(rawurldecode((string)$m[1]), (int)$m[2], $sort, $period);
 });
 $router->get('#^/category/([^/]+)/?$#', function (array $m) use ($categoryController): void {
-    $sort = gdy_allowlist(gdy_qs_str('sort', 'latest'), ['latest','oldest','popular'], 'latest');
-    $period = gdy_allowlist(gdy_qs_str('period', 'all'), ['all','day','week','month','year'], 'all');
+    $sort = isset($_GET['sort']) ? (string)$_GET['sort'] : 'latest';
+    $period = isset($_GET['period']) ? (string)$_GET['period'] : 'all';
     $categoryController->show(rawurldecode((string)$m[1]), 1, $sort, $period);
 });
 
@@ -425,7 +389,7 @@ $router->get('#^/topic/([^/]+)/?$#', function (array $m) use ($topicController):
 
 // /tag/{slug}
 $router->get('#^/tag/([^/]+)/page/([0-9]+)/?$#', fn(array $m) => $tagController->show(rawurldecode((string)$m[1]), (int)$m[2]));
-$router->get('#^/tag/([^/]+)/?$#', fn(array $m) => $tagController->show(gdy_slug_clean(rawurldecode((string)$m[1])), gdy_qs_int('page', 1)));
+$router->get('#^/tag/([^/]+)/?$#', fn(array $m) => $tagController->show(rawurldecode((string)$m[1]), (int)($_GET['page'] ?? 1)));
 
 // /trending
 $router->get('#^/trending/?$#', fn() => $legacy->include('frontend/controllers/TrendingController.php'));
@@ -449,7 +413,7 @@ $router->get('#^/archive/([0-9]{4})/page/([0-9]+)/?$#', fn(array $m) => $archive
 $router->get('#^/archive/([0-9]{4})/([0-9]{1,2})/page/([0-9]+)/?$#', fn(array $m) => $archiveController->index((int)$m[3], (int)$m[1], (int)$m[2]));
 $router->get('#^/archive/([0-9]{4})/([0-9]{1,2})/?$#', fn(array $m) => $archiveController->index(1, (int)$m[1], (int)$m[2]));
 $router->get('#^/archive/([0-9]{4})/?$#', fn(array $m) => $archiveController->index(1, (int)$m[1], null));
-$router->get('#^/archive/?$#', fn() => $archiveController->index(gdy_qs_int('page', 1)));
+$router->get('#^/archive/?$#', fn() => $archiveController->index((int)($_GET['page'] ?? 1)));
 
 // API
 $router->get('#^/api/capabilities/?$#', fn() => $extrasApi->capabilities());
@@ -503,7 +467,7 @@ $router->post('#^/api/newsletter/subscribe/?$#', function () use ($pdo): void {
     }
 
     $email = '';
-    if (isset($_POST['newsletter_email']) && is_scalar($_POST['newsletter_email']) && (string)$_POST['newsletter_email'] !== '') {
+    if (!empty($_POST['newsletter_email'])) {
         $email = trim((string)$_POST['newsletter_email']);
     } else {
         $raw = (string)file_get_contents('php://input');
@@ -560,9 +524,7 @@ $router->post('#^/api/newsletter/subscribe/?$#', function () use ($pdo): void {
     }
 
     $lang = '';
-    if (!empty($_COOKIE['lang']) && is_scalar($_COOKIE['lang'])) {
-        $lang = gdy_allowlist((string)$_COOKIE['lang'], ['ar','en','fr'], $lang);
-    }
+    if (!empty($_COOKIE['lang'])) $lang = (string)$_COOKIE['lang'];
     $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
     $ua = substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255);
 

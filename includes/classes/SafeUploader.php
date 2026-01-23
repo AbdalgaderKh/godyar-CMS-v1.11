@@ -33,6 +33,11 @@ final class SafeUploader
     public static function upload(array $file, array $opt): array
     {
         $destAbs = (string)($opt['dest_abs_dir'] ?? '');
+        // Require absolute destination to avoid directory traversal via configuration.
+        if ($destAbs !== '' && $destAbs[0] !== '/' && strpos($destAbs, ':') === false) {
+            return ['success' => false, 'error' => 'Destination must be absolute'];
+        }
+
         $urlPrefix = (string)($opt['url_prefix'] ?? '');
         if ($destAbs === '' || $urlPrefix === '' || $urlPrefix[0] !== '/') {
             return ['success' => false, 'error' => 'Uploader misconfigured'];
@@ -70,7 +75,7 @@ final class SafeUploader
             if ($fi) {
                 $m = finfo_file($fi, $tmp);
                 if (is_string($m) && $m !== '') $mime = $m;
-                @finfo_close($fi);
+                if (function_exists('gdy_suppress_errors')) { gdy_suppress_errors(static function () use ($fi) { finfo_close($fi); return true; }, true); } else { finfo_close($fi); }
             }
         }
 
@@ -90,9 +95,9 @@ final class SafeUploader
 
         if (!is_dir($destAbsNorm)) {
             if (function_exists('gdy_mkdir')) {
-                gdy_mkdir($destAbsNorm, 0775, true);
+                gdy_mkdir($destAbsNorm, 0755, true);
             } else {
-                @mkdir($destAbsNorm, 0775, true);
+                mkdir($destAbsNorm, 0755, true);
             }
         }
 
@@ -116,7 +121,7 @@ final class SafeUploader
         if (function_exists('gdy_chmod')) {
             gdy_chmod($absPath, 0644);
         } else {
-            @chmod($absPath, 0644);
+            chmod($absPath, 0644);
         }
 
         $relUrl = rtrim($urlPrefix, '/') . '/' . $name;

@@ -1,11 +1,23 @@
 version = 1
 
+exclude_patterns = [
+  "libs/PHPMailer/**",
+  "assets/vendor/**",
+  "assets/js/vendor/**",
+  "assets/css/vendor/**",
+  "vendor/**"
+]
+
 [[analyzers]]
-name = "python"  # محالل مدعومة
+name = "php"
 enabled = true
 
 [[analyzers]]
-name = "javascript"  # محالل مدعومة
+name = "javascript"
 enabled = true
 
-# قم بإزالة أي محلل غير مدعوم مثل "css" إذا لم يكن موجودًا
+# ملاحظة: DeepSeek لا يدعم محلل CSS
+# إذا كان لديك قسم CSS أدناه، يجب حذفه أو تعطيله
+# [[analyzers]]
+# name = "css"
+# enabled = false  # غير صحيح إلى false بدلاً من true

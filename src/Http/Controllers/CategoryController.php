@@ -39,7 +39,7 @@ final class CategoryController
 
         // كاش اختياري إن وُجد Cache class
         $usePageCache = class_exists('Cache');
-        $pageCacheKey = 'cat:' . md5($slug . '|' . $page . '|' . $sort . '|' . $period);
+        $pageCacheKey = 'cat:' . hash('sha256', $slug . '|' . $page . '|' . $sort . '|' . $period);
         if ($usePageCache) {
             try {
                 $cached = \Cache::get($pageCacheKey);

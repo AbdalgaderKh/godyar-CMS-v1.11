@@ -16,6 +16,8 @@ enabled = true
 name = "javascript"
 enabled = true
 
-[[analyzers]]
-name = "css"
-enabled = true
+# ملاحظة: DeepSeek لا يدعم محلل CSS
+# إذا كان لديك قسم CSS أدناه، يجب حذفه أو تعطيله
+# [[analyzers]]
+# name = "css"
+# enabled = false  # غير صحيح إلى false بدلاً من true

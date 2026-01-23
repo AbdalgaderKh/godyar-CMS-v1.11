@@ -164,7 +164,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
         // خيار __('t_06b29113eb', "تذكر البريد")
         if ($remember) {
-            setcookie('admin_remember_email', $email, [
+            gdy_setcookie('admin_remember_email', $email, [
                 'expires'  => time() + (30 * 24 * 60 * 60),
                 'path'     => '/admin', // ✅ بدل /godyar/admin
 	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
@@ -172,7 +172,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
                 'samesite' => 'Lax',
             ]);
         } else {
-	        setcookie('admin_remember_email', '', [
+	        gdy_setcookie('admin_remember_email', '', [
 	            'expires'  => time() - 3600,
 	            'path'     => '/admin',
 	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),

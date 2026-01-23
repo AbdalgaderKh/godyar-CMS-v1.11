@@ -40,7 +40,7 @@ if (!function_exists('gdy_admin_capture_error')) {
         // ملف لوج داخلي
         $dir = __DIR__ . '/../storage';
         if (!is_dir($dir)) {
-            gdy_mkdir($dir, 0755, true);
+            gdy_mkdir($dir, 0775, true);
         }
         $logFile = $dir . '/admin_debug.log';
         $jsonFlags = JSON_UNESCAPED_UNICODE

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $mode = $_POST['mode'] ?? '';
         if ($mode === 'on') {
-            gdy_mkdir(dirname($flagFile), 0755, true);
+            gdy_mkdir(dirname($flagFile), 0775, true);
             gdy_file_put_contents($flagFile, date('Y-m-d H:i:s') . ' maintenance on');
             $isOn    = true;
             $message = __('t_e1cd3f66b0', 'تم تفعيل وضع الصيانة.');

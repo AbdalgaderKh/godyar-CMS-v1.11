@@ -19,7 +19,7 @@ function gdy_client_ip(): string {
 
 function gdy_rate_limit(string $key, string $ip, int $max, int $windowSeconds): bool {
     $dir = rtrim((string)sys_get_temp_dir(), '/');
-    $file = $dir . '/gdy_rl_' . md5($key . '|' . $ip) . '.json';
+    $file = $dir . '/gdy_rl_' . hash('sha256', $key . '|' . $ip) . '.json';
     $now = time();
 
     $times = [];

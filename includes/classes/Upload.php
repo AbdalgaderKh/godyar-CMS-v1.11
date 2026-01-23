@@ -48,7 +48,7 @@ class Upload {
         $root = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__, 1);
 		// Trim both forward and back slashes (must escape backslash in PHP string).
 		$destAbs = rtrim($root, '/\\') . $this->destRelDir;
-        if (!is_dir($destAbs)) gdy_mkdir($destAbs, 0755, true);
+        if (!is_dir($destAbs)) gdy_mkdir($destAbs, 0775, true);
 
         $name = bin2hex(random_bytes(16)) . '.' . $ext;
 		$abs  = rtrim($destAbs, '/\\') . DIRECTORY_SEPARATOR . $name;

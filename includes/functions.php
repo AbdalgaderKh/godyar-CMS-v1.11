@@ -176,21 +176,6 @@ if (function_exists('csrf_field') === false) {
     }
 }
 
-
-
-if (function_exists('verify_csrf') === false) {
-    /**
-     * verify_csrf()
-     * Wrapper for legacy code paths.
-     * Accepts explicit token or reads from POST/headers.
-     */
-    function verify_csrf(?string $token = null): bool {
-        if ($token === null) {
-            $token = (string)($_POST['csrf_token'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''));
-        }
-        return verify_csrf_token((string)$token);
-    }
-}
 if (function_exists('csrf_verify_or_die') === false) {
     function csrf_verify_or_die(string $fieldName = 'csrf_token'): void {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

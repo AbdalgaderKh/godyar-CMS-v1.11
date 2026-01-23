@@ -64,7 +64,7 @@ function topbar_save_config(string $configFile, array $cfg): bool
     }
 
     if (!is_dir(dirname($configFile))) {
-        gdy_mkdir(dirname($configFile), 0755, true);
+        gdy_mkdir(dirname($configFile), 0775, true);
     }
 
     return gdy_file_put_contents($configFile, $json) !== false;

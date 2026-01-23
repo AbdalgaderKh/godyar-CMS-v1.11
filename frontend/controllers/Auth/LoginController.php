@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($remember) {
                         $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
                         $params = session_get_cookie_params();
-                        setcookie(
+                        gdy_setcookie(
                             session_name(),
                             session_id(),
                             [

@@ -1,42 +1,41 @@
 /*!
- * Inline Edit
- * - Double click on elements with data-inline-edit="1"
- * - Requires: data-entity, data-id, data-field
+ * Inline Edit (Ultra Pack)
+ * Usage:
+ *   <td data-inline-edit="1" data-entity="tags" data-id="12" data-field="name">Tag name</td>
  */
 (function () {
-  'use strict';
-
   function getCsrf() {
     var el = document.querySelector('input[name="csrf_token"]');
-    return el ? (el.value || '') : '';
-  }
+    return el ? el.value : '';
+  document.addEventListener('dblclick', function (e) {
+    var cell = e.target.closest('[data-inline-edit="1"]');
 
-  function ajax(data) {
-    var base = (window.GDY_ADMIN_URL || '/admin').replace(/\/+$/, '');
-    var url = base + '/api/inline_edit.php';
+  function ajax(url, data) {
     return fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
       body: new URLSearchParams(data).toString()
-    }).then(function (r) { return r.json(); });
+  document.addEventListener('dblclick', function (e) {
+    var cell = e.target.closest('[data-inline-edit="1"]');
+    var entity = cell.getAttribute('data-entity') || '';
+  }
+    }).then(r => r.json());
   }
 
-  document.addEventListener('dblclick', function (e) {
-    var cell = e.target && e.target.closest ? e.target.closest('[data-inline-edit="1"]') : null;
-    if (!cell) return;
-
-    if (cell.querySelector('input')) return;
-
     var entity = cell.getAttribute('data-entity') || '';
-    var id = cell.getAttribute('data-id') || '';
-    var field = cell.getAttribute('data-field') || '';
-    if (!entity || !id || !field) return;
+  }
 
-    var oldText = (cell.textContent || '').trim();
+    var old = cell.textContent.trim();
     var input = document.createElement('input');
     input.type = 'text';
     input.className = 'form-control form-control-sm';
-    input.value = oldText;
+
+    const old = cell.textContent.trim();
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'form-control form-control-sm';
+
+    if (cell.querySelector('input')) return;
     input.style.minWidth = '160px';
 
     cell.textContent = '';
@@ -44,34 +43,31 @@
     input.focus();
     input.select();
 
-    function restore(txt) {
-      cell.textContent = txt;
-    }
-
     function finish(save) {
-      var val = (input.value || '').trim();
-      if (!save) {
-        restore(oldText);
-        return;
-      }
-      ajax({
+      var val = input.value.trim();
+      ajax(${window.GDY_ADMIN_URL || '/admin'}/api/inline_edit.php, {
         csrf_token: getCsrf(),
         entity: entity,
         id: id,
-        field: field,
+
+      ajax((window.GDY_ADMIN_URL || '/admin') + '/api/inline_edit.php', {
+        csrf_token: getCsrf(),
+        entity,
+        id,
+        field,
         value: val
       }).then(function (res) {
         if (!res || !res.ok) {
-          restore(oldText);
+          cell.textContent = old;
           alert('تعذر حفظ التعديل');
-          return;
         }
-        restore(val);
       }).catch(function () {
-        restore(oldText);
+        cell.textContent = old;
         alert('تعذر حفظ التعديل');
-      });
-    }
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') finish(true);
+      if (ev.key === 'Escape') finish(false);
+    });
 
     input.addEventListener('keydown', function (ev) {
       if (ev.key === 'Enter') finish(true);

@@ -322,9 +322,9 @@ function gdy_protect_upload_dir(string $absDir): void
     try {
         if (!is_dir($absDir)) {
             if (function_exists('gdy_mkdir')) {
-                gdy_mkdir($absDir, 0755, true);
+                gdy_mkdir($absDir, 0775, true);
             } else {
-                mkdir($absDir, 0755, true);
+                @mkdir($absDir, 0775, true);
             }
         }
 

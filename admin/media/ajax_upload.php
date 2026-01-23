@@ -58,9 +58,9 @@ $destAbs = rtrim((string)$root, "/\\") . '/assets/uploads/media';
 try {
     if (!is_dir($destAbs)) {
         if (function_exists('gdy_mkdir')) {
-            gdy_mkdir($destAbs, 0775, true);
+            gdy_mkdir($destAbs, 0755, true);
         } else {
-            @mkdir($destAbs, 0775, true);
+            mkdir($destAbs, 0755, true);
         }
     }
     $ht = rtrim($destAbs, "/" . chr(92)) . '/.htaccess';

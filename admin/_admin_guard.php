@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+// Ensure shared bootstrap (sessions, CSRF helpers, runtime hardening) is loaded once
+require_once __DIR__ . '/../includes/bootstrap.php';
 /**
  * admin/_admin_guard.php
  * حارس عام لكل صفحات لوحة التحكم:
@@ -141,40 +144,6 @@ try {
 }
 
 // -----------------------------------------------------------------------------
-// CSRF helpers (global for admin)
-// -----------------------------------------------------------------------------
-// كثير من صفحات لوحة التحكم تستخدم generate_csrf_token()/verify_csrf_token().
-// في بعض التركيبات قد لا تكون هذه الدوال معرفة داخل includes/، مما كان يتسبب
-// بتوقف تنفيذ PHP منتصف الصفحة (فتظهر الصفحة وكأنها __('t_eb2d2a6edb', "بدون محتوى")).
-// نعرّفها هنا مرة واحدة لضمان عمل جميع صفحات الإدارة.
-
-if (!function_exists('generate_csrf_token')) {
-    function generate_csrf_token(): string {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            gdy_session_start();
-        }
-        if (empty($_SESSION['_csrf_token'])) {
-            try {
-                $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
-            } catch (Throwable $e) {
-                // fallback ضعيف لكن يمنع توقف الصفحة
-                // توكن CSRF قوي
-                $_SESSION['_csrf_token'] = bin2hex(random_bytes(32));
-            }
-        }
-        return (string)$_SESSION['_csrf_token'];
-    }
-}
-
-if (!function_exists('verify_csrf_token')) {
-    function verify_csrf_token(?string $token): bool {
-        $token = (string)($token ?? '');
-        $sessionToken = (string)($_SESSION['_csrf_token'] ?? '');
-        if ($token === '' || $sessionToken === '') return false;
-        return hash_equals($sessionToken, $token);
-    }
-}
-
 // -----------------------------------------------------------------------------
 // CSRF sugar helpers used across admin/settings pages
 // -----------------------------------------------------------------------------

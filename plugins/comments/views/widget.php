@@ -81,7 +81,7 @@ if (function_exists('gdy_rate_limit')) {
 
 $key = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $bucket . '_' . $ip);
 $dir = sys_get_temp_dir() . '/gdy_rl';
-if (!is_dir($dir)) @mkdir($dir, 0777, true);
+if (!is_dir($dir)) mkdir($dir, 0755, true);
     $file = $dir . '/' . $key . '.json';
     $now = time();
     $data = ['t' => $now, 'c' => 0];

@@ -41,7 +41,7 @@ final class GdyQueue {
     private static function ensureStorage(): void {
         $dir = self::baseDir();
         if (!is_dir($dir)) {
-            gdy_mkdir($dir, 0775, true);
+            gdy_mkdir($dir, 0755, true);
         }
         $file = self::jobsFile();
         if (!is_file($file)) {

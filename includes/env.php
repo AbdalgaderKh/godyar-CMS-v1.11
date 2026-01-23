@@ -134,7 +134,13 @@ foreach ($candidates as $f) {
 
 $cfg = is_array($GODYAR_ENV_ARR) ? $GODYAR_ENV_ARR : [];
 
-// Defaults map (no secrets)
+/**
+ * Defaults map (NO SECRETS).
+ *
+ * Important:
+ * - Do not hardcode DB credentials or encryption keys in Git.
+ * - Provide these via .env / environment variables on the server.
+ */
 $defaults = [
     'APP_ENV'        => 'production',
     'APP_DEBUG'      => 'false',
@@ -142,14 +148,14 @@ $defaults = [
     'DB_DRIVER'      => 'auto',
     'DB_HOST'        => 'localhost',
     'DB_PORT'        => '3306',
-    'DB_DATABASE'    => 'geqzylcq_myar',
-    'DB_USERNAME'    => 'geqzylcq_meera',
-    'DB_PASSWORD'    => 'Myar2018@',
+    'DB_DATABASE'    => '',   // set in .env (DB_DATABASE / DB_NAME)
+    'DB_USERNAME'    => '',   // set in .env (DB_USERNAME / DB_USER)
+    'DB_PASSWORD'    => '',   // set in .env (DB_PASSWORD / DB_PASS)
     'DB_CHARSET'     => 'utf8mb4',
     'DB_COLLATION'   => 'utf8mb4_unicode_ci',
     'DB_DSN'         => '',
     'TIMEZONE'       => 'Asia/Riyadh',
-    'ENCRYPTION_KEY' => '311a8cea10b1b836d566b3e082a0d9570ffb29abd6e387925a61b7dd424e6eae',
+    'ENCRYPTION_KEY' => '',   // set in .env (never commit real value)
 ];
 
 if (!function_exists('gody_env_db')) {
@@ -313,7 +319,7 @@ if (!function_exists('gody_create_pdo_connection')) {
                 try {
                     $pdo->exec("SET client_encoding TO 'UTF8'");
                 } catch (Throwable $e) {
-                    // empty
+                    // ignored
                 }
             }
 

@@ -53,9 +53,9 @@ $urlPrefix = '/uploads/editor';
 $ht = $destAbs . '/.htaccess';
 if (!is_dir($destAbs)) {
     if (function_exists('gdy_mkdir')) {
-        gdy_mkdir($destAbs, 0775, true);
+        gdy_mkdir($destAbs, 0755, true);
     } else {
-        @mkdir($destAbs, 0775, true);
+        mkdir($destAbs, 0755, true);
     }
 }
 if (is_dir($destAbs) && !is_file($ht)) {

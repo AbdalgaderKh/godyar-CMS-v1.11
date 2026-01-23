@@ -19,7 +19,7 @@ if (!function_exists('gody_audit_log')) {
     {
         $dir = rtrim(ROOT_PATH, '/\\') . '/storage/logs';
         if (!is_dir($dir)) {
-            gdy_mkdir($dir, 0775, true);
+            gdy_mkdir($dir, 0755, true);
         }
 
         $ip = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');

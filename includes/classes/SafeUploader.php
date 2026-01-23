@@ -90,9 +90,9 @@ final class SafeUploader
 
         if (!is_dir($destAbsNorm)) {
             if (function_exists('gdy_mkdir')) {
-                gdy_mkdir($destAbsNorm, 0775, true);
+                gdy_mkdir($destAbsNorm, 0755, true);
             } else {
-                @mkdir($destAbsNorm, 0775, true);
+                mkdir($destAbsNorm, 0755, true);
             }
         }
 

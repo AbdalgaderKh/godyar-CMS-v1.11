@@ -54,9 +54,9 @@ final class Security
 
             if (!is_dir($logDir)) {
                 if (function_exists('gdy_mkdir')) {
-                    @gdy_mkdir($logDir, 0775, true);
+                    @gdy_mkdir($logDir, 0755, true);
                 } else {
-                    @mkdir($logDir, 0775, true);
+                    mkdir($logDir, 0755, true);
                 }
             }
 

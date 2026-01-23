@@ -1,79 +1,32 @@
 <?php
-/**
- * Plugin Name: Side TOC Only
- * Description: Removes duplicated Table of Contents from the post content (keeps the sidebar/widget version).
- * Version: 1.0.0
- * Author: ChatGPT
- * License: GPLv2 or later
-/**
- * Remove TOC containers from the_content only.
- * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
+declare(strict_types=1);
 
-function stoc_should_filter_content($content) {
-    if (is_admin()) {
-        return false;
-    }
-    if (!is_string($content) || trim($content) === '') {
-        return false;
-    }
-    if (function_exists('is_singular') && !is_singular()) {
-        return false;
-    }
-    return true;
-}
-function stoc_has_toc_markers($content) {
-    $needles = array('ez-toc-container', 'lwptoc', 'toc_container', 'toc-container', 'rank-math-toc', 'wp-block-lwptoc');
-    foreach ($needles as $needle) {
-        if (stripos($content, $needle) !== false) {
-            return true;
-        }
-    }
-    return false;
-}
-function stoc_wrap_content($content) {
-    return mb_convert_encoding('<div id="stoc-wrapper">'. $content .'</div>', 'HTML-ENTITIES', 'UTF-8');
-}
-function stoc_remove_toc_nodes_from_dom($html) {
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
-    $xpath = new DOMXPath($dom);
-    $classes = array('ez-toc-container', 'toc_container', 'toc-container', 'rank-math-toc', 'wp-block-lwptoc');
-    foreach ($classes as $class) {
-        $nodes = $xpath->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $class ')]");
-        foreach ($nodes as $node) {
-            $node->parentNode->removeChild($node);
-        }
-    }
-    $ids = array('lwptoc');
-    foreach ($ids as $id) {
-        $nodes = $xpath->query("//*[@id='$id']");
-        foreach ($nodes as $node) {
-            $node->parentNode->removeChild($node);
-        }
-    }
-    $wrapper = $dom->getElementById('stoc-wrapper');
-    if ($wrapper) {
-        return $dom->saveHTML($wrapper);
-    }
-    return '';
-}
 /**
- * Remove TOC containers from the_content only.
- * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
-
- * Optional: add a CSS fallback to hide TOC blocks inside the post content if any slip through.
+ * side-toc-only.php
+ * Safe/optional WordPress helper plugin.
+ *
+ * This file is shipped with Godyar CMS distributions by some installers,
+ * but it is only relevant when the codebase is used inside WordPress.
+ *
+ * Behavior:
+ * - If WordPress is not present (no add_filter/add_action), the file exits silently.
+ * - If WordPress is present, it removes common TOC containers from post content only,
+ *   keeping sidebar widgets intact.
  */
-function stoc_inline_css_fallback() {
-    if (is_admin()) { return; }
-    if (function_exists('is_singular') && !is_singular()) { return; }
- * This keeps TOC widgets/sidebars intact because it only touches the post content HTML.
+
+if (!function_exists('add_filter') || !function_exists('add_action')) {
+    return;
+}
+
+/**
+ * Remove TOC containers from the_content only.
+ * Keeps TOC widgets/sidebars intact because it only touches the post content HTML.
  */
 function stoc_remove_toc_from_content($content) {
-    if (is_admin()) { return $content; }
+    if (function_exists('is_admin') && is_admin()) { return $content; }
     if (!is_string($content) || trim($content) === '') { return $content; }
 
-    // Run only on singular posts/pages (you can remove this check if you want it everywhere)
+    // Run only on singular posts/pages (optional)
     if (function_exists('is_singular') && !is_singular()) { return $content; }
 
     // Quick check to avoid DOM parsing when not needed
@@ -84,97 +37,70 @@ function stoc_remove_toc_from_content($content) {
     }
     if (!$found) { return $content; }
 
-    // Use DOMDocument to remove nodes by class/id safely
-    libxml_use_internal_errors(true);
+    // Use DOMDocument for safer HTML manipulation when available
+    if (class_exists('DOMDocument')) {
+        $html = '<!doctype html><html><head><meta charset="utf-8"></head><body>' . $content . '</body></html>';
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
 
-    $dom = new DOMDocument();
-
-    // Wrap to reliably extract inner HTML later
-    $html = '<div id="stoc-wrapper">' . $content . '</div>';
-
-    // Ensure proper encoding for Arabic/UTF-8 content
-    $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-
- */
-
-    $xpath = new DOMXPath($dom);
-
-    // XPath helpers
-    $classMatch = function($class) {
-        return "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
-    };
-
-    // Selectors to remove (classes/ids commonly used by TOC plugins)
-    $queries = array(
-        "//*[@id='toc_container']",
-        "//*[{$classMatch('ez-toc-container')}]",
-        "//*[{$classMatch('lwptoc')}]",
-        "//*[{$classMatch('wp-block-lwptoc')}]",
-        "//*[{$classMatch('toc-container')}]",
-        "//*[{$classMatch('rank-math-toc')}]",
-    );
-
-    foreach ($queries as $q) {
-        $nodes = $xpath->query($q);
-        if ($nodes && $nodes->length) {
-            // Remove from the bottom to avoid live NodeList issues
-            for ($i = $nodes->length - 1; $i >= 0; $i--) {
-                $node = $nodes->item($i);
-                if ($node && $node->parentNode) {
-                    $node->parentNode->removeChild($node);
+        $xpath = new DOMXPath($dom);
+        $queries = array(
+            "//*[@class and contains(concat(' ', normalize-space(@class), ' '), ' ez-toc-container ')]",
+            "//*[@id='toc_container']",
+            "//*[@class and contains(concat(' ', normalize-space(@class), ' '), ' lwptoc ')]",
+            "//*[@class and contains(concat(' ', normalize-space(@class), ' '), ' toc-container ')]",
+            "//*[@class and contains(concat(' ', normalize-space(@class), ' '), ' rank-math-toc ')]",
+            "//*[contains(concat(' ', normalize-space(@class), ' '), ' wp-block-lwptoc ')]",
+        );
+        foreach ($queries as $q) {
+            $nodes = $xpath->query($q);
+            if ($nodes) {
+                // NodeList is live; iterate backwards
+                for ($i = $nodes->length - 1; $i >= 0; $i--) {
+                    $node = $nodes->item($i);
+                    if ($node && $node->parentNode) {
+                        $node->parentNode->removeChild($node);
+                    }
                 }
             }
         }
+
+        // Extract body innerHTML
+        $body = $dom->getElementsByTagName('body')->item(0);
+        if ($body) {
+            $out = '';
+            foreach ($body->childNodes as $child) {
+                $out .= $dom->saveHTML($child);
+            }
+            return $out;
+        }
+        return $content;
     }
 
-    // Extract inner HTML of wrapper
-    $wrapper = $dom->getElementById('stoc-wrapper');
-    if (!$wrapper) { return $content; }
-
-    $out = '';
-    foreach ($wrapper->childNodes as $child) {
-        $out .= $dom->saveHTML($child);
-    }
-
-    libxml_clear_errors();
-    return $out;
+    // Fallback: regex remove common containers (best-effort)
+    $content = preg_replace('~<div[^>]*(?:id="toc_container"|class="[^"]*(?:ez-toc-container|lwptoc|toc-container|rank-math-toc)[^"]*")[^>]*>.*?</div>~is', '', $content);
+    return is_string($content) ? $content : '';
 }
-add_filter('the_content', 'stoc_remove_toc_from_content', 999);
 
-function stoc_inline_css_fallback() {
-    if (is_admin()) { return; }
-    if (function_exists('is_singular') && !is_singular()) { return; }
 /**
- * Optional: add a CSS fallback to hide TOC blocks inside the post content if any slip through.
+ * Optional CSS fallback to hide TOC blocks inside post content.
  */
-if (!function_exists('is_admin')) {
-    function is_admin() {
-        return false;
+function stoc_inline_css_fallback() {
+    if (function_exists('is_admin') && is_admin()) { return; }
+    if (function_exists('is_singular') && !is_singular()) { return; }
+    if (!function_exists('wp_add_inline_style')) { return; }
+
+    // Attach to any existing stylesheet handle, otherwise do nothing.
+    $css = '.entry-content .ez-toc-container,.entry-content #toc_container,.entry-content .lwptoc,.entry-content .toc-container,.entry-content .rank-math-toc{display:none!important;}';
+    // Many themes use 'wp-block-library' or 'classic-theme-styles'
+    if (function_exists('wp_style_is') && wp_style_is('wp-block-library', 'enqueued')) {
+        wp_add_inline_style('wp-block-library', $css);
+    } elseif (function_exists('wp_style_is') && wp_style_is('classic-theme-styles', 'enqueued')) {
+        wp_add_inline_style('classic-theme-styles', $css);
     }
 }
-function stoc_inline_css_fallback() {
-    if (is_admin()) { return; }
-    if (function_exists('is_singular') && !is_singular()) { return; }
-function stoc_inline_css_fallback() {
-    if (is_admin()) { return; }
-    if (function_exists('is_singular') && !is_singular()) { return; }
 
-    $css = "
-    .entry-content .ez-toc-container,
-    .entry-content .lwptoc,
-    .entry-content #toc_container,
-    .entry-content .toc-container,
-    .entry-content .rank-math-toc,
-    .entry-content .wp-block-lwptoc { display:none !important; }
-    ";
-
-    // Attach to a common stylesheet handle if possible; otherwise print in head.
-    if (function_exists('wp_add_inline_style')) {
-        // Try common theme handle; if it doesn't exist, we'll print in wp_head.
-        $handle = 'wp-block-library';
-        wp_add_inline_style($handle, $css);
-    } else {
-        echo '<style>' . $css . '</style>';
-    }
-}
+add_filter('the_content', 'stoc_remove_toc_from_content', 999);
 add_action('wp_enqueue_scripts', 'stoc_inline_css_fallback', 999);

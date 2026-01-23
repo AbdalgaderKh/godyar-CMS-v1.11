@@ -20,3 +20,10 @@ assets/uploads/
 Thumbs.db
 *.swp
 *.bak
+
+# Secrets / tokens
+libs/PHPMailer/tokens/
+libs/PHPMailer/tokens/*.json
+
+# Editor backups
+*.save

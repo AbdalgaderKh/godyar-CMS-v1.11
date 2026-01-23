@@ -37,7 +37,7 @@ if ($isDirect) {
 function gdy_queue_token_path(): string {
     $dir = dirname(__DIR__, 3) . '/cache/queue';
     if (!is_dir($dir)) {
-        gdy_mkdir($dir, 0775, true);
+        gdy_mkdir($dir, 0755, true);
     }
     return $dir . '/token.txt';
 }

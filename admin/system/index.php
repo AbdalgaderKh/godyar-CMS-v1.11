@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // تفعيل وضع الصيانة
                 $dir = dirname($maintenanceFlag);
                 if (is_dir($dir) === false) {
-                    gdy_mkdir($dir, 0775, true);
+                    gdy_mkdir($dir, 0755, true);
                 }
                 gdy_file_put_contents($maintenanceFlag, date('c'));
                 $maintenanceEnabled = true;

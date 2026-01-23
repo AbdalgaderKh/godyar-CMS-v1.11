@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (function_exists('gdy_mkdir')) {
                     gdy_mkdir($destAbs, 0755, true);
                 } else {
-                    @mkdir($destAbs, 0755, true);
+                    mkdir($destAbs, 0755, true);
                 }
             }
             $ht = $destAbs . '/.htaccess';

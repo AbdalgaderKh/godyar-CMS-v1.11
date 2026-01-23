@@ -1,1 +1,1 @@
-console.log('News module');
+// Intentionally left blank (news module bundled elsewhere)

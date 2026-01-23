@@ -59,7 +59,12 @@ self.addEventListener('fetch', (event) => {
         return response;
       } catch (e) {
         const cache = await caches.open(CACHE_NAME);
-        return (await cache.match(request)) || (await cache.match(OFFLINE_URL));
+        const cachedResponse = await cache.match(request);
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        const offlineResponse = await cache.match(OFFLINE_URL);
+        return offlineResponse;
       }
     })());
     return;
@@ -72,11 +77,12 @@ self.addEventListener('fetch', (event) => {
 
     try {
       const response = await fetch(request);
-      if (response && response.ok) {
+      if (response?.ok) {
         cache.put(request, response.clone());
       }
       return response;
     } catch (e) {
+      // Network error; fall back to gateway timeout for non-navigation requests
       return new Response('', { status: 504 });
     }
   })());
@@ -105,23 +111,28 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const urlToOpen = (event.notification && event.notification.data && event.notification.data.url)
-    ? event.notification.data.url
-    : '/';
+  const urlToOpen = event.notification?.data?.url ? event.notification.data.url : '/';
+  const swClients = self.clients;
 
   event.waitUntil((async () => {
-    const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const allClients = await swClients.matchAll({ type: 'window', includeUncontrolled: true });
 
     for (const client of allClients) {
       try {
         if (client.url === urlToOpen && 'focus' in client) {
           return client.focus();
         }
-      } catch (e) {}
+      } catch (e) {
+        /* intentionally ignore focus errors */
+      }
     }
 
-    if (clients.openWindow) {
-      return clients.openWindow(urlToOpen);
+    if (swClients.openWindow) {
+      return swClients.openWindow(urlToOpen);
     }
+    return null;
   })());
 });
+
+  
+

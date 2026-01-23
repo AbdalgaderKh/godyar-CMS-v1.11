@@ -7,7 +7,7 @@
     if (window.AdminHooks && typeof window.AdminHooks.applyFilters === 'function') {
       const chosen = window.AdminHooks.applyFilters('editor:choose', el.dataset.editor || 'auto', el);
       if (chosen && typeof window.AdminHooks.doAction === 'function') {
-        window.AdminHooks.doAction('editor:init:' + chosen, el);
+        window.AdminHooks.doAction(`editor:init:${chosen}`, el);
         return;
       }
     }

@@ -1,1 +1,1 @@
-console.log('Godyar admin loaded');
+// Intentionally left blank (admin bootstrap handled elsewhere)

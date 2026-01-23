@@ -1,21 +1,11 @@
 version = 1
 
-exclude_patterns = [
-  "libs/PHPMailer/**",
-  "assets/vendor/**",
-  "assets/js/vendor/**",
-  "assets/css/vendor/**",
-  "vendor/**"
-]
-
 [[analyzers]]
-name = "php"
+name = "python"  # محالل مدعومة
 enabled = true
 
 [[analyzers]]
-name = "javascript"
+name = "javascript"  # محالل مدعومة
 enabled = true
 
-[[analyzers]]
-name = "css"
-enabled = true
+# قم بإزالة أي محلل غير مدعوم مثل "css" إذا لم يكن موجودًا

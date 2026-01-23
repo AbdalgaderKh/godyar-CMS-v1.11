@@ -65,7 +65,8 @@ try {
       $has = $chk && $chk->fetchColumn();
       if (($has === false)) { row(['error']); row(['comments table missing']); break; }
       // column name differs between installs (body/comment)
-            try {
+      $col = 'body';
+      try {
         $c = gdy_db_stmt_column_like($pdo, 'comments', 'body');
         $hasBody = $c && $c->fetchColumn();
         if (($hasBody === false)) $col = 'comment';

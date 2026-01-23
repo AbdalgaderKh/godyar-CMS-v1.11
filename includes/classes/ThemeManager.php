@@ -48,7 +48,13 @@ class ThemeManager {
         // توليد CSS تلقائياً
         $css = $this->generateCSS($colors, $themeData);
         
-        $sql = "INSERT INTO {$this->table} (name, description, styles, colors, created_by, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO {$this->table} (name, description, styles, colors, created_by, created_at) 
+        $params = [
+            Security::cleanInput($themeData['name']),
+            Security::cleanInput($themeData['description'] ?? ''),
+            $css,
+            json_encode($colors),
+                VALUES (?, ?, ?, ?, ?, NOW())";
         
         $params = [
             Security::cleanInput($themeData['name']),

@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['gdy_questions_action'
 
                     $newId = (int)$pdo->lastInsertId();
                     $_SESSION['gdy_questions_last'] = ['id' => $newId, 'token' => $editToken, 'at' => time()];
-                    gdy_setcookie('gdy_q_edit', $editToken, time()+86400*7, '/', '', isset($_SERVER['HTTPS']), true);
+                    setcookie('gdy_q_edit', $editToken, time()+86400*7, '/', '', isset($_SERVER['HTTPS']), true);
 
                     $flash = 'تم استلام سؤالك وسيظهر بعد المراجعة.';
                     $flashType = 'success';

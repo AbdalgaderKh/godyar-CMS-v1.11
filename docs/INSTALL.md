@@ -19,10 +19,10 @@ From cPanel:
 
 ## 3) Create `.env` outside web root
 Create a private directory (outside `public_html`), e.g.:
-- `/home/USER/godyar_private/`
+- `/home/YOUR_USERNAME/godyar_private/`
 
 Create the file:
-- `/home/USER/godyar_private/.env`
+- `/home/YOUR_USERNAME/godyar_private/.env`
 
 Use this template (adjust values):
 ```env
@@ -37,7 +37,7 @@ DB_PASSWORD=YOUR_PASSWORD
 DB_CHARSET=utf8mb4
 DB_COLLATION=utf8mb4_unicode_ci
 
-SESSION_SAVE_PATH=/home/USER/godyar_private/sessions
+SESSION_SAVE_PATH=/home/YOUR_USERNAME/godyar_private/sessions
 ```
 
 File permissions:
@@ -49,7 +49,7 @@ File permissions:
 Edit `public_html/.htaccess`:
 - Set `ENV_FILE` to your `.env` location:
 ```apache
-SetEnv ENV_FILE /home/USER/godyar_private/.env
+SetEnv ENV_FILE /home/YOUR_USERNAME/godyar_private/.env
 ```
 
 ### Option B (recommended for PHP-FPM): `includes/env_path.php`
@@ -60,7 +60,7 @@ If `SetEnv` does not reach PHP (common with PHP-FPM), do:
 
 ## 5) Sessions path (shared hosting hardening)
 Create:
-- `/home/USER/godyar_private/sessions` with permissions `700`
+- `/home/YOUR_USERNAME/godyar_private/sessions` with permissions `700`
 
 If your host supports `.user.ini`, copy:
 - `.user.ini.example` -> `.user.ini`

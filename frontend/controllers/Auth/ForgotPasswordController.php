@@ -103,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>استعادة كلمة المرور — موقع Godyar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="<?= h($baseUrl); ?>/assets/css/vendors/bootstrap.min.css">
-  <link rel="stylesheet" href="<?= h($baseUrl); ?>/assets/css/vendors/font-awesome.css">
-  <link rel="stylesheet" href="<?= h($baseUrl); ?>/assets/css/style.css">
-  <link rel="stylesheet" href="<?= h($baseUrl); ?>/assets/css/responsive.css">
+  <link rel="stylesheet" href="<?php echo h($baseUrl);; ?>/assets/css/vendors/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo h($baseUrl);; ?>/assets/css/vendors/font-awesome.css">
+  <link rel="stylesheet" href="<?php echo h($baseUrl);; ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?php echo h($baseUrl);; ?>/assets/css/responsive.css">
 
   <style>
     body{
@@ -203,13 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <?php if ($error): ?>
-        <div class="alert alert-danger py-2 small mb-3"><?= h($error) ?></div>
+        <div class="alert alert-danger py-2 small mb-3"><?php echo h($error); ?></div>
       <?php elseif ($success): ?>
-        <div class="alert alert-success py-2 small mb-3"><?= h($success) ?></div>
+        <div class="alert alert-success py-2 small mb-3"><?php echo h($success); ?></div>
       <?php endif; ?>
 
-      <form method="post" action="<?= h($_SERVER['PHP_SELF']); ?>" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+      <form method="post" action="<?php echo h($_SERVER['PHP_SELF']);; ?>" novalidate>
+        <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
 
         <div class="mb-3">
           <label for="email" class="form-label">البريد الإلكتروني</label>
@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             class="form-control auth-input"
             required
             autocomplete="email"
-            value="<?= h($email) ?>"
+            value="<?php echo h($email); ?>"
             placeholder="admin@example.com"
           >
         </div>
@@ -231,13 +231,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </button>
 
         <div class="auth-footer d-flex justify-content-between align-items-center">
-          <a href="<?= h($baseUrl); ?>/frontend/controllers/Auth/LoginController.php" class="text-decoration-none" style="color:#e5e7eb;">العودة لتسجيل الدخول</a>
-          <a href="<?= h($baseUrl); ?>/" class="text-decoration-none" style="color:#9ca3af;">العودة للموقع</a>
+          <a href="<?php echo h($baseUrl);; ?>/frontend/controllers/Auth/LoginController.php" class="text-decoration-none" style="color:#e5e7eb;">العودة لتسجيل الدخول</a>
+          <a href="<?php echo h($baseUrl);; ?>/" class="text-decoration-none" style="color:#9ca3af;">العودة للموقع</a>
         </div>
       </form>
     </div>
   </div>
 
-  <script src="<?= h($baseUrl); ?>/assets/js/vendors/bootstrap.bundle.min.js"></script>
+  <script src="<?php echo h($baseUrl);; ?>/assets/js/vendors/bootstrap.bundle.min.js"></script>
   </body>
 </html>

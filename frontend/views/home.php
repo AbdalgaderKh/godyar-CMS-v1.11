@@ -52,26 +52,26 @@ if (!function_exists('godyar_news_card')) {
         <article class="card h-100 border-0 shadow-sm" style="border-radius:18px;overflow:hidden;background:#ffffff;">
             <?php if (!empty($img)): ?>
                 <div style="position:relative;height:180px;overflow:hidden;">
-                    <img src="/img.php?src=<?= rawurlencode($img) ?>&w=600"
-                         alt="<?= h($title) ?>"
+                    <img src="/img.php?src=<?php echo rawurlencode($img); ?>&w=600"
+                         alt="<?php echo h($title); ?>"
                          style="width:100%;height:100%;object-fit:cover;transform:scale(1.03);transition:transform .35s ease;">
                 </div>
             <?php endif; ?>
             <div class="card-body d-flex flex-column" style="padding:12px 14px 10px;">
                 <h3 class="h6 mb-1" style="font-weight:700;">
-                    <a href="<?= h($url) ?>" class="stretched-link text-decoration-none text-dark">
-                        <?= h($title) ?>
+                    <a href="<?php echo h($url); ?>" class="stretched-link text-decoration-none text-dark">
+                        <?php echo h($title); ?>
                     </a>
                 </h3>
                 <?php if ($ex): ?>
                     <p class="text-muted small mb-2" style="font-size:.8rem;">
-                        <?= h(mb_substr($ex, 0, 120)) ?><?= mb_strlen($ex) > 120 ? '…' : '' ?>
+                        <?php echo h(mb_substr($ex, 0, 120)); ?><?php echo mb_strlen($ex) > 120 ? '…' : ''; ?>
                     </p>
                 <?php endif; ?>
                 <?php if ($date): ?>
                     <div class="mt-auto d-flex align-items-center justify-content-between text-muted" style="font-size:.75rem;">
-                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
-                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= h(__('خبر')) ?></span>
+                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?></span>
+                        <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?php echo h(__('خبر')); ?></span>
                     </div>
                 <?php endif; ?>
             </div>
@@ -100,12 +100,12 @@ if (!function_exists('godyar_news_small_item')) {
         $url = $baseUrl ? rtrim($baseUrl, '/') . '/news/id/' . (int)$id : '/news/id/' . (int)$id;
         ?>
         <div class="d-flex flex-column mb-2">
-            <a href="<?= h($url) ?>" class="text-decoration-none" style="font-size:.85rem;font-weight:600;">
-                <?= h($title) ?>
+            <a href="<?php echo h($url); ?>" class="text-decoration-none" style="font-size:.85rem;font-weight:600;">
+                <?php echo h($title); ?>
             </a>
             <?php if ($date): ?>
                 <span class="text-muted" style="font-size:.75rem;">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?>
                 </span>
             <?php endif; ?>
         </div>
@@ -219,8 +219,8 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
               <div class="col-md-6">
                 <?php if ($heroImg): ?>
                   <div style="height:100%;min-height:220px;overflow:hidden;">
-                    <img src="/img.php?src=<?= rawurlencode($heroImg) ?>&w=900"
-                         alt="<?= h($heroTitle) ?>"
+                    <img src="/img.php?src=<?php echo rawurlencode($heroImg); ?>&w=900"
+                         alt="<?php echo h($heroTitle); ?>"
                          style="width:100%;height:100%;object-fit:cover;">
                   </div>
                 <?php else: ?>
@@ -235,22 +235,22 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                     </span>
                     <?php if ($heroDate): ?>
                       <span class="text-muted">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($heroDate) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($heroDate); ?>
                       </span>
                     <?php endif; ?>
                   </div>
                   <h1 class="h4 mb-2" style="color:#f9fafb;">
-                    <a href="<?= h($heroUrl) ?>" class="text-decoration-none text-reset">
-                      <?= h($heroTitle) ?>
+                    <a href="<?php echo h($heroUrl); ?>" class="text-decoration-none text-reset">
+                      <?php echo h($heroTitle); ?>
                     </a>
                   </h1>
                   <?php if ($heroExcerpt): ?>
                     <p class="mb-3" style="font-size:.86rem;color:#e5e7eb;opacity:.9;">
-                      <?= h(mb_substr($heroExcerpt, 0, 200)) ?><?= mb_strlen($heroExcerpt) > 200 ? '…' : '' ?>
+                      <?php echo h(mb_substr($heroExcerpt, 0, 200)); ?><?php echo mb_strlen($heroExcerpt) > 200 ? '…' : ''; ?>
                     </p>
                   <?php endif; ?>
                   <div class="mt-auto d-flex align-items-center justify-content-between">
-                    <a href="<?= h($heroUrl) ?>" class="btn btn-sm btn-light" style="border-radius:999px;font-size:.8rem;">
+                    <a href="<?php echo h($heroUrl); ?>" class="btn btn-sm btn-light" style="border-radius:999px;font-size:.8rem;">
                       اقرأ المزيد <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                     <span class="text-muted" style="font-size:.75rem;">
@@ -274,7 +274,7 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                 آخر ما تم نشره في الموقع.
               </div>
             </div>
-            <a href="<?= h($baseUrl) ?>/archive" class="text-decoration-none" style="font-size:.8rem;color:#a5b4fc;">
+            <a href="<?php echo h($baseUrl); ?>/archive" class="text-decoration-none" style="font-size:.8rem;color:#a5b4fc;">
               أرشيف الأخبار <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -324,14 +324,14 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                   $id = 'tab-' . preg_replace('~[^a-z0-9\-]+~i', '-', $slug);
                 ?>
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link <?= $first ? 'active' : '' ?>"
-                          id="<?= h($id) ?>-tab"
+                  <button class="nav-link <?php echo $first ? 'active' : ''; ?>"
+                          id="<?php echo h($id); ?>-tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#<?= h($id) ?>"
+                          data-bs-target="#<?php echo h($id); ?>"
                           type="button" role="tab"
-                          aria-controls="<?= h($id) ?>"
-                          aria-selected="<?= $first ? 'true' : 'false' ?>">
-                    <?= h($name) ?>
+                          aria-controls="<?php echo h($id); ?>"
+                          aria-selected="<?php echo $first ? 'true' : 'false'; ?>">
+                    <?php echo h($name); ?>
                   </button>
                 </li>
                 <?php $first = false; ?>
@@ -348,9 +348,9 @@ if (!$heroItem && !empty($latestNews) && is_array($latestNews)) {
                   $id    = 'tab-' . preg_replace('~[^a-z0-9\-]+~i', '-', $slug);
                   $items = $tab['items'] ?? [];
                 ?>
-                <div class="tab-pane fade <?= $first ? 'show active' : '' ?>"
-                     id="<?= h($id) ?>" role="tabpanel"
-                     aria-labelledby="<?= h($id) ?>-tab">
+                <div class="tab-pane fade <?php echo $first ? 'show active' : ''; ?>"
+                     id="<?php echo h($id); ?>" role="tabpanel"
+                     aria-labelledby="<?php echo h($id); ?>-tab">
                   <?php if (!empty($items) && is_array($items)): ?>
                     <div class="row g-3 mt-1">
                       <?php foreach ($items as $n): ?>

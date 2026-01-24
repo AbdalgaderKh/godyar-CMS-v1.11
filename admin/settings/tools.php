@@ -166,50 +166,50 @@ $pdo->commit();
   <div class="col-md-9">
     <div class="card p-4">
       <?php if ($notice): ?>
-        <div class="alert alert-success"><?= h($notice) ?></div>
+        <div class="alert alert-success"><?php echo h($notice); ?></div>
       <?php endif; ?>
       <?php if ($error): ?>
-        <div class="alert alert-danger"><?= h($error) ?></div>
+        <div class="alert alert-danger"><?php echo h($error); ?></div>
       <?php endif; ?>
 
-      <h5 class="mb-3"><?= h(__('t_1f60020959', 'أدوات الإعدادات')) ?></h5>
+      <h5 class="mb-3"><?php echo h(__('t_1f60020959', 'أدوات الإعدادات')); ?></h5>
 
       <div class="d-flex flex-wrap gap-2 mb-4">
-        <a class="btn btn-outline-primary" href="tools.php?action=export">⬇️ <?= h(__('t_eb12b2c44c', 'تصدير الإعدادات (JSON)')) ?></a>
+        <a class="btn btn-outline-primary" href="tools.php?action=export">⬇️ <?php echo h(__('t_eb12b2c44c', 'تصدير الإعدادات (JSON)')); ?></a>
 
         
-        <a class="btn btn-outline-secondary" href="tools.php?action=download_audit">📄 <?= h(__('t_audit_dl', 'تحميل سجل النشاط (audit.log)')) ?></a>
-        <a class="btn btn-outline-warning" href="tools.php?action=clear_ratelimit">🧹 <?= h(__('t_rl_clear', 'مسح ملفات الحد من المحاولات')) ?></a>
+        <a class="btn btn-outline-secondary" href="tools.php?action=download_audit">📄 <?php echo h(__('t_audit_dl', 'تحميل سجل النشاط (audit.log)')); ?></a>
+        <a class="btn btn-outline-warning" href="tools.php?action=clear_ratelimit">🧹 <?php echo h(__('t_rl_clear', 'مسح ملفات الحد من المحاولات')); ?></a>
 <form method="post" class="d-inline">
           <?php if (function_exists('csrf_token')): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
           <input type="hidden" name="action" value="clear_cache">
-          <button class="btn btn-outline-danger" type="submit" data-confirm='مسح الكاش؟'>🧹 <?= h(__('t_2b91fb1389', 'مسح الكاش')) ?></button>
+          <button class="btn btn-outline-danger" type="submit" data-confirm='مسح الكاش؟'>🧹 <?php echo h(__('t_2b91fb1389', 'مسح الكاش')); ?></button>
         </form>
       </div>
 
       <div class="alert alert-info">
-        <div class="mb-1"><strong>PHP:</strong> <?= h(PHP_VERSION) ?></div>
+        <div class="mb-1"><strong>PHP:</strong> <?php echo h(PHP_VERSION); ?></div>
         <?php if (function_exists('base_url')): ?>
-          <div><strong>Base URL:</strong> <?= h((string)base_url()) ?></div>
+          <div><strong>Base URL:</strong> <?php echo h((string)base_url()); ?></div>
         <?php endif; ?>
       </div>
 
       <hr>
 
-      <h6 class="mb-2"><?= h(__('t_679b77f47b', 'استيراد إعدادات (JSON)')) ?></h6>
+      <h6 class="mb-2"><?php echo h(__('t_679b77f47b', 'استيراد إعدادات (JSON)')); ?></h6>
       <p class="text-muted small mb-2">الصيغة: <code>{"site.name":"...","site.desc":"..."}</code></p>
 
       <form method="post">
         <?php if (function_exists('csrf_token')): ?>
-          <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
         <?php endif; ?>
         <input type="hidden" name="action" value="import_settings">
 
         <textarea class="form-control" name="settings_json" rows="10" placeholder='{"site.name":"Godyar","site.desc":"..."}'></textarea>
         <div class="form-text">ملاحظة: يتم استيراد المفاتيح فقط التي تطابق <code>a-zA-Z0-9._-</code>.</div>
-        <button class="btn btn-primary mt-3"><?= h(__('t_871a087a1d', 'استيراد')) ?></button>
+        <button class="btn btn-primary mt-3"><?php echo h(__('t_871a087a1d', 'استيراد')); ?></button>
       </form>
 
     </div>

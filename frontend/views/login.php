@@ -15,13 +15,13 @@ $baseUrl  = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= h('تسجيل الدخول') ?> — <?= h($siteName) ?></title>
+  <title><?php echo h('تسجيل الدخول'); ?> — <?php echo h($siteName); ?></title>
 
   <!-- Core CSS (existing assets) -->
-  <link rel="stylesheet" href="<?= h(($baseUrl ?: '')) ?>/assets/css/style.css">
-  <link rel="stylesheet" href="<?= h(($baseUrl ?: '')) ?>/assets/css/front.css">
-  <link rel="stylesheet" href="<?= h(($baseUrl ?: '')) ?>/assets/css/ui-enhancements.css">
-  <link rel="stylesheet" href="<?= h(($baseUrl ?: '')) ?>/assets/css/responsive.css">
+  <link rel="stylesheet" href="<?php echo h(($baseUrl ?: '')); ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?php echo h(($baseUrl ?: '')); ?>/assets/css/front.css">
+  <link rel="stylesheet" href="<?php echo h(($baseUrl ?: '')); ?>/assets/css/ui-enhancements.css">
+  <link rel="stylesheet" href="<?php echo h(($baseUrl ?: '')); ?>/assets/css/responsive.css">
 
   <style>
     :root { --gdy-radius: 14px; }
@@ -61,24 +61,24 @@ $baseUrl  = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
     <div class="card-body">
       <?php if (!empty($login_wait)) : ?>
         <div class="alert alert-info">
-          تم تقييد المحاولات مؤقتاً. الرجاء الانتظار <?= (int)$login_wait ?> ثانية ثم المحاولة مرة أخرى.
+          تم تقييد المحاولات مؤقتاً. الرجاء الانتظار <?php echo (int)$login_wait; ?> ثانية ثم المحاولة مرة أخرى.
         </div>
       <?php endif; ?>
 
       <?php if (!empty($login_error)) : ?>
         <div class="alert alert-danger" role="alert">
-          <?= h($login_error) ?>
+          <?php echo h($login_error); ?>
         </div>
       <?php endif; ?>
 
       <form method="post" class="row" autocomplete="on" novalidate>
-        <input type="hidden" name="csrf_token" value="<?= h((string)$login_csrf) ?>">
-        <input type="hidden" name="next" value="<?= h((string)$login_next) ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo h((string)$login_csrf); ?>">
+        <input type="hidden" name="next" value="<?php echo h((string)$login_next); ?>">
 
         <div>
           <label for="login">البريد الإلكتروني أو اسم المستخدم</label>
           <div class="field">
-            <input id="login" name="login" class="input" value="<?= h((string)$login_identifier) ?>" required autocomplete="username" inputmode="email">
+            <input id="login" name="login" class="input" value="<?php echo h((string)$login_identifier); ?>" required autocomplete="username" inputmode="email">
           </div>
         </div>
 
@@ -95,7 +95,7 @@ $baseUrl  = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
           <label class="muted" style="display:flex;gap:8px;align-items:center;">
             <input type="checkbox" name="remember" value="1"> تذكرني
           </label>
-          <a class="muted" href="<?= h(($baseUrl ?: '')) ?>/register">إنشاء حساب</a>
+          <a class="muted" href="<?php echo h(($baseUrl ?: '')); ?>/register">إنشاء حساب</a>
         </div>
 
         <button class="btn" type="submit">دخول</button>

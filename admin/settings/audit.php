@@ -30,7 +30,7 @@ $pageTitle = 'سجل النشاط (Audit Log)';
 <div class="container my-4">
   <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h4 class="m-0"><?= h($pageTitle) ?></h4>
+      <h4 class="m-0"><?php echo h($pageTitle); ?></h4>
       <div class="d-flex gap-2">
         <?php if (is_file($logFile) === true): ?>
           <a class="btn btn-sm btn-outline-primary" href="/admin/settings/audit_download.php" target="_blank" rel="noopener">تحميل الملف</a>
@@ -41,10 +41,10 @@ $pageTitle = 'سجل النشاط (Audit Log)';
 
     <form class="row g-2 mb-3" method="get">
       <div class="col-md-6">
-        <input class="form-control" name="q" value="<?= h($q) ?>" placeholder="ابحث داخل السجل (IP / user / action) ...">
+        <input class="form-control" name="q" value="<?php echo h($q); ?>" placeholder="ابحث داخل السجل (IP / user / action) ...">
       </div>
       <div class="col-md-2">
-        <input class="form-control" name="limit" type="number" value="<?= (int)$limit ?>" min="50" max="3000" step="50">
+        <input class="form-control" name="limit" type="number" value="<?php echo (int)$limit; ?>" min="50" max="3000" step="50">
       </div>
       <div class="col-md-4 d-flex gap-2">
         <button class="btn btn-primary" type="submit">عرض</button>
@@ -60,7 +60,7 @@ $pageTitle = 'سجل النشاط (Audit Log)';
           <div style="opacity:.8">لا توجد نتائج.</div>
         <?php else: ?>
           <?php foreach ($lines as $ln): ?>
-            <div><?= h($ln) ?></div>
+            <div><?php echo h($ln); ?></div>
           <?php endforeach; ?>
         <?php endif; ?>
       </div>

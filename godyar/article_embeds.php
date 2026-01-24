@@ -9,8 +9,8 @@ declare(strict_types=1);
  */
 $__base = isset($baseUrl) ? rtrim((string)$baseUrl, '/') : '';
 ?>
-<link rel="stylesheet" href="<?= htmlspecialchars($__base . '/assets/css/gdy-embeds.css', ENT_QUOTES, 'UTF-8') ?>?v=2">
+<link rel="stylesheet" href="<?php echo htmlspecialchars($__base . '/assets/css/gdy-embeds.css', ENT_QUOTES, 'UTF-8'); ?>?v=2">
 <script>
-  window.GDY_BASE_URL = <?= json_encode($__base, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+  window.GDY_BASE_URL = <?php echo json_encode($__base, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 </script>
-<script src="<?= htmlspecialchars($__base . '/assets/js/gdy-embeds.js', ENT_QUOTES, 'UTF-8') ?>?v=2" defer></script>
+<script src="<?php echo htmlspecialchars($__base . '/assets/js/gdy-embeds.js', ENT_QUOTES, 'UTF-8'); ?>?v=2" defer></script>

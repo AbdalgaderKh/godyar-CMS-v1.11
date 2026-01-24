@@ -106,7 +106,7 @@ if (!function_exists('gdy_video_thumbnail')) {
         <article class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
           <div class="position-relative" style="padding-top:56%;">
             <?php if ($thumb): ?>
-              <img src="<?= h($thumb) ?>" alt="<?= h($title) ?>"
+              <img src="<?php echo h($thumb); ?>" alt="<?php echo h($title); ?>"
                    class="position-absolute top-0 start-0 w-100 h-100"
                    style="object-fit:cover;">
             <?php else: ?>
@@ -115,8 +115,8 @@ if (!function_exists('gdy_video_thumbnail')) {
               </div>
             <?php endif; ?>
 
-            <span class="badge <?= $badgeClass ?> position-absolute top-2 start-2 rounded-pill px-2 py-1 small">
-              <?= h($platform) ?>
+            <span class="badge <?php echo $badgeClass; ?> position-absolute top-2 start-2 rounded-pill px-2 py-1 small">
+              <?php echo h($platform); ?>
             </span>
 
             <div class="position-absolute top-50 start-50 translate-middle bg-white bg-opacity-75 rounded-circle p-2">
@@ -124,20 +124,20 @@ if (!function_exists('gdy_video_thumbnail')) {
             </div>
           </div>
           <div class="card-body p-2 p-md-3">
-            <h3 class="h6 mb-1 text-truncate" title="<?= h($title) ?>"><?= h($title) ?></h3>
+            <h3 class="h6 mb-1 text-truncate" title="<?php echo h($title); ?>"><?php echo h($title); ?></h3>
             <?php if ($desc): ?>
               <p class="small text-muted mb-2" style="max-height:3.2em;overflow:hidden;">
-                <?= h($desc) ?>
+                <?php echo h($desc); ?>
               </p>
             <?php endif; ?>
             <div class="d-flex justify-content-between align-items-center">
-              <a href="<?= h($url) ?>" target="_blank" rel="noopener"
+              <a href="<?php echo h($url); ?>" target="_blank" rel="noopener"
                  class="btn btn-sm btn-outline-danger rounded-pill">
                 <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تشغيل الفيديو
               </a>
               <span class="small text-muted">
                 <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <?= h(date('Y-m-d', strtotime((string)$v['created_at'] ?? 'now'))) ?>
+                <?php echo h(date('Y-m-d', strtotime((string)$v['created_at'] ?? 'now'))); ?>
               </span>
             </div>
           </div>

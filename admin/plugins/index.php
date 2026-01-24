@@ -182,21 +182,21 @@ $csrf = generate_csrf_token();
     <div class="container-xxl gdy-inner">
   <div class="gdy-page-header d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h1 class="h4 text-white mb-1"><?= h(__('t_3be2bf6b96', 'الإضافات البرمجية')) ?></h1>
+      <h1 class="h4 text-white mb-1"><?php echo h(__('t_3be2bf6b96', 'الإضافات البرمجية')); ?></h1>
       <p class="text-muted mb-0">
-        <?= h(__('t_a1d9064a32', 'عرض الإضافات الموجودة داخل مجلد')) ?> <code>/plugins</code>.
+        <?php echo h(__('t_a1d9064a32', 'عرض الإضافات الموجودة داخل مجلد')); ?> <code>/plugins</code>.
       </p>
     </div>
   </div>
 
   <?php if (!empty($_SESSION['plugins_flash']) && is_array($_SESSION['plugins_flash'])): $f=$_SESSION['plugins_flash']; unset($_SESSION['plugins_flash']); ?>
-    <div class="alert alert-<?= h($f['type'] ?? 'info') ?> mb-2"><?= h($f['msg'] ?? '') ?></div>
+    <div class="alert alert-<?php echo h($f['type'] ?? 'info'); ?> mb-2"><?php echo h($f['msg'] ?? ''); ?></div>
   <?php endif; ?>
 
   <div class="d-flex justify-content-between align-items-center mb-2">
     <div class="text-muted small">يمكنك تشغيل migrations يدويًا عند الحاجة (مثلاً بعد تحديث الإضافة).</div>
     <form method="post" class="d-flex gap-2 align-items-center m-0">
-      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
       <input type="hidden" name="action" value="run_migrations_all">
       <div class="form-check form-switch m-0">
         <input class="form-check-input" type="checkbox" role="switch" id="force_all" name="force" value="1">
@@ -210,7 +210,7 @@ $csrf = generate_csrf_token();
     <div class="card-body">
 
       <?php if (empty($pluginRows)): ?>
-        <p class="mb-0"><?= h(__('t_7b963d34c0', 'لا توجد إضافات حتى الآن.')) ?></p>
+        <p class="mb-0"><?php echo h(__('t_7b963d34c0', 'لا توجد إضافات حتى الآن.')); ?></p>
       <?php else: ?>
         <!-- جدول (شاشات كبيرة) -->
         <div class="table-responsive d-none d-lg-block">
@@ -218,13 +218,13 @@ $csrf = generate_csrf_token();
             <thead>
               <tr>
                 <th style="width:32px;">#</th>
-                <th><?= h(__('t_e6ad5db8a9', 'الإضافة')) ?></th>
-                <th class="d-none d-xl-table-cell"><?= h(__('t_f58d38d563', 'الوصف')) ?></th>
-                <th class="d-none d-md-table-cell"><?= h(__('t_8c0c06316b', 'الإصدار')) ?></th>
-                <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                <th><?= h(__('t_5446a35e92', 'المجلد / الـ Slug')) ?></th>
-                <th class="d-none d-xl-table-cell"><?= h(__('t_dd21f0b9d2', 'المطوِّر')) ?></th>
-                <th style="width:190px;"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <th><?php echo h(__('t_e6ad5db8a9', 'الإضافة')); ?></th>
+                <th class="d-none d-xl-table-cell"><?php echo h(__('t_f58d38d563', 'الوصف')); ?></th>
+                <th class="d-none d-md-table-cell"><?php echo h(__('t_8c0c06316b', 'الإصدار')); ?></th>
+                <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                <th><?php echo h(__('t_5446a35e92', 'المجلد / الـ Slug')); ?></th>
+                <th class="d-none d-xl-table-cell"><?php echo h(__('t_dd21f0b9d2', 'المطوِّر')); ?></th>
+                <th style="width:190px;"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
               </tr>
             </thead>
             <tbody>
@@ -235,45 +235,45 @@ $csrf = generate_csrf_token();
                   $slug = $folder; // نستخدم اسم المجلد كأساس ثابت
                 ?>
                 <tr>
-                  <td><?= $i + 1 ?></td>
-                  <td><?= htmlspecialchars($pl['name'] ?? $slug, ENT_QUOTES, 'UTF-8') ?></td>
+                  <td><?php echo $i + 1; ?></td>
+                  <td><?php echo htmlspecialchars($pl['name'] ?? $slug, ENT_QUOTES, 'UTF-8'); ?></td>
                   <td class="small d-none d-xl-table-cell">
-                    <span class="gdy-plugin-desc"><?= htmlspecialchars($pl['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                    <span class="gdy-plugin-desc"><?php echo htmlspecialchars($pl['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
                   </td>
-                  <td class="d-none d-md-table-cell"><?= htmlspecialchars($pl['version'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                  <td class="d-none d-md-table-cell"><?php echo htmlspecialchars($pl['version'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                   <td>
                     <?php if (!empty($pl['enabled'])): ?>
-                      <span class="badge bg-success"><?= h(__('t_641298ecec', 'مفعّلة')) ?></span>
+                      <span class="badge bg-success"><?php echo h(__('t_641298ecec', 'مفعّلة')); ?></span>
                     <?php else: ?>
-                      <span class="badge bg-secondary"><?= h(__('t_2fab10b091', 'معطّلة')) ?></span>
+                      <span class="badge bg-secondary"><?php echo h(__('t_2fab10b091', 'معطّلة')); ?></span>
                     <?php endif; ?>
                   </td>
                   <td>
-                    <code><?= htmlspecialchars($folder, ENT_QUOTES, 'UTF-8') ?></code>
+                    <code><?php echo htmlspecialchars($folder, ENT_QUOTES, 'UTF-8'); ?></code>
                   </td>
-                  <td class="d-none d-xl-table-cell"><?= htmlspecialchars($pl['author'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+                  <td class="d-none d-xl-table-cell"><?php echo htmlspecialchars($pl['author'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                   <td>
                     <form method="post" class="d-inline">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
                       <input type="hidden" name="action" value="toggle_plugin">
                       <input type="hidden" name="slug"
-                             value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                             value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
                       <button type="submit"
-                              class="btn btn-sm <?= !empty($pl['enabled']) ? 'btn-outline-warning' : 'btn-outline-success' ?>">
-                        <?= !empty($pl['enabled']) ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>
+                              class="btn btn-sm <?php echo !empty($pl['enabled']) ? 'btn-outline-warning' : 'btn-outline-success'; ?>">
+                        <?php echo !empty($pl['enabled']) ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>
                       </button>
                     </form>
 
-                    <a href="settings.php?slug=<?= urlencode($slug) ?>"
+                    <a href="settings.php?slug=<?php echo urlencode($slug); ?>"
                        class="btn btn-sm btn-outline-info">
-                      <?= h(__('t_1f60020959', 'الإعدادات')) ?>
+                      <?php echo h(__('t_1f60020959', 'الإعدادات')); ?>
                     </a>
                   
                     <form method="post" class="d-inline ms-1">
-                      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                      <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                       <input type="hidden" name="action" value="run_migrations">
-                      <input type="hidden" name="slug" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                      <input type="hidden" name="slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
                       <input type="hidden" name="force" value="1">
                       <button type="submit" class="btn btn-sm btn-outline-light">Run Migrations</button>
                     </form>
@@ -292,47 +292,47 @@ $csrf = generate_csrf_token();
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start gap-2">
                   <div>
-                    <div class="fw-semibold"><?= htmlspecialchars($pl['name'] ?? $slug, ENT_QUOTES, 'UTF-8') ?></div>
-                    <div class="small gdy-plugin-meta text-muted"><?= h(__('t_9c31d5ad17', 'مجلد:')) ?> <code><?= htmlspecialchars($folder, ENT_QUOTES, 'UTF-8') ?></code></div>
+                    <div class="fw-semibold"><?php echo htmlspecialchars($pl['name'] ?? $slug, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="small gdy-plugin-meta text-muted"><?php echo h(__('t_9c31d5ad17', 'مجلد:')); ?> <code><?php echo htmlspecialchars($folder, ENT_QUOTES, 'UTF-8'); ?></code></div>
                   </div>
                   <div>
                     <?php if (!empty($pl['enabled'])): ?>
-                      <span class="badge bg-success"><?= h(__('t_641298ecec', 'مفعّلة')) ?></span>
+                      <span class="badge bg-success"><?php echo h(__('t_641298ecec', 'مفعّلة')); ?></span>
                     <?php else: ?>
-                      <span class="badge bg-secondary"><?= h(__('t_2fab10b091', 'معطّلة')) ?></span>
+                      <span class="badge bg-secondary"><?php echo h(__('t_2fab10b091', 'معطّلة')); ?></span>
                     <?php endif; ?>
                   </div>
                 </div>
 
                 <?php if (!empty($pl['description'])): ?>
-                  <div class="small mt-2 gdy-plugin-desc"><?= htmlspecialchars($pl['description'], ENT_QUOTES, 'UTF-8') ?></div>
+                  <div class="small mt-2 gdy-plugin-desc"><?php echo htmlspecialchars($pl['description'], ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
 
                 <div class="d-flex flex-wrap gap-2 mt-3">
                   <form method="post" class="m-0">
                     
-                    <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
 <input type="hidden" name="action" value="toggle_plugin">
-                    <input type="hidden" name="slug" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
-                    <button type="submit" class="btn btn-sm <?= !empty($pl['enabled']) ? 'btn-outline-warning' : 'btn-outline-success' ?>">
-                      <?= !empty($pl['enabled']) ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>
+                    <input type="hidden" name="slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+                    <button type="submit" class="btn btn-sm <?php echo !empty($pl['enabled']) ? 'btn-outline-warning' : 'btn-outline-success'; ?>">
+                      <?php echo !empty($pl['enabled']) ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>
                     </button>
                   </form>
 
-                  <a href="settings.php?slug=<?= urlencode($slug) ?>" class="btn btn-sm btn-outline-info"><?= h(__('t_1f60020959', 'الإعدادات')) ?></a>
+                  <a href="settings.php?slug=<?php echo urlencode($slug); ?>" class="btn btn-sm btn-outline-info"><?php echo h(__('t_1f60020959', 'الإعدادات')); ?></a>
                   <form method="post" class="d-inline">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="action" value="run_migrations">
-                    <input type="hidden" name="slug" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="slug" value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
                     <input type="hidden" name="force" value="1">
                     <button type="submit" class="btn btn-sm btn-outline-light">Run Migrations</button>
                   </form>
                 </div>
 
                 <div class="small text-muted mt-2">
-                  <?= !empty($pl['version']) ? (__('t_1425cbc31c', 'الإصدار: ').htmlspecialchars($pl['version'], ENT_QUOTES, 'UTF-8')) : '' ?>
-                  <?= (!empty($pl['version']) && !empty($pl['author'])) ? ' • ' : '' ?>
-                  <?= !empty($pl['author']) ? (__('t_d86ca392f0', 'المطوِّر: ').htmlspecialchars($pl['author'], ENT_QUOTES, 'UTF-8')) : '' ?>
+                  <?php echo !empty($pl['version']) ? (__('t_1425cbc31c', 'الإصدار: ').htmlspecialchars($pl['version'], ENT_QUOTES, 'UTF-8')) : ''; ?>
+                  <?php echo (!empty($pl['version']) && !empty($pl['author'])) ? ' • ' : ''; ?>
+                  <?php echo !empty($pl['author']) ? (__('t_d86ca392f0', 'المطوِّر: ').htmlspecialchars($pl['author'], ENT_QUOTES, 'UTF-8')) : ''; ?>
                 </div>
               </div>
             </div>

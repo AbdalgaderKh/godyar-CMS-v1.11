@@ -205,7 +205,7 @@ $pageNotFound = $pageNotFound ?? false;
       <!-- عمود النموذج -->
       <div>
         <!-- ✅ تعديل الـ action ليشير إلى contact-submit.php -->
-        <form class="gdy-contact-form" method="post" action="<?= h($baseUrl) ?>/contact-submit.php">
+        <form class="gdy-contact-form" method="post" action="<?php echo h($baseUrl); ?>/contact-submit.php">
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
           <div class="row g-2 mb-2">
             <div class="col-md-6">
@@ -246,18 +246,18 @@ $pageNotFound = $pageNotFound ?? false;
     <div class="hero-card" style="margin-bottom:18px;">
       <div class="hero-badge">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-        <span><?= $pageNotFound ? 'صفحة غير موجودة' : 'صفحة ثابتة' ?></span>
+        <span><?php echo $pageNotFound ? 'صفحة غير موجودة' : 'صفحة ثابتة'; ?></span>
       </div>
-      <h1 class="hero-title"><?= h($page['title'] ?? '') ?></h1>
+      <h1 class="hero-title"><?php echo h($page['title'] ?? ''); ?></h1>
       <div class="hero-meta">
         <span>
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(date('Y-m-d', strtotime($page['created_at'] ?? 'now'))) ?>
+          <?php echo h(date('Y-m-d', strtotime($page['created_at'] ?? 'now'))); ?>
         </span>
         <?php if (!empty($page['updated_at']) && $page['updated_at'] !== $page['created_at']): ?>
           <span>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            آخر تحديث: <?= h(date('Y-m-d', strtotime($page['updated_at']))) ?>
+            آخر تحديث: <?php echo h(date('Y-m-d', strtotime($page['updated_at']))); ?>
           </span>
         <?php endif; ?>
       </div>

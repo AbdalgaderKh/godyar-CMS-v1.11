@@ -24,7 +24,7 @@ $otherNews  = array_slice($latestNews, 1);
 <style>
   .gdy-home-layout {
     display: grid;
-    grid-template-columns: minmax(0, <?= $sidebarHidden ? '1fr' : '2fr' ?>) minmax(0, <?= $sidebarHidden ? '0' : '1fr' ?>);
+    grid-template-columns: minmax(0, <?php echo $sidebarHidden ? '1fr' : '2fr'; ?>) minmax(0, <?php echo $sidebarHidden ? '0' : '1fr'; ?>);
     gap: 18px;
   }
   @media (max-width: 992px) {
@@ -155,19 +155,19 @@ $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
         $views   = isset($mainNews['views']) ? (int)$mainNews['views'] : null;
         $url     = $buildNewsUrl($mainNews);
       ?>
-      <a href="<?= h($url) ?>" class="gdy-main-card d-block mb-3">
+      <a href="<?php echo h($url); ?>" class="gdy-main-card d-block mb-3">
         <span class="gdy-main-badge">الأبرز</span>
-        <h1 class="gdy-main-title"><?= h($title) ?></h1>
+        <h1 class="gdy-main-title"><?php echo h($title); ?></h1>
         <div class="gdy-main-meta">
           <?php if ($date): ?>
-            <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($date) ?></span>
+            <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($date); ?></span>
           <?php endif; ?>
           <?php if ($views !== null): ?>
-            <span class="ms-3"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= number_format($views) ?> مشاهدة</span>
+            <span class="ms-3"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo number_format($views); ?> مشاهدة</span>
           <?php endif; ?>
         </div>
         <p class="gdy-main-desc">
-          <?= h(mb_substr($title, 0, 110, 'UTF-8')) ?>...
+          <?php echo h(mb_substr($title, 0, 110, 'UTF-8')); ?>...
         </p>
       </a>
     <?php endif; ?>
@@ -175,7 +175,7 @@ $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
     <div class="gdy-home-section-title">
       <span>آخر الأخبار</span>
       <?php if (!empty($latestNews)): ?>
-        <span class="badge-count"><?= count($latestNews) ?> خبر</span>
+        <span class="badge-count"><?php echo count($latestNews); ?> خبر</span>
       <?php endif; ?>
     </div>
 
@@ -196,12 +196,12 @@ $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
             $date    = $dateRaw ? date('Y-m-d', strtotime((string)$dateRaw)) : '';
             $url     = $buildNewsUrl($row);
           ?>
-          <a href="<?= h($url) ?>" class="gdy-news-card">
-            <h3 class="gdy-news-card-title"><?= h($t) ?></h3>
+          <a href="<?php echo h($url); ?>" class="gdy-news-card">
+            <h3 class="gdy-news-card-title"><?php echo h($t); ?></h3>
             <?php if ($date): ?>
               <div class="gdy-news-card-meta">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <span><?= h($date) ?></span>
+                <span><?php echo h($date); ?></span>
               </div>
             <?php endif; ?>
           </a>
@@ -226,10 +226,10 @@ $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
                 $url     = $buildNewsUrl($row);
               ?>
               <li>
-                <a href="<?= h($url) ?>">
-                  <span><?= h($t) ?></span>
+                <a href="<?php echo h($url); ?>">
+                  <span><?php echo h($t); ?></span>
                   <?php if ($date): ?>
-                    <span class="date"><?= h($date) ?></span>
+                    <span class="date"><?php echo h($date); ?></span>
                   <?php endif; ?>
                 </a>
               </li>

@@ -190,21 +190,21 @@ $time   = trim((string)($info['time']   ?? ''));
     </p>
 
     <div class="notice">
-      <?= nl2br(htmlspecialchars($reason, ENT_QUOTES, 'UTF-8')) ?>
+      <?php echo nl2br(htmlspecialchars($reason, ENT_QUOTES, 'UTF-8')); ?>
     </div>
 
     <div class="pill-row">
       <?php if ($until !== ''): ?>
         <div class="pill">
           ⏱ التقدير:
-          <span><?= htmlspecialchars($until, ENT_QUOTES, 'UTF-8') ?></span>
+          <span><?php echo htmlspecialchars($until, ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endif; ?>
 
       <?php if ($time !== ''): ?>
         <div class="pill">
           🛠 بدء الصيانة:
-          <span><?= htmlspecialchars($time, ENT_QUOTES, 'UTF-8') ?></span>
+          <span><?php echo htmlspecialchars($time, ENT_QUOTES, 'UTF-8'); ?></span>
         </div>
       <?php endif; ?>
     </div>

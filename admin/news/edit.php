@@ -613,136 +613,136 @@ html, body { overflow-x: hidden; }
   <div class="container-fluid">
     <div class="gdy-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
       <div>
-        <h1><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_12df53dbfc', 'تعديل الخبر #')) ?><?= (int)$id ?></h1>
-        <p><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= h(__('t_927a001b84', 'عدّل بيانات الخبر ثم احفظ التغييرات')) ?></p>
+        <h1><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?php echo h(__('t_12df53dbfc', 'تعديل الخبر #')); ?><?php echo (int)$id; ?></h1>
+        <p><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?php echo h(__('t_927a001b84', 'عدّل بيانات الخبر ثم احفظ التغييرات')); ?></p>
       </div>
       <div class="gdy-actions">
-        <a href="create.php" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?></a>
-        <a href="index.php" class="gdy-btn gdy-btn-primary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_a4c812b3d4', 'عرض الأخبار')) ?></a>
+        <a href="create.php" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_0d1f6ecf66', 'إضافة خبر جديد')); ?></a>
+        <a href="index.php" class="gdy-btn gdy-btn-primary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo h(__('t_a4c812b3d4', 'عرض الأخبار')); ?></a>
       </div>
     </div>
 
     <?php if ($updated && empty($errors['general'])): ?>
-      <div class="alert alert-success"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_16e9a82b3b', 'تم حفظ التعديلات بنجاح.')) ?></div>
+      <div class="alert alert-success"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?php echo h(__('t_16e9a82b3b', 'تم حفظ التعديلات بنجاح.')); ?></div>
     <?php endif; ?>
 
     <?php if (!empty($errors['general'])): ?>
-      <div class="alert alert-danger"><?= h($errors['general']) ?></div>
+      <div class="alert alert-danger"><?php echo h($errors['general']); ?></div>
     <?php endif; ?>
 
     <div class="gdy-card mb-4">
       <div class="gdy-card-header">
-        <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_6c83766790', 'بيانات الخبر الأساسية')) ?></h2>
-        <small><?= h(__('t_7e11daf821', 'يمكنك تعديل العنوان والمحتوى والتصنيف وبقية الحقول')) ?></small>
+        <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_6c83766790', 'بيانات الخبر الأساسية')); ?></h2>
+        <small><?php echo h(__('t_7e11daf821', 'يمكنك تعديل العنوان والمحتوى والتصنيف وبقية الحقول')); ?></small>
       </div>
 
       <div class="gdy-card-body gdy-form-body">
         <form method="post" action="" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <div class="row g-3">
             <div class="col-md-8">
 
               <div class="mb-3">
-                <label class="gdy-form-label"><span class="text-danger">*</span><?= h(__('t_6dc6588082', 'العنوان')) ?></label>
+                <label class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_6dc6588082', 'العنوان')); ?></label>
                 <input type="text" name="title"
-                  class="form-control form-control-sm <?= isset($errors['title']) ? 'is-invalid' : '' ?>"
-                  value="<?= h($title) ?>" placeholder="<?= h(__('t_d48cac613d', 'أدخل عنوان الخبر هنا...')) ?>">
+                  class="form-control form-control-sm <?php echo isset($errors['title']) ? 'is-invalid' : ''; ?>"
+                  value="<?php echo h($title); ?>" placeholder="<?php echo h(__('t_d48cac613d', 'أدخل عنوان الخبر هنا...')); ?>">
                 <?php if (isset($errors['title'])): ?>
-                  <div class="invalid-feedback"><?= h($errors['title']) ?></div>
+                  <div class="invalid-feedback"><?php echo h($errors['title']); ?></div>
                 <?php else: ?>
-                  <div class="form-text"><?= h(__('t_9c84024cc6', 'اجعل العنوان واضحاً وجاذباً.')) ?></div>
+                  <div class="form-text"><?php echo h(__('t_9c84024cc6', 'اجعل العنوان واضحاً وجاذباً.')); ?></div>
                 <?php endif; ?>
               </div>
 
               <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label class="gdy-form-label mb-0"><?= h(__('t_0781965540', 'الرابط (Slug)')) ?></label>
-                  <span class="badge-soft"><?= h(__('t_f756530783', 'يمكنك تغييره بعناية، يؤثر على رابط الخبر')) ?></span>
+                  <label class="gdy-form-label mb-0"><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></label>
+                  <span class="badge-soft"><?php echo h(__('t_f756530783', 'يمكنك تغييره بعناية، يؤثر على رابط الخبر')); ?></span>
                 </div>
                 <input type="text" name="slug"
-                  class="form-control form-control-sm <?= isset($errors['slug']) ? 'is-invalid' : '' ?>"
-                  value="<?= h($slug) ?>" placeholder="<?= h(__('t_0f7738c806', 'مثال: breaking-news-2024')) ?>">
+                  class="form-control form-control-sm <?php echo isset($errors['slug']) ? 'is-invalid' : ''; ?>"
+                  value="<?php echo h($slug); ?>" placeholder="<?php echo h(__('t_0f7738c806', 'مثال: breaking-news-2024')); ?>">
                 <?php if (isset($errors['slug'])): ?>
-                  <div class="invalid-feedback"><?= h($errors['slug']) ?></div>
+                  <div class="invalid-feedback"><?php echo h($errors['slug']); ?></div>
                 <?php endif; ?>
               </div>
 
               <div class="mb-3">
-                <label class="gdy-form-label"><?= h(__('t_17220bb323', 'ملخص قصير (اختياري)')) ?></label>
+                <label class="gdy-form-label"><?php echo h(__('t_17220bb323', 'ملخص قصير (اختياري)')); ?></label>
                 <textarea name="excerpt" rows="3" class="form-control form-control-sm"
-                  placeholder="<?= h(__('t_774de80702', 'يمكن كتابة فقرة قصيرة تلخص أهم ما في الخبر.')) ?>"><?= h($excerpt) ?></textarea>
+                  placeholder="<?php echo h(__('t_774de80702', 'يمكن كتابة فقرة قصيرة تلخص أهم ما في الخبر.')); ?>"><?php echo h($excerpt); ?></textarea>
               </div>
 
               <div class="mb-3">
-                <label class="gdy-form-label"><?= h(__('t_1db9e4530e', 'نص الخبر / المقال')) ?></label>
+                <label class="gdy-form-label"><?php echo h(__('t_1db9e4530e', 'نص الخبر / المقال')); ?></label>
                 <textarea data-gdy-editor="1" name="content" rows="10" class="form-control form-control-sm"
-                  placeholder="<?= h(__('t_52461cefbe', 'اكتب نص الخبر كاملاً أو الصقه هنا.')) ?>"><?= h($content) ?></textarea>
+                  placeholder="<?php echo h(__('t_52461cefbe', 'اكتب نص الخبر كاملاً أو الصقه هنا.')); ?>"><?php echo h($content); ?></textarea>
 
                 <!-- Professional: Internal links suggestions -->
                 <div class="gdy-internal-links mt-2" id="internal-links-panel">
                   <div class="d-flex align-items-center gap-2 flex-wrap">
                     <button type="button" class="btn btn-sm btn-outline-info" id="btn-suggest-links">
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_il_suggest','اقتراح روابط داخلية')) ?>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_il_suggest','اقتراح روابط داخلية')); ?>
                     </button>
                     <input type="text" class="form-control form-control-sm" id="internal-link-query"
                       style="max-width: 260px"
-                      placeholder="<?= h(__('t_il_query','كلمة/عبارة (اختياري)')) ?>">
-                    <span class="text-muted small"><?= h(__('t_il_tip','حدد نصًا داخل المحتوى ثم اضغط "اقتراح".')) ?></span>
+                      placeholder="<?php echo h(__('t_il_query','كلمة/عبارة (اختياري)')); ?>">
+                    <span class="text-muted small"><?php echo h(__('t_il_tip','حدد نصًا داخل المحتوى ثم اضغط "اقتراح".')); ?></span>
                   </div>
                   <div class="results mt-2" id="internal-links-results"></div>
                 </div>
 
-                <div class="form-text"><?= h(__('t_cdab1836ce', 'يمكنك ربط هذا الحقل بمحرر WYSIWYG لاحقاً.')) ?></div>
+                <div class="form-text"><?php echo h(__('t_cdab1836ce', 'يمكنك ربط هذا الحقل بمحرر WYSIWYG لاحقاً.')); ?></div>
               </div>
 
               
               <?php $currentImage = (string)($news['image'] ?? ''); ?>
               <div class="mb-3">
-                <label class="gdy-form-label"><?= h(__('t_cd376ca9a8', 'صورة الخبر (اختياري)')) ?></label>
+                <label class="gdy-form-label"><?php echo h(__('t_cd376ca9a8', 'صورة الخبر (اختياري)')); ?></label>
                 <div id="image-dropzone" class="gdy-dropzone">
                   <input type="file" name="image" id="image-input" accept="image/*" class="d-none">
                   <div class="gdy-dropzone-inner">
                     <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <p class="mb-1"><?= h(__('t_82302b8afb', 'اسحب وأفلت الصورة هنا أو اضغط للاختيار')) ?></p>
-                    <small class="text-muted"><?= h(__('t_5968ccc71d', 'يفضل صور JPG أو PNG أو GIF أو WebP بحجم أقل من 5MB.')) ?></small>
+                    <p class="mb-1"><?php echo h(__('t_82302b8afb', 'اسحب وأفلت الصورة هنا أو اضغط للاختيار')); ?></p>
+                    <small class="text-muted"><?php echo h(__('t_5968ccc71d', 'يفضل صور JPG أو PNG أو GIF أو WebP بحجم أقل من 5MB.')); ?></small>
                   </div>
 <div class="mt-2 d-flex gap-2 flex-wrap">
   <button type="button" id="gdy-pick-featured" class="btn btn-sm btn-outline-light">اختيار من المكتبة</button>
   <small class="text-muted">يمكنك اختيار صورة الخبر من مكتبة الوسائط بدون رفع جديد.</small>
 </div>
-<input type="hidden" name="image_url" value="<?= isset($image_url) ? h($image_url) : '' ?>">
+<input type="hidden" name="image_url" value="<?php echo isset($image_url) ? h($image_url) : ''; ?>">
 
                 </div>
 
-                <div id="image-preview" class="gdy-image-preview mt-2 <?= $currentImage ? '' : 'd-none' ?>">
-                  <img src="<?= $currentImage ? '/' . h(ltrim($currentImage, '/')) : '' ?>"
-                    alt="<?= h(__('t_0075044f10', 'معاينة الصورة')) ?>" class="img-fluid rounded mb-2">
+                <div id="image-preview" class="gdy-image-preview mt-2 <?php echo $currentImage ? '' : 'd-none'; ?>">
+                  <img src="<?php echo $currentImage ? '/' . h(ltrim($currentImage, '/')) : ''; ?>"
+                    alt="<?php echo h(__('t_0075044f10', 'معاينة الصورة')); ?>" class="img-fluid rounded mb-2">
                   <div class="small text-muted" id="image-info">
                     <?php if ($currentImage): ?>
-                      <?= h(__('t_9b0b0e5e2a', 'الصورة الحالية')) ?>: <?= h(basename($currentImage)) ?><br>
-                      <?= h(__('t_3b0b82f5d7', 'رفع صورة جديدة سيستبدل الصورة الحالية.')) ?>
+                      <?php echo h(__('t_9b0b0e5e2a', 'الصورة الحالية')); ?>: <?php echo h(basename($currentImage)); ?><br>
+                      <?php echo h(__('t_3b0b82f5d7', 'رفع صورة جديدة سيستبدل الصورة الحالية.')); ?>
                     <?php endif; ?>
                   </div>
                 </div>
 
                 <?php if (isset($errors['image'])): ?>
-                  <div class="invalid-feedback d-block"><?= h($errors['image']) ?></div>
+                  <div class="invalid-feedback d-block"><?php echo h($errors['image']); ?></div>
                 <?php endif; ?>
               </div>
 
 <div class="mb-3">
-                <label class="gdy-form-label"><?= h(__('t_5deb5044ef', 'مرفقات الخبر (PDF / Word / Excel ...)')) ?></label>
+                <label class="gdy-form-label"><?php echo h(__('t_5deb5044ef', 'مرفقات الخبر (PDF / Word / Excel ...)')); ?></label>
                 <input type="file" name="attachments[]" id="attachments-input" class="form-control form-control-sm" multiple
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.7z,.txt,.rtf,image/*">
-                <div class="form-text"><?= h(__('t_9127f92063', 'يمكنك إضافة عدة ملفات (حتى 20MB لكل ملف).')) ?></div>
+                <div class="form-text"><?php echo h(__('t_9127f92063', 'يمكنك إضافة عدة ملفات (حتى 20MB لكل ملف).')); ?></div>
                 <div id="attachments-preview" class="mt-2 small text-muted"></div>
               </div>
 
               <?php if (!empty($attachments)): ?>
                 <div class="mb-3">
                   <div class="gdy-options-box" style="padding:.85rem;">
-                    <h3 class="mb-2"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_90e8368fd9', 'المرفقات الحالية')) ?></h3>
+                    <h3 class="mb-2"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_90e8368fd9', 'المرفقات الحالية')); ?></h3>
                     <div class="d-flex flex-column gap-2">
                       <?php foreach ($attachments as $att):
                         $attUrl = '/' . ltrim((string)$att['file_path'], '/');
@@ -751,23 +751,23 @@ html, body { overflow-x: hidden; }
                         <div class="d-flex align-items-center justify-content-between gap-2 p-2 rounded"
                              style="border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.6);">
                           <div class="d-flex align-items-center gap-2" style="min-width:0;">
-                            <i class="<?= h($icon) ?>"></i>
+                            <i class="<?php echo h($icon); ?>"></i>
                             <div style="min-width:0;">
-                              <div class="small text-white text-truncate" style="max-width:420px;"><?= h($att['original_name']) ?></div>
+                              <div class="small text-white text-truncate" style="max-width:420px;"><?php echo h($att['original_name']); ?></div>
                               <div class="text-muted small">
                                 <?php if (!empty($att['file_size'])): ?>
-                                  <?= number_format(((int)$att['file_size'])/1024, 0) ?> KB
+                                  <?php echo number_format(((int)$att['file_size'])/1024, 0); ?> KB
                                 <?php endif; ?>
                               </div>
                             </div>
                           </div>
 
                           <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                            <a class="btn btn-sm btn-outline-light" href="<?= h($attUrl) ?>" target="_blank" title="<?= h(__('t_6e63a5f0af', 'عرض')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg></a>
-                            <a class="btn btn-sm btn-outline-info" href="<?= h($attUrl) ?>" download title="<?= h(__('t_969879d297', 'تحميل')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#download"></use></svg></a>
-                            <button type="submit" name="delete_attachment_id" value="<?= (int)$att['id'] ?>"
+                            <a class="btn btn-sm btn-outline-light" href="<?php echo h($attUrl); ?>" target="_blank" title="<?php echo h(__('t_6e63a5f0af', 'عرض')); ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg></a>
+                            <a class="btn btn-sm btn-outline-info" href="<?php echo h($attUrl); ?>" download title="<?php echo h(__('t_969879d297', 'تحميل')); ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#download"></use></svg></a>
+                            <button type="submit" name="delete_attachment_id" value="<?php echo (int)$att['id']; ?>"
                               class="btn btn-sm btn-outline-danger" formnovalidate
-                              data-confirm=<?= json_encode(__('t_9bc98bfbb1', 'حذف هذا المرفق؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?> title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                              data-confirm=<?php echo json_encode(__('t_9bc98bfbb1', 'حذف هذا المرفق؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?> title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                           </div>
@@ -782,113 +782,113 @@ html, body { overflow-x: hidden; }
 
             <div class="col-md-4">
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_cf14329701', 'التصنيف')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_cf14329701', 'التصنيف')); ?></h3>
 
                 <div class="mb-3">
-                  <label class="gdy-form-label"><span class="text-danger">*</span><?= h(__('t_cf14329701', 'التصنيف')) ?></label>
-                  <select name="category_id" class="form-select form-select-sm <?= isset($errors['category_id']) ? 'is-invalid' : '' ?>">
-                    <option value="0"><?= h(__('t_0a8d417cf7', '-- اختر التصنيف --')) ?></option>
+                  <label class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_cf14329701', 'التصنيف')); ?></label>
+                  <select name="category_id" class="form-select form-select-sm <?php echo isset($errors['category_id']) ? 'is-invalid' : ''; ?>">
+                    <option value="0"><?php echo h(__('t_0a8d417cf7', '-- اختر التصنيف --')); ?></option>
                     <?php foreach ($categoriesTree as $parent): ?>
-                      <optgroup label="<?= h($parent['name']) ?>">
+                      <optgroup label="<?php echo h($parent['name']); ?>">
                         <?php if (!empty($parent['children'])): ?>
                           <?php foreach ($parent['children'] as $child): ?>
-                            <option value="<?= (int)$child['id'] ?>" <?= (int)$child['id'] === (int)$category_id ? 'selected' : '' ?>>
-                              <?= h($child['name']) ?>
+                            <option value="<?php echo (int)$child['id']; ?>" <?php echo (int)$child['id'] === (int)$category_id ? 'selected' : ''; ?>>
+                              <?php echo h($child['name']); ?>
                             </option>
                           <?php endforeach; ?>
                         <?php else: ?>
-                          <option value="<?= (int)$parent['id'] ?>" <?= (int)$parent['id'] === (int)$category_id ? 'selected' : '' ?>>
-                            <?= h($parent['name']) ?>
+                          <option value="<?php echo (int)$parent['id']; ?>" <?php echo (int)$parent['id'] === (int)$category_id ? 'selected' : ''; ?>>
+                            <?php echo h($parent['name']); ?>
                           </option>
                         <?php endif; ?>
                       </optgroup>
                     <?php endforeach; ?>
                   </select>
                   <?php if (isset($errors['category_id'])): ?>
-                    <div class="invalid-feedback"><?= h($errors['category_id']) ?></div>
+                    <div class="invalid-feedback"><?php echo h($errors['category_id']); ?></div>
                   <?php endif; ?>
                 </div>
 
                 <?php if (!empty($opinionAuthors)): ?>
                   <div class="mb-3">
-                    <label class="gdy-form-label"><?= h(__('t_9fd4be08b2', 'كاتب الرأي (إن كان مقال رأي)')) ?></label>
+                    <label class="gdy-form-label"><?php echo h(__('t_9fd4be08b2', 'كاتب الرأي (إن كان مقال رأي)')); ?></label>
                     <select name="opinion_author_id" class="form-select form-select-sm">
-                      <option value="0"><?= h(__('t_7f3152db47', '-- ليس مقال رأي --')) ?></option>
+                      <option value="0"><?php echo h(__('t_7f3152db47', '-- ليس مقال رأي --')); ?></option>
                       <?php foreach ($opinionAuthors as $oa): ?>
-                        <option value="<?= (int)$oa['id'] ?>" <?= (int)$oa['id'] === (int)$opinion_author_id ? 'selected' : '' ?>>
-                          <?= h($oa['name']) ?>
+                        <option value="<?php echo (int)$oa['id']; ?>" <?php echo (int)$oa['id'] === (int)$opinion_author_id ? 'selected' : ''; ?>>
+                          <?php echo h($oa['name']); ?>
                         </option>
                       <?php endforeach; ?>
                     </select>
-                    <div class="form-text"><?= h(__('t_68e0482040', 'لو اخترت كاتب رأي، يُفضّل أن يكون التصنيف مناسباً (مثل الرأي).')) ?></div>
+                    <div class="form-text"><?php echo h(__('t_68e0482040', 'لو اخترت كاتب رأي، يُفضّل أن يكون التصنيف مناسباً (مثل الرأي).')); ?></div>
                   </div>
                 <?php endif; ?>
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_78865bbc36', 'حالة النشر')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_78865bbc36', 'حالة النشر')); ?></h3>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+                  <label class="gdy-form-label"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
                   <select name="status" class="form-select form-select-sm">
-                    <option value="published" <?= $status === 'published' ? 'selected' : '' ?>><?= h(__('t_ecfb62b400', 'منشور')) ?></option>
-                    <option value="approved" <?= $status === 'approved' ? 'selected' : '' ?>><?= h(__('t_aeb4d514db', 'جاهز للنشر')) ?></option>
-                    <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>><?= h(__('t_9071af8f2d', 'مسودة')) ?></option>
-                    <option value="pending" <?= $status === 'pending' ? 'selected' : '' ?>><?= h(__('t_e9210fb9c2', 'بانتظار المراجعة')) ?></option>
-                    <option value="archived" <?= $status === 'archived' ? 'selected' : '' ?>><?= h(__('t_2e67aea8ca', 'مؤرشف')) ?></option>
+                    <option value="published" <?php echo $status === 'published' ? 'selected' : ''; ?>><?php echo h(__('t_ecfb62b400', 'منشور')); ?></option>
+                    <option value="approved" <?php echo $status === 'approved' ? 'selected' : ''; ?>><?php echo h(__('t_aeb4d514db', 'جاهز للنشر')); ?></option>
+                    <option value="draft" <?php echo $status === 'draft' ? 'selected' : ''; ?>><?php echo h(__('t_9071af8f2d', 'مسودة')); ?></option>
+                    <option value="pending" <?php echo $status === 'pending' ? 'selected' : ''; ?>><?php echo h(__('t_e9210fb9c2', 'بانتظار المراجعة')); ?></option>
+                    <option value="archived" <?php echo $status === 'archived' ? 'selected' : ''; ?>><?php echo h(__('t_2e67aea8ca', 'مؤرشف')); ?></option>
                   </select>
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?= h(__('t_9260bd801b', 'جدولة نشر (publish_at)')) ?></label>
-                  <input type="datetime-local" name="publish_at" class="form-control form-control-sm" value="<?= h($publish_at ?? '') ?>">
+                  <label class="gdy-form-label"><?php echo h(__('t_9260bd801b', 'جدولة نشر (publish_at)')); ?></label>
+                  <input type="datetime-local" name="publish_at" class="form-control form-control-sm" value="<?php echo h($publish_at ?? ''); ?>">
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?= h(__('t_58e272983c', 'جدولة إلغاء نشر (unpublish_at)')) ?></label>
-                  <input type="datetime-local" name="unpublish_at" class="form-control form-control-sm" value="<?= h($unpublish_at ?? '') ?>">
+                  <label class="gdy-form-label"><?php echo h(__('t_58e272983c', 'جدولة إلغاء نشر (unpublish_at)')); ?></label>
+                  <input type="datetime-local" name="unpublish_at" class="form-control form-control-sm" value="<?php echo h($unpublish_at ?? ''); ?>">
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?= h(__('t_9928bed160', 'تاريخ النشر (اختياري)')) ?></label>
-                  <input type="datetime-local" name="published_at" class="form-control form-control-sm" value="<?= h($published_at) ?>">
-                  <div class="form-text"><?= h(__('t_47d90f80b5', 'إذا تركته فارغاً، يظل كما هو.')) ?></div>
+                  <label class="gdy-form-label"><?php echo h(__('t_9928bed160', 'تاريخ النشر (اختياري)')); ?></label>
+                  <input type="datetime-local" name="published_at" class="form-control form-control-sm" value="<?php echo h($published_at); ?>">
+                  <div class="form-text"><?php echo h(__('t_47d90f80b5', 'إذا تركته فارغاً، يظل كما هو.')); ?></div>
                 </div>
 
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" value="1" id="featured" name="featured" <?= $featured ? 'checked' : '' ?>>
-                  <label class="form-check-label" for="featured"><?= h(__('t_6b9fb336b6', 'خبر مميز (Featured)')) ?></label>
+                  <input class="form-check-input" type="checkbox" value="1" id="featured" name="featured" <?php echo $featured ? 'checked' : ''; ?>>
+                  <label class="form-check-label" for="featured"><?php echo h(__('t_6b9fb336b6', 'خبر مميز (Featured)')); ?></label>
                 </div>
 
                 <div class="form-check mb-2">
-                  <input class="form-check-input" type="checkbox" value="1" id="is_breaking" name="is_breaking" <?= $is_breaking ? 'checked' : '' ?>>
-                  <label class="form-check-label" for="is_breaking"><?= h(__('t_d8a9550063', 'خبر عاجل (Breaking)')) ?></label>
+                  <input class="form-check-input" type="checkbox" value="1" id="is_breaking" name="is_breaking" <?php echo $is_breaking ? 'checked' : ''; ?>>
+                  <label class="form-check-label" for="is_breaking"><?php echo h(__('t_d8a9550063', 'خبر عاجل (Breaking)')); ?></label>
                 </div>
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg><?= h(__('t_5584163b0c', 'إعدادات SEO')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg><?php echo h(__('t_5584163b0c', 'إعدادات SEO')); ?></h3>
                 <div class="mb-2">
                   <label class="gdy-form-label">SEO Title</label>
-                  <input type="text" name="seo_title" class="form-control form-control-sm" value="<?= h($seo_title ?? '') ?>" placeholder="<?= h(__('t_439b74907d', 'عنوان لمحركات البحث (اختياري)')) ?>">
+                  <input type="text" name="seo_title" class="form-control form-control-sm" value="<?php echo h($seo_title ?? ''); ?>" placeholder="<?php echo h(__('t_439b74907d', 'عنوان لمحركات البحث (اختياري)')); ?>">
                 </div>
                 <div class="mb-2">
                   <label class="gdy-form-label">SEO Description</label>
-                  <textarea name="seo_description" rows="3" class="form-control form-control-sm" placeholder="<?= h(__('t_29002a42e6', 'وصف مختصر لمحركات البحث (اختياري)')) ?>"><?= h($seo_description ?? '') ?></textarea>
+                  <textarea name="seo_description" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_29002a42e6', 'وصف مختصر لمحركات البحث (اختياري)')); ?>"><?php echo h($seo_description ?? ''); ?></textarea>
                 </div>
                 <div class="mb-2">
                   <label class="gdy-form-label">SEO Keywords</label>
-                  <input type="text" name="seo_keywords" class="form-control form-control-sm" value="<?= h($seo_keywords ?? '') ?>" placeholder="<?= h(__('t_dd1cc5fb86', 'كلمات مفتاحية (اختياري)')) ?>">
+                  <input type="text" name="seo_keywords" class="form-control form-control-sm" value="<?php echo h($seo_keywords ?? ''); ?>" placeholder="<?php echo h(__('t_dd1cc5fb86', 'كلمات مفتاحية (اختياري)')); ?>">
                 </div>
               </div>
 
               <div class="gdy-options-box mb-3">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_84c1b773c5', 'الوسوم')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_84c1b773c5', 'الوسوم')); ?></h3>
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?= h(__('t_51071ad5c6', 'وسوم (Tags)')) ?></label>
+                  <label class="gdy-form-label"><?php echo h(__('t_51071ad5c6', 'وسوم (Tags)')); ?></label>
                   <textarea name="tags" rows="2" class="form-control form-control-sm tags-input"
-                    placeholder="<?= h(__('t_4669e64c64', 'اكتب الوسوم مفصولة بفاصلة')) ?>"><?= h($tags_input) ?></textarea>
-                  <div class="form-text"><?= h(__('t_feeeca0c74', 'تساعد الوسوم في تنظيم المحتوى وتحسين البحث.')) ?></div>
+                    placeholder="<?php echo h(__('t_4669e64c64', 'اكتب الوسوم مفصولة بفاصلة')); ?>"><?php echo h($tags_input); ?></textarea>
+                  <div class="form-text"><?php echo h(__('t_feeeca0c74', 'تساعد الوسوم في تنظيم المحتوى وتحسين البحث.')); ?></div>
                 </div>
               </div>
 
@@ -897,67 +897,67 @@ html, body { overflow-x: hidden; }
 <?php if (!empty($relatedNews)): ?>
 <div class="card mb-3">
   <div class="card-body">
-    <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_admin_related_news', 'اقتراحات: أخبار مشابهة')) ?></h3>
+    <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_admin_related_news', 'اقتراحات: أخبار مشابهة')); ?></h3>
     <div class="list-group">
       <?php foreach ($relatedNews as $rn): ?>
         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-           href="edit.php?id=<?= (int)$rn['id'] ?>">
-          <span><?= h((string)($rn['title'] ?? ('#' . (int)$rn['id']))) ?></span>
-          <span class="badge bg-secondary"><?= (int)($rn['score'] ?? 0) ?></span>
+           href="edit.php?id=<?php echo (int)$rn['id']; ?>">
+          <span><?php echo h((string)($rn['title'] ?? ('#' . (int)$rn['id']))); ?></span>
+          <span class="badge bg-secondary"><?php echo (int)($rn['score'] ?? 0); ?></span>
         </a>
       <?php endforeach; ?>
     </div>
-    <div class="form-text mt-2"><?= h(__('t_admin_related_news_hint', 'النتائج تعتمد على تشابه الوسوم (Tags).')) ?></div>
+    <div class="form-text mt-2"><?php echo h(__('t_admin_related_news_hint', 'النتائج تعتمد على تشابه الوسوم (Tags).')); ?></div>
   </div>
 </div>
 <?php endif; ?>
 <!-- Professional: Pre-publish Checklist -->
           <div class="gdy-card mt-3" id="prepublish-checklist-card">
             <div class="gdy-card-header">
-              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_precheck', 'قائمة التحقق قبل النشر')) ?></h3>
+              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_precheck', 'قائمة التحقق قبل النشر')); ?></h3>
               <span class="badge bg-secondary-subtle text-secondary-emphasis" id="precheck-badge">—</span>
             </div>
             <div class="gdy-card-body">
               <ul class="list-unstyled mb-0 gdy-checklist" id="prepublish-checklist">
-                <li data-key="title"><span class="ci">○</span><span><?= h(__('t_ck_title','العنوان')) ?></span></li>
-                <li data-key="category"><span class="ci">○</span><span><?= h(__('t_ck_category','التصنيف')) ?></span></li>
-                <li data-key="content"><span class="ci">○</span><span><?= h(__('t_ck_content','المحتوى')) ?></span></li>
-                <li data-key="tags"><span class="ci">○</span><span><?= h(__('t_ck_tags','الوسوم (Tags)')) ?></span> <small>(<?= h(__('t_ck_rec','مستحسن')) ?>)</small></li>
-                <li data-key="seo"><span class="ci">○</span><span><?= h(__('t_ck_seo','SEO Title/Description')) ?></span> <small>(<?= h(__('t_ck_rec','مستحسن')) ?>)</small></li>
-                <li data-key="image"><span class="ci">○</span><span><?= h(__('t_ck_image','صورة الخبر')) ?></span> <small>(<?= h(__('t_ck_rec','مستحسن')) ?>)</small></li>
+                <li data-key="title"><span class="ci">○</span><span><?php echo h(__('t_ck_title','العنوان')); ?></span></li>
+                <li data-key="category"><span class="ci">○</span><span><?php echo h(__('t_ck_category','التصنيف')); ?></span></li>
+                <li data-key="content"><span class="ci">○</span><span><?php echo h(__('t_ck_content','المحتوى')); ?></span></li>
+                <li data-key="tags"><span class="ci">○</span><span><?php echo h(__('t_ck_tags','الوسوم (Tags)')); ?></span> <small>(<?php echo h(__('t_ck_rec','مستحسن')); ?>)</small></li>
+                <li data-key="seo"><span class="ci">○</span><span><?php echo h(__('t_ck_seo','SEO Title/Description')); ?></span> <small>(<?php echo h(__('t_ck_rec','مستحسن')); ?>)</small></li>
+                <li data-key="image"><span class="ci">○</span><span><?php echo h(__('t_ck_image','صورة الخبر')); ?></span> <small>(<?php echo h(__('t_ck_rec','مستحسن')); ?>)</small></li>
               </ul>
-              <div class="form-text mt-2"><?= h(__('t_ck_hint','يمكنك حفظ الخبر كمسودة بدون اكتمال القائمة. عند اختيار الحالة "منشور" سيتم التحقق من العناصر الأساسية.')) ?></div>
+              <div class="form-text mt-2"><?php echo h(__('t_ck_hint','يمكنك حفظ الخبر كمسودة بدون اكتمال القائمة. عند اختيار الحالة "منشور" سيتم التحقق من العناصر الأساسية.')); ?></div>
             </div>
           </div>
 
           <!-- Professional: OpenGraph Preview -->
           <div class="gdy-card mt-3" id="og-preview-card">
             <div class="gdy-card-header">
-              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_ogprev','معاينة المشاركة (OpenGraph)')) ?></h3>
+              <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo h(__('t_ogprev','معاينة المشاركة (OpenGraph)')); ?></h3>
             </div>
             <div class="gdy-card-body">
               <div class="gdy-og-preview">
-                <div class="gdy-og-img" id="ogp-img"><span class="muted"><?= h(__('t_og_img','صورة المعاينة')) ?></span></div>
+                <div class="gdy-og-img" id="ogp-img"><span class="muted"><?php echo h(__('t_og_img','صورة المعاينة')); ?></span></div>
                 <div class="gdy-og-meta">
                   <div class="gdy-og-domain" id="ogp-domain">—</div>
                   <div class="gdy-og-title" id="ogp-title">—</div>
                   <div class="gdy-og-desc" id="ogp-desc">—</div>
                 </div>
               </div>
-              <div class="form-text mt-2"><?= h(__('t_og_hint','هذه معاينة تقريبية لكيف سيظهر الرابط عند المشاركة في واتساب/فيسبوك. الشكل النهائي يختلف حسب المنصة.')) ?></div>
+              <div class="form-text mt-2"><?php echo h(__('t_og_hint','هذه معاينة تقريبية لكيف سيظهر الرابط عند المشاركة في واتساب/فيسبوك. الشكل النهائي يختلف حسب المنصة.')); ?></div>
             </div>
           </div>
 
               <div class="gdy-options-box mb-3" id="editorial-notes">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_6d5f18f157', 'ملاحظات فريق التحرير')) ?></h3>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_6d5f18f157', 'ملاحظات فريق التحرير')); ?></h3>
 
                 <!-- ملاحظة: لا تضع <form> داخل <form> (يسبب تعطل أزرار الحفظ/النشر في المتصفح) -->
                 <div class="mb-2">
-                  <textarea name="new_note" rows="3" class="form-control form-control-sm" placeholder="<?= h(__('t_7f7c715e6d', 'اكتب ملاحظة للخبر (تظهر داخل لوحة التحكم فقط)')) ?>"></textarea>
+                  <textarea name="new_note" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_7f7c715e6d', 'اكتب ملاحظة للخبر (تظهر داخل لوحة التحكم فقط)')); ?>"></textarea>
                   <div class="d-flex justify-content-between align-items-center mt-2">
-                    <div class="form-text"><?= h(__('t_ebe14519dc', 'للتعليقات الداخلية بين المحرر والكاتب (لا تظهر للزوار).')) ?></div>
+                    <div class="form-text"><?php echo h(__('t_ebe14519dc', 'للتعليقات الداخلية بين المحرر والكاتب (لا تظهر للزوار).')); ?></div>
                     <button type="submit" name="add_note" value="1" class="gdy-btn gdy-btn-secondary" formnovalidate>
-                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_b9508aa2a9', 'إضافة')) ?>
+                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_b9508aa2a9', 'إضافة')); ?>
                     </button>
                   </div>
                 </div>
@@ -969,26 +969,26 @@ html, body { overflow-x: hidden; }
                         <div class="d-flex justify-content-between gap-2">
                           <div class="small" style="color:#cbd5e1">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-                            <?= h(($n['user_name'] ?? '') ?: '—') ?>
+                            <?php echo h(($n['user_name'] ?? '') ?: '—'); ?>
                           </div>
                           <div class="small" style="color:#94a3b8">
-                            <?= h($n['created_at'] ?? '') ?>
+                            <?php echo h($n['created_at'] ?? ''); ?>
                           </div>
                         </div>
                         <div class="mt-1" style="white-space:pre-wrap;line-height:1.6;">
-                          <?= h($n['note'] ?? '') ?>
+                          <?php echo h($n['note'] ?? ''); ?>
                         </div>
                       </div>
                     <?php endforeach; ?>
                   </div>
                 <?php else: ?>
-                  <div class="small" style="color:#94a3b8"><?= h(__('t_792758e182', 'لا توجد ملاحظات بعد.')) ?></div>
+                  <div class="small" style="color:#94a3b8"><?php echo h(__('t_792758e182', 'لا توجد ملاحظات بعد.')); ?></div>
                 <?php endif; ?>
               </div>
 
               <div class="gdy-options-box mb-3" id="revision-history">
-                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_caa79d9298', 'سجل التعديلات')) ?></h3>
-                <div class="form-text mb-2"><?= h(__('t_f3bc0558d2', 'يمكنك استرجاع نسخة سابقة عند الحاجة.')) ?></div>
+                <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?php echo h(__('t_caa79d9298', 'سجل التعديلات')); ?></h3>
+                <div class="form-text mb-2"><?php echo h(__('t_f3bc0558d2', 'يمكنك استرجاع نسخة سابقة عند الحاجة.')); ?></div>
 
                 <?php if (!empty($revisionHistory)): ?>
                   <div style="max-height: 260px; overflow: auto;">
@@ -997,12 +997,12 @@ html, body { overflow-x: hidden; }
                         <div>
                           <div class="small" style="color:#e5e7eb">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <?= h($r['action'] ?? 'update') ?>
+                            <?php echo h($r['action'] ?? 'update'); ?>
                           </div>
                           <div class="small" style="color:#94a3b8">
-                            <?= h($r['created_at'] ?? '') ?>
+                            <?php echo h($r['created_at'] ?? ''); ?>
                             <?php if (!empty($r['user_name'])): ?>
-                              • <?= h($r['user_name']) ?>
+                              • <?php echo h($r['user_name']); ?>
                             <?php endif; ?>
                           </div>
                         </div>
@@ -1010,24 +1010,24 @@ html, body { overflow-x: hidden; }
                         <button
                           type="submit"
                           name="restore_revision_id"
-                          value="<?= (int)($r['id'] ?? 0) ?>"
+                          value="<?php echo (int)($r['id'] ?? 0); ?>"
                           class="gdy-btn gdy-btn-secondary"
                           formnovalidate
-                          data-confirm=<?= json_encode(__('t_66f9d119fa', 'هل تريد استرجاع هذه النسخة؟ سيتم حفظ نسخة من الحالة الحالية أيضاً.'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_14c4cb02e3', 'استرجاع')) ?>
+                          data-confirm=<?php echo json_encode(__('t_66f9d119fa', 'هل تريد استرجاع هذه النسخة؟ سيتم حفظ نسخة من الحالة الحالية أيضاً.'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_14c4cb02e3', 'استرجاع')); ?>
                         </button>
                       </div>
                     <?php endforeach; ?>
                   </div>
                 <?php else: ?>
-                  <div class="small" style="color:#94a3b8"><?= h(__('t_fcd3c7e498', 'لا توجد نسخ محفوظة بعد.')) ?></div>
+                  <div class="small" style="color:#94a3b8"><?php echo h(__('t_fcd3c7e498', 'لا توجد نسخ محفوظة بعد.')); ?></div>
                 <?php endif; ?>
               </div>
 
               <?php if (!empty($opinionAuthors)): ?>
                 <div class="gdy-note-box">
-                  <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_db8da3e12f', 'ملاحظة:')) ?></strong>
-                  <div class="mt-1"><?= h(__('t_b6e2560649', 'تأكد من توافق')) ?><b><?= h(__('t_af47abc07d', 'كاتب الرأي')) ?></b><?= h(__('t_d5a86ca5b4', 'مع التصنيف (مثل تصنيف الرأي).')) ?></div>
+                  <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_db8da3e12f', 'ملاحظة:')); ?></strong>
+                  <div class="mt-1"><?php echo h(__('t_b6e2560649', 'تأكد من توافق')); ?><b><?php echo h(__('t_af47abc07d', 'كاتب الرأي')); ?></b><?php echo h(__('t_d5a86ca5b4', 'مع التصنيف (مثل تصنيف الرأي).')); ?></div>
                 </div>
               <?php endif; ?>
 
@@ -1035,37 +1035,37 @@ html, body { overflow-x: hidden; }
           </div>
 
           <div class="gdy-card-header gdy-form-footer mt-3">
-            <div class="small text-muted"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?= h(__('t_6297868797', 'تأكد من مراجعة التعديلات قبل الحفظ.')) ?></div>
+            <div class="small text-muted"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg><?php echo h(__('t_6297868797', 'تأكد من مراجعة التعديلات قبل الحفظ.')); ?></div>
             <div class="d-flex gap-2">
               <button type="submit" name="workflow_action" value="save" class="gdy-btn gdy-btn-primary">
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_871a087a1d', 'حفظ')) ?>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?php echo h(__('t_871a087a1d', 'حفظ')); ?>
               </button>
 
               <?php if ($isWriter && $status === 'draft'): ?>
                 <button type="submit" name="workflow_action" value="submit" class="gdy-btn gdy-btn-secondary">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a04c53724d', 'إرسال للمراجعة')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_a04c53724d', 'إرسال للمراجعة')); ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status === 'pending'): ?>
                 <button type="submit" name="workflow_action" value="approve" class="gdy-btn gdy-btn-secondary">
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_51cc4e6944', 'اعتماد')) ?>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_51cc4e6944', 'اعتماد')); ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status !== 'published'): ?>
-                <button type="submit" name="workflow_action" value="publish" class="gdy-btn gdy-btn-secondary" data-confirm=<?= json_encode(__('t_b5797f62a0', 'هل تريد نشر هذا الخبر الآن؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1f0a9584a7', 'نشر')) ?>
+                <button type="submit" name="workflow_action" value="publish" class="gdy-btn gdy-btn-secondary" data-confirm=<?php echo json_encode(__('t_b5797f62a0', 'هل تريد نشر هذا الخبر الآن؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_1f0a9584a7', 'نشر')); ?>
                 </button>
               <?php endif; ?>
 
               <?php if (!$isWriter && $status !== 'archived'): ?>
-                <button type="submit" name="workflow_action" value="archive" class="gdy-btn gdy-btn-secondary" data-confirm=<?= json_encode(__('t_7e6cd317b1', 'هل تريد أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_44e09190ab', 'أرشفة')) ?>
+                <button type="submit" name="workflow_action" value="archive" class="gdy-btn gdy-btn-secondary" data-confirm=<?php echo json_encode(__('t_7e6cd317b1', 'هل تريد أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                  <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_44e09190ab', 'أرشفة')); ?>
                 </button>
               <?php endif; ?>
-              <a href="view.php?id=<?= (int)$id ?>" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_a477d64bb1', 'عرض الخبر')) ?></a>
-              <a href="/preview/news/<?= (int)$id ?>" target="_blank" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= h(__('t_26d308e1c7', 'معاينة في الموقع')) ?></a>
+              <a href="view.php?id=<?php echo (int)$id; ?>" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo h(__('t_a477d64bb1', 'عرض الخبر')); ?></a>
+              <a href="/preview/news/<?php echo (int)$id; ?>" target="_blank" class="gdy-btn gdy-btn-secondary"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo h(__('t_26d308e1c7', 'معاينة في الموقع')); ?></a>
             </div>
           </div>
 
@@ -1089,7 +1089,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function handleFile(file) {
     if (!file || !previewWrap || !previewImg) return;
     if (!file.type || file.type.indexOf('image/') !== 0) {
-      alert(<?= json_encode(__('t_126be999c1', 'الرجاء اختيار ملف صورة صالح.'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>);
+      alert(<?php echo json_encode(__('t_126be999c1', 'الرجاء اختيار ملف صورة صالح.'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>);
       return;
     }
     previewWrap.classList.remove('d-none');

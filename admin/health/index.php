@@ -294,23 +294,23 @@ html, body{
 
     <!-- رأس الصفحة -->
     <div class="gdy-page-header mb-3">
-      <h1 class="h4"><?= h(__('t_63163058e0', 'صحة النظام')) ?></h1>
-      <p><?= h(__('t_57f02b95e4', 'فحص سريع لأهم مكوّنات البيئة: PHP، قاعدة البيانات، الكاش، إعدادات الخادم.')) ?></p>
+      <h1 class="h4"><?php echo h(__('t_63163058e0', 'صحة النظام')); ?></h1>
+      <p><?php echo h(__('t_57f02b95e4', 'فحص سريع لأهم مكوّنات البيئة: PHP، قاعدة البيانات، الكاش، إعدادات الخادم.')); ?></p>
     </div>
 
     <!-- التقييم العام -->
     <div class="card glass-card border-0 shadow-sm mb-3">
       <div class="card-body gdy-health-summary">
         <div>
-          <div class="mb-1 small text-muted"><?= h(__('t_7a148c6e4b', 'التقييم العام')) ?></div>
-          <span class="badge badge-health <?= h($overallClass) ?>"><?= h($overallLabel) ?></span>
+          <div class="mb-1 small text-muted"><?php echo h(__('t_7a148c6e4b', 'التقييم العام')); ?></div>
+          <span class="badge badge-health <?php echo h($overallClass); ?>"><?php echo h($overallLabel); ?></span>
           <div class="mt-2 gdy-health-meter">
-            <div class="gdy-health-meter-fill" style="width: <?= max(10, min(100, $score)) ?>%;"></div>
+            <div class="gdy-health-meter-fill" style="width: <?php echo max(10, min(100, $score)); ?>%;"></div>
           </div>
         </div>
         <div class="text-end">
-          <div class="gdy-health-score"><?= (int)$score ?>%</div>
-          <div class="small text-muted"><?= h(__('t_717d8ac6b3', 'مبني على PHP + قاعدة البيانات + الكاش')) ?></div>
+          <div class="gdy-health-score"><?php echo (int)$score; ?>%</div>
+          <div class="small text-muted"><?php echo h(__('t_717d8ac6b3', 'مبني على PHP + قاعدة البيانات + الكاش')); ?></div>
         </div>
       </div>
     </div>
@@ -326,19 +326,19 @@ html, body{
             </h5>
             <table class="table table-sm table-borderless table-health mb-1">
               <tr>
-                <th><?= h(__('t_8c0c06316b', 'الإصدار')) ?></th>
-                <td><?= h($checks['php_version']) ?></td>
+                <th><?php echo h(__('t_8c0c06316b', 'الإصدار')); ?></th>
+                <td><?php echo h($checks['php_version']); ?></td>
               </tr>
               <tr>
-                <th><?= h(__('t_0cc940b3e8', 'وضع التشغيل (SAPI)')) ?></th>
-                <td><?= h($checks['php_sapi']) ?></td>
+                <th><?php echo h(__('t_0cc940b3e8', 'وضع التشغيل (SAPI)')); ?></th>
+                <td><?php echo h($checks['php_sapi']); ?></td>
               </tr>
               <tr>
-                <th><?= h(__('t_1cdc416592', 'النظام')) ?></th>
-                <td><?= h($checks['os']) ?></td>
+                <th><?php echo h(__('t_1cdc416592', 'النظام')); ?></th>
+                <td><?php echo h($checks['os']); ?></td>
               </tr>
             </table>
-            <small class="text-muted">الوقت الحالي: <?= h($checks['now']) ?> (<?= h($checks['timezone']) ?>)</small>
+            <small class="text-muted">الوقت الحالي: <?php echo h($checks['now']); ?> (<?php echo h($checks['timezone']); ?>)</small>
           </div>
         </div>
       </div>
@@ -348,27 +348,27 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_fa678d5458', 'قاعدة البيانات')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_fa678d5458', 'قاعدة البيانات')); ?>
             </h5>
             <?php if ($checks['db_ok']): ?>
-              <span class="badge badge-health bg-success mb-2"><?= h(__('t_be7ec211f4', 'متصل')) ?></span>
+              <span class="badge badge-health bg-success mb-2"><?php echo h(__('t_be7ec211f4', 'متصل')); ?></span>
             <?php else: ?>
-              <span class="badge badge-health bg-danger mb-2"><?= h(__('t_dbf2299ec8', 'فشل الاتصال')) ?></span>
+              <span class="badge badge-health bg-danger mb-2"><?php echo h(__('t_dbf2299ec8', 'فشل الاتصال')); ?></span>
             <?php endif; ?>
 
             <table class="table table-sm table-borderless table-health mb-1">
               <tr>
-                <th><?= h(__('t_e1be0fd308', 'المحرك')) ?></th>
-                <td><?= h($checks['db_driver'] ?: __('t_6b5e6d57ba', 'غير معروف')) ?></td>
+                <th><?php echo h(__('t_e1be0fd308', 'المحرك')); ?></th>
+                <td><?php echo h($checks['db_driver'] ?: __('t_6b5e6d57ba', 'غير معروف')); ?></td>
               </tr>
               <tr>
-                <th><?= h(__('t_646ca15d4e', 'نسخة الخادم')) ?></th>
-                <td><?= h($checks['db_server'] ?: '-') ?></td>
+                <th><?php echo h(__('t_646ca15d4e', 'نسخة الخادم')); ?></th>
+                <td><?php echo h($checks['db_server'] ?: '-'); ?></td>
               </tr>
             </table>
 
             <?php if (!$checks['db_ok'] && $dbError): ?>
-              <p class="small text-warning mb-0">الخطأ: <?= h($dbError) ?></p>
+              <p class="small text-warning mb-0">الخطأ: <?php echo h($dbError); ?></p>
             <?php endif; ?>
           </div>
         </div>
@@ -379,18 +379,18 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title.text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a58f1e6aeb', 'نظام الكاش')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_a58f1e6aeb', 'نظام الكاش')); ?>
             </h5>
             <table class="table table-sm.table-borderless.table-health mb-1">
               <tr>
                 <th>Driver</th>
-                <td><?= h($checks['cache_driver']) ?></td>
+                <td><?php echo h($checks['cache_driver']); ?></td>
               </tr>
             </table>
             <?php if ($checks['cache_ok']): ?>
-              <span class="badge badge-health bg-success"><?= h(__('t_69bf6c3ec9', 'الكاش يعمل بشكل سليم')) ?></span>
+              <span class="badge badge-health bg-success"><?php echo h(__('t_69bf6c3ec9', 'الكاش يعمل بشكل سليم')); ?></span>
             <?php else: ?>
-              <span class="badge badge-health bg-warning text-dark"><?= h(__('t_e23c9778a3', 'الكاش غير مفعّل أو غير مستقر')) ?></span>
+              <span class="badge badge-health bg-warning text-dark"><?php echo h(__('t_e23c9778a3', 'الكاش غير مفعّل أو غير مستقر')); ?></span>
             <?php endif; ?>
           </div>
         </div>
@@ -404,28 +404,28 @@ html, body{
         <div class="card glass-card border-0 shadow-sm mb-3">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?php echo h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')); ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <tr>
                 <th>memory_limit</th>
-                <td><?= h($phpIni['memory_limit']) ?></td>
+                <td><?php echo h($phpIni['memory_limit']); ?></td>
               </tr>
               <tr>
                 <th>max_execution_time</th>
-                <td><?= h($phpIni['max_execution_time']) ?> ثانية</td>
+                <td><?php echo h($phpIni['max_execution_time']); ?> ثانية</td>
               </tr>
               <tr>
                 <th>upload_max_filesize</th>
-                <td><?= h($phpIni['upload_max_filesize']) ?></td>
+                <td><?php echo h($phpIni['upload_max_filesize']); ?></td>
               </tr>
               <tr>
                 <th>post_max_size</th>
-                <td><?= h($phpIni['post_max_size']) ?></td>
+                <td><?php echo h($phpIni['post_max_size']); ?></td>
               </tr>
               <tr>
                 <th>display_errors</th>
-                <td><?= h($phpIni['display_errors']) ?></td>
+                <td><?php echo h($phpIni['display_errors']); ?></td>
               </tr>
             </table>
           </div>
@@ -434,24 +434,24 @@ html, body{
         <div class="card glass-card border-0 shadow-sm">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1f71f9dd0d', 'معلومات البيئة')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_1f71f9dd0d', 'معلومات البيئة')); ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <tr>
                 <th>APP_ENV</th>
-                <td><?= h($appEnv) ?></td>
+                <td><?php echo h($appEnv); ?></td>
               </tr>
               <tr>
                 <th>APP_DEBUG</th>
-                <td><?= $appDebug ? 'ON' : 'OFF' ?></td>
+                <td><?php echo $appDebug ? 'ON' : 'OFF'; ?></td>
               </tr>
               <tr>
                 <th>APP_URL</th>
-                <td><?= $appUrl !== '' ? h($appUrl) : '-' ?></td>
+                <td><?php echo $appUrl !== '' ? h($appUrl) : '-'; ?></td>
               </tr>
               <tr>
                 <th>HTTPS</th>
-                <td><?= (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? __('t_918499f2af', 'مفعل') : __('t_60dfc10f77', 'غير مفعل') ?></td>
+                <td><?php echo (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? __('t_918499f2af', 'مفعل') : __('t_60dfc10f77', 'غير مفعل'); ?></td>
               </tr>
             </table>
           </div>
@@ -463,28 +463,28 @@ html, body{
         <div class="card glass-card border-0 shadow-sm h-100">
           <div class="card-body">
             <h5 class="card-title text-white">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6870d42f69', 'الملفات والصلاحيات')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_6870d42f69', 'الملفات والصلاحيات')); ?>
             </h5>
             <table class="table table-sm table-borderless table-health mb-0">
               <thead>
               <tr>
-                <th><?= h(__('t_3cc8aa6d79', 'المجلد')) ?></th>
-                <th><?= h(__('t_4f3d289eb3', 'المسار')) ?></th>
-                <th class="text-center"><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
+                <th><?php echo h(__('t_3cc8aa6d79', 'المجلد')); ?></th>
+                <th><?php echo h(__('t_4f3d289eb3', 'المسار')); ?></th>
+                <th class="text-center"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
               </tr>
               </thead>
               <tbody>
               <?php foreach ($fsChecks as $fs): ?>
                   <tr>
-                    <td><?= h($fs['label']) ?></td>
-                    <td><small><?= h($fs['path']) ?></small></td>
+                    <td><?php echo h($fs['label']); ?></td>
+                    <td><small><?php echo h($fs['path']); ?></small></td>
                     <td class="text-center">
                       <?php if (!$fs['exists']): ?>
-                        <span class="badge badge-bad"><?= h(__('t_bf016f0ee1', 'غير موجود')) ?></span>
+                        <span class="badge badge-bad"><?php echo h(__('t_bf016f0ee1', 'غير موجود')); ?></span>
                       <?php elseif ($fs['writable']): ?>
-                        <span class="badge badge-ok"><?= h(__('t_66602b5188', 'قابل للكتابة')) ?></span>
+                        <span class="badge badge-ok"><?php echo h(__('t_66602b5188', 'قابل للكتابة')); ?></span>
                       <?php else: ?>
-                        <span class="badge badge-warn"><?= h(__('t_10ae42e443', 'غير قابل للكتابة')) ?></span>
+                        <span class="badge badge-warn"><?php echo h(__('t_10ae42e443', 'غير قابل للكتابة')); ?></span>
                       <?php endif; ?>
                     </td>
                   </tr>

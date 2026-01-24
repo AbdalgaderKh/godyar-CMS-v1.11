@@ -51,77 +51,77 @@ $indexnow_key_location = (string)settings_get('seo.indexnow_key_location', '');
     <div class="col-md-9">
       <div class="card p-4">
 <?php if ($notice): ?>
-          <div class="alert alert-success"><?= h($notice) ?></div>
+          <div class="alert alert-success"><?php echo h($notice); ?></div>
         <?php endif; ?>
         <?php if ($error): ?>
-          <div class="alert alert-danger"><?= h($error) ?></div>
+          <div class="alert alert-danger"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post">
           <?php if (function_exists('csrf_token')): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_79dc36c355', 'Meta Title (عنوان افتراضي)')) ?></label>
-            <input class="form-control" name="meta_title" value="<?= h($meta_title) ?>">
+            <label class="form-label"><?php echo h(__('t_79dc36c355', 'Meta Title (عنوان افتراضي)')); ?></label>
+            <input class="form-control" name="meta_title" value="<?php echo h($meta_title); ?>">
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_eff8e0d67a', 'Meta Description (وصف افتراضي)')) ?></label>
-            <textarea class="form-control" rows="3" name="meta_description"><?= h($meta_description) ?></textarea>
+            <label class="form-label"><?php echo h(__('t_eff8e0d67a', 'Meta Description (وصف افتراضي)')); ?></label>
+            <textarea class="form-control" rows="3" name="meta_description"><?php echo h($meta_description); ?></textarea>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_95481e62d6', 'Meta Keywords (اختياري)')) ?></label>
-            <input class="form-control" name="meta_keywords" value="<?= h($meta_keywords) ?>">
+            <label class="form-label"><?php echo h(__('t_95481e62d6', 'Meta Keywords (اختياري)')); ?></label>
+            <input class="form-control" name="meta_keywords" value="<?php echo h($meta_keywords); ?>">
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_32769a7187', 'OG Image (رابط صورة مشاركة)')) ?></label>
-            <input class="form-control" name="og_image" value="<?= h($og_image) ?>">
-            <div class="form-text"><?= h(__('t_f19157842d', 'يمكن استخدام مسار من مكتبة الوسائط أو رابط مباشر.')) ?></div>
+            <label class="form-label"><?php echo h(__('t_32769a7187', 'OG Image (رابط صورة مشاركة)')); ?></label>
+            <input class="form-control" name="og_image" value="<?php echo h($og_image); ?>">
+            <div class="form-text"><?php echo h(__('t_f19157842d', 'يمكن استخدام مسار من مكتبة الوسائط أو رابط مباشر.')); ?></div>
           </div>
 
           <div class="row">
             <div class="col-md-7 mb-3">
-              <label class="form-label"><?= h(__('t_7d3e93eac6', 'Robots')) ?></label>
-              <input class="form-control" name="robots" value="<?= h($robots) ?>">
-              <div class="form-text"><?= h(__('t_a8399bb5d7', 'مثال: index,follow أو noindex,nofollow')) ?></div>
+              <label class="form-label"><?php echo h(__('t_7d3e93eac6', 'Robots')); ?></label>
+              <input class="form-control" name="robots" value="<?php echo h($robots); ?>">
+              <div class="form-text"><?php echo h(__('t_a8399bb5d7', 'مثال: index,follow أو noindex,nofollow')); ?></div>
             </div>
             <div class="col-md-5 mb-3">
-              <label class="form-label"><?= h(__('t_33a60bd5bd', 'Canonical (اختياري)')) ?></label>
-              <input class="form-control" name="canonical" value="<?= h($canonical) ?>">
+              <label class="form-label"><?php echo h(__('t_33a60bd5bd', 'Canonical (اختياري)')); ?></label>
+              <input class="form-control" name="canonical" value="<?php echo h($canonical); ?>">
             </div>
           </div>
 
           
           <hr class="my-4">
 
-          <h6 class="mb-3"><?= h(__('t_idxnow_001', 'IndexNow (إشعار محركات البحث عند نشر خبر)')) ?></h6>
+          <h6 class="mb-3"><?php echo h(__('t_idxnow_001', 'IndexNow (إشعار محركات البحث عند نشر خبر)')); ?></h6>
 
           <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="indexnow_enabled" name="indexnow_enabled" value="1" <?= ($indexnow_enabled === '1' ? 'checked' : '') ?>>
-            <label class="form-check-label" for="indexnow_enabled"><?= h(__('t_idxnow_002', 'تفعيل IndexNow')) ?></label>
+            <input class="form-check-input" type="checkbox" id="indexnow_enabled" name="indexnow_enabled" value="1" <?php echo ($indexnow_enabled === '1' ? 'checked' : ''); ?>>
+            <label class="form-check-label" for="indexnow_enabled"><?php echo h(__('t_idxnow_002', 'تفعيل IndexNow')); ?></label>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_idxnow_003', 'IndexNow Key')) ?></label>
-            <input class="form-control" name="indexnow_key" value="<?= h($indexnow_key) ?>" placeholder="ضع المفتاح هنا">
-            <div class="form-text"><?= h(__('t_idxnow_004', 'سيتم نشر المفتاح تلقائياً على الرابط: /indexnow-key.txt')) ?></div>
+            <label class="form-label"><?php echo h(__('t_idxnow_003', 'IndexNow Key')); ?></label>
+            <input class="form-control" name="indexnow_key" value="<?php echo h($indexnow_key); ?>" placeholder="ضع المفتاح هنا">
+            <div class="form-text"><?php echo h(__('t_idxnow_004', 'سيتم نشر المفتاح تلقائياً على الرابط: /indexnow-key.txt')); ?></div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_idxnow_005', 'Key Location (اختياري)')) ?></label>
-            <input class="form-control" name="indexnow_key_location" value="<?= h($indexnow_key_location) ?>" placeholder="<?= h(rtrim((string)base_url(), '/')) ?>/indexnow-key.txt">
+            <label class="form-label"><?php echo h(__('t_idxnow_005', 'Key Location (اختياري)')); ?></label>
+            <input class="form-control" name="indexnow_key_location" value="<?php echo h($indexnow_key_location); ?>" placeholder="<?php echo h(rtrim((string)base_url(), '/')); ?>/indexnow-key.txt">
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_idxnow_006', 'Endpoint (اختياري)')) ?></label>
-            <input class="form-control" name="indexnow_endpoint" value="<?= h($indexnow_endpoint) ?>" placeholder="https://api.indexnow.org/indexnow">
+            <label class="form-label"><?php echo h(__('t_idxnow_006', 'Endpoint (اختياري)')); ?></label>
+            <input class="form-control" name="indexnow_endpoint" value="<?php echo h($indexnow_endpoint); ?>" placeholder="https://api.indexnow.org/indexnow">
           </div>
 
-<button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+<button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </form>
       </div>
     </div>

@@ -32,7 +32,7 @@ if (function_exists('gdy_img_src') === false) {
             <div class="section-title">الأخبار الأكثر تداولاً</div>
             <div class="section-sub">أكثر الأخبار مشاهدة وقراءة من قبل الزوار</div>
         </div>
-        <a href="<?= h($baseUrl) ?>" class="section-sub">
+        <a href="<?php echo h($baseUrl); ?>" class="section-sub">
             العودة للرئيسية
         </a>
     </div>
@@ -42,22 +42,22 @@ if (function_exists('gdy_img_src') === false) {
             <?php foreach ($trendingNews as $row): ?>
                 <article class="news-card fade-in">
                     <?php if (!empty($row['featured_image'])): ?>
-                        <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
-                            <img src="<?= htmlspecialchars(gdy_img_src($row['featured_image'] ?? ''), ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="<?= htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+                        <a href="<?php echo h($newsUrl($row)); ?>" class="news-thumb">
+                            <img src="<?php echo htmlspecialchars(gdy_img_src($row['featured_image'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                                 alt="<?php echo htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>">
                         </a>
                     <?php endif; ?>
                     <div class="news-body">
-                        <a href="<?= h($newsUrl($row)) ?>">
-                            <h3><?= htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8') ?></h3>
+                        <a href="<?php echo h($newsUrl($row)); ?>">
+                            <h3><?php echo htmlspecialchars((string)($row['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></h3>
                         </a>
                         <?php if (!empty($row['excerpt'])): ?>
-                            <p class="news-excerpt"><?= htmlspecialchars((string)$row['excerpt'], ENT_QUOTES, 'UTF-8') ?></p>
+                            <p class="news-excerpt"><?php echo htmlspecialchars((string)$row['excerpt'], ENT_QUOTES, 'UTF-8'); ?></p>
                         <?php endif; ?>
                         <div class="news-meta">
-                            <span><?= htmlspecialchars((string)($row['views'] ?? 0), ENT_QUOTES, 'UTF-8') ?> مشاهدة</span>
+                            <span><?php echo htmlspecialchars((string)($row['views'] ?? 0), ENT_QUOTES, 'UTF-8'); ?> مشاهدة</span>
                             <?php if (!empty($row['publish_at'])): ?>
-                                <span><?= htmlspecialchars((string)$row['publish_at'], ENT_QUOTES, 'UTF-8') ?></span>
+                                <span><?php echo htmlspecialchars((string)$row['publish_at'], ENT_QUOTES, 'UTF-8'); ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -73,7 +73,7 @@ if (function_exists('gdy_img_src') === false) {
             <p style="color: var(--text-muted); margin-top: 10px;">
                 سيتم عرض الأخبار الأكثر مشاهدة هنا تلقائياً بعد وجود زيارات كافية.
             </p>
-            <a href="<?= h($baseUrl) ?>" class="btn-primary" style="margin-top: 15px;">
+            <a href="<?php echo h($baseUrl); ?>" class="btn-primary" style="margin-top: 15px;">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>العودة للرئيسية</span>
             </a>

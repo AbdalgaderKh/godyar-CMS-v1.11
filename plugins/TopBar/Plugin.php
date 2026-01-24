@@ -96,12 +96,12 @@ return new class implements GodyarPluginInterface {
         ?>
         <div
           id="godyar-topbar"
-          style="<?= htmlspecialchars($positionCss, ENT_QUOTES, 'UTF-8') ?>background:<?= htmlspecialchars($bg, ENT_QUOTES, 'UTF-8') ?>;color:<?= htmlspecialchars($txt, ENT_QUOTES, 'UTF-8') ?>;padding:8px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;">
+          style="<?php echo htmlspecialchars($positionCss, ENT_QUOTES, 'UTF-8'); ?>background:<?php echo htmlspecialchars($bg, ENT_QUOTES, 'UTF-8'); ?>;color:<?php echo htmlspecialchars($txt, ENT_QUOTES, 'UTF-8'); ?>;padding:8px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;">
           <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;">
             <div style="display:flex;align-items:center;gap:8px;flex:1;">
               <span style="font-size:16px;">📢</span>
               <div style="line-height:1.4;">
-                <?= $msg // يُفضل تعديله من لوحة التحكم بنص موثوق ?>
+                <?php echo $msg // يُفضل تعديله من لوحة التحكم بنص موثوق; ?>
               </div>
             </div>
             <?php if ((empty($clos) === false)): ?>
@@ -122,7 +122,7 @@ return new class implements GodyarPluginInterface {
           const bar   = document.getElementById('godyar-topbar');
           if (!bar) return;
 
-          const key   = '<?= $storageKey ?>';
+          const key   = '<?php echo $storageKey; ?>';
 
           try {
             if (window.localStorage && localStorage.getItem(key) === '1') {

@@ -113,7 +113,7 @@ if (!empty($headerFile) && is_file($headerFile)) {
         
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-        <title><?= h($pageTitle) ?></title>
+        <title><?php echo h($pageTitle); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
     </head>
@@ -131,7 +131,7 @@ if (!empty($headerFile) && is_file($headerFile)) {
 <main class="container my-4">
     <div class="row gy-3">
         <!-- عمود المحتوى الرئيسي -->
-        <div class="<?= $sidebarHidden ? 'col-12' : 'col-lg-8' ?>">
+        <div class="<?php echo $sidebarHidden ? 'col-12' : 'col-lg-8'; ?>">
             <?php if ($notFound): ?>
                 <div class="alert alert-warning rounded-3">
                     <h2 class="h5.mb-2">التصنيف غير موجود</h2>
@@ -142,13 +142,13 @@ if (!empty($headerFile) && is_file($headerFile)) {
                     <h2 class="h4 mb-1">
                         تصنيف الأخبار:
                         <span class="text-info">
-                            <?= h($category['name'] ?? $slug) ?>
+                            <?php echo h($category['name'] ?? $slug); ?>
                         </span>
                     </h2>
 
                     <?php if (!empty($category['description'])): ?>
                         <p class="text-muted small mb-3">
-                            <?= h($category['description']) ?>
+                            <?php echo h($category['description']); ?>
                         </p>
                     <?php else: ?>
                         <p class="text-muted small mb-3">
@@ -168,21 +168,21 @@ if (!empty($headerFile) && is_file($headerFile)) {
                                 $views = isset($row['views']) ? (int)$row['views'] : null;
                                 $newsUrl = $buildNewsUrl($row);
                             ?>
-                            <a href="<?= h($newsUrl) ?>"
+                            <a href="<?php echo h($newsUrl); ?>"
                                class="list-group-item list-group-item-action border-0 mb-2 rounded-3 shadow-sm">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h3 class="h6 mb-1"><?= h($title) ?></h3>
+                                    <h3 class="h6 mb-1"><?php echo h($title); ?></h3>
                                     <?php if ($date): ?>
                                         <small class="text-muted ms-2">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            <?= h($date) ?>
+                                            <?php echo h($date); ?>
                                         </small>
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($views !== null): ?>
                                     <small class="text-muted">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                        <?= number_format($views) ?> مشاهدة
+                                        <?php echo number_format($views); ?> مشاهدة
                                     </small>
                                 <?php endif; ?>
                             </a>
@@ -217,7 +217,7 @@ if (!empty($footerFile) && is_file($footerFile)) {
 } else {
     ?>
     <footer class="border-top border-secondary mt-4 py-3 text-center small text-muted">
-        &copy; <?= date('Y') ?> Godyar News
+        &copy; <?php echo date('Y'); ?> Godyar News
     </footer>
     </body>
     </html>

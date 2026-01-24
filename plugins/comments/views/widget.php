@@ -215,28 +215,28 @@ $renderNode = function(int $id, int $depth = 0) use (&$renderNode, $byId, $child
     $isAdmin = (int)($row['is_admin'] ?? 0) === 1;
     $pad = min(42, $depth * 14);
     ?>
-    <div class="gdy-item" style="margin-right: <?= (int)$pad ?>px;">
+    <div class="gdy-item" style="margin-right: <?php echo (int)$pad; ?>px;">
       <div class="gdy-row" style="align-items:flex-start">
-        <div class="gdy-avatar"><?= h(gdy_comments_initials($name)) ?></div>
+        <div class="gdy-avatar"><?php echo h(gdy_comments_initials($name)); ?></div>
         <div class="gdy-box">
           <div class="gdy-item-head">
             <div class="gdy-item-name">
-              <?= h($name) ?>
+              <?php echo h($name); ?>
               <?php if ($isAdmin): ?>
                 <span class="gdy-badge">رد الإدارة</span>
               <?php endif; ?>
             </div>
-            <div class="gdy-item-date"><?= h((string)($row['created_at'] ?? '')) ?></div>
+            <div class="gdy-item-date"><?php echo h((string)($row['created_at'] ?? '')); ?></div>
           </div>
-          <div class="gdy-item-body"><?= nl2br(h((string)($row['body'] ?? '')), false) ?></div>
+          <div class="gdy-item-body"><?php echo nl2br(h((string)($row['body'] ?? '')), false); ?></div>
 
           <div class="gdy-item-actions">
             <details class="gdy-reply-details">
               <summary class="gdy-reply-summary">رد</summary>
               <form method="post" class="gdy-reply-form">
-                <?= $csrf_field_html ?>
+                <?php echo $csrf_field_html; ?>
                 <input type="hidden" name="_gdy_comments_submit" value="1">
-                <input type="hidden" name="parent_id" value="<?= (int)$id ?>">
+                <input type="hidden" name="parent_id" value="<?php echo (int)$id; ?>">
                 <textarea class="gdy-textarea" name="body" required minlength="2" maxlength="2000" placeholder="اكتب ردك (نص فقط)"></textarea>
                 <div class="gdy-actions">
                   <button class="gdy-btn" type="submit">إرسال الرد</button>
@@ -296,16 +296,16 @@ $commentsCount = (int)($commentsCount ?? count($approved));
 <section class="gdy-card mt-3">
   <div class="gdy-head">
     <div class="gdy-title">النقاش</div>
-    <div style="color:#64748b;font-size:13px">التعليقات (<?= (int)$commentsCount ?>)</div>
+    <div style="color:#64748b;font-size:13px">التعليقات (<?php echo (int)$commentsCount; ?>)</div>
   </div>
   <div class="gdy-sub">كن أول من يشارك رأيه في هذا الخبر</div>
 
   <div class="gdy-body">
     <div class="gdy-row">
-      <div class="gdy-avatar"><?= h(gdy_comments_initials((string)($_SESSION['gdy_display_name'] ?? 'زائر'))) ?></div>
+      <div class="gdy-avatar"><?php echo h(gdy_comments_initials((string)($_SESSION['gdy_display_name'] ?? 'زائر'))); ?></div>
       <div class="gdy-box">
         <form method="post">
-          <?= $csrf_field_html ?>
+          <?php echo $csrf_field_html; ?>
           <input type="hidden" name="_gdy_comments_submit" value="1">
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
             <input class="gdy-textarea" style="min-height:auto;height:44px" type="text" name="author_name" placeholder="الاسم (اختياري)" maxlength="150">
@@ -319,7 +319,7 @@ $commentsCount = (int)($commentsCount ?? count($approved));
         </form>
 
         <?php if (is_array($flash)): ?>
-          <div class="gdy-flash <?= h($flash['type'] ?? 'success') ?>"><?= h($flash['msg'] ?? '') ?></div>
+          <div class="gdy-flash <?php echo h($flash['type'] ?? 'success'); ?>"><?php echo h($flash['msg'] ?? ''); ?></div>
         <?php endif; ?>
 
         <div class="gdy-list">

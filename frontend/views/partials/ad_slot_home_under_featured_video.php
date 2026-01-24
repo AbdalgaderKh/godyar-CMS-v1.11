@@ -48,5 +48,5 @@ if ($__adHtml === '') {
 </style>
 
 <div class="hm-under-featured-ad" aria-label="Advertisement">
-  <?= $__adHtml ?>
+  <?php echo $__adHtml; ?>
 </div>

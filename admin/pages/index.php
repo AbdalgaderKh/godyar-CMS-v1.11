@@ -363,18 +363,18 @@ html, body {
   <div class="gdy-layout-wrap">
   <div class="gdy-page-header d-flex justify-content-between align-items-center.mb-3 flex-wrap gap-2">
     <div>
-      <h1 class="h4 text-white mb-1"><?= h(__('t_0046fa59f3', 'الصفحات الثابتة')) ?></h1>
+      <h1 class="h4 text-white mb-1"><?php echo h(__('t_0046fa59f3', 'الصفحات الثابتة')); ?></h1>
       <p class="text-muted mb-0 small">
-        <?= h(__('t_89b58b47e8', 'إدارة صفحات مثل من نحن، اتصل بنا، الشروط، الخصوصية...')) ?>
+        <?php echo h(__('t_89b58b47e8', 'إدارة صفحات مثل من نحن، اتصل بنا، الشروط، الخصوصية...')); ?>
       </p>
     </div>
     <div class="d-flex align-items-center gap-2 flex-wrap">
       <div class="badge bg-primary-subtle text-info-emphasis border.border-primary-subtle small px-3 py-2">
         <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-        <span>إجمالي: <?= number_format($statsPages['total']) ?> صفحة</span>
+        <span>إجمالي: <?php echo number_format($statsPages['total']); ?> صفحة</span>
       </div>
       <a href="create.php" class="btn btn-sm btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_2a1b455803', 'صفحة جديدة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_2a1b455803', 'صفحة جديدة')); ?>
       </a>
     </div>
   </div>
@@ -387,11 +387,11 @@ html, body {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
-          <div class="gdy-pages-stat-label"><?= h(__('t_eb1400e221', 'إجمالي الصفحات')) ?></div>
-          <div class="gdy-pages-stat-value"><?= number_format($statsPages['total']) ?></div>
+          <div class="gdy-pages-stat-label"><?php echo h(__('t_eb1400e221', 'إجمالي الصفحات')); ?></div>
+          <div class="gdy-pages-stat-value"><?php echo number_format($statsPages['total']); ?></div>
         </div>
       </div>
-      <div class="gdy-pages-stat-tag"><?= h(__('t_de3c9734aa', 'كل الصفحات')) ?></div>
+      <div class="gdy-pages-stat-tag"><?php echo h(__('t_de3c9734aa', 'كل الصفحات')); ?></div>
     </div>
 
     <div class="gdy-pages-stat">
@@ -400,11 +400,11 @@ html, body {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
-          <div class="gdy-pages-stat-label"><?= h(__('t_da9181305e', 'صفحات منشورة')) ?></div>
-          <div class="gdy-pages-stat-value"><?= number_format($statsPages['published']) ?></div>
+          <div class="gdy-pages-stat-label"><?php echo h(__('t_da9181305e', 'صفحات منشورة')); ?></div>
+          <div class="gdy-pages-stat-value"><?php echo number_format($statsPages['published']); ?></div>
         </div>
       </div>
-      <div class="gdy-pages-stat-tag"><?= h(__('t_d4737d83ce', 'ظاهرة في الموقع')) ?></div>
+      <div class="gdy-pages-stat-tag"><?php echo h(__('t_d4737d83ce', 'ظاهرة في الموقع')); ?></div>
     </div>
 
     <div class="gdy-pages-stat">
@@ -413,34 +413,34 @@ html, body {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="gdy-pages-stat-text">
-          <div class="gdy-pages-stat-label"><?= h(__('t_7b17ab78a5', 'مسودات')) ?></div>
-          <div class="gdy-pages-stat-value"><?= number_format($statsPages['draft']) ?></div>
+          <div class="gdy-pages-stat-label"><?php echo h(__('t_7b17ab78a5', 'مسودات')); ?></div>
+          <div class="gdy-pages-stat-value"><?php echo number_format($statsPages['draft']); ?></div>
         </div>
       </div>
-      <div class="gdy-pages-stat-tag"><?= h(__('t_5cde709cef', 'تحت التجهيز')) ?></div>
+      <div class="gdy-pages-stat-tag"><?php echo h(__('t_5cde709cef', 'تحت التجهيز')); ?></div>
     </div>
   </div>
 
   <?php if (!empty($_GET['saved'])): ?>
-    <div class="alert alert-success py-2"><?= h(__('t_ec9c600345', 'تم حفظ الصفحة بنجاح.')) ?></div>
+    <div class="alert alert-success py-2"><?php echo h(__('t_ec9c600345', 'تم حفظ الصفحة بنجاح.')); ?></div>
   <?php elseif (!empty($_GET['deleted'])): ?>
-    <div class="alert alert-success py-2"><?= h(__('t_8e3da1b7c5', 'تم حذف الصفحة بنجاح.')) ?></div>
+    <div class="alert alert-success py-2"><?php echo h(__('t_8e3da1b7c5', 'تم حذف الصفحة بنجاح.')); ?></div>
   <?php elseif (!empty($_GET['error'])): ?>
-    <div class="alert alert-danger py-2"><?= h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')) ?></div>
+    <div class="alert alert-danger py-2"><?php echo h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')); ?></div>
   <?php endif; ?>
 
   <!-- شريط فلترة الحالة + البحث -->
   <div class="gdy-filter-bar mb-3">
     <form class="row g-2 align-items-center" method="get" action="">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
       <div class="col-md-4 col-sm-12">
         <input
           type="text"
           name="q"
-          value="<?= h($search) ?>"
+          value="<?php echo h($search); ?>"
           class="form-control.form-control-sm bg-dark border-secondary text-light"
-          placeholder="<?= h(__('t_6263c20317', 'بحث في عنوان الصفحة أو الـ slug...')) ?>"
+          placeholder="<?php echo h(__('t_6263c20317', 'بحث في عنوان الصفحة أو الـ slug...')); ?>"
         >
       </div>
       <div class="col-md-5 col-sm-12">
@@ -449,27 +449,27 @@ html, body {
             $baseLink = '?q=' . urlencode($search);
           ?>
           <li class="nav-item">
-            <a class="nav-link <?= $statusFilter === 'all' ? 'active' : '' ?>"
-               href="<?= $baseLink ?>&status=all">
-              <?= h(__('t_6d08f19681', 'الكل')) ?>
+            <a class="nav-link <?php echo $statusFilter === 'all' ? 'active' : ''; ?>"
+               href="<?php echo $baseLink; ?>&status=all">
+              <?php echo h(__('t_6d08f19681', 'الكل')); ?>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link <?= $statusFilter === 'published' ? 'active' : '' ?>"
-               href="<?= $baseLink ?>&status=published">
-              <?= h(__('t_c67d973434', 'منشورة')) ?>
+            <a class="nav-link <?php echo $statusFilter === 'published' ? 'active' : ''; ?>"
+               href="<?php echo $baseLink; ?>&status=published">
+              <?php echo h(__('t_c67d973434', 'منشورة')); ?>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link <?= $statusFilter === 'draft' ? 'active' : '' ?>"
-               href="<?= $baseLink ?>&status=draft">
-              <?= h(__('t_7b17ab78a5', 'مسودات')) ?>
+            <a class="nav-link <?php echo $statusFilter === 'draft' ? 'active' : ''; ?>"
+               href="<?php echo $baseLink; ?>&status=draft">
+              <?php echo h(__('t_7b17ab78a5', 'مسودات')); ?>
             </a>
           </li>
         </ul>
       </div>
       <div class="col-md-3 col-sm-12 text-md-end text-start small.text-muted">
-        <span><?= h(__('t_c6a5fe1902', 'عدد النتائج:')) ?> <strong><?= number_format($totalRows) ?></strong></span>
+        <span><?php echo h(__('t_c6a5fe1902', 'عدد النتائج:')); ?> <strong><?php echo number_format($totalRows); ?></strong></span>
       </div>
     </form>
   </div>
@@ -477,24 +477,24 @@ html, body {
   <!-- كارت الجدول -->
   <div class="card gdy-card">
     <div class="gdy-card-header d-flex justify-content-between align-items-center">
-      <span><?= h(__('t_d60941d5b3', 'قائمة الصفحات')) ?></span>
-      <small class="text-muted"><?= h(__('t_2f56b62be0', 'إدارة الصفحات الثابتة للموقع')) ?></small>
+      <span><?php echo h(__('t_d60941d5b3', 'قائمة الصفحات')); ?></span>
+      <small class="text-muted"><?php echo h(__('t_2f56b62be0', 'إدارة الصفحات الثابتة للموقع')); ?></small>
     </div>
     <div class="card-body p-0">
       <?php if (empty($pages)): ?>
-        <p class="p-3 mb-0 text-muted"><?= h(__('t_5c2345720e', 'لا توجد صفحات بعد. ابدأ بإنشاء صفحة جديدة.')) ?></p>
+        <p class="p-3 mb-0 text-muted"><?php echo h(__('t_5c2345720e', 'لا توجد صفحات بعد. ابدأ بإنشاء صفحة جديدة.')); ?></p>
       <?php else: ?>
         <div class="table-responsive">
           <table class="table table-hover.mb-0 align-middle text-center table-pages">
             <thead>
               <tr>
                 <th style="width: 60px;">#</th>
-                <th class="text-start"><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
+                <th class="text-start"><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
                 <th>Slug</th>
-                <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                <th><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></th>
-                <th><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></th>
-                <th style="width: 210px;"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                <th><?php echo h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')); ?></th>
+                <th><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></th>
+                <th style="width: 210px;"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
               </tr>
             </thead>
             <tbody>
@@ -514,47 +514,47 @@ html, body {
                   $frontUrl = front_page_url($row);
                 ?>
                 <tr>
-                  <td><?= $id ?></td>
+                  <td><?php echo $id; ?></td>
                   <td class="text-start">
-                    <div class="fw-semibold"><?= h($title) ?></div>
+                    <div class="fw-semibold"><?php echo h($title); ?></div>
                     <div class="small text-muted">
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                      <span><?= h($dateShown) ?></span>
+                      <span><?php echo h($dateShown); ?></span>
                     </div>
                   </td>
                   <td>
-                    <code class="small"><?= h($slug) ?></code>
+                    <code class="small"><?php echo h($slug); ?></code>
                   </td>
                   <td>
-                    <span class="badge-status <?= $statusClass ?>">
-                      <?= h($label) ?>
+                    <span class="badge-status <?php echo $statusClass; ?>">
+                      <?php echo h($label); ?>
                     </span>
                   </td>
-                  <td><small><?= h($createdAt) ?></small></td>
-                  <td><small><?= h($updatedAt) ?></small></td>
+                  <td><small><?php echo h($createdAt); ?></small></td>
+                  <td><small><?php echo h($updatedAt); ?></small></td>
                   <td>
                     <div class="d-flex justify-content-center gap-1 flex-wrap">
-                      <a href="<?= h($frontUrl) ?>" target="_blank"
+                      <a href="<?php echo h($frontUrl); ?>" target="_blank"
                          class="btn btn-sm btn-outline-info btn-icon"
-                         title="<?= h(__('t_ac5402edac', 'عرض في الموقع')) ?>">
+                         title="<?php echo h(__('t_ac5402edac', 'عرض في الموقع')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
-                      <a href="edit.php?id=<?= $id ?>"
+                      <a href="edit.php?id=<?php echo $id; ?>"
                          class="btn btn-sm btn-outline-primary btn-icon"
-                         title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                         title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <button
                         type="button"
                         class="btn btn-sm btn-outline-secondary btn-icon btn-copy-slug"
-                        data-slug="<?= h($slug) ?>"
-                        title="<?= h(__('t_2c7a36f6dc', 'نسخ الـ Slug')) ?>">
+                        data-slug="<?php echo h($slug); ?>"
+                        title="<?php echo h(__('t_2c7a36f6dc', 'نسخ الـ Slug')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </button>
-                      <a href="delete.php?id=<?= $id ?>"
+                      <a href="delete.php?id=<?php echo $id; ?>"
                          class="btn btn-sm btn-outline-danger btn-icon"
                          data-confirm='هل أنت متأكد من حذف هذه الصفحة؟'
-                         title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                         title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                     </div>
@@ -570,17 +570,17 @@ html, body {
     <div class="gdy-table-footer">
       <div>
         <?php if ($totalRows > 0): ?>
-          <span>عرض <?= count($pages) ?> من أصل <?= number_format($totalRows) ?> صفحة.</span>
+          <span>عرض <?php echo count($pages); ?> من أصل <?php echo number_format($totalRows); ?> صفحة.</span>
         <?php endif; ?>
       </div>
       <?php if ($totalPages > 1): ?>
         <nav>
           <ul class="pagination.pagination-sm justify-content-end mb-0">
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-              <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+              <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
                 <a class="page-link"
-                   href="?page=<?= $i ?>&amp;q=<?= urlencode($search) ?>&amp;status=<?= urlencode($statusFilter) ?>">
-                  <?= $i ?>
+                   href="?page=<?php echo $i; ?>&amp;q=<?php echo urlencode($search); ?>&amp;status=<?php echo urlencode($statusFilter); ?>">
+                  <?php echo $i; ?>
                 </a>
               </li>
             <?php endfor; ?>

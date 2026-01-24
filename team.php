@@ -409,12 +409,12 @@ require __DIR__ . '/frontend/views/partials/header.php';
               <div class="team-card">
                 <div class="team-card-index">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span>#<?= (int)$i ?></span>
+                  <span>#<?php echo (int)$i; ?></span>
                 </div>
 
                 <div class="team-card-img-wrapper">
                   <?php if (!empty($photo)): ?>
-                    <img src="<?= h($photo) ?>" alt="<?= h($name) ?>">
+                    <img src="<?php echo h($photo); ?>" alt="<?php echo h($name); ?>">
                   <?php else: ?>
                     <div class="d-flex align-items-center justify-content-center" style="width:100%;height:100%;">
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
@@ -424,25 +424,25 @@ require __DIR__ . '/frontend/views/partials/header.php';
 
                 <div class="team-card-body">
                   <?php if ($name): ?>
-                    <div class="team-name"><?= h($name) ?></div>
+                    <div class="team-name"><?php echo h($name); ?></div>
                   <?php endif; ?>
 
                   <?php if ($position): ?>
                     <div class="team-position">
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                      <span><?= h($position) ?></span>
+                      <span><?php echo h($position); ?></span>
                     </div>
                   <?php endif; ?>
 
                   <?php if ($email): ?>
                     <div class="team-email">
                       <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                      <a href="mailto:<?= h($email) ?>"><?= h($email) ?></a>
+                      <a href="mailto:<?php echo h($email); ?>"><?php echo h($email); ?></a>
                     </div>
                   <?php endif; ?>
 
                   <?php if ($bioShort): ?>
-                    <p class="team-bio"><?= nl2br(h($bioShort)) ?></p>
+                    <p class="team-bio"><?php echo nl2br(h($bioShort)); ?></p>
                   <?php endif; ?>
 
                   <div class="team-footer-tag">

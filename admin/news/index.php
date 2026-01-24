@@ -500,7 +500,7 @@ html, body {
   text-overflow: ellipsis;
 }
 
-/* شارة <?= h(__('t_1253eb5642', 'الحالة')) ?> */
+/* شارة <?php echo h(__('t_1253eb5642', 'الحالة')); ?> */
 .badge-status {
   font-size: .7rem;
   padding: .25rem .6rem;
@@ -532,7 +532,7 @@ html, body {
   border: 1px solid rgba(107,114,128,0.55);
 }
 
-/* أزرار ال<?= h(__('t_901efe9b1c', 'إجراءات')) ?> */
+/* أزرار ال<?php echo h(__('t_901efe9b1c', 'إجراءات')); ?> */
 .btn-icon {
   width: 30px;
   height: 30px;
@@ -583,25 +583,25 @@ html, body {
 
     <div class="gdy-page-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
       <div>
-        <h1 class="h4 mb-1 text-white"><?= h(__('t_e06a9f8f17', 'إدارة الأخبار')) ?></h1>
-	        <p class="mb-0 small"><?= h(__('t_8403e3b222', 'إضافة وتعديل وحذف الأخبار المنشورة في الموقع.')) ?></p>
+        <h1 class="h4 mb-1 text-white"><?php echo h(__('t_e06a9f8f17', 'إدارة الأخبار')); ?></h1>
+	        <p class="mb-0 small"><?php echo h(__('t_8403e3b222', 'إضافة وتعديل وحذف الأخبار المنشورة في الموقع.')); ?></p>
       </div>
       <div class="d-flex gap-2 flex-wrap">
         <a href="create.php" class="btn btn-primary btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_0d1f6ecf66', 'إضافة خبر جديد')); ?>
         </a>
         <a href="translations.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?= h('ترجمات') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?php echo h('ترجمات'); ?>
         </a>
         <a href="polls.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h('استطلاعات') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h('استطلاعات'); ?>
         </a>
         <a href="questions.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h('أسئلة القرّاء') ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h('أسئلة القرّاء'); ?>
         </a>
         <?php if (!$isWriter): ?>
         <a href="trash.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_e92d1bf1e5', 'سلة المحذوفات')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_e92d1bf1e5', 'سلة المحذوفات')); ?>
         </a>
         <?php endif; ?>
       </div>
@@ -615,12 +615,12 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           </div>
           <div>
-            <div class="gdy-stat-pill-label"><?= h(__('t_93e37eb4e5', 'إجمالي الأخبار')) ?></div>
-            <div class="gdy-stat-pill-value"><?= number_format($stats['total']) ?></div>
+            <div class="gdy-stat-pill-label"><?php echo h(__('t_93e37eb4e5', 'إجمالي الأخبار')); ?></div>
+            <div class="gdy-stat-pill-value"><?php echo number_format($stats['total']); ?></div>
           </div>
         </div>
         <div class="gdy-stat-pill-tag">
-          <?= h(__('t_6d08f19681', 'الكل')) ?>
+          <?php echo h(__('t_6d08f19681', 'الكل')); ?>
         </div>
       </div>
 
@@ -630,12 +630,12 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
-	            <div class="gdy-stat-pill-label"><?= h(__('t_f23ef521b6', 'الأخبار المنشورة')) ?></div>
-            <div class="gdy-stat-pill-value"><?= number_format($stats['published']) ?></div>
+	            <div class="gdy-stat-pill-label"><?php echo h(__('t_f23ef521b6', 'الأخبار المنشورة')); ?></div>
+            <div class="gdy-stat-pill-value"><?php echo number_format($stats['published']); ?></div>
           </div>
         </div>
 	        <div class="gdy-stat-pill-tag">
-	          <?= h(__('t_ddcbb708cd', 'جاهزة على الموقع')) ?>
+	          <?php echo h(__('t_ddcbb708cd', 'جاهزة على الموقع')); ?>
 	        </div>
       </div>
 
@@ -645,12 +645,12 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
-            <div class="gdy-stat-pill-label"><?= h(__('t_e66db1aa36', 'المسودات')) ?></div>
-            <div class="gdy-stat-pill-value"><?= number_format($stats['draft']) ?></div>
+            <div class="gdy-stat-pill-label"><?php echo h(__('t_e66db1aa36', 'المسودات')); ?></div>
+            <div class="gdy-stat-pill-value"><?php echo number_format($stats['draft']); ?></div>
           </div>
         </div>
         <div class="gdy-stat-pill-tag">
-          <?= h(__('t_94fa971b80', 'قيد الإعداد')) ?>
+          <?php echo h(__('t_94fa971b80', 'قيد الإعداد')); ?>
         </div>
       </div>
 
@@ -660,12 +660,12 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
-            <div class="gdy-stat-pill-label"><?= h(__('t_0f6db0d92a', 'أخبار اليوم')) ?></div>
-            <div class="gdy-stat-pill-value"><?= number_format($stats['today']) ?></div>
+            <div class="gdy-stat-pill-label"><?php echo h(__('t_0f6db0d92a', 'أخبار اليوم')); ?></div>
+            <div class="gdy-stat-pill-value"><?php echo number_format($stats['today']); ?></div>
           </div>
         </div>
         <div class="gdy-stat-pill-tag">
-          <?= h(__('t_39901a1f84', 'آخر 24 ساعة')) ?>
+          <?php echo h(__('t_39901a1f84', 'آخر 24 ساعة')); ?>
         </div>
       </div>
     </div>
@@ -678,33 +678,33 @@ html, body {
           echo gdy_saved_filters_ui('news');
 ?>
       <form class="row g-2 align-items-center" method="get" action="">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="col-sm-5 col-md-4 col-lg-3">
           <input
             type="text"
             name="q"
-            value="<?= h($search) ?>"
+            value="<?php echo h($search); ?>"
             class="form-control form-control-sm bg-dark border-secondary text-light"
-	            placeholder="<?= h(__('t_f3ac22dd80', 'بحث (العنوان/الرابط) ...')) ?>"
+	            placeholder="<?php echo h(__('t_f3ac22dd80', 'بحث (العنوان/الرابط) ...')); ?>"
           >
         </div>
         <div class="col-12">
           <div class="d-flex flex-wrap gap-3 align-items-center small text-light">
             <label class="form-check form-check-inline mb-0">
-              <input class="form-check-input" type="checkbox" name="in_content" value="1" <?= $inContent ? 'checked' : '' ?>>
+              <input class="form-check-input" type="checkbox" name="in_content" value="1" <?php echo $inContent ? 'checked' : ''; ?>>
               <span class="form-check-label">بحث داخل المحتوى</span>
             </label>
             <label class="form-check form-check-inline mb-0">
-              <input class="form-check-input" type="checkbox" name="no_image" value="1" <?= $noImage ? 'checked' : '' ?>>
+              <input class="form-check-input" type="checkbox" name="no_image" value="1" <?php echo $noImage ? 'checked' : ''; ?>>
               <span class="form-check-label">بدون صورة</span>
             </label>
             <label class="form-check form-check-inline mb-0">
-              <input class="form-check-input" type="checkbox" name="no_desc" value="1" <?= $noDesc ? 'checked' : '' ?>>
+              <input class="form-check-input" type="checkbox" name="no_desc" value="1" <?php echo $noDesc ? 'checked' : ''; ?>>
               <span class="form-check-label">بدون وصف SEO</span>
             </label>
             <label class="form-check form-check-inline mb-0">
-              <input class="form-check-input" type="checkbox" name="no_keywords" value="1" <?= $noKeywords ? 'checked' : '' ?>>
+              <input class="form-check-input" type="checkbox" name="no_keywords" value="1" <?php echo $noKeywords ? 'checked' : ''; ?>>
               <span class="form-check-label">بدون كلمات مفتاحية</span>
             </label>
           </div>
@@ -713,39 +713,39 @@ html, body {
         <div class="col-sm-4 col-md-3 col-lg-3">
           <ul class="nav nav-pills nav-fill gdy-status-filters">
             <li class="nav-item">
-              <a class="nav-link <?= $status === '' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => '', 'page' => 1])) ?>">
-                <?= h(__('t_6d08f19681', 'الكل')) ?>
+              <a class="nav-link <?php echo $status === '' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => '', 'page' => 1])); ?>">
+                <?php echo h(__('t_6d08f19681', 'الكل')); ?>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $status === 'published' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => 'published', 'page' => 1])) ?>">
-                <?= h(__('t_ecfb62b400', 'منشور')) ?>
+              <a class="nav-link <?php echo $status === 'published' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => 'published', 'page' => 1])); ?>">
+                <?php echo h(__('t_ecfb62b400', 'منشور')); ?>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $status === 'draft' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => 'draft', 'page' => 1])) ?>">
-                <?= h(__('t_9071af8f2d', 'مسودة')) ?>
+              <a class="nav-link <?php echo $status === 'draft' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => 'draft', 'page' => 1])); ?>">
+                <?php echo h(__('t_9071af8f2d', 'مسودة')); ?>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $status === 'pending' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => 'pending', 'page' => 1])) ?>">
-                <?= h(__('t_64d3e10dc3', 'للمراجعة')) ?>
+              <a class="nav-link <?php echo $status === 'pending' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => 'pending', 'page' => 1])); ?>">
+                <?php echo h(__('t_64d3e10dc3', 'للمراجعة')); ?>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $status === 'approved' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => 'approved', 'page' => 1])) ?>">
-                <?= h(__('t_d7fe42c8a3', 'جاهز')) ?>
+              <a class="nav-link <?php echo $status === 'approved' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => 'approved', 'page' => 1])); ?>">
+                <?php echo h(__('t_d7fe42c8a3', 'جاهز')); ?>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?= $status === 'archived' ? 'active' : '' ?>"
-                 href="?<?= h($buildQuery(['status' => 'archived', 'page' => 1])) ?>">
-                <?= h(__('t_c220a1c484', 'أرشيف')) ?>
+              <a class="nav-link <?php echo $status === 'archived' ? 'active' : ''; ?>"
+                 href="?<?php echo h($buildQuery(['status' => 'archived', 'page' => 1])); ?>">
+                <?php echo h(__('t_c220a1c484', 'أرشيف')); ?>
               </a>
             </li>
           </ul>
@@ -755,38 +755,38 @@ html, body {
 
         <div class="col-sm-4 col-md-3 col-lg-3">
           <select name="category_id" class="form-select form-select-sm bg-dark border-secondary text-light">
-            <option value="0"><?= h(__('t_2f9a3a66fd', 'كل التصنيفات')) ?></option>
+            <option value="0"><?php echo h(__('t_2f9a3a66fd', 'كل التصنيفات')); ?></option>
             <?php foreach ($categories as $c): ?>
-              <option value="<?= (int)$c['id'] ?>" <?= ((int)$c['id'] === (int)$categoryId) ? 'selected' : '' ?>>
-                <?= h($c['name'] ?? '') ?>
+              <option value="<?php echo (int)$c['id']; ?>" <?php echo ((int)$c['id'] === (int)$categoryId) ? 'selected' : ''; ?>>
+                <?php echo h($c['name'] ?? ''); ?>
               </option>
             <?php endforeach; ?>
           </select>
         </div>
 
         <div class="col-sm-6 col-md-3 col-lg-2">
-          <input type="date" name="from" value="<?= h($dateFrom) ?>" class="form-control form-control-sm bg-dark border-secondary text-light" title="<?= h(__('t_3c7ab1e348', 'من تاريخ')) ?>">
+          <input type="date" name="from" value="<?php echo h($dateFrom); ?>" class="form-control form-control-sm bg-dark border-secondary text-light" title="<?php echo h(__('t_3c7ab1e348', 'من تاريخ')); ?>">
         </div>
         <div class="col-sm-6 col-md-3 col-lg-2">
-          <input type="date" name="to" value="<?= h($dateTo) ?>" class="form-control form-control-sm bg-dark border-secondary text-light" title="<?= h(__('t_4e7112c8a1', 'إلى تاريخ')) ?>">
+          <input type="date" name="to" value="<?php echo h($dateTo); ?>" class="form-control form-control-sm bg-dark border-secondary text-light" title="<?php echo h(__('t_4e7112c8a1', 'إلى تاريخ')); ?>">
         </div>
 
         <div class="col-sm-6 col-md-3 col-lg-2">
           <select name="sort" class="form-select form-select-sm bg-dark border-secondary text-light">
-            <option value="published_desc" <?= $sort==='published_desc'?'selected':'' ?>><?= h(__('t_4d9df0f319', 'الأحدث نشرًا')) ?></option>
-            <option value="published_asc" <?= $sort==='published_asc'?'selected':'' ?>><?= h(__('t_a2fd2d3dbe', 'الأقدم نشرًا')) ?></option>
-            <option value="created_desc" <?= $sort==='created_desc'?'selected':'' ?>><?= h(__('t_0f58c4c34e', 'الأحدث إنشاءً')) ?></option>
-            <option value="created_asc" <?= $sort==='created_asc'?'selected':'' ?>><?= h(__('t_0a4a9edc8c', 'الأقدم إنشاءً')) ?></option>
-            <option value="title_asc" <?= $sort==='title_asc'?'selected':'' ?>><?= h(__('t_9d5b2aa3b3', 'العنوان A→Z')) ?></option>
-            <option value="title_desc" <?= $sort==='title_desc'?'selected':'' ?>><?= h(__('t_3eabd2e8d2', 'العنوان Z→A')) ?></option>
+            <option value="published_desc" <?php echo $sort==='published_desc'?'selected':''; ?>><?php echo h(__('t_4d9df0f319', 'الأحدث نشرًا')); ?></option>
+            <option value="published_asc" <?php echo $sort==='published_asc'?'selected':''; ?>><?php echo h(__('t_a2fd2d3dbe', 'الأقدم نشرًا')); ?></option>
+            <option value="created_desc" <?php echo $sort==='created_desc'?'selected':''; ?>><?php echo h(__('t_0f58c4c34e', 'الأحدث إنشاءً')); ?></option>
+            <option value="created_asc" <?php echo $sort==='created_asc'?'selected':''; ?>><?php echo h(__('t_0a4a9edc8c', 'الأقدم إنشاءً')); ?></option>
+            <option value="title_asc" <?php echo $sort==='title_asc'?'selected':''; ?>><?php echo h(__('t_9d5b2aa3b3', 'العنوان A→Z')); ?></option>
+            <option value="title_desc" <?php echo $sort==='title_desc'?'selected':''; ?>><?php echo h(__('t_3eabd2e8d2', 'العنوان Z→A')); ?></option>
           </select>
         </div>
-<!-- اختيار عدد العناصر <?= h(__('t_1787671ea7', 'في الصفحة')) ?> -->
+<!-- اختيار عدد العناصر <?php echo h(__('t_1787671ea7', 'في الصفحة')); ?> -->
         <div class="col-sm-3 col-md-2 col-lg-2">
           <select name="per_page" class="form-select form-select-sm bg-dark border-secondary text-light">
             <?php foreach ($allowedPerPage as $pp): ?>
-              <option value="<?= $pp ?>" <?= $perPage === $pp ? 'selected' : '' ?>>
-                <?= $pp ?> <?= h(__('t_1787671ea7', 'في الصفحة')) ?>
+              <option value="<?php echo $pp; ?>" <?php echo $perPage === $pp ? 'selected' : ''; ?>>
+                <?php echo $pp; ?> <?php echo h(__('t_1787671ea7', 'في الصفحة')); ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -794,20 +794,20 @@ html, body {
 
         <div class="col-auto">
           <button type="submit" class="btn btn-outline-secondary btn-sm">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_ab79fc1485', 'بحث')); ?>
           </button>
-        <a href="index.php" class="btn btn-outline-light btn-sm" title="<?= h(__('t_2ab2c7a79f', 'إعادة ضبط الفلاتر')) ?>">
+        <a href="index.php" class="btn btn-outline-light btn-sm" title="<?php echo h(__('t_2ab2c7a79f', 'إعادة ضبط الفلاتر')); ?>">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </a>
         <?php if (!$isWriter): ?>
-        <a href="?<?= h($buildQuery(['export'=>'csv','page'=>1])) ?>" class="btn btn-outline-success btn-sm" title="<?= h(__('t_5bb5d93d1a', 'تصدير CSV')) ?>">
+        <a href="?<?php echo h($buildQuery(['export'=>'csv','page'=>1])); ?>" class="btn btn-outline-success btn-sm" title="<?php echo h(__('t_5bb5d93d1a', 'تصدير CSV')); ?>">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg> CSV
         </a>
         <?php endif; ?>
 
         </div>
         <div class="col-12 col-md-auto ms-md-auto text-md-end small text-muted mt-2 mt-md-0">
-          <span><?= h(__('t_c6a5fe1902', 'عدد النتائج:')) ?> <strong><?= number_format($total) ?></strong></span>
+          <span><?php echo h(__('t_c6a5fe1902', 'عدد النتائج:')); ?> <strong><?php echo number_format($total); ?></strong></span>
         </div>
       </form>
     </div>
@@ -815,35 +815,35 @@ html, body {
     <div class="card shadow-sm glass-card">
       <div class="card-body p-0">
         <?php if (empty($items)): ?>
-          <p class="p-3 text-muted mb-0"><?= h(__('t_8912ba2932', 'لا توجد أخبار حالياً.')) ?></p>
+          <p class="p-3 text-muted mb-0"><?php echo h(__('t_8912ba2932', 'لا توجد أخبار حالياً.')); ?></p>
         <?php else: ?>
           
           <?php if (!$isWriter): ?>
           <div class="gdy-bulkbar">
             <select id="bulkAction" class="form-select form-select-sm bg-dark border-secondary text-light" style="max-width:220px">
-              <option value=""><?= h(__('t_7f4c0ad5f1', 'إجراءات جماعية...')) ?></option>
-              <option value="status:published"><?= h(__('t_ecfb62b400', 'نشر')) ?></option>
-              <option value="status:draft"><?= h(__('t_9071af8f2d', 'تحويل لمسودة')) ?></option>
-              <option value="status:pending"><?= h(__('t_64d3e10dc3', 'إرسال للمراجعة')) ?></option>
-              <option value="status:approved"><?= h(__('t_d7fe42c8a3', 'اعتماد')) ?></option>
-              <option value="status:archived"><?= h(__('t_c220a1c484', 'أرشفة')) ?></option>
+              <option value=""><?php echo h(__('t_7f4c0ad5f1', 'إجراءات جماعية...')); ?></option>
+              <option value="status:published"><?php echo h(__('t_ecfb62b400', 'نشر')); ?></option>
+              <option value="status:draft"><?php echo h(__('t_9071af8f2d', 'تحويل لمسودة')); ?></option>
+              <option value="status:pending"><?php echo h(__('t_64d3e10dc3', 'إرسال للمراجعة')); ?></option>
+              <option value="status:approved"><?php echo h(__('t_d7fe42c8a3', 'اعتماد')); ?></option>
+              <option value="status:archived"><?php echo h(__('t_c220a1c484', 'أرشفة')); ?></option>
               <option value="duplicate">نسخ خبر (Duplicate)</option>
               <option value="move_category">نقل لتصنيف...</option>
-              <option value="delete"><?= h(__('t_3b9854e1bb', 'نقل إلى سلة المحذوفات')) ?></option>
+              <option value="delete"><?php echo h(__('t_3b9854e1bb', 'نقل إلى سلة المحذوفات')); ?></option>
             </select>
             <select id="bulkCategory" class="form-select form-select-sm bg-dark border-secondary text-light d-none" style="max-width:220px">
               <option value="0">اختر التصنيف...</option>
               <?php foreach ($categories as $c): ?>
-                <option value="<?= (int)$c['id'] ?>"><?= h($c['name'] ?? '') ?></option>
+                <option value="<?php echo (int)$c['id']; ?>"><?php echo h($c['name'] ?? ''); ?></option>
               <?php endforeach; ?>
             </select>
             <button type="button" id="bulkApply" class="btn btn-primary btn-sm" disabled>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7a5d1d39c4', 'تطبيق')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_7a5d1d39c4', 'تطبيق')); ?>
             </button>
             <button type="button" id="bulkClear" class="btn btn-outline-light btn-sm" disabled>
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9b2b5d1c34', 'إلغاء التحديد')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_9b2b5d1c34', 'إلغاء التحديد')); ?>
             </button>
-            <span class="count ms-auto"><span id="selectedCount">0</span> <?= h(__('t_45d980a7f0', 'محدد')) ?></span>
+            <span class="count ms-auto"><span id="selectedCount">0</span> <?php echo h(__('t_45d980a7f0', 'محدد')); ?></span>
           </div>
             <div id="selectAllResultsBar" class="gdy-selectall-results d-none px-3 py-2 small bg-dark text-light border-top border-secondary">
               <span id="selectAllMsg"></span>
@@ -858,12 +858,12 @@ html, body {
                 <tr>
                   <th style="width:38px"><input type="checkbox" id="checkAll" title="تحديد الكل"></th>
                   <th style="width:60px">#</th>
-                  <th class="text-start"><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
-                  <th><?= h(__('t_0781965540', 'الرابط (Slug)')) ?></th>
-                  <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                  <th><?= h(__('t_4da1d32d5f', 'تاريخ النشر')) ?></th>
+                  <th class="text-start"><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
+                  <th><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></th>
+                  <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                  <th><?php echo h(__('t_4da1d32d5f', 'تاريخ النشر')); ?></th>
                   <th style="width:260px">SEO</th>
-                  <th style="width:240px"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                  <th style="width:240px"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
                 </tr>
               </thead>
               <tbody>
@@ -944,71 +944,71 @@ $imgOk      = ($imgMain !== '');
 
                   ?>
                   <tr>
-                    <td><input type="checkbox" class="form-check-input row-check" value="<?= $id ?>" aria-label="select"></td>
-                    <td><?= $id ?></td>
+                    <td><input type="checkbox" class="form-check-input row-check" value="<?php echo $id; ?>" aria-label="select"></td>
+                    <td><?php echo $id; ?></td>
                     <td class="text-start">
-                      <div class="fw-semibold"><?= h($title) ?></div>
+                      <div class="fw-semibold"><?php echo h($title); ?></div>
                       <div class="small text-muted">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <span><?= h($dateVal) ?></span>
+                        <span><?php echo h($dateVal); ?></span>
                       </div>
                     </td>
                     <td class="small-slug text-start">
-                      <code class="small" title="<?= h($slugFull) ?>">
-                        <?= h($slugShort) ?>
+                      <code class="small" title="<?php echo h($slugFull); ?>">
+                        <?php echo h($slugShort); ?>
                       </code>
                     </td>
                     <td>
-                      <span class="badge-status <?= $statusClass ?>">
-                        <?= h($label) ?>
+                      <span class="badge-status <?php echo $statusClass; ?>">
+                        <?php echo h($label); ?>
                       </span>
                     </td>
-                    <td><small><?= h($dateVal) ?></small></td>
+                    <td><small><?php echo h($dateVal); ?></small></td>
                     <td class="text-start">
                       <div class="d-flex flex-wrap gap-1">
-                        <span class="badge <?= $titleLenOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="طول العنوان"><?= (int)$titleLen ?></span>
-                        <span class="badge <?= $descLenOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="وصف SEO"><?= (int)$seoDescLen ?></span>
-                        <span class="badge <?= $kwOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="عدد الكلمات المفتاحية"><?= (int)$kwCount ?></span>
-                        <span class="badge <?= $slugOk ? 'bg-success' : 'bg-danger' ?>" title="Slug"><?= $slugOk ? 'OK' : '!' ?></span>
-                        <span class="badge <?= $altOk ? 'bg-success' : 'bg-danger' ?>" title="Alt للصور"><?= $altOk ? 'ALT' : 'NO ALT' ?></span>
-                        <span class="badge <?= $imgOk ? 'bg-success' : 'bg-danger' ?>" title="صورة"><?= $imgOk ? 'IMG' : 'NO IMG' ?></span>
+                        <span class="badge <?php echo $titleLenOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="طول العنوان"><?php echo (int)$titleLen; ?></span>
+                        <span class="badge <?php echo $descLenOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="وصف SEO"><?php echo (int)$seoDescLen; ?></span>
+                        <span class="badge <?php echo $kwOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="عدد الكلمات المفتاحية"><?php echo (int)$kwCount; ?></span>
+                        <span class="badge <?php echo $slugOk ? 'bg-success' : 'bg-danger'; ?>" title="Slug"><?php echo $slugOk ? 'OK' : '!'; ?></span>
+                        <span class="badge <?php echo $altOk ? 'bg-success' : 'bg-danger'; ?>" title="Alt للصور"><?php echo $altOk ? 'ALT' : 'NO ALT'; ?></span>
+                        <span class="badge <?php echo $imgOk ? 'bg-success' : 'bg-danger'; ?>" title="صورة"><?php echo $imgOk ? 'IMG' : 'NO IMG'; ?></span>
                       </div>
                       <div class="small text-muted mt-1">
-                        <?= $seoTitle !== '' ? 'SEO title ✓' : 'SEO title ✗' ?>
+                        <?php echo $seoTitle !== '' ? 'SEO title ✓' : 'SEO title ✗'; ?>
                       </div>
                     </td>
                     <td>
                       <div class="d-flex justify-content-center gap-1 flex-wrap">
-                        <a href="<?= h($frontUrl) ?>" target="_blank"
-                           class="btn btn-sm btn-outline-info btn-icon" title="<?= h(__('t_ac5402edac', 'عرض في الموقع')) ?>">
+                        <a href="<?php echo h($frontUrl); ?>" target="_blank"
+                           class="btn btn-sm btn-outline-info btn-icon" title="<?php echo h(__('t_ac5402edac', 'عرض في الموقع')); ?>">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg>
                         </a>
-                        <a href="edit.php?id=<?= $id ?>"
-                           class="btn btn-sm btn-outline-primary btn-icon" title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                        <a href="edit.php?id=<?php echo $id; ?>"
+                           class="btn btn-sm btn-outline-primary btn-icon" title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg>
                         </a>
                         <?php if (!$isWriter): ?>
-                        <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-duplicate-one" data-id="<?= $id ?>" title="نسخ (Duplicate)">
+                        <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-duplicate-one" data-id="<?php echo $id; ?>" title="نسخ (Duplicate)">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#duplicate"></use></svg>
                         </button>
                         <?php endif; ?>
                         <?php if (!$isWriter): ?>
-                        <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-toggle-publish" data-id="<?= $id ?>" title="<?= h(__('t_7df6f1d7d1', 'تبديل نشر/مسودة')) ?>">
+                        <button type="button" class="btn btn-sm btn-outline-warning btn-icon btn-toggle-publish" data-id="<?php echo $id; ?>" title="<?php echo h(__('t_7df6f1d7d1', 'تبديل نشر/مسودة')); ?>">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg>
                         </button>
                         <?php endif; ?>
                         <?php if (!$isWriter): ?>
-                        <a href="delete.php?id=<?= $id ?>"
+                        <a href="delete.php?id=<?php echo $id; ?>"
                            class="btn btn-sm btn-outline-danger btn-icon"
-                           data-confirm=<?= json_encode(__('t_ff433bbc04', 'هل أنت متأكد من حذف هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?> title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                           data-confirm=<?php echo json_encode(__('t_ff433bbc04', 'هل أنت متأكد من حذف هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?> title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg>
                         </a>
                         <?php endif; ?>
                         <button
                           type="button"
                           class="btn btn-sm btn-outline-secondary btn-icon btn-copy-link"
-                          data-url="<?= h($frontUrl) ?>"
-                          title="<?= h(__('t_086a81f788', 'نسخ رابط الخبر')) ?>">
+                          data-url="<?php echo h($frontUrl); ?>"
+                          title="<?php echo h(__('t_086a81f788', 'نسخ رابط الخبر')); ?>">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#copy"></use></svg>
                         </button>
                       </div>
@@ -1024,18 +1024,18 @@ $imgOk      = ($imgMain !== '');
       <div class="gdy-table-footer">
         <div>
           <?php if ($total > 0): ?>
-            <span><?= h(__('t_6e63a5f0af', 'عرض')) ?><?= count($items) ?><?= h(__('t_b535458712', 'من أصل')) ?><?= number_format($total) ?><?= h(__('t_8717261ce0', 'خبر.')) ?></span>
-            <span class="ms-2">عدد العناصر <?= h(__('t_1787671ea7', 'في الصفحة')) ?>: <strong><?= $perPage ?></strong></span>
+            <span><?php echo h(__('t_6e63a5f0af', 'عرض')); ?><?php echo count($items); ?><?php echo h(__('t_b535458712', 'من أصل')); ?><?php echo number_format($total); ?><?php echo h(__('t_8717261ce0', 'خبر.')); ?></span>
+            <span class="ms-2">عدد العناصر <?php echo h(__('t_1787671ea7', 'في الصفحة')); ?>: <strong><?php echo $perPage; ?></strong></span>
           <?php endif; ?>
         </div>
         <?php if ($totalPages > 1): ?>
           <nav>
             <ul class="pagination pagination-sm justify-content-end mb-0">
               <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
                   <a class="page-link"
-                     href="?<?= h($buildQuery(['page' => $i])) ?>">
-                    <?= $i ?>
+                     href="?<?php echo h($buildQuery(['page' => $i])); ?>">
+                    <?php echo $i; ?>
                   </a>
                 </li>
               <?php endfor; ?>
@@ -1050,9 +1050,9 @@ $imgOk      = ($imgMain !== '');
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var CSRF = <?= json_encode(generate_csrf_token(), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-  var TOTAL = <?= (int)$total ?>;
-  var FILTERS = <?= json_encode([
+  var CSRF = <?php echo json_encode(generate_csrf_token(), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+  var TOTAL = <?php echo (int)$total; ?>;
+  var FILTERS = <?php echo json_encode([
       'q' => $search,
       'status' => $status,
       'category_id' => $categoryId,
@@ -1064,7 +1064,7 @@ document.addEventListener('DOMContentLoaded', function () {
       'no_desc' => $noDesc ? 1 : 0,
       'no_keywords' => $noKeywords ? 1 : 0,
       'trash' => 0,
-  ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+  ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
   // Elements
   var checkAll = document.getElementById('checkAll');

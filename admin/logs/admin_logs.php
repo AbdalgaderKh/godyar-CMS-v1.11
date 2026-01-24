@@ -125,8 +125,8 @@ require_once __DIR__ . '/../layout/app_start.php';
               $id = (int)($u['id'] ?? 0);
               $label = (string)($u['name'] ?? '') ?: (string)($u['username'] ?? '') ?: ('User #' . $id);
             ?>
-            <option value="<?= $id ?>" <?= $filterUserId === $id ? 'selected' : '' ?>>
-              <?= h($label) ?> (ID: <?= $id ?>)
+            <option value="<?php echo $id; ?>" <?php echo $filterUserId === $id ? 'selected' : ''; ?>>
+              <?php echo h($label); ?> (ID: <?php echo $id; ?>)
             </option>
           <?php endforeach; ?>
         </select>
@@ -134,7 +134,7 @@ require_once __DIR__ . '/../layout/app_start.php';
 
       <div class="col-md-4">
         <label class="form-label">الإجراء (Action)</label>
-        <input type="text" name="action" value="<?= h($filterAction) ?>" class="form-control" placeholder="login, update_settings, ...">
+        <input type="text" name="action" value="<?php echo h($filterAction); ?>" class="form-control" placeholder="login, update_settings, ...">
       </div>
 
       <div class="col-md-3 d-flex gap-2">
@@ -171,13 +171,13 @@ require_once __DIR__ . '/../layout/app_start.php';
                 $when = (string)($row['created_at'] ?? '');
               ?>
               <tr>
-                <td><?= (int)($row['id'] ?? 0) ?></td>
-                <td class="text-muted small"><?= h($when) ?></td>
-                <td><?= h($uName) ?></td>
-                <td><code><?= h((string)($row['action'] ?? '')) ?></code></td>
-                <td class="text-muted small"><?= h((string)($row['entity_type'] ?? '')) ?><?= ($row['entity_id'] ?? '') !== '' ? (' #' . (int)$row['entity_id']) : '' ?></td>
-                <td class="text-muted small"><?= h((string)($row['ip_address'] ?? '')) ?></td>
-                <td class="small"><?= format_details($row['details'] ?? null) ?></td>
+                <td><?php echo (int)($row['id'] ?? 0); ?></td>
+                <td class="text-muted small"><?php echo h($when); ?></td>
+                <td><?php echo h($uName); ?></td>
+                <td><code><?php echo h((string)($row['action'] ?? '')); ?></code></td>
+                <td class="text-muted small"><?php echo h((string)($row['entity_type'] ?? '')); ?><?php echo ($row['entity_id'] ?? '') !== '' ? (' #' . (int)$row['entity_id']) : ''; ?></td>
+                <td class="text-muted small"><?php echo h((string)($row['ip_address'] ?? '')); ?></td>
+                <td class="small"><?php echo format_details($row['details'] ?? null); ?></td>
               </tr>
             <?php endforeach; ?>
           <?php endif; ?>

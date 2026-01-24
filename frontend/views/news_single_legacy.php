@@ -484,13 +484,13 @@ if (is_file($header)) {
                         قد يكون الخبر قد تم حذفه أو أنه غير منشور حالياً.
                     </p>
                     <div class="error-actions">
-                        <a href="<?= h($homeUrl) ?>" class="error-action-btn primary">
+                        <a href="<?php echo h($homeUrl); ?>" class="error-action-btn primary">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
                             العودة للرئيسية
                         </a>
-                        <a href="<?= h($categoryUrl) ?>" class="error-action-btn secondary">
+                        <a href="<?php echo h($categoryUrl); ?>" class="error-action-btn secondary">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-                            أخبار <?= h($categoryName) ?>
+                            أخبار <?php echo h($categoryName); ?>
                         </a>
                         <a href="javascript:history.back()" class="error-action-btn secondary">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -508,9 +508,9 @@ if (is_file($header)) {
         <header class="article-hero">
             <div class="container text-center">
                 <div class="article-path">
-                    <a href="<?= h($homeUrl) ?>">الرئيسية</a>
+                    <a href="<?php echo h($homeUrl); ?>">الرئيسية</a>
                     <span>›</span>
-                    <a href="<?= h($categoryUrl) ?>"><?= h($categoryName) ?></a>
+                    <a href="<?php echo h($categoryUrl); ?>"><?php echo h($categoryName); ?></a>
                 </div>
 
                 <?php if ($authorName): ?>
@@ -523,30 +523,30 @@ if (is_file($header)) {
                         <div class="article-author-meta">
                             <?php if ($authorPageTitle): ?>
                                 <div class="article-author-page-title">
-                                    <?= h($authorPageTitle) ?>
+                                    <?php echo h($authorPageTitle); ?>
                                 </div>
                             <?php endif; ?>
                             <div class="article-author-name">
-                                <?= h($authorName) ?>
+                                <?php echo h($authorName); ?>
                             </div>
                             <div class="article-author-social">
                                 <?php if ($authorFacebook): ?>
-                                    <a href="<?= h($authorFacebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
+                                    <a href="<?php echo h($authorFacebook); ?>" target="_blank" rel="noopener" title="فيسبوك">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                                     </a>
                                 <?php endif; ?>
                                 <?php if ($authorEmail): ?>
-                                    <a href="mailto:<?= h($authorEmail) ?>" title="البريد الإلكتروني">
+                                    <a href="mailto:<?php echo h($authorEmail); ?>" title="البريد الإلكتروني">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </a>
                                 <?php endif; ?>
                                 <?php if ($authorWebsite): ?>
-                                    <a href="<?= h($authorWebsite) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
+                                    <a href="<?php echo h($authorWebsite); ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                                     </a>
                                 <?php endif; ?>
                                 <?php if ($authorTwitter): ?>
-                                    <a href="<?= h($authorTwitter) ?>" target="_blank" rel="noopener" title="تويتر">
+                                    <a href="<?php echo h($authorTwitter); ?>" target="_blank" rel="noopener" title="تويتر">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                     </a>
                                 <?php endif; ?>
@@ -556,12 +556,12 @@ if (is_file($header)) {
                 <?php endif; ?>
 
                 <h1 class="article-title">
-                    <?= h($title) ?>
+                    <?php echo h($title); ?>
                 </h1>
 
                 <?php if ($excerpt): ?>
                     <p class="article-sub">
-                        <?= h($excerpt) ?>
+                        <?php echo h($excerpt); ?>
                     </p>
                 <?php endif; ?>
 
@@ -569,35 +569,35 @@ if (is_file($header)) {
                     <?php if ($date): ?>
                         <div class="article-meta-chip">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <span><?= date('Y-m-d', strtotime($date)) ?></span>
+                            <span><?php echo date('Y-m-d', strtotime($date)); ?></span>
                         </div>
                     <?php endif; ?>
 
                     <?php if ($views > 0): ?>
                         <div class="article-meta-chip">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <span><?= $views ?> مشاهدة</span>
+                            <span><?php echo $views; ?> مشاهدة</span>
                         </div>
                     <?php endif; ?>
 
                     <?php if ($readMinutes > 0): ?>
                         <div class="article-meta-chip">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <span><?= $readMinutes ?> دقيقة قراءة تقريباً</span>
+                            <span><?php echo $readMinutes; ?> دقيقة قراءة تقريباً</span>
                         </div>
                     <?php endif; ?>
 
                     <div class="article-meta-chip">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <span><?= h($categoryName) ?></span>
+                        <span><?php echo h($categoryName); ?></span>
                     </div>
                 </div>
 
                 <!-- كارت الصورة الرئيسية -->
                 <div class="article-cover-card">
                     <div class="article-cover-inner">
-                        <img src="<?= h($coverUrl) ?>"
-                             alt="<?= h($title) ?>"
+                        <img src="<?php echo h($coverUrl); ?>"
+                             alt="<?php echo h($title); ?>"
                              data-gdy-hide-onerror="1">
                     </div>
                 </div>
@@ -613,7 +613,7 @@ if (is_file($header)) {
 
                         <!-- نص المقال -->
                         <div class="article-body">
-                            <?= $body /* يحتوي HTML من لوحة التحكم */ ?>
+                            <?php echo $body /* يحتوي HTML من لوحة التحكم */; ?>
                         </div>
 
                         <?php
@@ -627,20 +627,20 @@ if (is_file($header)) {
                             <div class="article-tags">
                                 <?php if (!empty($post['tags']) && is_array($post['tags'])): ?>
                                     <?php foreach ($post['tags'] as $tag): ?>
-                                        <span class="article-tag">#<?= h($tag) ?></span>
+                                        <span class="article-tag">#<?php echo h($tag); ?></span>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
 
                             <div class="article-share">
                                 <span class="text-muted small">شارك:</span>
-                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode($newsUrl) ?>" target="_blank" rel="noopener">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($newsUrl); ?>" target="_blank" rel="noopener">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                                 </a>
-                                <a href="https://x.com/intent/tweet?url=<?= urlencode($newsUrl) ?>&text=<?= urlencode($title) ?>" target="_blank" rel="noopener">
+                                <a href="https://x.com/intent/tweet?url=<?php echo urlencode($newsUrl); ?>&text=<?php echo urlencode($title); ?>" target="_blank" rel="noopener">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                 </a>
-                                <a href="https://t.me/share/url?url=<?= urlencode($newsUrl) ?>&text=<?= urlencode($title) ?>" target="_blank" rel="noopener">
+                                <a href="https://t.me/share/url?url=<?php echo urlencode($newsUrl); ?>&text=<?php echo urlencode($title); ?>" target="_blank" rel="noopener">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#telegram"></use></svg>
                                 </a>
                             </div>

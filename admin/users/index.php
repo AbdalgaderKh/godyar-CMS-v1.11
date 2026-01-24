@@ -393,14 +393,14 @@ html, body{
     <!-- رأس الصفحة -->
     <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 mb-1 text-white"><?= h(__('t_5aa71f1bf6', 'إدارة المستخدمين')) ?></h1>
+            <h1 class="h4 mb-1 text-white"><?php echo h(__('t_5aa71f1bf6', 'إدارة المستخدمين')); ?></h1>
             <p class="mb-0" style="color:#e5e7eb;">
-                <?= h(__('t_569340c7e9', 'إدارة حسابات المستخدمين والصلاحيات في النظام')) ?>
+                <?php echo h(__('t_569340c7e9', 'إدارة حسابات المستخدمين والصلاحيات في النظام')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h(__('t_480d828737', 'إضافة مستخدم جديد')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?php echo h(__('t_480d828737', 'إضافة مستخدم جديد')); ?>
             </a>
         </div>
     </div>
@@ -408,52 +408,52 @@ html, body{
     <!-- الإحصائيات -->
     <div class="gdy-stats">
         <div class="gdy-stat">
-            <span class="gdy-stat-value"><?= $totalUsers ?></span>
-            <span class="gdy-stat-label"><?= h(__('t_6736adddff', 'إجمالي المستخدمين')) ?></span>
+            <span class="gdy-stat-value"><?php echo $totalUsers; ?></span>
+            <span class="gdy-stat-label"><?php echo h(__('t_6736adddff', 'إجمالي المستخدمين')); ?></span>
         </div>
         <div class="gdy-stat">
-            <span class="gdy-stat-value"><?= $activeUsers ?></span>
-            <span class="gdy-stat-label"><?= h(__('t_aa109446d1', 'مستخدمين نشطين')) ?></span>
+            <span class="gdy-stat-value"><?php echo $activeUsers; ?></span>
+            <span class="gdy-stat-label"><?php echo h(__('t_aa109446d1', 'مستخدمين نشطين')); ?></span>
         </div>
         <div class="gdy-stat">
-            <span class="gdy-stat-value"><?= $adminsCount ?></span>
-            <span class="gdy-stat-label"><?= h(__('t_5787adcd13', 'مشرفين')) ?></span>
+            <span class="gdy-stat-value"><?php echo $adminsCount; ?></span>
+            <span class="gdy-stat-label"><?php echo h(__('t_5787adcd13', 'مشرفين')); ?></span>
         </div>
         <div class="gdy-stat">
-            <span class="gdy-stat-value"><?= count($users) ?></span>
-            <span class="gdy-stat-label"><?= h(__('t_8dea9c0652', 'نتائج البحث')) ?></span>
+            <span class="gdy-stat-value"><?php echo count($users); ?></span>
+            <span class="gdy-stat-label"><?php echo h(__('t_8dea9c0652', 'نتائج البحث')); ?></span>
         </div>
     </div>
 
     <!-- شريط التصفية -->
     <div class="gdy-filter-bar">
         <form method="get" class="row g-3 align-items-end">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
             <div class="col-12 col-md-4">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_ab79fc1485', 'بحث')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_ab79fc1485', 'بحث')); ?></label>
                 <input type="text" name="q" class="form-control bg-dark text-light border-secondary" 
-                       value="<?= h($q) ?>" 
-                       placeholder="<?= h(__('t_174cbf594a', 'ابحث بالاسم، اسم المستخدم، أو البريد...')) ?>">
+                       value="<?php echo h($q); ?>" 
+                       placeholder="<?php echo h(__('t_174cbf594a', 'ابحث بالاسم، اسم المستخدم، أو البريد...')); ?>">
             </div>
             <div class="col-12 col-md-3">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_1647921065', 'الدور')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_1647921065', 'الدور')); ?></label>
                 <select name="role" class="form-select bg-dark text-light border-secondary">
-                    <option value=""><?= h(__('t_7f38b9650b', 'جميع الأدوار')) ?></option>
+                    <option value=""><?php echo h(__('t_7f38b9650b', 'جميع الأدوار')); ?></option>
                     <?php foreach ($roles as $value => $roleInfo): ?>
-                        <option value="<?= h($value) ?>" <?= $role === $value ? 'selected' : '' ?>>
-                            <?= h($roleInfo['label']) ?>
+                        <option value="<?php echo h($value); ?>" <?php echo $role === $value ? 'selected' : ''; ?>>
+                            <?php echo h($roleInfo['label']); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="col-12 col-md-3">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
                 <select name="status" class="form-select bg-dark text-light border-secondary">
-                    <option value=""><?= h(__('t_a4028d028a', 'جميع الحالات')) ?></option>
+                    <option value=""><?php echo h(__('t_a4028d028a', 'جميع الحالات')); ?></option>
                     <?php foreach ($statuses as $value => $statusInfo): ?>
-                        <option value="<?= h($value) ?>" <?= $status === $value ? 'selected' : '' ?>>
-                            <?= h($statusInfo['label']) ?>
+                        <option value="<?php echo h($value); ?>" <?php echo $status === $value ? 'selected' : ''; ?>>
+                            <?php echo h($statusInfo['label']); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -461,7 +461,7 @@ html, body{
             <div class="col-12 col-md-2">
                 <button type="submit" class="btn btn-primary w-100">
                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= h(__('t_abe3151c63', 'تطبيق')) ?>
+                    <?php echo h(__('t_abe3151c63', 'تطبيق')); ?>
                 </button>
             </div>
         </form>
@@ -477,10 +477,10 @@ html, body{
             <div class="mt-3">
                 <a href="index.php" class="btn btn-outline-light btn-sm">
                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= h(__('t_abcc7085f3', 'إعادة تعيين الفلتر')) ?>
+                    <?php echo h(__('t_abcc7085f3', 'إعادة تعيين الفلتر')); ?>
                 </a>
                 <span class="text-muted small ms-2">
-                    <?= count($users) ?> نتيجة
+                    <?php echo count($users); ?> نتيجة
                 </span>
             </div>
         <?php endif; ?>
@@ -493,10 +493,10 @@ html, body{
                 <div class="gdy-empty-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
-                <h4 class="text-muted mb-3"><?= h(__('t_d0852a495b', 'لا توجد مستخدمين')) ?></h4>
-                <p class="text-muted mb-4"><?= h(__('t_aa99d4b434', 'ابدأ بإضافة أول مستخدم إلى النظام')) ?></p>
+                <h4 class="text-muted mb-3"><?php echo h(__('t_d0852a495b', 'لا توجد مستخدمين')); ?></h4>
+                <p class="text-muted mb-4"><?php echo h(__('t_aa99d4b434', 'ابدأ بإضافة أول مستخدم إلى النظام')); ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#user"></use></svg><?= h(__('t_9e922cf9b6', 'إضافة أول مستخدم')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#user"></use></svg><?php echo h(__('t_9e922cf9b6', 'إضافة أول مستخدم')); ?>
                 </a>
             </div>
         <?php else: ?>
@@ -512,27 +512,27 @@ html, body{
                                 </div>
                                 <div class="gdy-user-overlay">
                                     <div class="gdy-user-actions">
-                                        <a href="edit.php?id=<?= $user['id'] ?>" 
+                                        <a href="edit.php?id=<?php echo $user['id']; ?>" 
                                            class="gdy-user-btn"
-                                           title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                                           title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <?php if ($user['id'] !== ($currentUser['id'] ?? 0)): ?>
                                             <button class="gdy-user-btn toggle-status" 
-                                                    data-id="<?= $user['id'] ?>"
-                                                    data-status="<?= $user['status'] ?>"
-                                                    data-username="<?= h($user['username']) ?>"
-                                                    title="<?= $user['status'] === 'active' ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
+                                                    data-id="<?php echo $user['id']; ?>"
+                                                    data-status="<?php echo $user['status']; ?>"
+                                                    data-username="<?php echo h($user['username']); ?>"
+                                                    title="<?php echo $user['status'] === 'active' ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>">
                                                 <svg class="gdy-icon $user['status'] === 'active' ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                             <button class="gdy-user-btn delete-user" 
-                                                    data-id="<?= $user['id'] ?>"
-                                                    data-username="<?= h($user['username']) ?>"
-                                                    title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                                                    data-id="<?php echo $user['id']; ?>"
+                                                    data-username="<?php echo h($user['username']); ?>"
+                                                    title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         <?php else: ?>
-                                            <span class="gdy-user-btn" title="<?= h(__('t_2f03db59ec', 'لا يمكن تعديل حسابك')) ?>">
+                                            <span class="gdy-user-btn" title="<?php echo h(__('t_2f03db59ec', 'لا يمكن تعديل حسابك')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                                             </span>
                                         <?php endif; ?>
@@ -543,23 +543,23 @@ html, body{
                             <!-- معلومات المستخدم -->
                             <div class="gdy-user-info">
                                 <div class="gdy-user-name">
-                                    <?= h((($user['name'] ?? '') !== '' ? $user['name'] : ($user['username'] ?? ''))) ?>
+                                    <?php echo h((($user['name'] ?? '') !== '' ? $user['name'] : ($user['username'] ?? ''))); ?>
                                 </div>
                                 <div class="gdy-user-username">
-                                    @<?= h($user['username']) ?>
+                                    @<?php echo h($user['username']); ?>
                                 </div>
                                 <div class="gdy-user-email">
-                                    <?= h($user['email']) ?>
+                                    <?php echo h($user['email']); ?>
                                 </div>
                                 
                                 <div class="gdy-user-meta">
                                     <span class="gdy-user-role">
-                                        <svg class="gdy-icon <?= $roles[$user['role']]['icon'] ?? 'fa-user' ?>" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-                                        <?= h($roles[$user['role']]['label'] ?? $user['role']) ?>
+                                        <svg class="gdy-icon <?php echo $roles[$user['role']]['icon'] ?? 'fa-user'; ?>" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
+                                        <?php echo h($roles[$user['role']]['label'] ?? $user['role']); ?>
                                     </span>
-                                    <span class="gdy-user-status <?= $user['status'] ?>">
-                                        <svg class="gdy-icon <?= $statuses[$user['status']]['icon'] ?? 'fa-circle' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                        <?= h($statuses[$user['status']]['label'] ?? $user['status']) ?>
+                                    <span class="gdy-user-status <?php echo $user['status']; ?>">
+                                        <svg class="gdy-icon <?php echo $statuses[$user['status']]['icon'] ?? 'fa-circle'; ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                                        <?php echo h($statuses[$user['status']]['label'] ?? $user['status']); ?>
                                     </span>
                                 </div>
                                 
@@ -567,15 +567,15 @@ html, body{
                                 <div class="mt-3 pt-3 border-top border-secondary">
                                     <div class="row text-center">
                                         <div class="col-6">
-                                            <small class="text-muted"><?= h(__('t_f7ed03560d', 'آخر دخول')) ?></small>
+                                            <small class="text-muted"><?php echo h(__('t_f7ed03560d', 'آخر دخول')); ?></small>
                                             <div class="small">
                                                 <?php $lla = $user['last_login_at'] ?? null; echo $lla ? date('Y-m-d', strtotime($lla)) : __('t_7e2dd2d275', 'لم يسجل'); ?>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <small class="text-muted"><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></small>
+                                            <small class="text-muted"><?php echo h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')); ?></small>
                                             <div class="small">
-                                                <?= date('Y-m-d', strtotime($user['created_at'])) ?>
+                                                <?php echo date('Y-m-d', strtotime($user['created_at'])); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -594,15 +594,15 @@ html, body{
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark border-light">
             <div class="modal-header">
-                <h5 class="modal-title text-white" id="modalTitle"><?= h(__('t_d0c0c79999', 'تأكيد الإجراء')) ?></h5>
+                <h5 class="modal-title text-white" id="modalTitle"><?php echo h(__('t_d0c0c79999', 'تأكيد الإجراء')); ?></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p id="modalMessage" class="text-light"><?= h(__('t_f8ccab620d', 'هل أنت متأكد من تنفيذ هذا الإجراء؟')) ?></p>
+                <p id="modalMessage" class="text-light"><?php echo h(__('t_f8ccab620d', 'هل أنت متأكد من تنفيذ هذا الإجراء؟')); ?></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= h(__('t_b9568e869d', 'إلغاء')) ?></button>
-                <button type="button" class="btn btn-danger" id="confirmAction"><?= h(__('t_7651effd37', 'تنفيذ')) ?></button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo h(__('t_b9568e869d', 'إلغاء')); ?></button>
+                <button type="button" class="btn btn-danger" id="confirmAction"><?php echo h(__('t_7651effd37', 'تنفيذ')); ?></button>
             </div>
         </div>
     </div>

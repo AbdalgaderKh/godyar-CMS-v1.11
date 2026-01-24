@@ -453,25 +453,25 @@ $year = (int)date('Y');
       <div class="gdy-footer-main">
         <!-- هوية الموقع -->
         <div class="gdy-footer-brand">
-          <div class="gdy-footer-title"><?= h($siteName) ?></div>
+          <div class="gdy-footer-title"><?php echo h($siteName); ?></div>
           <div class="gdy-footer-tagline">
-            <?= h($siteTagline) ?>
+            <?php echo h($siteTagline); ?>
           </div>
         </div>
 
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
           <?php if ($siteEmail): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($siteEmail) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($siteEmail); ?></div>
           <?php endif; ?>
           <?php if ($sitePhone): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($sitePhone) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($sitePhone); ?></div>
           <?php endif; ?>
           <?php if ($siteAddr): ?>
             <div>
               <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <strong>العنوان:</strong>
-              <?= h($siteAddr) ?>
+              <?php echo h($siteAddr); ?>
             </div>
           <?php endif; ?>
         </div>
@@ -485,7 +485,7 @@ $year = (int)date('Y');
                   $label = trim((string)($link['label'] ?? ''));
                   if ($url === '' || $label === '') continue;
               ?>
-                <a href="<?= h($url) ?>"><?= h($label) ?></a>
+                <a href="<?php echo h($url); ?>"><?php echo h($label); ?></a>
               <?php endforeach; ?>
             </nav>
           <?php endif; ?>
@@ -530,13 +530,13 @@ $year = (int)date('Y');
           <?php if ($hasApps): ?>
             <div class="gdy-footer-apps">
               <?php if ($appAndroid): ?>
-                <a href="<?= h($appAndroid) ?>" target="_blank" rel="noopener noreferrer">
+                <a href="<?php echo h($appAndroid); ?>" target="_blank" rel="noopener noreferrer">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span>تطبيق أندرويد</span>
                 </a>
               <?php endif; ?>
               <?php if ($appIos): ?>
-                <a href="<?= h($appIos) ?>" target="_blank" rel="noopener noreferrer">
+                <a href="<?php echo h($appIos); ?>" target="_blank" rel="noopener noreferrer">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   <span>تطبيق iOS</span>
                 </a>
@@ -547,10 +547,10 @@ $year = (int)date('Y');
       </div>
 
       <div class="gdy-footer-bottom">
-        <span>© <?= date('Y') ?> <?= h($siteName) ?>. جميع الحقوق محفوظة.</span>
+        <span>© <?php echo date('Y'); ?> <?php echo h($siteName); ?>. جميع الحقوق محفوظة.</span>
 
         <?php if (!empty($teamUrl)): ?>
-          <a href="<?= h($teamUrl) ?>" class="gdy-footer-team-link">
+          <a href="<?php echo h($teamUrl); ?>" class="gdy-footer-team-link">
             <span class="gdy-social-icon is-team">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
               <span class="gdy-footer-social-tooltip">فريق العمل</span>
@@ -572,7 +572,7 @@ $year = (int)date('Y');
   </button>
 
   <?php if (!empty($extraBodyCode)): ?>
-    <?= $extraBodyCode . "\n" ?>
+    <?php echo $extraBodyCode . "\n"; ?>
   <?php endif; ?>
 
   <script>

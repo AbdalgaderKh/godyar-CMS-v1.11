@@ -163,17 +163,17 @@ require __DIR__ . '/frontend/templates/header.php';
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/index.php">الرئيسية</a></li>
       <li class="breadcrumb-item">
-        <a href="/elections.php?election=<?= h($currentElection['slug']) ?>">
-          نتائج الانتخابات – <?= h($currentElection['title']) ?>
+        <a href="/elections.php?election=<?php echo h($currentElection['slug']); ?>">
+          نتائج الانتخابات – <?php echo h($currentElection['title']); ?>
         </a>
       </li>
       <li class="breadcrumb-item">
-        <a href="/election_region.php?election=<?= h($currentElection['slug']) ?>&code=<?= h($constituency['region_map_code']) ?>">
-          <?= h($regionName) ?>
+        <a href="/election_region.php?election=<?php echo h($currentElection['slug']); ?>&code=<?php echo h($constituency['region_map_code']); ?>">
+          <?php echo h($regionName); ?>
         </a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <?= h($constName) ?>
+        <?php echo h($constName); ?>
       </li>
     </ol>
   </nav>
@@ -181,21 +181,21 @@ require __DIR__ . '/frontend/templates/header.php';
   <div class="gdy-const-page-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
     <div>
       <h1 class="h5 mb-1">
-        الدائرة الانتخابية: <?= h($constName) ?>
+        الدائرة الانتخابية: <?php echo h($constName); ?>
       </h1>
       <div class="small text-muted">
-        ضمن ولاية <?= h($regionName) ?> – تغطية: <?= h($currentElection['title']) ?>
+        ضمن ولاية <?php echo h($regionName); ?> – تغطية: <?php echo h($currentElection['title']); ?>
       </div>
     </div>
     <div class="text-md-end small">
       <?php if (!empty($constituency['c_code'])): ?>
         <span class="badge bg-secondary gdy-const-page-badge">
-          رمز الدائرة: <?= h($constituency['c_code']) ?>
+          رمز الدائرة: <?php echo h($constituency['c_code']); ?>
         </span>
       <?php endif; ?>
       <?php if (!empty($constituency['c_status'])): ?>
         <span class="badge bg-light text-muted border gdy-const-page-badge">
-          الحالة: <?= h($constituency['c_status']) ?>
+          الحالة: <?php echo h($constituency['c_status']); ?>
         </span>
       <?php endif; ?>
     </div>
@@ -211,31 +211,31 @@ require __DIR__ . '/frontend/templates/header.php';
         <div class="card-body small">
           <dl class="row mb-0">
             <dt class="col-5 text-muted">اسم الدائرة</dt>
-            <dd class="col-7"><?= h($constName) ?></dd>
+            <dd class="col-7"><?php echo h($constName); ?></dd>
 
             <dt class="col-5 text-muted">الولاية</dt>
-            <dd class="col-7"><?= h($regionName) ?></dd>
+            <dd class="col-7"><?php echo h($regionName); ?></dd>
 
             <dt class="col-5 text-muted">رقم المقعد</dt>
             <dd class="col-7">
-              <?= $constituency['c_seat_number'] !== null ? (int)$constituency['c_seat_number'] : '—' ?>
+              <?php echo $constituency['c_seat_number'] !== null ? (int)$constituency['c_seat_number'] : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد الناخبين</dt>
             <dd class="col-7">
-              <?= $constituency['c_total_voters'] !== null
+              <?php echo $constituency['c_total_voters'] !== null
                     ? number_format((int)$constituency['c_total_voters'])
-                    : '—' ?>
+                    : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">رمز الدائرة</dt>
             <dd class="col-7">
-              <?= !empty($constituency['c_code']) ? h($constituency['c_code']) : '—' ?>
+              <?php echo !empty($constituency['c_code']) ? h($constituency['c_code']) : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">حالة النتيجة</dt>
             <dd class="col-7">
-              <?= !empty($constituency['c_status']) ? h($constituency['c_status']) : '—' ?>
+              <?php echo !empty($constituency['c_status']) ? h($constituency['c_status']) : '—'; ?>
             </dd>
           </dl>
         </div>
@@ -280,17 +280,17 @@ require __DIR__ . '/frontend/templates/header.php';
                     <tr>
                       <td>
                         <div class="fw-semibold small">
-                          <?= h($cand['name']) ?>
+                          <?php echo h($cand['name']); ?>
                           <?php if ($isWinner): ?>
                             <span class="gdy-const-winner-pill">فائز</span>
                           <?php endif; ?>
                         </div>
                       </td>
                       <td class="text-center">
-                        <?= !empty($cand['party_short_name']) ? h($cand['party_short_name']) : '—' ?>
+                        <?php echo !empty($cand['party_short_name']) ? h($cand['party_short_name']) : '—'; ?>
                       </td>
                       <td class="text-center">
-                        <?= $cand['votes'] !== null ? number_format((int)$cand['votes']) : '—' ?>
+                        <?php echo $cand['votes'] !== null ? number_format((int)$cand['votes']) : '—'; ?>
                       </td>
                       <td class="text-center">
                         <?php if ($isWinner): ?>

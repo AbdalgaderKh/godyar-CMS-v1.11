@@ -132,7 +132,7 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title>الأخبار - <?= h($siteName) ?></title>
+  <title>الأخبار - <?php echo h($siteName); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap 5 -->
   <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
@@ -193,7 +193,7 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
           name="q"
           class="form-control form-control-sm"
           placeholder="ابحث في العناوين..."
-          value="<?= h($q) ?>"
+          value="<?php echo h($q); ?>"
         >
         <button class="btn btn-light btn-sm" type="submit">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
@@ -242,8 +242,8 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
               <div class="row g-0">
                 <?php if ($image): ?>
                   <div class="col-md-4">
-                    <a href="<?= h($url) ?>">
-                      <img src="<?= h($image) ?>" alt="<?= h($title) ?>" class="news-thumb">
+                    <a href="<?php echo h($url); ?>">
+                      <img src="<?php echo h($image); ?>" alt="<?php echo h($title); ?>" class="news-thumb">
                     </a>
                   </div>
                   <div class="col-md-8">
@@ -252,20 +252,20 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
                 <?php endif; ?>
                     <div class="p-3">
                       <h2 class="h5">
-                        <a href="<?= h($url) ?>" class="text-decoration-none text-dark">
-                          <?= h($title) ?>
+                        <a href="<?php echo h($url); ?>" class="text-decoration-none text-dark">
+                          <?php echo h($title); ?>
                         </a>
                       </h2>
                       <?php if ($created): ?>
                         <div class="news-meta mb-2">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                          <span><?= h($created) ?></span>
+                          <span><?php echo h($created); ?></span>
                         </div>
                       <?php endif; ?>
                       <?php if ($excerpt): ?>
-                        <p class="mb-2"><?= nl2br(h($excerpt)) ?></p>
+                        <p class="mb-2"><?php echo nl2br(h($excerpt)); ?></p>
                       <?php endif; ?>
-                      <a href="<?= h($url) ?>" class="btn btn-sm btn-outline-primary">
+                      <a href="<?php echo h($url); ?>" class="btn btn-sm btn-outline-primary">
                         قراءة المزيد
                       </a>
                     </div>
@@ -284,8 +284,8 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
                     $query['page'] = $p;
                     $link = 'news.php?' . http_build_query($query);
                   ?>
-                  <li class="page-item <?= $p === $page ? 'active' : '' ?>">
-                    <a class="page-link" href="<?= h($link) ?>"><?= $p ?></a>
+                  <li class="page-item <?php echo $p === $page ? 'active' : ''; ?>">
+                    <a class="page-link" href="<?php echo h($link); ?>"><?php echo $p; ?></a>
                   </li>
                 <?php endfor; ?>
               </ul>
@@ -316,7 +316,7 @@ $siteName = (string)env('SITE_NAME', 'Godyar News');
 </main>
 
 <footer class="py-4 text-center text-muted small">
-  &copy; <?= date('Y') ?> <?= h($siteName) ?> . جميع الحقوق محفوظة.
+  &copy; <?php echo date('Y'); ?> <?php echo h($siteName); ?> . جميع الحقوق محفوظة.
 </footer>
 
 </body>

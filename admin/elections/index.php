@@ -280,39 +280,39 @@ $csrf = generate_csrf_token();
         $hidC   = (int)($electionStats['hidden'] ?? 0);
         $arcC   = (int)($electionStats['archived'] ?? 0);
       ?>
-      <span class="badge rounded-pill bg-secondary">الكل: <?= (int)$totalC ?></span>
-      <span class="badge rounded-pill bg-success">ظاهر: <?= (int)$visC ?></span>
-      <span class="badge rounded-pill bg-warning text-dark">مخفي: <?= (int)$hidC ?></span>
-      <span class="badge rounded-pill bg-danger">مؤرشف: <?= (int)$arcC ?></span>
+      <span class="badge rounded-pill bg-secondary">الكل: <?php echo (int)$totalC; ?></span>
+      <span class="badge rounded-pill bg-success">ظاهر: <?php echo (int)$visC; ?></span>
+      <span class="badge rounded-pill bg-warning text-dark">مخفي: <?php echo (int)$hidC; ?></span>
+      <span class="badge rounded-pill bg-danger">مؤرشف: <?php echo (int)$arcC; ?></span>
     </div>
 
     <form class="row g-2 align-items-end w-100 w-lg-auto" method="get" action="">
       <div class="col-12 col-md-5">
-        <label class="form-label text-muted mb-1"><?= h(__('t_ab79fc1485', 'بحث')) ?></label>
-        <input type="text" class="form-control" name="q" value="<?= h($search) ?>" placeholder="<?= h(__('t_ab232dbd00', 'عنوان / slug')) ?>">
+        <label class="form-label text-muted mb-1"><?php echo h(__('t_ab79fc1485', 'بحث')); ?></label>
+        <input type="text" class="form-control" name="q" value="<?php echo h($search); ?>" placeholder="<?php echo h(__('t_ab232dbd00', 'عنوان / slug')); ?>">
       </div>
       <div class="col-12 col-md-4">
-        <label class="form-label text-muted mb-1"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+        <label class="form-label text-muted mb-1"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
         <select class="form-select" name="status">
-          <option value="" <?= $statusFilter===''?'selected':'' ?>><?= h(__('t_6d08f19681', 'الكل')) ?></option>
-          <option value="visible" <?= $statusFilter==='visible'?'selected':'' ?>><?= h(__('t_4f619e05c6', 'ظاهر')) ?></option>
-          <option value="hidden" <?= $statusFilter==='hidden'?'selected':'' ?>><?= h(__('t_a39aacaa71', 'مخفي')) ?></option>
-          <option value="archived" <?= $statusFilter==='archived'?'selected':'' ?>><?= h(__('t_2e67aea8ca', 'مؤرشف')) ?></option>
+          <option value="" <?php echo $statusFilter===''?'selected':''; ?>><?php echo h(__('t_6d08f19681', 'الكل')); ?></option>
+          <option value="visible" <?php echo $statusFilter==='visible'?'selected':''; ?>><?php echo h(__('t_4f619e05c6', 'ظاهر')); ?></option>
+          <option value="hidden" <?php echo $statusFilter==='hidden'?'selected':''; ?>><?php echo h(__('t_a39aacaa71', 'مخفي')); ?></option>
+          <option value="archived" <?php echo $statusFilter==='archived'?'selected':''; ?>><?php echo h(__('t_2e67aea8ca', 'مؤرشف')); ?></option>
         </select>
       </div>
       <div class="col-12 col-md-3 d-flex gap-2">
-        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
-        <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?= h(__('t_ec2ce8be93', 'مسح')) ?></a>
+        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_abe3151c63', 'تطبيق')); ?></button>
+        <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?php echo h(__('t_ec2ce8be93', 'مسح')); ?></a>
       </div>
     </form>
   </div>
 
   <div class="gdy-card-body">
     <?php if ($flashSuccess): ?>
-      <div class="alert alert-success"><?= h($flashSuccess) ?></div>
+      <div class="alert alert-success"><?php echo h($flashSuccess); ?></div>
     <?php endif; ?>
     <?php if ($flashError): ?>
-      <div class="alert alert-danger"><?= h($flashError) ?></div>
+      <div class="alert alert-danger"><?php echo h($flashError); ?></div>
     <?php endif; ?>
 
     <div class="table-responsive">
@@ -320,16 +320,16 @@ $csrf = generate_csrf_token();
         <thead>
           <tr>
             <th style="width:72px">#</th>
-            <th><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
-            <th style="width:140px"><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-            <th style="width:160px"><?= h(__('t_91bfba79c3', 'المقاعد')) ?></th>
-            <th style="width:190px"><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></th>
-            <th style="width:280px" class="text-end"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+            <th><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
+            <th style="width:140px"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+            <th style="width:160px"><?php echo h(__('t_91bfba79c3', 'المقاعد')); ?></th>
+            <th style="width:190px"><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></th>
+            <th style="width:280px" class="text-end"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
           </tr>
         </thead>
         <tbody>
           <?php if (empty($items)): ?>
-            <tr><td colspan="6" class="text-center text-muted py-4"><?= h(__('t_760b0f31b8', 'لا توجد بيانات مطابقة للبحث.')) ?></td></tr>
+            <tr><td colspan="6" class="text-center text-muted py-4"><?php echo h(__('t_760b0f31b8', 'لا توجد بيانات مطابقة للبحث.')); ?></td></tr>
           <?php else: ?>
             <?php foreach ($items as $it): 
               $st = (string)($it['status'] ?? '');
@@ -344,57 +344,57 @@ $csrf = generate_csrf_token();
               $updated = $it['updated_at'] ?: $it['created_at'];
             ?>
             <tr>
-              <td><?= (int)$it['id'] ?></td>
+              <td><?php echo (int)$it['id']; ?></td>
               <td>
-                <div class="fw-bold"><?= h($it['title'] ?? '') ?></div>
-                <div class="text-muted small"><?= h($it['slug'] ?? '') ?></div>
+                <div class="fw-bold"><?php echo h($it['title'] ?? ''); ?></div>
+                <div class="text-muted small"><?php echo h($it['slug'] ?? ''); ?></div>
                 <?php if (!empty($it['description'])): ?>
-                  <div class="text-muted small mt-1" style="max-width: 60ch;"><?= h(mb_strimwidth((string)$it['description'], 0, 160, '…', 'UTF-8')) ?></div>
+                  <div class="text-muted small mt-1" style="max-width: 60ch;"><?php echo h(mb_strimwidth((string)$it['description'], 0, 160, '…', 'UTF-8')); ?></div>
                 <?php endif; ?>
               </td>
-              <td><span class="badge <?= $badge ?> rounded-pill px-3 py-2"><?= h($label) ?></span></td>
+              <td><span class="badge <?php echo $badge; ?> rounded-pill px-3 py-2"><?php echo h($label); ?></span></td>
               <td class="text-muted">
-                <div><?= h(__('t_35c497cbae', 'إجمالي:')) ?> <span class="fw-semibold text-light"><?= $seats ?></span></div>
-                <div><?= h(__('t_c43fb95c54', 'أغلبية:')) ?> <span class="fw-semibold text-light"><?= $maj ?></span></div>
+                <div><?php echo h(__('t_35c497cbae', 'إجمالي:')); ?> <span class="fw-semibold text-light"><?php echo $seats; ?></span></div>
+                <div><?php echo h(__('t_c43fb95c54', 'أغلبية:')); ?> <span class="fw-semibold text-light"><?php echo $maj; ?></span></div>
               </td>
-              <td class="text-muted small"><?= h((string)$updated) ?></td>
+              <td class="text-muted small"><?php echo h((string)$updated); ?></td>
               <td class="text-end">
                 <div class="d-flex flex-wrap justify-content-end gap-2">
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="edit.php?id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="regions.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_745a7a18bc', 'مناطق')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="parties.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_604826c00c', 'أحزاب')) ?></a>
-                  <a class="btn btn-sm btn-gdy btn-gdy-primary" href="results.php?election_id=<?= (int)$it['id'] ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_981d67a249', 'نتائج')) ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="edit.php?id=<?php echo (int)$it['id']; ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_759fdc242e', 'تعديل')); ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="regions.php?election_id=<?php echo (int)$it['id']; ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_745a7a18bc', 'مناطق')); ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-ghost" href="parties.php?election_id=<?php echo (int)$it['id']; ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_604826c00c', 'أحزاب')); ?></a>
+                  <a class="btn btn-sm btn-gdy btn-gdy-primary" href="results.php?election_id=<?php echo (int)$it['id']; ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_981d67a249', 'نتائج')); ?></a>
 
                   <div class="dropdown">
                     <button class="btn btn-sm btn-gdy btn-gdy-ghost dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                      <?= h(__('t_1253eb5642', 'الحالة')) ?>
+                      <?php echo h(__('t_1253eb5642', 'الحالة')); ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?= h($csrf) ?>">
+                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
                           <input type="hidden" name="action" value="set_status">
-                          <input type="hidden" name="id" value="<?= (int)$it['id'] ?>">
+                          <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="visible">
-                          <button class="btn btn-sm btn-link text-success p-0" type="submit"><?= h(__('t_d7c6255e5b', 'جعلها ظاهرة')) ?></button>
+                          <button class="btn btn-sm btn-link text-success p-0" type="submit"><?php echo h(__('t_d7c6255e5b', 'جعلها ظاهرة')); ?></button>
                         </form>
                       </li>
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?= h($csrf) ?>">
+                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
                           <input type="hidden" name="action" value="set_status">
-                          <input type="hidden" name="id" value="<?= (int)$it['id'] ?>">
+                          <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="hidden">
-                          <button class="btn btn-sm btn-link text-warning p-0" type="submit"><?= h(__('t_cdd3df9b53', 'إخفاء')) ?></button>
+                          <button class="btn btn-sm btn-link text-warning p-0" type="submit"><?php echo h(__('t_cdd3df9b53', 'إخفاء')); ?></button>
                         </form>
                       </li>
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?= h($csrf) ?>">
+                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
                           <input type="hidden" name="action" value="set_status">
-                          <input type="hidden" name="id" value="<?= (int)$it['id'] ?>">
+                          <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="archived">
-                          <button class="btn btn-sm btn-link text-danger p-0" type="submit"><?= h(__('t_44e09190ab', 'أرشفة')) ?></button>
+                          <button class="btn btn-sm btn-link text-danger p-0" type="submit"><?php echo h(__('t_44e09190ab', 'أرشفة')); ?></button>
                         </form>
                       </li>
                     </ul>
@@ -412,7 +412,7 @@ $csrf = generate_csrf_token();
 
   <div class="gdy-card-footer d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
     <div class="text-muted small">
-      <?= h(__('t_93313790b8', 'إجمالي السجلات:')) ?> <span class="text-light fw-semibold"><?= (int)$totalRows ?></span> <?= h(__('t_f67df4e2c5', '— الصفحة')) ?> <span class="text-light fw-semibold"><?= (int)$currentPage ?></span> <?= h(__('t_99fb92edad', 'من')) ?> <span class="text-light fw-semibold"><?= (int)$totalPages ?></span>
+      <?php echo h(__('t_93313790b8', 'إجمالي السجلات:')); ?> <span class="text-light fw-semibold"><?php echo (int)$totalRows; ?></span> <?php echo h(__('t_f67df4e2c5', '— الصفحة')); ?> <span class="text-light fw-semibold"><?php echo (int)$currentPage; ?></span> <?php echo h(__('t_99fb92edad', 'من')); ?> <span class="text-light fw-semibold"><?php echo (int)$totalPages; ?></span>
     </div>
 
     <?php if ($totalPages > 1): ?>
@@ -429,7 +429,7 @@ $csrf = generate_csrf_token();
             $prev = max(1, $currentPage - 1);
             $next = min($totalPages, $currentPage + 1);
           ?>
-          <li class="page-item <?= $currentPage<=1?'disabled':'' ?>"><a class="page-link" href="<?= h($mk($prev)) ?>"><?= h(__('t_650bd5b508', 'السابق')) ?></a></li>
+          <li class="page-item <?php echo $currentPage<=1?'disabled':''; ?>"><a class="page-link" href="<?php echo h($mk($prev)); ?>"><?php echo h(__('t_650bd5b508', 'السابق')); ?></a></li>
           <?php
             $start = max(1, $currentPage - 2);
             $end   = min($totalPages, $currentPage + 2);
@@ -446,7 +446,7 @@ $csrf = generate_csrf_token();
               echo '<li class="page-item"><a class="page-link" href="'.h($mk($totalPages)).'">'.$totalPages.'</a></li>';
             }
           ?>
-          <li class="page-item <?= $currentPage>=$totalPages?'disabled':'' ?>"><a class="page-link" href="<?= h($mk($next)) ?>"><?= h(__('t_8435afd9e8', 'التالي')) ?></a></li>
+          <li class="page-item <?php echo $currentPage>=$totalPages?'disabled':''; ?>"><a class="page-link" href="<?php echo h($mk($next)); ?>"><?php echo h(__('t_8435afd9e8', 'التالي')); ?></a></li>
         </ul>
       </nav>
     <?php endif; ?>

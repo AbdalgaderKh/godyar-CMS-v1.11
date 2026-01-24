@@ -73,25 +73,25 @@ require __DIR__ . '/frontend/views/partials/header.php';
         <div class="col-12 col-md-6 col-lg-4">
           <div class="card h-100">
             <?php if (!empty($item['image'])): ?>
-              <a href="<?= htmlspecialchars($baseUrl . '/news/id/' . (int)($item['id'] ?? 0), ENT_QUOTES, 'UTF-8') ?>">
+              <a href="<?php echo htmlspecialchars($baseUrl . '/news/id/' . (int)($item['id'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>">
                 <img
-                  src="<?= htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8') ?>"
+                  src="<?php echo htmlspecialchars($item['image'], ENT_QUOTES, 'UTF-8'); ?>"
                   class="card-img-top"
-                  alt="<?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?>"
+                  alt="<?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?>"
                   data-gdy-hide-onerror="1">
               </a>
             <?php endif; ?>
             <div class="card-body">
               <h2 class="h6 card-title">
                 <a
-                  href="<?= htmlspecialchars($baseUrl . '/news/id/' . (int)($item['id'] ?? 0), ENT_QUOTES, 'UTF-8') ?>"
+                  href="<?php echo htmlspecialchars($baseUrl . '/news/id/' . (int)($item['id'] ?? 0), ENT_QUOTES, 'UTF-8'); ?>"
                   class="text-decoration-none">
-                  <?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?>
+                  <?php echo htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8'); ?>
                 </a>
               </h2>
               <?php if (!empty($item['published_at'])): ?>
                 <div class="text-muted small mb-1">
-                  <?= htmlspecialchars($item['published_at'], ENT_QUOTES, 'UTF-8') ?>
+                  <?php echo htmlspecialchars($item['published_at'], ENT_QUOTES, 'UTF-8'); ?>
                 </div>
               <?php endif; ?>
             </div>

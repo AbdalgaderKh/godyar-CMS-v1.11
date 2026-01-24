@@ -123,9 +123,9 @@ html, body{
 
 <div class="admin-content container-fluid py-4">
   <div class="admin-header">
-    <h1><?= h(__('t_243673ce24', 'أدوار المستخدمين')) ?></h1>
+    <h1><?php echo h(__('t_243673ce24', 'أدوار المستخدمين')); ?></h1>
     <p class="text-muted">
-      <?= h(__('t_4603636bda', 'من هنا يمكنك ربط كل مستخدم بالأدوار (Roles) المعرّفة في النظام.')) ?>
+      <?php echo h(__('t_4603636bda', 'من هنا يمكنك ربط كل مستخدم بالأدوار (Roles) المعرّفة في النظام.')); ?>
     </p>
   </div>
 
@@ -133,34 +133,34 @@ html, body{
     <div class="col-md-5">
       <div class="card mb-4">
         <div class="card-header">
-          <h2 class="card-title mb-0"><?= h(__('t_39d3073371', 'المستخدمون')) ?></h2>
+          <h2 class="card-title mb-0"><?php echo h(__('t_39d3073371', 'المستخدمون')); ?></h2>
         </div>
         <div class="card-body">
           <?php if (empty($users)): ?>
-            <p><?= h(__('t_9aa8b46001', 'لا يوجد مستخدمون.')) ?></p>
+            <p><?php echo h(__('t_9aa8b46001', 'لا يوجد مستخدمون.')); ?></p>
           <?php else: ?>
             <div class="table-responsive">
               <table class="table table-sm table-hover text-center">
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th><?= h(__('t_2e8b171b46', 'الاسم')) ?></th>
-                    <th><?= h(__('t_5ca6657770', 'اسم الدخول')) ?></th>
-                    <th><?= h(__('t_c5b8d695f6', 'الدور الأساسي')) ?></th>
-                    <th><?= h(__('t_34b595a894', 'إدارة الأدوار')) ?></th>
+                    <th><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></th>
+                    <th><?php echo h(__('t_5ca6657770', 'اسم الدخول')); ?></th>
+                    <th><?php echo h(__('t_c5b8d695f6', 'الدور الأساسي')); ?></th>
+                    <th><?php echo h(__('t_34b595a894', 'إدارة الأدوار')); ?></th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($users as $u): ?>
                     <tr>
-                      <td><?= (int)$u['id'] ?></td>
-                      <td><?= h($u['name'] ?: $u['username']) ?></td>
-                      <td><code><?= h($u['username']) ?></code></td>
-                      <td><?= h($u['role']) ?></td>
+                      <td><?php echo (int)$u['id']; ?></td>
+                      <td><?php echo h($u['name'] ?: $u['username']); ?></td>
+                      <td><code><?php echo h($u['username']); ?></code></td>
+                      <td><?php echo h($u['role']); ?></td>
                       <td>
-                        <a href="user_roles.php?user_id=<?= (int)$u['id'] ?>"
+                        <a href="user_roles.php?user_id=<?php echo (int)$u['id']; ?>"
                            class="btn btn-sm btn-outline-primary">
-                          <?= h(__('t_64ad71446c', 'تعديل الأدوار')) ?>
+                          <?php echo h(__('t_64ad71446c', 'تعديل الأدوار')); ?>
                         </a>
                       </td>
                     </tr>
@@ -176,44 +176,44 @@ html, body{
     <div class="col-md-7">
       <div class="card mb-4">
         <div class="card-header">
-          <h2 class="card-title mb-0"><?= h(__('t_41ff0546fd', 'أدوار المستخدم المحدد')) ?></h2>
+          <h2 class="card-title mb-0"><?php echo h(__('t_41ff0546fd', 'أدوار المستخدم المحدد')); ?></h2>
         </div>
         <div class="card-body">
           <?php if (!$selectedUser): ?>
             <p class="text-muted">
-              <?= h(__('t_f95734154c', 'اختر مستخدمًا من الجدول على اليسار لتعديل أدواره.')) ?>
+              <?php echo h(__('t_f95734154c', 'اختر مستخدمًا من الجدول على اليسار لتعديل أدواره.')); ?>
             </p>
           <?php else: ?>
 
             <?php if ($successMessage): ?>
-              <div class="alert alert-success"><?= h($successMessage) ?></div>
+              <div class="alert alert-success"><?php echo h($successMessage); ?></div>
             <?php endif; ?>
 
             <?php if ($errorMessage): ?>
-              <div class="alert alert-danger"><?= h($errorMessage) ?></div>
+              <div class="alert alert-danger"><?php echo h($errorMessage); ?></div>
             <?php endif; ?>
 
             <div class="mb-3">
-              <strong><?= h(__('t_ded0f6afb3', 'المستخدم:')) ?></strong>
-              <?= h($selectedUser['name'] ?: $selectedUser['username']) ?>
+              <strong><?php echo h(__('t_ded0f6afb3', 'المستخدم:')); ?></strong>
+              <?php echo h($selectedUser['name'] ?: $selectedUser['username']); ?>
               <br>
-              <strong><?= h(__('t_b54724b18e', 'البريد:')) ?></strong>
-              <?= h($selectedUser['email']) ?>
+              <strong><?php echo h(__('t_b54724b18e', 'البريد:')); ?></strong>
+              <?php echo h($selectedUser['email']); ?>
               <br>
-              <strong><?= h(__('t_ba1e927092', 'الدور الأساسي (حقل users.role):')) ?></strong>
-              <code><?= h($selectedUser['role']) ?></code>
+              <strong><?php echo h(__('t_ba1e927092', 'الدور الأساسي (حقل users.role):')); ?></strong>
+              <code><?php echo h($selectedUser['role']); ?></code>
             </div>
 
             <?php if (empty($allRoles)): ?>
-              <p><?= h(__('t_660e9ff699', 'لا توجد أدوار متاحة في النظام.')) ?></p>
+              <p><?php echo h(__('t_660e9ff699', 'لا توجد أدوار متاحة في النظام.')); ?></p>
             <?php else: ?>
 
               <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
                 <?php csrf_field(); ?>
 
-                <input type="hidden" name="user_id" value="<?= (int)$selectedUserId ?>">
+                <input type="hidden" name="user_id" value="<?php echo (int)$selectedUserId; ?>">
 
                 <div class="row">
                   <?php foreach ($allRoles as $r): ?>
@@ -228,16 +228,16 @@ html, body{
                           class="form-check-input"
                           type="checkbox"
                           name="roles[]"
-                          id="<?= $inputId ?>"
-                          value="<?= $rid ?>"
-                          <?= $checked ? 'checked' : '' ?>
+                          id="<?php echo $inputId; ?>"
+                          value="<?php echo $rid; ?>"
+                          <?php echo $checked ? 'checked' : ''; ?>
                         >
-                        <label class="form-check-label" for="<?= $inputId ?>">
-                          <strong><?= h($r['label']) ?></strong>
+                        <label class="form-check-label" for="<?php echo $inputId; ?>">
+                          <strong><?php echo h($r['label']); ?></strong>
                           <br>
                           <small class="text-muted">
-                            <code><?= h($r['name']) ?></code>
-                            <?= $r['is_system'] ? __('t_0571328da2', ' (نظامي)') : '' ?>
+                            <code><?php echo h($r['name']); ?></code>
+                            <?php echo $r['is_system'] ? __('t_0571328da2', ' (نظامي)') : ''; ?>
                           </small>
                         </label>
                       </div>
@@ -247,7 +247,7 @@ html, body{
 
                 <div class="mt-3">
                   <button type="submit" class="btn btn-primary">
-                    <?= h(__('t_2e8e7fc723', 'حفظ الأدوار للمستخدم')) ?>
+                    <?php echo h(__('t_2e8e7fc723', 'حفظ الأدوار للمستخدم')); ?>
                   </button>
                 </div>
 

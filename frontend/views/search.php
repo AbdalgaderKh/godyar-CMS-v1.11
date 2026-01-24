@@ -53,7 +53,7 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
         <div>
             <h1 style="margin:0;font-size:1.35rem">البحث</h1>
             <?php if ($q !== ''): ?>
-                <div class="search-meta">نتائج البحث عن: <strong><?= h($q) ?></strong> • إجمالي النتائج: <strong><?= (int)$total ?></strong></div>
+                <div class="search-meta">نتائج البحث عن: <strong><?php echo h($q); ?></strong> • إجمالي النتائج: <strong><?php echo (int)$total; ?></strong></div>
             <?php else: ?>
                 <div class="search-meta">اكتب كلمة للبحث في محتوى الموقع.</div>
             <?php endif; ?>
@@ -61,22 +61,22 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
 
         <div class="search-actions">
             <button data-copy-url="<?php echo h($currentUrl); ?>" data-copy-success="تم نسخ رابط البحث" type="button" class="btn btn-sm btn-outline-secondary" >نسخ رابط البحث</button>
-            <a class="btn btn-sm btn-outline-secondary" href="<?= h($baseUrl) ?>/ar/search">مسح البحث</a>
+            <a class="btn btn-sm btn-outline-secondary" href="<?php echo h($baseUrl); ?>/ar/search">مسح البحث</a>
         </div>
     </div>
 
-    <form method="get" action="<?= h($baseUrl) ?>/ar/search" class="mt-3">
+    <form method="get" action="<?php echo h($baseUrl); ?>/ar/search" class="mt-3">
         <div class="row g-2">
             <div class="col-12 col-lg-6">
-                <input name="q" value="<?= h($q) ?>" class="form-control" placeholder="ابحث في الأخبار والصفحات وكتّاب الرأي..." />
+                <input name="q" value="<?php echo h($q); ?>" class="form-control" placeholder="ابحث في الأخبار والصفحات وكتّاب الرأي..." />
             </div>
             <div class="col-6 col-lg-2">
                 <select class="form-select" name="type">
-                    <option value="all"     <?= $typeFilter==='all'?'selected':'' ?>>الكل</option>
-                    <option value="news"    <?= $typeFilter==='news'?'selected':'' ?>>أخبار</option>
-                    <option value="opinion" <?= $typeFilter==='opinion'?'selected':'' ?>>مقالات رأي</option>
-                    <option value="page"    <?= $typeFilter==='page'?'selected':'' ?>>صفحات</option>
-                    <option value="author"  <?= $typeFilter==='author'?'selected':'' ?>>كتّاب الرأي</option>
+                    <option value="all"     <?php echo $typeFilter==='all'?'selected':''; ?>>الكل</option>
+                    <option value="news"    <?php echo $typeFilter==='news'?'selected':''; ?>>أخبار</option>
+                    <option value="opinion" <?php echo $typeFilter==='opinion'?'selected':''; ?>>مقالات رأي</option>
+                    <option value="page"    <?php echo $typeFilter==='page'?'selected':''; ?>>صفحات</option>
+                    <option value="author"  <?php echo $typeFilter==='author'?'selected':''; ?>>كتّاب الرأي</option>
                 </select>
             </div>
             <div class="col-6 col-lg-2">
@@ -84,23 +84,23 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
                     <option value="all">كل الأقسام</option>
                     <?php foreach ($categories as $c): ?>
                         <?php $slug = (string)($c['slug'] ?? ''); $name = (string)($c['name'] ?? ''); if ($slug==='') continue; ?>
-                        <option value="<?= h($slug) ?>" <?= $catFilter===$slug?'selected':'' ?>><?= h($name) ?></option>
+                        <option value="<?php echo h($slug); ?>" <?php echo $catFilter===$slug?'selected':''; ?>><?php echo h($name); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="col-6 col-lg-1">
                 <select class="form-select" name="date">
-                    <option value="any" <?= $dateFilter==='any'?'selected':'' ?>>أي وقت</option>
-                    <option value="24h" <?= $dateFilter==='24h'?'selected':'' ?>>آخر 24 ساعة</option>
-                    <option value="7d"  <?= $dateFilter==='7d'?'selected':'' ?>>7 أيام</option>
-                    <option value="30d" <?= $dateFilter==='30d'?'selected':'' ?>>30 يومًا</option>
-                    <option value="year"<?= $dateFilter==='year'?'selected':'' ?>>سنة</option>
+                    <option value="any" <?php echo $dateFilter==='any'?'selected':''; ?>>أي وقت</option>
+                    <option value="24h" <?php echo $dateFilter==='24h'?'selected':''; ?>>آخر 24 ساعة</option>
+                    <option value="7d"  <?php echo $dateFilter==='7d'?'selected':''; ?>>7 أيام</option>
+                    <option value="30d" <?php echo $dateFilter==='30d'?'selected':''; ?>>30 يومًا</option>
+                    <option value="year"<?php echo $dateFilter==='year'?'selected':''; ?>>سنة</option>
                 </select>
             </div>
             <div class="col-6 col-lg-1">
                 <select class="form-select" name="match">
-                    <option value="all" <?= $match==='all'?'selected':'' ?>>كل الكلمات</option>
-                    <option value="any" <?= $match==='any'?'selected':'' ?>>أي كلمة</option>
+                    <option value="all" <?php echo $match==='all'?'selected':''; ?>>كل الكلمات</option>
+                    <option value="any" <?php echo $match==='any'?'selected':''; ?>>أي كلمة</option>
                 </select>
             </div>
 
@@ -133,7 +133,7 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
     <div class="mt-3" id="resultsWrap">
         <?php if (!$results): ?>
             <div class="alert alert-warning" style="border-radius:14px">
-                لا توجد نتائج مطابقة لعبارة البحث <strong><?= h($q) ?></strong>.
+                لا توجد نتائج مطابقة لعبارة البحث <strong><?php echo h($q); ?></strong>.
                 <div class="mt-2">جرّب كلمات أقصر، أو اختر "أي كلمة"، أو أزل فلتر القسم.</div>
             </div>
         <?php else: ?>
@@ -151,25 +151,25 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
                         $href = $url !== '' ? (rtrim($baseUrl,'/') . $url) : '#';
                     ?>
                     <div class="col-12">
-                        <a href="<?= h($href) ?>" style="color:inherit;text-decoration:none" class="result-item">
+                        <a href="<?php echo h($href); ?>" style="color:inherit;text-decoration:none" class="result-item">
                             <div class="search-card">
                                 <?php if ($img !== ''): ?>
-                                    <img class="search-thumb" src="<?= h($img) ?>" alt="<?= h($title) ?>" />
+                                    <img class="search-thumb" src="<?php echo h($img); ?>" alt="<?php echo h($title); ?>" />
                                 <?php else: ?>
                                     <div class="search-thumb"></div>
                                 <?php endif; ?>
                                 <div style="min-width:0">
                                     <div class="search-meta">
-                                        <span class="badge bg-primary"><?= h($badge) ?></span>
-                                        <?php if ($date !== ''): ?><span><?= h($date) ?></span><?php endif; ?>
-                                        <?php if (!empty($r['category_slug'] ?? '')): ?><span>#<?= h((string)$r['category_slug']) ?></span><?php endif; ?>
+                                        <span class="badge bg-primary"><?php echo h($badge); ?></span>
+                                        <?php if ($date !== ''): ?><span><?php echo h($date); ?></span><?php endif; ?>
+                                        <?php if (!empty($r['category_slug'] ?? '')): ?><span>#<?php echo h((string)$r['category_slug']); ?></span><?php endif; ?>
                                     </div>
                                     <div style="font-size:1.05rem;font-weight:700;margin-top:4px">
-                                        <?= highlight_term($title, $q) ?>
+                                        <?php echo highlight_term($title, $q); ?>
                                     </div>
                                     <?php if ($excerpt !== ''): ?>
                                         <div style="opacity:.9;margin-top:6px;line-height:1.7">
-                                            <?= highlight_term(mb_substr(strip_tags($excerpt), 0, 220), $q) ?>
+                                            <?php echo highlight_term(mb_substr(strip_tags($excerpt), 0, 220), $q); ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -188,7 +188,7 @@ $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUE
                                 $params['page'] = $p;
                                 $href = rtrim($baseUrl,'/') . '/ar/search?' . http_build_query($params);
                         ?>
-                            <li class="page-item <?= $p===$page?'active':'' ?>"><a class="page-link" href="<?= h($href) ?>"><?= (int)$p ?></a></li>
+                            <li class="page-item <?php echo $p===$page?'active':''; ?>"><a class="page-link" href="<?php echo h($href); ?>"><?php echo (int)$p; ?></a></li>
                         <?php endfor; ?>
                     </ul>
                 </nav>

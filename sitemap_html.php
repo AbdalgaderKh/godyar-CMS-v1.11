@@ -122,7 +122,7 @@ if ((empty($pdo) === false)) {
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>خريطة الموقع</title>
   <meta name="description" content="خريطة الموقع: روابط الأقسام والصفحات والأخبار.">
-  <link rel="canonical" href="<?= h(function_exists('gdy_clean_url') ? gdy_clean_url(($base . '/sitemap')) : ($base . '/sitemap')) ?>">
+  <link rel="canonical" href="<?php echo h(function_exists('gdy_clean_url') ? gdy_clean_url(($base . '/sitemap')) : ($base . '/sitemap')); ?>">
   <style>
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#fff;color:#111}
     .wrap{max-width:980px;margin:0 auto;padding:24px}
@@ -143,7 +143,7 @@ if ((empty($pdo) === false)) {
   <div class="wrap">
     <div class="top">
       <h1>خريطة الموقع</h1>
-      <a href="<?= h($base . '/sitemap.xml') ?>">ملف Sitemap.xml</a>
+      <a href="<?php echo h($base . '/sitemap.xml'); ?>">ملف Sitemap.xml</a>
     </div>
     <p class="note">هذه صفحة HTML مخصصة للزوار والبوتات لتسهيل اكتشاف الروابط. يتم تحديثها تلقائيًا.</p>
 
@@ -152,9 +152,9 @@ if ((empty($pdo) === false)) {
         <h2>روابط أساسية</h2>
         <ul>
           <?php foreach ($items['home'] as $it): ?>
-            <li><a href="<?= h($it['url']) ?>"><?= h($it['title']) ?></a></li>
+            <li><a href="<?php echo h($it['url']); ?>"><?php echo h($it['title']); ?></a></li>
           <?php endforeach; ?>
-          <li><a href="<?= h($base . '/rss.xml') ?>">RSS</a></li>
+          <li><a href="<?php echo h($base . '/rss.xml'); ?>">RSS</a></li>
         </ul>
       </div>
 
@@ -162,7 +162,7 @@ if ((empty($pdo) === false)) {
         <h2>الأقسام</h2>
         <ul>
           <?php foreach ($items['categories'] as $it): ?>
-            <li><a href="<?= h($it['url']) ?>"><?= h($it['title']) ?></a></li>
+            <li><a href="<?php echo h($it['url']); ?>"><?php echo h($it['title']); ?></a></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -171,7 +171,7 @@ if ((empty($pdo) === false)) {
         <h2>الصفحات</h2>
         <ul>
           <?php foreach ($items['pages'] as $it): ?>
-            <li><a href="<?= h($it['url']) ?>"><?= h($it['title']) ?></a></li>
+            <li><a href="<?php echo h($it['url']); ?>"><?php echo h($it['title']); ?></a></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -180,7 +180,7 @@ if ((empty($pdo) === false)) {
         <h2>آخر الأخبار (500)</h2>
         <ul>
           <?php foreach ($items['news'] as $it): ?>
-            <li><a href="<?= h($it['url']) ?>"><?= h($it['title']) ?></a></li>
+            <li><a href="<?php echo h($it['url']); ?>"><?php echo h($it['title']); ?></a></li>
           <?php endforeach; ?>
         </ul>
       </div>

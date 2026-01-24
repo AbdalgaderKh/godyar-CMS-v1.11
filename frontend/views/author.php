@@ -68,23 +68,23 @@ require __DIR__ . '/partials/header.php';
       ?>
       <div class="author-avatar" style="width:84px;height:84px;border-radius:18px;overflow:hidden;background:#111827;flex:0 0 auto;">
         <?php if (!empty($avatar)): ?>
-          <img src="<?= h($avatar) ?>" alt="<?= h($author['name'] ?? '') ?>" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+          <img src="<?php echo h($avatar); ?>" alt="<?php echo h($author['name'] ?? ''); ?>" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
         <?php else: ?>
           <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-weight:700;">AC</div>
         <?php endif; ?>
       </div>
       <div class="flex-grow-1">
-        <h1 class="h4 mb-1"><?= h($author['name'] ?? 'غير موجود') ?></h1>
+        <h1 class="h4 mb-1"><?php echo h($author['name'] ?? 'غير موجود'); ?></h1>
         <?php if (!empty($author['specialization'])): ?>
-          <div class="text-muted mb-2"><?= h($author['specialization']) ?></div>
+          <div class="text-muted mb-2"><?php echo h($author['specialization']); ?></div>
         <?php endif; ?>
         <?php if (!empty($author['bio'])): ?>
-          <div class="small" style="line-height:1.8;opacity:.92"><?= nl2br(h($author['bio'])) ?></div>
+          <div class="small" style="line-height:1.8;opacity:.92"><?php echo nl2br(h($author['bio'])); ?></div>
         <?php endif; ?>
       </div>
       <?php if ($author): ?>
       <div class="text-muted small" style="white-space:nowrap">
-        <span><?= h('عدد المقالات: ') ?></span><strong><?= (int)$total ?></strong>
+        <span><?php echo h('عدد المقالات: '); ?></span><strong><?php echo (int)$total; ?></strong>
       </div>
       <?php endif; ?>
     </div>
@@ -110,17 +110,17 @@ require __DIR__ . '/partials/header.php';
         <div class="col-12 col-md-6 col-lg-4">
           <article class="card h-100 shadow-sm">
             <?php if ($img !== ''): ?>
-              <a href="<?= h($url) ?>" class="ratio ratio-16x9" style="border-radius:14px;overflow:hidden;">
-                <img src="<?= h($img) ?>" alt="<?= h($row['title'] ?? '') ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+              <a href="<?php echo h($url); ?>" class="ratio ratio-16x9" style="border-radius:14px;overflow:hidden;">
+                <img src="<?php echo h($img); ?>" alt="<?php echo h($row['title'] ?? ''); ?>" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
               </a>
             <?php endif; ?>
             <div class="card-body">
-              <h2 class="h6 mb-2"><a href="<?= h($url) ?>" class="text-decoration-none"><?= h($row['title'] ?? '') ?></a></h2>
+              <h2 class="h6 mb-2"><a href="<?php echo h($url); ?>" class="text-decoration-none"><?php echo h($row['title'] ?? ''); ?></a></h2>
               <?php if (!empty($row['excerpt'])): ?>
-                <p class="text-muted small mb-2" style="line-height:1.7"><?= h(mb_strimwidth((string)$row['excerpt'], 0, 140, '…', 'UTF-8')) ?></p>
+                <p class="text-muted small mb-2" style="line-height:1.7"><?php echo h(mb_strimwidth((string)$row['excerpt'], 0, 140, '…', 'UTF-8')); ?></p>
               <?php endif; ?>
               <?php if ($date !== ''): ?>
-                <div class="text-muted small"><?= h($date) ?></div>
+                <div class="text-muted small"><?php echo h($date); ?></div>
               <?php endif; ?>
             </div>
           </article>
@@ -136,8 +136,8 @@ require __DIR__ . '/partials/header.php';
       <nav class="mt-4" aria-label="pagination">
         <ul class="pagination justify-content-center">
           <?php for ($i=1; $i<=$pages; $i++): ?>
-            <li class="page-item <?= ($i === $page ? 'active' : '') ?>">
-              <a class="page-link" href="<?= h($base . '&page=' . $i) ?>"><?= (int)$i ?></a>
+            <li class="page-item <?php echo ($i === $page ? 'active' : ''); ?>">
+              <a class="page-link" href="<?php echo h($base . '&page=' . $i); ?>"><?php echo (int)$i; ?></a>
             </li>
           <?php endfor; ?>
         </ul>

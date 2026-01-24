@@ -31,7 +31,7 @@ if ($pdo instanceof PDO) {
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title>فريق العمل - <?= h(env('SITE_NAME','Godyar News')) ?></title>
+  <title>فريق العمل - <?php echo h(env('SITE_NAME','Godyar News')); ?></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="/godyar/assets/css/bootstrap.min.css">
 </head>
@@ -50,31 +50,31 @@ if ($pdo instanceof PDO) {
                 <div class="rounded-circle d-inline-flex align-items-center justify-content-center"
                      style="width:72px;height:72px;background:#e5e7eb;overflow:hidden;">
                   <?php if (empty($m['photo']) === false): ?>
-                    <img src="<?= h($m['photo']) ?>" alt="<?= h($m['name']) ?>"
+                    <img src="<?php echo h($m['photo']); ?>" alt="<?php echo h($m['name']); ?>"
                          style="width:100%;height:100%;object-fit:cover;">
                   <?php else: ?>
-                    <span class="fw-bold"><?= mb_substr($m['name'],0,1,'UTF-8') ?></span>
+                    <span class="fw-bold"><?php echo mb_substr($m['name'],0,1,'UTF-8'); ?></span>
                   <?php endif; ?>
                 </div>
               </div>
-              <h2 class="h6 mb-1"><?= h($m['name']) ?></h2>
-              <div class="small text-muted mb-2"><?= h($m['position']) ?></div>
+              <h2 class="h6 mb-1"><?php echo h($m['name']); ?></h2>
+              <div class="small text-muted mb-2"><?php echo h($m['position']); ?></div>
               <?php if (empty($m['bio']) === false): ?>
-                <p class="small"><?= nl2br(h($m['bio'])) ?></p>
+                <p class="small"><?php echo nl2br(h($m['bio'])); ?></p>
               <?php endif; ?>
             </div>
             <div class="card-footer small">
               <?php if (empty($m['social_twitter']) === false): ?>
-                <a href="<?= h($m['social_twitter']) ?>" target="_blank" class="me-1">X</a>
+                <a href="<?php echo h($m['social_twitter']); ?>" target="_blank" class="me-1">X</a>
               <?php endif; ?>
               <?php if (empty($m['social_facebook']) === false): ?>
-                <a href="<?= h($m['social_facebook']) ?>" target="_blank" class="me-1">F</a>
+                <a href="<?php echo h($m['social_facebook']); ?>" target="_blank" class="me-1">F</a>
               <?php endif; ?>
               <?php if (empty($m['social_instagram']) === false): ?>
-                <a href="<?= h($m['social_instagram']) ?>" target="_blank" class="me-1">IG</a>
+                <a href="<?php echo h($m['social_instagram']); ?>" target="_blank" class="me-1">IG</a>
               <?php endif; ?>
               <?php if (empty($m['social_linkedin']) === false): ?>
-                <a href="<?= h($m['social_linkedin']) ?>" target="_blank" class="me-1">IN</a>
+                <a href="<?php echo h($m['social_linkedin']); ?>" target="_blank" class="me-1">IN</a>
               <?php endif; ?>
             </div>
           </div>

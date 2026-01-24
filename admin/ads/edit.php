@@ -251,21 +251,21 @@ html, body{
 <div class="admin-content container-fluid py-4">
     <div class="gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 text-white mb-1"><?= h(__('t_74db3d033e', 'تعديل إعلان')) ?></h1>
-            <p class="text-muted mb-0 small"><?= h(__('t_e62cc12417', 'تعديل بيانات إعلان حالي.')) ?></p>
+            <h1 class="h4 text-white mb-1"><?php echo h(__('t_74db3d033e', 'تعديل إعلان')); ?></h1>
+            <p class="text-muted mb-0 small"><?php echo h(__('t_e62cc12417', 'تعديل بيانات إعلان حالي.')); ?></p>
         </div>
         <a href="index.php" class="btn btn-outline-light mt-3 mt-md-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_fed95e1016', 'عودة للقائمة')); ?>
         </a>
     </div>
 
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
+            <strong><?php echo h(__('t_c83b645dc3', 'حدث خطأ:')); ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
-                    <li><?= h($err) ?></li>
+                    <li><?php echo h($err); ?></li>
                 <?php endforeach; ?>
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -284,47 +284,47 @@ html, body{
                 ?>
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label text-white"><?= h(__('t_9fabdb0201', 'عنوان الإعلان')) ?></label>
-                        <input type="text" name="title" class="form-control" required value="<?= h($title) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_9fabdb0201', 'عنوان الإعلان')); ?></label>
+                        <input type="text" name="title" class="form-control" required value="<?php echo h($title); ?>">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-white"><?= h(__('t_ab9dd93492', 'موضع الظهور (location)')) ?></label>
-                        <input type="text" name="location" class="form-control" value="<?= h($location) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_ab9dd93492', 'موضع الظهور (location)')); ?></label>
+                        <input type="text" name="location" class="form-control" value="<?php echo h($location); ?>">
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label text-white"><?= h(__('t_63ead7cf13', 'رابط صورة الإعلان')) ?></label>
-                        <input type="text" name="image_url" class="form-control" value="<?= h($imageUrl) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_63ead7cf13', 'رابط صورة الإعلان')); ?></label>
+                        <input type="text" name="image_url" class="form-control" value="<?php echo h($imageUrl); ?>">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-white"><?= h(__('t_d448c9c33a', 'رابط عند النقر (URL)')) ?></label>
-                        <input type="text" name="target_url" class="form-control" value="<?= h($targetUrl) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_d448c9c33a', 'رابط عند النقر (URL)')); ?></label>
+                        <input type="text" name="target_url" class="form-control" value="<?php echo h($targetUrl); ?>">
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label text-white"><?= h(__('t_8e7ec1a12d', 'نشط؟')) ?></label>
+                        <label class="form-label text-white"><?php echo h(__('t_8e7ec1a12d', 'نشط؟')); ?></label>
                         <div class="form-check form-switch mt-1">
                             <input class="form-check-input" type="checkbox" name="is_active" id="is_active"
-                                   <?= $isActive ? 'checked' : '' ?>>
-                            <label class="form-check-label text-muted" for="is_active"><?= h(__('t_ddaa41f4e3', 'إظهار الإعلان للمستخدمين')) ?></label>
+                                   <?php echo $isActive ? 'checked' : ''; ?>>
+                            <label class="form-check-label text-muted" for="is_active"><?php echo h(__('t_ddaa41f4e3', 'إظهار الإعلان للمستخدمين')); ?></label>
                         </div>
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label text-white"><?= h(__('t_c90712e95b', 'تاريخ بداية الحملة')) ?></label>
-                        <input type="datetime-local" name="starts_at" class="form-control" value="<?= h($startsAt) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_c90712e95b', 'تاريخ بداية الحملة')); ?></label>
+                        <input type="datetime-local" name="starts_at" class="form-control" value="<?php echo h($startsAt); ?>">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-white"><?= h(__('t_8b05b1c719', 'تاريخ نهاية الحملة')) ?></label>
-                        <input type="datetime-local" name="ends_at" class="form-control" value="<?= h($endsAt) ?>">
+                        <label class="form-label text-white"><?php echo h(__('t_8b05b1c719', 'تاريخ نهاية الحملة')); ?></label>
+                        <input type="datetime-local" name="ends_at" class="form-control" value="<?php echo h($endsAt); ?>">
                     </div>
                 </div>
 
                 <div class="mt-4 d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_91d6db7f39', 'حفظ التعديلات')); ?>
                     </button>
-                    <a href="index.php" class="btn btn-outline-secondary"><?= h(__('t_b9568e869d', 'إلغاء')) ?></a>
+                    <a href="index.php" class="btn btn-outline-secondary"><?php echo h(__('t_b9568e869d', 'إلغاء')); ?></a>
                 </div>
             </form>
         </div>

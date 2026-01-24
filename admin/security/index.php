@@ -28,23 +28,23 @@ $sessionSettings = [
 ?>
 
 <div class="alert alert-info">
-  <?= h(__('t_131af90b58', 'هذه الصفحة مخصصة لفحص إعدادات الأمان العامة للنظام.')) ?>
+  <?php echo h(__('t_131af90b58', 'هذه الصفحة مخصصة لفحص إعدادات الأمان العامة للنظام.')); ?>
   <br>
-  <small class="text-muted"><?= h(__('t_c8a1d5ae64', 'النسخة الحالية مبسطة، ويمكن تطويرها لاحقًا لإظهار المزيد من التفاصيل.')) ?></small>
+  <small class="text-muted"><?php echo h(__('t_c8a1d5ae64', 'النسخة الحالية مبسطة، ويمكن تطويرها لاحقًا لإظهار المزيد من التفاصيل.')); ?></small>
 </div>
 
 <div class="row g-3">
   <div class="col-lg-6">
     <div class="card">
       <div class="card-header">
-        <?= h(__('t_afd4e6edb4', 'إعدادات الجلسات والكويكز')) ?>
+        <?php echo h(__('t_afd4e6edb4', 'إعدادات الجلسات والكويكز')); ?>
       </div>
       <div class="card-body small">
         <ul class="mb-0">
-          <li>HTTPOnly: <strong><?= $sessionSettings['httponly'] ? 'ON' : 'OFF' ?></strong></li>
-          <li>SameSite: <strong><?= h($sessionSettings['samesite'] ?: 'Lax') ?></strong></li>
-          <li>Secure cookie: <strong><?= $sessionSettings['secure'] ? 'ON' : 'OFF' ?></strong></li>
-          <li>HTTPS: <strong><?= $https ? __('t_e1dadf4c7c', 'نعم') : __('t_b27ea934ef', 'لا') ?></strong></li>
+          <li>HTTPOnly: <strong><?php echo $sessionSettings['httponly'] ? 'ON' : 'OFF'; ?></strong></li>
+          <li>SameSite: <strong><?php echo h($sessionSettings['samesite'] ?: 'Lax'); ?></strong></li>
+          <li>Secure cookie: <strong><?php echo $sessionSettings['secure'] ? 'ON' : 'OFF'; ?></strong></li>
+          <li>HTTPS: <strong><?php echo $https ? __('t_e1dadf4c7c', 'نعم') : __('t_b27ea934ef', 'لا'); ?></strong></li>
         </ul>
       </div>
     </div>
@@ -53,14 +53,14 @@ $sessionSettings = [
   <div class="col-lg-6">
     <div class="card">
       <div class="card-header">
-        <?= h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')) ?>
+        <?php echo h(__('t_84d1dd88a6', 'إعدادات PHP المهمة')); ?>
       </div>
       <div class="card-body small">
         <ul class="mb-0">
-          <li><?= h(__('t_1425cbc31c', 'الإصدار:')) ?> <strong><?= h(PHP_VERSION) ?></strong></li>
-          <li>display_errors: <strong><?= $displayErrors ? 'ON' : 'OFF' ?></strong></li>
-          <li>log_errors: <strong><?= $logErrors ? 'ON' : 'OFF' ?></strong></li>
-          <li>error_reporting: <strong><?= h((string)error_reporting()) ?></strong></li>
+          <li><?php echo h(__('t_1425cbc31c', 'الإصدار:')); ?> <strong><?php echo h(PHP_VERSION); ?></strong></li>
+          <li>display_errors: <strong><?php echo $displayErrors ? 'ON' : 'OFF'; ?></strong></li>
+          <li>log_errors: <strong><?php echo $logErrors ? 'ON' : 'OFF'; ?></strong></li>
+          <li>error_reporting: <strong><?php echo h((string)error_reporting()); ?></strong></li>
         </ul>
       </div>
     </div>

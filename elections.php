@@ -352,11 +352,11 @@ require __DIR__ . '/frontend/templates/header.php';
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <div>
           <h1 class="h4 mb-1">
-            نتائج الانتخابات – <?= h($currentElection['title'] ?? '') ?>
+            نتائج الانتخابات – <?php echo h($currentElection['title'] ?? ''); ?>
           </h1>
           <?php if (empty($currentElection['description']) === false): ?>
             <p class="mb-0 small text-muted">
-              <?= nl2br(h($currentElection['description'])) ?>
+              <?php echo nl2br(h($currentElection['description'])); ?>
             </p>
           <?php endif; ?>
 
@@ -393,8 +393,8 @@ require __DIR__ . '/frontend/templates/header.php';
                       class="form-select form-select-sm" js-auto-submit"
                      >
                 <?php foreach ($allElections as $el): ?>
-                  <option value="<?= h($el['slug']) ?>" <?= ((int)$el['id'] === $electionId ? 'selected' : '') ?>>
-                    <?= h($el['title']) ?>
+                  <option value="<?php echo h($el['slug']); ?>" <?php echo ((int)$el['id'] === $electionId ? 'selected' : ''); ?>>
+                    <?php echo h($el['title']); ?>
                   </option>
                 <?php endforeach; ?>
               </select>
@@ -407,9 +407,9 @@ require __DIR__ . '/frontend/templates/header.php';
 
             <?php if ($totalSeats > 0): ?>
               <span class="gdy-el-metric-pill">
-                إجمالي المقاعد / الدوائر: <strong><?= $totalSeats ?></strong>
+                إجمالي المقاعد / الدوائر: <strong><?php echo $totalSeats; ?></strong>
                 <?php if ($majoritySeats > 0): ?>
-                  <span class="text-muted"> – الأغلبية: <?= $majoritySeats ?></span>
+                  <span class="text-muted"> – الأغلبية: <?php echo $majoritySeats; ?></span>
                 <?php endif; ?>
               </span>
             <?php endif; ?>
@@ -417,8 +417,8 @@ require __DIR__ . '/frontend/templates/header.php';
             <?php if ($overallLeader): ?>
               <span class="gdy-el-metric-pill">
                 <span class="gdy-el-party-dot"
-                      style="background: <?= h($overallLeader['color_hex'] ?: '#22c55e') ?>"></span>
-                المتصدر: <strong><?= h($overallLeader['short_name']) ?></strong>
+                      style="background: <?php echo h($overallLeader['color_hex'] ?: '#22c55e'); ?>"></span>
+                المتصدر: <strong><?php echo h($overallLeader['short_name']); ?></strong>
               </span>
             <?php endif; ?>
           </div>
@@ -438,8 +438,8 @@ require __DIR__ . '/frontend/templates/header.php';
           <select id="gdy-el-party-filter" class="form-select form-select-sm">
             <option value="">كل الأحزاب</option>
             <?php foreach ($parties as $p): ?>
-              <option value="<?= (int)$p['id'] ?>">
-                <?= h($p['short_name']) ?>
+              <option value="<?php echo (int)$p['id']; ?>">
+                <?php echo h($p['short_name']); ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -478,7 +478,7 @@ require __DIR__ . '/frontend/templates/header.php';
         <div class="card-body">
           <div class="gdy-el-map-wrapper">
             <div id="gdy-el-map-tooltip" class="gdy-el-map-tooltip"></div>
-            <?= gdy_elections_sudan_svg_map(); ?>
+            <?php echo gdy_elections_sudan_svg_map();; ?>
           </div>
 
           <?php if ($parties): ?>
@@ -487,8 +487,8 @@ require __DIR__ . '/frontend/templates/header.php';
                 <?php $color = $p['color_hex'] ?: '#38bdf8'; ?>
                 <span class="gdy-el-map-legend-item">
                   <span class="gdy-el-map-legend-swatch"
-                        style="background: <?= h($color) ?>"></span>
-                  <span class="small"><?= h($p['short_name']) ?></span>
+                        style="background: <?php echo h($color); ?>"></span>
+                  <span class="small"><?php echo h($p['short_name']); ?></span>
                 </span>
               <?php endforeach; ?>
             </div>
@@ -502,7 +502,7 @@ require __DIR__ . '/frontend/templates/header.php';
         <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="h6 mb-0">توزيع النتائج حسب الولايات / المناطق</h2>
           <span class="small text-muted">
-            إجمالي: <?= count($regions) ?>
+            إجمالي: <?php echo count($regions); ?>
           </span>
         </div>
         <div class="card-body p-0">
@@ -518,15 +518,15 @@ require __DIR__ . '/frontend/templates/header.php';
               <tbody id="gdy-el-regions-tbody">
                 <?php foreach ($regions as $reg): ?>
                   <tr data-region-row="1"
-                      data-party-id="<?= $reg['leading_party_id'] ? (int)$reg['leading_party_id'] : '' ?>">
-                    <td><?= h($reg['name_ar'] ?: $reg['name_en']) ?></td>
+                      data-party-id="<?php echo $reg['leading_party_id'] ? (int)$reg['leading_party_id'] : ''; ?>">
+                    <td><?php echo h($reg['name_ar'] ?: $reg['name_en']); ?></td>
                     <td class="text-center">
                       <span class="badge bg-dark-subtle text-light">
-                        <?= (int)$reg['leading_seats_won'] ?> / <?= (int)$reg['total_seats'] ?>
+                        <?php echo (int)$reg['leading_seats_won']; ?> / <?php echo (int)$reg['total_seats']; ?>
                       </span>
                       <?php if ((int)$reg['leading_seats_leading'] > 0): ?>
                         <span class="badge bg-warning text-dark ms-1">
-                          +<?= (int)$reg['leading_seats_leading'] ?> متقدم
+                          +<?php echo (int)$reg['leading_seats_leading']; ?> متقدم
                         </span>
                       <?php endif; ?>
                     </td>
@@ -534,8 +534,8 @@ require __DIR__ . '/frontend/templates/header.php';
                       <?php if ($reg['leading_party_short']): ?>
                         <span class="gdy-el-leading-badge">
                           <span class="gdy-el-party-dot"
-                                style="background: <?= h($reg['leading_color']) ?>"></span>
-                          <?= h($reg['leading_party_short']) ?>
+                                style="background: <?php echo h($reg['leading_color']); ?>"></span>
+                          <?php echo h($reg['leading_party_short']); ?>
                         </span>
                       <?php else: ?>
                         <span class="text-muted small">لا بيانات</span>
@@ -563,9 +563,9 @@ require __DIR__ . '/frontend/templates/header.php';
     <div class="card-header d-flex justify-content-between align-items-center">
       <h2 class="h6 mb-0">ملخص النتائج حسب الحزب</h2>
       <span class="small text-muted">
-        المقاعد المحسومة: <?= $totalWon ?>
+        المقاعد المحسومة: <?php echo $totalWon; ?>
         <?php if ($totalLeading > 0): ?>
-          – المتقدمة: <?= $totalLeading ?>
+          – المتقدمة: <?php echo $totalLeading; ?>
         <?php endif; ?>
       </span>
     </div>
@@ -589,27 +589,27 @@ require __DIR__ . '/frontend/templates/header.php';
                 $totalSeatsParty = (int)$p['seats_won'] + (int)$p['seats_leading'];
               ?>
               <tr data-party-row="1"
-                  data-party-id="<?= (int)$p['id'] ?>"
-                  data-total-seats="<?= $totalSeatsParty ?>">
+                  data-party-id="<?php echo (int)$p['id']; ?>"
+                  data-total-seats="<?php echo $totalSeatsParty; ?>">
                 <td>
                   <div class="d-flex align-items-center gap-2">
-                    <span class="gdy-el-party-dot" style="background: <?= h($color) ?>"></span>
+                    <span class="gdy-el-party-dot" style="background: <?php echo h($color); ?>"></span>
                     <div>
-                      <div class="fw-semibold"><?= h($p['short_name']) ?></div>
+                      <div class="fw-semibold"><?php echo h($p['short_name']); ?></div>
                       <?php if (!empty($p['full_name'])): ?>
-                        <div class="small text-muted"><?= h($p['full_name']) ?></div>
+                        <div class="small text-muted"><?php echo h($p['full_name']); ?></div>
                       <?php endif; ?>
                     </div>
                   </div>
                 </td>
-                <td class="text-center"><?= (int)$p['seats_won'] ?></td>
-                <td class="text-center"><?= (int)$p['seats_leading'] ?></td>
-                <td class="text-center"><strong><?= $totalSeatsParty ?></strong></td>
+                <td class="text-center"><?php echo (int)$p['seats_won']; ?></td>
+                <td class="text-center"><?php echo (int)$p['seats_leading']; ?></td>
+                <td class="text-center"><strong><?php echo $totalSeatsParty; ?></strong></td>
                 <td class="text-center">
-                  <?= $p['votes'] ? number_format((int)$p['votes']) : '—' ?>
+                  <?php echo $p['votes'] ? number_format((int)$p['votes']) : '—'; ?>
                 </td>
                 <td class="text-center">
-                  <?= $p['vote_percent'] !== null ? number_format((float)$p['vote_percent'], 2) . '%' : '—' ?>
+                  <?php echo $p['vote_percent'] !== null ? number_format((float)$p['vote_percent'], 2) . '%' : '—'; ?>
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -633,9 +633,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // ==========================
   // 1) خريطة السودان: تلوين + تلميح + فتح صفحة الولاية
   // ==========================
-  const regionsData = <?= json_encode($regionsMapPayload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?> || {};
+  const regionsData = <?php echo json_encode($regionsMapPayload, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?> || {};
   const tooltipEl   = document.getElementById('gdy-el-map-tooltip');
-  const regionBaseUrl = <?= json_encode($scriptDir . '/election_region.php?election=' . rawurlencode($requestedSlug) . '&code=') ?>;
+  const regionBaseUrl = <?php echo json_encode($scriptDir . '/election_region.php?election=' . rawurlencode($requestedSlug) . '&code='); ?>;
 
   function positionTooltip(ev, rootEl) {
     if (!tooltipEl || !rootEl) return;

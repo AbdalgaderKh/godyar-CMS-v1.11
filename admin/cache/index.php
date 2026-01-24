@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $cacheSupported) {
         <p class="text-danger mb-0">كلاس Cache غير موجود، يرجى التأكد من ملف <code>includes/cache.php</code>.</p>
       <?php else: ?>
         <?php if ($cacheMessage): ?>
-          <div class="alert alert-info py-2"><?= h($cacheMessage) ?></div>
+          <div class="alert alert-info py-2"><?php echo h($cacheMessage); ?></div>
         <?php endif; ?>
 
         <p class="mb-2">
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $cacheSupported) {
         </p>
 
         <form method="post" action="">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
           <button type="submit" class="btn btn-danger" data-confirm='تأكيد مسح الكاش بالكامل؟'>

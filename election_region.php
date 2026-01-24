@@ -542,16 +542,16 @@ require __DIR__ . '/frontend/templates/header.php';
     <ol class="breadcrumb mb-1">
       <li class="breadcrumb-item"><a href="/index.php">الرئيسية</a></li>
       <li class="breadcrumb-item">
-        <a href="/elections.php?election=<?= h($currentElection['slug']) ?>">
-          نتائج الانتخابات – <?= h($currentElection['title']) ?>
+        <a href="/elections.php?election=<?php echo h($currentElection['slug']); ?>">
+          نتائج الانتخابات – <?php echo h($currentElection['title']); ?>
         </a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <?= h($stateName) ?>
+        <?php echo h($stateName); ?>
       </li>
     </ol>
     <div class="d-flex flex-wrap gap-2 mt-1">
-      <a href="/elections.php?election=<?= h($currentElection['slug']) ?>" class="btn btn-sm btn-outline-secondary">
+      <a href="/elections.php?election=<?php echo h($currentElection['slug']); ?>" class="btn btn-sm btn-outline-secondary">
         ← العودة لخريطة الولايات
       </a>
     </div>
@@ -567,26 +567,26 @@ require __DIR__ . '/frontend/templates/header.php';
           </span>
         </div>
         <h1 class="h4 mb-1">
-          ولاية <?= h($stateName) ?>
+          ولاية <?php echo h($stateName); ?>
         </h1>
         <p class="mb-2 small text-slate-300">
-          ضمن تغطية: <strong><?= h($currentElection['title']) ?></strong>
+          ضمن تغطية: <strong><?php echo h($currentElection['title']); ?></strong>
         </p>
 
         <div class="d-flex flex-wrap gap-2 mt-2">
           <div class="gdy-region-stat-pill">
             <span class="gdy-region-stat-label">إجمالي الدوائر / المقاعد</span>
             <span class="gdy-region-stat-value">
-              <?= (empty($constituenciesCount) === false) ?: '—' ?>
+              <?php echo (empty($constituenciesCount) === false) ?: '—'; ?>
             </span>
           </div>
           <div class="gdy-region-stat-pill">
             <span class="gdy-region-stat-label">المقاعد المحسومة</span>
             <span class="gdy-region-stat-value">
-              <?= $totalSeatsWon ?>
+              <?php echo $totalSeatsWon; ?>
               <?php if ($totalSeatsLeading > 0): ?>
                 <span class="text-warning small">
-                  (+<?= $totalSeatsLeading ?> متقدمة)
+                  (+<?php echo $totalSeatsLeading; ?> متقدمة)
                 </span>
               <?php endif; ?>
             </span>
@@ -594,7 +594,7 @@ require __DIR__ . '/frontend/templates/header.php';
           <div class="gdy-region-stat-pill">
             <span class="gdy-region-stat-label">عدد الأحزاب المشاركة</span>
             <span class="gdy-region-stat-value">
-              <?= $partyResults ? count($partyResults) : '—' ?>
+              <?php echo $partyResults ? count($partyResults) : '—'; ?>
             </span>
           </div>
         </div>
@@ -614,13 +614,13 @@ require __DIR__ . '/frontend/templates/header.php';
             <div class="small text-muted mb-1">الحزب المتصدر في الولاية</div>
             <div class="d-flex align-items-center justify-content-between gap-2">
               <div class="d-flex align-items-center gap-2">
-                <span class="gdy-region-dot" style="background: <?= h($lpColor) ?>;"></span>
+                <span class="gdy-region-dot" style="background: <?php echo h($lpColor); ?>;"></span>
                 <div>
-                  <div class="fw-semibold small"><?= h($lpShort) ?></div>
+                  <div class="fw-semibold small"><?php echo h($lpShort); ?></div>
                   <div class="small text-muted">
-                    مقاعد محسومة: <?= (int)$leadingParty['seats_won'] ?>
+                    مقاعد محسومة: <?php echo (int)$leadingParty['seats_won']; ?>
                     <?php if ((int)$leadingParty['seats_leading'] > 0): ?>
-                      – متقدمة: <?= (int)$leadingParty['seats_leading'] ?>
+                      – متقدمة: <?php echo (int)$leadingParty['seats_leading']; ?>
                     <?php endif; ?>
                   </div>
                 </div>
@@ -628,7 +628,7 @@ require __DIR__ . '/frontend/templates/header.php';
               <?php if ($shareSeat !== null): ?>
                 <div class="text-end">
                   <div class="small text-muted mb-1">حصة المقاعد</div>
-                  <div class="fw-semibold"><?= $shareSeat ?>%</div>
+                  <div class="fw-semibold"><?php echo $shareSeat; ?>%</div>
                 </div>
               <?php endif; ?>
             </div>
@@ -664,14 +664,14 @@ require __DIR__ . '/frontend/templates/header.php';
         <div class="card-header bg-light d-flex align-items-center justify-content-between">
           <span class="fw-semibold small">معلومات الولاية</span>
           <span class="badge bg-secondary-subtle text-secondary-emphasis gdy-pill-status">
-            <?= h($stateName) ?>
+            <?php echo h($stateName); ?>
           </span>
         </div>
         <div class="card-body small">
 
           <dl class="row mb-2">
             <dt class="col-5 text-muted">عاصمة الولاية</dt>
-            <dd class="col-7"><?= h($meta['capital'] ?? 'غير محددة') ?></dd>
+            <dd class="col-7"><?php echo h($meta['capital'] ?? 'غير محددة'); ?></dd>
 
             <dt class="col-5 text-muted">أهم المدن</dt>
             <dd class="col-7">
@@ -681,7 +681,7 @@ require __DIR__ . '/frontend/templates/header.php';
                 ?>
                 <?php foreach ($cities as $city): ?>
                   <?php if ($city === '') continue; ?>
-                  <span class="gdy-region-chip"><?= h($city) ?></span>
+                  <span class="gdy-region-chip"><?php echo h($city); ?></span>
                 <?php endforeach; ?>
               <?php else: ?>
                 —
@@ -690,32 +690,32 @@ require __DIR__ . '/frontend/templates/header.php';
 
             <dt class="col-5 text-muted">المساحة (كم²)</dt>
             <dd class="col-7">
-              <?= isset($meta['area_km2']) && $meta['area_km2']
+              <?php echo isset($meta['area_km2']) && $meta['area_km2']
                     ? number_format((float)$meta['area_km2'], 0)
-                    : '—' ?>
+                    : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد السكان (تقريبي)</dt>
             <dd class="col-7">
-              <?= isset($meta['pop_2008']) && $meta['pop_2008']
+              <?php echo isset($meta['pop_2008']) && $meta['pop_2008']
                     ? number_format((float)$meta['pop_2008'], 0)
-                    : '—' ?>
+                    : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد الدوائر / المقاعد</dt>
             <dd class="col-7">
-              <?= $constituenciesCount ? (int)$constituenciesCount : '—' ?>
+              <?php echo $constituenciesCount ? (int)$constituenciesCount : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد الأحزاب المشاركة</dt>
             <dd class="col-7">
-              <?= $partyResults ? count($partyResults) : '—' ?>
+              <?php echo $partyResults ? count($partyResults) : '—'; ?>
             </dd>
           </dl>
 
           <?php if (!empty($meta['wiki'])): ?>
             <hr>
-            <a href="<?= h($meta['wiki']) ?>" target="_blank" rel="noopener"
+            <a href="<?php echo h($meta['wiki']); ?>" target="_blank" rel="noopener"
                class="btn btn-sm btn-outline-secondary w-100">
               المزيد عن الولاية في ويكيبيديا
             </a>
@@ -730,7 +730,7 @@ require __DIR__ . '/frontend/templates/header.php';
             <span class="fw-semibold small">لمحة عن الولاية</span>
           </div>
           <div class="card-body small text-muted">
-            <?= nl2br(h($meta['info'])) ?>
+            <?php echo nl2br(h($meta['info'])); ?>
           </div>
         </div>
       <?php endif; ?>
@@ -743,7 +743,7 @@ require __DIR__ . '/frontend/templates/header.php';
           <div>
             <span class="fw-semibold small">النتائج الانتخابية في الولاية</span>
             <span class="small text-muted ms-2">
-              إجمالي الدوائر / المقاعد: <?= $constituenciesCount ?: '—' ?>
+              إجمالي الدوائر / المقاعد: <?php echo $constituenciesCount ?: '—'; ?>
             </span>
           </div>
           <div class="d-flex align-items-center gap-2">
@@ -786,42 +786,42 @@ require __DIR__ . '/frontend/templates/header.php';
                     }
                   ?>
                     <tr
-                      class="<?= implode(' ', $rowClasses) ?>"
-                      data-seats="<?= $totalSeatsParty ?>"
-                      data-votes="<?= $votes !== null ? $votes : 0 ?>"
+                      class="<?php echo implode(' ', $rowClasses); ?>"
+                      data-seats="<?php echo $totalSeatsParty; ?>"
+                      data-votes="<?php echo $votes !== null ? $votes : 0; ?>"
                     >
                       <td>
                         <div class="d-flex align-items-center gap-2">
-                          <span class="gdy-region-dot" style="background: <?= h($color) ?>;"></span>
+                          <span class="gdy-region-dot" style="background: <?php echo h($color); ?>;"></span>
                           <div>
                             <div class="fw-semibold small">
-                              <?= h($row['short_name'] ?? $row['full_name'] ?? 'حزب') ?>
+                              <?php echo h($row['short_name'] ?? $row['full_name'] ?? 'حزب'); ?>
                             </div>
                             <?php if (!empty($row['full_name']) && $row['full_name'] !== $row['short_name']): ?>
-                              <div class="small text-muted"><?= h($row['full_name']) ?></div>
+                              <div class="small text-muted"><?php echo h($row['full_name']); ?></div>
                             <?php endif; ?>
                           </div>
                         </div>
                       </td>
-                      <td class="text-center"><?= (int)$row['seats_won'] ?></td>
-                      <td class="text-center"><?= (int)$row['seats_leading'] ?></td>
+                      <td class="text-center"><?php echo (int)$row['seats_won']; ?></td>
+                      <td class="text-center"><?php echo (int)$row['seats_leading']; ?></td>
                       <td class="text-center">
-                        <strong><?= $totalSeatsParty ?></strong>
+                        <strong><?php echo $totalSeatsParty; ?></strong>
                       </td>
                       <td>
                         <div class="gdy-progress-shell">
                           <div class="gdy-progress-bar"
-                               style="background: <?= h($color) ?>; width: <?= $seatShare ?>%;"></div>
+                               style="background: <?php echo h($color); ?>; width: <?php echo $seatShare; ?>%;"></div>
                         </div>
                         <div class="small text-muted mt-1">
-                          <?= $seatShare ? $seatShare . '%' : 'لا مقاعد بعد' ?>
+                          <?php echo $seatShare ? $seatShare . '%' : 'لا مقاعد بعد'; ?>
                         </div>
                       </td>
                       <td class="text-center">
-                        <?= $votes !== null ? number_format($votes) : '—' ?>
+                        <?php echo $votes !== null ? number_format($votes) : '—'; ?>
                       </td>
                       <td class="text-center">
-                        <?= $votePercent !== null ? number_format($votePercent, 2) . '%' : '—' ?>
+                        <?php echo $votePercent !== null ? number_format($votePercent, 2) . '%' : '—'; ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>
@@ -842,7 +842,7 @@ require __DIR__ . '/frontend/templates/header.php';
           <span class="fw-semibold small">الدوائر والمرشحين في هذه الولاية</span>
           <?php if ($constituencies): ?>
             <span class="small text-muted">
-              عدد الدوائر: <?= count($constituencies) ?>
+              عدد الدوائر: <?php echo count($constituencies); ?>
             </span>
           <?php endif; ?>
         </div>
@@ -881,52 +881,52 @@ require __DIR__ . '/frontend/templates/header.php';
                 $headingId  = 'gdy-const-heading-' . $cid;
               ?>
                 <div class="accordion-item mb-1 border-0">
-                  <h2 class="accordion-header" id="<?= h($headingId) ?>">
+                  <h2 class="accordion-header" id="<?php echo h($headingId); ?>">
                     <button class="accordion-button collapsed py-2 px-3 small"
                             type="button"
                             data-bs-toggle="collapse"
-                            data-bs-target="#<?= h($collapseId) ?>"
+                            data-bs-target="#<?php echo h($collapseId); ?>"
                             aria-expanded="false"
-                            aria-controls="<?= h($collapseId) ?>">
+                            aria-controls="<?php echo h($collapseId); ?>">
                       <div class="w-100 d-flex flex-column flex-md-row justify-content-between gap-2">
                         <div>
-                          <span class="fw-semibold"><?= h($cName) ?></span>
+                          <span class="fw-semibold"><?php echo h($cName); ?></span>
                           <?php if ($cCode): ?>
                             <span class="badge bg-dark-subtle text-light ms-2">
-                              كود: <?= h($cCode) ?>
+                              كود: <?php echo h($cCode); ?>
                             </span>
                           <?php endif; ?>
                         </div>
                         <div class="d-flex flex-wrap gap-2">
                           <span class="gdy-region-pill">
                             <span class="gdy-region-dot" style="background:#0ea5e9;"></span>
-                            المقاعد: <?= (int)$cSeats ?>
+                            المقاعد: <?php echo (int)$cSeats; ?>
                           </span>
                           <?php if ($regVoters): ?>
                             <span class="gdy-region-pill">
                               الناخبون المسجلون:
-                              <?= number_format((float)$regVoters) ?>
+                              <?php echo number_format((float)$regVoters); ?>
                             </span>
                           <?php endif; ?>
                           <?php if ($turnout): ?>
                             <span class="gdy-region-pill">
                               نسبة الإقبال:
-                              <?= is_numeric($turnout) ? number_format((float)$turnout, 1) . '%' : h((string)$turnout) ?>
+                              <?php echo is_numeric($turnout) ? number_format((float)$turnout, 1) . '%' : h((string)$turnout); ?>
                             </span>
                           <?php endif; ?>
                           <?php if ($winnerName): ?>
                             <span class="gdy-region-pill">
                               الفائز (مبدئيًا):
-                              <strong><?= h($winnerName) ?></strong>
+                              <strong><?php echo h($winnerName); ?></strong>
                             </span>
                           <?php endif; ?>
                         </div>
                       </div>
                     </button>
                   </h2>
-                  <div id="<?= h($collapseId) ?>"
+                  <div id="<?php echo h($collapseId); ?>"
                        class="accordion-collapse collapse"
-                       aria-labelledby="<?= h($headingId) ?>"
+                       aria-labelledby="<?php echo h($headingId); ?>"
                        data-bs-parent="#gdy-const-accordion">
                     <div class="accordion-body pt-2 pb-2 px-3">
                       <?php if ($candList): ?>
@@ -951,16 +951,16 @@ require __DIR__ . '/frontend/templates/header.php';
                                 $isWinner  = isset($candRow['is_winner']) && (string)$candRow['is_winner'] === '1';
                               ?>
                                 <tr>
-                                  <td><?= h($candName) ?></td>
+                                  <td><?php echo h($candName); ?></td>
                                   <td>
-                                    <span class="gdy-region-dot me-1" style="background: <?= h($pColor) ?>;"></span>
-                                    <?= h($partyShort) ?>
+                                    <span class="gdy-region-dot me-1" style="background: <?php echo h($pColor); ?>;"></span>
+                                    <?php echo h($partyShort); ?>
                                   </td>
                                   <td class="text-center">
-                                    <?= $candVotes !== null ? number_format((float)$candVotes) : '—' ?>
+                                    <?php echo $candVotes !== null ? number_format((float)$candVotes) : '—'; ?>
                                   </td>
                                   <td class="text-center">
-                                    <?= $candPct !== null ? number_format((float)$candPct, 2) . '%' : '—' ?>
+                                    <?php echo $candPct !== null ? number_format((float)$candPct, 2) . '%' : '—'; ?>
                                   </td>
                                   <td class="text-center">
                                     <?php if ($isWinner): ?>

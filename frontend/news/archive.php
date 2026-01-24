@@ -15,5 +15,5 @@ if (headers_sent() === false) {
 // Fallback when headers already sent
 ?><!doctype html>
 <meta charset="utf-8">
-<meta http-equiv="refresh" content="0;url=<?= htmlspecialchars($to, ENT_QUOTES, 'UTF-8') ?>">
-<a href="<?= htmlspecialchars($to, ENT_QUOTES, 'UTF-8') ?>">Continue</a>
+<meta http-equiv="refresh" content="0;url=<?php echo htmlspecialchars($to, ENT_QUOTES, 'UTF-8'); ?>">
+<a href="<?php echo htmlspecialchars($to, ENT_QUOTES, 'UTF-8'); ?>">Continue</a>

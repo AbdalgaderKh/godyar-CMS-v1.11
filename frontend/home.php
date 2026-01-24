@@ -532,11 +532,11 @@ $renderOpinionAuthorsBlock = function () use (
         return;
     }
     ?>
-    <section id="opinion-authors" class="hm-section hm-opinion-authors" aria-label="<?= h(__('كتّاب الرأي')) ?>">
+    <section id="opinion-authors" class="hm-section hm-opinion-authors" aria-label="<?php echo h(__('كتّاب الرأي')); ?>">
         <div class="hm-section-header">
             <h2 class="hm-section-title">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <?= h(__('كتّاب الرأي')) ?>
+                <?php echo h(__('كتّاب الرأي')); ?>
             </h2>
         </div>
 
@@ -568,33 +568,33 @@ $renderOpinionAuthorsBlock = function () use (
                 }
                 ?>
                 <article class="hm-opinion-author-card">
-                    <a href="<?= h($authorUrl) ?>" class="hm-opinion-author-avatar">
-                        <img src="<?= h($avatar) ?>"
-                             alt="<?= h($name) ?>"
-                             data-gdy-fallback-src="<?= h($authorImageDefault) ?>">
+                    <a href="<?php echo h($authorUrl); ?>" class="hm-opinion-author-avatar">
+                        <img src="<?php echo h($avatar); ?>"
+                             alt="<?php echo h($name); ?>"
+                             data-gdy-fallback-src="<?php echo h($authorImageDefault); ?>">
                     </a>
                     <div class="hm-opinion-author-body">
                         <div class="hm-opinion-author-name">
-                            <a href="<?= h($authorUrl) ?>" style="color:inherit;text-decoration:none;">
-                                <?= h($name) ?>
+                            <a href="<?php echo h($authorUrl); ?>" style="color:inherit;text-decoration:none;">
+                                <?php echo h($name); ?>
                             </a>
                         </div>
 
                         <?php if ($pageTitle !== ''): ?>
                             <div class="hm-opinion-author-spec">
-                                <?= h($pageTitle) ?>
+                                <?php echo h($pageTitle); ?>
                             </div>
                         <?php elseif ($spec !== ''): ?>
                             <div class="hm-opinion-author-spec">
-                                <?= h($spec) ?>
+                                <?php echo h($spec); ?>
                             </div>
                         <?php endif; ?>
 
                         <?php if ($lastUrl && $lastTitle): ?>
-                            <a href="<?= h($lastUrl) ?>" class="hm-opinion-author-last">
+                            <a href="<?php echo h($lastUrl); ?>" class="hm-opinion-author-last">
                                 آخر مقال:
-                                <?= h(mb_substr($lastTitle, 0, 80, 'UTF-8')) ?>
-                                <?= mb_strlen($lastTitle, 'UTF-8') > 80 ? '…' : '' ?>
+                                <?php echo h(mb_substr($lastTitle, 0, 80, 'UTF-8')); ?>
+                                <?php echo mb_strlen($lastTitle, 'UTF-8') > 80 ? '…' : ''; ?>
                             </a>
                         <?php else: ?>
                             <div class="hm-opinion-author-last muted">

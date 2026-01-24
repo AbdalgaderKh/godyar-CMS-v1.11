@@ -186,7 +186,7 @@ $contactOld     = $contactOld     ?? [];
     <!-- رسائل النجاح / الخطأ -->
     <?php if (!empty($contactSuccess)): ?>
       <div class="gdy-alert gdy-alert-success">
-        <?= h($contactSuccess) ?>
+        <?php echo h($contactSuccess); ?>
       </div>
     <?php endif; ?>
 
@@ -195,7 +195,7 @@ $contactOld     = $contactOld     ?? [];
         <strong>حدثت الأخطاء التالية:</strong>
         <ul>
           <?php foreach ($contactErrors as $err): ?>
-            <li><?= h($err) ?></li>
+            <li><?php echo h($err); ?></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -245,10 +245,10 @@ $contactOld     = $contactOld     ?? [];
         </div>
       </div>
 
-        <form class="gdy-contact-form" method="post" action="<?= h($baseUrl) ?>
+        <form class="gdy-contact-form" method="post" action="<?php echo h($baseUrl); ?>
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
           <div class="row g-2 mb-2">
-        <form class="gdy-contact-form" method="post" action="<?= h($baseUrl) ?>
+        <form class="gdy-contact-form" method="post" action="<?php echo h($baseUrl); ?>
           <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
           <div class="row g-2 mb-2">
             <div class="col-md-6">
@@ -261,7 +261,7 @@ $contactOld     = $contactOld     ?? [];
                 id="contact_name"
                 class="form-control"
                 required
-                value="<?= h($contactOld['name'] ?? '') ?>"
+                value="<?php echo h($contactOld['name'] ?? ''); ?>"
               >
             </div>
             <div class="col-md-6">
@@ -274,7 +274,7 @@ $contactOld     = $contactOld     ?? [];
                 id="contact_email"
                 class="form-control"
                 required
-                value="<?= h($contactOld['email'] ?? '') ?>"
+                value="<?php echo h($contactOld['email'] ?? ''); ?>"
               >
             </div>
           </div>
@@ -288,7 +288,7 @@ $contactOld     = $contactOld     ?? [];
               name="subject"
               id="contact_subject"
               class="form-control"
-              value="<?= h($contactOld['subject'] ?? '') ?>"
+              value="<?php echo h($contactOld['subject'] ?? ''); ?>"
             >
           </div>
 
@@ -302,7 +302,7 @@ $contactOld     = $contactOld     ?? [];
               rows="8"
               class="form-control"
               required
-            ><?= h($contactOld['message'] ?? '') ?></textarea>
+            ><?php echo h($contactOld['message'] ?? ''); ?></textarea>
           </div>
 
           <div class="gdy-contact-submit">
@@ -324,18 +324,18 @@ $contactOld     = $contactOld     ?? [];
     <div class="hero-card" style="margin-bottom:18px;">
       <div class="hero-badge">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-        <span><?= $pageNotFound ? 'صفحة غير موجودة' : 'صفحة ثابتة' ?></span>
+        <span><?php echo $pageNotFound ? 'صفحة غير موجودة' : 'صفحة ثابتة'; ?></span>
       </div>
-      <h1 class="hero-title"><?= h($page['title'] ?? '') ?></h1>
+      <h1 class="hero-title"><?php echo h($page['title'] ?? ''); ?></h1>
       <div class="hero-meta">
         <span>
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(date('Y-m-d', strtotime($page['created_at'] ?? 'now'))) ?>
+          <?php echo h(date('Y-m-d', strtotime($page['created_at'] ?? 'now'))); ?>
         </span>
         <?php if (!empty($page['updated_at']) && $page['updated_at'] !== $page['created_at']): ?>
           <span>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            آخر تحديث: <?= h(date('Y-m-d', strtotime($page['updated_at']))) ?>
+            آخر تحديث: <?php echo h(date('Y-m-d', strtotime($page['updated_at']))); ?>
           </span>
         <?php endif; ?>
       </div>

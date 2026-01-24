@@ -64,22 +64,22 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
         <div class="cat-header">
 
           <div class="cat-breadcrumb mb-2">
-            <a href="<?= h(rtrim($baseUrl, '/') . '/') ?>">
+            <a href="<?php echo h(rtrim($baseUrl, '/') . '/'); ?>">
               <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
               الرئيسية
             </a>
             <span class="mx-1 text-muted">/</span>
-            <span><?= h($name) ?></span>
+            <span><?php echo h($name); ?></span>
           </div>
 
           <div class="cat-main-title-wrap">
             <div>
               <h1 class="cat-main-title">
-                <?= h($name) ?>
+                <?php echo h($name); ?>
               </h1>
               <?php if (!empty($desc)): ?>
                 <p class="cat-main-desc">
-                  <?= h($desc) ?>
+                  <?php echo h($desc); ?>
                 </p>
               <?php endif; ?>
             </div>
@@ -89,32 +89,32 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
           <div class="cat-toolbar">
             <div class="cat-sort-group">
               <span class="cat-filter-label">ترتيب حسب:</span>
-              <a href="<?= h($makeUrl('latest', $currentPeriod)) ?>"
-                 class="cat-pill <?= $currentSort === 'latest' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl('latest', $currentPeriod)); ?>"
+                 class="cat-pill <?php echo $currentSort === 'latest' ? 'active' : ''; ?>">
                 الأحدث
               </a>
-              <a href="<?= h($makeUrl('popular', $currentPeriod)) ?>"
-                 class="cat-pill <?= $currentSort === 'popular' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl('popular', $currentPeriod)); ?>"
+                 class="cat-pill <?php echo $currentSort === 'popular' ? 'active' : ''; ?>">
                 الأكثر قراءة
               </a>
             </div>
 
             <div class="cat-filter-group">
               <span class="cat-filter-label">الفترة:</span>
-              <a href="<?= h($makeUrl($currentSort, 'all')) ?>"
-                 class="cat-pill <?= $currentPeriod === 'all' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl($currentSort, 'all')); ?>"
+                 class="cat-pill <?php echo $currentPeriod === 'all' ? 'active' : ''; ?>">
                 الكل
               </a>
-              <a href="<?= h($makeUrl($currentSort, 'today')) ?>"
-                 class="cat-pill <?= $currentPeriod === 'today' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl($currentSort, 'today')); ?>"
+                 class="cat-pill <?php echo $currentPeriod === 'today' ? 'active' : ''; ?>">
                 اليوم
               </a>
-              <a href="<?= h($makeUrl($currentSort, 'week')) ?>"
-                 class="cat-pill <?= $currentPeriod === 'week' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl($currentSort, 'week')); ?>"
+                 class="cat-pill <?php echo $currentPeriod === 'week' ? 'active' : ''; ?>">
                 هذا الأسبوع
               </a>
-              <a href="<?= h($makeUrl($currentSort, 'month')) ?>"
-                 class="cat-pill <?= $currentPeriod === 'month' ? 'active' : '' ?>">
+              <a href="<?php echo h($makeUrl($currentSort, 'month')); ?>"
+                 class="cat-pill <?php echo $currentPeriod === 'month' ? 'active' : ''; ?>">
                 هذا الشهر
               </a>
             </div>
@@ -155,11 +155,11 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
 
                   $isVideo  = (!empty($videoUrl));
                   ?>
-                  <article class="cat-card-modern<?= $isVideo ? ' cat-card-video' : '' ?>">
-                    <a href="<?= h($newsUrl) ?>" class="cat-card-thumb-wrap">
+                  <article class="cat-card-modern<?php echo $isVideo ? ' cat-card-video' : ''; ?>">
+                    <a href="<?php echo h($newsUrl); ?>" class="cat-card-thumb-wrap">
                       <?php if (!empty($thumb)): ?>
                         <div class="cat-card-thumb">
-                          <img src="<?= h($thumb) ?>" alt="<?= h($title) ?>">
+                          <img src="<?php echo h($thumb); ?>" alt="<?php echo h($title); ?>">
                           <div class="cat-card-thumb-overlay"></div>
                           <?php if ($isVideo): ?>
                             <div class="cat-card-badge">
@@ -172,24 +172,24 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                     </a>
                     <div class="cat-card-body-modern">
                       <h3 class="cat-card-title-modern">
-                        <a href="<?= h($newsUrl) ?>">
-                          <?= h(mb_substr($title, 0, 90, 'UTF-8')) ?><?= mb_strlen($title,'UTF-8')>90 ? '…' : '' ?>
+                        <a href="<?php echo h($newsUrl); ?>">
+                          <?php echo h(mb_substr($title, 0, 90, 'UTF-8')); ?><?php echo mb_strlen($title,'UTF-8')>90 ? '…' : ''; ?>
                         </a>
                       </h3>
                       <?php if ($excerpt !== ''): ?>
                         <p class="cat-card-excerpt">
-                          <?= h(mb_substr($excerpt, 0, 110, 'UTF-8')) ?><?= mb_strlen($excerpt,'UTF-8')>110 ? '…' : '' ?>
+                          <?php echo h(mb_substr($excerpt, 0, 110, 'UTF-8')); ?><?php echo mb_strlen($excerpt,'UTF-8')>110 ? '…' : ''; ?>
                         </p>
                       <?php endif; ?>
                       <div class="cat-card-meta-modern">
                         <?php if ($date): ?>
                           <span>
-                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?>
+                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?>
                           </span>
                         <?php endif; ?>
                         <?php if ($views !== null): ?>
                           <span>
-                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($views) ?> مشاهدة
+                            <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo number_format($views); ?> مشاهدة
                           </span>
                         <?php endif; ?>
                       </div>
@@ -235,15 +235,15 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                     $tDate   = !empty($row['created_at']) ? date('Y-m-d', strtotime((string)$row['created_at'])) : '';
                   ?>
                   <li class="cat-sidebar-item">
-                    <a href="<?= h($tUrl) ?>">
-                      <?= h(mb_substr($tTitle, 0, 70, 'UTF-8')) ?><?= mb_strlen($tTitle, 'UTF-8')>70 ? '…':'' ?>
+                    <a href="<?php echo h($tUrl); ?>">
+                      <?php echo h(mb_substr($tTitle, 0, 70, 'UTF-8')); ?><?php echo mb_strlen($tTitle, 'UTF-8')>70 ? '…':''; ?>
                     </a>
                     <div class="cat-sidebar-meta">
                       <?php if ($tDate): ?>
-                        <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($tDate) ?></span>
+                        <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($tDate); ?></span>
                       <?php endif; ?>
                       <?php if ($tViews !== null): ?>
-                        <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($tViews) ?></span>
+                        <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo number_format($tViews); ?></span>
                       <?php endif; ?>
                     </div>
                   </li>

@@ -36,7 +36,7 @@ declare(strict_types=1);
 // =====================
 // إعدادات أمان وتشغيل
 // =====================
-const SECRET_TOKEN = 'REPLACE_WITH_YOUR_TOKEN';
+const SECRET_TOKEN = 'Ghtkj4586o73S54a';
 
 // افتراضيات مجلدات الكتابة داخل المشروع (public_html)
 const DEFAULT_WRITABLE_DIRS = ['uploads', 'cache', 'storage', 'logs', 'tmp'];
@@ -45,8 +45,8 @@ const DEFAULT_WRITABLE_DIRS = ['uploads', 'cache', 'storage', 'logs', 'tmp'];
 const DEFAULT_REQUIRED_EXTS = ['curl', 'mbstring', 'openssl', 'pdo', 'json', 'xml', 'gd', 'pdo_mysql', 'pdo_pgsql'];
 
 // إعداد افتراضي لمسار خاص (يمكن تجاوزه عبر private_root في الرابط)
-// ضع مسارك الحقيقي هنا (كما ذكرت: /home/USER/godyar_private)
-const DEFAULT_PRIVATE_ROOT = '/home/USER/godyar_private';
+// ضع مسارك الحقيقي هنا (كما ذكرت: /home/geqzylcq/godyar_private)
+const DEFAULT_PRIVATE_ROOT = '/home/geqzylcq/godyar_private';
 
 const MAX_SECURITY_FILE_SIZE = 2_000_000; // 2MB لتسريع فحص الأنماط
 const MAX_SECURITY_HITS_PER_PATTERN = 10;
@@ -889,20 +889,20 @@ $issues = $report['summary']['issues'] ?? [];
 </head>
 <body>
   <h2>تقرير فحص المشروع</h2>
-  <div>المسار (root): <code><?=h((string)($report['summary']['root'] ?? ''))?></code></div>
-  <div>المسار الخاص (private_root): <code><?=h((string)($report['summary']['private_root'] ?? ''))?></code></div>
+  <div>المسار (root): <code><?php echo h((string)($report['summary']['root'] ?? '')); ?></code></div>
+  <div>المسار الخاص (private_root): <code><?php echo h((string)($report['summary']['private_root'] ?? '')); ?></code></div>
 
   <div class="cards">
-    <div class="card"><div class="ok">OK</div><div><?= (int)$counts['ok'] ?></div></div>
-    <div class="card"><div class="warn">WARN</div><div><?= (int)$counts['warn'] ?></div></div>
-    <div class="card"><div class="fail">FAIL</div><div><?= (int)$counts['fail'] ?></div></div>
+    <div class="card"><div class="ok">OK</div><div><?php echo (int)$counts['ok']; ?></div></div>
+    <div class="card"><div class="warn">WARN</div><div><?php echo (int)$counts['warn']; ?></div></div>
+    <div class="card"><div class="fail">FAIL</div><div><?php echo (int)$counts['fail']; ?></div></div>
   </div>
 
   <div class="actions">
-    <a href="<?=h($base . '&format=json')?>">تحميل JSON</a>
-    <a href="<?=h($base . '&format=csv')?>">تحميل CSV</a>
-    <a href="<?=h($base)?>">إعادة الفحص</a>
-    <a href="<?=h($base . '&lint=1')?>">إعادة الفحص مع Lint</a>
+    <a href="<?php echo h($base . '&format=json'); ?>">تحميل JSON</a>
+    <a href="<?php echo h($base . '&format=csv'); ?>">تحميل CSV</a>
+    <a href="<?php echo h($base); ?>">إعادة الفحص</a>
+    <a href="<?php echo h($base . '&lint=1'); ?>">إعادة الفحص مع Lint</a>
   </div>
 
   <h3>أهم التحذيرات/الأخطاء</h3>
@@ -918,13 +918,13 @@ $issues = $report['summary']['issues'] ?? [];
       <tbody>
       <?php foreach ($issues as $it): ?>
         <tr>
-          <td class="<?=h((string)$it['status'])?>"><?=h(strtoupper((string)$it['status']))?></td>
-          <td><?=h((string)$it['section'])?></td>
-          <td><?=h((string)$it['check'])?></td>
+          <td class="<?php echo h((string)$it['status']); ?>"><?php echo h(strtoupper((string)$it['status'])); ?></td>
+          <td><?php echo h((string)$it['section']); ?></td>
+          <td><?php echo h((string)$it['check']); ?></td>
           <td>
-            <?=h((string)$it['message'])?>
+            <?php echo h((string)$it['message']); ?>
             <?php if (!empty($it['extra'])): ?>
-              <div><small><code><?=h(json_encode($it['extra'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))?></code></small></div>
+              <div><small><code><?php echo h(json_encode($it['extra'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?></code></small></div>
             <?php endif; ?>
           </td>
         </tr>
@@ -943,14 +943,14 @@ $issues = $report['summary']['issues'] ?? [];
     <tbody>
     <?php foreach ($report['rows'] as $r): ?>
       <tr>
-        <td><code><?=h((string)($r['ts'] ?? ''))?></code></td>
-        <td class="<?=h((string)($r['status'] ?? ''))?>"><?=h(strtoupper((string)($r['status'] ?? '')))?></td>
-        <td><?=h((string)($r['section'] ?? ''))?></td>
-        <td><?=h((string)($r['check'] ?? ''))?></td>
+        <td><code><?php echo h((string)($r['ts'] ?? '')); ?></code></td>
+        <td class="<?php echo h((string)($r['status'] ?? '')); ?>"><?php echo h(strtoupper((string)($r['status'] ?? ''))); ?></td>
+        <td><?php echo h((string)($r['section'] ?? '')); ?></td>
+        <td><?php echo h((string)($r['check'] ?? '')); ?></td>
         <td>
-          <?=h((string)($r['message'] ?? ''))?>
+          <?php echo h((string)($r['message'] ?? '')); ?>
           <?php if (!empty($r['extra'])): ?>
-            <div><small><code><?=h(json_encode($r['extra'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))?></code></small></div>
+            <div><small><code><?php echo h(json_encode($r['extra'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); ?></code></small></div>
           <?php endif; ?>
         </td>
       </tr>

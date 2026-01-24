@@ -53,7 +53,7 @@ if (is_file($headerFile) === true) {
     <html lang="ar" dir="rtl">
     <head>
         <meta charset="utf-8">
-        <title><?= h($pageTitle) ?></title>
+        <title><?php echo h($pageTitle); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
     </head>
@@ -81,7 +81,7 @@ if (is_file($footerFile) === true) {
     ?>
     </main>
     <footer class="border-top mt-4 py-3 text-center small text-muted">
-        &copy; <?= date('Y') ?> <?= h($siteName) ?>
+        &copy; <?php echo date('Y'); ?> <?php echo h($siteName); ?>
     </footer>
     </body>
     </html>

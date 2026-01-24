@@ -38,7 +38,7 @@ $name = trim($_POST['name'] ?? '');
 <link rel="stylesheet" href="/godyar/assets/css/vendors/bootstrap.min.css"></head><body class="p-3">
 <div class="container" style="max-width:420px">
   <h1 class="h4 my-3 text-center">إنشاء حساب</h1>
-  <?php if (!empty($error)): ?><div class="alert alert-danger"><?= htmlspecialchars($error) ?></div><?php endif; ?>
+  <?php if (!empty($error)): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div><?php endif; ?>
   <form method="post">
     <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
     <div class="mb-3"><label class="form-label">الاسم</label><input class="form-control" name="name" required></div>

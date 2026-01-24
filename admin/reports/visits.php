@@ -60,9 +60,9 @@ require_once __DIR__ . '/../layout/sidebar.php';
 ?>
 <div class="admin-content container-fluid py-4">
   <div class="mb-4">
-    <h1 class="h4 mb-1 text-white"><?= h(__('t_95bc86fefd', 'التقارير والإحصائيات')) ?></h1>
+    <h1 class="h4 mb-1 text-white"><?php echo h(__('t_95bc86fefd', 'التقارير والإحصائيات')); ?></h1>
     <p class="mb-0" style="color:#e5e7eb;">
-      <?= h(__('t_2ba628bc6d', 'لمحة رقمية عن أداء الموقع والمحتوى والتفاعل.')) ?>
+      <?php echo h(__('t_2ba628bc6d', 'لمحة رقمية عن أداء الموقع والمحتوى والتفاعل.')); ?>
     </p>
   </div>
 
@@ -71,8 +71,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
           <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <h6><?= h(__('t_4a6ec64a15', 'عدد المستخدمين')) ?></h6>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['users'] ?></p>
+          <h6><?php echo h(__('t_4a6ec64a15', 'عدد المستخدمين')); ?></h6>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['users']; ?></p>
         </div>
       </div>
     </div>
@@ -80,8 +80,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
           <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-          <h6><?= h(__('t_a1d2f1590c', 'عدد الأخبار')) ?></h6>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['news'] ?></p>
+          <h6><?php echo h(__('t_a1d2f1590c', 'عدد الأخبار')); ?></h6>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['news']; ?></p>
         </div>
       </div>
     </div>
@@ -89,8 +89,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
           <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <h6><?= h(__('t_ef63c8093d', 'عدد الصفحات')) ?></h6>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['pages'] ?></p>
+          <h6><?php echo h(__('t_ef63c8093d', 'عدد الصفحات')); ?></h6>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['pages']; ?></p>
         </div>
       </div>
     </div>
@@ -98,8 +98,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card text-center" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-body py-3">
           <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <h6><?= h(__('t_8f564ddff8', 'إعلانات فعّالة')) ?></h6>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['ads_active'] ?></p>
+          <h6><?php echo h(__('t_8f564ddff8', 'إعلانات فعّالة')); ?></h6>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['ads_active']; ?></p>
         </div>
       </div>
     </div>
@@ -110,12 +110,12 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
           <h2 class="h6 mb-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_06dd6988d0', 'مكتبة الوسائط')); ?>
           </h2>
         </div>
         <div class="card-body">
-          <p class="mb-1"><?= h(__('t_b33e1c959a', 'عدد العناصر في مكتبة الوسائط:')) ?></p>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['media'] ?></p>
+          <p class="mb-1"><?php echo h(__('t_b33e1c959a', 'عدد العناصر في مكتبة الوسائط:')); ?></p>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['media']; ?></p>
         </div>
       </div>
     </div>
@@ -124,14 +124,14 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
         <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
           <h2 class="h6 mb-0">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_ef4521073d', 'رسائل جديدة من نموذج التواصل')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_ef4521073d', 'رسائل جديدة من نموذج التواصل')); ?>
           </h2>
         </div>
         <div class="card-body">
-          <p class="mb-1"><?= h(__('t_79a7329372', 'عدد الرسائل الجديدة:')) ?></p>
-          <p class="fs-4 mb-0 fw-bold"><?= (int)$stats['contacts_new'] ?></p>
+          <p class="mb-1"><?php echo h(__('t_79a7329372', 'عدد الرسائل الجديدة:')); ?></p>
+          <p class="fs-4 mb-0 fw-bold"><?php echo (int)$stats['contacts_new']; ?></p>
           <a class="btn btn-sm btn-outline-light mt-2" href="../contact/">
-            <?= h(__('t_ad7dce327c', 'عرض رسائل التواصل')) ?>
+            <?php echo h(__('t_ad7dce327c', 'عرض رسائل التواصل')); ?>
           </a>
         </div>
       </div>

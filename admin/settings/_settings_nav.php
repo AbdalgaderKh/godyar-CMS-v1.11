@@ -13,15 +13,15 @@ $pages = $GLOBALS['__SETTINGS_PAGES'] ?? [];
         $icon  = (string)($meta['icon'] ?? '');
       ?>
       <a
-        href="<?= h((string)$file) ?>"
-        class="list-group-item d-flex justify-content-between align-items-center <?= (empty($isActive) === false) ? 'active fw-semibold' : '' ?>"
-        <?= (empty($isActive) === false) ? 'aria-current="page"' : '' ?>
+        href="<?php echo h((string)$file); ?>"
+        class="list-group-item d-flex justify-content-between align-items-center <?php echo (empty($isActive) === false) ? 'active fw-semibold' : ''; ?>"
+        <?php echo (empty($isActive) === false) ? 'aria-current="page"' : ''; ?>
       >
         <span class="d-inline-flex align-items-center gap-2">
-          <span aria-hidden="true"><?= h($icon) ?></span>
-          <span><?= h($title) ?></span>
+          <span aria-hidden="true"><?php echo h($icon); ?></span>
+          <span><?php echo h($title); ?></span>
         </span>
-        <?php if ((empty($isActive) === false)): ?><span class="badge bg-light text-dark"><?= h(__('t_804237edcf', 'الحالي')) ?></span><?php endif; ?>
+        <?php if ((empty($isActive) === false)): ?><span class="badge bg-light text-dark"><?php echo h(__('t_804237edcf', 'الحالي')); ?></span><?php endif; ?>
       </a>
     <?php endforeach; ?>
   </div>

@@ -76,19 +76,19 @@ $stmt = $pdo->query($sqlList);
 $comments = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
 ?>
 <!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr'); ?>">
 <head>
   <meta charset="utf-8">
-  <title><?= h(__('t_08a0cc810c', 'إدارة التعليقات')) ?></title>
+  <title><?php echo h(__('t_08a0cc810c', 'إدارة التعليقات')); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css">
 </head>
 <body class="bg-light">
 <div class="container my-4">
-  <h1 class="h4 mb-3"><?= h(__('t_08a0cc810c', 'إدارة التعليقات')) ?></h1>
+  <h1 class="h4 mb-3"><?php echo h(__('t_08a0cc810c', 'إدارة التعليقات')); ?></h1>
 
   <?php if ($actionMsg): ?>
-    <div class="alert alert-success py-2"><?= h($actionMsg) ?></div>
+    <div class="alert alert-success py-2"><?php echo h($actionMsg); ?></div>
   <?php endif; ?>
 
   <div class="table-responsive">
@@ -96,49 +96,49 @@ $comments = $stmt ? $stmt->fetchAll(PDO::FETCH_ASSOC) : [];
       <thead class="table-light">
         <tr>
           <th>#</th>
-          <th><?= h(__('t_213a03802a', 'الخبر')) ?></th>
-          <th><?= h(__('t_2e8b171b46', 'الاسم')) ?></th>
-          <th><?= h(__('t_533ba29a76', 'التعليق')) ?></th>
-          <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-          <th><?= h(__('t_8456f22b47', 'التاريخ')) ?></th>
-          <th><?= h(__('t_11053ef7fa', 'أوامر')) ?></th>
+          <th><?php echo h(__('t_213a03802a', 'الخبر')); ?></th>
+          <th><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></th>
+          <th><?php echo h(__('t_533ba29a76', 'التعليق')); ?></th>
+          <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+          <th><?php echo h(__('t_8456f22b47', 'التاريخ')); ?></th>
+          <th><?php echo h(__('t_11053ef7fa', 'أوامر')); ?></th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($comments as $c): ?>
         <tr>
-          <td><?= (int)$c['id'] ?></td>
+          <td><?php echo (int)$c['id']; ?></td>
           <td>
             <?php if (!empty($c['news_title'])): ?>
-	              <a href="<?= h($baseUrl . '/news/id/' . (int)$c['news_id']) ?>" target="_blank">
-                <?= h($c['news_title']) ?>
+	              <a href="<?php echo h($baseUrl . '/news/id/' . (int)$c['news_id']); ?>" target="_blank">
+                <?php echo h($c['news_title']); ?>
               </a>
             <?php else: ?>
-              <span class="text-muted"><?= h(__('t_18fc31c036', 'غير مرتبط')) ?></span>
+              <span class="text-muted"><?php echo h(__('t_18fc31c036', 'غير مرتبط')); ?></span>
             <?php endif; ?>
           </td>
-          <td><?= h($c['name']) ?></td>
-          <td class="small"><?= nl2br(h(mb_strimwidth($c['body'],0,140,'...','UTF-8'))) ?></td>
+          <td><?php echo h($c['name']); ?></td>
+          <td class="small"><?php echo nl2br(h(mb_strimwidth($c['body'],0,140,'...','UTF-8'))); ?></td>
           <td>
             <?php if ($c['status']==='approved'): ?>
-              <span class="badge bg-success"><?= h(__('t_19837e3e8e', 'مقبول')) ?></span>
+              <span class="badge bg-success"><?php echo h(__('t_19837e3e8e', 'مقبول')); ?></span>
             <?php elseif ($c['status']==='rejected'): ?>
-              <span class="badge bg-danger"><?= h(__('t_20a971a379', 'مرفوض')) ?></span>
+              <span class="badge bg-danger"><?php echo h(__('t_20a971a379', 'مرفوض')); ?></span>
             <?php else: ?>
-              <span class="badge bg-warning text-dark"><?= h(__('t_0b8364216b', 'قيد المراجعة')) ?></span>
+              <span class="badge bg-warning text-dark"><?php echo h(__('t_0b8364216b', 'قيد المراجعة')); ?></span>
             <?php endif; ?>
           </td>
           <td class="small text-muted">
-            <?= h(date('Y-m-d H:i', strtotime((string)$c['created_at']))) ?>
+            <?php echo h(date('Y-m-d H:i', strtotime((string)$c['created_at']))); ?>
           </td>
           <td>
             <a class="btn btn-sm btn-outline-success"
-               href="?do=approve&id=<?= (int)$c['id'] ?>"><?= h(__('t_d7e02c9230', 'قبول')) ?></a>
+               href="?do=approve&id=<?php echo (int)$c['id']; ?>"><?php echo h(__('t_d7e02c9230', 'قبول')); ?></a>
             <a class="btn btn-sm btn-outline-secondary"
-               href="?do=reject&id=<?= (int)$c['id'] ?>"><?= h(__('t_b7dee9747a', 'رفض')) ?></a>
+               href="?do=reject&id=<?php echo (int)$c['id']; ?>"><?php echo h(__('t_b7dee9747a', 'رفض')); ?></a>
             <a class="btn btn-sm btn-outline-danger"
-               href="?do=delete&id=<?= (int)$c['id'] ?>"
-               data-confirm='حذف نهائي؟'><?= h(__('t_3b9854e1bb', 'حذف')) ?></a>
+               href="?do=delete&id=<?php echo (int)$c['id']; ?>"
+               data-confirm='حذف نهائي؟'><?php echo h(__('t_3b9854e1bb', 'حذف')); ?></a>
           </td>
         </tr>
       <?php endforeach; ?>

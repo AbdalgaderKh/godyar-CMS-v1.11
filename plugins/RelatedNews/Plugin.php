@@ -91,14 +91,14 @@ return new class implements GodyarPluginInterface {
                 <article class="card h-100">
                   <div class="card-body">
                     <h4 class="h6 card-title">
-                      <a href="<?= htmlspecialchars($makeUrl($item), ENT_QUOTES, 'UTF-8') ?>">
-                        <?= htmlspecialchars((string)$item['title'], ENT_QUOTES, 'UTF-8') ?>
+                      <a href="<?php echo htmlspecialchars($makeUrl($item), ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo htmlspecialchars((string)$item['title'], ENT_QUOTES, 'UTF-8'); ?>
                       </a>
                     </h4>
                     <?php if (empty($item['created_at']) === false): ?>
                       <div class="text-muted small mt-1">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?= htmlspecialchars((string)$item['created_at'], ENT_QUOTES, 'UTF-8') ?>
+                        <?php echo htmlspecialchars((string)$item['created_at'], ENT_QUOTES, 'UTF-8'); ?>
                       </div>
                     <?php endif; ?>
                   </div>

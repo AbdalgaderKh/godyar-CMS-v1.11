@@ -623,25 +623,25 @@ html[dir="rtl"] .gdy-sidebar-column {
         <header class="gdy-category-header">
             <div class="gdy-breadcrumb">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <a href="<?= h($homeUrl) ?>">الرئيسية</a>
+                <a href="<?php echo h($homeUrl); ?>">الرئيسية</a>
                 <span>›</span>
-                <a href="<?= h($generalNewsUrl) ?>">أخبار عامة</a>
+                <a href="<?php echo h($generalNewsUrl); ?>">أخبار عامة</a>
                 <span>›</span>
-                <span><?= h($categoryName) ?></span>
+                <span><?php echo h($categoryName); ?></span>
             </div>
 
             <div class="gdy-category-title">
-                <h1><?= h($categoryName) ?></h1>
+                <h1><?php echo h($categoryName); ?></h1>
                 <span class="gdy-category-chip">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    قسم: <?= h($categoryName) ?>
+                    قسم: <?php echo h($categoryName); ?>
                 </span>
             </div>
         </header>
 
         <?php if (!empty($category['description'])): ?>
             <div class="gdy-category-desc">
-                <?= h($category['description']) ?>
+                <?php echo h($category['description']); ?>
             </div>
         <?php endif; ?>
 
@@ -650,7 +650,7 @@ html[dir="rtl"] .gdy-sidebar-column {
             <div class="gdy-toolbar-left">
                 <div class="gdy-stats">
                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-                    إجمالي الأخبار: <strong><?= (int)$totalItems ?></strong>
+                    إجمالي الأخبار: <strong><?php echo (int)$totalItems; ?></strong>
                 </div>
 
                 <div class="btn-group gdy-sort-buttons" role="group">
@@ -782,13 +782,13 @@ if ($imgUrl === '') {
                                 $isFeatured = ($index < 2);
                             ?>
                             <article class="news-card"
-                                     data-date="<?= h($dateAttr) ?>"
-                                     data-views="<?= (int)$views ?>">
-                                <a href="<?= h($newsUrl) ?>" class="text-decoration-none text-dark d-block h-100">
+                                     data-date="<?php echo h($dateAttr); ?>"
+                                     data-views="<?php echo (int)$views; ?>">
+                                <a href="<?php echo h($newsUrl); ?>" class="text-decoration-none text-dark d-block h-100">
                                     <div class="news-thumb">
                                         <?php if ($imgUrl !== ''): ?>
-                                            <img src="<?= h($imgUrl) ?>" loading="lazy" decoding="async"
-                                                 alt="<?= h($title) ?>"
+                                            <img src="<?php echo h($imgUrl); ?>" loading="lazy" decoding="async"
+                                                 alt="<?php echo h($title); ?>"
                                                  data-gdy-hide-onerror="1" data-gdy-hide-parent-class="news-thumb-empty">
                                         <?php else: ?>
                                             <div class="news-thumb-placeholder gdy-skeleton" aria-hidden="true"></div>
@@ -810,13 +810,13 @@ if ($imgUrl === '') {
                                             <span>
                                                 <?php if ($date): ?>
                                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                                    <?= date('Y-m-d', strtotime($date)) ?>
+                                                    <?php echo date('Y-m-d', strtotime($date)); ?>
                                                 <?php endif; ?>
                                             </span>
                                             <span>
                                                 <?php if ($views > 0): ?>
                                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                                    <?= number_format($views) ?>
+                                                    <?php echo number_format($views); ?>
                                                 <?php else: ?>
                                                     <svg class="gdy-icon gdy-new-dot" aria-hidden="true" focusable="false"><use href="#plus"></use></svg>
                                                     جديد
@@ -825,12 +825,12 @@ if ($imgUrl === '') {
                                         </div>
 
                                         <h2 class="news-title h5">
-                                            <?= h($title) ?>
+                                            <?php echo h($title); ?>
                                         </h2>
 
                                         <?php if ($excerpt): ?>
                                             <p class="news-excerpt">
-                                                <?= h($excerpt) ?>
+                                                <?php echo h($excerpt); ?>
                                             </p>
                                         <?php endif; ?>
 
@@ -838,7 +838,7 @@ if ($imgUrl === '') {
                                             <?php if ($author): ?>
                                                 <div class="news-author">
                                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-                                                    <span><?= h($author) ?></span>
+                                                    <span><?php echo h($author); ?></span>
                                                 </div>
                                             <?php else: ?>
                                                 <div class="news-author">
@@ -864,7 +864,7 @@ if ($imgUrl === '') {
                                 <?php if ($currentPage > 1): ?>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="<?= h($makePageUrl($currentPage - 1)) ?>">
+                                           href="<?php echo h($makePageUrl($currentPage - 1)); ?>">
                                             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> السابقة
                                         </a>
                                     </li>
@@ -877,16 +877,16 @@ if ($imgUrl === '') {
                                 ?>
 
                                 <?php for ($p = $startPage; $p <= $endPage; $p++): ?>
-                                    <li class="page-item <?= $p == $currentPage ? 'active' : '' ?>">
+                                    <li class="page-item <?php echo $p == $currentPage ? 'active' : ''; ?>">
                                         <a class="page-link"
-                                           href="<?= h($makePageUrl((int)$p)) ?>"><?= $p ?></a>
+                                           href="<?php echo h($makePageUrl((int)$p)); ?>"><?php echo $p; ?></a>
                                     </li>
                                 <?php endfor; ?>
 
                                 <?php if ($currentPage < $pages): ?>
                                     <li class="page-item">
                                         <a class="page-link"
-                                           href="<?= h($makePageUrl($currentPage + 1)) ?>">
+                                           href="<?php echo h($makePageUrl($currentPage + 1)); ?>">
                                             التالية <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#arrow-right"></use></svg>
                                         </a>
                                     </li>
@@ -902,7 +902,7 @@ if ($imgUrl === '') {
                         </div>
                         <h3 class="h4 mb-2">لا توجد مقالات</h3>
                         <p class="mb-4">لم يتم إضافة أي مقالات في هذا القسم حتى الآن.</p>
-                        <a href="<?= h($homeUrl) ?>" class="btn btn-primary">
+                        <a href="<?php echo h($homeUrl); ?>" class="btn btn-primary">
                             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#home"></use></svg> العودة للرئيسية
                         </a>
                     </div>

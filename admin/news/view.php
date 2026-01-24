@@ -110,18 +110,18 @@ html, body {
     <div>
       <h1 class="h4 mb-1 text-white">
         <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-        <?= h(__('t_d87bb21604', 'عرض الخبر / المقال')) ?>
+        <?php echo h(__('t_d87bb21604', 'عرض الخبر / المقال')); ?>
       </h1>
       <p class="text-muted mb-0 small">
-        <?= h(__('t_a7cd995583', 'معاينة تفاصيل الخبر كما تظهر في واجهة الإدارة.')) ?>
+        <?php echo h(__('t_a7cd995583', 'معاينة تفاصيل الخبر كما تظهر في واجهة الإدارة.')); ?>
       </p>
     </div>
     <div class="mt-3 mt-md-0 d-flex gap-2">
-      <a href="edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
+      <a href="edit.php?id=<?php echo (int)$row['id']; ?>" class="btn btn-primary">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_759fdc242e', 'تعديل')); ?>
       </a>
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_19ae074cbf', 'العودة للقائمة')); ?>
       </a>
     </div>
   </div>
@@ -130,29 +130,29 @@ html, body {
     <div class="card-body">
       <div class="row">
         <div class="col-md-8">
-          <h2 class="h5 mb-1"><?= h($row['title']) ?></h2>
+          <h2 class="h5 mb-1"><?php echo h($row['title']); ?></h2>
           <div class="small text-muted mb-2">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h($displayDate) ?>
+            <?php echo h($displayDate); ?>
           </div>
           <?php if ($summaryText !== ''): ?>
-            <p class="mb-0"><?= nl2br(h($summaryText)) ?></p>
+            <p class="mb-0"><?php echo nl2br(h($summaryText)); ?></p>
           <?php endif; ?>
         </div>
         <div class="col-md-4">
           <div class="border rounded p-3 text-center" style="background:#020617;">
             <div class="mb-2">
               <span class="badge bg-info-subtle text-info">
-                <?= h(__('t_4404f61de7', 'رقم الخبر:')) ?> <?= (int)$row['id'] ?>
+                <?php echo h(__('t_4404f61de7', 'رقم الخبر:')); ?> <?php echo (int)$row['id']; ?>
               </span>
             </div>
             <div class="small text-muted">
-              <div><?= h(__('t_3f3f7de97d', 'الحالة:')) ?><?= h($statusLabels[$row['status']] ?? $row['status']) ?></div>
+              <div><?php echo h(__('t_3f3f7de97d', 'الحالة:')); ?><?php echo h($statusLabels[$row['status']] ?? $row['status']); ?></div>
               <?php if (!empty($row['category_id'])): ?>
-                <div><?= h(__('t_d32197597f', 'التصنيف: #')) ?><?= (int)$row['category_id'] ?></div>
+                <div><?php echo h(__('t_d32197597f', 'التصنيف: #')); ?><?php echo (int)$row['category_id']; ?></div>
               <?php endif; ?>
               <?php if (!empty($row['author_id'])): ?>
-                <div><?= h(__('t_214fa8fcfb', 'الكاتب: #')) ?><?= (int)$row['author_id'] ?></div>
+                <div><?php echo h(__('t_214fa8fcfb', 'الكاتب: #')); ?><?php echo (int)$row['author_id']; ?></div>
               <?php endif; ?>
             </div>
           </div>
@@ -164,7 +164,7 @@ html, body {
   <?php if (!empty($attachments)): ?>
     <div class="card glass-card mb-3" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
       <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
-        <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a2737af54c', 'المرفقات')) ?></h2>
+        <h2 class="h6 mb-0"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_a2737af54c', 'المرفقات')); ?></h2>
       </div>
       <div class="card-body">
         <div class="d-flex flex-column gap-2">
@@ -181,39 +181,39 @@ html, body {
                  style="border:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.6);">
               <div class="d-flex align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-2" style="min-width:0;">
-                  <i class="<?= h($icon) ?>"></i>
-                  <div class="text-truncate" style="max-width:520px;"><?= h($att['original_name']) ?></div>
+                  <i class="<?php echo h($icon); ?>"></i>
+                  <div class="text-truncate" style="max-width:520px;"><?php echo h($att['original_name']); ?></div>
                 </div>
                 <div class="d-flex align-items-center gap-2 flex-shrink-0">
                   <button class="btn btn-sm btn-outline-light" type="button"
-                          data-bs-toggle="collapse" data-bs-target="#<?= h($cid) ?>"
-                          aria-expanded="false" aria-controls="<?= h($cid) ?>" title="<?= h(__('t_d6a504f92a', 'مشاهدة داخل الصفحة')) ?>">
+                          data-bs-toggle="collapse" data-bs-target="#<?php echo h($cid); ?>"
+                          aria-expanded="false" aria-controls="<?php echo h($cid); ?>" title="<?php echo h(__('t_d6a504f92a', 'مشاهدة داخل الصفحة')); ?>">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </button>
-                  <a class="btn btn-sm btn-outline-info" href="<?= h($attUrl) ?>" download title="<?= h(__('t_871a087a1d', 'حفظ')) ?>">
+                  <a class="btn btn-sm btn-outline-info" href="<?php echo h($attUrl); ?>" download title="<?php echo h(__('t_871a087a1d', 'حفظ')); ?>">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </a>
                 </div>
               </div>
 
-              <div class="collapse mt-2" id="<?= h($cid) ?>">
+              <div class="collapse mt-2" id="<?php echo h($cid); ?>">
                 <div class="rounded p-2" style="background:rgba(15,23,42,.9);border:1px solid rgba(148,163,184,.2);">
                   <?php if ($isPdf): ?>
-                    <iframe src="<?= h($attUrl) ?>"
+                    <iframe src="<?php echo h($attUrl); ?>"
                             style="width:100%;height:560px;border:0;border-radius:10px;background:#0b1220;"
                             loading="lazy"></iframe>
                   <?php elseif ($isImg): ?>
                     <div class="text-center">
-                      <img src="<?= h($attUrl) ?>" alt="<?= h($att['original_name']) ?>"
+                      <img src="<?php echo h($attUrl); ?>" alt="<?php echo h($att['original_name']); ?>"
                            style="max-width:100%;height:auto;border-radius:10px;border:1px solid rgba(148,163,184,.25);">
                     </div>
                   <?php elseif ($isTxt): ?>
-                    <iframe src="<?= h($attUrl) ?>"
+                    <iframe src="<?php echo h($attUrl); ?>"
                             style="width:100%;height:420px;border:0;border-radius:10px;background:#0b1220;"
                             loading="lazy"></iframe>
                   <?php else: ?>
                     <div class="small text-muted">
-                      <?= h(__('t_9f1b6a7644', 'لا يمكن عرض هذا النوع مباشرة داخل الصفحة. استخدم زر')) ?> <strong><?= h(__('t_871a087a1d', 'حفظ')) ?></strong> <?= h(__('t_0fa14e657d', 'لتنزيله وفتحه على جهازك.')) ?>
+                      <?php echo h(__('t_9f1b6a7644', 'لا يمكن عرض هذا النوع مباشرة داخل الصفحة. استخدم زر')); ?> <strong><?php echo h(__('t_871a087a1d', 'حفظ')); ?></strong> <?php echo h(__('t_0fa14e657d', 'لتنزيله وفتحه على جهازك.')); ?>
                     </div>
                   <?php endif; ?>
                 </div>
@@ -227,11 +227,11 @@ html, body {
 
   <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
     <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
-      <h2 class="h6 mb-0"><?= h(__('t_9b0ff1e677', 'النص الكامل')) ?></h2>
+      <h2 class="h6 mb-0"><?php echo h(__('t_9b0ff1e677', 'النص الكامل')); ?></h2>
     </div>
     <div class="card-body">
       <div style="white-space:pre-wrap;word-wrap:break-word;">
-        <?= nl2br(h($bodyText)) ?>
+        <?php echo nl2br(h($bodyText)); ?>
       </div>
     </div>
   </div>

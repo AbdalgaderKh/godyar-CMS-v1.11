@@ -82,7 +82,7 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><?= h2(__('t_06dd6988d0','مكتبة الوسائط')) ?></title>
+  <title><?php echo h2(__('t_06dd6988d0','مكتبة الوسائط')); ?></title>
   <style>
     :root{ --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --bd:rgba(148,163,184,.25); --acc:#38bdf8; }
     html,body{height:100%}
@@ -117,17 +117,17 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
 </head>
 <body>
   <div class="top">
-    <input id="q" value="<?= h2($q) ?>" placeholder="<?= h2(__('t_7f7c3191be','ابحث باسم الملف أو الرابط...')) ?>">
-    <button id="btn-search"><?= h2(__('t_2d711b09bd','بحث')) ?></button>
-    <a href="<?= h2((string)base_url()) ?>/admin/media/upload.php" target="_blank" rel="noopener"><?= h2(__('t_7dfb9782c8','رفع جديد')) ?></a>
+    <input id="q" value="<?php echo h2($q); ?>" placeholder="<?php echo h2(__('t_7f7c3191be','ابحث باسم الملف أو الرابط...')); ?>">
+    <button id="btn-search"><?php echo h2(__('t_2d711b09bd','بحث')); ?></button>
+    <a href="<?php echo h2((string)base_url()); ?>/admin/media/upload.php" target="_blank" rel="noopener"><?php echo h2(__('t_7dfb9782c8','رفع جديد')); ?></a>
   </div>
 
   <div class="wrap">
     <div class="grid">
       <?php if (($tableExists === false)): ?>
-        <div class="empty"><?= h2(__('t_4f86cc0b6b','جدول media غير موجود.')) ?></div>
+        <div class="empty"><?php echo h2(__('t_4f86cc0b6b','جدول media غير موجود.')); ?></div>
       <?php elseif (($items === false)): ?>
-        <div class="empty"><?= h2(__('t_44f01f5c1e','لا توجد ملفات مطابقة.')) ?></div>
+        <div class="empty"><?php echo h2(__('t_44f01f5c1e','لا توجد ملفات مطابقة.')); ?></div>
       <?php else: ?>
         <div class="items" id="items">
           <?php foreach ($items as $it):
@@ -136,14 +136,14 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
             $alt = guess_alt($name);
           ?>
           <div class="item" tabindex="0"
-               data-id="<?= (int)$it['id'] ?>"
-               data-url="<?= h2($url) ?>"
-               data-name="<?= h2($name) ?>"
-               data-alt="<?= h2($alt) ?>">
+               data-id="<?php echo (int)$it['id']; ?>"
+               data-url="<?php echo h2($url); ?>"
+               data-name="<?php echo h2($name); ?>"
+               data-alt="<?php echo h2($alt); ?>">
             <div class="thumb">
-              <img src="<?= h2($url) ?>" alt="<?= h2($alt) ?>" loading="lazy" decoding="async">
+              <img src="<?php echo h2($url); ?>" alt="<?php echo h2($alt); ?>" loading="lazy" decoding="async">
             </div>
-            <div class="meta"><?= h2($name) ?></div>
+            <div class="meta"><?php echo h2($name); ?></div>
           </div>
           <?php endforeach; ?>
         </div>
@@ -151,11 +151,11 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
         <?php if ($totalPages > 1): ?>
           <div class="pager">
             <?php if ($page > 1): ?>
-              <a href="?q=<?= urlencode($q) ?>&page=<?= $page-1 ?>">&lsaquo;</a>
+              <a href="?q=<?php echo urlencode($q); ?>&page=<?php echo $page-1; ?>">&lsaquo;</a>
             <?php endif; ?>
-            <span><?= (int)$page ?> / <?= (int)$totalPages ?></span>
+            <span><?php echo (int)$page; ?> / <?php echo (int)$totalPages; ?></span>
             <?php if ($page < $totalPages): ?>
-              <a href="?q=<?= urlencode($q) ?>&page=<?= $page+1 ?>">&rsaquo;</a>
+              <a href="?q=<?php echo urlencode($q); ?>&page=<?php echo $page+1; ?>">&rsaquo;</a>
             <?php endif; ?>
           </div>
         <?php endif; ?>
@@ -163,19 +163,19 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
     </div>
 
     <div class="side">
-      <div class="p"><?= h2(__('t_2b4fef6b07','اختر صورة ثم اضغط إدراج لإضافتها داخل محرر الخبر.')) ?></div>
+      <div class="p"><?php echo h2(__('t_2b4fef6b07','اختر صورة ثم اضغط إدراج لإضافتها داخل محرر الخبر.')); ?></div>
       <img id="preview" src="" alt="">
-      <label><?= h2(__('t_5717a0810e','Alt النص البديل')) ?></label>
+      <label><?php echo h2(__('t_5717a0810e','Alt النص البديل')); ?></label>
       <input id="alt" type="text" value="">
-      <label><?= h2(__('t_9a9d5f3e5d','الرابط')) ?></label>
+      <label><?php echo h2(__('t_9a9d5f3e5d','الرابط')); ?></label>
       <input id="url" type="text" value="" readonly>
       <div class="btns">
-        <button class="btn primary" id="insert" disabled><?= h2(__('t_5f6aa9be6f','إدراج')) ?></button>
-        <button class="btn" id="copy" disabled><?= h2(__('t_9abf6d7e92','نسخ الرابط')) ?></button>
-        <button class="btn danger" id="del" disabled><?= h2(__('t_0d7ea7b7c0','حذف')) ?></button>
+        <button class="btn primary" id="insert" disabled><?php echo h2(__('t_5f6aa9be6f','إدراج')); ?></button>
+        <button class="btn" id="copy" disabled><?php echo h2(__('t_9abf6d7e92','نسخ الرابط')); ?></button>
+        <button class="btn danger" id="del" disabled><?php echo h2(__('t_0d7ea7b7c0','حذف')); ?></button>
       </div>
       <div class="p" style="margin-top:.65rem">
-        <small><?= h2(__('t_0f5e5f2c48','ملاحظة: الحذف يزيل الملف من السيرفر وقاعدة البيانات.')) ?></small>
+        <small><?php echo h2(__('t_0f5e5f2c48','ملاحظة: الحذف يزيل الملف من السيرفر وقاعدة البيانات.')); ?></small>
       </div>
     </div>
   </div>
@@ -240,7 +240,7 @@ $totalPages = ($perPage > 0) ? (int)ceil($total / $perPage) : 1;
   
   insert && insert.addEventListener('click', function(){
     if(!selected) return;
-    const t = <?= json_encode($target) ?>;
+    const t = <?php echo json_encode($target); ?>;
     const payloadA = {
       type: 'gdy_media_selected',
       target: t,
@@ -281,7 +281,7 @@ del && del.addEventListener('click', async function(){
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
         body: new URLSearchParams({
           id: selected.dataset.id || '',
-          csrf_token: '<?= h2($csrf) ?>'
+          csrf_token: '<?php echo h2($csrf); ?>'
         })
       });
       const data = await resp.json().catch(()=>null);

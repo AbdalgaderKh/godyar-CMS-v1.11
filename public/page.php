@@ -61,7 +61,7 @@ $content = $page['content'] ?? ($page['body'] ?? '');
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title><?= h($title) ?> - <?= h($siteName) ?></title>
+  <title><?php echo h($title); ?> - <?php echo h($siteName); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap -->
   <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
@@ -100,7 +100,7 @@ $content = $page['content'] ?? ($page['body'] ?? '');
 
 <header class="page-hero">
   <div class="container">
-    <h1><?= h($title) ?></h1>
+    <h1><?php echo h($title); ?></h1>
   </div>
 </header>
 
@@ -113,7 +113,7 @@ $content = $page['content'] ?? ($page['body'] ?? '');
     <?php else: ?>
       <article class="page-card p-3 p-md-4">
         <div class="page-content">
-          <?= $content // محتوى موثوق من لوحة التحكم ?>
+          <?php echo $content // محتوى موثوق من لوحة التحكم; ?>
         </div>
       </article>
     <?php endif; ?>
@@ -121,7 +121,7 @@ $content = $page['content'] ?? ($page['body'] ?? '');
 </main>
 
 <footer class="py-4 text-center text-muted small">
-  &copy; <?= date('Y') ?> <?= h($siteName) ?> . جميع الحقوق محفوظة.
+  &copy; <?php echo date('Y'); ?> <?php echo h($siteName); ?> . جميع الحقوق محفوظة.
 </footer>
 
 </body>

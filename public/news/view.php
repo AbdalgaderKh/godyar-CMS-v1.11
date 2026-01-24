@@ -45,7 +45,7 @@ if (!$news) {
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title><?= h($news['title']) ?> - <?= h(env('SITE_NAME','Godyar News')) ?></title>
+  <title><?php echo h($news['title']); ?> - <?php echo h(env('SITE_NAME','Godyar News')); ?></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="/godyar/assets/css/bootstrap.min.css">
 </head>
@@ -54,22 +54,22 @@ if (!$news) {
   <div class="row">
     <div class="col-md-8">
       <article>
-        <h1 class="h3 mb-2"><?= h($news['title']) ?></h1>
-        <div class="text-muted small mb-3"><?= h($news['published_at'] ?: $news['created_at']) ?></div>
+        <h1 class="h3 mb-2"><?php echo h($news['title']); ?></h1>
+        <div class="text-muted small mb-3"><?php echo h($news['published_at'] ?: $news['created_at']); ?></div>
 
         <?php if (!empty($news['image_path'])): ?>
           <div class="mb-3">
-            <img src="<?= h($news['image_path']) ?>" alt="<?= h($news['title']) ?>"
+            <img src="<?php echo h($news['image_path']); ?>" alt="<?php echo h($news['title']); ?>"
                  class="img-fluid rounded">
           </div>
         <?php endif; ?>
 
         <?php if (!empty($news['excerpt'])): ?>
-          <p class="lead"><?= nl2br(h($news['excerpt'])) ?></p>
+          <p class="lead"><?php echo nl2br(h($news['excerpt'])); ?></p>
         <?php endif; ?>
 
         <div style="white-space:pre-wrap;word-wrap:break-word;">
-          <?= nl2br(h($news['body'])) ?>
+          <?php echo nl2br(h($news['body'])); ?>
         </div>
       </article>
     </div>

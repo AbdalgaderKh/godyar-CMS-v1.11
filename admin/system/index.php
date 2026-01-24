@@ -437,40 +437,40 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h3 mb-1"><?= h(__('t_4c2c39a341', 'مركز النظام')) ?></h1>
+      <h1 class="h3 mb-1"><?php echo h(__('t_4c2c39a341', 'مركز النظام')); ?></h1>
       <p class="text-muted mb-0 small">
-        <?= h(__('t_2d324516c7', 'لوحة لمراقبة صحة النظام، إدارة الكاش، الاطلاع على السجلات، والتحكم في وضع الصيانة.')) ?>
+        <?php echo h(__('t_2d324516c7', 'لوحة لمراقبة صحة النظام، إدارة الكاش، الاطلاع على السجلات، والتحكم في وضع الصيانة.')); ?>
       </p>
     </div>
   </div>
 
   <?php if ($flashSuccess): ?>
-    <div class="alert alert-success py-2"><?= h($flashSuccess) ?></div>
+    <div class="alert alert-success py-2"><?php echo h($flashSuccess); ?></div>
   <?php endif; ?>
   <?php if ($flashError): ?>
-    <div class="alert alert-danger py-2"><?= h($flashError) ?></div>
+    <div class="alert alert-danger py-2"><?php echo h($flashError); ?></div>
   <?php endif; ?>
 
   <!-- تبويبات النظام -->
   <ul class="nav nav-pills mb-3 system-tabs">
     <li class="nav-item">
-      <a class="nav-link <?= $tab === 'health' ? 'active' : '' ?>" href="?tab=health">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_63163058e0', 'صحة النظام')) ?>
+      <a class="nav-link <?php echo $tab === 'health' ? 'active' : ''; ?>" href="?tab=health">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_63163058e0', 'صحة النظام')); ?>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?= $tab === 'cache' ? 'active' : '' ?>" href="?tab=cache">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a10e27b470', 'الكاش')) ?>
+      <a class="nav-link <?php echo $tab === 'cache' ? 'active' : ''; ?>" href="?tab=cache">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_a10e27b470', 'الكاش')); ?>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?= $tab === 'logs' ? 'active' : '' ?>" href="?tab=logs">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b66a827841', 'السجلات')) ?>
+      <a class="nav-link <?php echo $tab === 'logs' ? 'active' : ''; ?>" href="?tab=logs">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_b66a827841', 'السجلات')); ?>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link <?= $tab === 'maintenance' ? 'active' : '' ?>" href="?tab=maintenance">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?>
+      <a class="nav-link <?php echo $tab === 'maintenance' ? 'active' : ''; ?>" href="?tab=maintenance">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f96c99c4d8', 'وضع الصيانة')); ?>
       </a>
     </li>
   </ul>
@@ -486,16 +486,16 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-4">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6d5c9702b3', 'ملخص سريع')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_6d5c9702b3', 'ملخص سريع')); ?></h5>
             <ul class="list-unstyled mb-0 small">
               <li class="mb-1">
-                <span class="badge bg-success me-1"><?= $okCount ?></span> <?= h(__('t_921d6d0ec7', 'عناصر سليمة')) ?>
+                <span class="badge bg-success me-1"><?php echo $okCount; ?></span> <?php echo h(__('t_921d6d0ec7', 'عناصر سليمة')); ?>
               </li>
               <li class="mb-1">
-                <span class="badge bg-warning text-dark me-1"><?= $warnCount ?></span> <?= h(__('t_b349024108', 'تحذيرات')) ?>
+                <span class="badge bg-warning text-dark me-1"><?php echo $warnCount; ?></span> <?php echo h(__('t_b349024108', 'تحذيرات')); ?>
               </li>
               <li class="mb-1">
-                <span class="badge bg-danger me-1"><?= $failCount ?></span> <?= h(__('t_ccf97a7e4a', 'مشاكل تحتاج تدخل')) ?>
+                <span class="badge bg-danger me-1"><?php echo $failCount; ?></span> <?php echo h(__('t_ccf97a7e4a', 'مشاكل تحتاج تدخل')); ?>
               </li>
             </ul>
           </div>
@@ -509,27 +509,27 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <table class="table table-sm mb-0 align-middle">
                 <thead class="table-light">
                   <tr>
-                    <th><?= h(__('t_c4cf241e6b', 'العنصر')) ?></th>
-                    <th><?= h(__('t_931f803bd8', 'القيمة')) ?></th>
-                    <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                    <th><?= h(__('t_3c4208fe6a', 'ملاحظات')) ?></th>
+                    <th><?php echo h(__('t_c4cf241e6b', 'العنصر')); ?></th>
+                    <th><?php echo h(__('t_931f803bd8', 'القيمة')); ?></th>
+                    <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                    <th><?php echo h(__('t_3c4208fe6a', 'ملاحظات')); ?></th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($healthChecks as $check): ?>
                     <tr>
-                      <td><strong><?= h($check['label']) ?></strong></td>
-                      <td><small><?= h((string)$check['value']) ?></small></td>
+                      <td><strong><?php echo h($check['label']); ?></strong></td>
+                      <td><small><?php echo h((string)$check['value']); ?></small></td>
                       <td>
                         <?php if ($check['status'] === 'ok'): ?>
-                          <span class="badge bg-success"><?= h(__('t_aaaa712e44', 'سليم')) ?></span>
+                          <span class="badge bg-success"><?php echo h(__('t_aaaa712e44', 'سليم')); ?></span>
                         <?php elseif ($check['status'] === 'warn'): ?>
-                          <span class="badge bg-warning text-dark"><?= h(__('t_b34a41530b', 'تحذير')) ?></span>
+                          <span class="badge bg-warning text-dark"><?php echo h(__('t_b34a41530b', 'تحذير')); ?></span>
                         <?php else: ?>
-                          <span class="badge bg-danger"><?= h(__('t_8c96e0d00d', 'مشكلة')) ?></span>
+                          <span class="badge bg-danger"><?php echo h(__('t_8c96e0d00d', 'مشكلة')); ?></span>
                         <?php endif; ?>
                       </td>
-                      <td><small class="text-muted"><?= h($check['message']) ?></small></td>
+                      <td><small class="text-muted"><?php echo h($check['message']); ?></small></td>
                     </tr>
                   <?php endforeach; ?>
                 </tbody>
@@ -546,46 +546,46 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_cd55756f04', 'إعدادات الكاش')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?php echo h(__('t_cd55756f04', 'إعدادات الكاش')); ?></h5>
             <dl class="row small mb-0">
-              <dt class="col-4"><?= h(__('t_1253eb5642', 'الحالة')) ?></dt>
+              <dt class="col-4"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></dt>
               <dd class="col-8">
                 <?php
                   $st = bool_to_status($cacheConfig['enabled']);
                 ?>
-                <span class="badge bg-<?= $st['badge'] ?>"><?= $st['label'] ?></span>
+                <span class="badge bg-<?php echo $st['badge']; ?>"><?php echo $st['label']; ?></span>
               </dd>
 
-              <dt class="col-4"><?= h(__('t_6bf9aa1887', 'السائق (Driver)')) ?></dt>
-              <dd class="col-8"><?= h($cacheConfig['driver']) ?></dd>
+              <dt class="col-4"><?php echo h(__('t_6bf9aa1887', 'السائق (Driver)')); ?></dt>
+              <dd class="col-8"><?php echo h($cacheConfig['driver']); ?></dd>
 
-              <dt class="col-4"><?= h(__('t_4f3d289eb3', 'المسار')) ?></dt>
-              <dd class="col-8"><code><?= h($cacheConfig['path']) ?></code></dd>
+              <dt class="col-4"><?php echo h(__('t_4f3d289eb3', 'المسار')); ?></dt>
+              <dd class="col-8"><code><?php echo h($cacheConfig['path']); ?></code></dd>
 
-              <dt class="col-4"><?= h(__('t_58c27f48ec', 'TTL الافتراضي')) ?></dt>
-              <dd class="col-8"><?= (int)$cacheConfig['ttl'] ?> ثانية</dd>
+              <dt class="col-4"><?php echo h(__('t_58c27f48ec', 'TTL الافتراضي')); ?></dt>
+              <dd class="col-8"><?php echo (int)$cacheConfig['ttl']; ?> ثانية</dd>
 
-              <dt class="col-4"><?= h(__('t_1c74d47709', 'ملفات الكاش')) ?></dt>
+              <dt class="col-4"><?php echo h(__('t_1c74d47709', 'ملفات الكاش')); ?></dt>
               <dd class="col-8">
-                <?= (int)$cacheStats['files'] ?> ملف
-                <small class="text-muted">(≈ <?= round($cacheStats['size'] / 1024, 1) ?> كيلوبايت)</small>
+                <?php echo (int)$cacheStats['files']; ?> ملف
+                <small class="text-muted">(≈ <?php echo round($cacheStats['size'] / 1024, 1); ?> كيلوبايت)</small>
               </dd>
 
-              <dt class="col-4"><?= h(__('t_0f1c748e44', 'اختبار الكاش')) ?></dt>
+              <dt class="col-4"><?php echo h(__('t_0f1c748e44', 'اختبار الكاش')); ?></dt>
               <dd class="col-8">
                 <?php if (!$cacheConfig['enabled']): ?>
-                  <span class="badge bg-warning text-dark"><?= h(__('t_f08d8e9f9b', 'الكاش غير مفعّل')) ?></span>
+                  <span class="badge bg-warning text-dark"><?php echo h(__('t_f08d8e9f9b', 'الكاش غير مفعّل')); ?></span>
                   <div class="small text-muted mt-1">
-                    <?= h(__('t_d0dba25f1e', 'فعّل CACHE_ENABLED في ملف البيئة للاستفادة من الأداء.')) ?>
+                    <?php echo h(__('t_d0dba25f1e', 'فعّل CACHE_ENABLED في ملف البيئة للاستفادة من الأداء.')); ?>
                   </div>
                 <?php elseif (!$cacheSelfTest['run']): ?>
-                  <span class="badge bg-secondary"><?= h(__('t_169a5da88f', 'لم يتم الفحص')) ?></span>
+                  <span class="badge bg-secondary"><?php echo h(__('t_169a5da88f', 'لم يتم الفحص')); ?></span>
                 <?php elseif ($cacheSelfTest['ok']): ?>
-                  <span class="badge bg-success"><?= h(__('t_655b17dd81', 'ناجح')) ?></span>
-                  <div class="small text-muted mt-1"><?= h($cacheSelfTest['message']) ?></div>
+                  <span class="badge bg-success"><?php echo h(__('t_655b17dd81', 'ناجح')); ?></span>
+                  <div class="small text-muted mt-1"><?php echo h($cacheSelfTest['message']); ?></div>
                 <?php else: ?>
-                  <span class="badge bg-danger"><?= h(__('t_a838e35c4d', 'فشل')) ?></span>
-                  <div class="small text-muted mt-1"><?= h($cacheSelfTest['message']) ?></div>
+                  <span class="badge bg-danger"><?php echo h(__('t_a838e35c4d', 'فشل')); ?></span>
+                  <div class="small text-muted mt-1"><?php echo h($cacheSelfTest['message']); ?></div>
                 <?php endif; ?>
               </dd>
             </dl>
@@ -596,17 +596,17 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_736b931c7c', 'إدارة الكاش')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_736b931c7c', 'إدارة الكاش')); ?></h5>
             <p class="small text-muted">
-              <?= h(__('t_ddd3d2ec83', 'يمكنك مسح الكاش بالكامل لإجبار النظام على إعادة تحميل الإعدادات والبيانات من قاعدة البيانات.')) ?>
+              <?php echo h(__('t_ddd3d2ec83', 'يمكنك مسح الكاش بالكامل لإجبار النظام على إعادة تحميل الإعدادات والبيانات من قاعدة البيانات.')); ?>
             </p>
             <form method="post" data-confirm='هل أنت متأكد من مسح الكاش بالكامل؟'>
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
               <input type="hidden" name="action" value="flush_cache">
               <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
               <button type="submit" class="btn btn-danger">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_53081a962d', 'مسح الكاش الآن')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_53081a962d', 'مسح الكاش الآن')); ?>
               </button>
             </form>
           </div>
@@ -621,44 +621,44 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="card glass-card shadow-sm border-0">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title h6 mb-0">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d5b113d588', 'admin_logs (آخر 100 سجل)')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_d5b113d588', 'admin_logs (آخر 100 سجل)')); ?>
             </h5>
           </div>
           <div class="card-body p-0">
             <?php if ($adminLogsError): ?>
-              <p class="text-danger small p-3 mb-0"><?= h($adminLogsError) ?></p>
+              <p class="text-danger small p-3 mb-0"><?php echo h($adminLogsError); ?></p>
             <?php elseif (!$adminLogsTableExists): ?>
               <p class="text-muted small p-3 mb-0">
-                <?= h(__('t_64b2ab32d2', 'جدول')) ?> <code>admin_logs</code> <?= h(__('t_48ba74b806', 'غير موجود. تأكد من تشغيل سكربت إنشاء الجداول.')) ?>
+                <?php echo h(__('t_64b2ab32d2', 'جدول')); ?> <code>admin_logs</code> <?php echo h(__('t_48ba74b806', 'غير موجود. تأكد من تشغيل سكربت إنشاء الجداول.')); ?>
               </p>
             <?php elseif (empty($adminLogs)): ?>
-              <p class="text-muted small p-3 mb-0"><?= h(__('t_6255ed95d0', 'لا توجد سجلات حتى الآن.')) ?></p>
+              <p class="text-muted small p-3 mb-0"><?php echo h(__('t_6255ed95d0', 'لا توجد سجلات حتى الآن.')); ?></p>
             <?php else: ?>
               <div class="table-responsive">
                 <table class="table table-sm mb-0 align-middle text-center">
                   <thead class="table-light">
                     <tr>
                       <th>#</th>
-                      <th><?= h(__('t_8456f22b47', 'التاريخ')) ?></th>
-                      <th><?= h(__('t_457bd90fa1', 'الحدث')) ?></th>
-                      <th><?= h(__('t_92ad641491', 'المستخدم')) ?></th>
-                      <th><?= h(__('t_cc0478a85c', 'تفاصيل')) ?></th>
+                      <th><?php echo h(__('t_8456f22b47', 'التاريخ')); ?></th>
+                      <th><?php echo h(__('t_457bd90fa1', 'الحدث')); ?></th>
+                      <th><?php echo h(__('t_92ad641491', 'المستخدم')); ?></th>
+                      <th><?php echo h(__('t_cc0478a85c', 'تفاصيل')); ?></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php foreach ($adminLogs as $log): ?>
                       <tr>
-                        <td><?= (int)$log['id'] ?></td>
-                        <td><small><?= h($log['created_at']) ?></small></td>
-                        <td><code class="small"><?= h($log['action']) ?></code></td>
+                        <td><?php echo (int)$log['id']; ?></td>
+                        <td><small><?php echo h($log['created_at']); ?></small></td>
+                        <td><code class="small"><?php echo h($log['action']); ?></code></td>
                         <td>
                           <?php if ($log['user_id']): ?>
-                            <small>#<?= (int)$log['user_id'] ?></small>
+                            <small>#<?php echo (int)$log['user_id']; ?></small>
                           <?php else: ?>
-                            <span class="text-muted small"><?= h(__('t_cd09c30d57', 'غير محدد')) ?></span>
+                            <span class="text-muted small"><?php echo h(__('t_cd09c30d57', 'غير محدد')); ?></span>
                           <?php endif; ?>
                         </td>
-                        <td style="max-width: 260px;"><small><?= format_details_short($log['details'] ?? '') ?></small></td>
+                        <td style="max-width: 260px;"><small><?php echo format_details_short($log['details'] ?? ''); ?></small></td>
                       </tr>
                     <?php endforeach; ?>
                   </tbody>
@@ -673,18 +673,18 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="card glass-card shadow-sm border-0">
           <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title h6 mb-0">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_70b4ac3c65', 'ملف أخطاء PHP')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_70b4ac3c65', 'ملف أخطاء PHP')); ?>
             </h5>
-            <span class="small text-muted"><?= h(basename($errorLogPath)) ?></span>
+            <span class="small text-muted"><?php echo h(basename($errorLogPath)); ?></span>
           </div>
           <div class="card-body">
             <?php if (!$errorLogPath || !is_file($errorLogPath)): ?>
               <p class="small text-muted mb-0">
-                <?= h(__('t_27231c932a', 'لم يتم العثور على ملف الأخطاء. يمكنك تحديده عبر')) ?>
-                <code>GODYAR_ERROR_LOG</code> <?= h(__('t_ab6e943213', 'في ملف البيئة.')) ?>
+                <?php echo h(__('t_27231c932a', 'لم يتم العثور على ملف الأخطاء. يمكنك تحديده عبر')); ?>
+                <code>GODYAR_ERROR_LOG</code> <?php echo h(__('t_ab6e943213', 'في ملف البيئة.')); ?>
               </p>
             <?php elseif (empty($errorLogLines)): ?>
-              <p class="small text-muted mb-0"><?= h(__('t_9daab3604d', 'لا توجد أسطر لعرضها أو الملف فارغ.')) ?></p>
+              <p class="small text-muted mb-0"><?php echo h(__('t_9daab3604d', 'لا توجد أسطر لعرضها أو الملف فارغ.')); ?></p>
             <?php else: ?>
               <pre class="small mb-0" style="max-height: 360px; overflow:auto; background:rgba(15,23,42,.85); color:#e5e7eb; border-radius:8px; padding:10px;">
 <?php foreach ($errorLogLines as $line) {
@@ -703,41 +703,41 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f96c99c4d8', 'وضع الصيانة')); ?></h5>
 
             <p class="small text-muted">
-              <?= h(__('t_4aff301ed8', 'عند تفعيل وضع الصيانة، يمكن أن تقوم الواجهة الأمامية بعرض صفحة "الموقع تحت الصيانة"
-              مع إبقاء لوحة التحكم متاحة للمسؤولين.')) ?>
+              <?php echo h(__('t_4aff301ed8', 'عند تفعيل وضع الصيانة، يمكن أن تقوم الواجهة الأمامية بعرض صفحة "الموقع تحت الصيانة"
+              مع إبقاء لوحة التحكم متاحة للمسؤولين.')); ?>
             </p>
 
             <p class="mt-2">
               الحالة الحالية:
               <?php if ($maintenanceEnabled): ?>
-                <span class="badge bg-warning text-dark"><?= h(__('t_918499f2af', 'مفعل')) ?></span>
+                <span class="badge bg-warning text-dark"><?php echo h(__('t_918499f2af', 'مفعل')); ?></span>
               <?php else: ?>
-                <span class="badge bg-success"><?= h(__('t_60dfc10f77', 'غير مفعل')) ?></span>
+                <span class="badge bg-success"><?php echo h(__('t_60dfc10f77', 'غير مفعل')); ?></span>
               <?php endif; ?>
             </p>
 
             <form method="post" class="mt-3"
                   data-confirm='هل أنت متأكد من تغيير حالة وضع الصيانة؟'>
               <input type="hidden" name="action" value="toggle_maintenance">
-              <input type="hidden" name="enable" value="<?= $maintenanceEnabled ? '0' : '1' ?>">
+              <input type="hidden" name="enable" value="<?php echo $maintenanceEnabled ? '0' : '1'; ?>">
               <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
 
               <?php if ($maintenanceEnabled): ?>
                 <button type="submit" class="btn btn-success">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_1ab11f3d9d', 'إيقاف وضع الصيانة')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?php echo h(__('t_1ab11f3d9d', 'إيقاف وضع الصيانة')); ?>
                 </button>
                 <div class="small text-muted mt-2">
-                  <?= h(__('t_a35b25300b', 'عند الإيقاف سيتم')) ?> <strong><?= h(__('t_2caa9c447f', 'مسح الكاش')) ?></strong> <?= h(__('t_5c1edd5e9d', 'تلقائياً لضمان تحديث كل شيء.')) ?>
+                  <?php echo h(__('t_a35b25300b', 'عند الإيقاف سيتم')); ?> <strong><?php echo h(__('t_2caa9c447f', 'مسح الكاش')); ?></strong> <?php echo h(__('t_5c1edd5e9d', 'تلقائياً لضمان تحديث كل شيء.')); ?>
                 </div>
               <?php else: ?>
                 <button type="submit" class="btn btn-warning text-dark">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?php echo h(__('t_11f2db3133', 'تفعيل وضع الصيانة')); ?>
                 </button>
                 <div class="small text-muted mt-2">
-                  <?= h(__('t_a051961618', 'تحتاج إضافة فحص ملف')) ?> <code>storage/maintenance.flag</code> <?= h(__('t_e51e911768', 'في الواجهة الأمامية لعرض صفحة الصيانة.')) ?>
+                  <?php echo h(__('t_a051961618', 'تحتاج إضافة فحص ملف')); ?> <code>storage/maintenance.flag</code> <?php echo h(__('t_e51e911768', 'في الواجهة الأمامية لعرض صفحة الصيانة.')); ?>
                 </div>
               <?php endif; ?>
             </form>
@@ -748,13 +748,13 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="col-md-6">
         <div class="card glass-card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ca1a330b25', 'ملاحظات فنية')) ?></h5>
+            <h5 class="card-title mb-3"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_ca1a330b25', 'ملاحظات فنية')); ?></h5>
             <ul class="small text-muted mb-0">
-              <li><?= h(__('t_452f8963f9', 'هذا التبويب لا يغيّر الكود الأمامي بنفسه، بل يضع/يحذف ملف علامة في')) ?>
+              <li><?php echo h(__('t_452f8963f9', 'هذا التبويب لا يغيّر الكود الأمامي بنفسه، بل يضع/يحذف ملف علامة في')); ?>
                 <code>storage/maintenance.flag</code>.
               </li>
-              <li><?= h(__('t_eb4935de3b', 'يمكنك في صفحة index الرئيسية للموقع أن تتحقق من وجود هذا الملف لعرض صفحة "الموقع تحت الصيانة".')) ?></li>
-              <li><?= h(__('t_86825d1b4e', 'عند الخروج من وضع الصيانة، يتم استدعاء')) ?> <code>Cache::flush()</code> <?= h(__('t_6d7725f09e', 'لمسح الكاش بالكامل.')) ?></li>
+              <li><?php echo h(__('t_eb4935de3b', 'يمكنك في صفحة index الرئيسية للموقع أن تتحقق من وجود هذا الملف لعرض صفحة "الموقع تحت الصيانة".')); ?></li>
+              <li><?php echo h(__('t_86825d1b4e', 'عند الخروج من وضع الصيانة، يتم استدعاء')); ?> <code>Cache::flush()</code> <?php echo h(__('t_6d7725f09e', 'لمسح الكاش بالكامل.')); ?></li>
             </ul>
           </div>
         </div>

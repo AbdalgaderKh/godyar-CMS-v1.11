@@ -31,25 +31,25 @@ if ($cover !== '') {
 <main class="container py-4">
   <div class="card border-0 shadow-sm mb-4 overflow-hidden" style="border-radius:18px;">
     <?php if ((empty($coverUrl) === false)): ?>
-      <div style="height:180px; background:url('<?= h($coverUrl) ?>') center/cover no-repeat;"></div>
+      <div style="height:180px; background:url('<?php echo h($coverUrl); ?>') center/cover no-repeat;"></div>
     <?php else: ?>
       <div style="height:140px; background:linear-gradient(135deg, rgba(14,165,233,.18), rgba(99,102,241,.12));"></div>
     <?php endif; ?>
     <div class="card-body">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
-          <div class="text-muted small mb-1"><?= h(__('الموضوع')) ?></div>
-          <h1 class="h4 mb-0">#<?= h($name) ?></h1>
+          <div class="text-muted small mb-1"><?php echo h(__('الموضوع')); ?></div>
+          <h1 class="h4 mb-0">#<?php echo h($name); ?></h1>
         </div>
-        <a class="btn btn-outline-light" href="<?= h($baseUrl . '/tag/' . rawurlencode((empty($slug) === false) ?: $name)) ?>">
-          <?= h(__('عرض الوسم الكلاسيكي')) ?>
+        <a class="btn btn-outline-light" href="<?php echo h($baseUrl . '/tag/' . rawurlencode((empty($slug) === false) ?: $name)); ?>">
+          <?php echo h(__('عرض الوسم الكلاسيكي')); ?>
         </a>
       </div>
 
       <?php if ($intro !== ''): ?>
-        <p class="text-muted mt-3 mb-0" style="max-width:900px;"><?= nl2br(h($intro)) ?></p>
+        <p class="text-muted mt-3 mb-0" style="max-width:900px;"><?php echo nl2br(h($intro)); ?></p>
       <?php else: ?>
-        <p class="text-muted mt-3 mb-0" style="max-width:900px;"><?= h(__('أحدث وأهم المقالات المتعلقة بهذا الموضوع.')) ?></p>
+        <p class="text-muted mt-3 mb-0" style="max-width:900px;"><?php echo h(__('أحدث وأهم المقالات المتعلقة بهذا الموضوع.')); ?></p>
       <?php endif; ?>
     </div>
   </div>
@@ -57,7 +57,7 @@ if ($cover !== '') {
   <?php if (empty($best) === false): ?>
     <section class="mb-4">
       <div class="d-flex align-items-center justify-content-between mb-2">
-        <h2 class="h6 mb-0"><?= h(__('الأكثر قراءة في هذا الموضوع')) ?></h2>
+        <h2 class="h6 mb-0"><?php echo h(__('الأكثر قراءة في هذا الموضوع')); ?></h2>
       </div>
       <div class="row g-3">
         <?php foreach ($best as $it): 
@@ -69,12 +69,12 @@ if ($cover !== '') {
           $imgUrl = (empty($img) === false) ? ($baseUrl . '/img.php?src=' . rawurlencode($img) . '&w=560') : '';
         ?>
         <div class="col-12 col-md-6 col-lg-4">
-          <a class="card h-100 text-decoration-none border-0 shadow-sm" href="<?= h($newsUrl) ?>" style="border-radius:16px;">
+          <a class="card h-100 text-decoration-none border-0 shadow-sm" href="<?php echo h($newsUrl); ?>" style="border-radius:16px;">
             <?php if ((empty($imgUrl) === false)): ?>
-              <img class="card-img-top" src="<?= h($imgUrl) ?>" alt="<?= h($title) ?>" style="height:160px; object-fit:cover;">
+              <img class="card-img-top" src="<?php echo h($imgUrl); ?>" alt="<?php echo h($title); ?>" style="height:160px; object-fit:cover;">
             <?php endif; ?>
             <div class="card-body">
-              <h3 class="h6 mb-0"><?= h($title) ?></h3>
+              <h3 class="h6 mb-0"><?php echo h($title); ?></h3>
             </div>
           </a>
         </div>
@@ -85,8 +85,8 @@ if ($cover !== '') {
 
   <section class="mb-3">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-      <h2 class="h6 mb-0"><?= h(__('أحدث المقالات')) ?></h2>
-      <div class="text-muted small"><?= h(__('صفحة')) ?> <?= (int)$page ?> / <?= (int)$pages ?></div>
+      <h2 class="h6 mb-0"><?php echo h(__('أحدث المقالات')); ?></h2>
+      <div class="text-muted small"><?php echo h(__('صفحة')); ?> <?php echo (int)$page; ?> / <?php echo (int)$pages; ?></div>
     </div>
 
     <div class="row g-3">
@@ -100,14 +100,14 @@ if ($cover !== '') {
         $imgUrl = $img ? ($baseUrl . '/img.php?src=' . rawurlencode($img) . '&w=560') : '';
       ?>
       <div class="col-12 col-md-6 col-lg-4">
-        <a class="card h-100 text-decoration-none border-0 shadow-sm" href="<?= h($newsUrl) ?>" style="border-radius:16px;">
+        <a class="card h-100 text-decoration-none border-0 shadow-sm" href="<?php echo h($newsUrl); ?>" style="border-radius:16px;">
           <?php if ($imgUrl): ?>
-            <img class="card-img-top" src="<?= h($imgUrl) ?>" alt="<?= h($title) ?>" style="height:160px; object-fit:cover;">
+            <img class="card-img-top" src="<?php echo h($imgUrl); ?>" alt="<?php echo h($title); ?>" style="height:160px; object-fit:cover;">
           <?php endif; ?>
           <div class="card-body">
-            <h3 class="h6 mb-1"><?= h($title) ?></h3>
+            <h3 class="h6 mb-1"><?php echo h($title); ?></h3>
             <?php if ($excerpt): ?>
-              <p class="text-muted small mb-0"><?= h(mb_substr($excerpt, 0, 160, 'UTF-8')) ?>…</p>
+              <p class="text-muted small mb-0"><?php echo h(mb_substr($excerpt, 0, 160, 'UTF-8')); ?>…</p>
             <?php endif; ?>
           </div>
         </a>
@@ -123,11 +123,11 @@ if ($cover !== '') {
             $prev = max(1, $page - 1);
             $next = min($pages, $page + 1);
           ?>
-          <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-            <a class="page-link" href="<?= h($base . '/page/' . $prev) ?>"><?= h(__('السابق')) ?></a>
+          <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
+            <a class="page-link" href="<?php echo h($base . '/page/' . $prev); ?>"><?php echo h(__('السابق')); ?></a>
           </li>
-          <li class="page-item <?= $page >= $pages ? 'disabled' : '' ?>">
-            <a class="page-link" href="<?= h($base . '/page/' . $next) ?>"><?= h(__('التالي')) ?></a>
+          <li class="page-item <?php echo $page >= $pages ? 'disabled' : ''; ?>">
+            <a class="page-link" href="<?php echo h($base . '/page/' . $next); ?>"><?php echo h(__('التالي')); ?></a>
           </li>
         </ul>
       </nav>

@@ -120,17 +120,17 @@ if ($action === 'apply' && (empty($canApply) === false)) {
   <div class="card">
     <h3>نتيجة الفحص</h3>
     <ul>
-      <li>PHP 7.4+: <?= (empty($checks['php_version']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير متوافق</span>' ?></li>
-      <li>pdo_mysql: <?= (empty($checks['pdo_mysql']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير مُفعّل</span>' ?></li>
-      <li>وجود .env: <?= (empty($checks['env_exists']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">⚠️ غير موجود</span>' ?></li>
-      <li>وجود الملف الهدف DB.php: <?= (empty($checks['target_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
-      <li>وجود ملف الترقيعة: <?= (empty($checks['patch_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>' ?></li>
+      <li>PHP 7.4+: <?php echo (empty($checks['php_version']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير متوافق</span>'; ?></li>
+      <li>pdo_mysql: <?php echo (empty($checks['pdo_mysql']) === false) ? '<span class="ok">✅ OK</span>' : '<span class="bad">❌ غير مُفعّل</span>'; ?></li>
+      <li>وجود .env: <?php echo (empty($checks['env_exists']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">⚠️ غير موجود</span>'; ?></li>
+      <li>وجود الملف الهدف DB.php: <?php echo (empty($checks['target_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>'; ?></li>
+      <li>وجود ملف الترقيعة: <?php echo (empty($checks['patch_db']) === false) ? '<span class="ok">✅ موجود</span>' : '<span class="bad">❌ مفقود</span>'; ?></li>
     </ul>
 
     <?php if (empty($warnings) === false): ?>
       <p class="bad"><strong>ملاحظات:</strong></p>
       <ul>
-        <?php foreach ($warnings as $w): ?><li class="bad"><?= h($w) ?></li><?php endforeach; ?>
+        <?php foreach ($warnings as $w): ?><li class="bad"><?php echo h($w); ?></li><?php endforeach; ?>
       </ul>
     <?php endif; ?>
   </div>
@@ -145,11 +145,11 @@ if ($action === 'apply' && (empty($canApply) === false)) {
       <?php endif; ?>
 
       <?php if ((empty($backedUp) === false)): ?>
-        <p class="ok">✅ نسخة احتياطية: <code><?= h(str_replace($root, '', $backedUp)) ?></code></p>
+        <p class="ok">✅ نسخة احتياطية: <code><?php echo h(str_replace($root, '', $backedUp)); ?></code></p>
       <?php endif; ?>
 
       <?php if (empty($removed) === false): ?>
-        <p class="ok">✅ تم حذف ملفات تطوير/تشخيص: <code><?= h(implode(', ', $removed)) ?></code></p>
+        <p class="ok">✅ تم حذف ملفات تطوير/تشخيص: <code><?php echo h(implode(', ', $removed)); ?></code></p>
       <?php endif; ?>
 
       <?php if ($written): ?>
@@ -166,7 +166,7 @@ if ($action === 'apply' && (empty($canApply) === false)) {
     <h3>تنفيذ الترقية</h3>
     <form method="post">
       <input type="hidden" name="action" value="apply">
-      <button class="btn" <?= (empty($canApply) === false) ? '' : 'disabled' ?>>تطبيق الترقية الآن</button>
+      <button class="btn" <?php echo (empty($canApply) === false) ? '' : 'disabled'; ?>>تطبيق الترقية الآن</button>
     </form>
     <p class="muted">مهم: احذف مجلد <code>/upgrade</code> فور الانتهاء.</p>
   </div>

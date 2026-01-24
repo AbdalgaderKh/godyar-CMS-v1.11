@@ -53,14 +53,14 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
   $pub = (empty($dt) === false) ? gmdate('c', strtotime($dt)) : gmdate('c');
 ?>
   <url>
-    <loc><?= xml($url) ?></loc>
+    <loc><?php echo xml($url); ?></loc>
     <news:news>
       <news:publication>
-        <news:name><?= xml($siteName) ?></news:name>
-        <news:language><?= xml($lang) ?></news:language>
+        <news:name><?php echo xml($siteName); ?></news:name>
+        <news:language><?php echo xml($lang); ?></news:language>
       </news:publication>
-      <news:publication_date><?= xml($pub) ?></news:publication_date>
-      <news:title><?= xml($title) ?></news:title>
+      <news:publication_date><?php echo xml($pub); ?></news:publication_date>
+      <news:title><?php echo xml($title); ?></news:title>
     </news:news>
   </url>
 <?php endforeach; ?>

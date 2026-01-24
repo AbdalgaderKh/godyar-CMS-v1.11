@@ -73,16 +73,16 @@ include __DIR__ . '/../partials/admin_header.php';
 ?>
 <div class="container" style="max-width: 1180px; margin: 0 auto; padding: 16px;">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <h2 style="margin:0"><?= htmlspecialchars($title) ?></h2>
+    <h2 style="margin:0"><?php echo htmlspecialchars($title); ?></h2>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <a class="btn btn-outline" href="?download=1" style="text-decoration:none">تحميل</a>
       <form method="get" style="display:flex;gap:6px;align-items:center;margin:0">
         <label style="opacity:.8">عدد السطور</label>
-        <input name="lines" type="number" min="50" max="2000" value="<?= (int)$max ?>" style="width:90px">
+        <input name="lines" type="number" min="50" max="2000" value="<?php echo (int)$max; ?>" style="width:90px">
         <button class="btn btn-outline" type="submit">تحديث</button>
       </form>
       <form method="post" style="margin:0">
-        <?= csrf_token() ?>
+        <?php echo csrf_token(); ?>
         <button class="btn btn-danger" type="submit" name="clear_log" value="1" data-confirm='مسح سجل الأخطاء؟'>مسح السجل</button>
       </form>
     </div>
@@ -94,16 +94,16 @@ include __DIR__ . '/../partials/admin_header.php';
 
   <div style="margin-top:12px; padding:12px; border-radius:12px; background:#0b1220; color:#e5e7eb; overflow:auto; max-height:70vh; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 12px; line-height: 1.6;">
     <?php if (($lines === false)): ?>
-      <div style="opacity:.8">لا توجد أخطاء أو الملف غير موجود: <?= htmlspecialchars($logPath) ?></div>
+      <div style="opacity:.8">لا توجد أخطاء أو الملف غير موجود: <?php echo htmlspecialchars($logPath); ?></div>
     <?php else: ?>
       <?php foreach ($lines as $ln): ?>
-        <div><?= htmlspecialchars($ln) ?></div>
+        <div><?php echo htmlspecialchars($ln); ?></div>
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
 
   <div style="margin-top:10px;opacity:.7;font-size:12px">
-    المسار: <?= htmlspecialchars($logPath) ?>
+    المسار: <?php echo htmlspecialchars($logPath); ?>
   </div>
 </div>
 <?php include __DIR__ . '/../partials/admin_footer.php'; ?>

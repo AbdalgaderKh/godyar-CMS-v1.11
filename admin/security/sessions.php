@@ -53,15 +53,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= h($title) ?></title>
+  <title><?php echo h($title); ?></title>
   <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
 </head>
 <body class="p-3">
   <div class="container" style="max-width:720px;">
-    <h1 class="h4 mb-3"><?= h($title) ?></h1>
+    <h1 class="h4 mb-3"><?php echo h($title); ?></h1>
 
     <?php if ((empty($error) === false)): ?>
-      <div class="alert alert-danger"><?= h($error) ?></div>
+      <div class="alert alert-danger"><?php echo h($error); ?></div>
     <?php endif; ?>
 
     <div class="card mb-3">
@@ -69,7 +69,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         <p class="mb-3">يمكنك تسجيل الخروج من هذا الجهاز فقط، أو من جميع الأجهزة (وإبطال كل الجلسات القديمة).</p>
 
         <form method="post" class="d-flex gap-2 flex-wrap">
-          <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h(generate_csrf_token()); ?>">
           <button class="btn btn-outline-secondary" name="action" value="logout_me" type="submit">
             تسجيل الخروج من هذا الجهاز
           </button>

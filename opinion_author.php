@@ -156,7 +156,7 @@ if ($mode === 'single') {
             <div class="alert alert-warning text-center" role="alert">
               <h1 class="h4 mb-2">عذراً، كاتب الرأي غير موجود</h1>
               <p class="mb-3">قد يكون تم حذفه أو إيقاف تفعيله.</p>
-              <a href="<?= h($baseUrl ?: '/') ?>" class="btn btn-primary">
+              <a href="<?php echo h($baseUrl ?: '/'); ?>" class="btn btn-primary">
                 العودة إلى الصفحة الرئيسية
               </a>
             </div>
@@ -577,8 +577,8 @@ require __DIR__ . '/frontend/views/partials/header.php';
 <?php if ($mode === 'single'): ?>
     <div class="oa-author-card mb-3">
       <div class="oa-author-avatar-wrap">
-        <img src="<?= h($authorAvatar) ?>"
-             alt="<?= h($authorName) ?>"
+        <img src="<?php echo h($authorAvatar); ?>"
+             alt="<?php echo h($authorName); ?>"
              class="oa-author-avatar">
       </div>
       <div class="oa-author-meta">
@@ -587,39 +587,39 @@ require __DIR__ . '/frontend/views/partials/header.php';
           <span>كاتب رأي</span>
         </div>
         <h1 class="oa-author-name">
-          <?= h($authorName) ?>
+          <?php echo h($authorName); ?>
         </h1>
         <?php if ($specialization !== ''): ?>
           <div class="oa-author-spec">
-            <?= h($specialization) ?>
+            <?php echo h($specialization); ?>
           </div>
         <?php endif; ?>
 
         <?php if ($bio !== ''): ?>
           <div class="oa-author-bio">
-            <?= nl2br(h($bio)) ?>
+            <?php echo nl2br(h($bio)); ?>
           </div>
         <?php endif; ?>
 
         <div class="oa-author-meta-footer mt-2">
           <?php if ($email !== ''): ?>
-            <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($email) ?></span>
+            <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?php echo h($email); ?></span>
           <?php endif; ?>
 
           <?php if ($website !== '' || $twitter !== '' || $facebook !== ''): ?>
             <div class="oa-author-social">
               <?php if ($website !== ''): ?>
-                <a href="<?= h($website) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
+                <a href="<?php echo h($website); ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                 </a>
               <?php endif; ?>
               <?php if ($twitter !== ''): ?>
-                <a href="<?= h($twitter) ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
+                <a href="<?php echo h($twitter); ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                 </a>
               <?php endif; ?>
               <?php if ($facebook !== ''): ?>
-                <a href="<?= h($facebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
+                <a href="<?php echo h($facebook); ?>" target="_blank" rel="noopener" title="فيسبوك">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                 </a>
               <?php endif; ?>
@@ -631,7 +631,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
 
     <div class="oa-articles-header">
       <h2 class="oa-articles-title">
-        أحدث مقالات <?= h($authorName) ?>
+        أحدث مقالات <?php echo h($authorName); ?>
       </h2>
       <div class="oa-articles-sub">
         يتم عرض المقالات المرتبطة بهذا الكاتب في الموقع.
@@ -660,27 +660,27 @@ require __DIR__ . '/frontend/views/partials/header.php';
           $url = gdy_build_news_url($baseUrl, $row);
           ?>
           <article class="oa-article-card">
-            <a href="<?= h($url) ?>" class="oa-article-thumb">
+            <a href="<?php echo h($url); ?>" class="oa-article-thumb">
               <span class="oa-article-badge">مقال رأي</span>
-              <img src="<?= h($imgUrl) ?>" alt="<?= h($title) ?>">
+              <img src="<?php echo h($imgUrl); ?>" alt="<?php echo h($title); ?>">
             </a>
             <div class="oa-article-body">
               <h3 class="oa-article-title">
-                <a href="<?= h($url) ?>">
-                  <?= h(gdy_str_limit($title, 110)) ?>
+                <a href="<?php echo h($url); ?>">
+                  <?php echo h(gdy_str_limit($title, 110)); ?>
                 </a>
               </h3>
               <div class="oa-article-meta">
                 <?php if ($date !== ''): ?>
-                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($date) ?></span>
+                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?></span>
                 <?php endif; ?>
                 <?php if ($views > 0): ?>
-                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?= number_format($views) ?> مشاهدة</span>
+                  <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo number_format($views); ?> مشاهدة</span>
                 <?php endif; ?>
               </div>
               <?php if ($excerpt !== ''): ?>
                 <div class="oa-article-excerpt">
-                  <?= h(gdy_str_limit($excerpt, 190)) ?>
+                  <?php echo h(gdy_str_limit($excerpt, 190)); ?>
                 </div>
               <?php endif; ?>
             </div>
@@ -727,21 +727,21 @@ require __DIR__ . '/frontend/views/partials/header.php';
               }
           }
           ?>
-          <a href="<?= h($authorUrl) ?>" class="oa-author-card-small">
+          <a href="<?php echo h($authorUrl); ?>" class="oa-author-card-small">
             <div class="oa-author-avatar-small-wrap">
-              <img src="<?= h($avatarUrl) ?>" alt="<?= h($aName) ?>" class="oa-author-avatar-small">
+              <img src="<?php echo h($avatarUrl); ?>" alt="<?php echo h($aName); ?>" class="oa-author-avatar-small">
             </div>
             <div>
               <div class="oa-author-small-name">
-                <?= h($aName) ?>
+                <?php echo h($aName); ?>
               </div>
               <?php if ($aSpec !== ''): ?>
                 <div class="oa-author-small-spec">
-                  <?= h($aSpec) ?>
+                  <?php echo h($aSpec); ?>
                 </div>
               <?php elseif ($aTitle !== ''): ?>
                 <div class="oa-author-small-spec">
-                  <?= h($aTitle) ?>
+                  <?php echo h($aTitle); ?>
                 </div>
               <?php endif; ?>
               <div class="oa-author-small-meta">

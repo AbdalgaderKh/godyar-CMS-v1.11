@@ -49,15 +49,15 @@ require_once __DIR__ . '/header.php';
 
           <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
             <div>
-              <h1 class="gdy-page-title h4 mb-0"><?= h((string)$pageTitle) ?></h1>
+              <h1 class="gdy-page-title h4 mb-0"><?php echo h((string)$pageTitle); ?></h1>
               <?php if ((string)$pageSubtitle !== ''): ?>
-                <div class="gdy-page-subtitle text-muted"><?= h((string)$pageSubtitle) ?></div>
+                <div class="gdy-page-subtitle text-muted"><?php echo h((string)$pageSubtitle); ?></div>
               <?php endif; ?>
             </div>
 
             <?php if ((string)$pageActionsHtml !== ''): ?>
               <div class="d-flex flex-wrap gap-2 align-items-center">
-                <?= (string)$pageActionsHtml ?>
+                <?php echo (string)$pageActionsHtml; ?>
               </div>
             <?php endif; ?>
           </div>

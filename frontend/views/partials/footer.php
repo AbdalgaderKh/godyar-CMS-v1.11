@@ -256,25 +256,25 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
       <div class="gdy-footer-main">
         <!-- هوية الموقع -->
         <div class="gdy-footer-brand">
-          <div class="gdy-footer-title"><?= h($siteName) ?></div>
+          <div class="gdy-footer-title"><?php echo h($siteName); ?></div>
           <div class="gdy-footer-tagline">
-            <?= h($siteTagline) ?>
+            <?php echo h($siteTagline); ?>
           </div>
         </div>
 
         <!-- بيانات التواصل + العنوان -->
         <div class="gdy-footer-contact">
           <?php if ((empty($siteEmail) === false)): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($siteEmail) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?php echo h($siteEmail); ?></div>
           <?php endif; ?>
           <?php if ((empty($sitePhone) === false)): ?>
-            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?= h($sitePhone) ?></div>
+            <div><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#phone"></use></svg> <?php echo h($sitePhone); ?></div>
           <?php endif; ?>
           <?php if ((empty($siteAddr) === false)): ?>
             <div>
               <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <strong><?= h(__("address")) ?>:</strong>
-              <?= h($siteAddr) ?>
+              <strong><?php echo h(__("address")); ?>:</strong>
+              <?php echo h($siteAddr); ?>
             </div>
           <?php endif; ?>
         </div>
@@ -282,19 +282,19 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
         <!-- روابط سريعة + تواصل اجتماعي + تطبيقات -->
         <div class="gdy-footer-extra">
           <?php if (empty($footerLinks) === false): ?>
-            <nav class="gdy-footer-links" aria-label="<?= h(__("footer_links")) ?>">
+            <nav class="gdy-footer-links" aria-label="<?php echo h(__("footer_links")); ?>">
               <?php foreach ($footerLinks as $link):
                   $url   = trim((string)($link['url'] ?? ''));
                   $label = trim((string)($link['label'] ?? ''));
                   if ($url === '' || $label === '') continue;
               ?>
-                <a href="<?= h($url) ?>"><?= h($label) ?></a>
+                <a href="<?php echo h($url); ?>"><?php echo h($label); ?></a>
               <?php endforeach; ?>
             </nav>
           <?php endif; ?>
 
           <div class="gdy-footer-social">
-            <span class="gdy-footer-social-label"><?= h(__("follow_us")) ?>:</span>
+            <span class="gdy-footer-social-label"><?php echo h(__("follow_us")); ?>:</span>
             <div class="gdy-footer-social-links">
               <?php
               if (function_exists('render_social_icon') === false) {
@@ -334,15 +334,15 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
           <?php if ($hasApps): ?>
             <div class="gdy-footer-apps">
               <?php if ($appAndroid): ?>
-                <a href="<?= h($appAndroid) ?>" target="_blank" rel="noopener noreferrer">
+                <a href="<?php echo h($appAndroid); ?>" target="_blank" rel="noopener noreferrer">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span><?= h(__("android_app")) ?></span>
+                  <span><?php echo h(__("android_app")); ?></span>
                 </a>
               <?php endif; ?>
               <?php if ($appIos): ?>
-                <a href="<?= h($appIos) ?>" target="_blank" rel="noopener noreferrer">
+                <a href="<?php echo h($appIos); ?>" target="_blank" rel="noopener noreferrer">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span><?= h(__("ios_app")) ?></span>
+                  <span><?php echo h(__("ios_app")); ?></span>
                 </a>
               <?php endif; ?>
             </div>
@@ -352,15 +352,15 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 
       <div class="gdy-footer-bottom">
         <?php if (!isset($year) || !$year) { $year = (int)date('Y'); } // ✅ حارس نهائي لمنع أي Warning ?>
-        <span>© <?= $year ?> <?= h($siteName) ?>. <?= h(__("all_rights_reserved")) ?>.</span>
+        <span>© <?php echo $year; ?> <?php echo h($siteName); ?>. <?php echo h(__("all_rights_reserved")); ?>.</span>
 
         <?php if (!empty($teamUrl)): ?>
-          <a href="<?= h($teamUrl) ?>" class="gdy-footer-team-link">
+          <a href="<?php echo h($teamUrl); ?>" class="gdy-footer-team-link">
             <span class="gdy-social-icon is-team">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <span class="gdy-footer-social-tooltip"><?= h(__("team")) ?></span>
+              <span class="gdy-footer-social-tooltip"><?php echo h(__("team")); ?></span>
             </span>
-            <span><?= h(__("team")) ?></span>
+            <span><?php echo h(__("team")); ?></span>
           </a>
         <?php endif; ?>
 </div>
@@ -370,21 +370,21 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
   <!-- Mobile App Bar (Facebook-like) -->
   <?php $gdyIsUser = (!empty($_SESSION['user']) || !empty($_SESSION['user_id']) || !empty($_SESSION['user_email'])); ?>
   <nav class="gdy-mobile-bar" id="gdyMobileBar" aria-label="التنقل">
-    <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/') ?>" data-tab="home" aria-label="الرئيسية">
+    <a class="mb-item" href="<?php echo h(($_gdy_baseUrl ?: '') . '/'); ?>" data-tab="home" aria-label="الرئيسية">
       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg><span>الرئيسية</span>
     </a>
     <button class="mb-item" type="button" data-action="cats" data-tab="cats" aria-label="الأقسام">
       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><span>الأقسام</span>
     </button>
-    <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/saved') ?>" data-tab="saved" aria-label="محفوظاتي">
+    <a class="mb-item" href="<?php echo h(($_gdy_baseUrl ?: '') . '/saved'); ?>" data-tab="saved" aria-label="محفوظاتي">
       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><span>محفوظاتي</span>
     </a>
     <?php if ($gdyIsUser): ?>
-      <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/profile.php') ?>" data-tab="profile" aria-label="حسابي">
+      <a class="mb-item" href="<?php echo h(($_gdy_baseUrl ?: '') . '/profile.php'); ?>" data-tab="profile" aria-label="حسابي">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg><span>حسابي</span>
       </a>
     <?php else: ?>
-      <a class="mb-item" href="<?= h(($_gdy_baseUrl ?: '') . '/login.php') ?>" data-tab="login" aria-label="دخول">
+      <a class="mb-item" href="<?php echo h(($_gdy_baseUrl ?: '') . '/login.php'); ?>" data-tab="login" aria-label="دخول">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg><span>دخول</span>
       </a>
     <?php endif; ?>
@@ -508,7 +508,7 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
   </script>
 
   <?php if (!empty($extraBodyCode)): ?>
-    <?= $extraBodyCode . "\n" ?>
+    <?php echo $extraBodyCode . "\n"; ?>
   <?php endif; ?>
 
   <!-- Glossary tooltip styles & behavior -->
@@ -706,9 +706,9 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
   }
 ?>
 <script>
-  window.GDY_VAPID_PUBLIC_KEY = <?= json_encode($vapidPublic, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+  window.GDY_VAPID_PUBLIC_KEY = <?php echo json_encode($vapidPublic, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('<?= h($baseUrl) ?>/sw.js').catch(function(){});
+    navigator.serviceWorker.register('<?php echo h($baseUrl); ?>/sw.js').catch(function(){});
   }
 </script>
 
@@ -728,72 +728,72 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
   $tabMy     = rtrim($navBaseUrl2, '/') . '/my';
   $tabArchive = rtrim($navBaseUrl2, '/') . '/archive';
 ?>
-<nav class="gdy-tabbar" aria-label="<?= h(__('navigation')) ?>">
-  <a class="gdy-tab" href="<?= h($tabNewest) ?>" data-tab="home" aria-label="<?= h(__('home')) ?>">
+<nav class="gdy-tabbar" aria-label="<?php echo h(__('navigation')); ?>">
+  <a class="gdy-tab" href="<?php echo h($tabNewest); ?>" data-tab="home" aria-label="<?php echo h(__('home')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
-    <span><?= h(__('home')) ?></span>
+    <span><?php echo h(__('home')); ?></span>
   </a>
 
-  <a class="gdy-tab" href="<?= h($tabArchive) ?>" data-tab="archive" aria-label="<?= h(__('latest_news')) ?>">
+  <a class="gdy-tab" href="<?php echo h($tabArchive); ?>" data-tab="archive" aria-label="<?php echo h(__('latest_news')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg>
-    <span><?= h(__('latest_news')) ?></span>
+    <span><?php echo h(__('latest_news')); ?></span>
   </a>
 
-  <a class="gdy-tab" href="<?= h($tabSaved) ?>" data-tab="saved" aria-label="<?= h(__('saved')) ?>">
+  <a class="gdy-tab" href="<?php echo h($tabSaved); ?>" data-tab="saved" aria-label="<?php echo h(__('saved')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg>
-    <span><?= h(__('saved')) ?></span>
+    <span><?php echo h(__('saved')); ?></span>
   </a>
 
-  <a class="gdy-tab" href="<?= h($tabMost) ?>" data-tab="most" aria-label="<?= h(__('most_read')) ?>">
+  <a class="gdy-tab" href="<?php echo h($tabMost); ?>" data-tab="most" aria-label="<?php echo h(__('most_read')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg>
-    <span><?= h(__('most_read')) ?></span>
+    <span><?php echo h(__('most_read')); ?></span>
   </a>
 
-  <a class="gdy-tab" href="<?= h($tabMy) ?>" data-tab="my" aria-label="<?= h(__('my_news')) ?>">
+  <a class="gdy-tab" href="<?php echo h($tabMy); ?>" data-tab="my" aria-label="<?php echo h(__('my_news')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#user"></use></svg>
-    <span><?= h(__('my_news')) ?></span>
+    <span><?php echo h(__('my_news')); ?></span>
   </a>
 
-  <button class="gdy-tab gdy-tab--btn" type="button" data-tab="theme" id="gdyTabTheme" aria-label="<?= h(__('dark_mode')) ?>">
+  <button class="gdy-tab gdy-tab--btn" type="button" data-tab="theme" id="gdyTabTheme" aria-label="<?php echo h(__('dark_mode')); ?>">
     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#moon"></use></svg>
-    <span><?= h(__('dark_mode')) ?></span>
+    <span><?php echo h(__('dark_mode')); ?></span>
   </button>
 </nav>
 
 <!-- Mobile Search Overlay -->
 <div class="gdy-search" id="gdyMobileSearch" hidden>
   <div class="gdy-search__top">
-    <button class="gdy-search__close" type="button" id="gdyMobileSearchClose" aria-label="<?= h(__('close')) ?>">
+    <button class="gdy-search__close" type="button" id="gdyMobileSearchClose" aria-label="<?php echo h(__('close')); ?>">
       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg>
     </button>
     <div class="gdy-search__field">
       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#search"></use></svg>
-      <input id="gdyMobileSearchInput" type="search" autocomplete="off" placeholder="<?= h(__('search_placeholder')) ?>">
+      <input id="gdyMobileSearchInput" type="search" autocomplete="off" placeholder="<?php echo h(__('search_placeholder')); ?>">
     </div>
   </div>
   <div class="gdy-search__body">
-    <div class="gdy-search__title"><?= h(__('smart_search')) ?></div>
+    <div class="gdy-search__title"><?php echo h(__('smart_search')); ?></div>
     <div class="gdy-search__list" id="gdyMobileSearchList"></div>
   </div>
 </div>
 
 <script>
-  window.GDY_NAV_BASE = "<?= h($navBaseUrl2) ?>";
+  window.GDY_NAV_BASE = "<?php echo h($navBaseUrl2); ?>";
 </script>
   
-<button id="gdyBackTop" class="gdy-backtop" type="button" aria-label="<?= h(__('العودة للأعلى')) ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg></button>
+<button id="gdyBackTop" class="gdy-backtop" type="button" aria-label="<?php echo h(__('العودة للأعلى')); ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/godyar-icons.svg#dot"></use></svg></button>
 
-<script src="<?= h($baseUrl) ?>/assets/js/modules/search.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/notifications.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/push_prompt.js?v=20260107_1" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/mobile_app.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/pwa.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/mobile_tabbar.js?v=20260107_5" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/mobile_search_overlay.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/search.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/notifications.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/push_prompt.js?v=20260107_1" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_app.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/pwa.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_tabbar.js?v=20260107_5" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_search_overlay.js" defer></script>
 
-<script src="<?= h($baseUrl) ?>/assets/js/ui-enhancements.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/lazy-images.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/modules/newsletter_subscribe.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/ui-enhancements.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/lazy-images.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/newsletter_subscribe.js" defer></script>
 
 <!-- Mobile push enable prompt (shows only if push enabled + no subscription) -->
 <div id="gdy-push-toast" class="gdy-push-toast" role="dialog" aria-live="polite" aria-label="Push Prompt">
@@ -806,6 +806,6 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 </div>
 
   <script src="/assets/js/public-interactions.js" defer></script>
-<script src="<?= h($baseUrl) ?>/assets/js/image_fallback.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/image_fallback.js" defer></script>
 </body>
 </html>

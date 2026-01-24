@@ -116,7 +116,7 @@ $catUrl  = ($catSlug !== '') ? ($baseUrl . '/category/' . rawurlencode($catSlug)
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?> — <?= htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8') ?></title>
+  <title><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?> — <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?></title>
 
   <!-- Optional Arabic webfont (falls back gracefully if blocked) -->
   <style>
@@ -358,39 +358,39 @@ $catUrl  = ($catSlug !== '') ? ($baseUrl . '/category/' . rawurlencode($catSlug)
     <div class="mast">
       <div class="brand">
         <?php if ($logoUrl !== ''): ?>
-          <img class="logo" src="<?= htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8') ?>" alt="logo"/>
+          <img class="logo" src="<?php echo htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="logo"/>
         <?php endif; ?>
         <div class="brandText">
-          <div class="siteName"><?= htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8') ?></div>
-          <div class="siteDesc"><?= htmlspecialchars($siteDesc, ENT_QUOTES, 'UTF-8') ?></div>
+          <div class="siteName"><?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?></div>
+          <div class="siteDesc"><?php echo htmlspecialchars($siteDesc, ENT_QUOTES, 'UTF-8'); ?></div>
         </div>
       </div>
 
       <div class="meta">
         <?php if ($catName !== ''): ?>
-          <div><strong>القسم:</strong> <?= htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') ?></div>
+          <div><strong>القسم:</strong> <?php echo htmlspecialchars($catName, ENT_QUOTES, 'UTF-8'); ?></div>
         <?php endif; ?>
         <?php if ($dateFmt !== ''): ?>
-          <div><strong>التاريخ:</strong> <?= htmlspecialchars($dateFmt, ENT_QUOTES, 'UTF-8') ?></div>
+          <div><strong>التاريخ:</strong> <?php echo htmlspecialchars($dateFmt, ENT_QUOTES, 'UTF-8'); ?></div>
         <?php endif; ?>
       </div>
     </div>
 
-    <h1><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?></h1>
+    <h1><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></h1>
 
     <div class="subbar">
       <div>
-        <a href="<?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>">الرئيسية</a>
+        <a href="<?php echo htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8'); ?>">الرئيسية</a>
         <?php if ($catName !== '' && $catUrl !== ''): ?>
           <span class="dot">•</span>
-          <a href="<?= htmlspecialchars($catUrl, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($catName, ENT_QUOTES, 'UTF-8') ?></a>
+          <a href="<?php echo htmlspecialchars($catUrl, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($catName, ENT_QUOTES, 'UTF-8'); ?></a>
         <?php endif; ?>
       </div>
-      <div class="url"><?= htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8') ?></div>
+      <div class="url"><?php echo htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8'); ?></div>
     </div>
 
     <?php if ($coverUrl !== ''): ?>
-      <div class="cover"><img src="<?= htmlspecialchars($coverUrl, ENT_QUOTES, 'UTF-8') ?>" alt="cover"/></div>
+      <div class="cover"><img src="<?php echo htmlspecialchars($coverUrl, ENT_QUOTES, 'UTF-8'); ?>" alt="cover"/></div>
     <?php endif; ?>
 
     <?php if (!$hideQr): ?>
@@ -401,16 +401,16 @@ $catUrl  = ($catSlug !== '') ? ($baseUrl . '/category/' . rawurlencode($catSlug)
             <small class="badge">امسح QR أو افتح الرابط</small>
           </div>
         </div>
-        <div class="url"><?= htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8') ?></div>
+        <div class="url"><?php echo htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8'); ?></div>
       </div>
     <?php endif; ?>
 
     <div class="content">
-      <?= $contentClean /* trusted already in CMS */ ?>
+      <?php echo $contentClean /* trusted already in CMS */; ?>
     </div>
 
     <div class="foot">
-      <div class="left"><?= htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8') ?></div>
+      <div class="left"><?php echo htmlspecialchars($articleUrlFull, ENT_QUOTES, 'UTF-8'); ?></div>
       <div>نسخة للطباعة — <span class="badge">GDY_BUILD: v9.0</span></div>
     </div>
 

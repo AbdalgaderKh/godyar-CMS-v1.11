@@ -257,7 +257,7 @@ if (empty($headerCategories)) {
   $gdyIsRtl = in_array($gdyLang2, ['ar','fa','ur','he'], true) || (bool)preg_match('~^/ar(/|$)~', $gdyPath);
 ?>
 <!DOCTYPE html>
-<html lang="<?= h($gdyLang) ?>" dir="<?= $gdyIsRtl ? 'rtl' : 'ltr' ?>" data-theme="light" class="no-js">
+<html lang="<?php echo h($gdyLang); ?>" dir="<?php echo $gdyIsRtl ? 'rtl' : 'ltr'; ?>" data-theme="light" class="no-js">
 <head>
   <meta charset="utf-8">
 <?php
@@ -326,16 +326,16 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     $metaKeywords = (string)($siteSettings['seo.meta_keywords'] ?? '');
 
   ?>
-  <title><?= $seoTitle ?></title>
+  <title><?php echo $seoTitle; ?></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="<?= $seoDesc ?>">
-  <meta name="robots" content="<?= h($robotsMeta) ?>">
-  <?php if ($metaKeywords !== ''): ?><meta name="keywords" content="<?= h($metaKeywords) ?>"><?php endif; ?>
+  <meta name="description" content="<?php echo $seoDesc; ?>">
+  <meta name="robots" content="<?php echo h($robotsMeta); ?>">
+  <?php if ($metaKeywords !== ''): ?><meta name="keywords" content="<?php echo h($metaKeywords); ?>"><?php endif; ?>
 
   
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?= h(rtrim($rootUrl,'/')) ?>/rss.xml">
-  <link rel="sitemap" type="application/xml" href="<?= h(rtrim($rootUrl,'/')) ?>/sitemap.xml">
-<link rel="canonical" href="<?= h($seoUrl) ?>">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo h(rtrim($rootUrl,'/')); ?>/rss.xml">
+  <link rel="sitemap" type="application/xml" href="<?php echo h(rtrim($rootUrl,'/')); ?>/sitemap.xml">
+<link rel="canonical" href="<?php echo h($seoUrl); ?>">
 
   <?php
     // Preload images مهمة (LCP) إذا مررتها الصفحة عبر $pagePreloadImages
@@ -356,35 +356,35 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     $ogUrl   = $seoUrl !== '' ? $seoUrl : '';
     $ogImage = $seoImage !== '' ? $seoImage : '';
   ?>
-  <meta property="og:type" content="<?= h($seoType) ?>">
-  <meta property="og:title" content="<?= $ogTitle ?>">
-  <meta property="og:description" content="<?= $ogDesc ?>">
-  <?php if ($ogUrl !== ''): ?><meta property="og:url" content="<?= h($ogUrl) ?>"><?php endif; ?>
-  <?php if ($ogImage !== ''): ?><meta property="og:image" content="<?= h($ogImage) ?>"><?php endif; ?>
+  <meta property="og:type" content="<?php echo h($seoType); ?>">
+  <meta property="og:title" content="<?php echo $ogTitle; ?>">
+  <meta property="og:description" content="<?php echo $ogDesc; ?>">
+  <?php if ($ogUrl !== ''): ?><meta property="og:url" content="<?php echo h($ogUrl); ?>"><?php endif; ?>
+  <?php if ($ogImage !== ''): ?><meta property="og:image" content="<?php echo h($ogImage); ?>"><?php endif; ?>
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?= $ogTitle ?>">
-  <meta name="twitter:description" content="<?= $ogDesc ?>">
-  <?php if ($ogImage !== ''): ?><meta name="twitter:image" content="<?= h($ogImage) ?>"><?php endif; ?>
+  <meta name="twitter:title" content="<?php echo $ogTitle; ?>">
+  <meta name="twitter:description" content="<?php echo $ogDesc; ?>">
+  <?php if ($ogImage !== ''): ?><meta name="twitter:image" content="<?php echo h($ogImage); ?>"><?php endif; ?>
 
-  <?php if ($seoPublished !== ''): ?><meta property="article:published_time" content="<?= h($seoPublished) ?>"><?php endif; ?>
-  <?php if ($seoModified !== ''): ?><meta property="article:modified_time" content="<?= h($seoModified) ?>"><?php endif; ?>
-  <?php if ($seoAuthor !== ''): ?><meta property="article:author" content="<?= h($seoAuthor) ?>"><?php endif; ?>
+  <?php if ($seoPublished !== ''): ?><meta property="article:published_time" content="<?php echo h($seoPublished); ?>"><?php endif; ?>
+  <?php if ($seoModified !== ''): ?><meta property="article:modified_time" content="<?php echo h($seoModified); ?>"><?php endif; ?>
+  <?php if ($seoAuthor !== ''): ?><meta property="article:author" content="<?php echo h($seoAuthor); ?>"><?php endif; ?>
 
   <?php if ($seoJsonLd !== ''): ?>
-    <script type="application/ld+json" nonce="<?php echo htmlspecialchars($cspNonce, ENT_QUOTES, 'UTF-8'); ?>"><?= $seoJsonLd ?></script>
+    <script type="application/ld+json" nonce="<?php echo htmlspecialchars($cspNonce, ENT_QUOTES, 'UTF-8'); ?>"><?php echo $seoJsonLd; ?></script>
   <?php endif; ?>
   <?php if (!gdy_is_rtl()): ?>
-    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/ltr.css">
+    <link rel="stylesheet" href="<?php echo h(rtrim((string)($baseUrl ?? ''), '/')); ?>/assets/css/ltr.css">
   <?php endif; ?>
 
-    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/ui-enhancements.css?v=20260107_8">
-    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/pwa.css?v=20260107_8">
+    <link rel="stylesheet" href="<?php echo h(rtrim((string)($baseUrl ?? ''), '/')); ?>/assets/css/ui-enhancements.css?v=20260107_8">
+    <link rel="stylesheet" href="<?php echo h(rtrim((string)($baseUrl ?? ''), '/')); ?>/assets/css/pwa.css?v=20260107_8">
     <!-- Compatibility fixes (Safari/WebKit) -->
-    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/compat.css?v=20260117_1">
+    <link rel="stylesheet" href="<?php echo h(rtrim((string)($baseUrl ?? ''), '/')); ?>/assets/css/compat.css?v=20260117_1">
 
     <!-- Theme Core (Front): يجعل تغيير الثيم ينعكس على كل عناصر الواجهة بشكل احترافي -->
-    <link rel="stylesheet" href="<?= h(rtrim((string)($baseUrl ?? ''), '/')) ?>/assets/css/themes/theme-core.css?v=20260107_8">
+    <link rel="stylesheet" href="<?php echo h(rtrim((string)($baseUrl ?? ''), '/')); ?>/assets/css/themes/theme-core.css?v=20260107_8">
 
     <?php
       // Front-end theme stylesheet (optional)
@@ -418,17 +418,17 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     ?>
 
   <?php if (!empty($siteSettings['extra_head_code'])): ?>
-    <?= $siteSettings['extra_head_code'] . "\n" ?>
+    <?php echo $siteSettings['extra_head_code'] . "\n"; ?>
   <?php endif; ?>
 
   <style>
     :root {
 <?php if (empty($hasThemeCss)): ?>
       /* لا يوجد ملف ثيم => استخدم ألوان الإعدادات كـ fallback */
-      --primary: <?= h($primaryColor) ?>;
-      --primary-rgb: <?= h($primaryRgb) ?>;
-      --primary-light: <?= h($primaryColor) ?>22;
-      --primary-dark: <?= h($primaryDark) ?>;
+      --primary: <?php echo h($primaryColor); ?>;
+      --primary-rgb: <?php echo h($primaryRgb); ?>;
+      --primary-light: <?php echo h($primaryColor); ?>22;
+      --primary-dark: <?php echo h($primaryDark); ?>;
 <?php endif; ?>
 
       /* اجعل الخلفيات/التدرجات تتبع الثيم المختار */
@@ -996,23 +996,23 @@ $__gdyBasePath = $__gdyAppPath; // path فقط (بدون دومين)
 $__gdyManifestUrl = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/manifest.webmanifest?lang=' . rawurlencode($__gdyLang);
 $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 ?>
-<link rel="manifest" href="<?= h($__gdyManifestUrl) ?>">
+<link rel="manifest" href="<?php echo h($__gdyManifestUrl); ?>">
 <meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<link rel="apple-touch-icon" sizes="180x180" href="<?= h($__gdyBasePath) ?>/assets/images/icons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="<?= h($__gdyBasePath) ?>/assets/images/icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="<?= h($__gdyBasePath) ?>/assets/images/icons/favicon-16x16.png">
-<link rel="icon" href="<?= h($__gdyBasePath) ?>/assets/images/icons/favicon.ico">
-<link rel="shortcut icon" href="<?= h($__gdyBasePath) ?>/assets/images/icons/favicon.ico">
-<link rel="icon" type="image/png" sizes="192x192" href="<?= h($__gdyBasePath) ?>/assets/images/icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="<?= h($__gdyBasePath) ?>/assets/images/icons/icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/favicon-16x16.png">
+<link rel="icon" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/favicon.ico">
+<link rel="shortcut icon" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="<?php echo h($__gdyBasePath); ?>/assets/images/icons/icon-512.png">
 
-<script nonce="<?= h($cspNonce ?? '') ?>">
-  window.GDY_BASE = <?= json_encode($__gdyBasePath, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-  window.GDY_SW_URL = <?= json_encode($__gdySwUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+<script nonce="<?php echo h($cspNonce ?? ''); ?>">
+  window.GDY_BASE = <?php echo json_encode($__gdyBasePath, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+  window.GDY_SW_URL = <?php echo json_encode($__gdySwUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 </script>
 </head>
 <!-- HEADER_NON_STICKY_MARKER: non-sticky header 2025-12-14 -->
@@ -1053,41 +1053,41 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
     $themeClass = trim(((string)$themeClass) . ' ' . $themeFrontClass);
   }
 ?>
-<body class="<?= h($themeClass) ?>" data-auth="<?= !empty($currentUser) ? '1' : '0' ?>" data-user-id="<?= (int)($currentUser['id'] ?? 0) ?>">
+<body class="<?php echo h($themeClass); ?>" data-auth="<?php echo !empty($currentUser) ? '1' : '0'; ?>" data-user-id="<?php echo (int)($currentUser['id'] ?? 0); ?>">
 
 <?php $hdrClass = $headerBg ? ' has-bg' : ''; ?>
 <?php $hdrStyle = $headerBg ? ' style="--gdy-header-bg:url(\'' . h($headerBg) . '\');"' : ''; ?>
-<header class="site-header<?= $hdrClass ?>"<?= $hdrStyle ?>>
+<header class="site-header<?php echo $hdrClass; ?>"<?php echo $hdrStyle; ?>>
   <div class="container">
     <div class="header-inner">
-      <a href="<?= h($navBaseUrl) ?>" class="brand-block">
+      <a href="<?php echo h($navBaseUrl); ?>" class="brand-block">
         <div class="brand-logo">
           <?php if ($siteLogo): ?>
-            <img src="<?= h($siteLogo) ?>" alt="<?= h($siteName) ?>">
+            <img src="<?php echo h($siteLogo); ?>" alt="<?php echo h($siteName); ?>">
           <?php else: ?>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           <?php endif; ?>
         </div>
         <div class="brand-text">
-          <div class="brand-title"><?= h($siteName) ?></div>
-          <div class="brand-subtitle"><?= h($siteTagline) ?></div>
+          <div class="brand-title"><?php echo h($siteName); ?></div>
+          <div class="brand-subtitle"><?php echo h($siteTagline); ?></div>
         </div>
       </a>
 
       <div class="hdr-utils">
-          <button type="button" class="hdr-dd-btn hdr-search-btn" id="gdyMobileSearchBtn" title="<?= h(__('search')) ?>" aria-label="<?= h(__('search')) ?>">
+          <button type="button" class="hdr-dd-btn hdr-search-btn" id="gdyMobileSearchBtn" title="<?php echo h(__('search')); ?>" aria-label="<?php echo h(__('search')); ?>">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
           </button>
           <div class="hdr-dropdown hdr-lang" id="gdyLangDd">
             <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="Language">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
-              <span><?= strtoupper(gdy_lang()) ?></span>
+              <span><?php echo strtoupper(gdy_lang()); ?></span>
               <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
             </button>
             <div class="hdr-dd-menu" role="menu" aria-label="Language">
-              <a role="menuitem" href="<?= h(gdy_lang_url('ar')) ?>" class="<?= gdy_lang()==='ar' ? 'active' : '' ?>"><span>AR</span><span>العربية</span></a>
-              <a role="menuitem" href="<?= h(gdy_lang_url('en')) ?>" class="<?= gdy_lang()==='en' ? 'active' : '' ?>"><span>EN</span><span>English</span></a>
-              <a role="menuitem" href="<?= h(gdy_lang_url('fr')) ?>" class="<?= gdy_lang()==='fr' ? 'active' : '' ?>"><span>FR</span><span>Français</span></a>
+              <a role="menuitem" href="<?php echo h(gdy_lang_url('ar')); ?>" class="<?php echo gdy_lang()==='ar' ? 'active' : ''; ?>"><span>AR</span><span>العربية</span></a>
+              <a role="menuitem" href="<?php echo h(gdy_lang_url('en')); ?>" class="<?php echo gdy_lang()==='en' ? 'active' : ''; ?>"><span>EN</span><span>English</span></a>
+              <a role="menuitem" href="<?php echo h(gdy_lang_url('fr')); ?>" class="<?php echo gdy_lang()==='fr' ? 'active' : ''; ?>"><span>FR</span><span>Français</span></a>
             </div>
           </div>
 
@@ -1099,31 +1099,31 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <?php if (!$isLoggedIn): ?>
               <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-                <span><?= h(__('الحساب')) ?></span>
+                <span><?php echo h(__('الحساب')); ?></span>
                 <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
               </button>
               <div class="hdr-dd-menu" role="menu" aria-label="Account">
-                <a role="menuitem" href="<?= h($baseUrl) ?>/login"><span><?= h(__('تسجيل الدخول')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#login"></use></svg></a>
-                <a role="menuitem" href="<?= h($baseUrl) ?>/register"><span><?= h(__('إنشاء حساب')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
+                <a role="menuitem" href="<?php echo h($baseUrl); ?>/login"><span><?php echo h(__('تسجيل الدخول')); ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#login"></use></svg></a>
+                <a role="menuitem" href="<?php echo h($baseUrl); ?>/register"><span><?php echo h(__('إنشاء حساب')); ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
               </div>
             <?php else: ?>
               <?php $uLabel = (string)($currentUser['display_name'] ?? ($currentUser['username'] ?? ($currentUser['email'] ?? __('حسابي')))); ?>
-              <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="<?= h($uLabel) ?>">
+              <button type="button" class="hdr-dd-btn" aria-haspopup="menu" aria-expanded="false" title="<?php echo h($uLabel); ?>">
                 <?php if (!empty($currentUser['avatar'])): ?>
-                  <img class="avatar-mini" src="<?= h($baseUrl . '/' . ltrim((string)$currentUser['avatar'], '/')) ?>" alt="avatar">
+                  <img class="avatar-mini" src="<?php echo h($baseUrl . '/' . ltrim((string)$currentUser['avatar'], '/')); ?>" alt="avatar">
                 <?php else: ?>
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                 <?php endif; ?>
-                <span><?= h($uLabel) ?></span>
+                <span><?php echo h($uLabel); ?></span>
                 <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
               </button>
               <div class="hdr-dd-menu" role="menu" aria-label="Account">
-                <a role="menuitem" href="<?= h($baseUrl) ?>/profile"><span><?= h(__('الملف الشخصي')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
+                <a role="menuitem" href="<?php echo h($baseUrl); ?>/profile"><span><?php echo h(__('الملف الشخصي')); ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></a>
                 <?php if ($isAdmin): ?>
-                  <a role="menuitem" href="<?= h($baseUrl) ?>/admin/"><span><?= h(__('لوحة التحكم')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
+                  <a role="menuitem" href="<?php echo h($baseUrl); ?>/admin/"><span><?php echo h(__('لوحة التحكم')); ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
                 <?php endif; ?>
                 <div class="hdr-dd-sep"></div>
-                <a role="menuitem" href="<?= h($baseUrl) ?>/logout"><span><?= h(__('تسجيل الخروج')) ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
+                <a role="menuitem" href="<?php echo h($baseUrl); ?>/logout"><span><?php echo h(__('تسجيل الخروج')); ?></span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
               </div>
             <?php endif; ?>
           </div>
@@ -1134,17 +1134,17 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
       <div class="container">
         <div class="header-secondary-inner">
           <button type="button" class="cats-toggle" id="gdyCatsToggle" aria-expanded="false" aria-controls="gdyCatsNav">
-            <span class="gdy-inline-flex-gap"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#tag"></use></svg><span><?= h(__('الفئات')) ?></span></span>
+            <span class="gdy-inline-flex-gap"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#tag"></use></svg><span><?php echo h(__('الفئات')); ?></span></span>
             <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
           </button>
           <nav id="gdyCatsNav" class="cats-nav" aria-label="أقسام الموقع">
-          <a href="<?= h($navBaseUrl) ?>" class="cats-link cats-link--home">
+          <a href="<?php echo h($navBaseUrl); ?>" class="cats-link cats-link--home">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
-            <span><?= h(__('الرئيسية')) ?></span>
+            <span><?php echo h(__('الرئيسية')); ?></span>
           </a>
 
-          <a href="<?= h($baseUrl) ?>/elections.php" class="cats-link">
-            <span><?= h(__('الانتخابات')) ?></span>
+          <a href="<?php echo h($baseUrl); ?>/elections.php" class="cats-link">
+            <span><?php echo h(__('الانتخابات')); ?></span>
           </a>
 
           <?php if (!empty($headerCategories)): ?>
@@ -1281,9 +1281,9 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
                   $ariaCurrent = $isActive ? 'aria-current="page"' : '';
 
               ?>
-                <div class="cats-item <?= $hasChildren ? 'has-children' : '' ?>">
-                  <a href="<?= h($href) ?>" class="<?= h($clsAttr) ?>" <?= $ariaCurrent ?>>
-<span><?= h(__((string)$catName)) ?></span>
+                <div class="cats-item <?php echo $hasChildren ? 'has-children' : ''; ?>">
+                  <a href="<?php echo h($href); ?>" class="<?php echo h($clsAttr); ?>" <?php echo $ariaCurrent; ?>>
+<span><?php echo h(__((string)$catName)); ?></span>
                   </a>
                   <?php if ($hasChildren): ?>
                     <div class="cats-submenu">
@@ -1302,27 +1302,27 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <?php endforeach; ?>
 
           <?php else: ?>
-            <a href="<?= h($navBaseUrl) ?>/category/general-news" class="cats-link">
+            <a href="<?php echo h($navBaseUrl); ?>/category/general-news" class="cats-link">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-              <span><?= h(__('أخبار عامة')) ?></span>
+              <span><?php echo h(__('أخبار عامة')); ?></span>
             </a>
-            <a href="<?= h($navBaseUrl) ?>/category/politics" class="cats-link">
+            <a href="<?php echo h($navBaseUrl); ?>/category/politics" class="cats-link">
               
-              <span><?= h(__('سياسة')) ?></span>
+              <span><?php echo h(__('سياسة')); ?></span>
             </a>
-            <a href="<?= h($navBaseUrl) ?>/category/business" class="cats-link cats-link--business">
+            <a href="<?php echo h($navBaseUrl); ?>/category/business" class="cats-link cats-link--business">
               
-              <span><?= h(__('اقتصاد')) ?></span>
+              <span><?php echo h(__('اقتصاد')); ?></span>
             </a>
-            <a href="<?= h($navBaseUrl) ?>/category/sports" class="cats-link cats-link--sports">
+            <a href="<?php echo h($navBaseUrl); ?>/category/sports" class="cats-link cats-link--sports">
               
-              <span><?= h(__('رياضة')) ?></span>
+              <span><?php echo h(__('رياضة')); ?></span>
             </a>
           <?php endif; ?>
           </nav>
 
-          <form class="header-search" action="<?= h($navBaseUrl) ?>/search" method="get">
-            <input type="search" placeholder="<?= h($searchPlaceholder) ?>" name="q">
+          <form class="header-search" action="<?php echo h($navBaseUrl); ?>/search" method="get">
+            <input type="search" placeholder="<?php echo h($searchPlaceholder); ?>" name="q">
             <span class="header-search-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg></span>
           </form>
         </div>

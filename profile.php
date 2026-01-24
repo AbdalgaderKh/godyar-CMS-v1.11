@@ -706,23 +706,23 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
 <main class="container" style="padding: 18px 16px;">
   <div class="gdy-profile-wrap">
     <div class="gdy-profile-hero">
-      <div class="cover <?= $coverUi ? 'has-img' : '' ?>" style="<?= $coverUi ? 'background-image:url('.h($coverUi).')' : '' ?>"></div>
+      <div class="cover <?php echo $coverUi ? 'has-img' : ''; ?>" style="<?php echo $coverUi ? 'background-image:url('.h($coverUi).')' : ''; ?>"></div>
       <div class="hero-body">
         <?php if ($avatarUi): ?>
-          <img class="gdy-avatar" src="<?= h($avatarUi) ?>" alt="avatar" data-gdy-hide-onerror="1">
+          <img class="gdy-avatar" src="<?php echo h($avatarUi); ?>" alt="avatar" data-gdy-hide-onerror="1">
         <?php else: ?>
           <div class="gdy-avatar-fallback" aria-hidden="true"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></div>
         <?php endif; ?>
 
         <div class="gdy-hero-meta">
-          <h1 class="gdy-hero-name"><?= h($displayNameUi ?: $usernameUi ?: 'حسابي') ?></h1>
+          <h1 class="gdy-hero-name"><?php echo h($displayNameUi ?: $usernameUi ?: 'حسابي'); ?></h1>
           <div class="gdy-hero-sub">
-            <?php if ($emailUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?= h($emailUi) ?></span><?php endif; ?>
-            <?php if ($usernameUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h($usernameUi) ?></span><?php endif; ?>
-            <span class="gdy-chip"><strong><?= h($roleLabel) ?></strong></span>
-            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> محفوظات: <strong><?= (int)$stats['bookmarks'] ?></strong></span>
-            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg> تعليقات: <strong><?= (int)$stats['comments'] ?></strong></span>
-            <a class="gdy-chip" href="<?= h($baseUrl) ?>/my" style="text-decoration:none;color:inherit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة "لك"</a>
+            <?php if ($emailUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg> <?php echo h($emailUi); ?></span><?php endif; ?>
+            <?php if ($usernameUi): ?><span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?php echo h($usernameUi); ?></span><?php endif; ?>
+            <span class="gdy-chip"><strong><?php echo h($roleLabel); ?></strong></span>
+            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> محفوظات: <strong><?php echo (int)$stats['bookmarks']; ?></strong></span>
+            <span class="gdy-chip"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg> تعليقات: <strong><?php echo (int)$stats['comments']; ?></strong></span>
+            <a class="gdy-chip" href="<?php echo h($baseUrl); ?>/my" style="text-decoration:none;color:inherit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة "لك"</a>
           </div>
         </div>
       </div>
@@ -730,12 +730,12 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
 
     <?php if ($success): ?>
       <div class="alert" style="margin-top:12px;background:#dcfce7;border:1px solid #86efac;padding:10px 12px;border-radius:12px;">
-        <?= h($success) ?>
+        <?php echo h($success); ?>
       </div>
     <?php endif; ?>
     <?php if ($error): ?>
       <div class="alert" style="margin-top:12px;background:#fee2e2;border:1px solid #fca5a5;padding:10px 12px;border-radius:12px;">
-        <?= h($error) ?>
+        <?php echo h($error); ?>
       </div>
     <?php endif; ?>
 
@@ -744,45 +744,45 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
       <section class="gdy-card">
         <h3>الملف الشخصي</h3>
         <form method="post" enctype="multipart/form-data">
-          <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
           <input type="hidden" name="action" value="update_profile">
 
           <div style="margin-bottom:12px;">
             <label style="display:block;font-weight:700;margin-bottom:6px;">اسم الظهور في الموقع</label>
-            <input class="gdy-input" name="display_name" value="<?= h((string)($userRow['display_name'] ?? ($_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? ''))) ?>">
+            <input class="gdy-input" name="display_name" value="<?php echo h((string)($userRow['display_name'] ?? ($_SESSION['user']['display_name'] ?? $_SESSION['user']['username'] ?? ''))); ?>">
             <div class="gdy-muted">يظهر هذا الاسم بجوار تعليقاتك وفي صفحات الموقع.</div>
           </div>
 
           <div class="gdy-row">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">الاسم الكامل</label>
-              <input class="gdy-input" name="full_name" value="<?= h($profile['full_name'] ?? '') ?>" placeholder="مثال: محمد أحمد">
+              <input class="gdy-input" name="full_name" value="<?php echo h($profile['full_name'] ?? ''); ?>" placeholder="مثال: محمد أحمد">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">المسمى الوظيفي</label>
-              <input class="gdy-input" name="job_title" value="<?= h($profile['job_title'] ?? '') ?>" placeholder="مثال: صحفي / كاتب">
+              <input class="gdy-input" name="job_title" value="<?php echo h($profile['job_title'] ?? ''); ?>" placeholder="مثال: صحفي / كاتب">
             </div>
           </div>
 
           <div class="gdy-row" style="margin-top:12px;">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">الهاتف</label>
-              <input class="gdy-input" name="phone" value="<?= h($profile['phone'] ?? '') ?>">
+              <input class="gdy-input" name="phone" value="<?php echo h($profile['phone'] ?? ''); ?>">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">العنوان</label>
-              <input class="gdy-input" name="address" value="<?= h($profile['address'] ?? '') ?>">
+              <input class="gdy-input" name="address" value="<?php echo h($profile['address'] ?? ''); ?>">
             </div>
           </div>
 
           <div class="gdy-row" style="margin-top:12px;">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">الدولة</label>
-              <input class="gdy-input" name="country" value="<?= h($profile['country'] ?? '') ?>" placeholder="مثال: السعودية">
+              <input class="gdy-input" name="country" value="<?php echo h($profile['country'] ?? ''); ?>" placeholder="مثال: السعودية">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">المدينة</label>
-              <input class="gdy-input" name="city" value="<?= h($profile['city'] ?? '') ?>" placeholder="مثال: الرياض">
+              <input class="gdy-input" name="city" value="<?php echo h($profile['city'] ?? ''); ?>" placeholder="مثال: الرياض">
             </div>
           </div>
 
@@ -791,22 +791,22 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
               <label style="display:block;font-weight:700;margin-bottom:6px;">النوع</label>
               <select class="gdy-input" name="gender">
                 <?php $g = (string)($profile['gender'] ?? ''); ?>
-                <option value="" <?= $g===''?'selected':'' ?>>غير محدد</option>
-                <option value="male" <?= $g==='male'?'selected':'' ?>>ذكر</option>
-                <option value="female" <?= $g==='female'?'selected':'' ?>>أنثى</option>
-                <option value="other" <?= $g==='other'?'selected':'' ?>>آخر</option>
+                <option value="" <?php echo $g===''?'selected':''; ?>>غير محدد</option>
+                <option value="male" <?php echo $g==='male'?'selected':''; ?>>ذكر</option>
+                <option value="female" <?php echo $g==='female'?'selected':''; ?>>أنثى</option>
+                <option value="other" <?php echo $g==='other'?'selected':''; ?>>آخر</option>
               </select>
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">تاريخ الميلاد</label>
-              <input class="gdy-input" type="date" name="birthdate" value="<?= h((string)($profile['birthdate'] ?? '')) ?>">
+              <input class="gdy-input" type="date" name="birthdate" value="<?php echo h((string)($profile['birthdate'] ?? '')); ?>">
               <div class="gdy-muted">اختياري — لا يُعرض إلا إذا فعّلت ذلك في الخصوصية لاحقاً.</div>
             </div>
           </div>
 
           <div style="margin-top:12px;">
             <label style="display:block;font-weight:700;margin-bottom:6px;">نبذة</label>
-            <textarea class="gdy-textarea" name="bio" rows="4" placeholder="اكتب نبذة قصيرة..."><?= h($profile['bio'] ?? '') ?></textarea>
+            <textarea class="gdy-textarea" name="bio" rows="4" placeholder="اكتب نبذة قصيرة..."><?php echo h($profile['bio'] ?? ''); ?></textarea>
           </div>
 
           <hr style="border:none;border-top:1px solid rgba(148,163,184,.35);margin:14px 0">
@@ -816,39 +816,39 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
           <div class="gdy-row">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">الموقع الإلكتروني</label>
-              <input class="gdy-input" name="website" value="<?= h($profile['website'] ?? '') ?>" placeholder="example.com">
+              <input class="gdy-input" name="website" value="<?php echo h($profile['website'] ?? ''); ?>" placeholder="example.com">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">فيسبوك</label>
-              <input class="gdy-input" name="facebook" value="<?= h($profile['facebook'] ?? '') ?>" placeholder="facebook.com/...">
+              <input class="gdy-input" name="facebook" value="<?php echo h($profile['facebook'] ?? ''); ?>" placeholder="facebook.com/...">
             </div>
           </div>
 
           <div class="gdy-row" style="margin-top:12px;">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">X</label>
-              <input class="gdy-input" name="x_url" value="<?= h($profile['x_url'] ?? '') ?>" placeholder="x.com/...">
+              <input class="gdy-input" name="x_url" value="<?php echo h($profile['x_url'] ?? ''); ?>" placeholder="x.com/...">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">إنستغرام</label>
-              <input class="gdy-input" name="instagram" value="<?= h($profile['instagram'] ?? '') ?>" placeholder="instagram.com/...">
+              <input class="gdy-input" name="instagram" value="<?php echo h($profile['instagram'] ?? ''); ?>" placeholder="instagram.com/...">
             </div>
           </div>
 
           <div class="gdy-row" style="margin-top:12px;">
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">يوتيوب</label>
-              <input class="gdy-input" name="youtube" value="<?= h($profile['youtube'] ?? '') ?>" placeholder="youtube.com/...">
+              <input class="gdy-input" name="youtube" value="<?php echo h($profile['youtube'] ?? ''); ?>" placeholder="youtube.com/...">
             </div>
             <div>
               <label style="display:block;font-weight:700;margin-bottom:6px;">تيليجرام</label>
-              <input class="gdy-input" name="telegram" value="<?= h($profile['telegram'] ?? '') ?>" placeholder="@username أو رابط">
+              <input class="gdy-input" name="telegram" value="<?php echo h($profile['telegram'] ?? ''); ?>" placeholder="@username أو رابط">
             </div>
           </div>
 
           <div style="margin-top:12px;">
             <label style="display:block;font-weight:700;margin-bottom:6px;">واتساب</label>
-            <input class="gdy-input" name="whatsapp" value="<?= h($profile['whatsapp'] ?? '') ?>" placeholder="رقم أو wa.me/...">
+            <input class="gdy-input" name="whatsapp" value="<?php echo h($profile['whatsapp'] ?? ''); ?>" placeholder="رقم أو wa.me/...">
           </div>
 
           <hr style="border:none;border-top:1px solid rgba(148,163,184,.35);margin:14px 0">
@@ -886,16 +886,16 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
 
           <div class="gdy-row">
             <div class="gdy-check">
-              <input type="checkbox" id="show_email" name="show_email" value="1" <?= !empty($profile['show_email']) ? 'checked' : '' ?>>
+              <input type="checkbox" id="show_email" name="show_email" value="1" <?php echo !empty($profile['show_email']) ? 'checked' : ''; ?>>
               <label for="show_email">السماح بإظهار البريد في صفحات الكاتب/التعليقات</label>
             </div>
             <div class="gdy-check">
-              <input type="checkbox" id="show_phone" name="show_phone" value="1" <?= !empty($profile['show_phone']) ? 'checked' : '' ?>>
+              <input type="checkbox" id="show_phone" name="show_phone" value="1" <?php echo !empty($profile['show_phone']) ? 'checked' : ''; ?>>
               <label for="show_phone">السماح بإظهار الهاتف</label>
             </div>
           </div>
           <div class="gdy-check" style="margin-top:12px;">
-            <input type="checkbox" id="newsletter" name="newsletter" value="1" <?= !empty($profile['newsletter']) ? 'checked' : '' ?>>
+            <input type="checkbox" id="newsletter" name="newsletter" value="1" <?php echo !empty($profile['newsletter']) ? 'checked' : ''; ?>>
             <label for="newsletter">الاشتراك في النشرة البريدية (اختياري)</label>
           </div>
 
@@ -910,10 +910,10 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
         <section class="gdy-card">
           <h3>تغيير البريد الإلكتروني</h3>
           <form method="post">
-            <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
             <input type="hidden" name="action" value="update_email">
             <label style="display:block;font-weight:700;margin-bottom:6px;">البريد الإلكتروني</label>
-            <input type="email" class="gdy-input" name="email" value="<?= h($emailUi) ?>">
+            <input type="email" class="gdy-input" name="email" value="<?php echo h($emailUi); ?>">
             <div class="gdy-actions">
               <button type="submit" class="gdy-btn secondary">تحديث البريد</button>
             </div>
@@ -923,7 +923,7 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
         <section class="gdy-card">
           <h3>تغيير كلمة المرور</h3>
           <form method="post">
-            <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
             <input type="hidden" name="action" value="update_password">
 
             <div style="display:grid;grid-template-columns:1fr;gap:12px;">

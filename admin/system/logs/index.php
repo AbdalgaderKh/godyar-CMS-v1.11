@@ -303,11 +303,11 @@ html, body{ overflow-x:hidden; background:#020617; }
 
   <div class="gdy-filter-bar">
     <form method="get" class="row g-2 align-items-end">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
       <div class="col-12 col-md-4">
         <label class="form-label small mb-1" style="color:#e5e7eb;">بحث عام</label>
-        <input type="text" name="q" value="<?= h($q) ?>" class="form-control" placeholder="ابحث (action / entity / details / ip / user)...">
+        <input type="text" name="q" value="<?php echo h($q); ?>" class="form-control" placeholder="ابحث (action / entity / details / ip / user)...">
       </div>
 
       <div class="col-6 col-md-2">
@@ -315,8 +315,8 @@ html, body{ overflow-x:hidden; background:#020617; }
         <select name="action" class="form-select">
           <option value="">الكل</option>
           <?php foreach ($actions as $a): ?>
-            <option value="<?= h((string)$a) ?>" <?= $actionF === (string)$a ? 'selected' : '' ?>>
-              <?= h((string)$a) ?>
+            <option value="<?php echo h((string)$a); ?>" <?php echo $actionF === (string)$a ? 'selected' : ''; ?>>
+              <?php echo h((string)$a); ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -327,8 +327,8 @@ html, body{ overflow-x:hidden; background:#020617; }
         <select name="entity" class="form-select">
           <option value="">الكل</option>
           <?php foreach ($entities as $en): ?>
-            <option value="<?= h((string)$en) ?>" <?= $entityF === (string)$en ? 'selected' : '' ?>>
-              <?= h((string)$en) ?>
+            <option value="<?php echo h((string)$en); ?>" <?php echo $entityF === (string)$en ? 'selected' : ''; ?>>
+              <?php echo h((string)$en); ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -336,24 +336,24 @@ html, body{ overflow-x:hidden; background:#020617; }
 
       <div class="col-12 col-md-2">
         <label class="form-label small mb-1" style="color:#e5e7eb;">المستخدم</label>
-        <input type="text" name="user" value="<?= h($userF) ?>" class="form-control" placeholder="ID أو اسم...">
+        <input type="text" name="user" value="<?php echo h($userF); ?>" class="form-control" placeholder="ID أو اسم...">
       </div>
 
       <div class="col-6 col-md-1">
         <label class="form-label small mb-1" style="color:#e5e7eb;">من</label>
-        <input type="date" name="from" value="<?= h($dateFrom) ?>" class="form-control">
+        <input type="date" name="from" value="<?php echo h($dateFrom); ?>" class="form-control">
       </div>
 
       <div class="col-6 col-md-1">
         <label class="form-label small mb-1" style="color:#e5e7eb;">إلى</label>
-        <input type="date" name="to" value="<?= h($dateTo) ?>" class="form-control">
+        <input type="date" name="to" value="<?php echo h($dateTo); ?>" class="form-control">
       </div>
 
       <div class="col-6 col-md-2">
         <label class="form-label small mb-1" style="color:#e5e7eb;">عدد السجلات</label>
         <select name="per_page" class="form-select">
           <?php foreach ([25,50,100] as $pp): ?>
-            <option value="<?= (int)$pp ?>" <?= $perPage === (int)$pp ? 'selected' : '' ?>><?= (int)$pp ?></option>
+            <option value="<?php echo (int)$pp; ?>" <?php echo $perPage === (int)$pp ? 'selected' : ''; ?>><?php echo (int)$pp; ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -372,9 +372,9 @@ html, body{ overflow-x:hidden; background:#020617; }
     </form>
 
     <div class="gdy-stat">
-      <span class="gdy-pill">الإجمالي: <b><?= (int)$total ?></b></span>
-      <span class="gdy-pill">المعروض: <b><?= (int)count($logs) ?></b></span>
-      <span class="gdy-pill">الصفحة: <b><?= (int)$page ?></b> / <b><?= (int)$totalPages ?></b></span>
+      <span class="gdy-pill">الإجمالي: <b><?php echo (int)$total; ?></b></span>
+      <span class="gdy-pill">المعروض: <b><?php echo (int)count($logs); ?></b></span>
+      <span class="gdy-pill">الصفحة: <b><?php echo (int)$page; ?></b> / <b><?php echo (int)$totalPages; ?></b></span>
     </div>
   </div>
 
@@ -426,18 +426,18 @@ html, body{ overflow-x:hidden; background:#020617; }
                   $ua         = (string)($log['user_agent'] ?? '');
                 ?>
                 <tr>
-                  <td><span class="gdy-code"><?= $id ?></span></td>
-                  <td><small><?= h($log['created_at'] ?? '-') ?></small></td>
-                  <td><small><?= h($uLabel) ?></small></td>
-                  <td><code class="small"><?= h($action) ?></code></td>
+                  <td><span class="gdy-code"><?php echo $id; ?></span></td>
+                  <td><small><?php echo h($log['created_at'] ?? '-'); ?></small></td>
+                  <td><small><?php echo h($uLabel); ?></small></td>
+                  <td><code class="small"><?php echo h($action); ?></code></td>
                   <td>
-                    <small class="gdy-entity"><?= h($entityType) ?></small>
-                    <small>#<?= h($entityId) ?></small>
+                    <small class="gdy-entity"><?php echo h($entityType); ?></small>
+                    <small>#<?php echo h($entityId); ?></small>
                   </td>
-                  <td><small><?= h($ip) ?></small></td>
+                  <td><small><?php echo h($ip); ?></small></td>
                   <td class="text-start">
-                    <span class="gdy-truncate" title="<?= h($detailsTrim) ?>">
-                      <?= h($detailsShort) ?>
+                    <span class="gdy-truncate" title="<?php echo h($detailsTrim); ?>">
+                      <?php echo h($detailsShort); ?>
                     </span>
                   </td>
                   <td>
@@ -447,15 +447,15 @@ html, body{ overflow-x:hidden; background:#020617; }
                       title="عرض التفاصيل"
                       data-bs-toggle="modal"
                       data-bs-target="#logModal"
-                      data-id="<?= (int)$id ?>"
-                      data-created="<?= h((string)($log['created_at'] ?? '-')) ?>"
-                      data-user="<?= h($uLabel) ?>"
-                      data-action="<?= h($action) ?>"
-                      data-entity="<?= h($entityType) ?>"
-                      data-entityid="<?= h($entityId) ?>"
-                      data-ip="<?= h($ip) ?>"
-                      data-ua="<?= h($ua) ?>"
-                      data-details="<?= h($details) ?>"
+                      data-id="<?php echo (int)$id; ?>"
+                      data-created="<?php echo h((string)($log['created_at'] ?? '-')); ?>"
+                      data-user="<?php echo h($uLabel); ?>"
+                      data-action="<?php echo h($action); ?>"
+                      data-entity="<?php echo h($entityType); ?>"
+                      data-entityid="<?php echo h($entityId); ?>"
+                      data-ip="<?php echo h($ip); ?>"
+                      data-ua="<?php echo h($ua); ?>"
+                      data-details="<?php echo h($details); ?>"
                     >
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </button>
@@ -469,13 +469,13 @@ html, body{ overflow-x:hidden; background:#020617; }
         <div class="px-3 pb-3">
           <div class="gdy-pagination">
             <div class="gdy-page-mini">
-              عرض <?= (int)count($logs) ?> من <?= (int)$total ?>.
+              عرض <?php echo (int)count($logs); ?> من <?php echo (int)$total; ?>.
             </div>
 
             <nav aria-label="ترقيم الصفحات">
               <ul class="pagination pagination-sm mb-0">
-                <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                  <a class="page-link" href="<?= h(build_query(['page' => max(1, $page - 1)])) ?>">السابق</a>
+                <li class="page-item <?php echo $page <= 1 ? 'disabled' : ''; ?>">
+                  <a class="page-link" href="<?php echo h(build_query(['page' => max(1, $page - 1)])); ?>">السابق</a>
                 </li>
 
                 <?php
@@ -498,8 +498,8 @@ html, body{ overflow-x:hidden; background:#020617; }
                   }
                 ?>
 
-                <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                  <a class="page-link" href="<?= h(build_query(['page' => min($totalPages, $page + 1)])) ?>">التالي</a>
+                <li class="page-item <?php echo $page >= $totalPages ? 'disabled' : ''; ?>">
+                  <a class="page-link" href="<?php echo h(build_query(['page' => min($totalPages, $page + 1)])); ?>">التالي</a>
                 </li>
               </ul>
             </nav>

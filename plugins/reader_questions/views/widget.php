@@ -227,22 +227,22 @@ function gdy_reader_questions_initials(string $name): string {
       <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:999px;background:#e6f3ff;color:#0b63b6">❓</span>
       <span>أسئلة القرّاء</span>
     </div>
-    <span class="gdy-pill">الأسئلة: <?= (int)($questionsCount ?? count($items)) ?></span>
+    <span class="gdy-pill">الأسئلة: <?php echo (int)($questionsCount ?? count($items)); ?></span>
   </div>
   <div class="gdy-discuss-sub">اكتب سؤالك وسيظهر بعد المراجعة</div>
 
   <div class="gdy-discuss-body">
     <?php if ($flash): ?>
-      <div class="gdy-flash <?= $flashType ?>"><?= h($flash) ?></div>
+      <div class="gdy-flash <?php echo $flashType; ?>"><?php echo h($flash); ?></div>
     <?php endif; ?>
 
     <div class="gdy-row">
-      <div class="gdy-avatar"><?= h(gdy_reader_questions_initials((string)($_POST['author_name'] ?? ''))) ?></div>
+      <div class="gdy-avatar"><?php echo h(gdy_reader_questions_initials((string)($_POST['author_name'] ?? ''))); ?></div>
 
       <div class="gdy-box">
         <form method="post" action="#gdy-questions-box">
           <input type="hidden" name="gdy_questions_action" value="create">
-          <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px">
             <input type="text" name="author_name" placeholder="الاسم" style="flex:1;min-width:160px;border:1px solid #d1d5db;border-radius:10px;padding:10px 12px" maxlength="150">
@@ -262,10 +262,10 @@ function gdy_reader_questions_initials(string $name): string {
             <div class="gdy-note" style="margin-bottom:8px">آخر سؤال لك بانتظار المراجعة. يمكنك تعديله وإعادة إرساله:</div>
             <form method="post" action="#gdy-questions-box">
               <input type="hidden" name="gdy_questions_action" value="update">
-              <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
-              <input type="hidden" name="question_id" value="<?= (int)$lastPending['id'] ?>">
-              <input type="hidden" name="edit_token" value="<?= h($editToken) ?>">
-              <textarea class="gdy-textarea" name="question" maxlength="2000" required><?= h($lastPending['question']) ?></textarea>
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
+              <input type="hidden" name="question_id" value="<?php echo (int)$lastPending['id']; ?>">
+              <input type="hidden" name="edit_token" value="<?php echo h($editToken); ?>">
+              <textarea class="gdy-textarea" name="question" maxlength="2000" required><?php echo h($lastPending['question']); ?></textarea>
               <div class="gdy-actions">
                 <button class="gdy-btn" type="submit">تعديل وإعادة إرسال</button>
                 <div class="gdy-note">سيبقى في حالة “قيد المراجعة”.</div>
@@ -285,15 +285,15 @@ function gdy_reader_questions_initials(string $name): string {
             <?php foreach ($items as $q): ?>
               <div class="gdy-item">
                 <div class="gdy-item-head">
-                  <div class="gdy-item-name"><?= h((string)($q['author_name'] ?? 'زائر')) ?></div>
-                  <div><?= h((string)($q['created_at'] ?? '')) ?></div>
+                  <div class="gdy-item-name"><?php echo h((string)($q['author_name'] ?? 'زائر')); ?></div>
+                  <div><?php echo h((string)($q['created_at'] ?? '')); ?></div>
                 </div>
-                <div><?= nl2br(h((string)($q['question'] ?? '')), false) ?></div>
+                <div><?php echo nl2br(h((string)($q['question'] ?? '')), false); ?></div>
 
                 <?php if (($q['status'] ?? '') === 'answered' && !empty($q['answer'])): ?>
                   <div class="gdy-answer">
                     <div style="font-weight:800;color:#0f172a;margin-bottom:6px">الإجابة</div>
-                    <div><?= nl2br(h((string)$q['answer']), false) ?></div>
+                    <div><?php echo nl2br(h((string)$q['answer']), false); ?></div>
                   </div>
                 <?php endif; ?>
               </div>

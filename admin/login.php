@@ -224,10 +224,10 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 }
 ?>
 <!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr'); ?>">
 <head>
   <meta charset="utf-8">
-  <title><?= h(__("login")) ?> — <?= h(__("admin_panel")) ?> Godyar</title>
+  <title><?php echo h(__("login")); ?> — <?php echo h(__("admin_panel")); ?> Godyar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link
@@ -403,19 +403,19 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
           <div class="gdy-brand-badge mb-2">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use id="togglePassIcon" href="#eye"></use></svg>
           </div>
-          <h1 class="auth-title mb-1"><?= h(__("admin_panel")) ?> Godyar Pro</h1>
-          <p class="auth-subtitle text-muted mb-0"><?= h(__("login_to_admin")) ?></p>
+          <h1 class="auth-title mb-1"><?php echo h(__("admin_panel")); ?> Godyar Pro</h1>
+          <p class="auth-subtitle text-muted mb-0"><?php echo h(__("login_to_admin")); ?></p>
         </div>
 
         <?php if ($error): ?>
-          <div class="alert alert-danger py-2 small mb-3"><?= h($error) ?></div>
+          <div class="alert alert-danger py-2 small mb-3"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post" action="login.php" novalidate>
-          <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
 
           <div class="mb-3">
-            <label for="email" class="form-label"><?= h(__("email")) ?></label>
+            <label for="email" class="form-label"><?php echo h(__("email")); ?></label>
             <input
               type="email"
               name="email"
@@ -423,13 +423,13 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
               class="form-control auth-input"
               required
               autocomplete="username"
-              value="<?= h($email) ?>"
+              value="<?php echo h($email); ?>"
             >
           </div>
 
           <div class="mb-2">
             <label for="password" class="form-label d-flex justify-content-between align-items-center">
-              <span><?= h(__("password")) ?></span>
+              <span><?php echo h(__("password")); ?></span>
               <button type="button" class="password-toggle-btn" data-action="toggle-password">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
               </button>
@@ -446,24 +446,24 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="form-check form-check-sm">
-              <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember" <?= $rememberedEmail ? 'checked' : '' ?>>
+              <input class="form-check-input" type="checkbox" value="1" id="remember" name="remember" <?php echo $rememberedEmail ? 'checked' : ''; ?>>
               <label class="form-check-label small" for="remember">
-                <?= h(__("remember_email")) ?>
+                <?php echo h(__("remember_email")); ?>
               </label>
             </div>
             <span class="small text-muted">
-              <?= h(__('t_efdc17402d', 'نسيت كلمة المرور؟')) ?>
+              <?php echo h(__('t_efdc17402d', 'نسيت كلمة المرور؟')); ?>
             </span>
           </div>
 
           <button type="submit" class="btn btn-auth-primary w-100 mb-2">
             <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#login"></use></svg>
-            <?= h(__("login_to_dashboard")) ?>
+            <?php echo h(__("login_to_dashboard")); ?>
           </button>
 
           <div class="login-meta d-flex justify-content-between align-items-center mt-2">
-            <span><?= h(__('t_f8e20d0ab5', 'بيئة:')) ?> <span class="badge-env"><?= h(getenv('APP_ENV') ?: 'production') ?></span></span>
-            <span><?= h(__('t_27f6c4c05c', 'إصدار: Godyar Pro')) ?></span>
+            <span><?php echo h(__('t_f8e20d0ab5', 'بيئة:')); ?> <span class="badge-env"><?php echo h(getenv('APP_ENV') ?: 'production'); ?></span></span>
+            <span><?php echo h(__('t_27f6c4c05c', 'إصدار: Godyar Pro')); ?></span>
           </div>
         </form>
       </section>
@@ -472,25 +472,25 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         <div class="d-flex justify-content-between align-items-center mb-3">
           <span class="auth-chip">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-            <?= h(__("secure_login")) ?>
+            <?php echo h(__("secure_login")); ?>
           </span>
           <span class="auth-chip">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#calendar"></use></svg>
-            <?= date('Y-m-d'); ?>
+            <?php echo date('Y-m-d');; ?>
           </span>
         </div>
-        <h2 class="auth-side-title"><?= h(__("godyar_admin_area")) ?></h2>
+        <h2 class="auth-side-title"><?php echo h(__("godyar_admin_area")); ?></h2>
         <p class="text-muted small mb-3">
-          <?= h(__("admin_area_desc")) ?>
+          <?php echo h(__("admin_area_desc")); ?>
         </p>
         <ul class="auth-side-list">
-          <li><?= h(__('t_0f7cff7bf9', 'نظام أذونات وصلاحيات يمكن توسعه لاحقاً.')) ?></li>
-          <li><?= h(__('t_c40fd6b389', 'تسجيل دخول آمن مع دعم كلمات مرور مشفّرة.')) ?></li>
-          <li><?= h(__('t_f5a0a12850', 'سجل نشاط إداري وتقارير استخدام (من صفحات النظام).')) ?></li>
-          <li><?= h(__('t_7a122ecaec', 'تكامل مع هوية الواجهة الأمامية للموقع.')) ?></li>
+          <li><?php echo h(__('t_0f7cff7bf9', 'نظام أذونات وصلاحيات يمكن توسعه لاحقاً.')); ?></li>
+          <li><?php echo h(__('t_c40fd6b389', 'تسجيل دخول آمن مع دعم كلمات مرور مشفّرة.')); ?></li>
+          <li><?php echo h(__('t_f5a0a12850', 'سجل نشاط إداري وتقارير استخدام (من صفحات النظام).')); ?></li>
+          <li><?php echo h(__('t_7a122ecaec', 'تكامل مع هوية الواجهة الأمامية للموقع.')); ?></li>
         </ul>
         <p class="text-muted login-meta mt-4 mb-0">
-          <?= h(__("logout_notice")) ?>
+          <?php echo h(__("logout_notice")); ?>
         </p>
       </aside>
     </div>

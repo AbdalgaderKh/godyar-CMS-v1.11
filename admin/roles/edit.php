@@ -88,32 +88,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <div class="admin-content">
   <div class="admin-header">
-    <h1><?= h(__('t_08f5732603', 'تعديل صلاحيات الدور')) ?></h1>
+    <h1><?php echo h(__('t_08f5732603', 'تعديل صلاحيات الدور')); ?></h1>
     <p class="text-muted">
-      <?= h(__('t_b2279fd438', 'الدور:')) ?> <strong><?= h($role['label']) ?></strong>
-      <span class="mx-2">(<code><?= h($role['name']) ?></code>)</span>
+      <?php echo h(__('t_b2279fd438', 'الدور:')); ?> <strong><?php echo h($role['label']); ?></strong>
+      <span class="mx-2">(<code><?php echo h($role['name']); ?></code>)</span>
     </p>
-    <a href="index.php" class="btn btn-secondary btn-sm"><?= h(__('t_d8123b0f46', '← الرجوع لقائمة الأدوار')) ?></a>
+    <a href="index.php" class="btn btn-secondary btn-sm"><?php echo h(__('t_d8123b0f46', '← الرجوع لقائمة الأدوار')); ?></a>
   </div>
 
   <?php if ($successMessage): ?>
-    <div class="alert alert-success"><?= h($successMessage) ?></div>
+    <div class="alert alert-success"><?php echo h($successMessage); ?></div>
   <?php endif; ?>
 
   <?php if ($errorMessage): ?>
-    <div class="alert alert-danger"><?= h($errorMessage) ?></div>
+    <div class="alert alert-danger"><?php echo h($errorMessage); ?></div>
   <?php endif; ?>
 
   <div class="card">
     <div class="card-header">
-      <h2 class="card-title mb-0"><?= h(__('t_036bfd7509', 'الصلاحيات المتاحة')) ?></h2>
+      <h2 class="card-title mb-0"><?php echo h(__('t_036bfd7509', 'الصلاحيات المتاحة')); ?></h2>
     </div>
     <div class="card-body">
       <?php if (empty($allPermissions)): ?>
-        <p><?= h(__('t_c6991f176a', 'لا توجد صلاحيات مسجلة.')) ?></p>
+        <p><?php echo h(__('t_c6991f176a', 'لا توجد صلاحيات مسجلة.')); ?></p>
       <?php else: ?>
         <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
           <div class="row">
             <?php foreach ($allPermissions as $perm): ?>
               <?php
@@ -126,15 +126,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     class="form-check-input"
                     type="checkbox"
                     name="permissions[]"
-                    id="<?= $inputId ?>"
-                    value="<?= h($perm['name']) ?>"
-                    <?= $checked ? 'checked' : '' ?>
+                    id="<?php echo $inputId; ?>"
+                    value="<?php echo h($perm['name']); ?>"
+                    <?php echo $checked ? 'checked' : ''; ?>
                   >
-                  <label class="form-check-label" for="<?= $inputId ?>">
-                    <strong><?= h($perm['label']) ?></strong><br>
+                  <label class="form-check-label" for="<?php echo $inputId; ?>">
+                    <strong><?php echo h($perm['label']); ?></strong><br>
                     <small class="text-muted">
-                      <code><?= h($perm['name']) ?></code><br>
-                      <?= nl2br(h($perm['description'] ?? '')) ?>
+                      <code><?php echo h($perm['name']); ?></code><br>
+                      <?php echo nl2br(h($perm['description'] ?? '')); ?>
                     </small>
                   </label>
                 </div>
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
           <div class="mt-4">
             <button type="submit" class="btn btn-primary">
-              <?= h(__('t_02f31ae27c', 'حفظ التغييرات')) ?>
+              <?php echo h(__('t_02f31ae27c', 'حفظ التغييرات')); ?>
             </button>
           </div>
         </form>

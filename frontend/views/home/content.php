@@ -1,5 +1,5 @@
 <?php
-// /godyar/frontend/views/home/USER.php
+// /godyar/frontend/views/home/content.php
 $pdo = $pdo ?? (function_exists("gdy_pdo_safe") ? gdy_pdo_safe() : null);
 if (!function_exists("nf")) {
   function nf(array $n, string $field): string {
@@ -93,7 +93,7 @@ if (!function_exists('gdy_youtube_embed_url')) {
 <!-- إعلان أعلى الصفحة -->
 <?php if (!empty($headerAd) && strpos($headerAd, 'No active ad') === false): ?>
 <div class="header-ad-container" style="margin-bottom: 2rem; text-align: center;">
-    <?= $headerAd ?>
+    <?php echo $headerAd; ?>
 </div>
 <?php endif; ?>
 <?php
@@ -133,10 +133,10 @@ if (!isset($newsUrl) || !is_callable($newsUrl)) {
 	                -webkit-backdrop-filter: blur(10px);
 	                backdrop-filter: blur(10px);
             ">
-                <i class="fa <?= $notification['icon'] ?>" style="font-size: 1.1rem;"></i>
+                <i class="fa <?php echo $notification['icon']; ?>" style="font-size: 1.1rem;"></i>
                 <div>
-                    <div style="font-weight: 600; font-size: 0.9rem;"><?= nf($notification,'title') ?></div>
-                    <div style="font-size: 0.8rem; opacity: 0.9;"><?= $notification['message'] ?></div>
+                    <div style="font-weight: 600; font-size: 0.9rem;"><?php echo nf($notification,'title'); ?></div>
+                    <div style="font-size: 0.8rem; opacity: 0.9;"><?php echo $notification['message']; ?></div>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -162,7 +162,7 @@ if (!isset($newsUrl) || !is_callable($newsUrl)) {
             border-left: 4px solid #10b981;
         ">
             <div style="font-size: 2rem; color: #10b981; margin-bottom: 0.5rem;">📊</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?= $smartStats['total_news'] ?? 0 ?></div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?php echo $smartStats['total_news'] ?? 0; ?></div>
             <div style="color: #6b7280; font-size: 0.9rem;">إجمالي الأخبار</div>
         </div>
 
@@ -175,7 +175,7 @@ if (!isset($newsUrl) || !is_callable($newsUrl)) {
             border-left: 4px solid #3b82f6;
         ">
             <div style="font-size: 2rem; color: #3b82f6; margin-bottom: 0.5rem;">👁️</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?= number_format($smartStats['total_views'] ?? 0) ?></div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?php echo number_format($smartStats['total_views'] ?? 0); ?></div>
             <div style="color: #6b7280; font-size: 0.9rem;">إجمالي المشاهدات</div>
         </div>
 
@@ -188,7 +188,7 @@ if (!isset($newsUrl) || !is_callable($newsUrl)) {
             border-left: 4px solid #f59e0b;
         ">
             <div style="font-size: 2rem; color: #f59e0b; margin-bottom: 0.5rem;">📅</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?= $smartStats['today_news'] ?? 0 ?></div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?php echo $smartStats['today_news'] ?? 0; ?></div>
             <div style="color: #6b7280; font-size: 0.9rem;">أخبار اليوم</div>
         </div>
 
@@ -201,7 +201,7 @@ if (!isset($newsUrl) || !is_callable($newsUrl)) {
             border-left: 4px solid #ef4444;
         ">
             <div style="font-size: 2rem; color: #ef4444; margin-bottom: 0.5rem;">⚡</div>
-            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?= $smartStats['avg_views'] ?? 0 ?></div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #1f2937;"><?php echo $smartStats['avg_views'] ?? 0; ?></div>
             <div style="color: #6b7280; font-size: 0.9rem;">متوسط المشاهدات</div>
         </div>
     </div>
@@ -275,16 +275,16 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
             ">
                 عاجل
             </div>
-            <a href="<?= h($newsUrl($news)) ?>" style="
+            <a href="<?php echo h($newsUrl($news)); ?>" style="
                 color: #1f2937;
                 text-decoration: none;
                 font-weight: 600;
                 flex: 1;
             ">
-                <?= h(nf($news,'title')) ?>
+                <?php echo h(nf($news,'title')); ?>
             </a>
             <div style="color: #6b7280; font-size: 0.8rem; white-space: nowrap;">
-                <?= date('H:i', strtotime($news['created_at'])) ?>
+                <?php echo date('H:i', strtotime($news['created_at'])); ?>
             </div>
         </div>
         <?php endforeach; ?>
@@ -300,8 +300,8 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>خبر مميز</span>
             </div>
-            <a href="<?= h($newsUrl($mainNews)) ?>">
-                <h1 class="hero-title"><?= h(nf($mainNews,'title')) ?></h1>
+            <a href="<?php echo h($newsUrl($mainNews)); ?>">
+                <h1 class="hero-title"><?php echo h(nf($mainNews,'title')); ?></h1>
             </a>
             <p class="hero-subtitle">
                 <?php
@@ -316,16 +316,16 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
             <div class="hero-meta">
                 <span>
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= !empty($mainNews['published_at']) ? h(date('Y-m-d', strtotime($mainNews['published_at']))) : '' ?>
+                    <?php echo !empty($mainNews['published_at']) ? h(date('Y-m-d', strtotime($mainNews['published_at']))) : ''; ?>
                 </span>
                 <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> محدث من لوحة التحكم</span>
             </div>
             <div class="hero-actions">
-                <a href="<?= h($newsUrl($mainNews)) ?>" class="btn-primary">
+                <a href="<?php echo h($newsUrl($mainNews)); ?>" class="btn-primary">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     <span>اقرأ التفاصيل</span>
                 </a>
-                <a href="<?= h($archiveUrl) ?>" class="btn-ghost">
+                <a href="<?php echo h($archiveUrl); ?>" class="btn-ghost">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                     <span>جميع الأخبار</span>
                 </a>
@@ -335,7 +335,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>لا توجد أخبار بعد</span>
             </div>
-            <h1 class="hero-title">مرحباً بك في <?= h($siteName) ?></h1>
+            <h1 class="hero-title">مرحباً بك في <?php echo h($siteName); ?></h1>
             <p class="hero-subtitle">
                 قم بإضافة أول خبر من لوحة التحكم، وسيتم عرضه هنا تلقائياً بخلفية تركوازية خفيفة مع هيدر وفوتر داكنين.
             </p>
@@ -347,23 +347,23 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
         <!-- إعلان أعلى الشريط الجانبي -->
         <?php if (!empty($sidebarTopAd) && strpos($sidebarTopAd, 'No active ad') === false): ?>
         <div class="sidebar-ad-container" style="margin-bottom: 1.5rem;">
-            <?= $sidebarTopAd ?>
+            <?php echo $sidebarTopAd; ?>
         </div>
         <?php endif; ?>
 
         <div class="side-widget-title">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <span><?= h($homeFeaturedTitle) ?></span>
+            <span><?php echo h($homeFeaturedTitle); ?></span>
         </div>
 
         <?php if (!empty($featuredNews)): ?>
             <ul style="list-style:none;margin:0;padding:0;position:relative;z-index:1;">
                 <?php foreach ($featuredNews as $row): ?>
                     <li style="margin-bottom:6px;">
-                        <a href="<?= h($newsUrl($row)) ?>" style="display:flex;gap:8px;align-items:flex-start;">
+                        <a href="<?php echo h($newsUrl($row)); ?>" style="display:flex;gap:8px;align-items:flex-start;">
                             <?php if (!empty($row['featured_image'])): ?>
                                 <div style="width:52px;height:52px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#e2e8f0;">
-								<img src="<?= h(gdy_img_src($row['featured_image'] ?? '')) ?>" alt="<?= h(nf($row,'title')) ?>" style="width:100%;height:100%;object-fit:cover;">
+								<img src="<?php echo h(gdy_img_src($row['featured_image'] ?? '')); ?>" alt="<?php echo h(nf($row,'title')); ?>" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
                             <?php endif; ?>
                             <div style="flex:1;">
@@ -376,7 +376,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                                 </div>
                                 <div style="font-size:.7rem;color:#6b7280;">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                    <?= !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
+                                    <?php echo !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : ''; ?>
                                 </div>
                             </div>
                         </a>
@@ -447,7 +447,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                         $views    = (int)($video['views'] ?? 0);
                     ?>
                     <div class="video-card"
-                         <?= $embedUrl ? 'data-embed="'.h($embedUrl).'"' : '' ?>
+                         <?php echo $embedUrl ? 'data-embed="'.h($embedUrl).'"' : ''; ?>
                          style="
                             background: white;
                             border-radius: 10px;
@@ -457,10 +457,10 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                         <!-- الصورة -->
                         <div class="video-thumbnail"
                              style="position: relative; display: block; cursor: pointer;">
-                            <img src="<?= h($thumb) ?>"
-                                 alt="<?= h($title) ?>"
+                            <img src="<?php echo h($thumb); ?>"
+                                 alt="<?php echo h($title); ?>"
                                  style="width: 100%; height: 120px; object-fit: cover;"
-                                 data-gdy-fallback-src="<?= h($baseUrl) ?>/assets/images/video-placeholder.jpg">
+                                 data-gdy-fallback-src="<?php echo h($baseUrl); ?>/assets/images/video-placeholder.jpg">
 
                             <div class="video-overlay" style="
                                 position: absolute;
@@ -497,7 +497,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                                     border-radius: 4px;
                                     font-size: 0.7rem;
                                 ">
-                                    <?= h($duration) ?>
+                                    <?php echo h($duration); ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -509,7 +509,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                                 color: #1f2937;
                                 line-height: 1.4;
                             ">
-                                <?= h($title) ?>
+                                <?php echo h($title); ?>
                             </h4>
 
                             <div style="
@@ -522,12 +522,12 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                             ">
                                 <span>
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                    <?= number_format($views) ?> مشاهدة
+                                    <?php echo number_format($views); ?> مشاهدة
                                 </span>
 
                                 <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
                                     <?php if (!empty($rawUrl)): ?>
-                                        <a href="<?= h($rawUrl) ?>"
+                                        <a href="<?php echo h($rawUrl); ?>"
                                            target="_blank"
                                            rel="noopener noreferrer"
                                            style="
@@ -538,7 +538,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                                                font-size: 0.75rem;
                                                text-decoration: none;
                                            ">
-                                            مشاهدة على <?= h($platform) ?>
+                                            مشاهدة على <?php echo h($platform); ?>
                                         </a>
                                     <?php endif; ?>
 
@@ -570,7 +570,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
         <!-- إعلان أسفل الشريط الجانبي -->
         <?php if (!empty($sidebarBottomAd) && strpos($sidebarBottomAd, 'No active ad') === false): ?>
         <div class="sidebar-ad-container" style="margin-top: 1.5rem;">
-            <?= $sidebarBottomAd ?>
+            <?php echo $sidebarBottomAd; ?>
         </div>
         <?php endif; ?>
     </aside>
@@ -579,7 +579,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
 <!-- إعلان أعلى المحتوى -->
 <?php if (!empty($contentTopAd) && strpos($contentTopAd, 'No active ad') === false): ?>
 <div class="content-ad-container" style="margin: 2rem 0; text-align: center;">
-    <?= $contentTopAd ?>
+    <?php echo $contentTopAd; ?>
 </div>
 <?php endif; ?>
 
@@ -587,10 +587,10 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
 <section aria-label="آخر الأخبار">
     <div class="section-header">
         <div>
-            <div class="section-title"><?= h($homeLatestTitle) ?></div>
+            <div class="section-title"><?php echo h($homeLatestTitle); ?></div>
             <div class="section-sub">كل ما يُنشر من لوحة التحكم يظهر في هذه الشبكة تلقائياً.</div>
         </div>
-        <a href="<?= h($archiveUrl) ?>" class="section-sub">
+        <a href="<?php echo h($archiveUrl); ?>" class="section-sub">
             عرض الأرشيف بالكامل
         </a>
     </div>
@@ -601,12 +601,12 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                 <?php if ($idx === 0) continue; // استخدمناه في الهيرو ?>
                 <article class="news-card fade-in">
                     <?php if (!empty($row['featured_image'])): ?>
-                        <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
-						<img src="<?= h(gdy_img_src($row['featured_image'] ?? '')) ?>" alt="<?= h(nf($row,'title')) ?>">
+                        <a href="<?php echo h($newsUrl($row)); ?>" class="news-thumb">
+						<img src="<?php echo h(gdy_img_src($row['featured_image'] ?? '')); ?>" alt="<?php echo h(nf($row,'title')); ?>">
                         </a>
                     <?php endif; ?>
                     <div class="news-body">
-                        <a href="<?= h($newsUrl($row)) ?>">
+                        <a href="<?php echo h($newsUrl($row)); ?>">
                             <h2 class="news-title">
                                 <?php
                                     $t = (string)nf($row,'title');
@@ -627,11 +627,11 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                         <div class="news-meta">
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
+                                <?php echo !empty($row['published_at']) ? h(date('Y-m-d', strtotime($row['published_at']))) : ''; ?>
                             </span>
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= (int)($row['views'] ?? 0) ?> مشاهدة
+                                <?php echo (int)($row['views'] ?? 0); ?> مشاهدة
                             </span>
                         </div>
                     </div>
@@ -673,7 +673,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                 height: 160px;
                 overflow: hidden;
             ">
-				<img src="<?= h(gdy_img_src($news['featured_image'] ?? '')) ?>" alt="<?= h(nf($news,'title')) ?>" style="
+				<img src="<?php echo h(gdy_img_src($news['featured_image'] ?? '')); ?>" alt="<?php echo h(nf($news,'title')); ?>" style="
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
@@ -688,13 +688,13 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                     color: #1f2937;
                     line-height: 1.4;
                 ">
-                    <a href="<?= h($newsUrl($news)) ?>" style="color: inherit; text-decoration: none;">
-                        <?= h(mb_substr(nf($news,'title'), 0, 80)) . (mb_strlen(nf($news,'title')) > 80 ? '…' : '') ?>
+                    <a href="<?php echo h($newsUrl($news)); ?>" style="color: inherit; text-decoration: none;">
+                        <?php echo h(mb_substr(nf($news,'title'), 0, 80)) . (mb_strlen(nf($news,'title')) > 80 ? '…' : ''); ?>
                     </a>
                 </h3>
                 <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #6b7280;">
-                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= !empty($news['published_at']) ? h(date('Y-m-d', strtotime($news['published_at']))) : '' ?></span>
-                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= number_format($news['views']) ?> مشاهدة</span>
+                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo !empty($news['published_at']) ? h(date('Y-m-d', strtotime($news['published_at']))) : ''; ?></span>
+                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo number_format($news['views']); ?> مشاهدة</span>
                 </div>
             </div>
         </div>
@@ -706,7 +706,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
 <!-- إعلان أسفل المحتوى -->
 <?php if (!empty($contentBottomAd) && strpos($contentBottomAd, 'No active ad') === false): ?>
 <div class="content-ad-container" style="margin: 2rem 0; text-align: center;">
-    <?= $contentBottomAd ?>
+    <?php echo $contentBottomAd; ?>
 </div>
 <?php endif; ?>
 
@@ -718,7 +718,7 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
 <!-- إعلان الفوتر -->
 <?php if (!empty($footerAd) && strpos($footerAd, 'No active ad') === false): ?>
 <div class="footer-ad-container" style="margin-top: 3rem; text-align: center;">
-    <?= $footerAd ?>
+    <?php echo $footerAd; ?>
 </div>
 <?php endif; ?>
 

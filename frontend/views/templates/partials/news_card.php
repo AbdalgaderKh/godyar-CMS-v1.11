@@ -93,30 +93,30 @@ if ($excerpt === '' && $title !== '') {
 // كلاس إضافي للكرت (مثلاً للفيديو) إن وصل من الخارج
 $extraClass = isset($cardExtraClass) ? (string)$cardExtraClass : '';
 ?>
-<a href="<?= h($newsUrl) ?>" class="gdy-card <?= h($extraClass) ?>">
+<a href="<?php echo h($newsUrl); ?>" class="gdy-card <?php echo h($extraClass); ?>">
     <?php if (!empty($img)): ?>
         <div class="gdy-card-thumb">
-            <img src="<?= h($img) ?>" alt="<?= h($title) ?>">
+            <img src="<?php echo h($img); ?>" alt="<?php echo h($title); ?>">
         </div>
     <?php endif; ?>
 
-    <h3 class="gdy-card-title"><?= h($title) ?></h3>
+    <h3 class="gdy-card-title"><?php echo h($title); ?></h3>
 
     <?php if ($excerpt !== ''): ?>
-        <p class="gdy-card-excerpt"><?= h($excerpt) ?></p>
+        <p class="gdy-card-excerpt"><?php echo h($excerpt); ?></p>
     <?php endif; ?>
 
     <div class="gdy-card-meta">
         <?php if ($date): ?>
             <span>
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <?= h($date) ?>
+                <?php echo h($date); ?>
             </span>
         <?php endif; ?>
         <?php if ($views !== null): ?>
             <span>
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <?= number_format($views) ?> مشاهدة
+                <?php echo number_format($views); ?> مشاهدة
             </span>
         <?php endif; ?>
     </div>

@@ -450,31 +450,31 @@ require_once __DIR__ . '/../layout/app_start.php';
     <!-- شريط التصفية والإحصائيات -->
     <div class="gdy-filter-bar">
         <form method="get" class="row g-3 align-items-end">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
             <div class="col-12 col-md-5">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_402c90a28c', 'بحث بالاسم')) ?></label>
-                <input type="text" name="q" value="<?= h($search) ?>"
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_402c90a28c', 'بحث بالاسم')); ?></label>
+                <input type="text" name="q" value="<?php echo h($search); ?>"
                        class="form-control bg-dark text-light border-secondary"
-                       placeholder="<?= h(__('t_dda805e1c7', 'ابحث باسم الملف...')) ?>">
+                       placeholder="<?php echo h(__('t_dda805e1c7', 'ابحث باسم الملف...')); ?>">
             </div>
 
             <div class="col-12 col-md-4">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_ac419af75c', 'نوع الملف')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_ac419af75c', 'نوع الملف')); ?></label>
                 <select name="type" class="form-select bg-dark text-light border-secondary">
-                    <option value="" <?= $type === '' ? 'selected' : '' ?>><?= h(__('t_cd654353e8', 'كل الملفات')) ?></option>
-                    <option value="images" <?= $type === 'images' ? 'selected' : '' ?>><?= h(__('t_c52c6607e1', 'صور فقط')) ?></option>
-                    <option value="videos" <?= $type === 'videos' ? 'selected' : '' ?>><?= h(__('t_d589afa239', 'فيديو فقط')) ?></option>
-                    <option value="documents" <?= $type === 'documents' ? 'selected' : '' ?>><?= h(__('t_741b399829', 'مستندات')) ?></option>
+                    <option value="" <?php echo $type === '' ? 'selected' : ''; ?>><?php echo h(__('t_cd654353e8', 'كل الملفات')); ?></option>
+                    <option value="images" <?php echo $type === 'images' ? 'selected' : ''; ?>><?php echo h(__('t_c52c6607e1', 'صور فقط')); ?></option>
+                    <option value="videos" <?php echo $type === 'videos' ? 'selected' : ''; ?>><?php echo h(__('t_d589afa239', 'فيديو فقط')); ?></option>
+                    <option value="documents" <?php echo $type === 'documents' ? 'selected' : ''; ?>><?php echo h(__('t_741b399829', 'مستندات')); ?></option>
                 </select>
             </div>
 
             <div class="col-12 col-md-3 d-flex gap-2">
                 <button type="submit" class="btn btn-primary flex-fill">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_abe3151c63', 'تطبيق')); ?>
                 </button>
                 <a href="index.php" class="btn btn-outline-light flex-fill">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2cb0b85c56', 'إعادة تعيين')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_2cb0b85c56', 'إعادة تعيين')); ?>
                 </a>
             </div>
         </form>
@@ -482,20 +482,20 @@ require_once __DIR__ . '/../layout/app_start.php';
         <!-- الإحصائيات -->
         <div class="gdy-stats">
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$totalCount ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_82d70c2243', 'إجمالي الملفات')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$totalCount; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_82d70c2243', 'إجمالي الملفات')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$imageCount ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_f4f25f539b', 'صور')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$imageCount; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_f4f25f539b', 'صور')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$videoCount ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_f58f599d0d', 'فيديو')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$videoCount; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_f58f599d0d', 'فيديو')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$otherCount ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_288654d1a0', 'ملفات أخرى')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$otherCount; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_288654d1a0', 'ملفات أخرى')); ?></span>
             </div>
         </div>
     </div>
@@ -505,10 +505,10 @@ require_once __DIR__ . '/../layout/app_start.php';
         <?php if (empty($items)): ?>
             <div class="gdy-empty-state">
                 <div class="gdy-empty-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></div>
-                <h4 class="text-muted mb-3"><?= h(__('t_bec90f91b5', 'لا توجد ملفات في المكتبة')) ?></h4>
-                <p class="text-muted mb-4"><?= h(__('t_4665f3462c', 'ابدأ برفع أول ملف إلى مكتبة الوسائط')) ?></p>
+                <h4 class="text-muted mb-3"><?php echo h(__('t_bec90f91b5', 'لا توجد ملفات في المكتبة')); ?></h4>
+                <p class="text-muted mb-4"><?php echo h(__('t_4665f3462c', 'ابدأ برفع أول ملف إلى مكتبة الوسائط')); ?></p>
                 <a href="upload.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#upload"></use></svg><?= h(__('t_82db4f0e17', 'رفع أول ملف')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#upload"></use></svg><?php echo h(__('t_82db4f0e17', 'رفع أول ملف')); ?>
                 </a>
             </div>
         <?php else: ?>
@@ -523,11 +523,11 @@ require_once __DIR__ . '/../layout/app_start.php';
                     $typeLabel = $isImage ? __('t_22d882505c', 'صورة') : ($isVideo ? __('t_f58f599d0d', 'فيديو') : __('t_1e679e3005', 'ملف'));
                     $created = !empty($item['created_at']) ? date('Y-m-d H:i', strtotime((string)$item['created_at'])) : '';
                 ?>
-                    <div class="gdy-media-card" style="animation-delay: <?= ($index * 0.04) ?>s">
+                    <div class="gdy-media-card" style="animation-delay: <?php echo ($index * 0.04); ?>s">
                         <div class="gdy-media-preview">
                             <?php if ($isImage): ?>
-                                <img src="<?= h($filePath) ?>"
-                                     alt="<?= h($fileName) ?>"
+                                <img src="<?php echo h($filePath); ?>"
+                                     alt="<?php echo h($fileName); ?>"
                                      class="gdy-media-image"
                                      loading="lazy"
                                      data-gdy-show-onload="1"
@@ -537,24 +537,24 @@ require_once __DIR__ . '/../layout/app_start.php';
                                 </div>
                             <?php else: ?>
                                 <div class="gdy-media-icon">
-                                    <svg class="gdy-icon <?= h(getFileIcon($fileType)) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                                    <svg class="gdy-icon <?php echo h(getFileIcon($fileType)); ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 </div>
                             <?php endif; ?>
 
                             <div class="gdy-media-overlay">
                                 <div class="gdy-media-actions">
-                                    <a href="<?= h($filePath) ?>" target="_blank" class="gdy-media-btn" title="<?= h(__('t_b66b00ea74', 'فتح/معاينة')) ?>">
+                                    <a href="<?php echo h($filePath); ?>" target="_blank" class="gdy-media-btn" title="<?php echo h(__('t_b66b00ea74', 'فتح/معاينة')); ?>">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </a>
-                                    <button type="button" class="gdy-media-btn copy-link" data-url="<?= h($filePath) ?>" title="<?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?>">
+                                    <button type="button" class="gdy-media-btn copy-link" data-url="<?php echo h($filePath); ?>" title="<?php echo h(__('t_0d8af0ab07', 'نسخ الرابط')); ?>">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                     <button type="button"
                                             class="gdy-media-btn preview-btn"
-                                            data-file="<?= h($filePath) ?>"
-                                            data-type="<?= h($fileType) ?>"
-                                            data-name="<?= h($fileName) ?>"
-                                            title="<?= h(__('t_c9214ed951', 'معاينة مفصلة')) ?>">
+                                            data-file="<?php echo h($filePath); ?>"
+                                            data-type="<?php echo h($fileType); ?>"
+                                            data-name="<?php echo h($fileName); ?>"
+                                            title="<?php echo h(__('t_c9214ed951', 'معاينة مفصلة')); ?>">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </button>
                                 </div>
@@ -562,14 +562,14 @@ require_once __DIR__ . '/../layout/app_start.php';
                         </div>
 
                         <div class="gdy-media-info">
-                            <div class="gdy-media-name" title="<?= h($fileName) ?>"><?= h($fileName) ?></div>
+                            <div class="gdy-media-name" title="<?php echo h($fileName); ?>"><?php echo h($fileName); ?></div>
                             <div class="gdy-media-meta">
-                                <span class="gdy-media-type"><?= h($typeLabel) ?></span>
-                                <span class="gdy-media-size"><?= h(formatFileSize($item['file_size'] ?? 0)) ?></span>
+                                <span class="gdy-media-type"><?php echo h($typeLabel); ?></span>
+                                <span class="gdy-media-size"><?php echo h(formatFileSize($item['file_size'] ?? 0)); ?></span>
                             </div>
                             <?php if ($created): ?>
                                 <div class="gdy-media-date">
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h($created) ?>
+                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h($created); ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -582,18 +582,18 @@ require_once __DIR__ . '/../layout/app_start.php';
                     <button type="button"
                             id="loadMoreBtn"
                             class="btn btn-outline-light"
-                            data-next-page="<?= (int)($page + 1) ?>"
-                            data-total-pages="<?= (int)$totalPages ?>">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg> <?= h(__('t_407bdba777', 'المزيد')) ?>
+                            data-next-page="<?php echo (int)($page + 1); ?>"
+                            data-total-pages="<?php echo (int)$totalPages; ?>">
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg> <?php echo h(__('t_407bdba777', 'المزيد')); ?>
                     </button>
                 </div>
 
                 <div class="text-center small text-muted mt-2">
-                    <?= h(__('t_bab35cd1eb', 'تم عرض')) ?> <span id="shownCount"><?= (int)count($items) ?></span> من <?= (int)$totalCount ?>
+                    <?php echo h(__('t_bab35cd1eb', 'تم عرض')); ?> <span id="shownCount"><?php echo (int)count($items); ?></span> من <?php echo (int)$totalCount; ?>
                 </div>
             <?php else: ?>
                 <div class="text-center small text-muted mt-2">
-                    <?= h(__('t_bab35cd1eb', 'تم عرض')) ?> <span id="shownCount"><?= (int)count($items) ?></span> من <?= (int)$totalCount ?>
+                    <?php echo h(__('t_bab35cd1eb', 'تم عرض')); ?> <span id="shownCount"><?php echo (int)count($items); ?></span> من <?php echo (int)$totalCount; ?>
                 </div>
             <?php endif; ?>
 
@@ -606,7 +606,7 @@ require_once __DIR__ . '/../layout/app_start.php';
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="previewFileName"><?= h(__('t_2010f031f4', 'معاينة الملف')) ?></h5>
+                <h5 class="modal-title" id="previewFileName"><?php echo h(__('t_2010f031f4', 'معاينة الملف')); ?></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -614,13 +614,13 @@ require_once __DIR__ . '/../layout/app_start.php';
 
                 <div class="mt-3">
                     <button class="btn btn-outline-light copy-full-link me-2" type="button">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?php echo h(__('t_0d8af0ab07', 'نسخ الرابط')); ?>
                     </button>
                     <button class="btn btn-outline-info copy-embed me-2" type="button">
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?= h(__('t_5268d50cb2', 'نسخ كود التضمين')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg><?php echo h(__('t_5268d50cb2', 'نسخ كود التضمين')); ?>
                     </button>
                     <a href="#" id="previewDownload" class="btn btn-primary" download>
-                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_969879d297', 'تحميل')) ?>
+                        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_969879d297', 'تحميل')); ?>
                     </a>
                 </div>
             </div>

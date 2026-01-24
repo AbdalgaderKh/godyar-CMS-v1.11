@@ -36,7 +36,7 @@ if ($pdo instanceof PDO) {
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title>الأخبار - <?= h(env('SITE_NAME','Godyar News')) ?></title>
+  <title>الأخبار - <?php echo h(env('SITE_NAME','Godyar News')); ?></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="/godyar/assets/css/bootstrap.min.css">
 </head>
@@ -55,19 +55,19 @@ if ($pdo instanceof PDO) {
             <div class="card-body d-flex gap-3">
               <?php if (!empty($news['image_path'])): ?>
                 <div style="width:120px;flex-shrink:0;">
-                  <img src="<?= h($news['image_path']) ?>" alt="<?= h($news['title']) ?>"
+                  <img src="<?php echo h($news['image_path']); ?>" alt="<?php echo h($news['title']); ?>"
                        style="width:100%;height:auto;object-fit:cover;">
                 </div>
               <?php endif; ?>
 
               <div>
                 <h2 class="h5">
-                  <a href="view.php?slug=<?= urlencode($news['slug']) ?>" class="text-decoration-none">
-                    <?= h($news['title']) ?>
+                  <a href="view.php?slug=<?php echo urlencode($news['slug']); ?>" class="text-decoration-none">
+                    <?php echo h($news['title']); ?>
                   </a>
                 </h2>
-                <div class="text-muted small mb-2"><?= h($news['published_at']) ?></div>
-                <p class="mb-0"><?= nl2br(h($news['excerpt'])) ?></p>
+                <div class="text-muted small mb-2"><?php echo h($news['published_at']); ?></div>
+                <p class="mb-0"><?php echo nl2br(h($news['excerpt'])); ?></p>
               </div>
             </div>
           </article>

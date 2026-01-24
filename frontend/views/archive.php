@@ -23,20 +23,20 @@ if (function_exists('archive_card') === false) {
         $id    = (int)($n['id'] ?? ($n['news_id'] ?? 0));
         $url   = (empty($id) === false) ? '/news/id/' . $id : ((empty($slug) === false) ? '/news/' . $slug : '#');
         ?>
-        <a class="card h-100 text-decoration-none" href="<?= h($url) ?>">
+        <a class="card h-100 text-decoration-none" href="<?php echo h($url); ?>">
           <?php if ((empty($img) === false)): ?>
             <div class="thumb" style="height:160px;overflow:hidden;border-radius:14px;">
               <img
-                src="/img.php?src=<?= rawurlencode($img) ?>&w=400"
-                alt="<?= h($title) ?>"
+                src="/img.php?src=<?php echo rawurlencode($img); ?>&w=400"
+                alt="<?php echo h($title); ?>"
                 style="width:100%;height:100%;object-fit:cover;"
               >
             </div>
           <?php endif; ?>
           <div class="meta mt-2">
-            <h3 class="h6 mb-1"><?= h($title) ?></h3>
+            <h3 class="h6 mb-1"><?php echo h($title); ?></h3>
             <?php if ((empty($ex) === false)): ?>
-              <p class="text-muted small mb-0"><?= h($ex) ?></p>
+              <p class="text-muted small mb-0"><?php echo h($ex); ?></p>
             <?php endif; ?>
           </div>
         </a>
@@ -67,7 +67,7 @@ if ((empty($year) === false)) {
 
 <div class="container py-4">
   <header class="mb-3">
-    <h1 class="h4 mb-1"><?= h($page_title) ?></h1>
+    <h1 class="h4 mb-1"><?php echo h($page_title); ?></h1>
     <p class="text-muted mb-0">أرشيف الأخبار حسب الفترات الزمنية.</p>
   </header>
 
@@ -94,8 +94,8 @@ if ((empty($year) === false)) {
             // نفس النمط المستخدم في الراوتر: /archive[/year[/month]]/page/N
             $url = $archiveBasePath . '/page/' . $i;
           ?>
-          <a href="<?= h($url) ?>" class="btn btn-sm <?= (empty($isActive) === false) ? 'btn-primary' : 'btn-outline-secondary' ?>">
-            <?= $i ?>
+          <a href="<?php echo h($url); ?>" class="btn btn-sm <?php echo (empty($isActive) === false) ? 'btn-primary' : 'btn-outline-secondary'; ?>">
+            <?php echo $i; ?>
           </a>
         <?php endfor; ?>
       </div>

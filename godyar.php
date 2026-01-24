@@ -151,19 +151,19 @@ $featuredImg = $news['featured_image'] ?? '';
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="h5 mb-0">تعديل خبر</h2>
     <?php if ($id): ?>
-      <span class="text-muted small">#<?= $id ?></span>
+      <span class="text-muted small">#<?php echo $id; ?></span>
     <?php endif; ?>
   </div>
 
   <?php if (!empty($success)): ?>
-    <div class="alert alert-success"><?= h($success) ?></div>
+    <div class="alert alert-success"><?php echo h($success); ?></div>
   <?php endif; ?>
 
   <?php if (!empty($errors)): ?>
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $e): ?>
-          <li><?= h($e) ?></li>
+          <li><?php echo h($e); ?></li>
         <?php endforeach; ?>
       </ul>
     </div>
@@ -175,13 +175,13 @@ $featuredImg = $news['featured_image'] ?? '';
     <div class="mb-3">
       <label class="form-label">عنوان الخبر</label>
       <input type="text" name="title" class="form-control" required
-             value="<?= h($title) ?>">
+             value="<?php echo h($title); ?>">
     </div>
 
     <div class="mb-3">
       <label class="form-label">الرابط المختصر (Slug)</label>
       <input type="text" name="slug" class="form-control"
-             value="<?= h($slug) ?>"
+             value="<?php echo h($slug); ?>"
              placeholder="اتركه فارغاً ليُولد تلقائياً من العنوان">
     </div>
 
@@ -192,8 +192,8 @@ $featuredImg = $news['featured_image'] ?? '';
         <option value="">— اختر الفئة —</option>
         <?php foreach ($categories as $cat): ?>
           <?php $cid = (int)($cat['id'] ?? 0); ?>
-          <option value="<?= $cid ?>" <?= $cid === $category_id ? 'selected' : '' ?>>
-            <?= h($cat['name'] ?? ('فئة #' . $cid)) ?>
+          <option value="<?php echo $cid; ?>" <?php echo $cid === $category_id ? 'selected' : ''; ?>>
+            <?php echo h($cat['name'] ?? ('فئة #' . $cid)); ?>
           </option>
         <?php endforeach; ?>
       </select>
@@ -206,39 +206,39 @@ $featuredImg = $news['featured_image'] ?? '';
       <div class="col-md-4 mb-3">
         <label class="form-label">حالة الخبر</label>
         <select name="status" class="form-select">
-          <option value="draft"     <?= $status === 'draft'     ? 'selected' : '' ?>>مسودة</option>
-          <option value="published" <?= $status === 'published' ? 'selected' : '' ?>>منشور</option>
-          <option value="archived"  <?= $status === 'archived'  ? 'selected' : '' ?>>مؤرشف</option>
+          <option value="draft"     <?php echo $status === 'draft'     ? 'selected' : ''; ?>>مسودة</option>
+          <option value="published" <?php echo $status === 'published' ? 'selected' : ''; ?>>منشور</option>
+          <option value="archived"  <?php echo $status === 'archived'  ? 'selected' : ''; ?>>مؤرشف</option>
         </select>
       </div>
 
       <div class="col-md-4 mb-3">
         <label class="form-label">تاريخ / وقت النشر</label>
         <input type="datetime-local" name="published_at" class="form-control"
-               value="<?= $publish_at ? date('Y-m-d\TH:i', strtotime($publish_at)) : '' ?>">
+               value="<?php echo $publish_at ? date('Y-m-d\TH:i', strtotime($publish_at)) : ''; ?>">
       </div>
 
       <div class="col-md-2 mb-3">
         <label class="form-label">وقت القراءة (دقيقة)</label>
         <input type="number" name="read_time" class="form-control" min="0"
-               value="<?= $read_time ?: '' ?>">
+               value="<?php echo $read_time ?: ''; ?>">
       </div>
 
       <div class="col-md-2 mb-3">
         <label class="form-label">المشاهدات</label>
         <input type="number" name="views" class="form-control" min="0"
-               value="<?= $views ?>">
+               value="<?php echo $views; ?>">
       </div>
     </div>
 
     <div class="mb-3">
       <label class="form-label">ملخص قصير</label>
-      <textarea name="excerpt" rows="3" class="form-control"><?= h($excerpt) ?></textarea>
+      <textarea name="excerpt" rows="3" class="form-control"><?php echo h($excerpt); ?></textarea>
     </div>
 
     <div class="mb-3">
       <label class="form-label">نص الخبر</label>
-      <textarea name="body" rows="10" class="form-control" required><?= h($body) ?></textarea>
+      <textarea name="body" rows="10" class="form-control" required><?php echo h($body); ?></textarea>
     </div>
 
     <div class="row mb-3">
@@ -249,7 +249,7 @@ $featuredImg = $news['featured_image'] ?? '';
       <?php if ($featuredImg): ?>
         <div class="col-md-6">
           <label class="form-label d-block">الصورة الحالية</label>
-          <img src="<?= h($featuredImg) ?>" alt="الصورة الحالية"
+          <img src="<?php echo h($featuredImg); ?>" alt="الصورة الحالية"
                class="img-fluid rounded border" style="max-height:150px;">
         </div>
       <?php endif; ?>

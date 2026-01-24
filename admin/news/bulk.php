@@ -208,10 +208,10 @@ require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
 <?php if ($flashSuccess): ?>
-  <div class="alert alert-success"><?= h($flashSuccess) ?></div>
+  <div class="alert alert-success"><?php echo h($flashSuccess); ?></div>
 <?php endif; ?>
 <?php if ($flashError): ?>
-  <div class="alert alert-danger"><?= h($flashError) ?></div>
+  <div class="alert alert-danger"><?php echo h($flashError); ?></div>
 <?php endif; ?>
 
 <div class="card p-3">
@@ -221,7 +221,7 @@ require_once __DIR__ . '/../layout/app_start.php';
   </div>
 
   <form method="post">
-    <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+    <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
 
     <div class="row g-2 align-items-end mb-3">
       <div class="col-md-4">
@@ -251,7 +251,7 @@ require_once __DIR__ . '/../layout/app_start.php';
         <select class="form-select" name="category_id">
           <option value="0">—</option>
           <?php foreach ($categories as $c): ?>
-            <option value="<?= (int)($c['id'] ?? 0) ?>"><?= h((string)($c['name'] ?? '')) ?></option>
+            <option value="<?php echo (int)($c['id'] ?? 0); ?>"><?php echo h((string)($c['name'] ?? '')); ?></option>
           <?php endforeach; ?>
         </select>
         <div class="form-text">يستخدم فقط عند اختيار "تغيير الفئة".</div>
@@ -277,10 +277,10 @@ require_once __DIR__ . '/../layout/app_start.php';
               $date = !empty($n['created_at']) ? date('Y-m-d', strtotime((string)$n['created_at'])) : '';
             ?>
             <tr>
-              <td><input type="checkbox" name="ids[]" value="<?= $id ?>"></td>
-              <td><?= h(str_limit($title, 90)) ?></td>
-              <td><span class="badge bg-secondary"><?= h($status) ?></span></td>
-              <td><?= h($date) ?></td>
+              <td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>"></td>
+              <td><?php echo h(str_limit($title, 90)); ?></td>
+              <td><span class="badge bg-secondary"><?php echo h($status); ?></span></td>
+              <td><?php echo h($date); ?></td>
             </tr>
           <?php endforeach; ?>
           <?php if (!$newsRows): ?>

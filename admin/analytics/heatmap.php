@@ -123,7 +123,7 @@ function render_map(array $map, array $daysLabels, string $title): void {
 ?>
 
 <?php if (!$pdo): ?>
-  <div class="alert alert-warning"><?= h(__('t_admin_db_error','تعذر الاتصال بقاعدة البيانات.')) ?></div>
+  <div class="alert alert-warning"><?php echo h(__('t_admin_db_error','تعذر الاتصال بقاعدة البيانات.')); ?></div>
 <?php else: ?>
   <?php render_map($mapNews, $daysLabels, __('t_admin_heatmap_news','نشاط إنشاء الأخبار')); ?>
   <?php render_map($mapComments, $daysLabels, __('t_admin_heatmap_comments','نشاط التعليقات (إن وجد الجدول)')); ?>

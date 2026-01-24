@@ -281,7 +281,7 @@ if (is_file($headerFile)) {
 <script>window.GODYAR_CANONICAL_URL = window.location.href;</script>
 
         <meta charset="utf-8">
-        <title><?= h($pageTitle) ?></title>
+        <title><?php echo h($pageTitle); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
         </head>
@@ -296,7 +296,7 @@ if ($notFound): ?>
         <div class="alert alert-warning text-center">
           <h1 class="h4 mb-2">عذراً، لم يتم العثور على الخبر المطلوب</h1>
           <p class="mb-3">قد يكون تم حذفه أو تغيير رابط الوصول إليه.</p>
-          <a href="<?= h($baseUrl ?: '/') ?>" class="btn btn-primary">العودة إلى الصفحة الرئيسية</a>
+          <a href="<?php echo h($baseUrl ?: '/'); ?>" class="btn btn-primary">العودة إلى الصفحة الرئيسية</a>
         </div>
       </div>
     </main>
@@ -571,40 +571,40 @@ endif;
           ?>
           <?php if ($mainImg !== ''): ?>
             <div class="gdy-article-image-wrap">
-              <img src="<?= h($mainImg) ?>"
-                   alt="<?= h($title) ?>">
+              <img src="<?php echo h($mainImg); ?>"
+                   alt="<?php echo h($title); ?>">
             </div>
           <?php endif; ?>
 
           <div class="gdy-article-body-wrap">
-            <h1 class="gdy-article-title"><?= h($title) ?></h1>
+            <h1 class="gdy-article-title"><?php echo h($title); ?></h1>
 
             <div class="gdy-article-meta">
               <?php if ($catName): ?>
                 <span>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <?= h($catName) ?>
+                  <?php echo h($catName); ?>
                 </span>
               <?php endif; ?>
 
               <?php if ($createdAt): ?>
                 <span>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <?= h(date('Y-m-d', strtotime((string)$createdAt))) ?>
+                  <?php echo h(date('Y-m-d', strtotime((string)$createdAt))); ?>
                 </span>
               <?php endif; ?>
 
               <?php if (!empty($readingTime)): ?>
                 <span>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  قراءة تقريبية <?= (int)$readingTime ?> دقيقة
+                  قراءة تقريبية <?php echo (int)$readingTime; ?> دقيقة
                 </span>
               <?php endif; ?>
 
               <?php if (!empty($views)): ?>
                 <span>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <?= number_format($views) ?> مشاهدة
+                  <?php echo number_format($views); ?> مشاهدة
                 </span>
               <?php endif; ?>
             </div>
@@ -613,45 +613,45 @@ endif;
               <section class="gdy-opinion-author-box">
                 <div class="gdy-opinion-author-avatar">
                   <?php if (!empty($opinionAuthorUrl)): ?>
-                    <a href="<?= h($opinionAuthorUrl) ?>">
-                      <img src="<?= h($opinionAuthorAvatar) ?>" alt="<?= h($opinionAuthorName) ?>">
+                    <a href="<?php echo h($opinionAuthorUrl); ?>">
+                      <img src="<?php echo h($opinionAuthorAvatar); ?>" alt="<?php echo h($opinionAuthorName); ?>">
                     </a>
                   <?php else: ?>
-                    <img src="<?= h($opinionAuthorAvatar) ?>" alt="<?= h($opinionAuthorName) ?>">
+                    <img src="<?php echo h($opinionAuthorAvatar); ?>" alt="<?php echo h($opinionAuthorName); ?>">
                   <?php endif; ?>
                 </div>
 
                 <div class="gdy-opinion-author-main">
                   <div class="gdy-opinion-author-name">
                     <?php if (!empty($opinionAuthorUrl)): ?>
-                      <a href="<?= h($opinionAuthorUrl) ?>"><?= h($opinionAuthorName) ?></a>
+                      <a href="<?php echo h($opinionAuthorUrl); ?>"><?php echo h($opinionAuthorName); ?></a>
                     <?php else: ?>
-                      <?= h($opinionAuthorName) ?>
+                      <?php echo h($opinionAuthorName); ?>
                     <?php endif; ?>
                   </div>
 
                   <?php if (!empty($opinionAuthorPageTitle)): ?>
-                    <div class="gdy-opinion-author-meta"><?= h($opinionAuthorPageTitle) ?></div>
+                    <div class="gdy-opinion-author-meta"><?php echo h($opinionAuthorPageTitle); ?></div>
                   <?php endif; ?>
 
                   <div class="gdy-opinion-author-links">
                     <?php if (!empty($opinionAuthorEmail)): ?>
-                      <a href="mailto:<?= h($opinionAuthorEmail) ?>" title="البريد الإلكتروني">
+                      <a href="mailto:<?php echo h($opinionAuthorEmail); ?>" title="البريد الإلكتروني">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg>
                       </a>
                     <?php endif; ?>
                     <?php if (!empty($opinionAuthorWebsite)): ?>
-                      <a href="<?= h($opinionAuthorWebsite) ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
+                      <a href="<?php echo h($opinionAuthorWebsite); ?>" target="_blank" rel="noopener" title="الموقع الشخصي">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                       </a>
                     <?php endif; ?>
                     <?php if (!empty($opinionAuthorTwitter)): ?>
-                      <a href="<?= h($opinionAuthorTwitter) ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
+                      <a href="<?php echo h($opinionAuthorTwitter); ?>" target="_blank" rel="noopener" title="حساب X / تويتر">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                       </a>
                     <?php endif; ?>
                     <?php if (!empty($opinionAuthorFacebook)): ?>
-                      <a href="<?= h($opinionAuthorFacebook) ?>" target="_blank" rel="noopener" title="فيسبوك">
+                      <a href="<?php echo h($opinionAuthorFacebook); ?>" target="_blank" rel="noopener" title="فيسبوك">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                       </a>
                     <?php endif; ?>
@@ -671,7 +671,7 @@ endif;
                   <span class="gdy-ico" aria-hidden="true">⤴</span>
                   <span>مشاركة</span>
                 </button>
-                <button type="button" class="gdy-share-copy" data-copy-url="<?= h($canonicalUrl) ?>" aria-label="نسخ الرابط">
+                <button type="button" class="gdy-share-copy" data-copy-url="<?php echo h($canonicalUrl); ?>" aria-label="نسخ الرابط">
                   <span class="gdy-ico" aria-hidden="true">⧉</span>
                   <span>نسخ الرابط</span>
                 </button>
@@ -701,10 +701,10 @@ endif;
                 $relUrl   = rtrim($baseUrl, '/') . '/news/id/' . (int)($rel['id'] ?? 0);
                 $relDate  = !empty($rel['created_at']) ? date('Y-m-d', strtotime((string)$rel['created_at'])) : '';
                 ?>
-                <a href="<?= h($relUrl) ?>" class="gdy-related-item">
-                  <?= h($relTitle) ?>
+                <a href="<?php echo h($relUrl); ?>" class="gdy-related-item">
+                  <?php echo h($relTitle); ?>
                   <?php if ($relDate !== ''): ?>
-                    <small><?= h($relDate) ?></small>
+                    <small><?php echo h($relDate); ?></small>
                   <?php endif; ?>
                 </a>
               <?php endforeach; ?>

@@ -321,12 +321,12 @@ require __DIR__ . '/../frontend/templates/header.php';
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/index.php">الرئيسية</a></li>
       <li class="breadcrumb-item">
-        <a href="/godyar/elections.php?election=<?= h($currentElection['slug']) ?>">
-          نتائج الانتخابات – <?= h($currentElection['title']) ?>
+        <a href="/godyar/elections.php?election=<?php echo h($currentElection['slug']); ?>">
+          نتائج الانتخابات – <?php echo h($currentElection['title']); ?>
         </a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-        <?= h($stateName) ?>
+        <?php echo h($stateName); ?>
       </li>
     </ol>
   </nav>
@@ -336,48 +336,48 @@ require __DIR__ . '/../frontend/templates/header.php';
     <div class="col-lg-4">
       <div class="card shadow-sm mb-3">
         <div class="card-header bg-light">
-          <h1 class="h5 mb-0"><?= h($stateName) ?></h1>
+          <h1 class="h5 mb-0"><?php echo h($stateName); ?></h1>
           <small class="text-muted d-block mt-1">
-            تغطية: <?= h($currentElection['title']) ?>
+            تغطية: <?php echo h($currentElection['title']); ?>
           </small>
         </div>
         <div class="card-body small">
 
           <dl class="row mb-0">
             <dt class="col-5 text-muted">عاصمة الولاية</dt>
-            <dd class="col-7"><?= h($meta['capital'] ?? 'غير محددة') ?></dd>
+            <dd class="col-7"><?php echo h($meta['capital'] ?? 'غير محددة'); ?></dd>
 
             <dt class="col-5 text-muted">أهم المدن</dt>
-            <dd class="col-7"><?= h($meta['cities'] ?? '—') ?></dd>
+            <dd class="col-7"><?php echo h($meta['cities'] ?? '—'); ?></dd>
 
             <dt class="col-5 text-muted">المساحة (كم²)</dt>
             <dd class="col-7">
-              <?= isset($meta['area_km2']) && $meta['area_km2']
+              <?php echo isset($meta['area_km2']) && $meta['area_km2']
                     ? number_format((float)$meta['area_km2'], 0)
-                    : '—' ?>
+                    : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد السكان (تعداد تقريبي)</dt>
             <dd class="col-7">
-              <?= isset($meta['pop_2008']) && $meta['pop_2008']
+              <?php echo isset($meta['pop_2008']) && $meta['pop_2008']
                     ? number_format((float)$meta['pop_2008'], 0)
-                    : '—' ?>
+                    : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد الدوائر / المقاعد</dt>
             <dd class="col-7">
-              <?= $constituenciesCount ? (int)$constituenciesCount : '—' ?>
+              <?php echo $constituenciesCount ? (int)$constituenciesCount : '—'; ?>
             </dd>
 
             <dt class="col-5 text-muted">عدد الأحزاب المشاركة</dt>
             <dd class="col-7">
-              <?= $partyResults ? count($partyResults) : '—' ?>
+              <?php echo $partyResults ? count($partyResults) : '—'; ?>
             </dd>
           </dl>
 
           <?php if (!empty($meta['wiki'])): ?>
             <hr>
-            <a href="<?= h($meta['wiki']) ?>" target="_blank" rel="noopener"
+            <a href="<?php echo h($meta['wiki']); ?>" target="_blank" rel="noopener"
                class="btn btn-sm btn-outline-secondary w-100">
               المزيد عن الولاية في ويكيبيديا
             </a>
@@ -392,7 +392,7 @@ require __DIR__ . '/../frontend/templates/header.php';
             <span class="fw-semibold small">معلومات عامة عن الولاية</span>
           </div>
           <div class="card-body small text-muted">
-            <?= h($meta['info']) ?>
+            <?php echo h($meta['info']); ?>
           </div>
         </div>
       <?php endif; ?>
@@ -404,7 +404,7 @@ require __DIR__ . '/../frontend/templates/header.php';
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
           <span class="fw-semibold small">نتائج الانتخابات في هذه الولاية</span>
           <small class="text-muted">
-            إجمالي المقاعد / الدوائر: <?= $constituenciesCount ?: '—' ?>
+            إجمالي المقاعد / الدوائر: <?php echo $constituenciesCount ?: '—'; ?>
           </small>
         </div>
         <div class="card-body p-0">
@@ -429,25 +429,25 @@ require __DIR__ . '/../frontend/templates/header.php';
                     <tr>
                       <td>
                         <div class="d-flex align-items-center gap-2">
-                          <span class="gdy-el-party-dot" style="background: <?= h($color) ?>"></span>
+                          <span class="gdy-el-party-dot" style="background: <?php echo h($color); ?>"></span>
                           <div>
                             <div class="fw-semibold small">
-                              <?= h($row['short_name'] ?? $row['full_name'] ?? 'حزب') ?>
+                              <?php echo h($row['short_name'] ?? $row['full_name'] ?? 'حزب'); ?>
                             </div>
                             <?php if (!empty($row['full_name']) && $row['full_name'] !== $row['short_name']): ?>
-                              <div class="small text-muted"><?= h($row['full_name']) ?></div>
+                              <div class="small text-muted"><?php echo h($row['full_name']); ?></div>
                             <?php endif; ?>
                           </div>
                         </div>
                       </td>
-                      <td class="text-center"><?= (int)$row['seats_won'] ?></td>
-                      <td class="text-center"><?= (int)$row['seats_leading'] ?></td>
-                      <td class="text-center"><strong><?= $totalSeatsParty ?></strong></td>
+                      <td class="text-center"><?php echo (int)$row['seats_won']; ?></td>
+                      <td class="text-center"><?php echo (int)$row['seats_leading']; ?></td>
+                      <td class="text-center"><strong><?php echo $totalSeatsParty; ?></strong></td>
                       <td class="text-center">
-                        <?= $row['votes'] !== null ? number_format((float)$row['votes']) : '—' ?>
+                        <?php echo $row['votes'] !== null ? number_format((float)$row['votes']) : '—'; ?>
                       </td>
                       <td class="text-center">
-                        <?= $row['vote_percent'] !== null ? number_format((float)$row['vote_percent'], 2) . '%' : '—' ?>
+                        <?php echo $row['vote_percent'] !== null ? number_format((float)$row['vote_percent'], 2) . '%' : '—'; ?>
                       </td>
                     </tr>
                   <?php endforeach; ?>

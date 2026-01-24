@@ -360,16 +360,16 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
               </div>
               <div class="gdy-mini-content">
                 <?php if (empty($ad['url']) === false): ?>
-                  <a href="<?= h($ad['url']) ?>" target="_blank" rel="noopener" class="text-decoration-none">
+                  <a href="<?php echo h($ad['url']); ?>" target="_blank" rel="noopener" class="text-decoration-none">
                 <?php endif; ?>
 
                 <?php if (empty($ad['title']) === false): ?>
-                  <div class="gdy-mini-title"><?= h($ad['title']) ?></div>
+                  <div class="gdy-mini-title"><?php echo h($ad['title']); ?></div>
                 <?php endif; ?>
 
                 <?php if (empty($ad['image']) === false): ?>
                   <div class="gdy-mini-image">
-                    <img src="<?= h($ad['image']) ?>" alt="<?= h($ad['title'] ?? '') ?>">
+                    <img src="<?php echo h($ad['image']); ?>" alt="<?php echo h($ad['title'] ?? ''); ?>">
                   </div>
                 <?php endif; ?>
 
@@ -392,15 +392,15 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
   <div class="gdy-sidecard-inner">
     <div class="gdy-sidecard-header">
       <span class="gdy-sidecard-title">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> <?= h(__('الأخبار')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> <?php echo h(__('الأخبار')); ?>
       </span>
 
       <div class="gdy-side-tabs" role="tablist" aria-label="Sidebar News Tabs">
         <button type="button" class="gdy-tab-btn is-active" role="tab" aria-selected="true" data-tab="mostread">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('شائع')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('شائع')); ?>
         </button>
         <button type="button" class="gdy-tab-btn" role="tab" aria-selected="false" data-tab="latest">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('الأحدث')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('الأحدث')); ?>
         </button>
       </div>
     </div>
@@ -421,17 +421,17 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
         <?php else: ?>
           <?php foreach ($mostReadNews as $i => $item): ?>
             <?php $link = $buildNewsUrl($item); ?>
-            <a href="<?= h($link) ?>" class="gdy-mini-card">
-              <div class="gdy-mini-rank"><?= $i + 1 ?></div>
+            <a href="<?php echo h($link); ?>" class="gdy-mini-card">
+              <div class="gdy-mini-rank"><?php echo $i + 1; ?></div>
               <div class="gdy-mini-content">
-                <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
+                <div class="gdy-mini-title"><?php echo h($item['title'] ?? ''); ?></div>
                 <div class="gdy-mini-meta">
                   <?php if (empty($item['published_at']) === false): ?>
                     <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
+                    <?php echo h(date('Y-m-d', strtotime($item['published_at']))); ?>
                   <?php endif; ?>
                   <?php if (!empty($item['views'])): ?>
-                    — <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= (int)$item['views'] ?> <?= h(__('مشاهدة')) ?>
+                    — <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo (int)$item['views']; ?> <?php echo h(__('مشاهدة')); ?>
                   <?php endif; ?>
                 </div>
               </div>
@@ -446,21 +446,21 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
           <div class="gdy-mini-card">
             <div class="gdy-mini-rank">1</div>
             <div class="gdy-mini-content">
-              <div class="gdy-mini-title"><?= h(__('لا توجد أخبار بعد')) ?></div>
-              <div class="gdy-mini-meta"><?= h(__('ستظهر هنا أحدث الأخبار عند نشرها.')) ?></div>
+              <div class="gdy-mini-title"><?php echo h(__('لا توجد أخبار بعد')); ?></div>
+              <div class="gdy-mini-meta"><?php echo h(__('ستظهر هنا أحدث الأخبار عند نشرها.')); ?></div>
             </div>
           </div>
         <?php else: ?>
           <?php foreach ($latestNews as $i => $item): ?>
             <?php $link = $buildNewsUrl($item); ?>
-            <a href="<?= h($link) ?>" class="gdy-mini-card">
-              <div class="gdy-mini-rank"><?= $i + 1 ?></div>
+            <a href="<?php echo h($link); ?>" class="gdy-mini-card">
+              <div class="gdy-mini-rank"><?php echo $i + 1; ?></div>
               <div class="gdy-mini-content">
-                <div class="gdy-mini-title"><?= h($item['title'] ?? '') ?></div>
+                <div class="gdy-mini-title"><?php echo h($item['title'] ?? ''); ?></div>
                 <div class="gdy-mini-meta">
                   <?php if ((empty($item['published_at']) === false)): ?>
                     <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= h(date('Y-m-d', strtotime($item['published_at']))) ?>
+                    <?php echo h(date('Y-m-d', strtotime($item['published_at']))); ?>
                   <?php endif; ?>
                 </div>
               </div>
@@ -508,16 +508,16 @@ $buildNewsUrl = function (array $row) use ($baseUrl): string {
               ?></div>
               <div class="flex-grow-1">
                 <?php if ($authorUrl): ?>
-                  <a href="<?= h($authorUrl) ?>" target="_blank" rel="noopener"
+                  <a href="<?php echo h($authorUrl); ?>" target="_blank" rel="noopener"
                      class="text-decoration-none">
-                    <div class="gdy-author-name"><?= h($a['name'] ?? '') ?></div>
+                    <div class="gdy-author-name"><?php echo h($a['name'] ?? ''); ?></div>
                   </a>
                 <?php else: ?>
-                  <div class="gdy-author-name"><?= h($a['name'] ?? '') ?></div>
+                  <div class="gdy-author-name"><?php echo h($a['name'] ?? ''); ?></div>
                 <?php endif; ?>
 
                 <?php if (!empty($a['specialization'])): ?>
-                  <div class="gdy-author-specialty"><?= h($a['specialization']) ?></div>
+                  <div class="gdy-author-specialty"><?php echo h($a['specialization']); ?></div>
                 <?php endif; ?>
               </div>
             </div>

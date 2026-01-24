@@ -34,30 +34,30 @@ $extra_body_code = settings_get('advanced.extra_body', '');
     <div class="col-md-9">
       <div class="card p-4">
 <?php if ((empty($notice) === false)): ?>
-          <div class="alert alert-success"><?= h($notice) ?></div>
+          <div class="alert alert-success"><?php echo h($notice); ?></div>
         <?php endif; ?>
         <?php if ((empty($error) === false)): ?>
-          <div class="alert alert-danger"><?= h($error) ?></div>
+          <div class="alert alert-danger"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post">
           <?php if (function_exists('csrf_token') === true): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_709326ebec', 'كود إضافي داخل &lt;head&gt;')) ?></label>
-            <textarea class="form-control" rows="7" name="extra_head_code"><?= h($extra_head_code) ?></textarea>
-            <div class="form-text"><?= h(__('t_c9593b4c69', 'مثال: أكواد التحقق، ميتا، خطوط…')) ?></div>
+            <label class="form-label"><?php echo h(__('t_709326ebec', 'كود إضافي داخل &lt;head&gt;')); ?></label>
+            <textarea class="form-control" rows="7" name="extra_head_code"><?php echo h($extra_head_code); ?></textarea>
+            <div class="form-text"><?php echo h(__('t_c9593b4c69', 'مثال: أكواد التحقق، ميتا، خطوط…')); ?></div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_f02f35b274', 'كود إضافي قبل &lt;/body&gt;')) ?></label>
-            <textarea class="form-control" rows="7" name="extra_body_code"><?= h($extra_body_code) ?></textarea>
-            <div class="form-text"><?= h(__('t_22e2d23204', 'مثال: سكربتات، تتبع، شات…')) ?></div>
+            <label class="form-label"><?php echo h(__('t_f02f35b274', 'كود إضافي قبل &lt;/body&gt;')); ?></label>
+            <textarea class="form-control" rows="7" name="extra_body_code"><?php echo h($extra_body_code); ?></textarea>
+            <div class="form-text"><?php echo h(__('t_22e2d23204', 'مثال: سكربتات، تتبع، شات…')); ?></div>
           </div>
 
-          <button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+          <button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </form>
       </div>
     </div>

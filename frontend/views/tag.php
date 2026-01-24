@@ -24,9 +24,9 @@ $tagDescription = $tag['description'] ?? "الأخبار المرتبطة بهذ
 <div class="container py-4">
 
   <header class="mb-3">
-    <h1 class="h4 mb-1">الوسم: <?= h($tagName) ?></h1>
+    <h1 class="h4 mb-1">الوسم: <?php echo h($tagName); ?></h1>
     <?php if ($tagDescription): ?>
-      <p class="text-muted mb-0"><?= h($tagDescription) ?></p>
+      <p class="text-muted mb-0"><?php echo h($tagDescription); ?></p>
     <?php endif; ?>
   </header>
 
@@ -43,17 +43,17 @@ $tagDescription = $tag['description'] ?? "الأخبار المرتبطة بهذ
           $imgUrl  = $img ? $baseUrl . '/img.php?src=' . rawurlencode($img) . '&w=400' : '';
         ?>
         <div class="col-12 col-md-6 col-lg-4">
-          <a class="card h-100 text-decoration-none" href="<?= h($newsUrl) ?>">
+          <a class="card h-100 text-decoration-none" href="<?php echo h($newsUrl); ?>">
             <?php if ($imgUrl): ?>
               <img class="card-img-top"
-                   src="<?= h($imgUrl) ?>"
-                   alt="<?= h($title) ?>">
+                   src="<?php echo h($imgUrl); ?>"
+                   alt="<?php echo h($title); ?>">
             <?php endif; ?>
             <div class="card-body">
-              <h3 class="h6 mb-1"><?= h($title) ?></h3>
+              <h3 class="h6 mb-1"><?php echo h($title); ?></h3>
               <?php if ($excerpt): ?>
                 <p class="text-muted small mb-0">
-                  <?= h(mb_substr($excerpt, 0, 160, 'UTF-8')) ?><?= (mb_strlen($excerpt, 'UTF-8') > 160 ? '…' : '') ?>
+                  <?php echo h(mb_substr($excerpt, 0, 160, 'UTF-8')); ?><?php echo (mb_strlen($excerpt, 'UTF-8') > 160 ? '…' : ''); ?>
                 </p>
               <?php endif; ?>
             </div>
@@ -69,8 +69,8 @@ $tagDescription = $tag['description'] ?? "الأخبار المرتبطة بهذ
             <?php
               $pageUrl = $baseUrl . '/tag/' . rawurlencode($tag['slug'] ?? '') . '?page=' . $p;
             ?>
-            <li class="page-item <?= $p == $page ? 'active' : ''; ?>">
-              <a class="page-link" href="<?= h($pageUrl) ?>"><?= $p ?></a>
+            <li class="page-item <?php echo $p == $page ? 'active' : '';; ?>">
+              <a class="page-link" href="<?php echo h($pageUrl); ?>"><?php echo $p; ?></a>
             </li>
           <?php endfor; ?>
         </ul>

@@ -73,7 +73,7 @@ require_once __DIR__ . '/../views/partials/header.php';
             <div class="section-title">الأخبار الأكثر تداولاً</div>
             <div class="section-sub">أكثر الأخبار مشاهدة وقراءة من قبل الزوار</div>
         </div>
-        <a href="<?= h($baseUrl) ?>" class="section-sub">
+        <a href="<?php echo h($baseUrl); ?>" class="section-sub">
             العودة للرئيسية
         </a>
     </div>
@@ -83,12 +83,12 @@ require_once __DIR__ . '/../views/partials/header.php';
             <?php foreach ($trendingNews as $row): ?>
                 <article class="news-card fade-in">
                     <?php if (empty($row['featured_image']) === false): ?>
-                        <a href="<?= h($newsUrl($row)) ?>" class="news-thumb">
-                            <img src="<?= h($row['featured_image']) ?>" alt="<?= h($row['title']) ?>">
+                        <a href="<?php echo h($newsUrl($row)); ?>" class="news-thumb">
+                            <img src="<?php echo h($row['featured_image']); ?>" alt="<?php echo h($row['title']); ?>">
                         </a>
                     <?php endif; ?>
                     <div class="news-body">
-                        <a href="<?= h($newsUrl($row)) ?>">
+                        <a href="<?php echo h($newsUrl($row)); ?>">
                             <h2 class="news-title">
                                 <?php
                                     $t = (string)$row['title'];
@@ -109,11 +109,11 @@ require_once __DIR__ . '/../views/partials/header.php';
                         <div class="news-meta">
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= (empty($row['published_at']) === false) ? h(date('Y-m-d', strtotime($row['published_at']))) : '' ?>
+                                <?php echo (empty($row['published_at']) === false) ? h(date('Y-m-d', strtotime($row['published_at']))) : ''; ?>
                             </span>
                             <span>
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= (int)($row['views'] ?? 0) ?> مشاهدة
+                                <?php echo (int)($row['views'] ?? 0); ?> مشاهدة
                             </span>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ require_once __DIR__ . '/../views/partials/header.php';
             <p style="color: var(--text-muted); margin-top: 10px;">
                 سيتم عرض الأخبار الأكثر مشاهدة هنا تلقائياً بعد وجود زيارات كافية.
             </p>
-            <a href="<?= h($baseUrl) ?>" class="btn-primary" style="margin-top: 15px;">
+            <a href="<?php echo h($baseUrl); ?>" class="btn-primary" style="margin-top: 15px;">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 <span>العودة للرئيسية</span>
             </a>

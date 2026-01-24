@@ -192,20 +192,20 @@ $csrf = function_exists('csrf_token') ? (string)csrf_token() : '';
         <div class="msg err">
           <ul style="margin:0;padding-inline-start:1.2rem;">
             <?php foreach ($errors as $e): ?>
-              <li><?= h($e) ?></li>
+              <li><?php echo h($e); ?></li>
             <?php endforeach; ?>
           </ul>
         </div>
       <?php endif; ?>
 
       <form method="post" action="">
-        <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
 
         <label>البريد الإلكتروني</label>
-        <input type="email" name="email" value="<?= h($_POST['email'] ?? '') ?>" required>
+        <input type="email" name="email" value="<?php echo h($_POST['email'] ?? ''); ?>" required>
 
         <label>اسم المستخدم</label>
-        <input type="text" name="username" value="<?= h($_POST['username'] ?? '') ?>" required>
+        <input type="text" name="username" value="<?php echo h($_POST['username'] ?? ''); ?>" required>
 
         <label>كلمة المرور</label>
         <input type="password" name="password" required>

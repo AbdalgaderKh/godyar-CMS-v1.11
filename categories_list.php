@@ -113,20 +113,20 @@ require __DIR__ . '/frontend/views/partials/header.php';
 ?>
 <main class="container" style="padding:16px 0;">
   <div class="page-head" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-    <h1 style="margin:0; font-size: clamp(20px, 4vw, 28px);"><?= h(__('categories')) ?></h1>
-    <a class="btn btn-outline" href="<?= h($navBaseUrl) ?>" style="border-radius: 14px; padding: 10px 14px; text-decoration:none;">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?= h(__('home')) ?>
+    <h1 style="margin:0; font-size: clamp(20px, 4vw, 28px);"><?php echo h(__('categories')); ?></h1>
+    <a class="btn btn-outline" href="<?php echo h($navBaseUrl); ?>" style="border-radius: 14px; padding: 10px 14px; text-decoration:none;">
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?php echo h(__('home')); ?>
     </a>
   </div>
 
   <div style="margin-top:14px;">
-    <input id="gdyCatsFilter" type="search" placeholder="<?= h(__('search_placeholder')) ?>" style="width:100%;padding:12px 14px;border:1px solid rgba(0,0,0,.12);border-radius:14px;">
+    <input id="gdyCatsFilter" type="search" placeholder="<?php echo h(__('search_placeholder')); ?>" style="width:100%;padding:12px 14px;border:1px solid rgba(0,0,0,.12);border-radius:14px;">
   </div>
 
   <div id="gdyCatsGrid" style="margin-top:16px; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
     <?php if (empty($tree)): ?>
       <div class="alert alert-warning" style="border-radius: 14px; padding: 12px;">
-        <?= h(__('لا توجد فئات حالياً.')) ?>
+        <?php echo h(__('لا توجد فئات حالياً.')); ?>
       </div>
     <?php else: ?>
       <?php foreach ($tree as $cat): ?>
@@ -134,9 +134,9 @@ require __DIR__ . '/frontend/views/partials/header.php';
           $slug = $cat['slug'] ?: (string)$cat['id'];
           $url = rtrim($navBaseUrl, '/') . '/category/' . rawurlencode($slug);
         ?>
-        <section class="gdy-catcard" data-name="<?= h(mb_strtolower($cat['name'])) ?>" style="border:1px solid rgba(0,0,0,.10); border-radius: 18px; padding: 14px; background: rgba(255,255,255,.9);">
-          <a href="<?= h($url) ?>" style="text-decoration:none;color:inherit;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <strong style="font-size: 16px;"><?= h($cat['name']) ?></strong>
+        <section class="gdy-catcard" data-name="<?php echo h(mb_strtolower($cat['name'])); ?>" style="border:1px solid rgba(0,0,0,.10); border-radius: 18px; padding: 14px; background: rgba(255,255,255,.9);">
+          <a href="<?php echo h($url); ?>" style="text-decoration:none;color:inherit;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <strong style="font-size: 16px;"><?php echo h($cat['name']); ?></strong>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </a>
 
@@ -147,8 +147,8 @@ require __DIR__ . '/frontend/views/partials/header.php';
                   $chSlug = $ch['slug'] ?: (string)$ch['id'];
                   $chUrl = rtrim($navBaseUrl, '/') . '/category/' . rawurlencode($chSlug);
                 ?>
-                <a href="<?= h($chUrl) ?>" class="badge" style="text-decoration:none; padding: 8px 10px; border-radius: 999px; background: rgba(0,0,0,.06);">
-                  <?= h($ch['name']) ?>
+                <a href="<?php echo h($chUrl); ?>" class="badge" style="text-decoration:none; padding: 8px 10px; border-radius: 999px; background: rgba(0,0,0,.06);">
+                  <?php echo h($ch['name']); ?>
                 </a>
               <?php endforeach; ?>
             </div>

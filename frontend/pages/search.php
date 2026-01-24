@@ -111,7 +111,7 @@ $currentCount = is_array($results) ? count($results) : 0;
   
     <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
 <meta charset="utf-8">
-  <title>بحث الصفحات<?= $q ? ' - ' . h($q) : '' ?></title>
+  <title>بحث الصفحات<?php echo $q ? ' - ' . h($q) : ''; ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css">
   <style>
@@ -311,12 +311,12 @@ $currentCount = is_array($results) ? count($results) : 0;
       <div class="container">
         <h1>بحث الصفحات الثابتة</h1>
         <p>
-          <?= $q ? 'نتائج البحث عن: <strong>' . h($q) . '</strong>' : 'ابحث في الصفحات الثابتة مثل من نحن، اتصل بنا، السياسات وغيرها.' ?>
+          <?php echo $q ? 'نتائج البحث عن: <strong>' . h($q) . '</strong>' : 'ابحث في الصفحات الثابتة مثل من نحن، اتصل بنا، السياسات وغيرها.'; ?>
         </p>
 
         <!-- نموذج البحث + اختيار محرك البحث -->
         <form class="search-form-compact" method="get" action="" id="pagesSearchForm">
-          <input type="text" name="q" value="<?= h($q) ?>" placeholder="اكتب كلمة البحث داخل الصفحات">
+          <input type="text" name="q" value="<?php echo h($q); ?>" placeholder="اكتب كلمة البحث داخل الصفحات">
           <button type="submit">
             <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> بحث
           </button>
@@ -325,12 +325,12 @@ $currentCount = is_array($results) ? count($results) : 0;
             <span class="d-block mb-1">محرك البحث:</span>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="engine" id="engineLocal" value="local"
-                     <?= $engine === 'google' ? '' : 'checked' ?>>
+                     <?php echo $engine === 'google' ? '' : 'checked'; ?>>
               <label class="form-check-label" for="engineLocal">بحث داخل الموقع</label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="engine" id="engineGoogle" value="google"
-                     <?= $engine === 'google' ? 'checked' : '' ?>>
+                     <?php echo $engine === 'google' ? 'checked' : ''; ?>>
               <label class="form-check-label" for="engineGoogle">بحث عبر قوقل</label>
             </div>
           </div>
@@ -339,10 +339,10 @@ $currentCount = is_array($results) ? count($results) : 0;
           <div class="search-filters w-100 mt-2">
             <span>تصفية حسب التاريخ:</span>
             <select name="date">
-              <option value="any" <?= $dateFilter==='any'?'selected':'' ?>>أي وقت</option>
-              <option value="1d"  <?= $dateFilter==='1d'?'selected':''  ?>>آخر 24 ساعة</option>
-              <option value="7d"  <?= $dateFilter==='7d'?'selected':''  ?>>آخر 7 أيام</option>
-              <option value="30d" <?= $dateFilter==='30d'?'selected':'' ?>>آخر 30 يومًا</option>
+              <option value="any" <?php echo $dateFilter==='any'?'selected':''; ?>>أي وقت</option>
+              <option value="1d"  <?php echo $dateFilter==='1d'?'selected':''; ?>>آخر 24 ساعة</option>
+              <option value="7d"  <?php echo $dateFilter==='7d'?'selected':''; ?>>آخر 7 أيام</option>
+              <option value="30d" <?php echo $dateFilter==='30d'?'selected':''; ?>>آخر 30 يومًا</option>
             </select>
           </div>
         </form>
@@ -353,14 +353,14 @@ $currentCount = is_array($results) ? count($results) : 0;
       <div class="search-results-header">
         <div>
           <?php if ($q): ?>
-            تم العثور على <strong><?= (int)$currentCount ?></strong> نتيجة في هذه الصفحة من أصل <?= (int)$total ?>.
+            تم العثور على <strong><?php echo (int)$currentCount; ?></strong> نتيجة في هذه الصفحة من أصل <?php echo (int)$total; ?>.
           <?php else: ?>
             اكتب كلمة البحث في الأعلى لعرض نتائج الصفحات.
           <?php endif; ?>
         </div>
         <?php if ($q): ?>
           <div class="text-muted">
-            يمكنك اختيار "بحث عبر قوقل" لعرض نتائج <code>site:<?= h($_SERVER['HTTP_HOST'] ?? 'example.com') ?></code>.
+            يمكنك اختيار "بحث عبر قوقل" لعرض نتائج <code>site:<?php echo h($_SERVER['HTTP_HOST'] ?? 'example.com'); ?></code>.
           </div>
         <?php endif; ?>
       </div>
@@ -371,7 +371,7 @@ $currentCount = is_array($results) ? count($results) : 0;
         </div>
       <?php elseif (empty($results)): ?>
         <div class="search-empty">
-          لا توجد صفحات مطابقة لكلمة البحث "<strong><?= h($q) ?></strong>".
+          لا توجد صفحات مطابقة لكلمة البحث "<strong><?php echo h($q); ?></strong>".
         </div>
       <?php else: ?>
         <div class="page-card-list">
@@ -400,27 +400,27 @@ $currentCount = is_array($results) ? count($results) : 0;
             $statusClass = $status === 'published' ? 'page-status-published' : 'page-status-draft';
             $statusText  = $status === 'published' ? 'منشورة' : 'مسودة';
           ?>
-          <a href="<?= h($url) ?>" class="page-card">
+          <a href="<?php echo h($url); ?>" class="page-card">
             <div class="page-card-meta">
               <span>
                 <?php if ($updated): ?>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  آخر تحديث: <?= h(date('Y-m-d', strtotime($updated))) ?>
+                  آخر تحديث: <?php echo h(date('Y-m-d', strtotime($updated))); ?>
                 <?php elseif ($created): ?>
                   <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <?= h(date('Y-m-d', strtotime($created))) ?>
+                  <?php echo h(date('Y-m-d', strtotime($created))); ?>
                 <?php endif; ?>
               </span>
-              <span class="page-card-status <?= h($statusClass) ?>">
-                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($statusText) ?>
+              <span class="page-card-status <?php echo h($statusClass); ?>">
+                <svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($statusText); ?>
               </span>
             </div>
             <h2 class="page-card-title">
-              <?= highlight_term($title, $q) ?>
+              <?php echo highlight_term($title, $q); ?>
             </h2>
             <?php if ($excerpt !== ''): ?>
               <p class="page-card-excerpt">
-                <?= highlight_term($excerpt, $q) ?>
+                <?php echo highlight_term($excerpt, $q); ?>
               </p>
             <?php endif; ?>
           </a>
@@ -430,9 +430,9 @@ $currentCount = is_array($results) ? count($results) : 0;
         <?php if ($pages > 1): ?>
           <div class="search-pagination">
             <?php for($i=1;$i<=$pages;$i++): ?>
-              <a href="?q=<?= urlencode($q) ?>&page=<?= $i ?>&date=<?= urlencode($dateFilter) ?>&engine=<?= urlencode($engine) ?>"
-                 class="<?= $i === $page ? 'is-active' : '' ?>">
-                <?= $i ?>
+              <a href="?q=<?php echo urlencode($q); ?>&page=<?php echo $i; ?>&date=<?php echo urlencode($dateFilter); ?>&engine=<?php echo urlencode($engine); ?>"
+                 class="<?php echo $i === $page ? 'is-active' : ''; ?>">
+                <?php echo $i; ?>
               </a>
             <?php endfor; ?>
           </div>

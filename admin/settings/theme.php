@@ -185,173 +185,173 @@ foreach ($presetGuess as $k => $v) {
     <div class="col-md-9">
       <div class="card p-4">
 <?php if ($notice): ?>
-          <div class="alert alert-success"><?= h($notice) ?></div>
+          <div class="alert alert-success"><?php echo h($notice); ?></div>
         <?php endif; ?>
         <?php if ($error): ?>
-          <div class="alert alert-danger"><?= h($error) ?></div>
+          <div class="alert alert-danger"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post" enctype="multipart/form-data">
           <?php if (function_exists('csrf_token')): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
 
-          <h6 class="mb-2"><?= h(__('t_admin_theme_title', 'مظهر لوحة التحكم')) ?></h6>
+          <h6 class="mb-2"><?php echo h(__('t_admin_theme_title', 'مظهر لوحة التحكم')); ?></h6>
           <div class="alert alert-info py-2" style="font-size:.92rem;">
             <ul class="mb-0" style="padding-inline-start:1.1rem;">
-              <li><?= h(__('t_admin_theme_tip1', 'الاعتدال في استخدام الألوان: تجنب الفوضى البصرية.')) ?></li>
-              <li><?= h(__('t_admin_theme_tip2', 'ألوان متناسقة: استخدم ألوانًا متجانسة على مستوى اللوحة.')) ?></li>
-              <li><?= h(__('t_admin_theme_tip3', 'سهولة القراءة: تأكد أن النص واضح على الخلفيات الملونة.')) ?></li>
-              <li><?= h(__('t_admin_theme_tip4', 'تجربة المستخدم: اجعل اللون يخدم المحتوى ولا يشتّت الانتباه.')) ?></li>
+              <li><?php echo h(__('t_admin_theme_tip1', 'الاعتدال في استخدام الألوان: تجنب الفوضى البصرية.')); ?></li>
+              <li><?php echo h(__('t_admin_theme_tip2', 'ألوان متناسقة: استخدم ألوانًا متجانسة على مستوى اللوحة.')); ?></li>
+              <li><?php echo h(__('t_admin_theme_tip3', 'سهولة القراءة: تأكد أن النص واضح على الخلفيات الملونة.')); ?></li>
+              <li><?php echo h(__('t_admin_theme_tip4', 'تجربة المستخدم: اجعل اللون يخدم المحتوى ولا يشتّت الانتباه.')); ?></li>
             </ul>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_admin_theme_label', 'ستايل لوحة التحكم')) ?></label>
+              <label class="form-label"><?php echo h(__('t_admin_theme_label', 'ستايل لوحة التحكم')); ?></label>
               <select class="form-select" name="admin_theme" id="admin_theme">
-                <option value="blue"  <?= $admin_theme === 'blue'  ? 'selected' : '' ?>><?= h(__('t_admin_theme_blue', 'أزرق - Blue')) ?></option>
-                <option value="red"   <?= $admin_theme === 'red'   ? 'selected' : '' ?>><?= h(__('t_admin_theme_red', 'أحمر - Red')) ?></option>
-                <option value="green" <?= $admin_theme === 'green' ? 'selected' : '' ?>><?= h(__('t_admin_theme_green', 'أخضر - Green')) ?></option>
-                <option value="brown" <?= $admin_theme === 'brown' ? 'selected' : '' ?>><?= h(__('t_admin_theme_brown', 'بني - Brown')) ?></option>
+                <option value="blue"  <?php echo $admin_theme === 'blue'  ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_blue', 'أزرق - Blue')); ?></option>
+                <option value="red"   <?php echo $admin_theme === 'red'   ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_red', 'أحمر - Red')); ?></option>
+                <option value="green" <?php echo $admin_theme === 'green' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_green', 'أخضر - Green')); ?></option>
+                <option value="brown" <?php echo $admin_theme === 'brown' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_brown', 'بني - Brown')); ?></option>
               </select>
-              <div class="form-text"><?= h(__('t_admin_theme_note', 'يؤثر على لون الهيدر وأزرار (Primary) داخل لوحة التحكم فقط.')) ?></div>
+              <div class="form-text"><?php echo h(__('t_admin_theme_note', 'يؤثر على لون الهيدر وأزرار (Primary) داخل لوحة التحكم فقط.')); ?></div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_admin_theme_preview', 'معاينة')) ?></label>
+              <label class="form-label"><?php echo h(__('t_admin_theme_preview', 'معاينة')); ?></label>
               <div class="d-flex gap-2 flex-wrap align-items-center">
                 <span class="badge bg-primary" style="border-radius:999px;">Primary</span>
                 <span class="badge" style="background:var(--gdy-accent);color:var(--gdy-accent-on);border-radius:999px;">Accent</span>
                 <span class="badge" style="background:var(--gdy-accent-2);color:var(--gdy-accent-on);border-radius:999px;">Accent 2</span>
               </div>
-              <div class="form-text" id="admin_theme_preview_note"><?= h(__('t_admin_theme_preview_note', 'المعاينة فورية في هذه الصفحة. بعد الحفظ سيتم تطبيقها على جميع صفحات لوحة التحكم.')) ?></div>
+              <div class="form-text" id="admin_theme_preview_note"><?php echo h(__('t_admin_theme_preview_note', 'المعاينة فورية في هذه الصفحة. بعد الحفظ سيتم تطبيقها على جميع صفحات لوحة التحكم.')); ?></div>
             </div>
           </div>
 
           <hr>
 
-          <h6 class="mb-2"><?= h(__('t_front_theme_title', 'مظهر الواجهة')) ?></h6>
+          <h6 class="mb-2"><?php echo h(__('t_front_theme_title', 'مظهر الواجهة')); ?></h6>
           <div class="alert alert-info py-2" style="font-size:.92rem;">
-            <?= h(__('t_front_theme_note', 'هذه الإعدادات تؤثر على قالب الواجهة (الموقع) وليس لوحة التحكم.')) ?>
+            <?php echo h(__('t_front_theme_note', 'هذه الإعدادات تؤثر على قالب الواجهة (الموقع) وليس لوحة التحكم.')); ?>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_front_theme_layout', 'ستايل الواجهة')) ?></label>
+              <label class="form-label"><?php echo h(__('t_front_theme_layout', 'ستايل الواجهة')); ?></label>
               <select class="form-select" name="front_theme" id="front_theme">
-                <option value="default" <?= $front_theme === 'default' ? 'selected' : '' ?>>Default</option>
-                <option value="light" <?= $front_theme === 'light' ? 'selected' : '' ?>>light</option>
-                <option value="beige" <?= $front_theme === 'beige' ? 'selected' : '' ?>>beige</option>
-                <option value="red" <?= $front_theme === 'red' ? 'selected' : '' ?>><?= h(__('t_admin_theme_red', 'أحمر - Red')) ?></option>
-                <option value="blue" <?= $front_theme === 'blue' ? 'selected' : '' ?>><?= h(__('t_admin_theme_blue', 'أزرق - Blue')) ?></option>
-                <option value="green" <?= $front_theme === 'green' ? 'selected' : '' ?>><?= h(__('t_admin_theme_green', 'أخضر - Green')) ?></option>
-                <option value="brown" <?= $front_theme === 'brown' ? 'selected' : '' ?>><?= h(__('t_admin_theme_brown', 'بني - Brown')) ?></option>
+                <option value="default" <?php echo $front_theme === 'default' ? 'selected' : ''; ?>>Default</option>
+                <option value="light" <?php echo $front_theme === 'light' ? 'selected' : ''; ?>>light</option>
+                <option value="beige" <?php echo $front_theme === 'beige' ? 'selected' : ''; ?>>beige</option>
+                <option value="red" <?php echo $front_theme === 'red' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_red', 'أحمر - Red')); ?></option>
+                <option value="blue" <?php echo $front_theme === 'blue' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_blue', 'أزرق - Blue')); ?></option>
+                <option value="green" <?php echo $front_theme === 'green' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_green', 'أخضر - Green')); ?></option>
+                <option value="brown" <?php echo $front_theme === 'brown' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_brown', 'بني - Brown')); ?></option>
               </select>
-              <div class="form-text"><?= h(__('t_front_theme_files', 'يتم تحميل ملف CSS من: /assets/css/themes/theme-{name}.css (مثل: theme-red.css / theme-blue.css ...).')) ?></div>
+              <div class="form-text"><?php echo h(__('t_front_theme_files', 'يتم تحميل ملف CSS من: /assets/css/themes/theme-{name}.css (مثل: theme-red.css / theme-blue.css ...).')); ?></div>
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_bc7df01a60', 'عرض المحتوى')) ?></label>
+              <label class="form-label"><?php echo h(__('t_bc7df01a60', 'عرض المحتوى')); ?></label>
               <select class="form-select" name="container_width">
-                <option value="boxed" <?= $container_width === 'boxed' ? 'selected' : '' ?>><?= h(__('t_1018afa3c4', 'مربع (Boxed)')) ?></option>
-                <option value="full" <?= $container_width === 'full' ? 'selected' : '' ?>><?= h(__('t_acc87fcc65', 'كامل العرض')) ?></option>
+                <option value="boxed" <?php echo $container_width === 'boxed' ? 'selected' : ''; ?>><?php echo h(__('t_1018afa3c4', 'مربع (Boxed)')); ?></option>
+                <option value="full" <?php echo $container_width === 'full' ? 'selected' : ''; ?>><?php echo h(__('t_acc87fcc65', 'كامل العرض')); ?></option>
               </select>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_front_color_preset', 'لون الهوية (Preset)')) ?></label>
+              <label class="form-label"><?php echo h(__('t_front_color_preset', 'لون الهوية (Preset)')); ?></label>
               <select class="form-select" name="front_preset" id="front_preset">
-                <option value="custom" <?= $front_preset === 'custom' ? 'selected' : '' ?>><?= h(__('t_preset_custom', 'مخصص (Custom)')) ?></option>
-                <option value="default" <?= $front_preset === 'default' ? 'selected' : '' ?>>Default</option>
-                <option value="blue"  <?= $front_preset === 'blue' ? 'selected' : '' ?>><?= h(__('t_admin_theme_blue', 'أزرق - Blue')) ?></option>
-                <option value="red"   <?= $front_preset === 'red' ? 'selected' : '' ?>><?= h(__('t_admin_theme_red', 'أحمر - Red')) ?></option>
-                <option value="green" <?= $front_preset === 'green' ? 'selected' : '' ?>><?= h(__('t_admin_theme_green', 'أخضر - Green')) ?></option>
-                <option value="brown" <?= $front_preset === 'brown' ? 'selected' : '' ?>><?= h(__('t_admin_theme_brown', 'بني - Brown')) ?></option>
+                <option value="custom" <?php echo $front_preset === 'custom' ? 'selected' : ''; ?>><?php echo h(__('t_preset_custom', 'مخصص (Custom)')); ?></option>
+                <option value="default" <?php echo $front_preset === 'default' ? 'selected' : ''; ?>>Default</option>
+                <option value="blue"  <?php echo $front_preset === 'blue' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_blue', 'أزرق - Blue')); ?></option>
+                <option value="red"   <?php echo $front_preset === 'red' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_red', 'أحمر - Red')); ?></option>
+                <option value="green" <?php echo $front_preset === 'green' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_green', 'أخضر - Green')); ?></option>
+                <option value="brown" <?php echo $front_preset === 'brown' ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_brown', 'بني - Brown')); ?></option>
               </select>
-              <div class="form-text"><?= h(__('t_front_color_preset_note', 'اختر Preset لتطبيق ألوان متناسقة فوراً، أو اختر Custom لاستخدام منتقي الألوان بالأسفل.')) ?></div>
+              <div class="form-text"><?php echo h(__('t_front_color_preset_note', 'اختر Preset لتطبيق ألوان متناسقة فوراً، أو اختر Custom لاستخدام منتقي الألوان بالأسفل.')); ?></div>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_0d4de28c50', 'معاينة')) ?></label>
+              <label class="form-label"><?php echo h(__('t_0d4de28c50', 'معاينة')); ?></label>
               <div class="d-flex gap-2 flex-wrap align-items-center">
-                <span class="badge" id="front_preview_primary" style="background:<?= h($primary_color) ?>;border-radius:999px;">Primary</span>
-                <span class="badge" id="front_preview_accent" style="background:<?= h($accent_color) ?>;border-radius:999px;">Accent</span>
+                <span class="badge" id="front_preview_primary" style="background:<?php echo h($primary_color); ?>;border-radius:999px;">Primary</span>
+                <span class="badge" id="front_preview_accent" style="background:<?php echo h($accent_color); ?>;border-radius:999px;">Accent</span>
               </div>
-              <div class="form-text"><?= h(__('t_front_preview_note', 'بعد الحفظ افتح الموقع أو حدّث الصفحة (Ctrl+F5) لرؤية التغيير.')) ?></div>
+              <div class="form-text"><?php echo h(__('t_front_preview_note', 'بعد الحفظ افتح الموقع أو حدّث الصفحة (Ctrl+F5) لرؤية التغيير.')); ?></div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?= h(__('t_a71da15dca', 'اللون الأساسي')) ?></label>
-              <input type="color" class="form-control form-control-color" name="primary_color" id="primary_color" value="<?= h($primary_color) ?>">
+              <label class="form-label"><?php echo h(__('t_a71da15dca', 'اللون الأساسي')); ?></label>
+              <input type="color" class="form-control form-control-color" name="primary_color" id="primary_color" value="<?php echo h($primary_color); ?>">
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?= h(__('t_dac6ead9fa', 'لون التمييز')) ?></label>
-              <input type="color" class="form-control form-control-color" name="accent_color" id="accent_color" value="<?= h($accent_color) ?>">
+              <label class="form-label"><?php echo h(__('t_dac6ead9fa', 'لون التمييز')); ?></label>
+              <input type="color" class="form-control form-control-color" name="accent_color" id="accent_color" value="<?php echo h($accent_color); ?>">
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?= h(__('t_primary_dark', 'اللون الداكن (اختياري)')) ?></label>
-              <input type="color" class="form-control form-control-color" name="primary_dark" id="primary_dark" value="<?= h($primary_dark ?: $primary_color) ?>">
-              <div class="form-text"><?= h(__('t_primary_dark_note', 'إن تركته مناسباً سيُحسب تلقائياً.')) ?></div>
+              <label class="form-label"><?php echo h(__('t_primary_dark', 'اللون الداكن (اختياري)')); ?></label>
+              <input type="color" class="form-control form-control-color" name="primary_dark" id="primary_dark" value="<?php echo h($primary_dark ?: $primary_color); ?>">
+              <div class="form-text"><?php echo h(__('t_primary_dark_note', 'إن تركته مناسباً سيُحسب تلقائياً.')); ?></div>
             </div>
           </div>
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_8851fd9015', 'ستايل الهيدر')) ?></label>
+              <label class="form-label"><?php echo h(__('t_8851fd9015', 'ستايل الهيدر')); ?></label>
               <select class="form-select" name="header_style">
-                <option value="dark" <?= $header_style === 'dark' ? 'selected' : '' ?>><?= h(__('t_31546428bd', 'داكن')) ?></option>
-                <option value="light" <?= $header_style === 'light' ? 'selected' : '' ?>><?= h(__('t_f9d987e7c7', 'فاتح')) ?></option>
+                <option value="dark" <?php echo $header_style === 'dark' ? 'selected' : ''; ?>><?php echo h(__('t_31546428bd', 'داكن')); ?></option>
+                <option value="light" <?php echo $header_style === 'light' ? 'selected' : ''; ?>><?php echo h(__('t_f9d987e7c7', 'فاتح')); ?></option>
               </select>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_018b082610', 'ستايل الفوتر')) ?></label>
+              <label class="form-label"><?php echo h(__('t_018b082610', 'ستايل الفوتر')); ?></label>
               <select class="form-select" name="footer_style">
-                <option value="dark" <?= $footer_style === 'dark' ? 'selected' : '' ?>><?= h(__('t_31546428bd', 'داكن')) ?></option>
-                <option value="light" <?= $footer_style === 'light' ? 'selected' : '' ?>><?= h(__('t_f9d987e7c7', 'فاتح')) ?></option>
+                <option value="dark" <?php echo $footer_style === 'dark' ? 'selected' : ''; ?>><?php echo h(__('t_31546428bd', 'داكن')); ?></option>
+                <option value="light" <?php echo $footer_style === 'light' ? 'selected' : ''; ?>><?php echo h(__('t_f9d987e7c7', 'فاتح')); ?></option>
               </select>
             </div>
           </div>
 
           <div class="row">
             <div class="col-12">
-              <h6 class="mb-2"><?= h(__('t_hdrbg_title', 'خلفية الهيدر')) ?></h6>
+              <h6 class="mb-2"><?php echo h(__('t_hdrbg_title', 'خلفية الهيدر')); ?></h6>
               <div class="alert alert-info py-2" style="font-size:.92rem;">
-                <?= h(__('t_hdrbg_help', 'يمكنك اختيار صورة لخلفية الهيدر (رفع من الكمبيوتر أو رابط مباشر).')) ?>
+                <?php echo h(__('t_hdrbg_help', 'يمكنك اختيار صورة لخلفية الهيدر (رفع من الكمبيوتر أو رابط مباشر).')); ?>
               </div>
             </div>
 
             <div class="col-md-4 mb-3">
               <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" name="header_bg_enabled" id="header_bg_enabled" <?= $header_bg_enabled ? 'checked' : '' ?>>
-                <label class="form-check-label" for="header_bg_enabled"><?= h(__('t_hdrbg_enable', 'تفعيل')) ?></label>
+                <input class="form-check-input" type="checkbox" name="header_bg_enabled" id="header_bg_enabled" <?php echo $header_bg_enabled ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="header_bg_enabled"><?php echo h(__('t_hdrbg_enable', 'تفعيل')); ?></label>
               </div>
             </div>
 
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?= h(__('t_hdrbg_source', 'المصدر')) ?></label>
+              <label class="form-label"><?php echo h(__('t_hdrbg_source', 'المصدر')); ?></label>
               <select class="form-select" name="header_bg_source">
-                <option value="upload" <?= $header_bg_source === 'upload' ? 'selected' : '' ?>><?= h(__('t_hdrbg_upload', 'رفع من الكمبيوتر')) ?></option>
-                <option value="url" <?= $header_bg_source === 'url' ? 'selected' : '' ?>><?= h(__('t_hdrbg_url', 'رابط مباشر')) ?></option>
+                <option value="upload" <?php echo $header_bg_source === 'upload' ? 'selected' : ''; ?>><?php echo h(__('t_hdrbg_upload', 'رفع من الكمبيوتر')); ?></option>
+                <option value="url" <?php echo $header_bg_source === 'url' ? 'selected' : ''; ?>><?php echo h(__('t_hdrbg_url', 'رابط مباشر')); ?></option>
               </select>
             </div>
 
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?= h(__('t_hdrbg_url_label', 'رابط الصورة')) ?></label>
-              <input class="form-control" name="header_bg_url" value="<?= h($header_bg_url) ?>" placeholder="https://...">
-              <div class="form-text"><?= h(__('t_hdrbg_url_note', 'يُستخدم عند اختيار (رابط مباشر).')) ?></div>
+              <label class="form-label"><?php echo h(__('t_hdrbg_url_label', 'رابط الصورة')); ?></label>
+              <input class="form-control" name="header_bg_url" value="<?php echo h($header_bg_url); ?>" placeholder="https://...">
+              <div class="form-text"><?php echo h(__('t_hdrbg_url_note', 'يُستخدم عند اختيار (رابط مباشر).')); ?></div>
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_hdrbg_upload_label', 'رفع صورة')) ?></label>
+              <label class="form-label"><?php echo h(__('t_hdrbg_upload_label', 'رفع صورة')); ?></label>
               <input class="form-control" type="file" name="header_bg_file" accept="image/*">
-              <div class="form-text"><?= h(__('t_hdrbg_upload_note', 'PNG/JPG/WebP — يُفضّل أبعاد كبيرة لتظهر بجودة.')) ?></div>
+              <div class="form-text"><?php echo h(__('t_hdrbg_upload_note', 'PNG/JPG/WebP — يُفضّل أبعاد كبيرة لتظهر بجودة.')); ?></div>
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?= h(__('t_hdrbg_current', 'الصورة الحالية')) ?></label>
+              <label class="form-label"><?php echo h(__('t_hdrbg_current', 'الصورة الحالية')); ?></label>
               <?php
                 $base = '';
                 if (function_exists('base_url')) { $base = rtrim((string)base_url(), '/'); }
@@ -367,45 +367,45 @@ foreach ($presetGuess as $k => $v) {
               ?>
               <?php if ($preview): ?>
                 <div class="d-flex gap-3 align-items-center flex-wrap">
-                  <img src="<?= h($preview) ?>" alt="header-bg" style="width:160px;height:64px;object-fit:cover;border-radius:10px;border:1px solid rgba(0,0,0,.1);">
+                  <img src="<?php echo h($preview); ?>" alt="header-bg" style="width:160px;height:64px;object-fit:cover;border-radius:10px;border:1px solid rgba(0,0,0,.1);">
                   <div>
                     <div class="form-check mb-2">
                       <input class="form-check-input" type="checkbox" name="header_bg_remove" id="header_bg_remove">
-                      <label class="form-check-label" for="header_bg_remove"><?= h(__('t_hdrbg_remove', 'إزالة الصورة المحفوظة')) ?></label>
+                      <label class="form-check-label" for="header_bg_remove"><?php echo h(__('t_hdrbg_remove', 'إزالة الصورة المحفوظة')); ?></label>
                     </div>
                     <div class="text-muted" style="font-size:.85rem;direction:ltr;max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-                      <?= h($preview) ?>
+                      <?php echo h($preview); ?>
                     </div>
                   </div>
                 </div>
               <?php else: ?>
-                <div class="text-muted"><?= h(__('t_hdrbg_none', 'لا توجد صورة حالياً.')) ?></div>
+                <div class="text-muted"><?php echo h(__('t_hdrbg_none', 'لا توجد صورة حالياً.')); ?></div>
               <?php endif; ?>
             </div>
           </div>
 
           <hr>
 
-          <h6 class="mb-2"><?= h(__('t_0875a474ec', 'بلوكات الواجهة')) ?></h6>
+          <h6 class="mb-2"><?php echo h(__('t_0875a474ec', 'بلوكات الواجهة')); ?></h6>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" name="block_trending" id="block_trending" <?= $block_trending ? 'checked' : '' ?>>
-            <label class="form-check-label" for="block_trending"><?= h(__('t_73730b440c', 'إظهار الأخبار المتداولة')) ?></label>
+            <input class="form-check-input" type="checkbox" name="block_trending" id="block_trending" <?php echo $block_trending ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="block_trending"><?php echo h(__('t_73730b440c', 'إظهار الأخبار المتداولة')); ?></label>
           </div>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" name="block_editors_pick" id="block_editors_pick" <?= $block_editors_pick ? 'checked' : '' ?>>
-            <label class="form-check-label" for="block_editors_pick"><?= h(__('t_d9513dffd6', 'إظهار اختيار المحرر')) ?></label>
+            <input class="form-check-input" type="checkbox" name="block_editors_pick" id="block_editors_pick" <?php echo $block_editors_pick ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="block_editors_pick"><?php echo h(__('t_d9513dffd6', 'إظهار اختيار المحرر')); ?></label>
           </div>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="checkbox" name="block_videos" id="block_videos" <?= $block_videos ? 'checked' : '' ?>>
-            <label class="form-check-label" for="block_videos"><?= h(__('t_2c1c71442e', 'إظهار بلوك الفيديوهات')) ?></label>
+            <input class="form-check-input" type="checkbox" name="block_videos" id="block_videos" <?php echo $block_videos ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="block_videos"><?php echo h(__('t_2c1c71442e', 'إظهار بلوك الفيديوهات')); ?></label>
           </div>
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" name="block_newsletter" id="block_newsletter" <?= $block_newsletter ? 'checked' : '' ?>>
-            <label class="form-check-label" for="block_newsletter"><?= h(__('t_8236301d93', 'إظهار النشرة البريدية')) ?></label>
+            <input class="form-check-input" type="checkbox" name="block_newsletter" id="block_newsletter" <?php echo $block_newsletter ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="block_newsletter"><?php echo h(__('t_8236301d93', 'إظهار النشرة البريدية')); ?></label>
           </div>
 
-          <button class="btn btn-outline-secondary me-2" name="reset_front_defaults" value="1" data-confirm='سيتم استعادة مظهر الواجهة إلى الوضع الافتراضي (الجزيرة). هل تريد المتابعة؟'><?= h(__('t_reset_front_defaults', 'استعادة الافتراضي')) ?></button>
-          <button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+          <button class="btn btn-outline-secondary me-2" name="reset_front_defaults" value="1" data-confirm='سيتم استعادة مظهر الواجهة إلى الوضع الافتراضي (الجزيرة). هل تريد المتابعة؟'><?php echo h(__('t_reset_front_defaults', 'استعادة الافتراضي')); ?></button>
+          <button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </form>
 
         <script>

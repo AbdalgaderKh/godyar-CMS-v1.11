@@ -25,11 +25,11 @@ html, body{
 </style>
 <div class="admin-content">
   <div class="gdy-page-header mb-4">
-    <h1 class="h4 mb-1"><?= h(__('t_adefc961fd', 'المعرض')) ?></h1>
-    <p class="text-muted mb-0 small"><?= h(__('t_3b25f57bf1', 'إدارة صور المعرض وعرضها بطريقة منظمة.')) ?></p>
+    <h1 class="h4 mb-1"><?php echo h(__('t_adefc961fd', 'المعرض')); ?></h1>
+    <p class="text-muted mb-0 small"><?php echo h(__('t_3b25f57bf1', 'إدارة صور المعرض وعرضها بطريقة منظمة.')); ?></p>
   </div>
   <div class="gdy-card">
-    <?= h(__('t_8f5a2d188e', 'محتوى المعرض هنا')) ?>
+    <?php echo h(__('t_8f5a2d188e', 'محتوى المعرض هنا')); ?>
   </div>
 </div>
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>

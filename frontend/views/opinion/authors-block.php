@@ -226,8 +226,8 @@ if (!function_exists('gdy_trim_text')) {
                 <div class="opinion-author">
                     <div class="opinion-author-avatar">
                         <?php if (!empty($row['author_avatar'])) { ?>
-                            <img src="<?= htmlspecialchars($row['author_avatar'], ENT_QUOTES, 'UTF-8') ?>"
-                                 alt="<?= htmlspecialchars($row['author_name'], ENT_QUOTES, 'UTF-8') ?>">
+                            <img src="<?php echo htmlspecialchars($row['author_avatar'], ENT_QUOTES, 'UTF-8'); ?>"
+                                 alt="<?php echo htmlspecialchars($row['author_name'], ENT_QUOTES, 'UTF-8'); ?>">
                         <?php } else { ?>
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                         <?php } ?>
@@ -235,30 +235,30 @@ if (!function_exists('gdy_trim_text')) {
                     <div class="opinion-author-info">
                         <?php if (!empty($row['author_page_title'])) { ?>
                             <div class="opinion-author-page">
-                                <?= htmlspecialchars($row['author_page_title'], ENT_QUOTES, 'UTF-8') ?>
+                                <?php echo htmlspecialchars($row['author_page_title'], ENT_QUOTES, 'UTF-8'); ?>
                             </div>
                         <?php } ?>
                         <div class="opinion-author-name">
-                            <?= htmlspecialchars($row['author_name'], ENT_QUOTES, 'UTF-8') ?>
+                            <?php echo htmlspecialchars($row['author_name'], ENT_QUOTES, 'UTF-8'); ?>
                         </div>
                         <div class="opinion-author-social">
                             <?php if (!empty($row['author_facebook'])) { ?>
-                                <a href="<?= htmlspecialchars($row['author_facebook'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="فيسبوك">
+                                <a href="<?php echo htmlspecialchars($row['author_facebook'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" title="فيسبوك">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#facebook"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_email'])) { ?>
-                                <a href="mailto:<?= htmlspecialchars($row['author_email'], ENT_QUOTES, 'UTF-8') ?>" title="البريد الإلكتروني">
+                                <a href="mailto:<?php echo htmlspecialchars($row['author_email'], ENT_QUOTES, 'UTF-8'); ?>" title="البريد الإلكتروني">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_website'])) { ?>
-                                <a href="<?= htmlspecialchars($row['author_website'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="الموقع الشخصي">
+                                <a href="<?php echo htmlspecialchars($row['author_website'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" title="الموقع الشخصي">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                                 </a>
                             <?php } ?>
                             <?php if (!empty($row['author_twitter'])) { ?>
-                                <a href="<?= htmlspecialchars($row['author_twitter'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" title="تويتر">
+                                <a href="<?php echo htmlspecialchars($row['author_twitter'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" title="تويتر">
                                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                 </a>
                             <?php } ?>
@@ -272,8 +272,8 @@ if (!function_exists('gdy_trim_text')) {
                     $slug = !empty($row['slug']) ? $row['slug'] : ('news-' . (int)$row['id']);
                     $url  = '/news/id/' . (int)$id;
                     ?>
-                    <a href="<?= htmlspecialchars($url, ENT_QUOTES, 'UTF-8') ?>">
-                        <?= htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') ?>
+                    <a href="<?php echo htmlspecialchars($url, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8'); ?>
                     </a>
                 </div>
 
@@ -287,7 +287,7 @@ if (!function_exists('gdy_trim_text')) {
                 <div class="opinion-article-meta">
                     <span>
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?= htmlspecialchars(date('Y-m-d', strtotime((string)$row['published_at'])), ENT_QUOTES, 'UTF-8') ?>
+                        <?php echo htmlspecialchars(date('Y-m-d', strtotime((string)$row['published_at'])), ENT_QUOTES, 'UTF-8'); ?>
                     </span>
                     <span>
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

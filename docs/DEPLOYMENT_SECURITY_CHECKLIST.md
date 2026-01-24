@@ -28,18 +28,18 @@
 - يوصى بتحديد مسار ملف .env خارج public_html عبر متغير بيئة:
 
 ```
-ENV_FILE=/home/YOUR_USERNAME/godyar_private/.env
+ENV_FILE=/home/USER/godyar_private/.env
 ```
 
 - على Apache/LiteSpeed أضف في public_html/.htaccess:
 
 ```
-SetEnv ENV_FILE /home/YOUR_USERNAME/godyar_private/.env
+SetEnv ENV_FILE /home/USER/godyar_private/.env
 ```
 
 - بديل إذا لم يعمل SetEnv: ضع في أعلى includes/bootstrap.php قبل تحميل includes/env.php:
 
 ```php
-putenv('ENV_FILE=/home/YOUR_USERNAME/godyar_private/.env');
-$_SERVER['ENV_FILE'] = '/home/YOUR_USERNAME/godyar_private/.env';
+putenv('ENV_FILE=/home/USER/godyar_private/.env');
+$_SERVER['ENV_FILE'] = '/home/USER/godyar_private/.env';
 ```

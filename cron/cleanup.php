@@ -133,8 +133,10 @@ foreach ($results as $type => $count) {
 }
 
 file_put_contents('../logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
-file_put_contents('../logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
 
-echo "تم تنظيف النظام بنجاح:\n";
-print_r($results);
-?>
+// Avoid leaking runtime info in web context. For CLI debugging only:
+$verbose = getenv('CLEANUP_VERBOSE');
+if (PHP_SAPI === 'cli' && in_array(strtolower((string)$verbose), ['1','true','yes','on'], true)) {
+    echo "تم تنظيف النظام بنجاح:\n";
+    print_r($results);
+}

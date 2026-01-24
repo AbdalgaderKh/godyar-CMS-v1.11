@@ -36,7 +36,7 @@ declare(strict_types=1);
 // =====================
 // إعدادات أمان وتشغيل
 // =====================
-const SECRET_TOKEN = 'Ghtkj4586o73S54a';
+const SECRET_TOKEN = 'REPLACE_WITH_YOUR_TOKEN';
 
 // افتراضيات مجلدات الكتابة داخل المشروع (public_html)
 const DEFAULT_WRITABLE_DIRS = ['uploads', 'cache', 'storage', 'logs', 'tmp'];
@@ -45,8 +45,8 @@ const DEFAULT_WRITABLE_DIRS = ['uploads', 'cache', 'storage', 'logs', 'tmp'];
 const DEFAULT_REQUIRED_EXTS = ['curl', 'mbstring', 'openssl', 'pdo', 'json', 'xml', 'gd', 'pdo_mysql', 'pdo_pgsql'];
 
 // إعداد افتراضي لمسار خاص (يمكن تجاوزه عبر private_root في الرابط)
-// ضع مسارك الحقيقي هنا (كما ذكرت: /home/geqzylcq/godyar_private)
-const DEFAULT_PRIVATE_ROOT = '/home/geqzylcq/godyar_private';
+// ضع مسارك الحقيقي هنا (كما ذكرت: /home/USER/godyar_private)
+const DEFAULT_PRIVATE_ROOT = '/home/USER/godyar_private';
 
 const MAX_SECURITY_FILE_SIZE = 2_000_000; // 2MB لتسريع فحص الأنماط
 const MAX_SECURITY_HITS_PER_PATTERN = 10;

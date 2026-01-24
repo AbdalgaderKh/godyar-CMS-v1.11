@@ -15,7 +15,7 @@ It is intended for clean GitHub hosting and repeatable deployments.
 Place the web root inside `public_html` (or equivalent) and keep private files outside:
 
 ```
-/home/USERNAME/
+/home/USER/
   godyar_private/
     .env
     logs/
@@ -26,7 +26,7 @@ Place the web root inside `public_html` (or equivalent) and keep private files o
 ### Private directory (`godyar_private`)
 Create a directory outside public root, e.g.:
 
-- `/home/USERNAME/godyar_private/`
+- `/home/USER/godyar_private/`
 
 Recommended permissions:
 - `godyar_private` : **700**
@@ -42,14 +42,14 @@ Recommended permissions:
 2) Edit it and set the correct absolute path:
 
 ```php
-$envFile = '/home/USERNAME/godyar_private/.env';
+$envFile = '/home/USER/godyar_private/.env';
 ```
 
 > Do **not** commit `includes/env_path.php`. It is excluded by `.gitignore`.
 
 ## Create `.env`
 
-Create `/home/USERNAME/godyar_private/.env` with at least:
+Create `/home/USER/godyar_private/.env` with at least:
 
 ```
 APP_ENV=production
@@ -142,11 +142,11 @@ git push -u origin main
 2) On the server, deploy with Git (recommended):
 
 ```bash
-cd /home/USERNAME/public_html
+cd /home/USER/public_html
 git clone <YOUR_GITHUB_REPO> .
 ```
 
-3) Create `includes/env_path.php` and `/home/USERNAME/godyar_private/.env` (as above).
+3) Create `includes/env_path.php` and `/home/USER/godyar_private/.env` (as above).
 
 ## Troubleshooting
 

@@ -11,6 +11,9 @@ if (is_file($fast)) {
 
 header('Content-Type: application/json; charset=utf-8');
 
+// Some deployments expose this endpoint directly; avoid relying on implicit globals.
+$pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+
 $base = function_exists('gdy_base_url') ? (string)gdy_base_url() : (defined('GODYAR_BASE_URL') ? (string)GODYAR_BASE_URL : '');
 $base = rtrim($base, '/');
 
@@ -33,11 +36,13 @@ if (!function_exists('gdy_indexnow_submit')) {
 
 try {
     $rf = new ReflectionFunction('gdy_indexnow_submit');
-    $req = $rf->getNumberOfRequiredParameters();
+    $params = $rf->getParameters();
+    $firstType = isset($params[0]) ? $params[0]->getType() : null;
 
-    if ($req >= 2) {
+    $legacy = ($firstType instanceof ReflectionNamedType && $firstType->getName() === 'PDO');
+    if ($legacy) {
         // Legacy signature: (PDO $pdo, array $urls)
-        if (!isset($pdo) || !($pdo instanceof PDO)) {
+        if (!($pdo instanceof PDO)) {
             throw new RuntimeException('PDO not available for indexnow_submit');
         }
         $ok = (bool)gdy_indexnow_submit($pdo, [$url]);
@@ -45,7 +50,8 @@ try {
         // Newer signature: (array $urlList, ?string $baseOverride = null)
         $ok = (bool)gdy_indexnow_submit([$url]);
     }
-echo json_encode(['ok' => $ok, 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    echo json_encode(['ok' => $ok, 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => $e->getMessage(), 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

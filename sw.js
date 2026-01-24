@@ -72,7 +72,7 @@ self.addEventListener('fetch', (event) => {
 
     try {
       const response = await fetch(request);
-      if (response && response.ok) {
+      if (response?.ok) {
         cache.put(request, response.clone());
       }
       return response;
@@ -105,7 +105,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
-  const urlToOpen = (event.notification && event.notification.data && event.notification.data.url)
+  const urlToOpen = event.notification?.data?.url
     ? event.notification.data.url
     : '/';
 

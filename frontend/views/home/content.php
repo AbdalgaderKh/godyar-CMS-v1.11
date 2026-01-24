@@ -1,5 +1,5 @@
 <?php
-// /godyar/frontend/views/home/content.php
+// /godyar/frontend/views/home/USER.php
 $pdo = $pdo ?? (function_exists("gdy_pdo_safe") ? gdy_pdo_safe() : null);
 if (!function_exists("nf")) {
   function nf(array $n, string $field): string {

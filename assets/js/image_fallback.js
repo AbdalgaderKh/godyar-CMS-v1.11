@@ -19,7 +19,7 @@
   var ATTR_TRIED = 'data-gdy-fallback-tried';
 
   function isImg(el) {
-    return el && el.tagName && el.tagName.toLowerCase() === 'img';
+    return el?.tagName?.toLowerCase() === 'img';
   }
 
   function shouldManage(img) {
@@ -93,7 +93,7 @@
   }
 
   function scan(root) {
-    var scope = root && root.querySelectorAll ? root : document;
+    var scope = root?.querySelectorAll ? root : document;
     var imgs = scope.querySelectorAll(
       'img[' + ATTR_FALLBACK + '],img[' + ATTR_HIDE + '],img[' + ATTR_SHOW + ']'
     );
@@ -113,7 +113,7 @@
             var n = m.addedNodes[j];
             if (isImg(n)) {
               bindOne(n);
-            } else if (n && n.querySelectorAll) {
+            } else if (n?.querySelectorAll) {
               scan(n);
             }
           }

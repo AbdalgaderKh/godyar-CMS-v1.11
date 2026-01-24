@@ -32,8 +32,20 @@ if (!function_exists('gdy_indexnow_submit')) {
 }
 
 try {
-    $ok = (bool)gdy_indexnow_submit([$url]);
-    echo json_encode(['ok' => $ok, 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $rf = new ReflectionFunction('gdy_indexnow_submit');
+    $req = $rf->getNumberOfRequiredParameters();
+
+    if ($req >= 2) {
+        // Legacy signature: (PDO $pdo, array $urls)
+        if (!isset($pdo) || !($pdo instanceof PDO)) {
+            throw new RuntimeException('PDO not available for indexnow_submit');
+        }
+        $ok = (bool)gdy_indexnow_submit($pdo, [$url]);
+    } else {
+        // Newer signature: (array $urlList, ?string $baseOverride = null)
+        $ok = (bool)gdy_indexnow_submit([$url]);
+    }
+echo json_encode(['ok' => $ok, 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Throwable $e) {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => $e->getMessage(), 'url' => $url], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

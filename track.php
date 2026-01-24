@@ -24,7 +24,9 @@ if ($method !== 'POST') {
 $payload = [];
 try {
     $raw = (string)file_get_contents('php://input');
-    if ($raw !== '' && str_contains((!empty($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '', 'application/json'))) {
+    $ct = (string)($_SERVER['CONTENT_TYPE'] ?? '');
+    $hasJson = function_exists('str_contains') ? str_contains($ct, 'application/json') : (strpos($ct, 'application/json') !== false);
+    if ($raw !== '' && $hasJson) {
         $decoded = json_decode($raw, true);
         if (is_array($decoded) === true) {
             $payload = $decoded;

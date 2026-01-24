@@ -352,7 +352,7 @@ $breadcrumbs = [
     __('t_84c1b773c5', 'الوسوم') => null,
 ];
 
-$mkQs = static function(array $extra = []) use ($q,$usageFilter,$sort,$page): string {
+$mkQs = static function(array $extra = []) use ($q, $usageFilter, $sort): string {
     $arr = [];
     if ($q !== '') $arr['q'] = $q;
     if ($usageFilter !== '') $arr['usage'] = $usageFilter;

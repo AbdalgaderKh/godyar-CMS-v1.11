@@ -1,8 +1,11 @@
 <?php
+// Ensure bootstrap (PDO/session/helpers)
+require_once __DIR__ . '/includes/bootstrap.php';
+
 // godyar/admin/news/edit.php
 
-require_once __DIR__ . '/../layout/header.php';
-require_once __DIR__ . '/../layout/sidebar.php';
+require_once (is_file(__DIR__ . '/admin/layout/header.php') ? __DIR__ . '/admin/layout/header.php' : __DIR__ . '/../layout/header.php');
+require_once (is_file(__DIR__ . '/admin/layout/sidebar.php') ? __DIR__ . '/admin/layout/sidebar.php' : __DIR__ . '/../layout/sidebar.php');
 
 if (!function_exists('h')) {
     function h($v): string {
@@ -11,12 +14,7 @@ if (!function_exists('h')) {
 }
 
 // تأكد أن لديك اتصال PDO في $pdo
-// لو اتصالك اسمه مختلف عدّل هنا
-if (!isset($pdo)) {
-    // مثال إن كان لديك ملف config خاص بالاتصال
-    // require_once __DIR__ . '/../config.php';
-}
-
+$pdo = $pdo ?? (function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : ($pdo ?? null));
 // 1) التقاط معرف الخبر
 $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $errors  = [];
@@ -102,7 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors) && isset($pdo)) {
             'views'        => $views,
             'id'           => $id,
         ]);
-        // رفع صورة جديدة (إن وجدت) — hardened
+
+        // رفع صورة جديدة (إن وجدت)
         if (!empty($_FILES['featured_image']['name'])) {
             $uploadDir  = __DIR__ . '/../../uploads/news/';
             if (!is_dir($uploadDir)) {
@@ -110,49 +109,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors) && isset($pdo)) {
                 gdy_mkdir($uploadDir, 0755, true);
             }
 
-            // Prefer SafeUploader (centralised validation) if available
-            $allowedExt = ['jpg','jpeg','png','webp','gif','avif'];
-            $allowedMime = [
-                'jpg'  => ['image/jpeg'],
-                'jpeg' => ['image/jpeg'],
-                'png'  => ['image/png'],
-                'webp' => ['image/webp'],
-                'gif'  => ['image/gif'],
-                'avif' => ['image/avif'],
-            ];
+            $ext = pathinfo($_FILES['featured_image']['name'], PATHINFO_EXTENSION);
+            $ext = strtolower($ext ?: 'jpg');
+            $newName = 'news_' . $id . '_' . time() . '.' . $ext;
+            $destPath = $uploadDir . $newName;
 
-            $saved = null;
-            if (class_exists('Godyar\\SafeUploader')) {
-                $saved = \Godyar\SafeUploader::upload($_FILES['featured_image'], [
-                    'dest_abs_dir' => $uploadDir,
-                    'url_prefix'   => '/uploads/news',
-                    'max_bytes'    => 5 * 1024 * 1024,
-                    'allowed_ext'  => $allowedExt,
-                    'allowed_mime' => $allowedMime,
-                    'prefix'       => 'news_' . (int)$id . '_',
-                ]);
-            }
-
-            // Fallback (should not normally be used)
-            if (!is_array($saved) || empty($saved['success'])) {
-                $orig = (string)($_FILES['featured_image']['name'] ?? '');
-                $tmp  = (string)($_FILES['featured_image']['tmp_name'] ?? '');
-                $ext  = strtolower((string)pathinfo($orig, PATHINFO_EXTENSION));
-                if ($ext === 'jpeg') $ext = 'jpg';
-
-                if ($tmp !== '' && is_uploaded_file($tmp) && in_array($ext, $allowedExt, true)) {
-                    $newName = 'news_' . (int)$id . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
-                    $destPath = rtrim($uploadDir, '/\\') . '/' . $newName;
-                    if (function_exists('gdy_move_uploaded_file') ? gdy_move_uploaded_file($tmp, $destPath) : move_uploaded_file($tmp, $destPath)) {
-                        chmod($destPath, 0644);
-                        $saved = ['success' => true, 'rel_url' => '/uploads/news/' . $newName];
-                    }
-                }
-            }
-
-            if (is_array($saved) && !empty($saved['success']) && !empty($saved['rel_url'])) {
+            if (move_uploaded_file($_FILES['featured_image']['tmp_name'], $destPath)) {
                 // نحفظ المسار النسبي في قاعدة البيانات
-                $publicPath = (string)$saved['rel_url'];
+                $publicPath = '/uploads/news/' . $newName;
                 $u = $pdo->prepare("UPDATE news SET featured_image = :img WHERE id = :id LIMIT 1");
                 $u->execute(['img' => $publicPath, 'id' => $id]);
             }

@@ -143,12 +143,24 @@ if (!function_exists('normalize_display_name')) {
 }
 
 if (!function_exists('gdy_auto_track_request')) {
+    /**
+     * Auto request tracker (optional)
+     * -------------------------------
+     * هذا wrapper موجود لأن بعض التنصيبـات تستخدم tracking إضافي عبر Plugin/Hook.
+     * لو لم يكن لديك tracker فعلي فلن يحدث شيء.
+     */
     function gdy_auto_track_request(): void
     {
         try {
-            // empty
+            if (function_exists('gdy_track_request')) {
+                // tracker اختياري — نفذه لو كان موجودًا
+                gdy_track_request();
+            }
         } catch (Throwable $e) {
-            // empty
+            // لا تسرب تفاصيل للمستخدم. سجّل فقط في وضع debug.
+            if (defined('GODYAR_DEBUG') && GODYAR_DEBUG) {
+                error_log('[gdy_auto_track_request] ' . $e->getMessage());
+            }
         }
     }
 }

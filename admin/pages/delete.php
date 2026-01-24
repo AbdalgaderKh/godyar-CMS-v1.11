@@ -4,9 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../_admin_guard.php';
 require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
-require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
-require_once dirname(__DIR__, 2) . '/includes/bootstrap.php';
 
 // 1) معلومات الصفحة (ليست مهمة هنا لكن للاتساق)
 $currentPage = 'pages';
@@ -16,19 +14,19 @@ $pageTitle   = __('t_b10973702c', 'حذف صفحة');
 try {
     if (class_exists(Auth::class) && method_exists(Auth::class, 'isLoggedIn')) {
         if (!Auth::isLoggedIn()) {
-            header('Location: ' . GODYAR_BASE_URL . '/admin/login');
+            header('Location: ' . (function_exists('gdy_base_url') ? rtrim((string)gdy_base_url(), '/') : '') . '/admin/login');
             exit;
         }
     } else {
         if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
-            header('Location: ' . GODYAR_BASE_URL . '/admin/login');
+            header('Location: ' . (function_exists('gdy_base_url') ? rtrim((string)gdy_base_url(), '/') : '') . '/admin/login');
             exit;
         }
     }
 } catch (Throwable $e) {
     error_log('[Godyar Pages Delete] Auth check error: ' . $e->getMessage());
     if (empty($_SESSION['user']) || (($_SESSION['user']['role'] ?? '') === 'guest')) {
-        header('Location: ' . GODYAR_BASE_URL . '/admin/login');
+        header('Location: ' . (function_exists('gdy_base_url') ? rtrim((string)gdy_base_url(), '/') : '') . '/admin/login');
         exit;
     }
 }

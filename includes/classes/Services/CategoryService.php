@@ -489,7 +489,7 @@ final class CategoryService
         ];
     }
 
-    public function __version(): string
+    public function version(): string
     {
         return 'CategoryService v3 2026-01-17';
     }

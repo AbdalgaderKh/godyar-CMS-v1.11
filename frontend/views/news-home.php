@@ -19,14 +19,6 @@ $latestNews   = is_array($latestNews ?? null) ? $latestNews : [];
 $trendingNews = is_array($trendingNews ?? null) ? $trendingNews : [];
 $sidebarHidden = (bool)($sidebarHidden ?? false);
 
-    margin: 0;
-    padding: 0;
-    font-size: .8rem;
-  }
-</style>
-    margin: 0;
-    padding: 0;
-    font-size: .8rem;
 $otherNews  = array_slice($latestNews, 1);
 ?>
 <style>

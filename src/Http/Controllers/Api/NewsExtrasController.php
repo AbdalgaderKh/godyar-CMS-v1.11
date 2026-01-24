@@ -168,7 +168,7 @@ final class NewsExtrasController
 
     public function tts(): void { $this->json(['ok' => false, 'message' => 'TTS غير مفعّل'], 501); }
 
-    public function __version(): string
+    public function version(): string
     {
         return 'NewsExtrasController safe 2026-01-14';
     }

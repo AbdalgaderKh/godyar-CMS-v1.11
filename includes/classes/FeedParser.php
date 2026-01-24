@@ -4,7 +4,6 @@ declare(strict_types=1);
 /**
  * كلاس بسيط لقراءة RSS/Atom
  */
-
 class FeedParser
 {
     public static function parse(string $url, int $limit = 10): array
@@ -19,10 +18,6 @@ class FeedParser
                 'http' => [
                     'timeout'    => 5,
                     'user_agent' => 'GodyarFeedParser/1.0',
-            $xmlString = gdy_file_get_contents($url, false, $context);
-            if ($xmlString === false) {
-                return [];
-            }
                 ],
             ]);
 
@@ -67,7 +62,7 @@ class FeedParser
             }
 
             return $items;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[FeedParser] ' . $e->getMessage());
             return [];
         }

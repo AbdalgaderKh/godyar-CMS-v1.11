@@ -94,6 +94,8 @@ if (!function_exists('gdy_youtube_embed_url')) {
 <?php if (!empty($headerAd) && strpos($headerAd, 'No active ad') === false): ?>
 <div class="header-ad-container" style="margin-bottom: 2rem; text-align: center;">
     <?= $headerAd ?>
+</div>
+<?php endif; ?>
 <?php
 $archiveUrl = $archiveUrl ?? '';
 $homeLatestTitle = $homeLatestTitle ?? '';
@@ -417,14 +419,6 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
                         if ($platform === '' && $rawUrl !== '') {
                             $lower = strtolower($rawUrl);
                             if (strpos($lower, 'tiktok.com') !== false) {
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                </div>
-                            </div>
-</div>
-<?php endif; ?>
-                                    <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                </div>
-                            </div>
                                 $platform = 'TikTok';
                             } elseif (strpos($lower, 'facebook.com') !== false || strpos($lower, 'fb.watch') !== false) {
                                 $platform = 'Facebook';
@@ -666,36 +660,15 @@ $homeFeaturedTitle = $homeFeaturedTitle ?? '';
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 1.5rem;
     ">
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         <?php foreach ($smartRecommendations as $news): ?>
         <div class="recommendation-card" style="
             background: white;
-<?php
-/** @var bool $enableMostRead */
-/** @var bool $enableMostCommented */
-/** @var callable $newsUrl */
-if (!isset($enableMostRead)) {
-    $enableMostRead = false;
-}
-if (!isset($enableMostCommented)) {
-    $enableMostCommented = false;
-}
-if (!isset($newsUrl) || !is_callable($newsUrl)) {
-    $newsUrl = function ($news) {
-        return '';
-    };
-}
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         ">
-            <?php if (!empty($news['featured_image'])): ?>
+<?php if (!empty($news['featured_image'])): ?>
             <div class="recommendation-image" style="
                 height: 160px;
                 overflow: hidden;

@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/../../includes/bootstrap.php';
-<?php
-require_once __DIR__ . '/../../includes/bootstrap.php';
-$pdo = $pdo ?? null;
+$pdo = $pdo ?? (function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null);
+if (!($pdo instanceof PDO)) { http_response_code(500); exit('Database connection not available'); }
 
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : null;
 if (!$slug) { 

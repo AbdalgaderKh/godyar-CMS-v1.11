@@ -1,1 +1,1 @@
-console.log('Godyar front loaded');
+/* Godyar front loaded */

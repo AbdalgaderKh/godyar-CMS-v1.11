@@ -12,11 +12,13 @@ declare(strict_types=1);
  */
 
 if (!function_exists('gdy_suppress_errors')) {
-    function gdy_suppress_errors(callable $fn)
+    function gdy_suppress_errors(callable $fn, $default = null)
     {
         set_error_handler(static function () { return true; });
         try {
             return $fn();
+        } catch (Throwable $e) {
+            return $default;
         } finally {
             restore_error_handler();
         }

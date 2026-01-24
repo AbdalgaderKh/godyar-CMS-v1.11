@@ -10,14 +10,16 @@
  * This script is defensive and safe to run multiple times.
  */
 (function () {
-  const ATTR_FALLBACK = 'data-gdy-fallback-src';
-  const ATTR_HIDE = 'data-gdy-hide-onerror';
-  const ATTR_SHOW = 'data-gdy-show-onload';
-  const ATTR_BOUND = 'data-gdy-fallback-bound';
-  const ATTR_TRIED = 'data-gdy-fallback-tried';
+  'use strict';
+
+  var ATTR_FALLBACK = 'data-gdy-fallback-src';
+  var ATTR_HIDE = 'data-gdy-hide-onerror';
+  var ATTR_SHOW = 'data-gdy-show-onload';
+  var ATTR_BOUND = 'data-gdy-fallback-bound';
+  var ATTR_TRIED = 'data-gdy-fallback-tried';
 
   function isImg(el) {
-    return el?.tagName?.toLowerCase() === 'img';
+    return el && el.tagName && el.tagName.toLowerCase() === 'img';
   }
 
   function shouldManage(img) {
@@ -31,17 +33,13 @@
   function safeSetHidden(img, hidden) {
     try {
       img.style.display = hidden ? 'none' : '';
-    } catch (_) {
-      /* empty */
-    }
+    } catch (_) {}
   }
 
   function safeSetOpacity(img, value) {
     try {
       img.style.opacity = value;
-    } catch (_) {
-      /* empty */
-    }
+    } catch (_) {}
   }
 
   function onLoad(img) {
@@ -52,14 +50,13 @@
 
   function onError(img) {
     // 1) Try fallback once if provided
-    const fallback = img.getAttribute(ATTR_FALLBACK);
-    const tried = img.getAttribute(ATTR_TRIED) === '1';
+    var fallback = img.getAttribute(ATTR_FALLBACK);
+    var tried = img.getAttribute(ATTR_TRIED) === '1';
 
     if (fallback && !tried) {
       img.setAttribute(ATTR_TRIED, '1');
-
       // Prevent infinite loops if fallback equals current src
-      const current = (img.getAttribute('src') || '').trim();
+      var current = (img.getAttribute('src') || '').trim();
       if (current !== fallback) {
         img.setAttribute('src', fallback);
         return;
@@ -84,8 +81,8 @@
       safeSetOpacity(img, '0');
     }
 
-    img.addEventListener('load', () => onLoad(img), { passive: true });
-    img.addEventListener('error', () => onError(img), { passive: true });
+    img.addEventListener('load', function () { onLoad(img); }, { passive: true });
+    img.addEventListener('error', function () { onError(img); }, { passive: true });
 
     // If image is already complete from cache
     if (img.complete && img.naturalWidth > 0) {
@@ -96,9 +93,11 @@
   }
 
   function scan(root) {
-    const scope = root?.querySelectorAll ? root : document;
-    const imgs = scope.querySelectorAll(`img[${ATTR_FALLBACK}],img[${ATTR_HIDE}],img[${ATTR_SHOW}]`);
-    for (let i = 0; i < imgs.length; i++) bindOne(imgs[i]);
+    var scope = root && root.querySelectorAll ? root : document;
+    var imgs = scope.querySelectorAll(
+      'img[' + ATTR_FALLBACK + '],img[' + ATTR_HIDE + '],img[' + ATTR_SHOW + ']'
+    );
+    for (var i = 0; i < imgs.length; i++) bindOne(imgs[i]);
   }
 
   function init() {
@@ -106,23 +105,21 @@
 
     // Watch for dynamically inserted images
     if (typeof MutationObserver === 'function') {
-      const observer = new MutationObserver((mutations) => {
-        for (let i = 0; i < mutations.length; i++) {
-          const mutation = mutations[i];
-          if (!mutation.addedNodes) continue;
-
-          for (let j = 0; j < mutation.addedNodes.length; j++) {
-            const node = mutation.addedNodes[j];
-            if (isImg(node)) {
-              bindOne(node);
-            } else if (node?.querySelectorAll) {
-              scan(node);
+      var obs = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var m = mutations[i];
+          if (!m.addedNodes) continue;
+          for (var j = 0; j < m.addedNodes.length; j++) {
+            var n = m.addedNodes[j];
+            if (isImg(n)) {
+              bindOne(n);
+            } else if (n && n.querySelectorAll) {
+              scan(n);
             }
           }
         }
       });
-
-      observer.observe(document.documentElement || document.body, { childList: true, subtree: true });
+      obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
     }
   }
 

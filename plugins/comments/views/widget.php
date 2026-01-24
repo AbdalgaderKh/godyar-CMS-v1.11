@@ -207,7 +207,7 @@ foreach ($byId as $id => $row) {
 }
 
 // Render recursive
-$renderNode = function(int $id, int $depth = 0) use (&$renderNode, $byId, $children, $newsId, $csrf_field_html): void {
+$renderNode = function(int $id, int $depth = 0) use (&$renderNode, $byId, $children, $csrf_field_html): void {
     if (!isset($byId[$id])) return;
     $row = $byId[$id];
     $name = (string)($row['author_name'] ?? '');

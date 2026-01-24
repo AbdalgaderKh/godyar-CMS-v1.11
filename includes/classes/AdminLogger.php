@@ -1,20 +1,14 @@
 <?php
+declare(strict_types=1);
+
+use PDO;
 
 /**
  * AdminLogger
  * تسجيل الأحداث الإدارية في جدول admin_logs
+ */
 class AdminLogger
 {
- */
-
-class AdminLogger
-{
-Autofix Session
-59 occurrences can be fixed
-16 files will be affected
-use PDO;
-
- */
     private ?PDO $pdo;
 
     public function __construct(?PDO $pdo = null)
@@ -28,24 +22,37 @@ use PDO;
      * @param string      $action      نوع الحدث (مثال: login_success, news_create)
      * @param string|null $entityType  نوع الكيان (news, user, settings)
      * @param int|null    $entityId    رقم الكيان
-     * @param array|null  $extra       بيانات إضافية (مثلاً ['title' => '...', 'status' => 'published'])
+     * @param array|null  $extra       بيانات إضافية
      */
-    public static function log(string $action, ?string $entityType = null, ?int $entityId = null, ?array $extra = null, ?PDO $pdo = null): void
-    {
+    public static function log(
+        string $action,
+        ?string $entityType = null,
+        ?int $entityId = null,
+        ?array $extra = null,
+        ?PDO $pdo = null
+    ): void {
         // Support DI (preferred): pass $pdo from caller.
         // Backward compatibility: if not passed, we use the unified DB layer.
         if (($pdo instanceof PDO) === false) {
             try {
-                $pdo = DB::pdo();
-            } catch (\Throwable $e) {
+                $pdo = class_exists('DB') && method_exists('DB', 'pdo') ? DB::pdo() : null;
+            } catch (Throwable $e) {
                 error_log('[AdminLogger] PDO not available: ' . $e->getMessage());
                 return;
             }
         }
 
+        if (($pdo instanceof PDO) === false) {
+            return;
+        }
+
         // نحاول نجيب المستخدم الحالي من الجلسة
         if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            gdy_session_start();
+            if (function_exists('gdy_session_start')) {
+                gdy_session_start();
+            } else {
+                session_start();
+            }
         }
 
         $userId = null;
@@ -61,7 +68,12 @@ use PDO;
         // نحول extra إلى JSON لو موجود
         $details = null;
         if (!empty($extra)) {
-            $details = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+            $details = json_encode(
+                $extra,
+                JSON_UNESCAPED_UNICODE
+                | JSON_UNESCAPED_SLASHES
+                | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+            );
         }
 
         try {
@@ -70,17 +82,16 @@ use PDO;
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                ':user_id'    => $userId,
-                ':action'     => $action,
-                ':entity_type'=> $entityType,
-                ':entity_id'  => $entityId,
-                ':ip'         => $ip,
-                ':ua'         => $userAgent,
-                ':details'    => $details,
+                ':user_id'     => $userId,
+                ':action'      => $action,
+                ':entity_type' => $entityType,
+                ':entity_id'   => $entityId,
+                ':ip'          => $ip,
+                ':ua'          => $userAgent,
+                ':details'     => $details,
             ]);
-
-        } catch (\Throwable $e) {
-            error_log('[AdminLogger] log error: ' . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log('[AdminLogger] insert failed: ' . $e->getMessage());
         }
     }
 }

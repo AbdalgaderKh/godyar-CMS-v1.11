@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
     const toggle = document.getElementById("themeToggle");
     const backToTop = document.getElementById("backToTop");
     const root = document.documentElement;

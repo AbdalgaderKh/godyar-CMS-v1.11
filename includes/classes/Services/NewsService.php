@@ -412,13 +412,9 @@ final class NewsService
             return (bool)$stmt->fetchColumn();
         } catch (Throwable $e) {
             // On some DBs (or restricted permissions), information_schema may be unavailable.
-            // Fall back to a lightweight query (identifier validated).
+            // Fall back to a lightweight query.
             try {
-                if (!preg_match('/^[a-zA-Z0-9_]+$/', $table)) {
-                    return false;
-                }
-                $safeTable = '`' . str_replace('`', '``', $table) . '`';
-                $this->pdo->query('SELECT 1 FROM ' . $safeTable . ' LIMIT 1');
+                $this->pdo->query('SELECT 1 FROM ' . $table . ' LIMIT 1');
                 return true;
             } catch (Throwable $e2) {
                 return false;

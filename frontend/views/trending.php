@@ -113,7 +113,7 @@ try {
 }
 
 $newsUrl = function(array $row) use ($baseUrl): string {
-    $slug = isset($row['slug']) ? (string)$row['slug'] : (string)((empty($row['id']) === false) ?? '');
+    $slug = isset($row['slug']) ? (string)$row['slug'] : (string)((!empty($row['id']) ? $row['id'] : ''));
     $slug = trim($slug);
     if ($slug === '') {
         $slug = (string)($row['id'] ?? '');

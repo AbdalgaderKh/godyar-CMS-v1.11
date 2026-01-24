@@ -37,7 +37,7 @@ return new class implements GodyarPluginInterface {
         }
 
         $json = gdy_file_get_contents($this->configFile);
-        if (is_string($json) || $json === '' === false) {
+        if (!is_string($json) || $json === '') {
             return $defaults;
         }
 
@@ -61,7 +61,9 @@ return new class implements GodyarPluginInterface {
         }
 
         // فلترة حسب المسار إن لزم
-        $path      = parse_url((empty($_SERVER['REQUEST_URI']) === false) ?? '/', PHP_URL_PATH) ?: '/';
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        if ($uri === '') { $uri = '/'; }
+        $path = parse_url($uri, PHP_URL_PATH) ?: '/';
         $showPaths = (string)($cfg['show_on_paths'] ?? '*');
 
         if ($showPaths !== '*') {

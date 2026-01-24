@@ -39,7 +39,7 @@ try {
     error_log('[Elections] fetch all elections error: ' . $e->getMessage());
 }
 
-if (($allElections === false)) {
+if (empty($allElections)) {
     require __DIR__ . '/frontend/templates/header.php';
     ?>
     <div class="gdy-elections-page">
@@ -83,6 +83,32 @@ $electionId    = (int)$currentElection['id'];
 $totalSeats    = (int)($currentElection['total_seats'] ?? 0);
 $majoritySeats = (int)($currentElection['majority_seats'] ?? 0);
 
+
+// =====================
+// Schema-aware column selection (to avoid runtime SQL errors)
+// =====================
+if (!function_exists('gdy_db_has_column')) {
+    function gdy_db_has_column(PDO $pdo, string $table, string $column): bool {
+        try {
+            $q = $pdo->prepare("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?");
+            $q->execute([$table, $column]);
+            return (int)$q->fetchColumn() > 0;
+        } catch (Throwable $e) {
+            // If we can't introspect, assume the column does not exist to keep the page alive.
+            return false;
+        }
+    }
+}
+
+$partyShortCol = gdy_db_has_column($pdo, 'election_parties', 'short_name')
+    ? 'short_name'
+    : (gdy_db_has_column($pdo, 'election_parties', 'name') ? 'name' : (gdy_db_has_column($pdo, 'election_parties', 'title') ? 'title' : 'id'));
+
+$regionNameArCol = gdy_db_has_column($pdo, 'election_regions', 'name_ar')
+    ? 'name_ar'
+    : (gdy_db_has_column($pdo, 'election_regions', 'name') ? 'name' : (gdy_db_has_column($pdo, 'election_regions', 'title') ? 'title' : 'slug'));
+
+
 // =====================
 // 3) جلب ملخص الأحزاب
 // =====================
@@ -91,7 +117,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT
             p.id,
-            p.short_name,
+            p.{$partyShortCol},
             p.full_name,
             p.color_hex,
             p.logo_path,
@@ -149,7 +175,7 @@ try {
     $stmt = $pdo->prepare("
         SELECT
             r.id           AS region_id,
-            r.name_ar,
+            r.{$regionNameArCol},
             r.name_en,
             r.slug,
             r.map_code,
@@ -160,7 +186,7 @@ try {
             rr.seats_leading,
             rr.votes,
             rr.vote_percent,
-            p.short_name   AS party_short_name,
+            p.{$partyShortCol}   AS party_short_name,
             p.color_hex    AS party_color_hex
         FROM election_regions r
         LEFT JOIN election_results_regions rr
@@ -326,7 +352,7 @@ require __DIR__ . '/frontend/templates/header.php';
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
         <div>
           <h1 class="h4 mb-1">
-            نتائج الانتخابات – <?= h($currentElection['title']) ?>
+            نتائج الانتخابات – <?= h($currentElection['title'] ?? '') ?>
           </h1>
           <?php if (empty($currentElection['description']) === false): ?>
             <p class="mb-0 small text-muted">

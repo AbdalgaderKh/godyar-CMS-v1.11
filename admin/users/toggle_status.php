@@ -29,7 +29,7 @@ try {
 
 $pdo = gdy_pdo_safe();
 $currentUser = (class_exists(Auth::class) && method_exists(Auth::class, 'user'))
-    ? (Auth::user() ?? ((empty($_SESSION['user']) === false) ?? []))
+    ? (Auth::user() ?? ((!empty($_SESSION['user']) ? $_SESSION['user'] : [])))
     : ($_SESSION['user'] ?? []);
 
 $userId = (int)($_POST['id'] ?? 0);

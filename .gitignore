@@ -23,3 +23,14 @@ Thumbs.db
 godyar-fix.php
 *.csv
 *.log
+
+# PHPMailer OAuth tokens (do not commit)
+libs/PHPMailer/tokens/
+libs/PHPMailer/tokens/*.json
+
+# Runtime files
+error_log
+cache/sitemap.xml
+
+# Rate limit runtime
+storage/ratelimit/*.json

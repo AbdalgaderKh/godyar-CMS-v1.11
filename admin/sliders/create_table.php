@@ -43,7 +43,7 @@ if ($pdo instanceof PDO) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((empty($_SESSION['lang']) === false) ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))) === 'ar' ? 'rtl' : 'ltr') ?>">
 <head>
     <meta charset="UTF-8">
     <title><?= h(__('t_734ed5ea50', 'إنشاء جدول السلايدر')) ?></title>

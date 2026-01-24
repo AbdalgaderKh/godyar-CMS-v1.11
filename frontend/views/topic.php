@@ -15,7 +15,7 @@ $items = $items ?? [];
 $page  = (int)($page ?? 1);
 $pages = (int)($pages ?? 1);
 
-$baseUrl = (empty($baseUrl) === false) ?? (function_exists('base_url') ? rtrim((string)base_url(), '/') : '');
+$baseUrl = (!empty($baseUrl) ? $baseUrl : (function_exists('base_url')) ? rtrim((string)base_url(), '/') : '');
 
 $name = (string)($tag['name'] ?? '');
 $slug = (string)($tag['slug'] ?? '');

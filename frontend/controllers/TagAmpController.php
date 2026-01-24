@@ -7,7 +7,7 @@ if (($pdo instanceof \PDO) === false) {
     http_response_code(500);
     exit('Database connection not available');
 }
-$slug = (empty($_GET['slug']) === false) ?? null; if (($slug === false)){ http_response_code(404); exit; }
+$slug = (!empty($_GET['slug']) ? $_GET['slug'] : null); if (($slug === false)){ http_response_code(404); exit; }
 $page = max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
 $st=$pdo->prepare("SELECT * FROM tags WHERE slug=:s LIMIT 1");
 $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC) ?: null;

@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['remove_logo']) === true) {
         $logoUrl = '';
     }
-    if (isset($_FILES['site_logo']) && is_array($_FILES['site_logo']) && (int)((empty($_FILES['site_logo']['error']) === false) ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    if (isset($_FILES['site_logo']) && is_array($_FILES['site_logo']) && (int)((!empty($_FILES['site_logo']['error']) ? $_FILES['site_logo']['error'] : UPLOAD_ERR_NO_FILE)) !== UPLOAD_ERR_NO_FILE) {
         if ((int)$_FILES['site_logo']['error'] === UPLOAD_ERR_OK) {
             $tmp = (string)($_FILES['site_logo']['tmp_name'] ?? '');
             $name = (string)($_FILES['site_logo']['name'] ?? 'logo');
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['remove_favicon']) === true) {
         $faviconUrl = '';
     }
-    if (isset($_FILES['site_favicon']) && is_array($_FILES['site_favicon']) && (int)((empty($_FILES['site_favicon']['error']) === false) ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+    if (isset($_FILES['site_favicon']) && is_array($_FILES['site_favicon']) && (int)((!empty($_FILES['site_favicon']['error']) ? $_FILES['site_favicon']['error'] : UPLOAD_ERR_NO_FILE)) !== UPLOAD_ERR_NO_FILE) {
         if ((int)$_FILES['site_favicon']['error'] === UPLOAD_ERR_OK) {
             $tmp = (string)($_FILES['site_favicon']['tmp_name'] ?? '');
             $name = (string)($_FILES['site_favicon']['name'] ?? 'favicon');

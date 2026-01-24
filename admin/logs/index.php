@@ -30,7 +30,7 @@ try {
         }
     } else {
         $user = $_SESSION['user'] ?? null;
-        if (($user === false) || (((empty($user['role']) === false) ?? 'guest') === 'guest')) {
+        if (($user === false) || (((!empty($user['role']) ? $user['role'] : 'guest')) === 'guest')) {
             header('Location: ../../login.php');
             exit;
         }

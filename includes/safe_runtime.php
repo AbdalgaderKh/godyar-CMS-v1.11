@@ -507,3 +507,109 @@ if (!function_exists('gdy_header_remove')) {
         }, true);
     }
 }
+
+
+if (!function_exists('req_get')) {
+    function req_get(string $key, $default = null) {
+        return array_key_exists($key, $_GET) ? gdy_sanitize($_GET[$key]) : $default;
+    }
+}
+if (!function_exists('req_post')) {
+    function req_post(string $key, $default = null) {
+        return array_key_exists($key, $_POST) ? gdy_sanitize($_POST[$key]) : $default;
+    }
+}
+if (!function_exists('req_cookie')) {
+    function req_cookie(string $key, $default = null) {
+        return array_key_exists($key, $_COOKIE) ? gdy_sanitize($_COOKIE[$key]) : $default;
+    }
+}
+if (!function_exists('req_server')) {
+    function req_server(string $key, $default = null) {
+        return array_key_exists($key, $_SERVER) ? gdy_sanitize($_SERVER[$key]) : $default;
+    }
+}
+
+if (!function_exists('req_has_get')) {
+    function req_has_get(string $key): bool {
+        return array_key_exists($key, $_GET);
+    }
+}
+if (!function_exists('req_has_post')) {
+    function req_has_post(string $key): bool {
+        return array_key_exists($key, $_POST);
+    }
+}
+
+// HTML escaping helper
+if (!function_exists('e')) {
+    function e($v): string {
+        if (is_array($v)) {
+            $v = json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Request + Output helpers
+// الهدف: تقليل الاستخدام المباشر لـ superglobals وتوحيد التعقيم/الترميز.
+// -----------------------------------------------------------------------------
+
+if (!function_exists('gdy_sanitize_scalar')) {
+    function gdy_sanitize_scalar($v): string {
+        if ($v === null) return '';
+        if (is_bool($v)) return $v ? '1' : '0';
+        if (is_int($v) || is_float($v)) return (string)$v;
+        if (is_string($v)) {
+            // Remove null-bytes and trim
+            $v = str_replace("\0", '', $v);
+            return trim($v);
+        }
+        return trim((string)$v);
+    }
+}
+
+if (!function_exists('gdy_sanitize')) {
+    function gdy_sanitize($v) {
+        if (is_array($v)) {
+            $out = [];
+            foreach ($v as $k => $vv) {
+                $out[$k] = gdy_sanitize($vv);
+            }
+            return $out;
+        }
+        return gdy_sanitize_scalar($v);
+    }
+}
+
+if (!function_exists('req_get')) {
+    function req_get(string $key, $default = null) {
+        return array_key_exists($key, $_GET) ? gdy_sanitize($_GET[$key]) : $default;
+    }
+}
+if (!function_exists('req_post')) {
+    function req_post(string $key, $default = null) {
+        return array_key_exists($key, $_POST) ? gdy_sanitize($_POST[$key]) : $default;
+    }
+}
+if (!function_exists('req_has_get')) {
+    function req_has_get(string $key): bool {
+        return array_key_exists($key, $_GET);
+    }
+}
+if (!function_exists('req_has_post')) {
+    function req_has_post(string $key): bool {
+        return array_key_exists($key, $_POST);
+    }
+}
+
+// Unified HTML output escaping
+if (!function_exists('e')) {
+    function e($v): string {
+        if (is_array($v)) {
+            $v = json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
+}

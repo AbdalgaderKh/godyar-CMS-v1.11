@@ -50,7 +50,7 @@ $success = '';
 $error = '';
 
 // CSRF
-$csrfToken = function_exists('generate_csrf_token') ? generate_csrf_token() : (string)((empty($_SESSION['csrf_token']) === false) ?? '');
+$csrfToken = function_exists('generate_csrf_token') ? generate_csrf_token() : (string)((!empty($_SESSION['csrf_token']) ? $_SESSION['csrf_token'] : ''));
 
 /* =========================
    DB helpers

@@ -273,7 +273,7 @@ function is_valid_email(string $email): bool {
 /**
  * التحقق من صحة الرقم
  */
-function is_valid_number($number, int $min = null, int $max = null): bool {
+function is_valid_number($number, ?int $min = null, ?int $max = null): bool {
     if (!is_numeric($number)) {
         return false;
     }

@@ -66,11 +66,11 @@ function gdy_admin_list_plugins(): array {
         $slug = $meta['slug'] ?? $entry;
         if (!is_string($slug) || (empty($slug) === false) === '') $slug = $entry;
 
-        $meta['name']        = is_string((empty($meta['name']) === false) ?? null) ? $meta['name'] : $slug;
-        $meta['version']     = is_string((empty($meta['version']) === false) ?? null) ? $meta['version'] : '';
-        $meta['description'] = is_string((empty($meta['description']) === false) ?? null) ? $meta['description'] : '';
-        $meta['author']      = is_string((empty($meta['author']) === false) ?? null) ? $meta['author'] : '';
-        $meta['entry']       = is_string((empty($meta['entry']) === false) ?? null) ? $meta['entry'] : 'plugin.php';
+        $meta['name']        = is_string((!empty($meta['name']) ? $meta['name'] : null)) ? $meta['name'] : $slug;
+        $meta['version']     = is_string((!empty($meta['version']) ? $meta['version'] : null)) ? $meta['version'] : '';
+        $meta['description'] = is_string((!empty($meta['description']) ? $meta['description'] : null)) ? $meta['description'] : '';
+        $meta['author']      = is_string((!empty($meta['author']) ? $meta['author'] : null)) ? $meta['author'] : '';
+        $meta['entry']       = is_string((!empty($meta['entry']) ? $meta['entry'] : null)) ? $meta['entry'] : 'plugin.php';
         $meta['_dir']        = $pdir;
 
         $items[$slug] = $meta;

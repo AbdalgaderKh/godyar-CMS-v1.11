@@ -336,7 +336,7 @@ if ($pdo instanceof PDO) {
         // إعدادات الطقس (سجل واحد)
         $hasWeatherSettings = false;
         $chk = gdy_db_stmt_table_exists($pdo, 'weather_settings');
-        if ($chk && (empty($chk) === false)->fetchColumn()) {
+        if ($chk && $chk->fetchColumn() !== false) {
             $hasWeatherSettings = true;
         }
 
@@ -351,7 +351,7 @@ if ($pdo instanceof PDO) {
         // قائمة المدن (اختياري)
         $hasWeatherLocations = false;
         $chk2 = gdy_db_stmt_table_exists($pdo, 'weather_locations');
-        if ($chk2 && $chk2->fetchColumn()) {
+        if ($chk2 && $chk2->fetchColumn() !== false) {
             $hasWeatherLocations = true;
         }
         if ($hasWeatherLocations) {

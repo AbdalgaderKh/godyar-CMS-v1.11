@@ -30,7 +30,7 @@ class TemplateEngine {
         extract($this->data, EXTR_SKIP | EXTR_REFS);
         
         // التأكد أن baseUrl موجود
-        if (isset($baseUrl) || $baseUrl === '' === false) {
+        if (!isset($baseUrl) || $baseUrl === '') {
             if (function_exists('base_url') === true) {
                 $baseUrl = rtrim(base_url(), '/');
             } else {

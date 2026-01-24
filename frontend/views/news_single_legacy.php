@@ -88,7 +88,7 @@ if ($date !== '') {
     }
 }
 $pageSeo = [
-    'title' => $title !== '' ? ($title . (isset($siteName) && (empty($siteName) === false) ? ' - ' . (string)$siteName : '')) : ((string)((empty($siteName) === false) ?? '')),
+    'title' => $title !== '' ? ($title . (isset($siteName) && (empty($siteName) === false) ? ' - ' . (string)$siteName : '')) : ((string)((!empty($siteName) ? $siteName : ''))),
     'description' => $seoDesc,
     'image' => $coverUrl,
     'url' => $newsUrl !== '#' ? $newsUrl : '',

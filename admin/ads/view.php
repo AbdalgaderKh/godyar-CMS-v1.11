@@ -28,7 +28,7 @@ try {
     }
 } catch (Throwable $e) {
     error_log('[Admin Ads View] Auth error: ' . $e->getMessage());
-    if (empty($_SESSION['user']) || (((empty($_SESSION['user']['role']) === false) ?? 'guest') === 'guest')) {
+    if (empty($_SESSION['user']) || (((!empty($_SESSION['user']['role']) ? $_SESSION['user']['role'] : 'guest')) === 'guest')) {
         header('Location: ../login.php');
         exit;
     }

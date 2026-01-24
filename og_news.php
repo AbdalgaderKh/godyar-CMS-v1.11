@@ -18,7 +18,7 @@ require_once ROOT_PATH . '/includes/site_settings.php';
 
 $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$id = isset($id) ? (int)$id : (isset($_GET['id']) ? (int)$_GET['id'] : 0);
 if ($id <= 0 || !($pdo instanceof PDO)) {
     http_response_code(404);
     exit;

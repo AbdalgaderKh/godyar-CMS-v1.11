@@ -111,80 +111,80 @@ require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
     <?php if ($message): ?>
-      <div class="alert alert-success"><?= h($message) ?></div>
+      <div class="alert alert-success"><?php echo h($message); ?></div>
     <?php endif; ?>
 
     <?php if ($error): ?>
-      <div class="alert alert-danger"><?= h($error) ?></div>
+      <div class="alert alert-danger"><?php echo h($error); ?></div>
     <?php endif; ?>
 
     <div class="card mb-4">
       <div class="card-body">
-        <h2 class="h5 mb-3"><?= h(__('t_71d3bef41a', 'إضافة مصطلح جديد')) ?></h2>
+        <h2 class="h5 mb-3"><?php echo h(__('t_71d3bef41a', 'إضافة مصطلح جديد')); ?></h2>
         <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <input type="hidden" name="action" value="add">
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_d8189e371d', 'المصطلح')) ?></label>
-            <input type="text" name="term" class="form-control" required placeholder="<?= h(__('t_71693152a0', 'مثال: الفيدرالي الأمريكي')) ?>">
+            <label class="form-label"><?php echo h(__('t_d8189e371d', 'المصطلح')); ?></label>
+            <input type="text" name="term" class="form-control" required placeholder="<?php echo h(__('t_71693152a0', 'مثال: الفيدرالي الأمريكي')); ?>">
           </div>
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_50ac8aeda7', 'الشرح المختصر')) ?></label>
-            <textarea name="definition" class="form-control" rows="3" required placeholder="<?= h(__('t_4453b55e04', 'شرح بسيط للمصطلح يظهر فوق الكلمة للقارئ.')) ?>"></textarea>
+            <label class="form-label"><?php echo h(__('t_50ac8aeda7', 'الشرح المختصر')); ?></label>
+            <textarea name="definition" class="form-control" rows="3" required placeholder="<?php echo h(__('t_4453b55e04', 'شرح بسيط للمصطلح يظهر فوق الكلمة للقارئ.')); ?>"></textarea>
           </div>
           <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="glossaryActive" name="is_active" checked>
-            <label class="form-check-label" for="glossaryActive"><?= h(__('t_918499f2af', 'مفعل')) ?></label>
+            <label class="form-check-label" for="glossaryActive"><?php echo h(__('t_918499f2af', 'مفعل')); ?></label>
           </div>
-          <button type="submit" class="btn btn-primary px-4"><?= h(__('t_2492ab02ed', 'حفظ المصطلح')) ?></button>
+          <button type="submit" class="btn btn-primary px-4"><?php echo h(__('t_2492ab02ed', 'حفظ المصطلح')); ?></button>
         </form>
       </div>
     </div>
 
     <div class="card">
       <div class="card-body">
-        <h2 class="h5 mb-3"><?= h(__('t_eb29792630', 'المصطلحات المسجلة')) ?></h2>
+        <h2 class="h5 mb-3"><?php echo h(__('t_eb29792630', 'المصطلحات المسجلة')); ?></h2>
         <?php if (!$rows): ?>
-          <p class="text-muted mb-0"><?= h(__('t_f24713abfa', 'لا توجد مصطلحات بعد.')) ?></p>
+          <p class="text-muted mb-0"><?php echo h(__('t_f24713abfa', 'لا توجد مصطلحات بعد.')); ?></p>
         <?php else: ?>
           <div class="table-responsive">
             <table class="table align-middle">
               <thead>
                 <tr>
                   <th>#</th>
-                  <th><?= h(__('t_d8189e371d', 'المصطلح')) ?></th>
-                  <th><?= h(__('t_4c9678230f', 'الشرح')) ?></th>
-                  <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                  <th><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                  <th><?php echo h(__('t_d8189e371d', 'المصطلح')); ?></th>
+                  <th><?php echo h(__('t_4c9678230f', 'الشرح')); ?></th>
+                  <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                  <th><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
                 </tr>
               </thead>
               <tbody>
                 <?php foreach ($rows as $row): ?>
                   <tr>
-                    <td><?= (int)$row['id'] ?></td>
-                    <td><?= h($row['term']) ?></td>
-                    <td style="max-width:400px"><?= nl2br(h($row['short_definition'])) ?></td>
+                    <td><?php echo (int)$row['id']; ?></td>
+                    <td><?php echo h($row['term']); ?></td>
+                    <td style="max-width:400px"><?php echo nl2br(h($row['short_definition'])); ?></td>
                     <td>
                       <?php if ((int)$row['is_active'] === 1): ?>
-                        <span class="badge bg-success"><?= h(__('t_918499f2af', 'مفعل')) ?></span>
+                        <span class="badge bg-success"><?php echo h(__('t_918499f2af', 'مفعل')); ?></span>
                       <?php else: ?>
-                        <span class="badge bg-secondary"><?= h(__('t_0bad9c165c', 'معطل')) ?></span>
+                        <span class="badge bg-secondary"><?php echo h(__('t_0bad9c165c', 'معطل')); ?></span>
                       <?php endif; ?>
                     </td>
                     <td>
                       <form method="post" class="d-inline">
-                        <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
+                        <input type="hidden" name="id" value="<?php echo (int)$row['id']; ?>">
                         <input type="hidden" name="action" value="toggle">
                         <button type="submit" class="btn btn-sm btn-outline-primary">
-                          <?= h(__('t_01a5d8d953', 'تبديل الحالة')) ?>
+                          <?php echo h(__('t_01a5d8d953', 'تبديل الحالة')); ?>
                         </button>
                       </form>
                       <form method="post" class="d-inline" data-confirm='هل أنت متأكد من حذف هذا المصطلح؟'>
-                        <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
+                        <input type="hidden" name="id" value="<?php echo (int)$row['id']; ?>">
                         <input type="hidden" name="action" value="delete">
                         <button type="submit" class="btn btn-sm btn-outline-danger">
-                          <?= h(__('t_3b9854e1bb', 'حذف')) ?>
+                          <?php echo h(__('t_3b9854e1bb', 'حذف')); ?>
                         </button>
                       </form>
                     </td>

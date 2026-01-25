@@ -1,1 +1,1 @@
-console.log('Godyar admin loaded');
+// (prod) avoid noisy console output

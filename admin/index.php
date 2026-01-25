@@ -401,21 +401,21 @@ $footerPath  = __DIR__ . '/layout/footer.php';
 // لو المستخدم مش أدمن → صفحة مصغرة فقط
 if (!$isAdmin): ?>
     <!doctype html>
-    <html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+    <html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr'); ?>">
     <head>
       <meta charset="utf-8">
-      <title><?= h(__('t_559b292797', 'لوحة التحكم — تسجيل الدخول مطلوب')) ?></title>
+      <title><?php echo h(__('t_559b292797', 'لوحة التحكم — تسجيل الدخول مطلوب')); ?></title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
       </head>
     <body class="bg-dark text-light">
       <div class="container py-5">
-        <h1 class="h4 mb-3"><?= h(__('t_399cbf37c4', 'لوحة التحكم — Godyar')) ?></h1>
+        <h1 class="h4 mb-3"><?php echo h(__('t_399cbf37c4', 'لوحة التحكم — Godyar')); ?></h1>
         <div class="alert alert-warning">
-          <?= h(__('t_c027002e8e', 'يجب تسجيل الدخول كمدير للوصول إلى لوحة التحكم.')) ?>
+          <?php echo h(__('t_c027002e8e', 'يجب تسجيل الدخول كمدير للوصول إلى لوحة التحكم.')); ?>
         </div>
-        <a href="<?= h($adminBase) ?>/login.php" class="btn btn-primary"><?= h(__('t_a874173c2b', 'الذهاب لصفحة تسجيل الدخول')) ?></a>
-        <a href="<?= h($siteBase) ?>/" class="btn btn-outline-light ms-2"><?= h(__('t_3a5661ec20', 'العودة للموقع')) ?></a>
+        <a href="<?php echo h($adminBase); ?>/login.php" class="btn btn-primary"><?php echo h(__('t_a874173c2b', 'الذهاب لصفحة تسجيل الدخول')); ?></a>
+        <a href="<?php echo h($siteBase); ?>/" class="btn btn-outline-light ms-2"><?php echo h(__('t_3a5661ec20', 'العودة للموقع')); ?></a>
       </div>
     </body>
     </html>
@@ -1064,22 +1064,22 @@ html[dir="rtl"] .gdy-activity-bars{
     <div class="gdy-page-header">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
-          <h1 class="mb-1 text-white fw-bold"><?= h(__('t_a06ee671f4', 'لوحة التحكم')) ?></h1>
+          <h1 class="mb-1 text-white fw-bold"><?php echo h(__('t_a06ee671f4', 'لوحة التحكم')); ?></h1>
           <p class="mb-0">
-            <?= h(__('t_4fa3486d5e', 'نظرة عامة على أداء النظام والمحتوى والتفاعل.')) ?>
+            <?php echo h(__('t_4fa3486d5e', 'نظرة عامة على أداء النظام والمحتوى والتفاعل.')); ?>
           </p>
         </div>
         <div class="text-sm text-secondary d-flex align-items-center flex-wrap gap-2">
           <span class="me-2">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?= h(__('t_c2cde46825', 'مدير النظام')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg> <?php echo h(__('t_c2cde46825', 'مدير النظام')); ?>
           </span>
-          <a class="text-secondary text-decoration-none me-2" href="<?= h($siteBase) ?>/" target="_blank" rel="noopener" title="<?= h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')) ?>">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?= h(__('t_03b57332e5', 'الموقع الرئيسي')) ?>
+          <a class="text-secondary text-decoration-none me-2" href="<?php echo h($siteBase); ?>/" target="_blank" rel="noopener" title="<?php echo h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')); ?>">
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg> <?php echo h(__('t_03b57332e5', 'الموقع الرئيسي')); ?>
           </a>
           <?php if ($debugMode): ?>
             <span class="badge bg-danger">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_d78fba4389', 'وضع التطوير (display_errors مفعل)')) ?>
+              <?php echo h(__('t_d78fba4389', 'وضع التطوير (display_errors مفعل)')); ?>
             </span>
           <?php endif; ?>
         </div>
@@ -1094,25 +1094,25 @@ html[dir="rtl"] .gdy-activity-bars{
           <div class="col-md-5">
             <div class="gdy-welcome-box">
               <h2 class="gdy-welcome-title mb-1">
-                أهلاً <?= h($user['name'] ?? $user['email'] ?? 'admin') ?>! 👋
+                أهلاً <?php echo h($user['name'] ?? $user['email'] ?? 'admin'); ?>! 👋
               </h2>
               <p class="gdy-welcome-sub">
-                <?= h(__('t_4b682fc953', 'نظرة شاملة على أداء النظام والإحصائيات الحيوية')) ?>
+                <?php echo h(__('t_4b682fc953', 'نظرة شاملة على أداء النظام والإحصائيات الحيوية')); ?>
               </p>
               <div class="gdy-welcome-meta">
                 <span>
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span class="gdy-date-value"><?= date('Y-m-d') ?></span>
+                  <span class="gdy-date-value"><?php echo date('Y-m-d'); ?></span>
                 </span>
                 <span>
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span class="gdy-time-value"><?= date('H:i:s') ?></span>
+                  <span class="gdy-time-value"><?php echo date('H:i:s'); ?></span>
                 </span>
                 <span>
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-                  أخبار اليوم: <?= (int) $stats['today_news'] ?>
-                  / تعليقات اليوم: <?= (int) $stats['today_comments'] ?>
-                  / رسائل جديدة: <?= (int) $stats['unread_messages'] ?>
+                  أخبار اليوم: <?php echo (int) $stats['today_news']; ?>
+                  / تعليقات اليوم: <?php echo (int) $stats['today_comments']; ?>
+                  / رسائل جديدة: <?php echo (int) $stats['unread_messages']; ?>
                 </span>
               </div>
             </div>
@@ -1122,20 +1122,20 @@ html[dir="rtl"] .gdy-activity-bars{
           <div class="col-md-7 text-md-end">
             <div class="gdy-quickbar-title mb-2">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <span><?= h(__('t_5383623868', 'شريط المهام السريعة')) ?></span>
+              <span><?php echo h(__('t_5383623868', 'شريط المهام السريعة')); ?></span>
             </div>
             <div class="gdy-quick-actions">
               <?php foreach ($quickLinks as $link): ?>
-                <a href="<?= h($link['href']) ?>" class="gdy-quick-btn">
-                  <svg class="gdy-icon <?= h($link['icon']) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <span><?= h($link['text']) ?></span>
+                <a href="<?php echo h($link['href']); ?>" class="gdy-quick-btn">
+                  <svg class="gdy-icon <?php echo h($link['icon']); ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                  <span><?php echo h($link['text']); ?></span>
                 </a>
               <?php endforeach; ?>
 
               <!-- زر التحكم في إظهار/إخفاء القائمة الجانبية في الواجهة -->
               <button type="button" id="gdy-sidebar-global-toggle" class="gdy-quick-btn">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <span class="gdy-sidebar-global-label"><?= h(__('t_a0c2dca9fc', 'إخفاء القائمة الجانبية في الواجهة')) ?></span>
+                <span class="gdy-sidebar-global-label"><?php echo h(__('t_a0c2dca9fc', 'إخفاء القائمة الجانبية في الواجهة')); ?></span>
               </button>
             </div>
           </div>
@@ -1146,59 +1146,59 @@ html[dir="rtl"] .gdy-activity-bars{
     <!-- الإحصائيات الرئيسية -->
     <div class="gdy-stats-grid">
       <div class="gdy-stat-card" data-color="blue">
-        <div class="gdy-stat-label"><?= h(__('t_93e37eb4e5', 'إجمالي الأخبار')) ?></div>
-        <div class="gdy-stat-value"><?= number_format($stats['news']) ?></div>
+        <div class="gdy-stat-label"><?php echo h(__('t_93e37eb4e5', 'إجمالي الأخبار')); ?></div>
+        <div class="gdy-stat-value"><?php echo number_format($stats['news']); ?></div>
         <div class="gdy-stat-trend">
           <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
-          <span>+<?= (int) $stats['today_news'] ?> خبر جديد اليوم</span>
+          <span>+<?php echo (int) $stats['today_news']; ?> خبر جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
-          <div class="gdy-performance-fill" style="width: <?= $newsTodayPercent ?>%;"></div>
+          <div class="gdy-performance-fill" style="width: <?php echo $newsTodayPercent; ?>%;"></div>
         </div>
       </div>
 
       <div class="gdy-stat-card" data-color="green">
-        <div class="gdy-stat-label"><?= h(__('t_14f0cf5e77', 'التصنيفات')) ?></div>
-        <div class="gdy-stat-value"><?= number_format($stats['categories']) ?></div>
+        <div class="gdy-stat-label"><?php echo h(__('t_14f0cf5e77', 'التصنيفات')); ?></div>
+        <div class="gdy-stat-value"><?php echo number_format($stats['categories']); ?></div>
         <div class="gdy-stat-trend">
-          <span>متوسط <?= $avgNewsPerCategory ?> خبر لكل تصنيف</span>
+          <span>متوسط <?php echo $avgNewsPerCategory; ?> خبر لكل تصنيف</span>
         </div>
         <div class="gdy-performance-bar">
-          <div class="gdy-performance-fill" style="width: <?= $categoriesUsagePercent ?>%;"></div>
+          <div class="gdy-performance-fill" style="width: <?php echo $categoriesUsagePercent; ?>%;"></div>
         </div>
       </div>
 
       <div class="gdy-stat-card" data-color="yellow">
-        <div class="gdy-stat-label"><?= h(__('t_39d3073371', 'المستخدمون')) ?></div>
-        <div class="gdy-stat-value"><?= number_format($stats['users']) ?></div>
+        <div class="gdy-stat-label"><?php echo h(__('t_39d3073371', 'المستخدمون')); ?></div>
+        <div class="gdy-stat-value"><?php echo number_format($stats['users']); ?></div>
         <div class="gdy-stat-trend">
           <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <span>+<?= (int) $stats['today_users'] ?> مستخدم جديد اليوم</span>
+          <span>+<?php echo (int) $stats['today_users']; ?> مستخدم جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
-          <div class="gdy-performance-fill" style="width: <?= $usersPercent ?>%;"></div>
+          <div class="gdy-performance-fill" style="width: <?php echo $usersPercent; ?>%;"></div>
         </div>
       </div>
 
       <div class="gdy-stat-card" data-color="purple">
-        <div class="gdy-stat-label"><?= h(__('t_422df4da8b', 'التعليقات')) ?></div>
-        <div class="gdy-stat-value"><?= number_format($stats['comments']) ?></div>
+        <div class="gdy-stat-label"><?php echo h(__('t_422df4da8b', 'التعليقات')); ?></div>
+        <div class="gdy-stat-value"><?php echo number_format($stats['comments']); ?></div>
         <div class="gdy-stat-trend">
           <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <span><?= (int) $stats['today_comments'] ?> تعليق جديد اليوم</span>
+          <span><?php echo (int) $stats['today_comments']; ?> تعليق جديد اليوم</span>
         </div>
         <div class="gdy-performance-bar">
-          <div class="gdy-performance-fill" style="width: <?= $commentsPercent ?>%;"></div>
+          <div class="gdy-performance-fill" style="width: <?php echo $commentsPercent; ?>%;"></div>
         </div>
       </div>
 
       <!-- بطاقة إضافية: رسائل التواصل الجديدة -->
       <div class="gdy-stat-card" data-color="red">
-        <div class="gdy-stat-label"><?= h(__('t_1be2ee1784', 'رسائل التواصل الجديدة')) ?></div>
-        <div class="gdy-stat-value"><?= number_format($stats['unread_messages']) ?></div>
+        <div class="gdy-stat-label"><?php echo h(__('t_1be2ee1784', 'رسائل التواصل الجديدة')); ?></div>
+        <div class="gdy-stat-value"><?php echo number_format($stats['unread_messages']); ?></div>
         <div class="gdy-stat-trend">
           <svg class="gdy-icon text-danger" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-          <span><?= h(__('t_af2b984782', 'رسائل من نموذج "اتصل بنا" تحتاج للمراجعة')) ?></span>
+          <span><?php echo h(__('t_af2b984782', 'رسائل من نموذج "اتصل بنا" تحتاج للمراجعة')); ?></span>
         </div>
         <div class="gdy-performance-bar">
           <?php
@@ -1206,7 +1206,7 @@ html[dir="rtl"] .gdy-activity-bars{
               ? min($stats['unread_messages'] * 10, 100)
               : 0;
           ?>
-          <div class="gdy-performance-fill" style="width: <?= $msgPercent ?>%;"></div>
+          <div class="gdy-performance-fill" style="width: <?php echo $msgPercent; ?>%;"></div>
         </div>
       </div>
 
@@ -1217,11 +1217,11 @@ html[dir="rtl"] .gdy-activity-bars{
       <div class="gdy-card-header">
         <h3 class="gdy-card-title">
           <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_f850499360', 'تحليلات الزيارات اليوم')) ?>
+          <?php echo h(__('t_f850499360', 'تحليلات الزيارات اليوم')); ?>
         </h3>
         <div class="small text-muted">
           <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= date('Y-m-d') ?>
+          <?php echo date('Y-m-d'); ?>
         </div>
       </div>
 
@@ -1231,19 +1231,19 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- زيارات اليوم -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_1860c23886', 'زيارات اليوم')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_1860c23886', 'زيارات اليوم')); ?></div>
               </div>
               <div class="gdy-card-body">
                 <div class="gdy-kpi">
-                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_a5481217bd', 'إجمالي الزيارات')) ?></div>
-                  <div class="value"><?= number_format((int)$visitAnalytics['today']) ?></div>
+                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_a5481217bd', 'إجمالي الزيارات')); ?></div>
+                  <div class="value"><?php echo number_format((int)$visitAnalytics['today']); ?></div>
                 </div>
                 <div class="gdy-kpi mb-0">
-                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_da2ae4cedf', 'زوار مميزون')) ?></div>
-                  <div class="value"><?= number_format((int)$visitAnalytics['unique_today']) ?></div>
+                  <div class="label"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_da2ae4cedf', 'زوار مميزون')); ?></div>
+                  <div class="value"><?php echo number_format((int)$visitAnalytics['unique_today']); ?></div>
                 </div>
                 <div class="small text-muted mt-2">
-                  <?= h(__('t_b94e35403a', 'يتم احتساب "زوار مميزون" حسب IP إن كان متوفرًا.')) ?>
+                  <?php echo h(__('t_b94e35403a', 'يتم احتساب "زوار مميزون" حسب IP إن كان متوفرًا.')); ?>
                 </div>
               </div>
             </div>
@@ -1251,7 +1251,7 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- مصادر الزيارات -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_354b3cc224', 'مصادر الزيارات')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_354b3cc224', 'مصادر الزيارات')); ?></div>
               </div>
               <div class="gdy-card-body">
                 <?php
@@ -1275,18 +1275,18 @@ html[dir="rtl"] .gdy-activity-bars{
                     $icon = $srcIcons[$k] ?? 'fa-circle';
                     $name = $srcNames[$k] ?? $k;
                   ?>
-                  <div class="gdy-source-row" title="<?= h($name) ?>: <?= $val ?> (<?= $pct ?>%)">
+                  <div class="gdy-source-row" title="<?php echo h($name); ?>: <?php echo $val; ?> (<?php echo $pct; ?>%)">
                     <div class="name">
-                      <svg class="gdy-icon <?= h($icon) ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                      <span><?= h($name) ?></span>
+                      <svg class="gdy-icon <?php echo h($icon); ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                      <span><?php echo h($name); ?></span>
                     </div>
-                    <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
-                    <div class="pct"><?= $pct ?>%</div>
+                    <div class="bar"><div class="fill" style="width: <?php echo $pct; ?>%"></div></div>
+                    <div class="pct"><?php echo $pct; ?>%</div>
                   </div>
                 <?php endforeach; ?>
 
                 <div class="small text-muted mt-2">
-                  <?= h(__('t_7043ad5a85', 'التصنيف: مباشر / بحث / اجتماعي / إحالات (حسب referrer).')) ?>
+                  <?php echo h(__('t_7043ad5a85', 'التصنيف: مباشر / بحث / اجتماعي / إحالات (حسب referrer).')); ?>
                 </div>
               </div>
             </div>
@@ -1294,36 +1294,36 @@ html[dir="rtl"] .gdy-activity-bars{
             <!-- الأكثر قراءة اليوم -->
             <div class="gdy-analytics-card" data-span="4">
               <div class="gdy-card-header">
-                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f175185d34', 'الأكثر قراءة اليوم')) ?></div>
+                <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f175185d34', 'الأكثر قراءة اليوم')); ?></div>
               </div>
               <div class="gdy-card-body">
                 <?php if (!empty($visitAnalytics['top_news'])): ?>
                   <table class="gdy-top-news">
                     <thead>
                       <tr>
-                        <th style="width: 70%;"><?= h(__('t_213a03802a', 'الخبر')) ?></th>
-                        <th style="width: 30%;"><?= h(__('t_635e970ab9', 'الزيارات')) ?></th>
+                        <th style="width: 70%;"><?php echo h(__('t_213a03802a', 'الخبر')); ?></th>
+                        <th style="width: 30%;"><?php echo h(__('t_635e970ab9', 'الزيارات')); ?></th>
                       </tr>
                     </thead>
                     <tbody>
                       <?php foreach ($visitAnalytics['top_news'] as $row): ?>
                         <tr>
                           <td>
-                            <a href="<?= h($adminBase) ?>/news/edit.php?id=<?= (int)$row['id'] ?>">
-                              <?= h($row['title']) ?>
+                            <a href="<?php echo h($adminBase); ?>/news/edit.php?id=<?php echo (int)$row['id']; ?>">
+                              <?php echo h($row['title']); ?>
                             </a>
                           </td>
-                          <td><?= number_format((int)$row['count']) ?></td>
+                          <td><?php echo number_format((int)$row['count']); ?></td>
                         </tr>
                       <?php endforeach; ?>
                     </tbody>
                   </table>
                 <?php else: ?>
-                  <div class="text-muted"><?= h(__('t_90c052a29d', 'لا توجد بيانات كافية اليوم للأخبار الأكثر قراءة.')) ?></div>
+                  <div class="text-muted"><?php echo h(__('t_90c052a29d', 'لا توجد بيانات كافية اليوم للأخبار الأكثر قراءة.')); ?></div>
                 <?php endif; ?>
 
                 <div class="small text-muted mt-2">
-                  <?= h(__('t_0db1ace986', 'يتم الاحتساب من جدول الزيارات (visits) لصفحة')) ?> <b>article</b>.
+                  <?php echo h(__('t_0db1ace986', 'يتم الاحتساب من جدول الزيارات (visits) لصفحة')); ?> <b>article</b>.
                 </div>
               </div>
             </div>
@@ -1331,24 +1331,24 @@ html[dir="rtl"] .gdy-activity-bars{
 	          <!-- نوع النظام اليوم -->
 	          <div class="gdy-analytics-card" data-span="6">
 	            <div class="gdy-card-header">
-	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6f3b4f0a9', 'نوع النظام')) ?></div>
+	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_b6f3b4f0a9', 'نوع النظام')); ?></div>
 	            </div>
 	            <div class="gdy-card-body">
 	              <?php $osTotal = (int)array_sum((array)($visitAnalytics['os'] ?? [])); ?>
 	              <?php if ($osTotal > 0): ?>
 	                <?php foreach (($visitAnalytics['os'] ?? []) as $k => $v): ?>
 	                  <?php $pct = $osTotal ? (int)round(((int)$v / $osTotal) * 100) : 0; ?>
-	                  <div class="gdy-source-row" title="<?= h((string)$k) ?>: <?= (int)$v ?> (<?= $pct ?>%)">
+	                  <div class="gdy-source-row" title="<?php echo h((string)$k); ?>: <?php echo (int)$v; ?> (<?php echo $pct; ?>%)">
 	                    <div class="name">
 	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-	                      <span><?= h((string)$k) ?></span>
+	                      <span><?php echo h((string)$k); ?></span>
 	                    </div>
-	                    <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
-	                    <div class="pct"><?= $pct ?>%</div>
+	                    <div class="bar"><div class="fill" style="width: <?php echo $pct; ?>%"></div></div>
+	                    <div class="pct"><?php echo $pct; ?>%</div>
 	                  </div>
 	                <?php endforeach; ?>
 	              <?php else: ?>
-	                <div class="text-muted"><?= h(__('t_6d8a2b5f58', 'لا توجد بيانات كافية اليوم.')) ?></div>
+	                <div class="text-muted"><?php echo h(__('t_6d8a2b5f58', 'لا توجد بيانات كافية اليوم.')); ?></div>
 	              <?php endif; ?>
 	            </div>
 	          </div>
@@ -1356,31 +1356,31 @@ html[dir="rtl"] .gdy-activity-bars{
 	          <!-- نوع المتصفح اليوم -->
 	          <div class="gdy-analytics-card" data-span="6">
 	            <div class="gdy-card-header">
-	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?= h(__('t_6f1a3f7d22', 'نوع المتصفح')) ?></div>
+	              <div class="gdy-card-title"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg> <?php echo h(__('t_6f1a3f7d22', 'نوع المتصفح')); ?></div>
 	            </div>
 	            <div class="gdy-card-body">
 	              <?php $brTotal = (int)array_sum((array)($visitAnalytics['browsers'] ?? [])); ?>
 	              <?php if ($brTotal > 0): ?>
 	                <?php foreach (($visitAnalytics['browsers'] ?? []) as $k => $v): ?>
 	                  <?php $pct = $brTotal ? (int)round(((int)$v / $brTotal) * 100) : 0; ?>
-	                  <div class="gdy-source-row" title="<?= h((string)$k) ?>: <?= (int)$v ?> (<?= $pct ?>%)">
+	                  <div class="gdy-source-row" title="<?php echo h((string)$k); ?>: <?php echo (int)$v; ?> (<?php echo $pct; ?>%)">
 	                    <div class="name">
 	                      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-	                      <span><?= h((string)$k) ?></span>
+	                      <span><?php echo h((string)$k); ?></span>
 	                    </div>
-	                    <div class="bar"><div class="fill" style="width: <?= $pct ?>%"></div></div>
-	                    <div class="pct"><?= $pct ?>%</div>
+	                    <div class="bar"><div class="fill" style="width: <?php echo $pct; ?>%"></div></div>
+	                    <div class="pct"><?php echo $pct; ?>%</div>
 	                  </div>
 	                <?php endforeach; ?>
 	              <?php else: ?>
-	                <div class="text-muted"><?= h(__('t_6d8a2b5f58', 'لا توجد بيانات كافية اليوم.')) ?></div>
+	                <div class="text-muted"><?php echo h(__('t_6d8a2b5f58', 'لا توجد بيانات كافية اليوم.')); ?></div>
 	              <?php endif; ?>
 	            </div>
 	          </div>
           </div>
         <?php else: ?>
           <div class="alert alert-info mb-0">
-            <?= h(__('t_1ae643cf89', 'لم يتم تفعيل إحصائيات الزيارات بعد. بمجرد دخول الزوار لصفحات الأخبار (صفحات الأخبار /news) سيتم إنشاء بيانات جدول')) ?> <b>visits</b> <?= h(__('t_c2e7b3e9e8', 'تلقائيًا.')) ?>
+            <?php echo h(__('t_1ae643cf89', 'لم يتم تفعيل إحصائيات الزيارات بعد. بمجرد دخول الزوار لصفحات الأخبار (صفحات الأخبار /news) سيتم إنشاء بيانات جدول')); ?> <b>visits</b> <?php echo h(__('t_c2e7b3e9e8', 'تلقائيًا.')); ?>
           </div>
         <?php endif; ?>
       </div>
@@ -1394,7 +1394,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_390d8d902c', 'نشاط الأخبار خلال آخر 7 أيام')) ?>
+            <?php echo h(__('t_390d8d902c', 'نشاط الأخبار خلال آخر 7 أيام')); ?>
           </h3>
         </div>
         <div class="gdy-activity-chart">
@@ -1406,10 +1406,10 @@ html[dir="rtl"] .gdy-activity-bars{
             ?>
               <div class="gdy-activity-bar">
                 <div class="gdy-activity-bar-inner"
-                     style="height: <?= $height ?>%;"
-	                     title="<?= h($day) ?>: <?= (int) $count ?>"></div>
+                     style="height: <?php echo $height; ?>%;"
+	                     title="<?php echo h($day); ?>: <?php echo (int) $count; ?>"></div>
                 <div class="gdy-activity-bar-label">
-                  <?= date('D', strtotime($day)) ?>
+                  <?php echo date('D', strtotime($day)); ?>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -1425,7 +1425,7 @@ html[dir="rtl"] .gdy-activity-bars{
           <div class="gdy-card-header">
             <h3 class="gdy-card-title">
               <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_e610ba581c', 'آخر الأخبار المضافة')) ?>
+              <?php echo h(__('t_e610ba581c', 'آخر الأخبار المضافة')); ?>
             </h3>
             <div class="d-flex align-items-center gap-2 flex-wrap">
               <div class="input-group input-group-sm" style="max-width: 230px;">
@@ -1435,10 +1435,10 @@ html[dir="rtl"] .gdy-activity-bars{
                 <input type="text"
                        id="recent-news-search"
                        class="form-control bg-dark border-secondary text-light"
-                       placeholder="<?= h(__('t_c10cc4a01e', 'بحث في الأخبار...')) ?>">
+                       placeholder="<?php echo h(__('t_c10cc4a01e', 'بحث في الأخبار...')); ?>">
               </div>
-              <a href="<?= h($adminBase) ?>/news/" class="btn btn-sm btn-outline-light">
-                <?= h(__('t_7c627fa50f', 'عرض كل الأخبار')) ?>
+              <a href="<?php echo h($adminBase); ?>/news/" class="btn btn-sm btn-outline-light">
+                <?php echo h(__('t_7c627fa50f', 'عرض كل الأخبار')); ?>
               </a>
             </div>
           </div>
@@ -1450,9 +1450,9 @@ html[dir="rtl"] .gdy-activity-bars{
                     <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                   </div>
                   <div>
-                    <div class="gdy-news-title"><?= h($news['title']) ?></div>
+                    <div class="gdy-news-title"><?php echo h($news['title']); ?></div>
                     <div class="gdy-news-meta">
-                      <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= date('Y-m-d', strtotime($news['created_at'])) ?></span>
+                      <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo date('Y-m-d', strtotime($news['created_at'])); ?></span>
                     </div>
                   </div>
                 </div>
@@ -1460,7 +1460,7 @@ html[dir="rtl"] .gdy-activity-bars{
             <?php else: ?>
               <div class="text-center text-muted py-4">
                 <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-                <p class="mb-0"><?= h(__('t_6b2cba49e9', 'لا توجد أخبار حديثة حالياً.')) ?></p>
+                <p class="mb-0"><?php echo h(__('t_6b2cba49e9', 'لا توجد أخبار حديثة حالياً.')); ?></p>
               </div>
             <?php endif; ?>
           </div>
@@ -1472,29 +1472,29 @@ html[dir="rtl"] .gdy-activity-bars{
           <div class="gdy-card-header">
             <h3 class="gdy-card-title">
               <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_640a46691d', 'حالة النظام')) ?>
+              <?php echo h(__('t_640a46691d', 'حالة النظام')); ?>
             </h3>
           </div>
           <div class="gdy-system-indicators">
             <div class="gdy-indicator">
               <svg class="gdy-icon text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <div class="gdy-indicator-value"><?= h($systemInfo['php_version']) ?></div>
+              <div class="gdy-indicator-value"><?php echo h($systemInfo['php_version']); ?></div>
               <div class="gdy-indicator-label">PHP</div>
             </div>
             <div class="gdy-indicator">
               <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
-              <div class="gdy-indicator-value"><?= h($systemInfo['mysql_version']) ?></div>
+              <div class="gdy-indicator-value"><?php echo h($systemInfo['mysql_version']); ?></div>
               <div class="gdy-indicator-label">MySQL</div>
             </div>
             <div class="gdy-indicator">
               <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-              <div class="gdy-indicator-value"><?= h($systemInfo['memory_limit']) ?></div>
-              <div class="gdy-indicator-label"><?= h(__('t_6e3781c6ec', 'حد الذاكرة')) ?></div>
+              <div class="gdy-indicator-value"><?php echo h($systemInfo['memory_limit']); ?></div>
+              <div class="gdy-indicator-label"><?php echo h(__('t_6e3781c6ec', 'حد الذاكرة')); ?></div>
             </div>
             <div class="gdy-indicator">
               <svg class="gdy-icon text-primary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <div class="gdy-indicator-value"><?= h($systemInfo['upload_max_filesize']) ?></div>
-              <div class="gdy-indicator-label"><?= h(__('t_eac09e95a8', 'حجم الرفع الأقصى')) ?></div>
+              <div class="gdy-indicator-value"><?php echo h($systemInfo['upload_max_filesize']); ?></div>
+              <div class="gdy-indicator-label"><?php echo h(__('t_eac09e95a8', 'حجم الرفع الأقصى')); ?></div>
             </div>
           </div>
 
@@ -1503,15 +1503,15 @@ html[dir="rtl"] .gdy-activity-bars{
               <?php if ($memoryUsageMb !== null): ?>
                 <div class="gdy-performance-card">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <div class="gdy-indicator-value"><?= number_format($memoryUsageMb, 1) ?> MB</div>
-                  <div class="gdy-indicator-label"><?= h(__('t_11f69e717a', 'استخدام الذاكرة (PHP)')) ?></div>
+                  <div class="gdy-indicator-value"><?php echo number_format($memoryUsageMb, 1); ?> MB</div>
+                  <div class="gdy-indicator-label"><?php echo h(__('t_11f69e717a', 'استخدام الذاكرة (PHP)')); ?></div>
                 </div>
               <?php endif; ?>
               <?php if ($systemLoad !== null): ?>
                 <div class="gdy-performance-card">
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <div class="gdy-indicator-value"><?= number_format($systemLoad, 2) ?></div>
-                  <div class="gdy-indicator-label"><?= h(__('t_aa45c9e9a9', 'تحميل النظام')) ?></div>
+                  <div class="gdy-indicator-value"><?php echo number_format($systemLoad, 2); ?></div>
+                  <div class="gdy-indicator-label"><?php echo h(__('t_aa45c9e9a9', 'تحميل النظام')); ?></div>
                 </div>
               <?php endif; ?>
             </div>
@@ -1526,7 +1526,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_c5bc8cdb85', 'الأخبار الأكثر مشاهدة')) ?>
+            <?php echo h(__('t_c5bc8cdb85', 'الأخبار الأكثر مشاهدة')); ?>
           </h3>
         </div>
         <div class="gdy-news-list">
@@ -1534,12 +1534,12 @@ html[dir="rtl"] .gdy-activity-bars{
             <?php foreach ($popularNews as $index => $news): ?>
               <div class="gdy-news-item">
                 <div class="gdy-news-icon">
-                  <svg class="gdy-icon $index < 3 ? 'fire' : 'eye' ?> text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                  <svg class="gdy-icon <?php echo ($index < 3 ? 'fire' : 'eye'); ?> text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <div>
-                  <div class="gdy-news-title"><?= h($news['title']) ?></div>
+                  <div class="gdy-news-title"><?php echo h($news['title']); ?></div>
                   <div class="gdy-news-meta">
-                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= number_format($news['views']) ?> مشاهدة</span>
+                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo number_format((int)($news['views'] ?? 0)); ?> مشاهدة</span>
                   </div>
                 </div>
               </div>
@@ -1547,7 +1547,7 @@ html[dir="rtl"] .gdy-activity-bars{
           <?php else: ?>
             <div class="text-center text-muted py-3">
               <svg class="gdy-icon mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <p class="mb-0"><?= h(__('t_565b68e9d9', 'لا توجد بيانات مشاهدات كافية بعد.')) ?></p>
+              <p class="mb-0"><?php echo h(__('t_565b68e9d9', 'لا توجد بيانات مشاهدات كافية بعد.')); ?></p>
             </div>
           <?php endif; ?>
         </div>
@@ -1557,7 +1557,7 @@ html[dir="rtl"] .gdy-activity-bars{
         <div class="gdy-card-header">
           <h3 class="gdy-card-title">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_7a8965fe52', 'نصائح الأمان وتنبيهات الإدارة')) ?>
+            <?php echo h(__('t_7a8965fe52', 'نصائح الأمان وتنبيهات الإدارة')); ?>
           </h3>
         </div>
         <div class="gdy-news-list">
@@ -1566,9 +1566,9 @@ html[dir="rtl"] .gdy-activity-bars{
               <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
-              <div class="gdy-news-title"><?= h(__('t_80022702ae', 'استخدم كلمات مرور قوية')) ?></div>
+              <div class="gdy-news-title"><?php echo h(__('t_80022702ae', 'استخدم كلمات مرور قوية')); ?></div>
               <div class="gdy-news-meta">
-                <?= h(__('t_e185d0a75c', 'اجعل كلمة المرور طويلة وتحتوي على حروف وأرقام ورموز.')) ?>
+                <?php echo h(__('t_e185d0a75c', 'اجعل كلمة المرور طويلة وتحتوي على حروف وأرقام ورموز.')); ?>
               </div>
             </div>
           </div>
@@ -1577,9 +1577,9 @@ html[dir="rtl"] .gdy-activity-bars{
               <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
-              <div class="gdy-news-title"><?= h(__('t_c0679dc67e', 'تحديثات دورية للنظام')) ?></div>
+              <div class="gdy-news-title"><?php echo h(__('t_c0679dc67e', 'تحديثات دورية للنظام')); ?></div>
               <div class="gdy-news-meta">
-                <?= h(__('t_3f57ffd869', 'حافظ على تحديث السكربت والإضافات لسد الثغرات الأمنية.')) ?>
+                <?php echo h(__('t_3f57ffd869', 'حافظ على تحديث السكربت والإضافات لسد الثغرات الأمنية.')); ?>
               </div>
             </div>
           </div>
@@ -1588,9 +1588,9 @@ html[dir="rtl"] .gdy-activity-bars{
               <svg class="gdy-icon text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
             <div>
-              <div class="gdy-news-title"><?= h(__('t_0bb7a7bb4d', 'نسخ احتياطية منتظمة')) ?></div>
+              <div class="gdy-news-title"><?php echo h(__('t_0bb7a7bb4d', 'نسخ احتياطية منتظمة')); ?></div>
               <div class="gdy-news-meta">
-                <?= h(__('t_455ede10af', 'قم بإنشاء نسخ احتياطية لقاعدة البيانات والملفات بشكل دوري.')) ?>
+                <?php echo h(__('t_455ede10af', 'قم بإنشاء نسخ احتياطية لقاعدة البيانات والملفات بشكل دوري.')); ?>
               </div>
             </div>
           </div>
@@ -1604,13 +1604,13 @@ html[dir="rtl"] .gdy-activity-bars{
               <div class="gdy-news-title">
                 رسائل جديدة من الزوار
                 <?php if ($stats['unread_messages'] > 0): ?>
-                  <span class="badge bg-danger ms-1"><?= (int)$stats['unread_messages'] ?></span>
+                  <span class="badge bg-danger ms-1"><?php echo (int)$stats['unread_messages']; ?></span>
                 <?php endif; ?>
               </div>
               <div class="gdy-news-meta">
-                <?= h(__('t_1d036d5265', 'راجع رسائل نموذج "اتصل بنا" أولاً بأول لتحسين التفاعل مع القرّاء.')) ?>
-                <a href="<?= h($adminBase) ?>/contact/" class="text-info text-decoration-none ms-1">
-                  <?= h(__('t_262e3c1f97', 'الذهاب لصفحة الرسائل')) ?>
+                <?php echo h(__('t_1d036d5265', 'راجع رسائل نموذج "اتصل بنا" أولاً بأول لتحسين التفاعل مع القرّاء.')); ?>
+                <a href="<?php echo h($adminBase); ?>/contact/" class="text-info text-decoration-none ms-1">
+                  <?php echo h(__('t_262e3c1f97', 'الذهاب لصفحة الرسائل')); ?>
                   <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </a>
               </div>
@@ -1625,12 +1625,12 @@ html[dir="rtl"] .gdy-activity-bars{
     <div class="gdy-admin-footer">
       <div class="row align-items-center">
         <div class="col-md-6 mb-2 mb-md-0">
-          &copy; <?= date('Y') ?> Godyar News — نظام إدارة المحتوى المتقدم
+          &copy; <?php echo date('Y'); ?> Godyar News — نظام إدارة المحتوى المتقدم
         </div>
         <div class="col-md-6 text-md-end">
           <span class="me-2">
             <svg class="gdy-icon text-success" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
-            <?= h(__('t_0cef8a4c1b', 'النظام يعمل بشكل طبيعي')) ?>
+            <?php echo h(__('t_0cef8a4c1b', 'النظام يعمل بشكل طبيعي')); ?>
           </span>
           <span>
             <svg class="gdy-icon text-secondary" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

@@ -30,8 +30,8 @@ if (!$tableExists) {
   require_once __DIR__ . '/../layout/app_start.php';
   ?>
   <div class="alert alert-warning">
-    <b><?= h(__('t_admin_table_missing', 'الجدول غير موجود.')) ?></b>
-    <div class="mt-2"><?= h(__('t_admin_run_migration', 'نفّذ ملف SQL التالي مرة واحدة في phpMyAdmin:')) ?></div>
+    <b><?php echo h(__('t_admin_table_missing', 'الجدول غير موجود.')); ?></b>
+    <div class="mt-2"><?php echo h(__('t_admin_run_migration', 'نفّذ ملف SQL التالي مرة واحدة في phpMyAdmin:')); ?></div>
     <div class="mt-2"><code>/admin/db/migrations/2026_01_04_admin_notifications.sql</code></div>
   </div>
   <?php
@@ -98,11 +98,11 @@ require_once __DIR__ . '/../layout/app_start.php';
 ?>
 
 <?php if (!empty($_SESSION['flash_error'])): ?>
-  <div class="alert alert-danger"><?= h((string)$_SESSION['flash_error']); unset($_SESSION['flash_error']); ?></div>
+  <div class="alert alert-danger"><?php echo h((string)$_SESSION['flash_error']); unset($_SESSION['flash_error']);; ?></div>
 <?php endif; ?>
 
 <?php if (empty($items)): ?>
-  <div class="text-muted"><?= h(__('t_admin_no_notifications','لا توجد إشعارات بعد.')) ?></div>
+  <div class="text-muted"><?php echo h(__('t_admin_no_notifications','لا توجد إشعارات بعد.')); ?></div>
 <?php else: ?>
   <div class="list-group">
     <?php foreach ($items as $n): ?>
@@ -116,29 +116,29 @@ require_once __DIR__ . '/../layout/app_start.php';
         <div class="d-flex justify-content-between align-items-start gap-3">
           <div class="flex-grow-1">
             <div class="d-flex align-items-center gap-2">
-              <span class="badge <?= $isRead ? 'bg-secondary' : 'bg-primary' ?>"><?= $isRead ? h(__('t_admin_read','مقروء')) : h(__('t_admin_unread','غير مقروء')) ?></span>
-              <div class="fw-bold"><?= h($title) ?></div>
+              <span class="badge <?php echo $isRead ? 'bg-secondary' : 'bg-primary'; ?>"><?php echo $isRead ? h(__('t_admin_read','مقروء')) : h(__('t_admin_unread','غير مقروء')); ?></span>
+              <div class="fw-bold"><?php echo h($title); ?></div>
             </div>
             <?php if ($body !== ''): ?>
-              <div class="text-muted small mt-1"><?= h($body) ?></div>
+              <div class="text-muted small mt-1"><?php echo h($body); ?></div>
             <?php endif; ?>
             <?php if ($link !== ''): ?>
-              <div class="mt-2"><a href="<?= h($link) ?>" class="text-decoration-none"><?= h(__('t_admin_open','فتح')) ?></a></div>
+              <div class="mt-2"><a href="<?php echo h($link); ?>" class="text-decoration-none"><?php echo h(__('t_admin_open','فتح')); ?></a></div>
             <?php endif; ?>
-            <div class="text-muted small mt-2"><?= h((string)($n['created_at'] ?? '')) ?></div>
+            <div class="text-muted small mt-2"><?php echo h((string)($n['created_at'] ?? '')); ?></div>
           </div>
           <div class="d-flex flex-column gap-2">
             <form method="post">
-              <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
-              <input type="hidden" name="id" value="<?= (int)$n['id'] ?>">
-              <input type="hidden" name="action" value="<?= $isRead ? 'unread' : 'read' ?>">
-              <button type="submit" class="btn btn-sm btn-outline-primary"><?= $isRead ? h(__('t_admin_mark_unread','تعليم كغير مقروء')) : h(__('t_admin_mark_read','تعليم كمقروء')) ?></button>
+              <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
+              <input type="hidden" name="id" value="<?php echo (int)$n['id']; ?>">
+              <input type="hidden" name="action" value="<?php echo $isRead ? 'unread' : 'read'; ?>">
+              <button type="submit" class="btn btn-sm btn-outline-primary"><?php echo $isRead ? h(__('t_admin_mark_unread','تعليم كغير مقروء')) : h(__('t_admin_mark_read','تعليم كمقروء')); ?></button>
             </form>
-            <form method="post" data-confirm='<?= h(__('t_admin_confirm_delete','تأكيد الحذف؟')) ?>'>
-              <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
-              <input type="hidden" name="id" value="<?= (int)$n['id'] ?>">
+            <form method="post" data-confirm='<?php echo h(__('t_admin_confirm_delete','تأكيد الحذف؟')); ?>'>
+              <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
+              <input type="hidden" name="id" value="<?php echo (int)$n['id']; ?>">
               <input type="hidden" name="action" value="delete">
-              <button type="submit" class="btn btn-sm btn-outline-danger"><?= h(__('t_admin_delete','حذف')) ?></button>
+              <button type="submit" class="btn btn-sm btn-outline-danger"><?php echo h(__('t_admin_delete','حذف')); ?></button>
             </form>
           </div>
         </div>

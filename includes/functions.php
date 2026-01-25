@@ -550,3 +550,23 @@ $helpers_file = __DIR__ . '/helpers.php';
 if (file_exists($helpers_file)) {
     include $helpers_file;
 }
+
+// Detect AJAX requests (used across admin pages for JSON responses).
+// Some admin pages call is_ajax_request() during POST handling.
+// If undefined, PHP throws a fatal error and the request returns HTTP 500.
+if (!function_exists('is_ajax_request')) {
+    function is_ajax_request(): bool
+    {
+        $xrw = $_SERVER['HTTP_X_REQUESTED_WITH'] ?? '';
+        if (is_string($xrw) && strtolower($xrw) === 'xmlhttprequest') {
+            return true;
+        }
+
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '';
+        if (is_string($accept) && strpos($accept, 'application/json') !== false) {
+            return true;
+        }
+
+        return false;
+    }
+}

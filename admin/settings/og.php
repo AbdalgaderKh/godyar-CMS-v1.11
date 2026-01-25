@@ -81,48 +81,48 @@ $previewUrl = ($base ? $base : '') . '/og.php?title=' . rawurlencode($previewTit
   <div class="col-md-9">
     <div class="card p-4">
       <?php if ($notice): ?>
-        <div class="alert alert-success"><?= h($notice) ?></div>
+        <div class="alert alert-success"><?php echo h($notice); ?></div>
       <?php endif; ?>
       <?php if ($error): ?>
-        <div class="alert alert-danger"><?= h($error) ?></div>
+        <div class="alert alert-danger"><?php echo h($error); ?></div>
       <?php endif; ?>
 
       <form method="post">
         <?php if (function_exists('csrf_token')): ?>
-          <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
         <?php endif; ?>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h5 class="mb-1"><?= h(__('t_9f44d9ef4b', 'إعدادات صورة المشاركة (OG Image)')) ?></h5>
-            <div class="text-muted small"><?= h(__('t_7df69c7d85', 'تتحكم في الصورة الافتراضية التي تظهر عند مشاركة روابط الموقع على واتساب/تويتر/فيسبوك وغيرها.')) ?></div>
+            <h5 class="mb-1"><?php echo h(__('t_9f44d9ef4b', 'إعدادات صورة المشاركة (OG Image)')); ?></h5>
+            <div class="text-muted small"><?php echo h(__('t_7df69c7d85', 'تتحكم في الصورة الافتراضية التي تظهر عند مشاركة روابط الموقع على واتساب/تويتر/فيسبوك وغيرها.')); ?></div>
           </div>
-          <a class="btn btn-sm btn-outline-secondary" target="_blank" href="<?= h($previewUrl) ?>">
-            <?= h(__('t_2b5c257af1', 'معاينة')) ?>
+          <a class="btn btn-sm btn-outline-secondary" target="_blank" href="<?php echo h($previewUrl); ?>">
+            <?php echo h(__('t_2b5c257af1', 'معاينة')); ?>
           </a>
         </div>
 
         <div class="form-check form-switch mb-3">
-          <input class="form-check-input" type="checkbox" id="og_enabled" name="og_enabled" <?= $og_enabled ? 'checked' : '' ?>>
-          <label class="form-check-label" for="og_enabled"><?= h(__('t_3aa3309f64', 'تفعيل مولّد OG الديناميكي')) ?></label>
+          <input class="form-check-input" type="checkbox" id="og_enabled" name="og_enabled" <?php echo $og_enabled ? 'checked' : ''; ?>>
+          <label class="form-check-label" for="og_enabled"><?php echo h(__('t_3aa3309f64', 'تفعيل مولّد OG الديناميكي')); ?></label>
         </div>
 
         <div class="row">
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_67d67e57b0', 'الوضع')) ?></label>
+            <label class="form-label"><?php echo h(__('t_67d67e57b0', 'الوضع')); ?></label>
             <select class="form-select" name="og_mode">
-              <option value="dynamic" <?= $og_mode==='dynamic'?'selected':'' ?>><?= h(__('t_12df5d6c0a', 'ديناميكي (og.php)')) ?></option>
-              <option value="static"  <?= $og_mode==='static'?'selected':'' ?>><?= h(__('t_5ad56d1a68', 'ثابت (صورة محددة)')) ?></option>
+              <option value="dynamic" <?php echo $og_mode==='dynamic'?'selected':''; ?>><?php echo h(__('t_12df5d6c0a', 'ديناميكي (og.php)')); ?></option>
+              <option value="static"  <?php echo $og_mode==='static'?'selected':''; ?>><?php echo h(__('t_5ad56d1a68', 'ثابت (صورة محددة)')); ?></option>
             </select>
-            <div class="form-text"><?= h(__('t_4c104db2fd', 'الديناميكي يولّد صورة تلقائيًا حسب عنوان الصفحة. الثابت يستخدم صورة واحدة دائمًا.')) ?></div>
+            <div class="form-text"><?php echo h(__('t_4c104db2fd', 'الديناميكي يولّد صورة تلقائيًا حسب عنوان الصفحة. الثابت يستخدم صورة واحدة دائمًا.')); ?></div>
           </div>
 
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_1b330b4d71', 'محرك التوليد')) ?></label>
+            <label class="form-label"><?php echo h(__('t_1b330b4d71', 'محرك التوليد')); ?></label>
             <select class="form-select" name="og_engine">
-              <option value="auto"    <?= $og_engine==='auto'?'selected':'' ?>><?= h(__('t_8b930a5d0f', 'تلقائي (Imagick ثم GD)')) ?></option>
-              <option value="imagick" <?= $og_engine==='imagick'?'selected':'' ?>><?= h(__('t_2c9a9f3d10', 'Imagick (الأفضل للعربي إذا Pango متوفر)')) ?></option>
-              <option value="gd"      <?= $og_engine==='gd'?'selected':'' ?>><?= h(__('t_0c3a9aa4f1', 'GD (متوافق دائمًا)')) ?></option>
+              <option value="auto"    <?php echo $og_engine==='auto'?'selected':''; ?>><?php echo h(__('t_8b930a5d0f', 'تلقائي (Imagick ثم GD)')); ?></option>
+              <option value="imagick" <?php echo $og_engine==='imagick'?'selected':''; ?>><?php echo h(__('t_2c9a9f3d10', 'Imagick (الأفضل للعربي إذا Pango متوفر)')); ?></option>
+              <option value="gd"      <?php echo $og_engine==='gd'?'selected':''; ?>><?php echo h(__('t_0c3a9aa4f1', 'GD (متوافق دائمًا)')); ?></option>
             </select>
             <div class="form-text">
               <?php
@@ -137,21 +137,21 @@ $previewUrl = ($base ? $base : '') . '/og.php?title=' . rawurlencode($previewTit
                   } catch (Throwable $e) { $hasPango = false; }
                 }
               ?>
-              <?= h(__('t_5f8f6c2dd3', 'الحالة:')) ?>
-              <?= $hasImagick ? 'Imagick ✅' : 'Imagick ❌' ?>
+              <?php echo h(__('t_5f8f6c2dd3', 'الحالة:')); ?>
+              <?php echo $hasImagick ? 'Imagick ✅' : 'Imagick ❌'; ?>
               •
-              <?= $hasPango ? 'Pango ✅' : 'Pango ❌' ?>
+              <?php echo $hasPango ? 'Pango ✅' : 'Pango ❌'; ?>
             </div>
           </div>
 
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_4f7c7cc2d1', 'التعامل مع العناوين العربية')) ?></label>
+            <label class="form-label"><?php echo h(__('t_4f7c7cc2d1', 'التعامل مع العناوين العربية')); ?></label>
             <select class="form-select" name="og_arabic_mode">
-              <option value="auto"   <?= $og_arabic_mode==='auto'?'selected':'' ?>><?= h(__('t_8b930a5d0f', 'تلقائي (الأفضل)')) ?></option>
-              <option value="shape"  <?= $og_arabic_mode==='shape'?'selected':'' ?>><?= h(__('t_9c8c0c2d93', 'تشكيل عربي عبر GD (قد يعتمد على الخط)')) ?></option>
-              <option value="static" <?= $og_arabic_mode==='static'?'selected':'' ?>><?= h(__('t_9d2b5d4c2f', 'استخدم الصورة الثابتة للعربي')) ?></option>
+              <option value="auto"   <?php echo $og_arabic_mode==='auto'?'selected':''; ?>><?php echo h(__('t_8b930a5d0f', 'تلقائي (الأفضل)')); ?></option>
+              <option value="shape"  <?php echo $og_arabic_mode==='shape'?'selected':''; ?>><?php echo h(__('t_9c8c0c2d93', 'تشكيل عربي عبر GD (قد يعتمد على الخط)')); ?></option>
+              <option value="static" <?php echo $og_arabic_mode==='static'?'selected':''; ?>><?php echo h(__('t_9d2b5d4c2f', 'استخدم الصورة الثابتة للعربي')); ?></option>
             </select>
-            <div class="form-text"><?= h(__('t_2fbbd66f2c', 'بعض الاستضافات لا تدعم تشكيل العربية في صور GD بشكل ممتاز؛ هذا الخيار يعطيك تحكم.')) ?></div>
+            <div class="form-text"><?php echo h(__('t_2fbbd66f2c', 'بعض الاستضافات لا تدعم تشكيل العربية في صور GD بشكل ممتاز؛ هذا الخيار يعطيك تحكم.')); ?></div>
           </div>
         </div>
 
@@ -159,57 +159,57 @@ $previewUrl = ($base ? $base : '') . '/og.php?title=' . rawurlencode($previewTit
 
         <div class="row">
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_69b1dc21f6', 'لون الخلفية')) ?></label>
-            <input class="form-control" name="og_bg_color" value="<?= h($og_bg_color) ?>" placeholder="#F5F5F5">
+            <label class="form-label"><?php echo h(__('t_69b1dc21f6', 'لون الخلفية')); ?></label>
+            <input class="form-control" name="og_bg_color" value="<?php echo h($og_bg_color); ?>" placeholder="#F5F5F5">
           </div>
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_85d77e9b85', 'لون النص')) ?></label>
-            <input class="form-control" name="og_text_color" value="<?= h($og_text_color) ?>" placeholder="#141414">
+            <label class="form-label"><?php echo h(__('t_85d77e9b85', 'لون النص')); ?></label>
+            <input class="form-control" name="og_text_color" value="<?php echo h($og_text_color); ?>" placeholder="#141414">
           </div>
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_05c3d7f9b3', 'لون ثانوي (Tagline)')) ?></label>
-            <input class="form-control" name="og_muted_color" value="<?= h($og_muted_color) ?>" placeholder="#4B5563">
+            <label class="form-label"><?php echo h(__('t_05c3d7f9b3', 'لون ثانوي (Tagline)')); ?></label>
+            <input class="form-control" name="og_muted_color" value="<?php echo h($og_muted_color); ?>" placeholder="#4B5563">
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_0824132c2b', 'لون Accent (شريط/تفصيل)')) ?></label>
-            <input class="form-control" name="og_accent_color" value="<?= h($og_accent_color) ?>" placeholder="#111827">
+            <label class="form-label"><?php echo h(__('t_0824132c2b', 'لون Accent (شريط/تفصيل)')); ?></label>
+            <input class="form-control" name="og_accent_color" value="<?php echo h($og_accent_color); ?>" placeholder="#111827">
           </div>
 
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_88822c6fcb', 'صورة خلفية قالب (اختياري)')) ?></label>
-            <input class="form-control" name="og_template_image" value="<?= h($og_template_image) ?>" placeholder="assets/images/og-bg.png">
-            <div class="form-text"><?= h(__('t_6f6d8d8d25', 'مسار محلي داخل الموقع (لا نحمّل صور خارجية لأسباب أمنية).')) ?></div>
+            <label class="form-label"><?php echo h(__('t_88822c6fcb', 'صورة خلفية قالب (اختياري)')); ?></label>
+            <input class="form-control" name="og_template_image" value="<?php echo h($og_template_image); ?>" placeholder="assets/images/og-bg.png">
+            <div class="form-text"><?php echo h(__('t_6f6d8d8d25', 'مسار محلي داخل الموقع (لا نحمّل صور خارجية لأسباب أمنية).')); ?></div>
           </div>
 
           <div class="col-md-4 mb-3">
-            <label class="form-label"><?= h(__('t_3ac646c7b2', 'Logo (اختياري)')) ?></label>
-            <input class="form-control" name="og_logo_image" value="<?= h($og_logo_image) ?>" placeholder="assets/images/logo.png">
+            <label class="form-label"><?php echo h(__('t_3ac646c7b2', 'Logo (اختياري)')); ?></label>
+            <input class="form-control" name="og_logo_image" value="<?php echo h($og_logo_image); ?>" placeholder="assets/images/logo.png">
           </div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label"><?= h(__('t_7b418dd5ed', 'الصورة الثابتة الافتراضية')) ?></label>
-          <input class="form-control" name="og_default_image" value="<?= h($og_default_image) ?>" placeholder="assets/images/og-default.png">
-          <div class="form-text"><?= h(__('t_7f79204b9b', 'تستخدم كبديل إذا تعذر التوليد أو في وضع "ثابت".')) ?></div>
+          <label class="form-label"><?php echo h(__('t_7b418dd5ed', 'الصورة الثابتة الافتراضية')); ?></label>
+          <input class="form-control" name="og_default_image" value="<?php echo h($og_default_image); ?>" placeholder="assets/images/og-default.png">
+          <div class="form-text"><?php echo h(__('t_7f79204b9b', 'تستخدم كبديل إذا تعذر التوليد أو في وضع "ثابت".')); ?></div>
         </div>
 
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label"><?= h(__('t_16967b1b18', 'اسم الموقع (اختياري)')) ?></label>
-            <input class="form-control" name="og_site_name" value="<?= h($og_site_name) ?>">
-            <div class="form-text"><?= h(__('t_8c0b4e2f26', 'إن تركته فارغًا سيستخدم site_name من الإعدادات العامة.')) ?></div>
+            <label class="form-label"><?php echo h(__('t_16967b1b18', 'اسم الموقع (اختياري)')); ?></label>
+            <input class="form-control" name="og_site_name" value="<?php echo h($og_site_name); ?>">
+            <div class="form-text"><?php echo h(__('t_8c0b4e2f26', 'إن تركته فارغًا سيستخدم site_name من الإعدادات العامة.')); ?></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label"><?= h(__('t_04de2c3d96', 'وصف/شعار قصير (اختياري)')) ?></label>
-            <input class="form-control" name="og_tagline" value="<?= h($og_tagline) ?>">
-            <div class="form-text"><?= h(__('t_7e3ea92f5a', 'إن تركته فارغًا سيستخدم site_tagline إن وجد.')) ?></div>
+            <label class="form-label"><?php echo h(__('t_04de2c3d96', 'وصف/شعار قصير (اختياري)')); ?></label>
+            <input class="form-control" name="og_tagline" value="<?php echo h($og_tagline); ?>">
+            <div class="form-text"><?php echo h(__('t_7e3ea92f5a', 'إن تركته فارغًا سيستخدم site_tagline إن وجد.')); ?></div>
           </div>
         </div>
 
-        <button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+        <button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
       </form>
     </div>
   </div>

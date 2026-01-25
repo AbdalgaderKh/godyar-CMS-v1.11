@@ -127,6 +127,50 @@ if (!function_exists('gdy_setcookie')) {
     function gdy_setcookie(...$args): bool {
         if (headers_sent()) return false;
         return (bool)gdy_suppress_errors(static function () use ($args) {
+            // Harden defaults without breaking callers:
+            // - If HTTPS is detected, force `secure=true` unless explicitly provided.
+            // - Default `httponly=true` unless explicitly provided.
+            // Supports both: setcookie(name, value, optionsArray) and legacy positional args.
+
+            $isHttps = false;
+            try {
+                if (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off') {
+                    $isHttps = true;
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+                    $isHttps = true;
+                } elseif (!empty($_SERVER['SERVER_PORT']) && (string)$_SERVER['SERVER_PORT'] === '443') {
+                    $isHttps = true;
+                }
+            } catch (\Throwable $e) {
+                // ignore
+            }
+
+            // options-array form: setcookie(name, value, ['expires'=>.., 'secure'=>.., ...])
+            if (isset($args[2]) && is_array($args[2])) {
+                $opts = $args[2];
+                if (!array_key_exists('secure', $opts)) {
+                    $opts['secure'] = $isHttps;
+                } elseif ($isHttps) {
+                    $opts['secure'] = (bool)$opts['secure'] || $isHttps;
+                }
+                if (!array_key_exists('httponly', $opts)) {
+                    $opts['httponly'] = true;
+                }
+                // Default SameSite when not set (keeps most flows working; avoids "None" without Secure).
+                if (!array_key_exists('samesite', $opts)) {
+                    $opts['samesite'] = 'Lax';
+                }
+                $args[2] = $opts;
+                return setcookie(...$args);
+            }
+
+            // legacy positional args: name,value,expires,path,domain,secure,httponly
+            $defaults = [2 => 0, 3 => '', 4 => '', 5 => false, 6 => true];
+            $args = $args + $defaults;
+            if ($isHttps) {
+                $args[5] = (bool)$args[5] || $isHttps;
+            }
+            $args[6] = array_key_exists(6, $args) ? (bool)$args[6] : true;
             return setcookie(...$args);
         });
     }

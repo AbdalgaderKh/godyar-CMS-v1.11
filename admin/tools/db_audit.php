@@ -561,7 +561,7 @@ if ($format === 'sql') {
           <tbody>
             <?php foreach ($results as $r): ?>
               <tr>
-                <td><code><?= h($r['table']) ?></code></td>
+                <td><code><?php echo h($r['table']); ?></code></td>
                 <td>
                   <?php if (!$r['exists']): ?>
                     <span class="badge badge-danger">غير موجود</span>
@@ -573,11 +573,11 @@ if ($format === 'sql') {
                     <span class="badge badge-soft">مكتمل</span>
                   <?php endif; ?>
                 </td>
-                <td><?= $r['missing_required'] ? h(implode(', ', $r['missing_required'])) : '—' ?></td>
-                <td><?= $r['missing_recommended'] ? h(implode(', ', $r['missing_recommended'])) : '—' ?></td>
-                <td><?= h((string)($r['engine'] ?? '—')) ?></td>
-                <td><?= h((string)($r['collation'] ?? '—')) ?></td>
-                <td><?= h((string)($r['rows'] ?? '—')) ?></td>
+                <td><?php echo $r['missing_required'] ? h(implode(', ', $r['missing_required'])) : '—'; ?></td>
+                <td><?php echo $r['missing_recommended'] ? h(implode(', ', $r['missing_recommended'])) : '—'; ?></td>
+                <td><?php echo h((string)($r['engine'] ?? '—')); ?></td>
+                <td><?php echo h((string)($r['collation'] ?? '—')); ?></td>
+                <td><?php echo h((string)($r['rows'] ?? '—')); ?></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
@@ -592,7 +592,7 @@ if ($format === 'sql') {
         <?php if (!$unknown): ?>
           —
         <?php else: ?>
-          <?= h(implode('  ', $unknown)) ?>
+          <?php echo h(implode('  ', $unknown)); ?>
         <?php endif; ?>
       </div>
     </div>
@@ -604,7 +604,7 @@ if ($format === 'sql') {
           <div class="fw-semibold mb-1">db</div>
           <ul class="mb-0">
             <?php if (!empty($recommendations['db'])): foreach ($recommendations['db'] as $t): ?>
-              <li><?= h($t) ?></li>
+              <li><?php echo h($t); ?></li>
             <?php endforeach; else: ?>
               <li>لا توجد ملاحظات DB حرجة.</li>
             <?php endif; ?>
@@ -614,7 +614,7 @@ if ($format === 'sql') {
           <div class="fw-semibold mb-1">security</div>
           <ul class="mb-0">
             <?php if (!empty($recommendations['security'])): foreach ($recommendations['security'] as $t): ?>
-              <li><?= h($t) ?></li>
+              <li><?php echo h($t); ?></li>
             <?php endforeach; else: ?>
               <li>لا توجد ملاحظات أمنية حرجة.</li>
             <?php endif; ?>
@@ -624,7 +624,7 @@ if ($format === 'sql') {
           <div class="fw-semibold mb-1">admin_features</div>
           <ul class="mb-0">
             <?php if (!empty($recommendations['admin_features'])): foreach ($recommendations['admin_features'] as $t): ?>
-              <li><?= h($t) ?></li>
+              <li><?php echo h($t); ?></li>
             <?php endforeach; else: ?>
               <li>لا توجد ملاحظات ميزات حرجة.</li>
             <?php endif; ?>

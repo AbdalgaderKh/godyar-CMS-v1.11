@@ -17,6 +17,11 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH . '/includes/bootstrap.php';
 
+// Admin translation helpers (defines __t)
+if (file_exists(__DIR__ . '/lang.php')) {
+    require_once __DIR__ . '/lang.php';
+}
+
 // Start session if needed (admin pages rely on it)
 if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
     if (function_exists('gdy_session_start')) {

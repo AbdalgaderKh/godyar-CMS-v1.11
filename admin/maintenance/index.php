@@ -202,23 +202,23 @@ html, body { overflow-x: hidden; }
 
     <div class="gdy-header">
       <div>
-        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></h1>
-        <p><?= h(__('t_6e83122fb0', 'تفعيل أو إلغاء صفحة الصيانة في واجهة الموقع عبر ملف')) ?> <span class="gdy-kbd">maintenance.flag</span>.</p>
+        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f96c99c4d8', 'وضع الصيانة')); ?></h1>
+        <p><?php echo h(__('t_6e83122fb0', 'تفعيل أو إلغاء صفحة الصيانة في واجهة الموقع عبر ملف')); ?> <span class="gdy-kbd">maintenance.flag</span>.</p>
       </div>
       <div class="gdy-actions">
         <a href="index.php" class="btn btn-outline-light btn-sm gdy-btn">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_7cf7b105b4', 'العودة')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_7cf7b105b4', 'العودة')); ?>
         </a>
         <button type="button" class="btn btn-outline-info btn-sm gdy-btn" id="copy-flag-path"
-                data-path="<?= h($flagFile) ?>">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_1e713e7334', 'نسخ مسار الملف')) ?>
+                data-path="<?php echo h($flagFile); ?>">
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?php echo h(__('t_1e713e7334', 'نسخ مسار الملف')); ?>
         </button>
       </div>
     </div>
 
     <?php if ($flash): ?>
       <div class="alert alert-info py-2 mb-3">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($flash) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($flash); ?>
       </div>
     <?php endif; ?>
 
@@ -227,49 +227,49 @@ html, body { overflow-x: hidden; }
 
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
           <div>
-            <div class="gdy-status <?= $isMaintenance ? 'is-on' : '' ?>">
+            <div class="gdy-status <?php echo $isMaintenance ? 'is-on' : ''; ?>">
               <span class="dot"></span>
-              <span><?= $isMaintenance ? __('t_1cdcf83f2f', 'وضع الصيانة: مفعّل') : __('t_eb89a60edd', 'وضع الصيانة: غير مفعّل') ?></span>
+              <span><?php echo $isMaintenance ? __('t_1cdcf83f2f', 'وضع الصيانة: مفعّل') : __('t_eb89a60edd', 'وضع الصيانة: غير مفعّل'); ?></span>
             </div>
             <?php if ($lastUpdated): ?>
               <div class="small gdy-muted mt-1">
-                <?= h(__('t_e89d048a83', 'آخر تحديث:')) ?> <span class="gdy-kbd"><?= h($lastUpdated) ?></span>
+                <?php echo h(__('t_e89d048a83', 'آخر تحديث:')); ?> <span class="gdy-kbd"><?php echo h($lastUpdated); ?></span>
               </div>
             <?php endif; ?>
           </div>
 
           <div class="small gdy-muted">
-            <?= h(__('t_faa6688e17', 'المسار:')) ?> <span class="gdy-kbd"><?= h($flagFile) ?></span>
+            <?php echo h(__('t_faa6688e17', 'المسار:')); ?> <span class="gdy-kbd"><?php echo h($flagFile); ?></span>
           </div>
         </div>
 
         <?php if ($isMaintenance): ?>
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_4886822396', 'الرسالة الحالية المعروضة في صفحة الصيانة')) ?></label>
+            <label class="form-label"><?php echo h(__('t_4886822396', 'الرسالة الحالية المعروضة في صفحة الصيانة')); ?></label>
             <div class="gdy-info-box small">
-              <?= nl2br(h($currentMsg)) ?>
+              <?php echo nl2br(h($currentMsg)); ?>
             </div>
           </div>
         <?php endif; ?>
 
         <form method="post" id="maintenance-form">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_5c0b35918f', 'رسالة الصيانة المخصصة (اختياري)')) ?></label>
+            <label class="form-label"><?php echo h(__('t_5c0b35918f', 'رسالة الصيانة المخصصة (اختياري)')); ?></label>
             <textarea name="message" class="form-control" rows="3"
-                      placeholder="<?= h(__('t_132ae9a19f', 'سنعود قريباً...')) ?>"><?= h($currentMsg) ?></textarea>
+                      placeholder="<?php echo h(__('t_132ae9a19f', 'سنعود قريباً...')); ?>"><?php echo h($currentMsg); ?></textarea>
             <div class="form-text gdy-muted">
-              <?= h(__('t_ba08fbec23', 'اكتب رسالة مختصرة وواضحة للزوار (يمكن تركها فارغة لاستخدام الرسالة الافتراضية).')) ?>
+              <?php echo h(__('t_ba08fbec23', 'اكتب رسالة مختصرة وواضحة للزوار (يمكن تركها فارغة لاستخدام الرسالة الافتراضية).')); ?>
             </div>
           </div>
 
           <div class="d-flex flex-wrap gap-2">
             <button type="submit" name="mode" value="enable" class="btn btn-warning text-dark gdy-btn">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?= h(__('t_11f2db3133', 'تفعيل وضع الصيانة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg> <?php echo h(__('t_11f2db3133', 'تفعيل وضع الصيانة')); ?>
             </button>
             <button type="submit" name="mode" value="disable" class="btn btn-success gdy-btn" id="disable-btn">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_92c406424e', 'إلغاء وضع الصيانة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_92c406424e', 'إلغاء وضع الصيانة')); ?>
             </button>
           </div>
         </form>
@@ -277,8 +277,8 @@ html, body { overflow-x: hidden; }
         <div class="mt-3 gdy-info-box">
           <div class="small">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_afde1943c7', 'تأكد أن سكربت الواجهة (index.php أو router) يتحقق من وجود الملف')) ?>
-            <span class="gdy-kbd">maintenance.flag</span> <?= h(__('t_a5a2271c5b', 'ويحوّل الزائر إلى')) ?>
+            <?php echo h(__('t_afde1943c7', 'تأكد أن سكربت الواجهة (index.php أو router) يتحقق من وجود الملف')); ?>
+            <span class="gdy-kbd">maintenance.flag</span> <?php echo h(__('t_a5a2271c5b', 'ويحوّل الزائر إلى')); ?>
             <span class="gdy-kbd">/godyar/public/maintenance.php</span>.
           </div>
         </div>

@@ -53,23 +53,23 @@ if (!class_exists(\Godyar\Auth::class)) {
     // Sidebar مبسط للكاتب (إخفاء باقي الخصائص)
     if (($userRole ?? '') === 'writer') :
     ?>
-    <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
+    <aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?php echo h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')); ?>">
       <div class="admin-sidebar__card">
         <div class="admin-sidebar__brand">
-          <a class="admin-sidebar__brand-link" href="<?= h($adminBase) ?>/news/index.php">
-            <span class="admin-sidebar__brand-text"><?= h(__('t_2303d38e34', 'لوحة الكاتب')) ?></span>
+          <a class="admin-sidebar__brand-link" href="<?php echo h($adminBase); ?>/news/index.php">
+            <span class="admin-sidebar__brand-text"><?php echo h(__('t_2303d38e34', 'لوحة الكاتب')); ?></span>
           </a>
         </div>
 
         <ul class="admin-sidebar__nav" role="list">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'posts' ? 'is-active' : '' ?>">
-              <a href="<?= h($adminBase) ?>/news/index.php" class="admin-sidebar__link">
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'posts' ? 'is-active' : ''; ?>">
+              <a href="<?php echo h($adminBase); ?>/news/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-title"><?= h(__('t_de42e4f966', 'مقالاتي')) ?></div>
-                    <div class="admin-sidebar__link-desc"><?= h(__('t_e43a9422c5', 'عرض وتعديل مقالاتي')) ?></div>
+                    <div class="admin-sidebar__link-title"><?php echo h(__('t_de42e4f966', 'مقالاتي')); ?></div>
+                    <div class="admin-sidebar__link-desc"><?php echo h(__('t_e43a9422c5', 'عرض وتعديل مقالاتي')); ?></div>
                   </div>
                 </div>
               </a>
@@ -78,12 +78,12 @@ if (!class_exists(\Godyar\Auth::class)) {
 
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card">
-              <a href="<?= h($adminBase) ?>/news/create.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/news/create.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg></div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-title"><?= h(__('t_ae41371b05', 'إضافة مقال')) ?></div>
-                    <div class="admin-sidebar__link-desc"><?= h(__('t_aa08c5e144', 'إنشاء مقال جديد')) ?></div>
+                    <div class="admin-sidebar__link-title"><?php echo h(__('t_ae41371b05', 'إضافة مقال')); ?></div>
+                    <div class="admin-sidebar__link-desc"><?php echo h(__('t_aa08c5e144', 'إنشاء مقال جديد')); ?></div>
                   </div>
                 </div>
               </a>
@@ -92,12 +92,12 @@ if (!class_exists(\Godyar\Auth::class)) {
 
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card">
-              <a href="<?= h($adminBase) ?>/logout.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/logout.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-title"><?= h(__('t_5c4e4796c0', 'تسجيل الخروج')) ?></div>
-                    <div class="admin-sidebar__link-desc"><?= h(__('t_0df506fdfa', 'إنهاء الجلسة')) ?></div>
+                    <div class="admin-sidebar__link-title"><?php echo h(__('t_5c4e4796c0', 'تسجيل الخروج')); ?></div>
+                    <div class="admin-sidebar__link-desc"><?php echo h(__('t_0df506fdfa', 'إنهاء الجلسة')); ?></div>
                   </div>
                 </div>
               </a>
@@ -111,7 +111,7 @@ if (!class_exists(\Godyar\Auth::class)) {
     endif;
     ?>
 <!-- لاحظ: أزلت كلاس col-md-3 col-lg-2 -->
-<aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')) ?>">
+<aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?php echo h(__('t_b5192351b2', 'القائمة الجانبية للوحة التحكم')); ?>">
   <div class="admin-sidebar__card">
 
     <!-- رأس السايدبار -->
@@ -122,12 +122,12 @@ if (!class_exists(\Godyar\Auth::class)) {
         </div>
         <div class="admin-sidebar__brand-text">
           <div class="admin-sidebar__title">Godyar News</div>
-          <div class="admin-sidebar__subtitle"><?= h(__('t_a06ee671f4', 'لوحة التحكم')) ?></div>
+          <div class="admin-sidebar__subtitle"><?php echo h(__('t_a06ee671f4', 'لوحة التحكم')); ?></div>
         </div>
       </div>
 
       <!-- زر إظهار/إخفاء في الجوال -->
-      <button class="admin-sidebar__toggle" id="sidebarToggle" type="button" aria-label="<?= h(__('t_c21bebe724', 'إظهار/إخفاء القائمة')) ?>">
+      <button class="admin-sidebar__toggle" id="sidebarToggle" type="button" aria-label="<?php echo h(__('t_c21bebe724', 'إظهار/إخفاء القائمة')); ?>">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
       </button>
     </header>
@@ -139,12 +139,12 @@ if (!class_exists(\Godyar\Auth::class)) {
           type="text"
           id="sidebarSearch"
           class="admin-sidebar__search-input"
-          placeholder="<?= h(__('t_2cac671915', 'ابحث في القوائم...')) ?>"
+          placeholder="<?php echo h(__('t_2cac671915', 'ابحث في القوائم...')); ?>"
           autocomplete="off"
-          aria-label="<?= h(__('t_8b39c16358', 'بحث في عناصر القائمة')) ?>"
+          aria-label="<?php echo h(__('t_8b39c16358', 'بحث في عناصر القائمة')); ?>"
         >
         <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
-        <div class="admin-sidebar__search-results" id="searchResults" role="listbox" aria-label="<?= h(__('t_8dea9c0652', 'نتائج البحث')) ?>"></div>
+        <div class="admin-sidebar__search-results" id="searchResults" role="listbox" aria-label="<?php echo h(__('t_8dea9c0652', 'نتائج البحث')); ?>"></div>
       </div>
     </div>
 
@@ -155,8 +155,8 @@ if (!class_exists(\Godyar\Auth::class)) {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
-          <div class="admin-sidebar__quick-number"><?= (int)$quickStats['posts'] ?></div>
-          <div class="admin-sidebar__quick-label"><?= h(__('t_9e940078a1', 'مقالة')) ?></div>
+          <div class="admin-sidebar__quick-number"><?php echo (int)$quickStats['posts']; ?></div>
+          <div class="admin-sidebar__quick-label"><?php echo h(__('t_9e940078a1', 'مقالة')); ?></div>
         </div>
       </div>
       <div class="admin-sidebar__quick-item">
@@ -164,8 +164,8 @@ if (!class_exists(\Godyar\Auth::class)) {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
-          <div class="admin-sidebar__quick-number"><?= (int)$quickStats['users'] ?></div>
-          <div class="admin-sidebar__quick-label"><?= h(__('t_f1beebf31c', 'مستخدم')) ?></div>
+          <div class="admin-sidebar__quick-number"><?php echo (int)$quickStats['users']; ?></div>
+          <div class="admin-sidebar__quick-label"><?php echo h(__('t_f1beebf31c', 'مستخدم')); ?></div>
         </div>
       </div>
       <div class="admin-sidebar__quick-item">
@@ -173,8 +173,8 @@ if (!class_exists(\Godyar\Auth::class)) {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__quick-info">
-          <div class="admin-sidebar__quick-number"><?= (int)$quickStats['comments'] ?></div>
-          <div class="admin-sidebar__quick-label"><?= h(__('t_0215afbb03', 'تعليق')) ?></div>
+          <div class="admin-sidebar__quick-number"><?php echo (int)$quickStats['comments']; ?></div>
+          <div class="admin-sidebar__quick-label"><?php echo h(__('t_0215afbb03', 'تعليق')); ?></div>
         </div>
       </div>
     </div>
@@ -185,26 +185,26 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- نظرة عامة -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="overview">
-          <span><?= h(__('t_22daf17224', 'نظرة عامة')) ?></span>
+          <span><?php echo h(__('t_22daf17224', 'نظرة عامة')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-overview">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'dashboard' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'dashboard' ? 'is-active' : ''; ?>"
                  data-search="الرئيسية لوحة التحكم نظرة عامة">
-              <a href="<?= h($adminBase) ?>/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_3aa8578699', 'الرئيسية')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_eb65a9a9db', 'نظرة عامة على أداء النظام')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_3aa8578699', 'الرئيسية')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_eb65a9a9db', 'نظرة عامة على أداء النظام')); ?></div>
                   </div>
                 </div>
                 <div class="admin-sidebar__link-meta">
                   <?php if (!empty($notifications['reports'])): ?>
-                    <span class="admin-sidebar__badge"><?= (int)$notifications['reports'] ?></span>
+                    <span class="admin-sidebar__badge"><?php echo (int)$notifications['reports']; ?></span>
                   <?php endif; ?>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
@@ -213,20 +213,20 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'reports' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'reports' ? 'is-active' : ''; ?>"
                  data-search="التقارير الاحصائيات مؤشرات الأداء">
-              <a href="<?= h($adminBase) ?>/reports/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/reports/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_4d4e102c5e', 'التقارير')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_9858619f9c', 'لوحات تحكم ومؤشرات أداء')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_4d4e102c5e', 'التقارير')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_9858619f9c', 'لوحات تحكم ومؤشرات أداء')); ?></div>
                   </div>
                 </div>
                 <div class="admin-sidebar__link-meta">
-                  <span class="admin-sidebar__badge admin-sidebar__badge--pill"><?= h(__('t_c590a35c2d', 'جديد')) ?></span>
+                  <span class="admin-sidebar__badge admin-sidebar__badge--pill"><?php echo h(__('t_c590a35c2d', 'جديد')); ?></span>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
@@ -238,26 +238,26 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- المحتوى -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="content">
-          <span><?= h(__('t_9f3797ed99', 'المحتوى')) ?></span>
+          <span><?php echo h(__('t_9f3797ed99', 'المحتوى')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-content">
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'posts' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'posts' ? 'is-active' : ''; ?>"
                  data-search="إدارة المحتوى الأخبار المقالات الوسوم">
-              <a href="<?= h($adminBase) ?>/news/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/news/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_c6dac40d6a', 'إدارة المحتوى')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_67286c3c09', 'الأخبار والمقالات والتصنيفات والوسوم')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_c6dac40d6a', 'إدارة المحتوى')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_67286c3c09', 'الأخبار والمقالات والتصنيفات والوسوم')); ?></div>
                   </div>
                 </div>
                 <div class="admin-sidebar__link-meta">
-                  <span class="admin-sidebar__badge"><?= (int)$quickStats['posts'] ?></span>
+                  <span class="admin-sidebar__badge"><?php echo (int)$quickStats['posts']; ?></span>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
               </a>
@@ -265,9 +265,9 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'polls' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'polls' ? 'is-active' : ''; ?>"
                  data-search="استطلاع داخل المقال إدارة الاستطلاعات poll votes options">
-              <a href="<?= h($adminBase) ?>/news/polls.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/news/polls.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -283,9 +283,9 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'questions' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'questions' ? 'is-active' : ''; ?>"
                  data-search="اسأل الكاتب أسئلة وأجوبة إدارة الأسئلة">
-              <a href="<?= h($adminBase) ?>/news/questions.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/news/questions.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -300,16 +300,16 @@ if (!class_exists(\Godyar\Auth::class)) {
             </div>
           </li>
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'categories' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'categories' ? 'is-active' : ''; ?>"
                  data-search="الأقسام التصنيفات إدارة الأقسام">
-              <a href="<?= h($adminBase) ?>/categories/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/categories/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_c6386f9c0e', 'الأقسام')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_a369c932e0', 'إدارة الأقسام والتصنيفات الرئيسية')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_c6386f9c0e', 'الأقسام')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_a369c932e0', 'إدارة الأقسام والتصنيفات الرئيسية')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -318,16 +318,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>\n\n</li>
 
 <li class="admin-sidebar__item">
-  <div class="admin-sidebar__link-card <?= $currentPage === 'elections' ? 'is-active' : '' ?>"
+  <div class="admin-sidebar__link-card <?php echo $currentPage === 'elections' ? 'is-active' : ''; ?>"
        data-search="الانتخابات نتائج الانتخابات تغطية انتخابية أرشيف الانتخابات">
-    <a href="<?= h($adminBase) ?>/elections/index.php" class="admin-sidebar__link">
+    <a href="<?php echo h($adminBase); ?>/elections/index.php" class="admin-sidebar__link">
       <div class="admin-sidebar__link-main">
         <div class="admin-sidebar__link-icon">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         </div>
         <div class="admin-sidebar__link-text">
-          <div class="admin-sidebar__link-label"><?= h(__('t_b9af904113', 'الانتخابات')) ?></div>
-          <div class="admin-sidebar__link-sub"><?= h(__('t_01e75f784e', 'إدارة التغطيات الانتخابية (إظهار/إخفاء/أرشفة)')) ?></div>
+          <div class="admin-sidebar__link-label"><?php echo h(__('t_b9af904113', 'الانتخابات')); ?></div>
+          <div class="admin-sidebar__link-sub"><?php echo h(__('t_01e75f784e', 'إدارة التغطيات الانتخابية (إظهار/إخفاء/أرشفة)')); ?></div>
         </div>
       </div>
       <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -336,16 +336,16 @@ if (!class_exists(\Godyar\Auth::class)) {
 </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'pages' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'pages' ? 'is-active' : ''; ?>"
                  data-search="الصفحات الثابتة من نحن اتصل بنا">
-              <a href="<?= h($adminBase) ?>/pages/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/pages/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_0046fa59f3', 'الصفحات الثابتة')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_5fd50a4fd6', 'من نحن، اتصل بنا، الخدمات والسياسات')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_0046fa59f3', 'الصفحات الثابتة')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_5fd50a4fd6', 'من نحن، اتصل بنا، الخدمات والسياسات')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -354,16 +354,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'media' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'media' ? 'is-active' : ''; ?>"
                  data-search="مكتبة الوسائط الصور الفيديو الملفات">
-              <a href="<?= h($adminBase) ?>/media/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/media/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_50442947a8', 'الصور والفيديو والملفات المرفوعة')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_06dd6988d0', 'مكتبة الوسائط')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_50442947a8', 'الصور والفيديو والملفات المرفوعة')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -372,16 +372,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'slider' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'slider' ? 'is-active' : ''; ?>"
                  data-search="السلايدر شرائح العرض الرئيسية">
-              <a href="<?= h($adminBase) ?>/slider/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/slider/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_58a041f8da', 'السلايدر')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_59a13b7c65', 'شرائح العرض في الصفحة الرئيسية')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_58a041f8da', 'السلايدر')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_59a13b7c65', 'شرائح العرض في الصفحة الرئيسية')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -390,16 +390,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'videos' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'videos' ? 'is-active' : ''; ?>"
                  data-search="الفيديوهات المميزة مقاطع الفيديو">
-              <a href="<?= h($adminBase) ?>/manage_videos.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/manage_videos.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_8dd4b9c7f3', 'الفيديوهات المميزة')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_ef45c07e19', 'إدارة مقاطع الفيديو المميزة')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_8dd4b9c7f3', 'الفيديوهات المميزة')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_ef45c07e19', 'إدارة مقاطع الفيديو المميزة')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -408,16 +408,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'opinion_authors' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'opinion_authors' ? 'is-active' : ''; ?>"
                  data-search="كتّاب الرأي أعمدة الرأي مقالات رأي">
-              <a href="<?= h($adminBase) ?>/opinion_authors/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/opinion_authors/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_4a173870d1', 'كتّاب الرأي')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_acf979fd60', 'إدارة كتّاب وأعمدة الرأي')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_4a173870d1', 'كتّاب الرأي')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_acf979fd60', 'إدارة كتّاب وأعمدة الرأي')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -430,21 +430,21 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- المستخدمون وفريق العمل -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="users">
-          <span><?= h(__('t_849cd8703b', 'المستخدمون وفريق العمل')) ?></span>
+          <span><?php echo h(__('t_849cd8703b', 'المستخدمون وفريق العمل')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-users">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'users' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'users' ? 'is-active' : ''; ?>"
                  data-search="المستخدمون الأعضاء حسابات تسجيل الدخول الصلاحيات">
-              <a href="<?= h($adminBase) ?>/users/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/users/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_39d3073371', 'المستخدمون')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_3ed68c57ce', 'إدارة حسابات المستخدمين والصلاحيات')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_39d3073371', 'المستخدمون')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_3ed68c57ce', 'إدارة حسابات المستخدمين والصلاحيات')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -453,16 +453,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'team' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'team' ? 'is-active' : ''; ?>"
                  data-search="فريق العمل هيئة التحرير طاقم الموقع">
-              <a href="<?= h($adminBase) ?>/team/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/team/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_cd54bc26ba', 'فريق العمل')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_ef3eaa6abd', 'إدارة أعضاء فريق التحرير والإدارة')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_cd54bc26ba', 'فريق العمل')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_ef3eaa6abd', 'إدارة أعضاء فريق التحرير والإدارة')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -475,21 +475,21 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- الإعلانات والتواصل -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="marketing">
-          <span><?= h(__('t_be948b3b75', 'الإعلانات والتواصل')) ?></span>
+          <span><?php echo h(__('t_be948b3b75', 'الإعلانات والتواصل')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-marketing">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'ads' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'ads' ? 'is-active' : ''; ?>"
                  data-search="الإعلانات البانرات حملات إعلانية">
-              <a href="<?= h($adminBase) ?>/ads/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/ads/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_5750d13d2c', 'الإعلانات')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_aa106ae03d', 'إدارة البانرات والحملات الإعلانية')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_5750d13d2c', 'الإعلانات')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_aa106ae03d', 'إدارة البانرات والحملات الإعلانية')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -498,21 +498,21 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'contact' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>"
                  data-search="رسائل التواصل اتصل بنا رسائل الزوار">
-              <a href="<?= h($adminBase) ?>/contact/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/contact/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_cab8942d73', 'رسائل التواصل')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_676df33996', 'إدارة الرسائل الواردة من نموذج اتصل بنا')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_cab8942d73', 'رسائل التواصل')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_676df33996', 'إدارة الرسائل الواردة من نموذج اتصل بنا')); ?></div>
                   </div>
                 </div>
                 <div class="admin-sidebar__link-meta">
                   <?php if (!empty($notifications['contact'])): ?>
-                    <span class="admin-sidebar__badge"><?= (int)$notifications['contact'] ?></span>
+                    <span class="admin-sidebar__badge"><?php echo (int)$notifications['contact']; ?></span>
                   <?php endif; ?>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
@@ -525,20 +525,20 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- روابط سريعة -->
       <section class="admin-sidebar__section admin-sidebar__section--quick">
         <button class="admin-sidebar__section-header" type="button" data-section="shortcuts">
-          <span><?= h(__('t_f77df0e146', 'روابط سريعة')) ?></span>
+          <span><?php echo h(__('t_f77df0e146', 'روابط سريعة')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-shortcuts">
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card" data-search="إضافة خبر جديد مقال منشور create post">
-              <a href="<?= h($adminBase) ?>/news/create.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/news/create.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_0d1f6ecf66', 'إضافة خبر جديد')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_8df5af2c8e', 'إنشاء خبر أو مقال جديد بسرعة')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_0d1f6ecf66', 'إضافة خبر جديد')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_8df5af2c8e', 'إنشاء خبر أو مقال جديد بسرعة')); ?></div>
                   </div>
                 </div>
                 <span class="admin-sidebar__badge admin-sidebar__badge--pill">+1</span>
@@ -548,14 +548,14 @@ if (!class_exists(\Godyar\Auth::class)) {
 
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card" data-search="إدارة التصنيفات أقسام الموقع">
-              <a href="<?= h($adminBase) ?>/categories/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/categories/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_0a83b235e0', 'إدارة الأقسام')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_f928c160bf', 'الأقسام الرئيسية والفرعية للمحتوى')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_0a83b235e0', 'إدارة الأقسام')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_f928c160bf', 'الأقسام الرئيسية والفرعية للمحتوى')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -565,14 +565,14 @@ if (!class_exists(\Godyar\Auth::class)) {
 
           <li class="admin-sidebar__item">
             <div class="admin-sidebar__link-card" data-search="مكتبة الوسائط رفع صورة سريعة">
-              <a href="<?= h($adminBase) ?>/media/upload.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/media/upload.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_f8d557e5cd', 'رفع وسائط')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_5f5b0f52d9', 'رفع صورة أو ملف لاستخدامه في الأخبار')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_f8d557e5cd', 'رفع وسائط')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_5f5b0f52d9', 'رفع صورة أو ملف لاستخدامه في الأخبار')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -585,21 +585,21 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- الإعدادات -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="settings">
-          <span><?= h(__('t_1f60020959', 'الإعدادات')) ?></span>
+          <span><?php echo h(__('t_1f60020959', 'الإعدادات')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-settings">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'settings' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'settings' ? 'is-active' : ''; ?>"
                  data-search="الإعدادات العامة اسم الموقع الشعار اللغة المنطقة الزمنية">
-              <a href="<?= h($adminBase) ?>/settings/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/settings/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_46ce4c91ac', 'الإعدادات العامة')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_22f6a1b54b', 'اسم الموقع، الشعار، اللغة، المنطقة الزمنية')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_46ce4c91ac', 'الإعدادات العامة')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_22f6a1b54b', 'اسم الموقع، الشعار، اللغة، المنطقة الزمنية')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -608,16 +608,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'weather' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'weather' ? 'is-active' : ''; ?>"
                  data-search="إعدادات الطقس حالة الطقس API">
-              <a href="<?= h($adminBase) ?>/weather_settings.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/weather_settings.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_cdefdef2cf', 'إعدادات الطقس')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_143e81be2c', 'إدارة خدمة الطقس وربط API')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_cdefdef2cf', 'إعدادات الطقس')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_143e81be2c', 'إدارة خدمة الطقس وربط API')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -630,21 +630,21 @@ if (!class_exists(\Godyar\Auth::class)) {
       <!-- النظام والصيانة -->
       <section class="admin-sidebar__section">
         <button class="admin-sidebar__section-header" type="button" data-section="system">
-          <span><?= h(__('t_435013dbc1', 'النظام والصيانة')) ?></span>
+          <span><?php echo h(__('t_435013dbc1', 'النظام والصيانة')); ?></span>
           <svg class="gdy-icon admin-sidebar__section-arrow" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
         </button>
         <ul class="admin-sidebar__list" id="section-system">
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'system_health' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'system_health' ? 'is-active' : ''; ?>"
                  data-search="صحة النظام فحص النظام PHP قاعدة البيانات الكاش">
-              <a href="<?= h($adminBase) ?>/system/health/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/system/health/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_63163058e0', 'صحة النظام')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_e2bee95ee0', 'فحص إعدادات الخادم وقاعدة البيانات')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_63163058e0', 'صحة النظام')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_e2bee95ee0', 'فحص إعدادات الخادم وقاعدة البيانات')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -653,16 +653,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'system_logs' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'system_logs' ? 'is-active' : ''; ?>"
                  data-search="سجلات النظام admin_logs العمليات الإدارية">
-              <a href="<?= h($adminBase) ?>/system/logs/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/system/logs/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_b872dc8c01', 'سجلات النظام')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_b7e04759f6', 'آخر العمليات والأحداث في لوحة التحكم')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_b872dc8c01', 'سجلات النظام')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_b7e04759f6', 'آخر العمليات والأحداث في لوحة التحكم')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -671,16 +671,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'system_cache' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'system_cache' ? 'is-active' : ''; ?>"
                  data-search="الكاش مسح الكاش تسريع الموقع">
-              <a href="<?= h($adminBase) ?>/system/cache/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/system/cache/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_736b931c7c', 'إدارة الكاش')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_a83e409c10', 'عرض حالة الكاش ومسح الملفات المؤقتة')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_736b931c7c', 'إدارة الكاش')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_a83e409c10', 'عرض حالة الكاش ومسح الملفات المؤقتة')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -689,16 +689,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'maintenance' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'maintenance' ? 'is-active' : ''; ?>"
                  data-search="وضع الصيانة إيقاف الموقع الصيانة">
-              <a href="<?= h($adminBase) ?>/maintenance/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/maintenance/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_f96c99c4d8', 'وضع الصيانة')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_70cf2cbbb8', 'تفعيل/إلغاء صفحة الصيانة للزوار')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_f96c99c4d8', 'وضع الصيانة')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_70cf2cbbb8', 'تفعيل/إلغاء صفحة الصيانة للزوار')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -707,16 +707,16 @@ if (!class_exists(\Godyar\Auth::class)) {
           </li>
 
           <li class="admin-sidebar__item">
-            <div class="admin-sidebar__link-card <?= $currentPage === 'plugins' ? 'is-active' : '' ?>"
+            <div class="admin-sidebar__link-card <?php echo $currentPage === 'plugins' ? 'is-active' : ''; ?>"
                  data-search="الإضافات البرمجية plugins مكونات إضافية">
-              <a href="<?= h($adminBase) ?>/plugins/index.php" class="admin-sidebar__link">
+              <a href="<?php echo h($adminBase); ?>/plugins/index.php" class="admin-sidebar__link">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('t_3be2bf6b96', 'الإضافات البرمجية')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('t_e41f4eba3b', 'تفعيل وتعطيل مكونات النظام')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('t_3be2bf6b96', 'الإضافات البرمجية')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('t_e41f4eba3b', 'تفعيل وتعطيل مكونات النظام')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
@@ -733,24 +733,24 @@ if (!class_exists(\Godyar\Auth::class)) {
       <div class="admin-sidebar__user">
         <div class="admin-sidebar__user-avatar">
           <?php if ($userAvatar): ?>
-            <img src="<?= h($userAvatar) ?>" alt="<?= h(__('t_ee37e3b03b', 'صورة المستخدم')) ?>" />
+            <img src="<?php echo h($userAvatar); ?>" alt="<?php echo h(__('t_ee37e3b03b', 'صورة المستخدم')); ?>" />
           <?php else: ?>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
           <?php endif; ?>
         </div>
         <div class="admin-sidebar__user-info">
-          <div class="admin-sidebar__user-name"><?= h($userName) ?></div>
-          <div class="admin-sidebar__user-role"><?= h($userRole) ?></div>
+          <div class="admin-sidebar__user-name"><?php echo h($userName); ?></div>
+          <div class="admin-sidebar__user-role"><?php echo h($userRole); ?></div>
         </div>
       </div>
       <div class="admin-sidebar__footer-actions">
-        <a href="<?= h($siteBase) ?>/" class="admin-sidebar__action-btn" title="<?= h(__('t_03b57332e5', 'الموقع الرئيسي')) ?>" aria-label="<?= h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')) ?>" target="_blank" rel="noopener">
+        <a href="<?php echo h($siteBase); ?>/" class="admin-sidebar__action-btn" title="<?php echo h(__('t_03b57332e5', 'الموقع الرئيسي')); ?>" aria-label="<?php echo h(__('t_8a0d450cfd', 'الانتقال للموقع الرئيسي')); ?>" target="_blank" rel="noopener">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
         </a>
-        <button class="admin-sidebar__action-btn" id="darkModeToggle" type="button" title="<?= h(__('t_ccf95e3f4d', 'الوضع الليلي')) ?>" aria-label="<?= h(__('t_53144e5e01', 'تبديل الوضع الليلي')) ?>">
+        <button class="admin-sidebar__action-btn" id="darkModeToggle" type="button" title="<?php echo h(__('t_ccf95e3f4d', 'الوضع الليلي')); ?>" aria-label="<?php echo h(__('t_53144e5e01', 'تبديل الوضع الليلي')); ?>">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg>
         </button>
-        <a href="<?= h($adminBase) ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="<?= h(__('t_5c4e4796c0', 'تسجيل الخروج')) ?>" aria-label="<?= h(__('t_5c4e4796c0', 'تسجيل الخروج')) ?>">
+        <a href="<?php echo h($adminBase); ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="<?php echo h(__('t_5c4e4796c0', 'تسجيل الخروج')); ?>" aria-label="<?php echo h(__('t_5c4e4796c0', 'تسجيل الخروج')); ?>">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg>
         </a>
       </div>

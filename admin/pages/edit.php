@@ -301,15 +301,15 @@ html, body {
   <div class="gdy-layout-wrap">
     <div class="gdy-page-header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
       <div>
-        <h1 class="h4 text-white mb-1"><?= h(__('t_ac4518563a', 'تعديل صفحة')) ?></h1>
-        <p class="text-muted mb-0"><?= h(__('t_b9aec28ca6', 'قم بتحديث بيانات الصفحة الثابتة.')) ?></p>
+        <h1 class="h4 text-white mb-1"><?php echo h(__('t_ac4518563a', 'تعديل صفحة')); ?></h1>
+        <p class="text-muted mb-0"><?php echo h(__('t_b9aec28ca6', 'قم بتحديث بيانات الصفحة الثابتة.')); ?></p>
       </div>
       <div class="d-flex gap-2 flex-wrap">
-        <a href="<?= h($previewUrl) ?>" target="_blank" class="btn btn-sm btn-outline-info">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d051fa8276', 'معاينة الصفحة')) ?>
+        <a href="<?php echo h($previewUrl); ?>" target="_blank" class="btn btn-sm btn-outline-info">
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_d051fa8276', 'معاينة الصفحة')); ?>
         </a>
         <a href="index.php" class="btn btn-sm btn-secondary">
-          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_fed95e1016', 'عودة للقائمة')); ?>
         </a>
       </div>
     </div>
@@ -318,7 +318,7 @@ html, body {
       <div class="alert alert-danger">
         <ul class="mb-0">
           <?php foreach ($errors as $err): ?>
-            <li><?= h($err) ?></li>
+            <li><?php echo h($err); ?></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -328,17 +328,17 @@ html, body {
       <div class="gdy-page-card-header">
         <div class="d-flex align-items-center gap-2">
           <span class="badge bg-primary-subtle text-light border border-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة #<?= (int)$id ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> صفحة #<?php echo (int)$id; ?>
           </span>
         </div>
         <div>
           <?php if ($status === 'published'): ?>
             <span class="gdy-status-pill published">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_c67d973434', 'منشورة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_c67d973434', 'منشورة')); ?>
             </span>
           <?php else: ?>
             <span class="gdy-status-pill draft">
-              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9071af8f2d', 'مسودة')) ?>
+              <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_9071af8f2d', 'مسودة')); ?>
             </span>
           <?php endif; ?>
         </div>
@@ -347,30 +347,30 @@ html, body {
       <div class="gdy-page-meta-strip">
         <div class="gdy-page-meta-item">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <span><strong><?= h(__('t_3276131673', 'إنشاء:')) ?></strong> <?= h($created_at ?: __('t_5883c3555c', 'غير متوفر')) ?></span>
+          <span><strong><?php echo h(__('t_3276131673', 'إنشاء:')); ?></strong> <?php echo h($created_at ?: __('t_5883c3555c', 'غير متوفر')); ?></span>
         </div>
         <div class="gdy-page-meta-item">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <span><strong><?= h(__('t_5385d5784c', 'آخر تعديل:')) ?></strong> <?= h($updated_at ?: __('t_5883c3555c', 'غير متوفر')) ?></span>
+          <span><strong><?php echo h(__('t_5385d5784c', 'آخر تعديل:')); ?></strong> <?php echo h($updated_at ?: __('t_5883c3555c', 'غير متوفر')); ?></span>
         </div>
         <div class="gdy-page-meta-item">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           <span class="text-truncate" style="max-width:260px;">
-            <strong>Slug:</strong> <code class="small"><?= h($slug) ?></code>
+            <strong>Slug:</strong> <code class="small"><?php echo h($slug); ?></code>
           </span>
         </div>
       </div>
 
       <div class="card-body">
         <form method="post" id="pageEditForm">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <div class="row g-3">
             <div class="col-md-8">
               <label class="form-label text-white gdy-label-small">
-                <?= h(__('t_3463295a54', 'عنوان الصفحة')) ?>
+                <?php echo h(__('t_3463295a54', 'عنوان الصفحة')); ?>
                 <span class="text-danger">*</span>
-                <span class="gdy-counter-badge" id="titleCounter"><?= h(__('t_02ad3bab33', '0 حرف')) ?></span>
+                <span class="gdy-counter-badge" id="titleCounter"><?php echo h(__('t_02ad3bab33', '0 حرف')); ?></span>
               </label>
               <input
                 type="text"
@@ -378,25 +378,25 @@ html, body {
                 id="titleInput"
                 class="form-control form-control-sm bg-dark text-light border-secondary"
                 required
-                value="<?= h($title) ?>"
-                placeholder="<?= h(__('t_f71c026e6a', 'مثال: من نحن، اتصل بنا، سياسة الخصوصية...')) ?>"
+                value="<?php echo h($title); ?>"
+                placeholder="<?php echo h(__('t_f71c026e6a', 'مثال: من نحن، اتصل بنا، سياسة الخصوصية...')); ?>"
               >
             </div>
 
             <div class="col-md-4">
               <label class="form-label text-white gdy-label-small">
-                <?= h(__('t_1253eb5642', 'الحالة')) ?>
+                <?php echo h(__('t_1253eb5642', 'الحالة')); ?>
               </label>
               <select name="status" class="form-select form-select-sm bg-dark text-light border-secondary">
-                <option value="published" <?= $status === 'published' ? 'selected' : '' ?>><?= h(__('t_c67d973434', 'منشورة')) ?></option>
-                <option value="draft" <?= $status === 'draft' ? 'selected' : '' ?>><?= h(__('t_9071af8f2d', 'مسودة')) ?></option>
+                <option value="published" <?php echo $status === 'published' ? 'selected' : ''; ?>><?php echo h(__('t_c67d973434', 'منشورة')); ?></option>
+                <option value="draft" <?php echo $status === 'draft' ? 'selected' : ''; ?>><?php echo h(__('t_9071af8f2d', 'مسودة')); ?></option>
               </select>
             </div>
 
             <div class="col-md-8">
               <label class="form-label text-white gdy-label-small">
-                <?= h(__('t_0781965540', 'الرابط (Slug)')) ?>
-                <span class="gdy-counter-badge" id="slugCounter"><?= h(__('t_02ad3bab33', '0 حرف')) ?></span>
+                <?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?>
+                <span class="gdy-counter-badge" id="slugCounter"><?php echo h(__('t_02ad3bab33', '0 حرف')); ?></span>
               </label>
               <div class="input-group input-group-sm">
                 <input
@@ -404,37 +404,37 @@ html, body {
                   name="slug"
                   id="slugInput"
                   class="form-control bg-dark text-light border-secondary"
-                  value="<?= h($slug) ?>"
-                  placeholder="<?= h(__('t_30b8969c1f', 'مثال: about-us, contact, privacy-policy ...')) ?>"
+                  value="<?php echo h($slug); ?>"
+                  placeholder="<?php echo h(__('t_30b8969c1f', 'مثال: about-us, contact, privacy-policy ...')); ?>"
                 >
                 <button class="btn btn-outline-secondary" type="button" id="btnGenerateSlug">
-                  <?= h(__('t_9ac999098c', 'توليد تلقائي')) ?>
+                  <?php echo h(__('t_9ac999098c', 'توليد تلقائي')); ?>
                 </button>
               </div>
               <small class="text-muted d-block mt-1">
-                <?= h(__('t_4f4c278c33', 'يظهر هذا الجزء في رابط الصفحة، حاول أن يكون قصيراً وواضحاً.')) ?>
+                <?php echo h(__('t_4f4c278c33', 'يظهر هذا الجزء في رابط الصفحة، حاول أن يكون قصيراً وواضحاً.')); ?>
               </small>
             </div>
 
             <div class="col-md-12">
               <label class="form-label text-white gdy-label-small">
-                <?= h(__('t_e261adf643', 'محتوى الصفحة')) ?>
+                <?php echo h(__('t_e261adf643', 'محتوى الصفحة')); ?>
               </label>
               <textarea
                 name="content"
                 id="contentInput"
                 class="form-control bg-dark text-light border-secondary"
                 rows="10"
-              ><?= h($content) ?></textarea>
+              ><?php echo h($content); ?></textarea>
             </div>
           </div>
 
           <div class="mt-3 d-flex justify-content-between flex-wrap gap-2">
             <a href="index.php" class="btn btn-outline-secondary btn-sm">
-              <?= h(__('t_a7a59a8f5f', 'إلغاء والعودة للقائمة')) ?>
+              <?php echo h(__('t_a7a59a8f5f', 'إلغاء والعودة للقائمة')); ?>
             </a>
             <button type="submit" class="btn btn-primary btn-sm">
-              <?= h(__('t_02f31ae27c', 'حفظ التغييرات')) ?>
+              <?php echo h(__('t_02f31ae27c', 'حفظ التغييرات')); ?>
             </button>
           </div>
         </form>
@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
     str = str.replace(/[^\u0600-\u06FFa-z0-9]+/g, '-');
     str = str.replace(/-+/g, '-');
     str = str.replace(/^-|-$/g, '');
-    return str || 'page-<?= (int)$id ?>';
+    return str || 'page-<?php echo (int)$id; ?>';
   }
 
   if (btnGenerateSlug && titleInput && slugInput) {

@@ -42,11 +42,11 @@ if (is_file($storageLog) && is_readable($storageLog)) {
 }
 
 ?><!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)($_SESSION['lang'] ?? 'ar')) === 'ar' ? 'rtl' : 'ltr'); ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= h(__('t_5d0337afab', 'تشخيص الأخطاء - لوحة التحكم')) ?></title>
+  <title><?php echo h(__('t_5d0337afab', 'تشخيص الأخطاء - لوحة التحكم')); ?></title>
   <style>
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f5f7fb;margin:0;padding:16px}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:0 6px 20px rgba(0,0,0,.04)}
@@ -62,31 +62,31 @@ if (is_file($storageLog) && is_readable($storageLog)) {
   <div class="card">
     <div class="row" style="justify-content:space-between;align-items:center">
       <div>
-        <h2 style="margin:0 0 6px"><?= h(__('t_89206b9c86', 'تشخيص الأخطاء')) ?></h2>
-        <div class="muted"><?= h(__('t_6a64d9ae4f', 'هذه الصفحة للمدير فقط وتعرض آخر خطأ تم التقاطه داخل اللوحة + آخر سطور من سجل admin_debug.log.')) ?></div>
+        <h2 style="margin:0 0 6px"><?php echo h(__('t_89206b9c86', 'تشخيص الأخطاء')); ?></h2>
+        <div class="muted"><?php echo h(__('t_6a64d9ae4f', 'هذه الصفحة للمدير فقط وتعرض آخر خطأ تم التقاطه داخل اللوحة + آخر سطور من سجل admin_debug.log.')); ?></div>
       </div>
       <div class="row">
-        <a class="btn2" href="/admin/"><?= h(__('t_27b62857fb', 'العودة للوحة')) ?></a>
-        <a class="btn" href="?clear=1"><?= h(__('t_55db84569d', 'مسح آخر خطأ')) ?></a>
+        <a class="btn2" href="/admin/"><?php echo h(__('t_27b62857fb', 'العودة للوحة')); ?></a>
+        <a class="btn" href="?clear=1"><?php echo h(__('t_55db84569d', 'مسح آخر خطأ')); ?></a>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0"><?= h(__('t_5459bd7ee9', 'آخر خطأ (Session)')) ?></h3>
+    <h3 style="margin-top:0"><?php echo h(__('t_5459bd7ee9', 'آخر خطأ (Session)')); ?></h3>
     <?php if ($last): ?>
-      <pre><?= h(json_encode($last, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_PRETTY_PRINT)) ?></pre>
+      <pre><?php echo h(json_encode($last, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_PRETTY_PRINT)); ?></pre>
     <?php else: ?>
-      <div class="muted"><?= h(__('t_8a747b5900', 'لا يوجد خطأ محفوظ في الجلسة حالياً.')) ?></div>
+      <div class="muted"><?php echo h(__('t_8a747b5900', 'لا يوجد خطأ محفوظ في الجلسة حالياً.')); ?></div>
     <?php endif; ?>
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0"><?= h(__('t_1ca224939e', 'آخر 200 سطر من admin_debug.log')) ?></h3>
+    <h3 style="margin-top:0"><?php echo h(__('t_1ca224939e', 'آخر 200 سطر من admin_debug.log')); ?></h3>
     <?php if ($tail !== ''): ?>
-      <pre><?= h($tail) ?></pre>
+      <pre><?php echo h($tail); ?></pre>
     <?php else: ?>
-      <div class="muted">ملف السجل غير موجود/غير قابل للقراءة: <?= h($storageLog) ?></div>
+      <div class="muted">ملف السجل غير موجود/غير قابل للقراءة: <?php echo h($storageLog); ?></div>
     <?php endif; ?>
   </div>
 

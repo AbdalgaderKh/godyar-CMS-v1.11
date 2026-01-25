@@ -202,19 +202,19 @@ try {
   <div class="col-lg-8">
 
     <?php if ($notice): ?>
-      <div class="alert alert-success"><?= h($notice) ?></div>
+      <div class="alert alert-success"><?php echo h($notice); ?></div>
     <?php endif; ?>
     <?php if ($error): ?>
-      <div class="alert alert-danger"><?= h($error) ?></div>
+      <div class="alert alert-danger"><?php echo h($error); ?></div>
     <?php endif; ?>
 
     <div class="card mb-3">
       <div class="card-header d-flex align-items-center justify-content-between">
         <div>
-          <div class="fw-semibold"><?= h(__('t_pwa_push_title', 'PWA & Push')) ?></div>
-          <div class="text-muted small"><?= h(__('t_pwa_push_hint', 'تهيئة مفاتيح الإشعارات (Web Push) وإعدادات التثبيت كتطبيق.')) ?></div>
+          <div class="fw-semibold"><?php echo h(__('t_pwa_push_title', 'PWA & Push')); ?></div>
+          <div class="text-muted small"><?php echo h(__('t_pwa_push_hint', 'تهيئة مفاتيح الإشعارات (Web Push) وإعدادات التثبيت كتطبيق.')); ?></div>
         </div>
-        <span class="badge text-bg-secondary"><?= h(__('t_subscribers', 'مشتركين')) ?>: <?= (int)$subsCount ?></span>
+        <span class="badge text-bg-secondary"><?php echo h(__('t_subscribers', 'مشتركين')); ?>: <?php echo (int)$subsCount; ?></span>
       </div>
 
       <div class="card-body">
@@ -224,40 +224,40 @@ try {
           <input type="hidden" name="action" value="save_push" />
 
           <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" role="switch" id="push_enabled" name="push_enabled" value="1" <?= ($pushEnabled === '1') ? 'checked' : '' ?> />
-            <label class="form-check-label" for="push_enabled"><?= h(__('t_push_enable', 'تفعيل الاشتراك بالإشعارات')) ?></label>
+            <input class="form-check-input" type="checkbox" role="switch" id="push_enabled" name="push_enabled" value="1" <?php echo ($pushEnabled === '1') ? 'checked' : ''; ?> />
+            <label class="form-check-label" for="push_enabled"><?php echo h(__('t_push_enable', 'تفعيل الاشتراك بالإشعارات')); ?></label>
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="push_subject"><?= h(__('t_push_subject', 'Subject (mailto)')) ?></label>
-            <input class="form-control" id="push_subject" name="push_subject" value="<?= h($pushSubject) ?>" placeholder="mailto:admin@<?= h($_SERVER['HTTP_HOST'] ?? 'example.com') ?>" />
-            <div class="form-text"><?= h(__('t_push_subject_help', 'يُستخدم داخل VAPID كبيان تواصل (mailto: أو https://).')) ?></div>
+            <label class="form-label" for="push_subject"><?php echo h(__('t_push_subject', 'Subject (mailto)')); ?></label>
+            <input class="form-control" id="push_subject" name="push_subject" value="<?php echo h($pushSubject); ?>" placeholder="mailto:admin@<?php echo h($_SERVER['HTTP_HOST'] ?? 'example.com'); ?>" />
+            <div class="form-text"><?php echo h(__('t_push_subject_help', 'يُستخدم داخل VAPID كبيان تواصل (mailto: أو https://).')); ?></div>
           </div>
 
-          <button class="btn btn-primary" type="submit"><?= h(__('t_save', 'حفظ')) ?></button>
+          <button class="btn btn-primary" type="submit"><?php echo h(__('t_save', 'حفظ')); ?></button>
         </form>
 
         <hr class="my-4" />
 
         <form method="post">
           <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
-                    <input type="hidden" name="push_subject" value="<?= h($pushSubject) ?>" />
+                    <input type="hidden" name="push_subject" value="<?php echo h($pushSubject); ?>" />
 
           <div class="d-flex align-items-center justify-content-between mb-3">
-            <div class="fw-semibold"><?= h(__('t_vapid_keys', 'مفاتيح VAPID')) ?></div>
-            <button class="btn btn-outline-dark" type="submit" name="action" value="generate_vapid"><?= h(__('t_generate', 'توليد مفاتيح')) ?></button>
+            <div class="fw-semibold"><?php echo h(__('t_vapid_keys', 'مفاتيح VAPID')); ?></div>
+            <button class="btn btn-outline-dark" type="submit" name="action" value="generate_vapid"><?php echo h(__('t_generate', 'توليد مفاتيح')); ?></button>
           </div>
 
           <div class="row g-3">
             <div class="col-12">
-              <label class="form-label"><?= h(__('t_vapid_public', 'Public Key')) ?></label>
-              <textarea class="form-control" rows="2" readonly><?= h($vapidPublic) ?></textarea>
-              <div class="form-text"><?= h(__('t_vapid_public_help', 'انسخه كما هو. سيتم استخدامه في المتصفح للاشتراك.')) ?></div>
+              <label class="form-label"><?php echo h(__('t_vapid_public', 'Public Key')); ?></label>
+              <textarea class="form-control" rows="2" readonly><?php echo h($vapidPublic); ?></textarea>
+              <div class="form-text"><?php echo h(__('t_vapid_public_help', 'انسخه كما هو. سيتم استخدامه في المتصفح للاشتراك.')); ?></div>
             </div>
             <div class="col-12">
-              <label class="form-label"><?= h(__('t_vapid_private', 'Private Key')) ?></label>
-              <textarea class="form-control" rows="2" readonly><?= h($vapidPrivate) ?></textarea>
-              <div class="form-text"><?= h(__('t_vapid_private_help', 'مهم: لا تشاركه. يُستخدم فقط لإرسال الإشعارات من السيرفر.')) ?></div>
+              <label class="form-label"><?php echo h(__('t_vapid_private', 'Private Key')); ?></label>
+              <textarea class="form-control" rows="2" readonly><?php echo h($vapidPrivate); ?></textarea>
+              <div class="form-text"><?php echo h(__('t_vapid_private_help', 'مهم: لا تشاركه. يُستخدم فقط لإرسال الإشعارات من السيرفر.')); ?></div>
             </div>
           </div>
 
@@ -265,59 +265,59 @@ try {
           <hr class="my-4" />
 
           <div class="d-flex align-items-center justify-content-between mb-3">
-            <div class="fw-semibold"><?= h(__('t_push_send_now', 'إرسال إشعار الآن')) ?></div>
-            <div class="small text-muted"><?= h(__('t_push_send_hint', 'إرسال يدوي (Broadcast) لكل المشتركين')) ?></div>
+            <div class="fw-semibold"><?php echo h(__('t_push_send_now', 'إرسال إشعار الآن')); ?></div>
+            <div class="small text-muted"><?php echo h(__('t_push_send_hint', 'إرسال يدوي (Broadcast) لكل المشتركين')); ?></div>
           </div>
 
           <?php $sendRes = $GLOBALS['__push_send_result'] ?? null; ?>
           <?php if (is_array($sendRes)) : ?>
-            <div class="alert <?= !empty($sendRes['ok']) ? 'alert-success' : 'alert-danger' ?> py-2">
-              <div class="fw-semibold mb-1"><?= h(__('t_push_send_result', 'نتيجة الإرسال')) ?></div>
+            <div class="alert <?php echo !empty($sendRes['ok']) ? 'alert-success' : 'alert-danger'; ?> py-2">
+              <div class="fw-semibold mb-1"><?php echo h(__('t_push_send_result', 'نتيجة الإرسال')); ?></div>
               <div class="small">
-                <?= h(__('t_sent', 'تم الإرسال')) ?>: <?= (int)($sendRes['sent'] ?? 0) ?> —
-                <?= h(__('t_failed', 'فشل')) ?>: <?= (int)($sendRes['failed'] ?? 0) ?> —
-                <?= h(__('t_total', 'الإجمالي')) ?>: <?= (int)($sendRes['total'] ?? 0) ?>
+                <?php echo h(__('t_sent', 'تم الإرسال')); ?>: <?php echo (int)($sendRes['sent'] ?? 0); ?> —
+                <?php echo h(__('t_failed', 'فشل')); ?>: <?php echo (int)($sendRes['failed'] ?? 0); ?> —
+                <?php echo h(__('t_total', 'الإجمالي')); ?>: <?php echo (int)($sendRes['total'] ?? 0); ?>
               </div>
               <?php if (!empty($sendRes['errors']) && is_array($sendRes['errors'])) : ?>
-                <div class="small text-muted mt-1"><?= h(implode(' | ', array_slice($sendRes['errors'], 0, 2))) ?></div>
+                <div class="small text-muted mt-1"><?php echo h(implode(' | ', array_slice($sendRes['errors'], 0, 2))); ?></div>
               <?php endif; ?>
             </div>
           <?php endif; ?>
 
           <div class="row g-3">
             <div class="col-12">
-              <label class="form-label"><?= h(__('t_push_title', 'عنوان الإشعار')) ?></label>
-              <input class="form-control" type="text" name="push_title" value="<?= h((string)($_POST['push_title'] ?? '')) ?>" placeholder="<?= h(__('t_example', 'مثال')) ?>: خبر عاجل" />
+              <label class="form-label"><?php echo h(__('t_push_title', 'عنوان الإشعار')); ?></label>
+              <input class="form-control" type="text" name="push_title" value="<?php echo h((string)($_POST['push_title'] ?? '')); ?>" placeholder="<?php echo h(__('t_example', 'مثال')); ?>: خبر عاجل" />
             </div>
             <div class="col-12">
-              <label class="form-label"><?= h(__('t_push_body', 'نص الإشعار')) ?></label>
-              <textarea class="form-control" name="push_body" rows="3" placeholder="<?= h(__('t_push_body_ph', 'اكتب ملخصًا قصيرًا...')) ?>"><?= h((string)($_POST['push_body'] ?? '')) ?></textarea>
+              <label class="form-label"><?php echo h(__('t_push_body', 'نص الإشعار')); ?></label>
+              <textarea class="form-control" name="push_body" rows="3" placeholder="<?php echo h(__('t_push_body_ph', 'اكتب ملخصًا قصيرًا...')); ?>"><?php echo h((string)($_POST['push_body'] ?? '')); ?></textarea>
             </div>
             <div class="col-md-8">
-              <label class="form-label"><?= h(__('t_push_url', 'الرابط عند الضغط')) ?></label>
-              <input class="form-control" type="text" name="push_url" value="<?= h((string)($_POST['push_url'] ?? '/')) ?>" placeholder="/ar/" />
-              <div class="form-text"><?= h(__('t_push_url_help', 'يمكنك وضع رابط داخل الموقع مثل /ar/news/123')) ?></div>
+              <label class="form-label"><?php echo h(__('t_push_url', 'الرابط عند الضغط')); ?></label>
+              <input class="form-control" type="text" name="push_url" value="<?php echo h((string)($_POST['push_url'] ?? '/')); ?>" placeholder="/ar/" />
+              <div class="form-text"><?php echo h(__('t_push_url_help', 'يمكنك وضع رابط داخل الموقع مثل /ar/news/123')); ?></div>
             </div>
             <div class="col-md-4">
-              <label class="form-label"><?= h(__('t_push_ttl', 'مدة TTL بالثواني')) ?></label>
-              <input class="form-control" type="number" name="push_ttl" min="0" max="86400" value="<?= h((string)($_POST['push_ttl'] ?? '300')) ?>" />
+              <label class="form-label"><?php echo h(__('t_push_ttl', 'مدة TTL بالثواني')); ?></label>
+              <input class="form-control" type="number" name="push_ttl" min="0" max="86400" value="<?php echo h((string)($_POST['push_ttl'] ?? '300')); ?>" />
             </div>
             <div class="col-12">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="push_test_only" name="push_test_only" value="1" <?= !empty($_POST['push_test_only']) ? 'checked' : '' ?> />
-                <label class="form-check-label" for="push_test_only"><?= h(__('t_push_test_only', 'إرسال تجريبي لأول مشترك فقط')) ?></label>
+                <input class="form-check-input" type="checkbox" id="push_test_only" name="push_test_only" value="1" <?php echo !empty($_POST['push_test_only']) ? 'checked' : ''; ?> />
+                <label class="form-check-label" for="push_test_only"><?php echo h(__('t_push_test_only', 'إرسال تجريبي لأول مشترك فقط')); ?></label>
               </div>
             </div>
             <div class="col-12 d-flex gap-2">
-              <button class="btn btn-dark" type="submit" name="action" value="send_push"><?= h(__('t_send_now', 'إرسال الآن')) ?></button>
-              <button class="btn btn-outline-secondary" type="submit" name="action" value="send_push" data-check-target="#push_test_only"><?= h(__('t_send_test', 'إرسال تجريبي')) ?></button>
+              <button class="btn btn-dark" type="submit" name="action" value="send_push"><?php echo h(__('t_send_now', 'إرسال الآن')); ?></button>
+              <button class="btn btn-outline-secondary" type="submit" name="action" value="send_push" data-check-target="#push_test_only"><?php echo h(__('t_send_test', 'إرسال تجريبي')); ?></button>
             </div>
           </div>
 
 <div class="alert alert-warning mt-3 mb-0">
-            <div class="fw-semibold mb-1"><?= h(__('t_push_note', 'ملاحظة')) ?></div>
+            <div class="fw-semibold mb-1"><?php echo h(__('t_push_note', 'ملاحظة')); ?></div>
             <div class="small text-muted">
-              <?= h(__('t_push_note_body', 'هذه الصفحة تُجهّز مفاتيح الاشتراك. يمكنك إرسال إشعار يدوي الآن من نفس الصفحة بعد توليد مفاتيح VAPID وتفعيل الإشعارات.')) ?>
+              <?php echo h(__('t_push_note_body', 'هذه الصفحة تُجهّز مفاتيح الاشتراك. يمكنك إرسال إشعار يدوي الآن من نفس الصفحة بعد توليد مفاتيح VAPID وتفعيل الإشعارات.')); ?>
             </div>
           </div>
         </form>

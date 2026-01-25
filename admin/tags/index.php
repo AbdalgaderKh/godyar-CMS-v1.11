@@ -383,61 +383,61 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
 <div class="gdy-card mb-3">
   <div class="gdy-card-header d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3">
     <div class="d-flex flex-wrap gap-2">
-      <span class="badge rounded-pill bg-secondary">الكل: <?= (int)$stats['total'] ?></span>
-      <span class="badge rounded-pill bg-success">مستخدمة: <?= (int)$stats['used'] ?></span>
-      <span class="badge rounded-pill bg-warning text-dark">غير مستخدمة: <?= (int)$stats['unused'] ?></span>
+      <span class="badge rounded-pill bg-secondary">الكل: <?php echo (int)$stats['total']; ?></span>
+      <span class="badge rounded-pill bg-success">مستخدمة: <?php echo (int)$stats['used']; ?></span>
+      <span class="badge rounded-pill bg-warning text-dark">غير مستخدمة: <?php echo (int)$stats['unused']; ?></span>
     </div>
 
     <form class="row g-2 align-items-end w-100 w-lg-auto" method="get" action="">
       <div class="col-12 col-md-5">
-        <label class="form-label text-muted mb-1"><?= h(__('t_ab79fc1485', 'بحث')) ?></label>
-        <input type="text" class="form-control" name="q" value="<?= h($q) ?>" placeholder="<?= h(__('t_9a81271c03', 'اسم الوسم / slug')) ?>">
+        <label class="form-label text-muted mb-1"><?php echo h(__('t_ab79fc1485', 'بحث')); ?></label>
+        <input type="text" class="form-control" name="q" value="<?php echo h($q); ?>" placeholder="<?php echo h(__('t_9a81271c03', 'اسم الوسم / slug')); ?>">
       </div>
       <div class="col-12 col-md-3">
-        <label class="form-label text-muted mb-1"><?= h(__('t_5c9c7ec1ff', 'الاستخدام')) ?></label>
+        <label class="form-label text-muted mb-1"><?php echo h(__('t_5c9c7ec1ff', 'الاستخدام')); ?></label>
         <select class="form-select" name="usage">
-          <option value="" <?= $usageFilter===''?'selected':'' ?>><?= h(__('t_6d08f19681', 'الكل')) ?></option>
-          <option value="used" <?= $usageFilter==='used'?'selected':'' ?>><?= h(__('t_278d0a142c', 'مستخدمة')) ?></option>
-          <option value="unused" <?= $usageFilter==='unused'?'selected':'' ?>><?= h(__('t_6bbcd06009', 'غير مستخدمة')) ?></option>
+          <option value="" <?php echo $usageFilter===''?'selected':''; ?>><?php echo h(__('t_6d08f19681', 'الكل')); ?></option>
+          <option value="used" <?php echo $usageFilter==='used'?'selected':''; ?>><?php echo h(__('t_278d0a142c', 'مستخدمة')); ?></option>
+          <option value="unused" <?php echo $usageFilter==='unused'?'selected':''; ?>><?php echo h(__('t_6bbcd06009', 'غير مستخدمة')); ?></option>
         </select>
       </div>
       <div class="col-12 col-md-2">
-        <label class="form-label text-muted mb-1"><?= h(__('t_ddda59289a', 'الترتيب')) ?></label>
+        <label class="form-label text-muted mb-1"><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></label>
         <select class="form-select" name="sort">
-          <option value="usage_desc" <?= $sort==='usage_desc'?'selected':'' ?>><?= h(__('t_1a7bcce35f', 'الأكثر استخداماً')) ?></option>
-          <option value="usage_asc" <?= $sort==='usage_asc'?'selected':'' ?>><?= h(__('t_5a7e6ce44e', 'الأقل استخداماً')) ?></option>
-          <option value="name_asc" <?= $sort==='name_asc'?'selected':'' ?>><?= h(__('t_2c8c7eb98d', 'الاسم (أ-ي)')) ?></option>
-          <option value="name_desc" <?= $sort==='name_desc'?'selected':'' ?>><?= h(__('t_7b22353a36', 'الاسم (ي-أ)')) ?></option>
+          <option value="usage_desc" <?php echo $sort==='usage_desc'?'selected':''; ?>><?php echo h(__('t_1a7bcce35f', 'الأكثر استخداماً')); ?></option>
+          <option value="usage_asc" <?php echo $sort==='usage_asc'?'selected':''; ?>><?php echo h(__('t_5a7e6ce44e', 'الأقل استخداماً')); ?></option>
+          <option value="name_asc" <?php echo $sort==='name_asc'?'selected':''; ?>><?php echo h(__('t_2c8c7eb98d', 'الاسم (أ-ي)')); ?></option>
+          <option value="name_desc" <?php echo $sort==='name_desc'?'selected':''; ?>><?php echo h(__('t_7b22353a36', 'الاسم (ي-أ)')); ?></option>
         </select>
       </div>
       <div class="col-12 col-md-2 d-flex gap-2">
-        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_abe3151c63', 'تطبيق')) ?></button>
-        <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?= h(__('t_ec2ce8be93', 'مسح')) ?></a>
+        <button class="btn btn-gdy btn-gdy-primary w-100" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_abe3151c63', 'تطبيق')); ?></button>
+        <a class="btn btn-gdy btn-gdy-ghost w-100" href="index.php"><?php echo h(__('t_ec2ce8be93', 'مسح')); ?></a>
       </div>
     </form>
   </div>
 
   <div class="gdy-card-body">
     <?php if ($flashSuccess): ?>
-      <div class="alert alert-success">✅ <?= h($flashSuccess) ?></div>
+      <div class="alert alert-success">✅ <?php echo h($flashSuccess); ?></div>
     <?php endif; ?>
     <?php if ($flashError): ?>
-      <div class="alert alert-danger">⚠️ <?= h($flashError) ?></div>
+      <div class="alert alert-danger">⚠️ <?php echo h($flashError); ?></div>
     <?php endif; ?>
 
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2 mb-3">
       <div class="text-muted small">
-        <?= h(__('t_f220156b1c', 'استخدم')) ?> <strong><?= h(__('t_573cd1dfba', 'دمج وسوم')) ?></strong> <?= h(__('t_7135098e58', 'عند وجود وسوم متشابهة (مثل: AI / الذكاء-الاصطناعي) لتوحيدها.')) ?>
+        <?php echo h(__('t_f220156b1c', 'استخدم')); ?> <strong><?php echo h(__('t_573cd1dfba', 'دمج وسوم')); ?></strong> <?php echo h(__('t_7135098e58', 'عند وجود وسوم متشابهة (مثل: AI / الذكاء-الاصطناعي) لتوحيدها.')); ?>
       </div>
       <form method="post" class="m-0" data-confirm='حذف كل الوسوم غير المستخدمة؟'>
-        <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
         <input type="hidden" name="action" value="cleanup_unused">
-        <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_626532ff27', 'تنظيف غير المستخدمة')) ?></button>
+        <button class="btn btn-sm btn-gdy btn-gdy-ghost" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_626532ff27', 'تنظيف غير المستخدمة')); ?></button>
       </form>
     </div>
 
     <form method="post" id="bulkForm">
-      <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+      <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
       <input type="hidden" name="action" value="bulk_delete">
 
       <div class="table-responsive">
@@ -446,16 +446,16 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
             <tr>
               <th style="width:44px"><input type="checkbox" id="checkAll"></th>
               <th style="width:72px">#</th>
-              <th><?= h(__('t_ec99e3d757', 'الوسم')) ?></th>
+              <th><?php echo h(__('t_ec99e3d757', 'الوسم')); ?></th>
               <th style="width:140px">slug</th>
-              <th style="width:110px"><?= h(__('t_5c9c7ec1ff', 'الاستخدام')) ?></th>
-              <th style="width:190px"><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></th>
-              <th style="width:260px" class="text-end"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+              <th style="width:110px"><?php echo h(__('t_5c9c7ec1ff', 'الاستخدام')); ?></th>
+              <th style="width:190px"><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></th>
+              <th style="width:260px" class="text-end"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
             </tr>
           </thead>
           <tbody>
             <?php if (!$items): ?>
-              <tr><td colspan="7" class="text-center text-muted py-4"><?= h(__('t_091e7da517', 'لا توجد وسوم مطابقة.')) ?></td></tr>
+              <tr><td colspan="7" class="text-center text-muted py-4"><?php echo h(__('t_091e7da517', 'لا توجد وسوم مطابقة.')); ?></td></tr>
             <?php else: ?>
               <?php foreach ($items as $t):
                 $id = (int)($t['id'] ?? 0);
@@ -465,77 +465,77 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
                 elseif ($hasCreatedAt) $dt = (string)($t['created_at'] ?? '');
               ?>
               <tr>
-                <td><input type="checkbox" name="ids[]" value="<?= $id ?>" class="rowCheck"></td>
-                <td><?= $id ?></td>
+                <td><input type="checkbox" name="ids[]" value="<?php echo $id; ?>" class="rowCheck"></td>
+                <td><?php echo $id; ?></td>
                 <td>
-                  <div class="fw-bold">#<?= h((string)($t['name'] ?? '')) ?></div>
+                  <div class="fw-bold">#<?php echo h((string)($t['name'] ?? '')); ?></div>
                   <?php if ($hasDesc && !empty($t['description'])): ?>
                     <div class="text-muted small" style="max-width: 60ch;">
-                      <?= h(mb_strimwidth((string)$t['description'], 0, 140, '…', 'UTF-8')) ?>
+                      <?php echo h(mb_strimwidth((string)$t['description'], 0, 140, '…', 'UTF-8')); ?>
                     </div>
                   <?php endif; ?>
                   <div class="small mt-1">
-                    <a href="<?= h($tagUrl((string)($t['slug'] ?? ''))) ?>" target="_blank" rel="noopener" style="text-decoration:none;">
-                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7946c4d1dc', 'فتح صفحة الوسم')) ?>
+                    <a href="<?php echo h($tagUrl((string)($t['slug'] ?? ''))); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
+                      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_7946c4d1dc', 'فتح صفحة الوسم')); ?>
                     </a>
                   </div>
                 </td>
-                <td class="text-muted small"><code><?= h((string)($t['slug'] ?? '')) ?></code></td>
+                <td class="text-muted small"><code><?php echo h((string)($t['slug'] ?? '')); ?></code></td>
                 <td>
                   <?php if ($usage > 0): ?>
-                    <span class="badge bg-success rounded-pill px-3 py-2"><?= $usage ?></span>
+                    <span class="badge bg-success rounded-pill px-3 py-2"><?php echo $usage; ?></span>
                   <?php else: ?>
                     <span class="badge bg-warning text-dark rounded-pill px-3 py-2">0</span>
                   <?php endif; ?>
                 </td>
-                <td class="text-muted small"><?= h($dt) ?></td>
+                <td class="text-muted small"><?php echo h($dt); ?></td>
                 <td class="text-end">
                   <div class="d-flex flex-wrap justify-content-end gap-2">
-                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagEditModal<?= $id ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?></button>
-                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-copy="<?= h($tagUrl((string)($t['slug'] ?? ''))) ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?= h(__('t_0d8af0ab07', 'نسخ الرابط')) ?></button>
+                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-bs-toggle="modal" data-bs-target="#tagEditModal<?php echo $id; ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_759fdc242e', 'تعديل')); ?></button>
+                    <button type="button" class="btn btn-sm btn-gdy btn-gdy-ghost" data-copy="<?php echo h($tagUrl((string)($t['slug'] ?? ''))); ?>"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#copy"></use></svg> <?php echo h(__('t_0d8af0ab07', 'نسخ الرابط')); ?></button>
 
                     <form method="post" class="m-0" data-confirm='حذف الوسم؟ سيتم إزالة ربطه من الأخبار أيضاً.'>
-                      <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+                      <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
                       <input type="hidden" name="action" value="delete">
-                      <input type="hidden" name="id" value="<?= $id ?>">
-                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_3b9854e1bb', 'حذف')) ?></button>
+                      <input type="hidden" name="id" value="<?php echo $id; ?>">
+                      <button class="btn btn-sm btn-gdy btn-gdy-danger" type="submit"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?php echo h(__('t_3b9854e1bb', 'حذف')); ?></button>
                     </form>
                   </div>
                 </td>
               </tr>
 
               <!-- Edit Modal -->
-              <div class="modal fade" id="tagEditModal<?= $id ?>" tabindex="-1" aria-hidden="true">
+              <div class="modal fade" id="tagEditModal<?php echo $id; ?>" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content bg-dark text-light">
                     <div class="modal-header">
-                      <h5 class="modal-title"><?= h(__('t_2740e5007d', 'تعديل وسم')) ?></h5>
+                      <h5 class="modal-title"><?php echo h(__('t_2740e5007d', 'تعديل وسم')); ?></h5>
                       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="post">
                       <div class="modal-body">
-                        <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
                         <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="id" value="<?= $id ?>">
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
                         <div class="mb-3">
-                          <label class="form-label"><?= h(__('t_2e8b171b46', 'الاسم')) ?></label>
-                          <input class="form-control" name="name" value="<?= h((string)($t['name'] ?? '')) ?>" required>
+                          <label class="form-label"><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></label>
+                          <input class="form-control" name="name" value="<?php echo h((string)($t['name'] ?? '')); ?>" required>
                         </div>
                         <div class="mb-3">
                           <label class="form-label">Slug</label>
-                          <input class="form-control" name="slug" value="<?= h((string)($t['slug'] ?? '')) ?>" placeholder="<?= h(__('t_524cb09b95', 'اتركه فارغًا لتوليده تلقائيًا')) ?>">
-                          <div class="form-text text-muted"><?= h(__('t_efaa47290d', 'يفضل عدم تغييره إن كان الوسم مستخدمًا للحفاظ على الروابط.')) ?></div>
+                          <input class="form-control" name="slug" value="<?php echo h((string)($t['slug'] ?? '')); ?>" placeholder="<?php echo h(__('t_524cb09b95', 'اتركه فارغًا لتوليده تلقائيًا')); ?>">
+                          <div class="form-text text-muted"><?php echo h(__('t_efaa47290d', 'يفضل عدم تغييره إن كان الوسم مستخدمًا للحفاظ على الروابط.')); ?></div>
                         </div>
                         <?php if ($hasDesc): ?>
                           <div class="mb-3">
-                            <label class="form-label"><?= h(__('t_ac07b993ab', 'وصف')) ?></label>
-                            <textarea class="form-control" name="description" rows="3"><?= h((string)($t['description'] ?? '')) ?></textarea>
+                            <label class="form-label"><?php echo h(__('t_ac07b993ab', 'وصف')); ?></label>
+                            <textarea class="form-control" name="description" rows="3"><?php echo h((string)($t['description'] ?? '')); ?></textarea>
                           </div>
                         <?php endif; ?>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?= h(__('t_9932cca009', 'إغلاق')) ?></button>
-                        <button class="btn btn-gdy btn-gdy-primary" type="submit"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+                        <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?php echo h(__('t_9932cca009', 'إغلاق')); ?></button>
+                        <button class="btn btn-gdy btn-gdy-primary" type="submit"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
                       </div>
                     </form>
                   </div>
@@ -549,11 +549,11 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
 
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
         <div class="text-muted small">
-          <?= h(__('t_93313790b8', 'إجمالي السجلات:')) ?> <span class="text-light fw-semibold"><?= (int)$totalRows ?></span> <?= h(__('t_f67df4e2c5', '— الصفحة')) ?> <span class="text-light fw-semibold"><?= (int)$page ?></span> <?= h(__('t_99fb92edad', 'من')) ?> <span class="text-light fw-semibold"><?= (int)$totalPages ?></span>
+          <?php echo h(__('t_93313790b8', 'إجمالي السجلات:')); ?> <span class="text-light fw-semibold"><?php echo (int)$totalRows; ?></span> <?php echo h(__('t_f67df4e2c5', '— الصفحة')); ?> <span class="text-light fw-semibold"><?php echo (int)$page; ?></span> <?php echo h(__('t_99fb92edad', 'من')); ?> <span class="text-light fw-semibold"><?php echo (int)$totalPages; ?></span>
         </div>
 
         <div class="d-flex gap-2">
-          <button type="submit" class="btn btn-sm btn-gdy btn-gdy-danger" data-confirm='حذف الوسوم المحددة؟ سيتم إزالة ربطها من الأخبار.'><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_fa91840c47', 'حذف المحدد')) ?></button>
+          <button type="submit" class="btn btn-sm btn-gdy btn-gdy-danger" data-confirm='حذف الوسوم المحددة؟ سيتم إزالة ربطها من الأخبار.'><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?php echo h(__('t_fa91840c47', 'حذف المحدد')); ?></button>
         </div>
 
         <?php if ($totalPages > 1): ?>
@@ -566,7 +566,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
                 $prev = max(1, $page - 1);
                 $next = min($totalPages, $page + 1);
               ?>
-              <li class="page-item <?= $page<=1?'disabled':'' ?>"><a class="page-link" href="<?= h($mk($prev)) ?>"><?= h(__('t_650bd5b508', 'السابق')) ?></a></li>
+              <li class="page-item <?php echo $page<=1?'disabled':''; ?>"><a class="page-link" href="<?php echo h($mk($prev)); ?>"><?php echo h(__('t_650bd5b508', 'السابق')); ?></a></li>
               <?php
                 $start = max(1, $page - 2);
                 $end   = min($totalPages, $page + 2);
@@ -583,7 +583,7 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
                   echo '<li class="page-item"><a class="page-link" href="'.h($mk($totalPages)).'">'.$totalPages.'</a></li>';
                 }
               ?>
-              <li class="page-item <?= $page>=$totalPages?'disabled':'' ?>"><a class="page-link" href="<?= h($mk($next)) ?>"><?= h(__('t_8435afd9e8', 'التالي')) ?></a></li>
+              <li class="page-item <?php echo $page>=$totalPages?'disabled':''; ?>"><a class="page-link" href="<?php echo h($mk($next)); ?>"><?php echo h(__('t_8435afd9e8', 'التالي')); ?></a></li>
             </ul>
           </nav>
         <?php endif; ?>
@@ -597,32 +597,32 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-dark text-light">
       <div class="modal-header">
-        <h5 class="modal-title"><?= h(__('t_bbc5680b7c', 'إضافة وسم جديد')) ?></h5>
+        <h5 class="modal-title"><?php echo h(__('t_bbc5680b7c', 'إضافة وسم جديد')); ?></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form method="post">
         <div class="modal-body">
-          <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
           <input type="hidden" name="action" value="create">
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_2e8b171b46', 'الاسم')) ?></label>
-            <input class="form-control" name="name" required placeholder="<?= h(__('t_cfa0ab860f', 'مثال: تقنية / AI / رياضة')) ?>">
+            <label class="form-label"><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></label>
+            <input class="form-control" name="name" required placeholder="<?php echo h(__('t_cfa0ab860f', 'مثال: تقنية / AI / رياضة')); ?>">
           </div>
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_e691660aab', 'Slug (اختياري)')) ?></label>
-            <input class="form-control" name="slug" placeholder="<?= h(__('t_524cb09b95', 'اتركه فارغًا لتوليده تلقائيًا')) ?>">
+            <label class="form-label"><?php echo h(__('t_e691660aab', 'Slug (اختياري)')); ?></label>
+            <input class="form-control" name="slug" placeholder="<?php echo h(__('t_524cb09b95', 'اتركه فارغًا لتوليده تلقائيًا')); ?>">
           </div>
           <?php if ($hasDesc): ?>
             <div class="mb-3">
-              <label class="form-label"><?= h(__('t_d3581d718b', 'وصف (اختياري)')) ?></label>
-              <textarea class="form-control" name="description" rows="3" placeholder="<?= h(__('t_817a9f87b8', 'وصف قصير للوسم')) ?>"></textarea>
+              <label class="form-label"><?php echo h(__('t_d3581d718b', 'وصف (اختياري)')); ?></label>
+              <textarea class="form-control" name="description" rows="3" placeholder="<?php echo h(__('t_817a9f87b8', 'وصف قصير للوسم')); ?>"></textarea>
             </div>
           <?php endif; ?>
-          <div class="form-text text-muted"><?= h(__('t_b1d7cb63cc', 'سيتم ضمان عدم تكرار الـ slug تلقائيًا.')) ?></div>
+          <div class="form-text text-muted"><?php echo h(__('t_b1d7cb63cc', 'سيتم ضمان عدم تكرار الـ slug تلقائيًا.')); ?></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?= h(__('t_9932cca009', 'إغلاق')) ?></button>
-          <button class="btn btn-gdy btn-gdy-primary" type="submit"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+          <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?php echo h(__('t_9932cca009', 'إغلاق')); ?></button>
+          <button class="btn btn-gdy btn-gdy-primary" type="submit"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </div>
       </form>
     </div>
@@ -634,36 +634,36 @@ $tagUrl = static fn(string $slug) => ($siteBase ? $siteBase : '') . '/tag/' . ra
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-dark text-light">
       <div class="modal-header">
-        <h5 class="modal-title"><?= h(__('t_573cd1dfba', 'دمج وسوم')) ?></h5>
+        <h5 class="modal-title"><?php echo h(__('t_573cd1dfba', 'دمج وسوم')); ?></h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form method="post" data-confirm='سيتم نقل كل الأخبار من الوسم (من) إلى الوسم (إلى) ثم حذف الوسم القديم. متابعة؟'>
         <div class="modal-body">
-          <input type="hidden" name="csrf_token" value="<?= h($csrf) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrf); ?>">
           <input type="hidden" name="action" value="merge">
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_4fbcb89a50', 'دمج من')) ?></label>
+            <label class="form-label"><?php echo h(__('t_4fbcb89a50', 'دمج من')); ?></label>
             <select class="form-select" name="from_id" required>
-              <option value=""><?= h(__('t_190b8ce979', 'اختر وسمًا')) ?></option>
+              <option value=""><?php echo h(__('t_190b8ce979', 'اختر وسمًا')); ?></option>
               <?php foreach ($allTags as $t): ?>
-                <option value="<?= (int)$t['id'] ?>">#<?= h((string)$t['name']) ?> (<?= h((string)$t['slug']) ?>)</option>
+                <option value="<?php echo (int)$t['id']; ?>">#<?php echo h((string)$t['name']); ?> (<?php echo h((string)$t['slug']); ?>)</option>
               <?php endforeach; ?>
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_0985d27cd3', 'إلى')) ?></label>
+            <label class="form-label"><?php echo h(__('t_0985d27cd3', 'إلى')); ?></label>
             <select class="form-select" name="to_id" required>
-              <option value=""><?= h(__('t_190b8ce979', 'اختر وسمًا')) ?></option>
+              <option value=""><?php echo h(__('t_190b8ce979', 'اختر وسمًا')); ?></option>
               <?php foreach ($allTags as $t): ?>
-                <option value="<?= (int)$t['id'] ?>">#<?= h((string)$t['name']) ?> (<?= h((string)$t['slug']) ?>)</option>
+                <option value="<?php echo (int)$t['id']; ?>">#<?php echo h((string)$t['name']); ?> (<?php echo h((string)$t['slug']); ?>)</option>
               <?php endforeach; ?>
             </select>
           </div>
-          <div class="form-text text-muted"><?= h(__('t_a804c83325', 'نصيحة: اختر الوسم الأكثر استخدامًا كهدف (إلى) للحفاظ على صفحة الوسم الأقوى.')) ?></div>
+          <div class="form-text text-muted"><?php echo h(__('t_a804c83325', 'نصيحة: اختر الوسم الأكثر استخدامًا كهدف (إلى) للحفاظ على صفحة الوسم الأقوى.')); ?></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?= h(__('t_9932cca009', 'إغلاق')) ?></button>
-          <button class="btn btn-gdy btn-gdy-primary" type="submit"><?= h(__('t_34658b61e8', 'تنفيذ الدمج')) ?></button>
+          <button type="button" class="btn btn-gdy btn-gdy-ghost" data-bs-dismiss="modal"><?php echo h(__('t_9932cca009', 'إغلاق')); ?></button>
+          <button class="btn btn-gdy btn-gdy-primary" type="submit"><?php echo h(__('t_34658b61e8', 'تنفيذ الدمج')); ?></button>
         </div>
       </form>
     </div>

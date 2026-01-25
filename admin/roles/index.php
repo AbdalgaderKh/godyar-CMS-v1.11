@@ -59,43 +59,43 @@ if (($pdo instanceof PDO) === false) {
 <div class="card">
   <div class="card-body">
     <?php if ($rolesError): ?>
-      <div class="alert alert-warning mb-3"><?= h($rolesError) ?></div>
+      <div class="alert alert-warning mb-3"><?php echo h($rolesError); ?></div>
     <?php endif; ?>
 
     <?php if (empty($roles)): ?>
-      <p class="mb-0"><?= h(__('no_roles', 'لا توجد أدوار مسجلة.')) ?></p>
+      <p class="mb-0"><?php echo h(__('no_roles', 'لا توجد أدوار مسجلة.')); ?></p>
     <?php else: ?>
       <div class="table-responsive">
         <table class="table table-striped table-hover align-middle">
           <thead>
             <tr>
               <th style="width:70px;">#</th>
-              <th><?= h(__('tech_name', 'الاسم التقني')) ?></th>
-              <th><?= h(__('display_name', 'اسم العرض')) ?></th>
-              <th><?= h(__('desc', 'وصف')) ?></th>
-              <th style="width:110px;" class="text-center"><?= h(__('system', 'نظامي')) ?></th>
-              <th style="width:170px;" class="text-nowrap"><?= h(__('created_at', 'تاريخ الإنشاء')) ?></th>
-              <th style="width:120px;" class="text-center"><?= h(__('actions', 'إجراءات')) ?></th>
+              <th><?php echo h(__('tech_name', 'الاسم التقني')); ?></th>
+              <th><?php echo h(__('display_name', 'اسم العرض')); ?></th>
+              <th><?php echo h(__('desc', 'وصف')); ?></th>
+              <th style="width:110px;" class="text-center"><?php echo h(__('system', 'نظامي')); ?></th>
+              <th style="width:170px;" class="text-nowrap"><?php echo h(__('created_at', 'تاريخ الإنشاء')); ?></th>
+              <th style="width:120px;" class="text-center"><?php echo h(__('actions', 'إجراءات')); ?></th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($roles as $roleRow): ?>
               <tr>
-                <td><?= (int)($roleRow['id'] ?? 0) ?></td>
-                <td class="text-nowrap"><code><?= h((string)($roleRow['name'] ?? '')) ?></code></td>
-                <td><?= h((string)($roleRow['label'] ?? '')) ?></td>
-                <td><?= h((string)($roleRow['description'] ?? '')) ?></td>
+                <td><?php echo (int)($roleRow['id'] ?? 0); ?></td>
+                <td class="text-nowrap"><code><?php echo h((string)($roleRow['name'] ?? '')); ?></code></td>
+                <td><?php echo h((string)($roleRow['label'] ?? '')); ?></td>
+                <td><?php echo h((string)($roleRow['description'] ?? '')); ?></td>
                 <td class="text-center">
                   <?php if ((int)($roleRow['is_system'] ?? 0) === 1): ?>
-                    <span class="badge text-bg-secondary"><?= h(__('yes', 'نعم')) ?></span>
+                    <span class="badge text-bg-secondary"><?php echo h(__('yes', 'نعم')); ?></span>
                   <?php else: ?>
-                    <span class="badge text-bg-light"><?= h(__('no', 'لا')) ?></span>
+                    <span class="badge text-bg-light"><?php echo h(__('no', 'لا')); ?></span>
                   <?php endif; ?>
                 </td>
-                <td class="text-nowrap small text-muted"><?= h((string)($roleRow['created_at'] ?? '')) ?></td>
+                <td class="text-nowrap small text-muted"><?php echo h((string)($roleRow['created_at'] ?? '')); ?></td>
                 <td class="text-center">
-                  <a class="btn btn-sm btn-outline-secondary" href="edit.php?id=<?= (int)($roleRow['id'] ?? 0) ?>">
-                    <?= h(__('edit', 'تعديل')) ?>
+                  <a class="btn btn-sm btn-outline-secondary" href="edit.php?id=<?php echo (int)($roleRow['id'] ?? 0); ?>">
+                    <?php echo h(__('edit', 'تعديل')); ?>
                   </a>
                 </td>
               </tr>

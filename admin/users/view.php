@@ -96,15 +96,15 @@ html, body{
 <div class="admin-content container-fluid py-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h4 mb-1 text-white"><?= h($user['username']) ?></h1>
-      <p class="mb-0" style="color:#e5e7eb;"><?= h(__('t_f3f6edf49f', 'تفاصيل المستخدم وصلاحياته.')) ?></p>
+      <h1 class="h4 mb-1 text-white"><?php echo h($user['username']); ?></h1>
+      <p class="mb-0" style="color:#e5e7eb;"><?php echo h(__('t_f3f6edf49f', 'تفاصيل المستخدم وصلاحياته.')); ?></p>
     </div>
     <div class="mt-3 mt-md-0 d-flex gap-2">
-      <a href="edit.php?id=<?= (int)$user['id'] ?>" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
+      <a href="edit.php?id=<?php echo (int)$user['id']; ?>" class="btn btn-primary">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_759fdc242e', 'تعديل')); ?>
       </a>
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_19ae074cbf', 'العودة للقائمة')); ?>
       </a>
     </div>
   </div>
@@ -112,31 +112,31 @@ html, body{
   <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
     <div class="card-body">
       <dl class="row mb-0">
-        <dt class="col-md-3"><?= h(__('t_2e8b171b46', 'الاسم')) ?></dt>
-        <dd class="col-md-9"><?= h($user['name']) ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></dt>
+        <dd class="col-md-9"><?php echo h($user['name']); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_2436aacc18', 'البريد الإلكتروني')) ?></dt>
-        <dd class="col-md-9"><?= h($user['email']) ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_2436aacc18', 'البريد الإلكتروني')); ?></dt>
+        <dd class="col-md-9"><?php echo h($user['email']); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_1647921065', 'الدور')) ?></dt>
-        <dd class="col-md-9"><span class="badge bg-info"><?= h($roleLabel) ?></span></dd>
+        <dt class="col-md-3"><?php echo h(__('t_1647921065', 'الدور')); ?></dt>
+        <dd class="col-md-9"><span class="badge bg-info"><?php echo h($roleLabel); ?></span></dd>
 
-        <dt class="col-md-3"><?= h(__('t_1253eb5642', 'الحالة')) ?></dt>
+        <dt class="col-md-3"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></dt>
         <dd class="col-md-9">
           <?php
             $class = $user['status']==='active'?'bg-success':($user['status']==='banned'?'bg-danger':'bg-secondary');
           ?>
-          <span class="badge <?= $class ?>"><?= h($statusLabel) ?></span>
+          <span class="badge <?php echo $class; ?>"><?php echo h($statusLabel); ?></span>
         </dd>
 
-        <dt class="col-md-3"><?= h(__('t_a180402e1a', 'آخر تسجيل دخول')) ?></dt>
-        <dd class="col-md-9"><?= h($user['last_login_at'] ?? '') ?> — IP: <?= h($user['last_login_ip'] ?? '-') ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_a180402e1a', 'آخر تسجيل دخول')); ?></dt>
+        <dd class="col-md-9"><?php echo h($user['last_login_at'] ?? ''); ?> — IP: <?php echo h($user['last_login_ip'] ?? '-'); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></dt>
-        <dd class="col-md-9"><?= h($user['created_at'] ?? '') ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')); ?></dt>
+        <dd class="col-md-9"><?php echo h($user['created_at'] ?? ''); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></dt>
-        <dd class="col-md-9"><?= h($user['updated_at'] ?? '') ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></dt>
+        <dd class="col-md-9"><?php echo h($user['updated_at'] ?? ''); ?></dd>
       </dl>
     </div>
   </div>

@@ -26,6 +26,15 @@ if (!function_exists('gdy_pdo_safe')) {
     }
 }
 
+// Legacy alias used by some older controllers/scripts (e.g. ArchiveDayController).
+// Prefer using Godyar\DB::pdo() / gdy_pdo() in new code.
+if (!function_exists('db')) {
+    function db(): ?\PDO
+    {
+        return gdy_pdo_safe();
+    }
+}
+
 if (!function_exists('gdy_pdo')) {
     /**
      * Strict PDO getter.

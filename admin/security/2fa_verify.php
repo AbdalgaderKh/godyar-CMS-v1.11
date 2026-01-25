@@ -91,7 +91,7 @@ function h2(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'
   <h1 class="h5 mb-3">التحقق بخطوتين</h1>
 
   <?php if ($error): ?>
-    <div class="alert alert-danger"><?= h2($error) ?></div>
+    <div class="alert alert-danger"><?php echo h2($error); ?></div>
   <?php endif; ?>
 
   <div class="card">

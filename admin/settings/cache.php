@@ -39,29 +39,29 @@ $cache_ttl     = (int)settings_get('cache.ttl', '300');
     <div class="col-md-9">
       <div class="card p-4">
 <?php if ((empty($notice) === false)): ?>
-          <div class="alert alert-success"><?= h($notice) ?></div>
+          <div class="alert alert-success"><?php echo h($notice); ?></div>
         <?php endif; ?>
         <?php if ((empty($error) === false)): ?>
-          <div class="alert alert-danger"><?= h($error) ?></div>
+          <div class="alert alert-danger"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post">
           <?php if (function_exists('csrf_token') === true): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
 
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="cache_enabled" name="cache_enabled" <?= (empty($cache_enabled) === false) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="cache_enabled"><?= h(__('t_11832df349', 'تفعيل الكاش')) ?></label>
+            <input class="form-check-input" type="checkbox" id="cache_enabled" name="cache_enabled" <?php echo (empty($cache_enabled) === false) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="cache_enabled"><?php echo h(__('t_11832df349', 'تفعيل الكاش')); ?></label>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_85278cd78a', 'مدة الكاش (TTL بالثواني)')) ?></label>
-            <input class="form-control" type="number" name="cache_ttl" value="<?= h((string)$cache_ttl) ?>">
-            <div class="form-text"><?= h(__('t_c1220e1e8c', 'مثال: 300 = 5 دقائق.')) ?></div>
+            <label class="form-label"><?php echo h(__('t_85278cd78a', 'مدة الكاش (TTL بالثواني)')); ?></label>
+            <input class="form-control" type="number" name="cache_ttl" value="<?php echo h((string)$cache_ttl); ?>">
+            <div class="form-text"><?php echo h(__('t_c1220e1e8c', 'مثال: 300 = 5 دقائق.')); ?></div>
           </div>
 
-          <button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+          <button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </form>
       </div>
     </div>

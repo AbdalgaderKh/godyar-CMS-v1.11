@@ -343,15 +343,15 @@ html, body{
     <!-- رأس الصفحة -->
     <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 text-white mb-1"><?= h(__('t_480d828737', 'إضافة مستخدم جديد')) ?></h1>
+            <h1 class="h4 text-white mb-1"><?php echo h(__('t_480d828737', 'إضافة مستخدم جديد')); ?></h1>
             <p class="text-muted mb-0 small">
-                <?= h(__('t_f0742094fd', 'إنشاء حساب مستخدم جديد في النظام')) ?>
+                <?php echo h(__('t_f0742094fd', 'إنشاء حساب مستخدم جديد في النظام')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light btn-sm">
                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                <?= h(__('t_5a029c710d', 'العودة لقائمة المستخدمين')) ?>
+                <?php echo h(__('t_5a029c710d', 'العودة لقائمة المستخدمين')); ?>
             </a>
         </div>
     </div>
@@ -359,8 +359,8 @@ html, body{
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_56df17d34d', 'جدول المستخدمين غير موجود.')) ?> 
-            <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
+            <strong><?php echo h(__('t_b83c3996d9', 'تنبيه:')); ?></strong> <?php echo h(__('t_56df17d34d', 'جدول المستخدمين غير موجود.')); ?> 
+            <a href="create_table.php" class="alert-link"><?php echo h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')); ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -368,11 +368,11 @@ html, body{
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h($success) ?>
+            <?php echo h($success); ?>
             <div class="mt-2">
-                <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?= h(__('t_30997e79c2', 'عرض جميع المستخدمين')) ?></a>
+                <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?php echo h(__('t_30997e79c2', 'عرض جميع المستخدمين')); ?></a>
                 <?php if (isset($userId)): ?>
-                    <a href="edit.php?id=<?= $userId ?>" class="btn btn-sm btn-success"><?= h(__('t_b8b7a31a32', 'تعديل المستخدم')) ?></a>
+                    <a href="edit.php?id=<?php echo $userId; ?>" class="btn btn-sm btn-success"><?php echo h(__('t_b8b7a31a32', 'تعديل المستخدم')); ?></a>
                 <?php endif; ?>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -382,10 +382,10 @@ html, body{
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
+            <strong><?php echo h(__('t_c83b645dc3', 'حدث خطأ:')); ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
-                    <li><?= h($err) ?></li>
+                    <li><?php echo h($err); ?></li>
                 <?php endforeach; ?>
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -393,9 +393,9 @@ html, body{
     <?php endif; ?>
 
     <form method="post" id="userForm">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
-        <input type="hidden" name="_token" value="<?= h($csrf) ?>">
+        <input type="hidden" name="_token" value="<?php echo h($csrf); ?>">
         
         <div class="row g-4">
             <!-- العمود الرئيسي -->
@@ -403,47 +403,47 @@ html, body{
                 <div class="gdy-form-card card shadow-sm">
                     <div class="card-body">
                         <!-- المعلومات الأساسية -->
-                        <h5 class="card-title mb-4"><?= h(__('t_0f6bc67891', 'المعلومات الأساسية')) ?></h5>
+                        <h5 class="card-title mb-4"><?php echo h(__('t_0f6bc67891', 'المعلومات الأساسية')); ?></h5>
                         
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold"><?= h(__('t_f6767f689d', 'اسم المستخدم *')) ?></label>
+                                <label class="form-label fw-semibold"><?php echo h(__('t_f6767f689d', 'اسم المستخدم *')); ?></label>
                                 <input type="text" name="username" class="form-control" 
-                                       value="<?= h($data['username']) ?>" 
-                                       placeholder="<?= h(__('t_ceee6a9885', 'يجب أن يكون باللغة الإنجليزية')) ?>"
+                                       value="<?php echo h($data['username']); ?>" 
+                                       placeholder="<?php echo h(__('t_ceee6a9885', 'يجب أن يكون باللغة الإنجليزية')); ?>"
                                        required
                                        minlength="3"
                                        pattern="[a-zA-Z0-9_]+"
-                                       title="<?= h(__('t_0c98826c2d', 'أحرف إنجليزية، أرقام، وشرطة سفلية فقط')) ?>">
-                                <div class="form-text"><?= h(__('t_2fbec81ac4', '3 أحرف على الأقل، إنجليزية وأرقام فقط')) ?></div>
+                                       title="<?php echo h(__('t_0c98826c2d', 'أحرف إنجليزية، أرقام، وشرطة سفلية فقط')); ?>">
+                                <div class="form-text"><?php echo h(__('t_2fbec81ac4', '3 أحرف على الأقل، إنجليزية وأرقام فقط')); ?></div>
                             </div>
                             
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold"><?= h(__('t_90f9115ac9', 'الاسم الكامل')) ?></label>
+                                <label class="form-label fw-semibold"><?php echo h(__('t_90f9115ac9', 'الاسم الكامل')); ?></label>
                                 <input type="text" name="name" class="form-control"
-                                       value="<?= h($data['name']) ?>"
-                                       placeholder="<?= h(__('t_aeab31a759', 'الاسم الكامل للمستخدم')) ?>">
+                                       value="<?php echo h($data['name']); ?>"
+                                       placeholder="<?php echo h(__('t_aeab31a759', 'الاسم الكامل للمستخدم')); ?>">
                             </div>
                             
                             <div class="col-12">
-                                <label class="form-label fw-semibold"><?= h(__('t_b052caae3b', 'البريد الإلكتروني *')) ?></label>
+                                <label class="form-label fw-semibold"><?php echo h(__('t_b052caae3b', 'البريد الإلكتروني *')); ?></label>
                                 <input type="email" name="email" class="form-control" 
-                                       value="<?= h($data['email']) ?>"
+                                       value="<?php echo h($data['email']); ?>"
                                        placeholder="admin@example.com"
                                        required>
                             </div>
                         </div>
 
                         <!-- كلمة المرور -->
-                        <h5 class="card-title mt-5 mb-4"><?= h(__('t_bcb75ee312', 'كلمة المرور')) ?></h5>
+                        <h5 class="card-title mt-5 mb-4"><?php echo h(__('t_bcb75ee312', 'كلمة المرور')); ?></h5>
                         
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold"><?= h(__('t_88fd9f793b', 'كلمة المرور *')) ?></label>
+                                <label class="form-label fw-semibold"><?php echo h(__('t_88fd9f793b', 'كلمة المرور *')); ?></label>
                                 <div class="input-group">
                                     <input type="password" name="password" class="form-control" 
                                            id="passwordInput"
-                                           placeholder="<?= h(__('t_2c598bb67d', '8 أحرف على الأقل')) ?>"
+                                           placeholder="<?php echo h(__('t_2c598bb67d', '8 أحرف على الأقل')); ?>"
                                            required
                                            minlength="8">
                                     <button type="button" class="btn btn-outline-secondary" 
@@ -460,10 +460,10 @@ html, body{
                             </div>
                             
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold"><?= h(__('t_a255bc3d65', 'تأكيد كلمة المرور *')) ?></label>
+                                <label class="form-label fw-semibold"><?php echo h(__('t_a255bc3d65', 'تأكيد كلمة المرور *')); ?></label>
                                 <input type="password" name="password_confirm" class="form-control" 
                                        id="passwordConfirm"
-                                       placeholder="<?= h(__('t_9558ea3c2b', 'أعد إدخال كلمة المرور')) ?>"
+                                       placeholder="<?php echo h(__('t_9558ea3c2b', 'أعد إدخال كلمة المرور')); ?>"
                                        required>
                                 <div class="form-text" id="confirmText"></div>
                             </div>
@@ -471,12 +471,12 @@ html, body{
 
                         <!-- متطلبات كلمة المرور -->
                         <div class="alert alert-info mt-3">
-                            <h6 class="alert-heading"><?= h(__('t_1fafb80446', 'متطلبات كلمة المرور:')) ?></h6>
+                            <h6 class="alert-heading"><?php echo h(__('t_1fafb80446', 'متطلبات كلمة المرور:')); ?></h6>
                             <ul class="mb-0 small">
-                                <li><?= h(__('t_2c598bb67d', '8 أحرف على الأقل')) ?></li>
-                                <li><?= h(__('t_38525f503e', 'حرف كبير واحد على الأقل (A-Z)')) ?></li>
-                                <li><?= h(__('t_fa4ef508eb', 'حرف صغير واحد على الأقل (a-z)')) ?></li>
-                                <li><?= h(__('t_82fffeba1b', 'رقم واحد على الأقل (0-9)')) ?></li>
+                                <li><?php echo h(__('t_2c598bb67d', '8 أحرف على الأقل')); ?></li>
+                                <li><?php echo h(__('t_38525f503e', 'حرف كبير واحد على الأقل (A-Z)')); ?></li>
+                                <li><?php echo h(__('t_fa4ef508eb', 'حرف صغير واحد على الأقل (a-z)')); ?></li>
+                                <li><?php echo h(__('t_82fffeba1b', 'رقم واحد على الأقل (0-9)')); ?></li>
                             </ul>
                         </div>
                     </div>
@@ -488,31 +488,31 @@ html, body{
                 <div class="gdy-form-sidebar card shadow-sm">
                     <div class="card-body">
                         <!-- الصلاحيات والحالة -->
-                        <h6 class="card-title mb-3"><?= h(__('t_1f60020959', 'الإعدادات')) ?></h6>
+                        <h6 class="card-title mb-3"><?php echo h(__('t_1f60020959', 'الإعدادات')); ?></h6>
                         
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_b658c151c4', 'دور المستخدم')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_b658c151c4', 'دور المستخدم')); ?></label>
                             <select name="role" class="form-select" id="roleSelect">
                                 <?php foreach ($roles as $value => $label): ?>
-                                    <option value="<?= h($value) ?>" 
-                                            <?= $data['role'] === $value ? 'selected' : '' ?>
-                                            data-description="<?= h(getRoleDescription($value)) ?>">
-                                        <?= h($label) ?>
+                                    <option value="<?php echo h($value); ?>" 
+                                            <?php echo $data['role'] === $value ? 'selected' : ''; ?>
+                                            data-description="<?php echo h(getRoleDescription($value)); ?>">
+                                        <?php echo h($label); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                             <div class="form-text mt-2" id="roleDescription">
-                                <?= getRoleDescription($data['role']) ?>
+                                <?php echo getRoleDescription($data['role']); ?>
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_a9460d87de', 'حالة الحساب')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_a9460d87de', 'حالة الحساب')); ?></label>
                             <select name="status" class="form-select">
                                 <?php foreach ($statuses as $value => $label): ?>
-                                    <option value="<?= h($value) ?>" 
-                                            <?= $data['status'] === $value ? 'selected' : '' ?>>
-                                        <?= h($label) ?>
+                                    <option value="<?php echo h($value); ?>" 
+                                            <?php echo $data['status'] === $value ? 'selected' : ''; ?>>
+                                        <?php echo h($label); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -524,27 +524,27 @@ html, body{
                                 <input class="form-check-input" type="checkbox" name="send_email" 
                                        id="sendEmail" value="1">
                                 <label class="form-check-label" for="sendEmail">
-                                    <?= h(__('t_3636d551f1', 'إرسال تفاصيل الحساب بالبريد الإلكتروني')) ?>
+                                    <?php echo h(__('t_3636d551f1', 'إرسال تفاصيل الحساب بالبريد الإلكتروني')); ?>
                                 </label>
                             </div>
-                            <div class="form-text"><?= h(__('t_2f509ef1b1', 'سيتم إرسال اسم المستخدم وكلمة المرور للبريد المدخل')) ?></div>
+                            <div class="form-text"><?php echo h(__('t_2f509ef1b1', 'سيتم إرسال اسم المستخدم وكلمة المرور للبريد المدخل')); ?></div>
                         </div>
 
                         <!-- أزرار الحفظ -->
                         <div class="border-top pt-4">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= h(__('t_d876a2e373', 'حفظ المستخدم')) ?>
+                                <?php echo h(__('t_d876a2e373', 'حفظ المستخدم')); ?>
                             </button>
                             
                             <button type="submit" name="save_and_edit" class="btn btn-outline-primary w-100 mb-2">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')) ?>
+                                <?php echo h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')); ?>
                             </button>
                             
                             <button type="submit" name="save_and_list" class="btn btn-outline-light w-100">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= h(__('t_e934ff7404', 'حفظ والعودة للقائمة')) ?>
+                                <?php echo h(__('t_e934ff7404', 'حفظ والعودة للقائمة')); ?>
                             </button>
                         </div>
                     </div>
@@ -554,14 +554,14 @@ html, body{
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-dark text-light">
                         <h6 class="card-title mb-0">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_8111cbf1a9', 'معلومات الأدوار')) ?>
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_8111cbf1a9', 'معلومات الأدوار')); ?>
                         </h6>
                     </div>
                     <div class="card-body">
                         <?php foreach ($roles as $value => $label): ?>
                             <div class="mb-2 d-flex align-items-center">
-                                <span class="badge role-<?= $value ?> role-badge me-2"><?= h($label) ?></span>
-                                <small class="text-muted"><?= getRoleDescription($value) ?></small>
+                                <span class="badge role-<?php echo $value; ?> role-badge me-2"><?php echo h($label); ?></span>
+                                <small class="text-muted"><?php echo getRoleDescription($value); ?></small>
                             </div>
                         <?php endforeach; ?>
                     </div>

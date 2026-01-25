@@ -731,36 +731,36 @@ html, body {
           <div>
             <div class="gdy-page-kicker">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_9efc061dd5', 'لوحة المحتوى')) ?>
+              <?php echo h(__('t_9efc061dd5', 'لوحة المحتوى')); ?>
             </div>
-            <h1 class="gdy-page-title"><?= h($pageTitle) ?></h1>
+            <h1 class="gdy-page-title"><?php echo h($pageTitle); ?></h1>
             <p class="gdy-page-subtitle">
-              <?= h(__('t_cee7f4ea6d', 'إدارة أقسام الأخبار وتنظيم بنية المحتوى، مع إمكانيات الفلترة السريعة.')) ?>
+              <?php echo h(__('t_cee7f4ea6d', 'إدارة أقسام الأخبار وتنظيم بنية المحتوى، مع إمكانيات الفلترة السريعة.')); ?>
             </p>
           </div>
           <div class="gdy-page-header-actions">
             <div class="gdy-pill-meta">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <span><?= h(__('t_cbb2bd24d9', 'إجمالي الأقسام:')) ?> <strong><?= number_format($statsCats['total']) ?></strong></span>
+              <span><?php echo h(__('t_cbb2bd24d9', 'إجمالي الأقسام:')); ?> <strong><?php echo number_format($statsCats['total']); ?></strong></span>
             </div>
             <a href="#category-form" class="btn btn-sm btn-primary">
-              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_27535dee80', 'قسم جديد')) ?>
+              <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_27535dee80', 'قسم جديد')); ?>
             </a>
           </div>
         </div>
 
         <div class="gdy-page-header-filters">
           <div class="gdy-chip-filter active" data-filter-cats="all">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6d08f19681', 'الكل')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_6d08f19681', 'الكل')); ?>
           </div>
           <div class="gdy-chip-filter" data-filter-cats="root">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الأقسام الرئيسية فقط (<?= number_format($statsCats['root']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الأقسام الرئيسية فقط (<?php echo number_format($statsCats['root']); ?>)
           </div>
           <div class="gdy-chip-filter" data-filter-cats="with-news">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> أقسام تحتوي أخبار (<?= number_format($statsCats['with_news']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg> أقسام تحتوي أخبار (<?php echo number_format($statsCats['with_news']); ?>)
           </div>
           <div class="gdy-chip-filter" data-filter-cats="empty">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> أقسام بدون أخبار (<?= number_format($statsCats['empty']) ?>)
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> أقسام بدون أخبار (<?php echo number_format($statsCats['empty']); ?>)
           </div>
         </div>
       </div>
@@ -774,11 +774,11 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
-            <div class="gdy-cats-stat-label"><?= h(__('t_47254d4799', 'إجمالي الأقسام')) ?></div>
-            <div class="gdy-cats-stat-value"><?= number_format($statsCats['total']) ?></div>
+            <div class="gdy-cats-stat-label"><?php echo h(__('t_47254d4799', 'إجمالي الأقسام')); ?></div>
+            <div class="gdy-cats-stat-value"><?php echo number_format($statsCats['total']); ?></div>
           </div>
         </div>
-        <div class="gdy-cats-stat-tag"><?= h(__('t_6b7d9b3237', 'كل الأقسام')) ?></div>
+        <div class="gdy-cats-stat-tag"><?php echo h(__('t_6b7d9b3237', 'كل الأقسام')); ?></div>
       </div>
 
       <div class="gdy-cats-stat">
@@ -787,11 +787,11 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           </div>
           <div>
-            <div class="gdy-cats-stat-label"><?= h(__('t_a932911686', 'أقسام تحتوي أخبار')) ?></div>
-            <div class="gdy-cats-stat-value"><?= number_format($statsCats['with_news']) ?></div>
+            <div class="gdy-cats-stat-label"><?php echo h(__('t_a932911686', 'أقسام تحتوي أخبار')); ?></div>
+            <div class="gdy-cats-stat-value"><?php echo number_format($statsCats['with_news']); ?></div>
           </div>
         </div>
-        <div class="gdy-cats-stat-tag"><?= h(__('t_2c7cd087dc', 'نشطة')) ?></div>
+        <div class="gdy-cats-stat-tag"><?php echo h(__('t_2c7cd087dc', 'نشطة')); ?></div>
       </div>
 
       <div class="gdy-cats-stat">
@@ -800,11 +800,11 @@ html, body {
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
           </div>
           <div>
-            <div class="gdy-cats-stat-label"><?= h(__('t_3480ddb507', 'أقسام بدون أخبار')) ?></div>
-            <div class="gdy-cats-stat-value"><?= number_format($statsCats['empty']) ?></div>
+            <div class="gdy-cats-stat-label"><?php echo h(__('t_3480ddb507', 'أقسام بدون أخبار')); ?></div>
+            <div class="gdy-cats-stat-value"><?php echo number_format($statsCats['empty']); ?></div>
           </div>
         </div>
-        <div class="gdy-cats-stat-tag"><?= h(__('t_225dc4b4aa', 'يمكن مراجعتها')) ?></div>
+        <div class="gdy-cats-stat-tag"><?php echo h(__('t_225dc4b4aa', 'يمكن مراجعتها')); ?></div>
       </div>
     </div>
 
@@ -812,7 +812,7 @@ html, body {
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <ul class="mb-0">
           <?php foreach ($success as $msg): ?>
-            <li><?= h($msg) ?></li>
+            <li><?php echo h($msg); ?></li>
           <?php endforeach; ?>
         </ul>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -823,7 +823,7 @@ html, body {
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <ul class="mb-0">
           <?php foreach ($errors as $err): ?>
-            <li><?= h($err) ?></li>
+            <li><?php echo h($err); ?></li>
           <?php endforeach; ?>
         </ul>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -837,18 +837,18 @@ html, body {
           <input
             type="text"
             name="q"
-            value="<?= h($search) ?>"
+            value="<?php echo h($search); ?>"
             class="form-control form-control-sm bg-dark border-secondary text-light"
-            placeholder="<?= h(__('t_d784e72674', 'بحث في اسم القسم أو المعرّف (slug)...')) ?>"
+            placeholder="<?php echo h(__('t_d784e72674', 'بحث في اسم القسم أو المعرّف (slug)...')); ?>"
           >
         </div>
         <div class="col-auto">
           <button type="submit" class="btn btn-outline-secondary btn-sm">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_ab79fc1485', 'بحث')); ?>
           </button>
         </div>
         <div class="col-auto ms-auto text-end small text-muted d-none d-md-block">
-          <span><?= h(__('t_5501d9f909', 'عدد الأقسام المعروضة:')) ?> <strong><?= number_format($statsCats['total']) ?></strong></span>
+          <span><?php echo h(__('t_5501d9f909', 'عدد الأقسام المعروضة:')); ?> <strong><?php echo number_format($statsCats['total']); ?></strong></span>
         </div>
       </form>
     </div>
@@ -877,48 +877,48 @@ html, body {
     <div id="category-form" class="mb-4">
       <div class="card gdy-card">
         <div class="gdy-card-header">
-          <strong><?= $editRow ? __('t_101b85caad', 'تعديل قسم') : __('t_327a5f706a', 'إضافة قسم جديد') ?></strong>
+          <strong><?php echo $editRow ? __('t_101b85caad', 'تعديل قسم') : __('t_327a5f706a', 'إضافة قسم جديد'); ?></strong>
         </div>
         <div class="card-body">
           <form method="post" action="">
-            <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
             <?php if ($editRow): ?>
               <input type="hidden" name="action" value="update">
-              <input type="hidden" name="id" value="<?= (int)$editRow['id'] ?>">
+              <input type="hidden" name="id" value="<?php echo (int)$editRow['id']; ?>">
             <?php else: ?>
               <input type="hidden" name="action" value="create">
             <?php endif; ?>
 
             <div class="row g-3">
               <div class="col-md-6">
-                <label class="form-label gdy-form-label"><?= h(__('t_c80354bf07', 'اسم القسم')) ?> <span class="text-danger">*</span></label>
+                <label class="form-label gdy-form-label"><?php echo h(__('t_c80354bf07', 'اسم القسم')); ?> <span class="text-danger">*</span></label>
                 <input type="text" name="name" id="catNameInput" class="form-control gdy-input"
-                       value="<?= h($editRow['name'] ?? '') ?>" required
-                       placeholder="<?= h(__('t_78ecdc29c0', 'مثال: أخبار محلية')) ?>">
+                       value="<?php echo h($editRow['name'] ?? ''); ?>" required
+                       placeholder="<?php echo h(__('t_78ecdc29c0', 'مثال: أخبار محلية')); ?>">
                 <div class="gdy-helper-text mt-1">
-                  <?= h(__('t_2d38f811b3', 'الاسم الظاهر للزوار في القوائم والصفحات.')) ?>
+                  <?php echo h(__('t_2d38f811b3', 'الاسم الظاهر للزوار في القوائم والصفحات.')); ?>
                 </div>
               </div>
 
               <div class="col-md-6">
-                <label class="form-label gdy-form-label"><?= h(__('t_3f56539ded', 'المعرّف (Slug)')) ?></label>
+                <label class="form-label gdy-form-label"><?php echo h(__('t_3f56539ded', 'المعرّف (Slug)')); ?></label>
                 <input type="text" name="slug" id="catSlugInput" class="form-control gdy-input"
-                       value="<?= h($editRow['slug'] ?? '') ?>"
-                       placeholder="<?= h(__('t_e6468d6b68', 'يُفضّل أن يكون قصيراً بدون مسافات')) ?>">
+                       value="<?php echo h($editRow['slug'] ?? ''); ?>"
+                       placeholder="<?php echo h(__('t_e6468d6b68', 'يُفضّل أن يكون قصيراً بدون مسافات')); ?>">
                 <div class="gdy-helper-text.mt-1">
-                  <?= h(__('t_39182e3e04', 'إذا تركته فارغاً سيتم توليده تلقائياً من اسم القسم.')) ?>
+                  <?php echo h(__('t_39182e3e04', 'إذا تركته فارغاً سيتم توليده تلقائياً من اسم القسم.')); ?>
                 </div>
               </div>
             </div>
 
             <div class="mt-3">
-              <label class="form-label gdy-form-label"><?= h(__('t_2db04ee88f', 'وصف القسم')) ?></label>
+              <label class="form-label gdy-form-label"><?php echo h(__('t_2db04ee88f', 'وصف القسم')); ?></label>
               <textarea name="description" id="catDescInput"
                         class="form-control gdy-textarea" rows="3"
-                        placeholder="<?= h(__('t_8616cfa7ab', 'وصف قصير يساعد في فهم محتوى هذا القسم...')) ?>"><?= h($editRow['description'] ?? '') ?></textarea>
+                        placeholder="<?php echo h(__('t_8616cfa7ab', 'وصف قصير يساعد في فهم محتوى هذا القسم...')); ?>"><?php echo h($editRow['description'] ?? ''); ?></textarea>
               <div class="d-flex justify-content-between mt-1">
                 <small class="gdy-helper-text">
-                  <?= h(__('t_fa0a7f9e07', 'اختياري، مفيد لـ SEO وللفريق التحريري.')) ?>
+                  <?php echo h(__('t_fa0a7f9e07', 'اختياري، مفيد لـ SEO وللفريق التحريري.')); ?>
                 </small>
                 <small class="gdy-desc-counter">
                   <span id="catDescCount">0</span> / 160
@@ -926,7 +926,7 @@ html, body {
               </div>
               <?php if (!$hasCatDescription): ?>
                 <small class="text-warning d-block mt-1">
-                  <?= h(__('t_01cef970b2', 'ملاحظة: جدول الأقسام لا يحتوي عمود')) ?> <code>description</code> <?= h(__('t_64fdf67bff', 'حالياً.')) ?>
+                  <?php echo h(__('t_01cef970b2', 'ملاحظة: جدول الأقسام لا يحتوي عمود')); ?> <code>description</code> <?php echo h(__('t_64fdf67bff', 'حالياً.')); ?>
                 </small>
               <?php endif; ?>
             </div>
@@ -934,45 +934,45 @@ html, body {
             <?php if ($hasCatMembersOnly): ?>
               <div class="form-check mt-3">
                 <input class="form-check-input" type="checkbox" name="is_members_only" id="catMembersOnly" value="1"
-                       <?= !empty($editRow['is_members_only']) ? 'checked' : '' ?>>
+                       <?php echo !empty($editRow['is_members_only']) ? 'checked' : ''; ?>>
                 <label class="form-check-label" for="catMembersOnly">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('قسم للأعضاء فقط')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('قسم للأعضاء فقط')); ?>
                 </label>
-                <div class="form-text"><?= h(__('سيظل القسم ظاهرًا للزوار، لكن المقالات ستظهر بعلامة 🔒 وعند فتحها يظهر Paywall.')) ?></div>
+                <div class="form-text"><?php echo h(__('سيظل القسم ظاهرًا للزوار، لكن المقالات ستظهر بعلامة 🔒 وعند فتحها يظهر Paywall.')); ?></div>
               </div>
             <?php endif; ?>
 
             <?php if ($hasCatParent): ?>
             <div class="mt-3">
-              <label class="form-label gdy-form-label"><?= h(__('t_8816237320', 'القسم الأب (اختياري)')) ?></label>
+              <label class="form-label gdy-form-label"><?php echo h(__('t_8816237320', 'القسم الأب (اختياري)')); ?></label>
               <select name="parent_id" class="form-select gdy-input">
-                <option value=""><?= h(__('t_2a5b37708d', 'بدون قسم أب (قسم رئيسي)')) ?></option>
+                <option value=""><?php echo h(__('t_2a5b37708d', 'بدون قسم أب (قسم رئيسي)')); ?></option>
                 <?php foreach ($allCatsForParent as $pc): ?>
                   <?php if (!empty($editRow['id']) && (int)$editRow['id'] === (int)$pc['id']) continue; ?>
-                  <option value="<?= (int)$pc['id'] ?>"
-                    <?= $currentParentId === (int)$pc['id'] ? 'selected' : '' ?>>
-                    <?= h($pc['name']) ?>
+                  <option value="<?php echo (int)$pc['id']; ?>"
+                    <?php echo $currentParentId === (int)$pc['id'] ? 'selected' : ''; ?>>
+                    <?php echo h($pc['name']); ?>
                   </option>
                 <?php endforeach; ?>
               </select>
               <div class="gdy-helper-text mt-1">
-                <?= h(__('t_4e5b2bd8c7', 'لإنشاء بنية متدرجة للأقسام (رئيسي ← فرعي).')) ?>
+                <?php echo h(__('t_4e5b2bd8c7', 'لإنشاء بنية متدرجة للأقسام (رئيسي ← فرعي).')); ?>
               </div>
             </div>
             <?php endif; ?>
 
             <div class="d-flex justify-content-between mt-3">
               <?php if ($editRow): ?>
-                <a href="<?= h($adminBase) ?>/categories/index.php" class="btn btn-outline-secondary.btn-sm">
-                  <?= h(__('t_c5f601750e', 'إلغاء التعديل')) ?>
+                <a href="<?php echo h($adminBase); ?>/categories/index.php" class="btn btn-outline-secondary.btn-sm">
+                  <?php echo h(__('t_c5f601750e', 'إلغاء التعديل')); ?>
                 </a>
                 <button type="submit" class="btn btn-primary btn-sm">
-                  <?= h(__('t_02f31ae27c', 'حفظ التغييرات')) ?>
+                  <?php echo h(__('t_02f31ae27c', 'حفظ التغييرات')); ?>
                 </button>
               <?php else: ?>
                 <span></span>
                 <button type="submit" class="btn btn-primary btn-sm">
-                  <?= h(__('t_81d9a5642d', 'حفظ القسم')) ?>
+                  <?php echo h(__('t_81d9a5642d', 'حفظ القسم')); ?>
                 </button>
               <?php endif; ?>
             </div>
@@ -985,7 +985,7 @@ html, body {
     <div class="mb-4">
       <div class="card gdy-card">
         <div class="gdy-card-header">
-          <strong><?= h(__('t_3e9a70c934', 'قائمة الأقسام')) ?></strong>
+          <strong><?php echo h(__('t_3e9a70c934', 'قائمة الأقسام')); ?></strong>
         </div>
         <div class="card-body p-0">
           <?php if (!empty($categories)): ?>
@@ -994,12 +994,12 @@ html, body {
                 <thead>
                   <tr>
                     <th style="width: 50px;">#</th>
-                    <th><?= h(__('t_c80354bf07', 'اسم القسم')) ?></th>
-                    <th><?= h(__('t_4d27fe2ed2', 'القسم الأب')) ?></th>
+                    <th><?php echo h(__('t_c80354bf07', 'اسم القسم')); ?></th>
+                    <th><?php echo h(__('t_4d27fe2ed2', 'القسم الأب')); ?></th>
                     <th>Slug</th>
-                    <th><?= h(__('t_f58d38d563', 'الوصف')) ?></th>
-                    <th><?= h(__('t_a1d2f1590c', 'عدد الأخبار')) ?></th>
-                    <th><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                    <th><?php echo h(__('t_f58d38d563', 'الوصف')); ?></th>
+                    <th><?php echo h(__('t_a1d2f1590c', 'عدد الأخبار')); ?></th>
+                    <th><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1016,54 +1016,54 @@ html, body {
                       $hasNews    = ($countN > 0);
                     ?>
                     <tr
-                      data-cat-root="<?= $isRoot ? '1' : '0' ?>"
-                      data-cat-has-news="<?= $hasNews ? '1' : '0' ?>"
+                      data-cat-root="<?php echo $isRoot ? '1' : '0'; ?>"
+                      data-cat-has-news="<?php echo $hasNews ? '1' : '0'; ?>"
                     >
-                      <td><?= $id ?></td>
+                      <td><?php echo $id; ?></td>
                       <td class="fw-semibold">
-                        <?= h($name) ?>
+                        <?php echo h($name); ?>
                         <?php if ($hasCatMembersOnly && !empty($cat['is_members_only'])): ?>
                           <span class="badge bg-dark-subtle text-dark ms-1" title="للأعضاء فقط"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>للأعضاء</span>
                         <?php endif; ?>
                       </td>
                       <td class="text-muted small">
                         <?php if ($parentName !== ''): ?>
-                          <?= h($parentName) ?>
+                          <?php echo h($parentName); ?>
                         <?php else: ?>
-                          <span class="badge bg-secondary-subtle text-secondary"><?= h(__('t_9b71b13661', 'قسم رئيسي')) ?></span>
+                          <span class="badge bg-secondary-subtle text-secondary"><?php echo h(__('t_9b71b13661', 'قسم رئيسي')); ?></span>
                         <?php endif; ?>
                       </td>
                       <td class="slug-cell">
-                        <code><?= h($slug) ?></code>
+                        <code><?php echo h($slug); ?></code>
                       </td>
                       <td class="desc-cell">
-                        <?= h($cut) . (mb_strlen($desc, 'UTF-8') > 60 ? '…' : '') ?>
+                        <?php echo h($cut) . (mb_strlen($desc, 'UTF-8') > 60 ? '…' : ''); ?>
                       </td>
                       <td class="count-cell">
                         <span class="badge-count">
-                          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?= $countN ?>
+                          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?php echo $countN; ?>
                         </span>
                       </td>
                       <td class="actions-cell">
                         <div class="d-flex justify-content-center gap-1 flex-wrap">
-                          <a href="<?= h($adminBase) ?>/categories/index.php?edit=<?= $id ?>"
+                          <a href="<?php echo h($adminBase); ?>/categories/index.php?edit=<?php echo $id; ?>"
                              class="btn btn-outline-primary btn-sm btn-icon"
-                             title="<?= h(__('t_fe87fab237', 'تعديل القسم')) ?>">
+                             title="<?php echo h(__('t_fe87fab237', 'تعديل القسم')); ?>">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </a>
                           <button
                             type="button"
                             class="btn btn-outline-secondary btn-sm btn-icon btn-copy-slug"
-                            data-slug="<?= h($slug) ?>"
-                            title="<?= h(__('t_b1e8292d82', 'نسخ المعرّف (slug)')) ?>">
+                            data-slug="<?php echo h($slug); ?>"
+                            title="<?php echo h(__('t_b1e8292d82', 'نسخ المعرّف (slug)')); ?>">
                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                           </button>
                           <form method="post" action="" class="d-inline"
                                 data-confirm='هل أنت متأكد من حذف هذا القسم؟'>
-                            <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                             <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="id" value="<?= $id ?>">
-                            <button type="submit" class="btn btn-outline-danger btn-sm btn-icon" title="<?= h(__('t_a8bbe1197c', 'حذف القسم')) ?>">
+                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <button type="submit" class="btn btn-outline-danger btn-sm btn-icon" title="<?php echo h(__('t_a8bbe1197c', 'حذف القسم')); ?>">
                               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                             </button>
                           </form>
@@ -1076,7 +1076,7 @@ html, body {
             </div>
           <?php else: ?>
             <div class="p-3 text-muted">
-              <?= h(__('t_ca213e8c09', 'لا توجد أقسام بعد. قم بإضافة أول قسم من النموذج أعلاه.')) ?>
+              <?php echo h(__('t_ca213e8c09', 'لا توجد أقسام بعد. قم بإضافة أول قسم من النموذج أعلاه.')); ?>
             </div>
           <?php endif; ?>
         </div>

@@ -277,95 +277,95 @@ require __DIR__ . '/../layout/sidebar.php';
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
       <div>
-        <h1 class="h4 mb-1"><?= h(__('t_c683d6024a', 'إدارة أحزاب التغطية الانتخابية')) ?></h1>
+        <h1 class="h4 mb-1"><?php echo h(__('t_c683d6024a', 'إدارة أحزاب التغطية الانتخابية')); ?></h1>
         <p class="text-muted small mb-0">
-          <?= h(__('t_6e1a488764', 'التغطية:')) ?> <strong><?= h($currentElection['title']) ?></strong>
-          <span class="text-muted"> (ID: <?= (int)$currentElection['id'] ?>)</span>
+          <?php echo h(__('t_6e1a488764', 'التغطية:')); ?> <strong><?php echo h($currentElection['title']); ?></strong>
+          <span class="text-muted"> (ID: <?php echo (int)$currentElection['id']; ?>)</span>
         </p>
       </div>
       <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
         <a href="index.php" class="btn btn-outline-secondary btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')) ?>
+          <?php echo h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')); ?>
         </a>
-        <a href="regions.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-secondary btn-sm">
+        <a href="regions.php?election_id=<?php echo (int)$currentElection['id']; ?>" class="btn btn-outline-secondary btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_97493e2ddc', 'إدارة الولايات / المناطق')) ?>
+          <?php echo h(__('t_97493e2ddc', 'إدارة الولايات / المناطق')); ?>
         </a>
-        <a href="results.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-success btn-sm">
+        <a href="results.php?election_id=<?php echo (int)$currentElection['id']; ?>" class="btn btn-outline-success btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_0b51fa0ab1', 'إدارة النتائج')) ?>
+          <?php echo h(__('t_0b51fa0ab1', 'إدارة النتائج')); ?>
         </a>
       </div>
     </div>
 
     <?php if ($flashSuccess): ?>
-      <div class="alert alert-success py-2"><?= h($flashSuccess) ?></div>
+      <div class="alert alert-success py-2"><?php echo h($flashSuccess); ?></div>
     <?php endif; ?>
     <?php if ($flashError): ?>
-      <div class="alert alert-danger py-2"><?= h($flashError) ?></div>
+      <div class="alert alert-danger py-2"><?php echo h($flashError); ?></div>
     <?php endif; ?>
 
     <!-- فورم إضافة/تعديل حزب -->
     <div class="card mb-3">
       <div class="card-header">
         <strong class="small">
-          <?= $editParty ? __('t_fdfdfd9863', 'تعديل حزب') : __('t_77db93f78a', 'إضافة حزب جديد') ?>
+          <?php echo $editParty ? __('t_fdfdfd9863', 'تعديل حزب') : __('t_77db93f78a', 'إضافة حزب جديد'); ?>
         </strong>
       </div>
       <div class="card-body">
         <form method="post" class="row g-3">
           <?php if (function_exists('csrf_field')): ?>
-            <?= csrf_field() ?>
+            <?php echo csrf_field(); ?>
           <?php else: ?>
-            <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($_SESSION['csrf_token'] ?? ''); ?>">
           <?php endif; ?>
 
           <input type="hidden" name="action" value="save_party">
-          <input type="hidden" name="party_id" value="<?= $editParty ? (int)$editParty['id'] : 0 ?>">
+          <input type="hidden" name="party_id" value="<?php echo $editParty ? (int)$editParty['id'] : 0; ?>">
 
           <div class="col-md-3">
-            <label class="form-label small"><?= h(__('t_5eecb44d3b', 'الكود (اختياري)')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_5eecb44d3b', 'الكود (اختياري)')); ?></label>
             <input type="text" name="code" class="form-control form-control-sm"
-                   value="<?= h($editParty['code'] ?? '') ?>">
+                   value="<?php echo h($editParty['code'] ?? ''); ?>">
           </div>
 
           <div class="col-md-4">
-            <label class="form-label small"><?= h(__('t_9941065d4c', 'الاسم المختصر')) ?> <span class="text-danger">*</span></label>
+            <label class="form-label small"><?php echo h(__('t_9941065d4c', 'الاسم المختصر')); ?> <span class="text-danger">*</span></label>
             <input type="text" name="short_name" class="form-control form-control-sm"
-                   value="<?= h($editParty['short_name'] ?? '') ?>" required>
+                   value="<?php echo h($editParty['short_name'] ?? ''); ?>" required>
           </div>
 
           <div class="col-md-5">
-            <label class="form-label small"><?= h(__('t_68d407e649', 'الاسم الكامل (اختياري)')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_68d407e649', 'الاسم الكامل (اختياري)')); ?></label>
             <input type="text" name="full_name" class="form-control form-control-sm"
-                   value="<?= h($editParty['full_name'] ?? '') ?>">
+                   value="<?php echo h($editParty['full_name'] ?? ''); ?>">
           </div>
 
           <div class="col-md-3">
-            <label class="form-label small"><?= h(__('t_bab17f2f9a', 'لون الحزب (HEX)')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_bab17f2f9a', 'لون الحزب (HEX)')); ?></label>
             <input type="text" name="color_hex" class="form-control form-control-sm"
                    placeholder="#2563eb"
-                   value="<?= h($editParty['color_hex'] ?? '') ?>">
+                   value="<?php echo h($editParty['color_hex'] ?? ''); ?>">
           </div>
 
           <div class="col-md-5">
-            <label class="form-label small"><?= h(__('t_bb97a86375', 'مسار شعار الحزب (اختياري)')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_bb97a86375', 'مسار شعار الحزب (اختياري)')); ?></label>
             <input type="text" name="logo_path" class="form-control form-control-sm"
                    placeholder="/uploads/parties/logo.png"
-                   value="<?= h($editParty['logo_path'] ?? '') ?>">
+                   value="<?php echo h($editParty['logo_path'] ?? ''); ?>">
           </div>
 
           <div class="col-md-2">
-            <label class="form-label small"><?= h(__('t_2fcc9e97b9', 'ترتيب العرض')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_2fcc9e97b9', 'ترتيب العرض')); ?></label>
             <input type="number" name="sort_order" class="form-control form-control-sm"
-                   value="<?= h((string)($editParty['sort_order'] ?? 0)) ?>">
+                   value="<?php echo h((string)($editParty['sort_order'] ?? 0)); ?>">
           </div>
 
           <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary btn-sm w-100">
               <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_871a087a1d', 'حفظ')) ?>
+              <?php echo h(__('t_871a087a1d', 'حفظ')); ?>
             </button>
           </div>
         </form>
@@ -375,67 +375,67 @@ require __DIR__ . '/../layout/sidebar.php';
     <!-- جدول الأحزاب -->
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span class="small fw-semibold"><?= h(__('t_be2cdee15b', 'قائمة الأحزاب المسجلة')) ?></span>
-        <span class="small text-muted">إجمالي: <?= count($parties) ?></span>
+        <span class="small fw-semibold"><?php echo h(__('t_be2cdee15b', 'قائمة الأحزاب المسجلة')); ?></span>
+        <span class="small text-muted">إجمالي: <?php echo count($parties); ?></span>
       </div>
       <div class="table-responsive">
         <table class="table table-sm align-middle mb-0">
           <thead class="table-light">
             <tr>
               <th>#</th>
-              <th><?= h(__('t_2e8b171b46', 'الاسم')) ?></th>
-              <th class="text-center"><?= h(__('t_4851a7c099', 'اللون')) ?></th>
-              <th><?= h(__('t_1f41be3824', 'الكود')) ?></th>
-              <th class="text-center"><?= h(__('t_ddda59289a', 'الترتيب')) ?></th>
-              <th class="text-center"><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></th>
-              <th class="text-center"><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></th>
-              <th class="text-center"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+              <th><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></th>
+              <th class="text-center"><?php echo h(__('t_4851a7c099', 'اللون')); ?></th>
+              <th><?php echo h(__('t_1f41be3824', 'الكود')); ?></th>
+              <th class="text-center"><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></th>
+              <th class="text-center"><?php echo h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')); ?></th>
+              <th class="text-center"><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></th>
+              <th class="text-center"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
             </tr>
           </thead>
           <tbody>
             <?php if ($parties): ?>
               <?php foreach ($parties as $p): ?>
                 <tr>
-                  <td><?= (int)$p['id'] ?></td>
+                  <td><?php echo (int)$p['id']; ?></td>
                   <td>
-                    <div class="fw-semibold small"><?= h($p['short_name']) ?></div>
+                    <div class="fw-semibold small"><?php echo h($p['short_name']); ?></div>
                     <?php if (!empty($p['full_name'])): ?>
-                      <div class="small text-muted"><?= h($p['full_name']) ?></div>
+                      <div class="small text-muted"><?php echo h($p['full_name']); ?></div>
                     <?php endif; ?>
                   </td>
                   <td class="text-center">
                     <?php $color = $p['color_hex'] ?: '#6b7280'; ?>
                     <span class="d-inline-block rounded-circle"
-                          style="width:14px;height:14px;background:<?= h($color) ?>;"></span>
-                    <div class="small text-muted"><?= h($p['color_hex'] ?? '') ?></div>
+                          style="width:14px;height:14px;background:<?php echo h($color); ?>;"></span>
+                    <div class="small text-muted"><?php echo h($p['color_hex'] ?? ''); ?></div>
                   </td>
                   <td class="small">
-                    <?= $p['code'] ? '<code>' . h($p['code']) . '</code>' : '—' ?>
+                    <?php echo $p['code'] ? '<code>' . h($p['code']) . '</code>' : '—'; ?>
                   </td>
                   <td class="text-center small">
-                    <?= (int)$p['sort_order'] ?>
+                    <?php echo (int)$p['sort_order']; ?>
                   </td>
                   <td class="text-center small">
-                    <?= h($p['created_at']) ?>
+                    <?php echo h($p['created_at']); ?>
                   </td>
                   <td class="text-center small">
-                    <?= $p['updated_at'] ? h($p['updated_at']) : '—' ?>
+                    <?php echo $p['updated_at'] ? h($p['updated_at']) : '—'; ?>
                   </td>
                   <td class="text-center">
                     <div class="d-flex flex-wrap justify-content-center gap-1">
-                      <a href="parties.php?election_id=<?= (int)$electionId ?>&id=<?= (int)$p['id'] ?>"
+                      <a href="parties.php?election_id=<?php echo (int)$electionId; ?>&id=<?php echo (int)$p['id']; ?>"
                          class="btn btn-outline-primary btn-sm">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
 
                       <form method="post" data-confirm='حذف هذا الحزب؟ قد يؤثر على النتائج.'>
                         <?php if (function_exists('csrf_field')): ?>
-                          <?= csrf_field() ?>
+                          <?php echo csrf_field(); ?>
                         <?php else: ?>
-                          <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
+                          <input type="hidden" name="csrf_token" value="<?php echo h($_SESSION['csrf_token'] ?? ''); ?>">
                         <?php endif; ?>
                         <input type="hidden" name="action" value="delete_party">
-                        <input type="hidden" name="party_id" value="<?= (int)$p['id'] ?>">
+                        <input type="hidden" name="party_id" value="<?php echo (int)$p['id']; ?>">
                         <button type="submit" class="btn btn-outline-danger btn-sm">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </button>
@@ -447,7 +447,7 @@ require __DIR__ . '/../layout/sidebar.php';
             <?php else: ?>
               <tr>
                 <td colspan="8" class="text-center small text-muted py-3">
-                  <?= h(__('t_a0112e2743', 'لا توجد أحزاب مسجلة لهذه التغطية بعد.')) ?>
+                  <?php echo h(__('t_a0112e2743', 'لا توجد أحزاب مسجلة لهذه التغطية بعد.')); ?>
                 </td>
               </tr>
             <?php endif; ?>

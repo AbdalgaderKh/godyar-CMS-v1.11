@@ -43,10 +43,10 @@ if ($pdo instanceof PDO) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))) === 'ar' ? 'rtl' : 'ltr'); ?>">
 <head>
     <meta charset="UTF-8">
-    <title><?= h(__('t_734ed5ea50', 'إنشاء جدول السلايدر')) ?></title>
+    <title><?php echo h(__('t_734ed5ea50', 'إنشاء جدول السلايدر')); ?></title>
     <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
 </head>
 <body class="bg-dark text-light">
@@ -55,11 +55,11 @@ if ($pdo instanceof PDO) {
             <div class="col-md-6">
                 <div class="card bg-dark border-light">
                     <div class="card-body text-center">
-                        <h2 class="card-title mb-4"><?= h(__('t_734ed5ea50', 'إنشاء جدول السلايدر')) ?></h2>
-                        <div class="alert alert-<?= strpos($message, '✅') !== false ? 'success' : 'danger' ?>">
-                            <?= htmlspecialchars($message) ?>
+                        <h2 class="card-title mb-4"><?php echo h(__('t_734ed5ea50', 'إنشاء جدول السلايدر')); ?></h2>
+                        <div class="alert alert-<?php echo strpos($message, '✅') !== false ? 'success' : 'danger'; ?>">
+                            <?php echo htmlspecialchars($message); ?>
                         </div>
-                        <a href="index.php" class="btn btn-primary mt-3"><?= h(__('t_7bd3b38e2e', 'العودة لإدارة السلايدر')) ?></a>
+                        <a href="index.php" class="btn btn-primary mt-3"><?php echo h(__('t_7bd3b38e2e', 'العودة لإدارة السلايدر')); ?></a>
                     </div>
                 </div>
             </div>

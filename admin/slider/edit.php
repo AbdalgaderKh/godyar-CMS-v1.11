@@ -135,71 +135,71 @@ require_once __DIR__ . '/../layout/sidebar.php';
 <div class="admin-content container-fluid py-4">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h4 mb-1 text-white">تعديل شريحة: <?= h($data['title']) ?></h1>
-      <p class="mb-0" style="color:#e5e7eb;"><?= h(__('t_e23c0cfaad', 'تعديل بيانات الشريحة في السلايدر.')) ?></p>
+      <h1 class="h4 mb-1 text-white">تعديل شريحة: <?php echo h($data['title']); ?></h1>
+      <p class="mb-0" style="color:#e5e7eb;"><?php echo h(__('t_e23c0cfaad', 'تعديل بيانات الشريحة في السلايدر.')); ?></p>
     </div>
     <div class="mt-3 mt-md-0">
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_d407d42a27', 'العودة للسلايدر')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_d407d42a27', 'العودة للسلايدر')); ?>
       </a>
     </div>
   </div>
 
   <?php if (empty($errors['general']) === false): ?>
-    <div class="alert alert-danger py-2"><?= h($errors['general']) ?></div>
+    <div class="alert alert-danger py-2"><?php echo h($errors['general']); ?></div>
   <?php endif; ?>
 
   <form method="post" class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <div class="card-body">
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label"><?= h(__('t_aa7e2e97ea', 'العنوان *')) ?></label>
-          <input type="text" name="title" class="form-control" value="<?= h($data['title']) ?>">
+          <label class="form-label"><?php echo h(__('t_aa7e2e97ea', 'العنوان *')); ?></label>
+          <input type="text" name="title" class="form-control" value="<?php echo h($data['title']); ?>">
           <?php if (!empty($errors['title'])): ?>
-            <div class="text-danger small mt-1"><?= h($errors['title']) ?></div>
+            <div class="text-danger small mt-1"><?php echo h($errors['title']); ?></div>
           <?php endif; ?>
         </div>
         <div class="col-md-6">
-          <label class="form-label"><?= h(__('t_d31bde862c', 'النص الفرعي')) ?></label>
-          <input type="text" name="subtitle" class="form-control" value="<?= h($data['subtitle']) ?>">
+          <label class="form-label"><?php echo h(__('t_d31bde862c', 'النص الفرعي')); ?></label>
+          <input type="text" name="subtitle" class="form-control" value="<?php echo h($data['subtitle']); ?>">
         </div>
 
         <div class="col-md-6">
-          <label class="form-label"><?= h(__('t_324c759f42', 'مسار الصورة')) ?></label>
+          <label class="form-label"><?php echo h(__('t_324c759f42', 'مسار الصورة')); ?></label>
           <div class="input-group">
           <input type="text" id="slider_image_path" name="image_path" class="form-control"
-                 value="<?= h($data['image_path']) ?>">
+                 value="<?php echo h($data['image_path']); ?>">
           <button type="button" class="btn btn-outline-secondary" data-action="open-media-modal" data-target="slider_image_path">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_443b526a45', 'اختيار من الوسائط')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_443b526a45', 'اختيار من الوسائط')); ?>
           </button>
         </div>
         <div class="col-md-6">
-          <label class="form-label"><?= h(__('t_72ce2dd33e', 'الرابط عند الضغط')) ?></label>
+          <label class="form-label"><?php echo h(__('t_72ce2dd33e', 'الرابط عند الضغط')); ?></label>
           <input type="text" name="link_url" class="form-control"
-                 value="<?= h($data['link_url']) ?>">
+                 value="<?php echo h($data['link_url']); ?>">
         </div>
 
         <div class="col-md-3">
-          <label class="form-label d-block"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+          <label class="form-label d-block"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
           <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
-                   <?= !empty($data['is_active']) ? 'checked' : '' ?>>
-            <label class="form-check-label" for="is_active"><?= h(__('t_74cdedb351', 'مفعّلة في السلايدر')) ?></label>
+                   <?php echo !empty($data['is_active']) ? 'checked' : ''; ?>>
+            <label class="form-check-label" for="is_active"><?php echo h(__('t_74cdedb351', 'مفعّلة في السلايدر')); ?></label>
           </div>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label"><?= h(__('t_ddda59289a', 'الترتيب')) ?></label>
+          <label class="form-label"><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></label>
           <input type="number" name="sort_order" class="form-control"
-                 value="<?= (int)$data['sort_order'] ?>">
+                 value="<?php echo (int)$data['sort_order']; ?>">
         </div>
       </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
       <button type="submit" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_91d6db7f39', 'حفظ التعديلات')); ?>
       </button>
     </div>
   </form>
@@ -238,8 +238,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content" style="background:#020617;color:#e5e7eb;">
       <div class="modal-header border-secondary">
-        <h5 class="modal-title" id="godyarMediaModalLabel"><?= h(__('t_b8c98cdb48', 'اختيار ملف من مكتبة الوسائط')) ?></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?= h(__('t_9932cca009', 'إغلاق')) ?>"></button>
+        <h5 class="modal-title" id="godyarMediaModalLabel"><?php echo h(__('t_b8c98cdb48', 'اختيار ملف من مكتبة الوسائط')); ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo h(__('t_9932cca009', 'إغلاق')); ?>"></button>
       </div>
       <div class="modal-body p-0">
         <iframe src="../media/picker.php" style="width:100%;height:520px;border:0;"></iframe>

@@ -273,13 +273,13 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="gdy-card card">
       <div class="card-body">
         <form method="get" class="d-flex flex-column flex-md-row gap-2 align-items-stretch">
-          <input type="text" name="q" class="form-control" placeholder="<?= h(__('t_admin_search_placeholder','ابحث داخل الأخبار والمستخدمين والتعليقات والتصنيفات والوسوم والوسائط')) ?>" value="<?= h($searchTerm) ?>">
+          <input type="text" name="q" class="form-control" placeholder="<?php echo h(__('t_admin_search_placeholder','ابحث داخل الأخبار والمستخدمين والتعليقات والتصنيفات والوسوم والوسائط')); ?>" value="<?php echo h($searchTerm); ?>">
           <button class="btn btn-gdy btn-gdy-primary" type="submit">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_admin_search','بحث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_admin_search','بحث')); ?>
           </button>
         </form>
         <?php if ($error): ?>
-          <div class="alert alert-warning mt-3 small"><?= h($error) ?></div>
+          <div class="alert alert-warning mt-3 small"><?php echo h($error); ?></div>
         <?php endif; ?>
       </div>
     </div>
@@ -289,9 +289,9 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="col-12 col-lg-6">
       <div class="gdy-card card">
         <div class="card-body">
-          <h5 class="mb-3"><?= h(__('t_admin_news','الأخبار')) ?> <span class="text-muted">(<?= (int)count($results['news']) ?>)</span></h5>
+          <h5 class="mb-3"><?php echo h(__('t_admin_news','الأخبار')); ?> <span class="text-muted">(<?php echo (int)count($results['news']); ?>)</span></h5>
           <?php if (!$results['news']): ?>
-            <div class="text-muted small"><?= h(__('t_admin_no_results','لا توجد نتائج.')) ?></div>
+            <div class="text-muted small"><?php echo h(__('t_admin_no_results','لا توجد نتائج.')); ?></div>
           <?php else: ?>
             <div class="list-group list-group-flush">
               <?php foreach ($results['news'] as $n): ?>
@@ -302,12 +302,12 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
                   if (!empty($n['opinion_author_name'])) $sub[] = (string)$n['opinion_author_name'];
                   $subTxt = highlight_html(h(implode(' • ', $sub)), $searchTerm);
                 ?>
-                <a class="list-group-item list-group-item-action" href="/admin/news/edit.php?id=<?= (int)$n['id'] ?>">
+                <a class="list-group-item list-group-item-action" href="/admin/news/edit.php?id=<?php echo (int)$n['id']; ?>">
                   <div class="d-flex justify-content-between gap-2">
-                    <div class="text-truncate"><?= $title ?></div>
-                    <small class="text-muted"><?= h((string)($n['status'] ?? '')) ?></small>
+                    <div class="text-truncate"><?php echo $title; ?></div>
+                    <small class="text-muted"><?php echo h((string)($n['status'] ?? '')); ?></small>
                   </div>
-                  <?php if ($subTxt !== ''): ?><div class="small text-muted"><?= $subTxt ?></div><?php endif; ?>
+                  <?php if ($subTxt !== ''): ?><div class="small text-muted"><?php echo $subTxt; ?></div><?php endif; ?>
                 </a>
               <?php endforeach; ?>
             </div>
@@ -319,19 +319,19 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="col-12 col-lg-6">
       <div class="gdy-card card">
         <div class="card-body">
-          <h5 class="mb-3"><?= h(__('t_admin_users','المستخدمون')) ?> <span class="text-muted">(<?= (int)count($results['users']) ?>)</span></h5>
+          <h5 class="mb-3"><?php echo h(__('t_admin_users','المستخدمون')); ?> <span class="text-muted">(<?php echo (int)count($results['users']); ?>)</span></h5>
           <?php if (!$results['users']): ?>
-            <div class="text-muted small"><?= h(__('t_admin_no_results','لا توجد نتائج.')) ?></div>
+            <div class="text-muted small"><?php echo h(__('t_admin_no_results','لا توجد نتائج.')); ?></div>
           <?php else: ?>
             <div class="list-group list-group-flush">
               <?php foreach ($results['users'] as $u): ?>
                 <?php $name = highlight_html(h((string)($u['username'] ?? $u['email'] ?? '')), $searchTerm); ?>
-                <a class="list-group-item list-group-item-action" href="/admin/users/edit.php?id=<?= (int)$u['id'] ?>">
+                <a class="list-group-item list-group-item-action" href="/admin/users/edit.php?id=<?php echo (int)$u['id']; ?>">
                   <div class="d-flex justify-content-between gap-2">
-                    <div class="text-truncate"><?= $name ?></div>
-                    <small class="text-muted"><?= h((string)($u['role'] ?? '')) ?></small>
+                    <div class="text-truncate"><?php echo $name; ?></div>
+                    <small class="text-muted"><?php echo h((string)($u['role'] ?? '')); ?></small>
                   </div>
-                  <div class="small text-muted"><?= highlight_html(h((string)($u['email'] ?? '')), $searchTerm) ?></div>
+                  <div class="small text-muted"><?php echo highlight_html(h((string)($u['email'] ?? '')), $searchTerm); ?></div>
                 </a>
               <?php endforeach; ?>
             </div>
@@ -343,9 +343,9 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="col-12 col-lg-6">
       <div class="gdy-card card">
         <div class="card-body">
-          <h5 class="mb-3"><?= h(__('t_admin_comments','التعليقات')) ?> <span class="text-muted">(<?= (int)count($results['comments']) ?>)</span></h5>
+          <h5 class="mb-3"><?php echo h(__('t_admin_comments','التعليقات')); ?> <span class="text-muted">(<?php echo (int)count($results['comments']); ?>)</span></h5>
           <?php if (!$results['comments']): ?>
-            <div class="text-muted small"><?= h(__('t_admin_no_results','لا توجد نتائج.')) ?></div>
+            <div class="text-muted small"><?php echo h(__('t_admin_no_results','لا توجد نتائج.')); ?></div>
           <?php else: ?>
             <div class="list-group list-group-flush">
               <?php foreach ($results['comments'] as $c): ?>
@@ -356,9 +356,9 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
                   $tbl = (string)($c['_table'] ?? 'comments');
                   $href = '/admin/comments/index.php';
                 ?>
-                <a class="list-group-item list-group-item-action" href="<?= h($href) ?>">
-                  <div class="small text-muted mb-1"><?= h($tbl) ?> • #<?= (int)$c['id'] ?></div>
-                  <div><?= $body ?></div>
+                <a class="list-group-item list-group-item-action" href="<?php echo h($href); ?>">
+                  <div class="small text-muted mb-1"><?php echo h($tbl); ?> • #<?php echo (int)$c['id']; ?></div>
+                  <div><?php echo $body; ?></div>
                 </a>
               <?php endforeach; ?>
             </div>
@@ -370,9 +370,9 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="col-12 col-lg-6">
       <div class="gdy-card card">
         <div class="card-body">
-          <h5 class="mb-3"><?= h(__('t_admin_categories_tags','التصنيفات والوسوم')) ?> <span class="text-muted">(<?= (int)count($results['cats_tags']) ?>)</span></h5>
+          <h5 class="mb-3"><?php echo h(__('t_admin_categories_tags','التصنيفات والوسوم')); ?> <span class="text-muted">(<?php echo (int)count($results['cats_tags']); ?>)</span></h5>
           <?php if (!$results['cats_tags']): ?>
-            <div class="text-muted small"><?= h(__('t_admin_no_results','لا توجد نتائج.')) ?></div>
+            <div class="text-muted small"><?php echo h(__('t_admin_no_results','لا توجد نتائج.')); ?></div>
           <?php else: ?>
             <div class="list-group list-group-flush">
               <?php foreach ($results['cats_tags'] as $ct): ?>
@@ -381,12 +381,12 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
                   $href = $type === 'tag' ? ('/admin/tags/edit.php?id='.(int)$ct['id']) : ('/admin/categories/edit.php?id='.(int)$ct['id']);
                   $label = $type === 'tag' ? __('t_admin_tag','وسم') : __('t_admin_category','تصنيف');
                 ?>
-                <a class="list-group-item list-group-item-action" href="<?= h($href) ?>">
+                <a class="list-group-item list-group-item-action" href="<?php echo h($href); ?>">
                   <div class="d-flex justify-content-between gap-2">
-                    <div class="text-truncate"><?= highlight_html(h((string)($ct['name'] ?? '')), $searchTerm) ?></div>
-                    <small class="text-muted"><?= h($label) ?></small>
+                    <div class="text-truncate"><?php echo highlight_html(h((string)($ct['name'] ?? '')), $searchTerm); ?></div>
+                    <small class="text-muted"><?php echo h($label); ?></small>
                   </div>
-                  <div class="small text-muted"><?= highlight_html(h((string)($ct['slug'] ?? '')), $searchTerm) ?></div>
+                  <div class="small text-muted"><?php echo highlight_html(h((string)($ct['slug'] ?? '')), $searchTerm); ?></div>
                 </a>
               <?php endforeach; ?>
             </div>
@@ -398,20 +398,20 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
     <div class="col-12">
       <div class="gdy-card card">
         <div class="card-body">
-          <h5 class="mb-3"><?= h(__('t_admin_media','الوسائط')) ?> <span class="text-muted">(<?= (int)count($results['media']) ?>)</span></h5>
+          <h5 class="mb-3"><?php echo h(__('t_admin_media','الوسائط')); ?> <span class="text-muted">(<?php echo (int)count($results['media']); ?>)</span></h5>
           <?php if (!$results['media']): ?>
-            <div class="text-muted small"><?= h(__('t_admin_no_results','لا توجد نتائج.')) ?></div>
+            <div class="text-muted small"><?php echo h(__('t_admin_no_results','لا توجد نتائج.')); ?></div>
           <?php else: ?>
             <div class="list-group list-group-flush">
               <?php foreach ($results['media'] as $m): ?>
-                <a class="list-group-item list-group-item-action" href="/admin/media/edit.php?id=<?= (int)$m['id'] ?>">
+                <a class="list-group-item list-group-item-action" href="/admin/media/edit.php?id=<?php echo (int)$m['id']; ?>">
                   <div class="d-flex justify-content-between gap-2">
                     <div class="text-truncate">
-                      <?= highlight_html(h((string)($m['title'] ?? $m['file_name'] ?? ('#'.$m['id']))), $searchTerm) ?>
+                      <?php echo highlight_html(h((string)($m['title'] ?? $m['file_name'] ?? ('#'.$m['id']))), $searchTerm); ?>
                     </div>
-                    <small class="text-muted">#<?= (int)$m['id'] ?></small>
+                    <small class="text-muted">#<?php echo (int)$m['id']; ?></small>
                   </div>
-                  <?php if (!empty($m['file_name'])): ?><div class="small text-muted"><?= highlight_html(h((string)$m['file_name']), $searchTerm) ?></div><?php endif; ?>
+                  <?php if (!empty($m['file_name'])): ?><div class="small text-muted"><?php echo highlight_html(h((string)$m['file_name']), $searchTerm); ?></div><?php endif; ?>
                 </a>
               <?php endforeach; ?>
             </div>

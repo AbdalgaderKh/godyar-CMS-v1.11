@@ -356,97 +356,97 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
     <div class="gdy-header">
       <div>
-        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($pageTitle) ?></h1>
-        <p><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2c54b3d343', 'راجع الأخبار المستوردة/المكتوبة ثم اعتمدها أو انشرها بسرعة.')) ?></p>
+        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($pageTitle); ?></h1>
+        <p><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_2c54b3d343', 'راجع الأخبار المستوردة/المكتوبة ثم اعتمدها أو انشرها بسرعة.')); ?></p>
       </div>
       <div class="d-flex gap-2 flex-wrap">
-        <a class="btn btn-outline-light" href="index.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f2401e0914','قائمة الأخبار')) ?></a>
-        <a class="btn btn-success" href="create.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_0d1f6ecf66','إضافة خبر جديد')) ?></a>
+        <a class="btn btn-outline-light" href="index.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f2401e0914','قائمة الأخبار')); ?></a>
+        <a class="btn btn-success" href="create.php"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_0d1f6ecf66','إضافة خبر جديد')); ?></a>
       </div>
     </div>
 
     <?php if ($flashSuccess): ?>
-      <div class="alert alert-success mt-3 mb-0"><?= h($flashSuccess) ?></div>
+      <div class="alert alert-success mt-3 mb-0"><?php echo h($flashSuccess); ?></div>
     <?php endif; ?>
     <?php if ($flashError): ?>
-      <div class="alert alert-danger mt-3 mb-0"><?= h($flashError) ?></div>
+      <div class="alert alert-danger mt-3 mb-0"><?php echo h($flashError); ?></div>
     <?php endif; ?>
 
     <div class="gdy-card">
       <div class="gdy-card-header">
         <div>
-          <div class="fw-bold"><svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_32a45d45a2','الفلاتر')) ?></div>
-          <div class="text-muted small"><?= h(__('t_0b55c27b0c','إجمالي النتائج:')) ?> <strong><?= (int)$total ?></strong></div>
+          <div class="fw-bold"><svg class="gdy-icon me-1 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_32a45d45a2','الفلاتر')); ?></div>
+          <div class="text-muted small"><?php echo h(__('t_0b55c27b0c','إجمالي النتائج:')); ?> <strong><?php echo (int)$total; ?></strong></div>
         </div>
 
         <form class="gdy-filter" method="get" action="review.php">
           <div>
-            <label class="form-label small mb-1"><?= h(__('t_1253eb5642','الحالة')) ?></label>
+            <label class="form-label small mb-1"><?php echo h(__('t_1253eb5642','الحالة')); ?></label>
             <select name="status" class="form-select form-select-sm">
-              <option value="pending"  <?= $status==='pending'?'selected':'' ?>><?= h(__('t_e9210fb9c2','بانتظار المراجعة')) ?></option>
-              <option value="approved" <?= $status==='approved'?'selected':'' ?>><?= h(__('t_5e19b0c9c7','معتمد')) ?></option>
-              <option value="draft"    <?= $status==='draft'?'selected':'' ?>><?= h(__('t_9071af8f2d','مسودة')) ?></option>
-              <option value="published"<?= $status==='published'?'selected':'' ?>><?= h(__('t_ecfb62b400','منشور')) ?></option>
-              <option value="archived" <?= $status==='archived'?'selected':'' ?>><?= h(__('t_6d998a9b54','مؤرشف')) ?></option>
-              <option value="" <?= $status===''?'selected':'' ?>><?= h(__('t_06c54f8086','الكل')) ?></option>
+              <option value="pending"  <?php echo $status==='pending'?'selected':''; ?>><?php echo h(__('t_e9210fb9c2','بانتظار المراجعة')); ?></option>
+              <option value="approved" <?php echo $status==='approved'?'selected':''; ?>><?php echo h(__('t_5e19b0c9c7','معتمد')); ?></option>
+              <option value="draft"    <?php echo $status==='draft'?'selected':''; ?>><?php echo h(__('t_9071af8f2d','مسودة')); ?></option>
+              <option value="published"<?php echo $status==='published'?'selected':''; ?>><?php echo h(__('t_ecfb62b400','منشور')); ?></option>
+              <option value="archived" <?php echo $status==='archived'?'selected':''; ?>><?php echo h(__('t_6d998a9b54','مؤرشف')); ?></option>
+              <option value="" <?php echo $status===''?'selected':''; ?>><?php echo h(__('t_06c54f8086','الكل')); ?></option>
             </select>
           </div>
 
           <div>
-            <label class="form-label small mb-1"><?= h(__('t_cf14329701','التصنيف')) ?></label>
+            <label class="form-label small mb-1"><?php echo h(__('t_cf14329701','التصنيف')); ?></label>
             <select name="category_id" class="form-select form-select-sm">
-              <option value="0"><?= h(__('t_06c54f8086','الكل')) ?></option>
+              <option value="0"><?php echo h(__('t_06c54f8086','الكل')); ?></option>
               <?php foreach ($categories as $c): ?>
-                <option value="<?= (int)$c['id'] ?>" <?= (int)$c['id']===$categoryId?'selected':'' ?>><?= h((string)$c['name']) ?></option>
+                <option value="<?php echo (int)$c['id']; ?>" <?php echo (int)$c['id']===$categoryId?'selected':''; ?>><?php echo h((string)$c['name']); ?></option>
               <?php endforeach; ?>
             </select>
           </div>
 
           <?php if (!empty($feeds)): ?>
             <div>
-              <label class="form-label small mb-1"><?= h(__('t_8a5d4d9e31','المصدر')) ?></label>
+              <label class="form-label small mb-1"><?php echo h(__('t_8a5d4d9e31','المصدر')); ?></label>
               <select name="feed_id" class="form-select form-select-sm">
-                <option value="0"><?= h(__('t_06c54f8086','الكل')) ?></option>
+                <option value="0"><?php echo h(__('t_06c54f8086','الكل')); ?></option>
                 <?php foreach ($feeds as $f): ?>
-                  <option value="<?= (int)$f['id'] ?>" <?= (int)$f['id']===$feedId?'selected':'' ?>><?= h((string)$f['name']) ?></option>
+                  <option value="<?php echo (int)$f['id']; ?>" <?php echo (int)$f['id']===$feedId?'selected':''; ?>><?php echo h((string)$f['name']); ?></option>
                 <?php endforeach; ?>
               </select>
             </div>
           <?php endif; ?>
 
           <div>
-            <label class="form-label small mb-1"><?= h(__('t_3e5a0d5c6a','بحث')) ?></label>
-            <input name="q" class="form-control form-control-sm" value="<?= h($q) ?>" placeholder="<?= h(__('t_46c2b7cc10','عنوان أو رابط…')) ?>" />
+            <label class="form-label small mb-1"><?php echo h(__('t_3e5a0d5c6a','بحث')); ?></label>
+            <input name="q" class="form-control form-control-sm" value="<?php echo h($q); ?>" placeholder="<?php echo h(__('t_46c2b7cc10','عنوان أو رابط…')); ?>" />
           </div>
 
           <div>
-            <button class="btn btn-info btn-sm" type="submit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?></button>
+            <button class="btn btn-info btn-sm" type="submit"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_7d7c2d59cc','تطبيق')); ?></button>
           </div>
         </form>
       </div>
 
       <div class="gdy-card-body">
-        <form method="post" action="<?= h($buildUrl(['page'=>$page])) ?>" id="bulkForm">
-          <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>" />
+        <form method="post" action="<?php echo h($buildUrl(['page'=>$page])); ?>" id="bulkForm">
+          <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>" />
 
           <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
             <div class="d-flex flex-wrap gap-2 align-items-center">
               <select name="action" class="form-select form-select-sm" style="max-width:220px;">
-                <option value="">— <?= h(__('t_3b0c1b0b1b','إجراء جماعي')) ?> —</option>
-                <option value="approve"><?= h(__('t_5e19b0c9c7','اعتماد')) ?></option>
-                <option value="publish"><?= h(__('t_ecfb62b400','نشر')) ?></option>
-                <option value="draft"><?= h(__('t_9bb6a0a6a2','إرجاع لمسودة')) ?></option>
-                <option value="archive"><?= h(__('t_6d998a9b54','أرشفة')) ?></option>
+                <option value="">— <?php echo h(__('t_3b0c1b0b1b','إجراء جماعي')); ?> —</option>
+                <option value="approve"><?php echo h(__('t_5e19b0c9c7','اعتماد')); ?></option>
+                <option value="publish"><?php echo h(__('t_ecfb62b400','نشر')); ?></option>
+                <option value="draft"><?php echo h(__('t_9bb6a0a6a2','إرجاع لمسودة')); ?></option>
+                <option value="archive"><?php echo h(__('t_6d998a9b54','أرشفة')); ?></option>
               </select>
-              <input type="text" name="note" class="form-control form-control-sm" style="max-width:360px;" placeholder="<?= h(__('t_6d0ef8a7aa','سبب/ملاحظة (اختياري)…')) ?>" />
-              <button type="submit" class="btn btn-success btn-sm" data-confirm=<?= json_encode(__('t_64027a8a52', 'تأكيد تنفيذ الإجراء على العناصر المحددة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_7d7c2d59cc','تطبيق')) ?>
+              <input type="text" name="note" class="form-control form-control-sm" style="max-width:360px;" placeholder="<?php echo h(__('t_6d0ef8a7aa','سبب/ملاحظة (اختياري)…')); ?>" />
+              <button type="submit" class="btn btn-success btn-sm" data-confirm=<?php echo json_encode(__('t_64027a8a52', 'تأكيد تنفيذ الإجراء على العناصر المحددة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_7d7c2d59cc','تطبيق')); ?>
               </button>
             </div>
 
             <div class="text-muted small">
-              <span class="me-2"><input type="checkbox" id="checkAll" /> <?= h(__('t_2df3f2cc7d','تحديد الكل')) ?></span>
-              <span><?= h(__('t_4fb6d3e8b1','المحدد:')) ?> <strong id="selectedCount">0</strong></span>
+              <span class="me-2"><input type="checkbox" id="checkAll" /> <?php echo h(__('t_2df3f2cc7d','تحديد الكل')); ?></span>
+              <span><?php echo h(__('t_4fb6d3e8b1','المحدد:')); ?> <strong id="selectedCount">0</strong></span>
             </div>
           </div>
 
@@ -455,17 +455,17 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <thead>
                 <tr>
                   <th style="width:38px;"></th>
-                  <th><?= h(__('t_6dc6588082','العنوان')) ?></th>
-                  <th style="width:140px;" class="text-center"><?= h(__('t_cf14329701','التصنيف')) ?></th>
-                  <th style="width:160px;" class="text-center"><?= h(__('t_8a5d4d9e31','المصدر')) ?></th>
-                  <th style="width:120px;" class="text-center"><?= h(__('t_1253eb5642','الحالة')) ?></th>
-                  <th style="width:150px;" class="text-center"><?= h(__('t_93ef0b14b7','تاريخ')) ?></th>
-                  <th style="width:260px;" class="text-center"><?= h(__('t_07f6e3a5a6','إجراءات')) ?></th>
+                  <th><?php echo h(__('t_6dc6588082','العنوان')); ?></th>
+                  <th style="width:140px;" class="text-center"><?php echo h(__('t_cf14329701','التصنيف')); ?></th>
+                  <th style="width:160px;" class="text-center"><?php echo h(__('t_8a5d4d9e31','المصدر')); ?></th>
+                  <th style="width:120px;" class="text-center"><?php echo h(__('t_1253eb5642','الحالة')); ?></th>
+                  <th style="width:150px;" class="text-center"><?php echo h(__('t_93ef0b14b7','تاريخ')); ?></th>
+                  <th style="width:260px;" class="text-center"><?php echo h(__('t_07f6e3a5a6','إجراءات')); ?></th>
                 </tr>
               </thead>
               <tbody>
                 <?php if (empty($rows)): ?>
-                  <tr><td colspan="7" class="text-center text-muted py-4"><?= h(__('t_9f9b1a2d4c','لا توجد نتائج مطابقة.')) ?></td></tr>
+                  <tr><td colspan="7" class="text-center text-muted py-4"><?php echo h(__('t_9f9b1a2d4c','لا توجد نتائج مطابقة.')); ?></td></tr>
                 <?php endif; ?>
 
                 <?php foreach ($rows as $r):
@@ -485,40 +485,40 @@ require_once __DIR__ . '/../layout/sidebar.php';
                 ?>
                   <tr>
                     <td>
-                      <input class="form-check-input rowCheck" type="checkbox" name="ids[]" value="<?= $nid ?>" />
+                      <input class="form-check-input rowCheck" type="checkbox" name="ids[]" value="<?php echo $nid; ?>" />
                     </td>
                     <td>
                       <div class="fw-bold">
-                        <a class="text-decoration-none text-light" href="edit.php?id=<?= $nid ?>">
-                          <?= h($title) ?>
+                        <a class="text-decoration-none text-light" href="edit.php?id=<?php echo $nid; ?>">
+                          <?php echo h($title); ?>
                         </a>
                       </div>
                       <div class="small text-muted" style="direction:ltr;">
-                        <?= h((string)($r['slug'] ?? '')) ?>
+                        <?php echo h((string)($r['slug'] ?? '')); ?>
                       </div>
                     </td>
-                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($cat ?: '—') ?></span></td>
-                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($feed ?: '—') ?></span></td>
-                    <td class="text-center"><span class="gdy-badge gdy-status"><?= h($statusLabel) ?></span></td>
-                    <td class="text-center"><span class="small text-muted"><?= h($dt ?: '—') ?></span></td>
+                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($cat ?: '—'); ?></span></td>
+                    <td class="text-center"><span class="gdy-badge"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($feed ?: '—'); ?></span></td>
+                    <td class="text-center"><span class="gdy-badge gdy-status"><?php echo h($statusLabel); ?></span></td>
+                    <td class="text-center"><span class="small text-muted"><?php echo h($dt ?: '—'); ?></span></td>
                     <td class="text-center">
                       <div class="gdy-actions justify-content-center">
-                        <button type="button" class="btn btn-outline-secondary js-preview" data-id="<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= h(__('t_preview','معاينة')) ?></button>
-                        <a class="btn btn-outline-info" href="edit.php?id=<?= $nid ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_0b90f1a1f7','تعديل')) ?></a>
+                        <button type="button" class="btn btn-outline-secondary js-preview" data-id="<?php echo $nid; ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo h(__('t_preview','معاينة')); ?></button>
+                        <a class="btn btn-outline-info" href="edit.php?id=<?php echo $nid; ?>"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_0b90f1a1f7','تعديل')); ?></a>
 
-                        <button class="btn btn-outline-success" type="submit" name="action" value="approve" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5e19b0c9c7','اعتماد')) ?>
+                        <button class="btn btn-outline-success" type="submit" name="action" value="approve" formaction="<?php echo h($buildUrl(['page'=>$page])); ?>" formmethod="post" data-action="row-select">
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_5e19b0c9c7','اعتماد')); ?>
                         </button>
 
-                        <button class="btn btn-success" type="submit" name="action" value="publish" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select">
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ecfb62b400','نشر')) ?>
+                        <button class="btn btn-success" type="submit" name="action" value="publish" formaction="<?php echo h($buildUrl(['page'=>$page])); ?>" formmethod="post" data-action="row-select">
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_ecfb62b400','نشر')); ?>
                         </button>
 
-                        <button class="btn btn-outline-warning" type="submit" name="action" value="draft" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select" data-confirm=<?= json_encode(__('t_44e8416493', 'إرجاع هذا الخبر لمسودة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_9bb6a0a6a2','مسودة')) ?>
+                        <button class="btn btn-outline-warning" type="submit" name="action" value="draft" formaction="<?php echo h($buildUrl(['page'=>$page])); ?>" formmethod="post" data-action="row-select" data-confirm=<?php echo json_encode(__('t_44e8416493', 'إرجاع هذا الخبر لمسودة؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                          <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_9bb6a0a6a2','مسودة')); ?>
                         </button>
 
-                        <button class="btn btn-outline-danger" type="submit" name="action" value="archive" formaction="<?= h($buildUrl(['page'=>$page])) ?>" formmethod="post" data-action="row-select" data-confirm=<?= json_encode(__('t_c922c6d23e', 'أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
+                        <button class="btn btn-outline-danger" type="submit" name="action" value="archive" formaction="<?php echo h($buildUrl(['page'=>$page])); ?>" formmethod="post" data-action="row-select" data-confirm=<?php echo json_encode(__('t_c922c6d23e', 'أرشفة هذا الخبر؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </button>
                       </div>
@@ -536,20 +536,20 @@ require_once __DIR__ . '/../layout/sidebar.php';
                   $prev = max(1, $page - 1);
                   $next = min($pages, $page + 1);
                 ?>
-                <li class="page-item <?= $page<=1?'disabled':'' ?>">
-                  <a class="page-link" href="<?= h($buildUrl(['page'=>$prev])) ?>">&laquo;</a>
+                <li class="page-item <?php echo $page<=1?'disabled':''; ?>">
+                  <a class="page-link" href="<?php echo h($buildUrl(['page'=>$prev])); ?>">&laquo;</a>
                 </li>
                 <?php
                   $start = max(1, $page - 3);
                   $end   = min($pages, $page + 3);
                   for ($i=$start; $i<=$end; $i++):
                 ?>
-                  <li class="page-item <?= $i===$page?'active':'' ?>">
-                    <a class="page-link" href="<?= h($buildUrl(['page'=>$i])) ?>"><?= $i ?></a>
+                  <li class="page-item <?php echo $i===$page?'active':''; ?>">
+                    <a class="page-link" href="<?php echo h($buildUrl(['page'=>$i])); ?>"><?php echo $i; ?></a>
                   </li>
                 <?php endfor; ?>
-                <li class="page-item <?= $page>=$pages?'disabled':'' ?>">
-                  <a class="page-link" href="<?= h($buildUrl(['page'=>$next])) ?>">&raquo;</a>
+                <li class="page-item <?php echo $page>=$pages?'disabled':''; ?>">
+                  <a class="page-link" href="<?php echo h($buildUrl(['page'=>$next])); ?>">&raquo;</a>
                 </li>
               </ul>
             </nav>
@@ -566,19 +566,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content bg-dark text-light" style="border:1px solid rgba(148,163,184,.35);">
       <div class="modal-header" style="border-bottom:1px solid rgba(148,163,184,.25);">
-        <h5 class="modal-title" id="previewModalTitle"><?= h(__('t_preview','معاينة')) ?></h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="<?= h(__('t_close','إغلاق')) ?>"></button>
+        <h5 class="modal-title" id="previewModalTitle"><?php echo h(__('t_preview','معاينة')); ?></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="<?php echo h(__('t_close','إغلاق')); ?>"></button>
       </div>
       <div class="modal-body">
         <div id="previewModalBody">
           <div class="text-center py-5 text-muted">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_loading','جاري التحميل...')); ?>
           </div>
         </div>
       </div>
       <div class="modal-footer" style="border-top:1px solid rgba(148,163,184,.25);">
         <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_close','إغلاق')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_close','إغلاق')); ?>
         </button>
       </div>
     </div>
@@ -624,7 +624,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
   function setLoading(){
     if (!modalBodyEl) return;
-    modalBodyEl.innerHTML = '<div class="text-center py-5 text-muted"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_loading','جاري التحميل...')) ?></div>';
+    modalBodyEl.innerHTML = '<div class="text-center py-5 text-muted"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_loading','جاري التحميل...')); ?></div>';
   }
 
   function escapeHtml(str){
@@ -637,7 +637,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
     btn.addEventListener('click', function(){
       var id = btn.getAttribute('data-id');
       if (!id) return;
-      if (modalTitleEl) modalTitleEl.textContent = '<?= h(__('t_preview','معاينة')) ?>';
+      if (modalTitleEl) modalTitleEl.textContent = '<?php echo h(__('t_preview','معاينة')); ?>';
       setLoading();
       if (modal) modal.show();
 
@@ -646,15 +646,15 @@ require_once __DIR__ . '/../layout/sidebar.php';
         .then(function(data){
           if (!modalBodyEl) return;
           if (!data || !data.ok) {
-            modalBodyEl.innerHTML = '<div class="alert alert-danger mb-0"><?= h(__('t_error_loading_preview','تعذر تحميل المعاينة.')) ?></div>';
+            modalBodyEl.innerHTML = '<div class="alert alert-danger mb-0"><?php echo h(__('t_error_loading_preview','تعذر تحميل المعاينة.')); ?></div>';
             return;
           }
-          if (modalTitleEl) modalTitleEl.textContent = data.title ? data.title : '<?= h(__('t_preview','معاينة')) ?>';
+          if (modalTitleEl) modalTitleEl.textContent = data.title ? data.title : '<?php echo h(__('t_preview','معاينة')); ?>';
           modalBodyEl.innerHTML = data.html || '<div class="text-muted">—</div>';
         })
         .catch(function(){
           if (!modalBodyEl) return;
-          modalBodyEl.innerHTML = '<div class="alert alert-danger mb-0"><?= h(__('t_error_loading_preview','تعذر تحميل المعاينة.')) ?></div>';
+          modalBodyEl.innerHTML = '<div class="alert alert-danger mb-0"><?php echo h(__('t_error_loading_preview','تعذر تحميل المعاينة.')); ?></div>';
         });
     });
   });

@@ -52,15 +52,15 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="gdy-layout-wrap">
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h4 mb-1 text-white"><?= h($row['title']) ?></h1>
-      <p class="mb-0" style="color:#e5e7eb;"><?= h(__('t_4c123df2ef', 'عرض تفاصيل الصفحة الثابتة كما ستظهر للزوار.')) ?></p>
+      <h1 class="h4 mb-1 text-white"><?php echo h($row['title']); ?></h1>
+      <p class="mb-0" style="color:#e5e7eb;"><?php echo h(__('t_4c123df2ef', 'عرض تفاصيل الصفحة الثابتة كما ستظهر للزوار.')); ?></p>
     </div>
     <div class="mt-3 mt-md-0 d-flex gap-2">
-      <a href="edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_759fdc242e', 'تعديل')) ?>
+      <a href="edit.php?id=<?php echo (int)$row['id']; ?>" class="btn btn-primary">
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_759fdc242e', 'تعديل')); ?>
       </a>
       <a href="index.php" class="btn btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_19ae074cbf', 'العودة للقائمة')); ?>
       </a>
     </div>
   </div>
@@ -69,31 +69,31 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="card-body">
       <dl class="row mb-0">
         <dt class="col-md-3">Slug</dt>
-        <dd class="col-md-9"><?= h($row['slug']) ?></dd>
+        <dd class="col-md-9"><?php echo h($row['slug']); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_1253eb5642', 'الحالة')) ?></dt>
+        <dt class="col-md-3"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></dt>
         <dd class="col-md-9">
-          <span class="badge <?= $row['status']==='published'?'bg-success':'bg-secondary' ?>">
-            <?= $row['status']==='published'?__('t_c67d973434', 'منشورة'):__('t_2401f018ed', 'مسودّة') ?>
+          <span class="badge <?php echo $row['status']==='published'?'bg-success':'bg-secondary'; ?>">
+            <?php echo $row['status']==='published'?__('t_c67d973434', 'منشورة'):__('t_2401f018ed', 'مسودّة'); ?>
           </span>
         </dd>
 
-        <dt class="col-md-3"><?= h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')) ?></dt>
-        <dd class="col-md-9"><?= h($row['created_at']) ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_d4ef3a02e7', 'تاريخ الإنشاء')); ?></dt>
+        <dd class="col-md-9"><?php echo h($row['created_at']); ?></dd>
 
-        <dt class="col-md-3"><?= h(__('t_4041e7805b', 'آخر تحديث')) ?></dt>
-        <dd class="col-md-9"><?= h($row['updated_at'] ?? '') ?></dd>
+        <dt class="col-md-3"><?php echo h(__('t_4041e7805b', 'آخر تحديث')); ?></dt>
+        <dd class="col-md-9"><?php echo h($row['updated_at'] ?? ''); ?></dd>
       </dl>
     </div>
   </div>
 
   <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
     <div class="card-header" style="background:#020617;border-bottom:1px solid #1f2937;">
-      <h2 class="h6 mb-0"><?= h(__('t_e261adf643', 'محتوى الصفحة')) ?></h2>
+      <h2 class="h6 mb-0"><?php echo h(__('t_e261adf643', 'محتوى الصفحة')); ?></h2>
     </div>
     <div class="card-body">
       <div style="white-space:pre-wrap;word-wrap:break-word;">
-        <?= nl2br(h($row['content'])) ?>
+        <?php echo nl2br(h($row['content'])); ?>
       </div>
     </div>
   </div>

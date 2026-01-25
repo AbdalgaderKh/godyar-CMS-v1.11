@@ -155,78 +155,78 @@ require_once __DIR__ . '/../layout/sidebar.php';
 <div class="admin-content container-fluid py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h1 class="h4 mb-1"><?= h($pageTitle) ?></h1>
-      <div class="text-muted small"><?= h(__('t_9b9b0d2fd9', 'إدارة مصادر RSS/Atom لاستيراد الأخبار تلقائياً.')) ?></div>
+      <h1 class="h4 mb-1"><?php echo h($pageTitle); ?></h1>
+      <div class="text-muted small"><?php echo h(__('t_9b9b0d2fd9', 'إدارة مصادر RSS/Atom لاستيراد الأخبار تلقائياً.')); ?></div>
     </div>
     <form method="post" class="m-0">
       <input type="hidden" name="action" value="fetch_now">
-      <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
-      <button class="btn btn-sm btn-outline-primary" type="submit"><?= h(__('t_61c5b6e1fd', 'جلب الآن')) ?></button>
+      <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
+      <button class="btn btn-sm btn-outline-primary" type="submit"><?php echo h(__('t_61c5b6e1fd', 'جلب الآن')); ?></button>
     </form>
   </div>
 
   <?php if ($flashSuccess): ?>
-    <div class="alert alert-success"><?= h($flashSuccess) ?></div>
+    <div class="alert alert-success"><?php echo h($flashSuccess); ?></div>
   <?php endif; ?>
   <?php if ($flashError): ?>
-    <div class="alert alert-danger"><?= h($flashError) ?></div>
+    <div class="alert alert-danger"><?php echo h($flashError); ?></div>
   <?php endif; ?>
 
   <div class="card mb-4">
-    <div class="card-header"><strong><?= h(__('t_7fd80e5ddc', 'إضافة مصدر')) ?></strong></div>
+    <div class="card-header"><strong><?php echo h(__('t_7fd80e5ddc', 'إضافة مصدر')); ?></strong></div>
     <div class="card-body">
       <form method="post" class="row g-3">
         <input type="hidden" name="action" value="create">
-        <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+        <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
 
         <div class="col-md-4">
-          <label class="form-label"><?= h(__('t_2b778c7a76', 'الاسم')) ?></label>
+          <label class="form-label"><?php echo h(__('t_2b778c7a76', 'الاسم')); ?></label>
           <input class="form-control" name="name" required>
         </div>
         <div class="col-md-5">
-          <label class="form-label"><?= h(__('t_2e1d14fb67', 'رابط RSS/Atom')) ?></label>
+          <label class="form-label"><?php echo h(__('t_2e1d14fb67', 'رابط RSS/Atom')); ?></label>
           <input class="form-control" name="url" required>
         </div>
         <div class="col-md-3">
-          <label class="form-label"><?= h(__('t_0e1f4b2a21', 'تصنيف (اختياري)')) ?></label>
+          <label class="form-label"><?php echo h(__('t_0e1f4b2a21', 'تصنيف (اختياري)')); ?></label>
           <select class="form-select" name="category_id">
             <option value="0">—</option>
             <?php foreach ($cats as $c): ?>
-              <option value="<?= (int)$c['id'] ?>"><?= h((string)$c['name']) ?></option>
+              <option value="<?php echo (int)$c['id']; ?>"><?php echo h((string)$c['name']); ?></option>
             <?php endforeach; ?>
           </select>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label"><?= h(__('t_3b9cf1f4b5', 'الفاصل (دقائق)')) ?></label>
+          <label class="form-label"><?php echo h(__('t_3b9cf1f4b5', 'الفاصل (دقائق)')); ?></label>
           <input class="form-control" type="number" name="fetch_interval_minutes" value="60" min="5">
         </div>
         <div class="col-md-3 d-flex align-items-end">
           <div class="form-check">
             <input class="form-check-input" type="checkbox" name="is_active" id="is_active" checked>
-            <label class="form-check-label" for="is_active"><?= h(__('t_4d3f2e1b8a', 'مفعل')) ?></label>
+            <label class="form-check-label" for="is_active"><?php echo h(__('t_4d3f2e1b8a', 'مفعل')); ?></label>
           </div>
         </div>
         <div class="col-md-6 d-flex align-items-end">
-          <button class="btn btn-primary" type="submit"><?= h(__('t_6b0f1fd3b5', 'حفظ')) ?></button>
+          <button class="btn btn-primary" type="submit"><?php echo h(__('t_6b0f1fd3b5', 'حفظ')); ?></button>
         </div>
       </form>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><strong><?= h(__('t_8e4c6e41c2', 'المصادر')) ?></strong></div>
+    <div class="card-header"><strong><?php echo h(__('t_8e4c6e41c2', 'المصادر')); ?></strong></div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-sm align-middle">
           <thead>
             <tr>
               <th>ID</th>
-              <th><?= h(__('t_2b778c7a76', 'الاسم')) ?></th>
-              <th><?= h(__('t_2e1d14fb67', 'الرابط')) ?></th>
-              <th><?= h(__('t_3b9cf1f4b5', 'الفاصل')) ?></th>
-              <th><?= h(__('t_4d3f2e1b8a', 'الحالة')) ?></th>
-              <th><?= h(__('t_b8cde2321a', 'آخر جلب')) ?></th>
+              <th><?php echo h(__('t_2b778c7a76', 'الاسم')); ?></th>
+              <th><?php echo h(__('t_2e1d14fb67', 'الرابط')); ?></th>
+              <th><?php echo h(__('t_3b9cf1f4b5', 'الفاصل')); ?></th>
+              <th><?php echo h(__('t_4d3f2e1b8a', 'الحالة')); ?></th>
+              <th><?php echo h(__('t_b8cde2321a', 'آخر جلب')); ?></th>
               <th></th>
             </tr>
           </thead>
@@ -237,33 +237,33 @@ require_once __DIR__ . '/../layout/sidebar.php';
               $active = (int)($f['is_active'] ?? 0) === 1;
             ?>
             <tr>
-              <td><?= $fid ?></td>
-              <td><?= h((string)($f['name'] ?? '')) ?></td>
+              <td><?php echo $fid; ?></td>
+              <td><?php echo h((string)($f['name'] ?? '')); ?></td>
               <td style="max-width:420px;">
-                <div class="text-truncate" title="<?= h((string)($f['url'] ?? '')) ?>"><?= h((string)($f['url'] ?? '')) ?></div>
+                <div class="text-truncate" title="<?php echo h((string)($f['url'] ?? '')); ?>"><?php echo h((string)($f['url'] ?? '')); ?></div>
               </td>
-              <td><?= (int)($f['fetch_interval_minutes'] ?? 60) ?>m</td>
-              <td><?= $active ? '<span class="badge bg-success">ON</span>' : '<span class="badge bg-secondary">OFF</span>' ?></td>
-              <td><?= h((string)($f['last_fetched_at'] ?? '')) ?></td>
+              <td><?php echo (int)($f['fetch_interval_minutes'] ?? 60); ?>m</td>
+              <td><?php echo $active ? '<span class="badge bg-success">ON</span>' : '<span class="badge bg-secondary">OFF</span>'; ?></td>
+              <td><?php echo h((string)($f['last_fetched_at'] ?? '')); ?></td>
               <td class="text-end">
                 <div class="btn-group btn-group-sm">
                   <form method="post" class="d-inline">
-                    <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+                    <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
                     <input type="hidden" name="action" value="toggle">
-                    <input type="hidden" name="id" value="<?= $fid ?>">
-                    <input type="hidden" name="to" value="<?= $active ? 0 : 1 ?>">
-                    <button type="submit" class="btn btn-outline-secondary"><?= $active ? 'إيقاف' : 'تفعيل' ?></button>
+                    <input type="hidden" name="id" value="<?php echo $fid; ?>">
+                    <input type="hidden" name="to" value="<?php echo $active ? 0 : 1; ?>">
+                    <button type="submit" class="btn btn-outline-secondary"><?php echo $active ? 'إيقاف' : 'تفعيل'; ?></button>
                   </form>
                   <form method="post" class="d-inline">
-                    <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+                    <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
                     <input type="hidden" name="action" value="test">
-                    <input type="hidden" name="id" value="<?= $fid ?>">
+                    <input type="hidden" name="id" value="<?php echo $fid; ?>">
                     <button type="submit" class="btn btn-outline-info">Test</button>
                   </form>
                   <form method="post" class="d-inline" onsubmit="return confirm('حذف المصدر؟');">
-                    <input type="hidden" name="_token" value="<?= h($csrfToken) ?>">
+                    <input type="hidden" name="_token" value="<?php echo h($csrfToken); ?>">
                     <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id" value="<?= $fid ?>">
+                    <input type="hidden" name="id" value="<?php echo $fid; ?>">
                     <button type="submit" class="btn btn-outline-danger">حذف</button>
                   </form>
                 </div>

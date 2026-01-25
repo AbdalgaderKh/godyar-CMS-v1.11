@@ -109,11 +109,11 @@ $csrf = generate_csrf_token();
 <div class="admin-content  py-4 ">
   <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
-      <h1 class="h4 mb-1"><?= h(__('t_3b33450e32', 'تغطية انتخابية جديدة')) ?></h1>
-      <p class="mb-0 small text-muted"><?= h(__('t_e19fe64f2e', 'إضافة قسم مخصص لتغطية انتخابات معينة يمكن إظهاره أو إخفاؤه من القائمة.')) ?></p>
+      <h1 class="h4 mb-1"><?php echo h(__('t_3b33450e32', 'تغطية انتخابية جديدة')); ?></h1>
+      <p class="mb-0 small text-muted"><?php echo h(__('t_e19fe64f2e', 'إضافة قسم مخصص لتغطية انتخابات معينة يمكن إظهاره أو إخفاؤه من القائمة.')); ?></p>
     </div>
     <a href="index.php" class="btn btn-sm btn-outline-secondary">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_b6a95f6cdd', 'رجوع للقائمة')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_b6a95f6cdd', 'رجوع للقائمة')); ?>
     </a>
   </div>
 
@@ -121,7 +121,7 @@ $csrf = generate_csrf_token();
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $e): ?>
-          <li><?= htmlspecialchars($e, ENT_QUOTES, 'UTF-8') ?></li>
+          <li><?php echo htmlspecialchars($e, ENT_QUOTES, 'UTF-8'); ?></li>
         <?php endforeach; ?>
       </ul>
     </div>
@@ -132,36 +132,36 @@ $csrf = generate_csrf_token();
       <form method="post">
         <?php csrf_field(); ?>
         <div class="mb-3">
-          <label class="form-label"><?= h(__('t_6a10895a03', 'عنوان التغطية الانتخابية')) ?></label>
+          <label class="form-label"><?php echo h(__('t_6a10895a03', 'عنوان التغطية الانتخابية')); ?></label>
           <input type="text" name="title" class="form-control" required
-                 value="<?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
-          <div class="form-text"><?= h(__('t_385e0294c1', 'مثال: انتخابات برلمان 2025 - السودان')) ?></div>
+                 value="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?>">
+          <div class="form-text"><?php echo h(__('t_385e0294c1', 'مثال: انتخابات برلمان 2025 - السودان')); ?></div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label"><?= h(__('t_0781965540', 'الرابط (Slug)')) ?></label>
+          <label class="form-label"><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></label>
           <input type="text" name="slug" class="form-control"
-                 value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
-          <div class="form-text"><?= h(__('t_f5284920c8', 'يمكن تركه فارغاً ليتم توليده تلقائياً من العنوان.')) ?></div>
+                 value="<?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>">
+          <div class="form-text"><?php echo h(__('t_f5284920c8', 'يمكن تركه فارغاً ليتم توليده تلقائياً من العنوان.')); ?></div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label"><?= h(__('t_28ed3bee25', 'وصف / ملاحظات داخلية')) ?></label>
-          <textarea name="description" rows="3" class="form-control"><?= htmlspecialchars($description, ENT_QUOTES, 'UTF-8') ?></textarea>
-          <div class="form-text"><?= h(__('t_40fe0982af', 'وصف داخلي للتغطية أو ملاحظات لفريق التحرير (لا يظهر للزوار).')) ?></div>
+          <label class="form-label"><?php echo h(__('t_28ed3bee25', 'وصف / ملاحظات داخلية')); ?></label>
+          <textarea name="description" rows="3" class="form-control"><?php echo htmlspecialchars($description, ENT_QUOTES, 'UTF-8'); ?></textarea>
+          <div class="form-text"><?php echo h(__('t_40fe0982af', 'وصف داخلي للتغطية أو ملاحظات لفريق التحرير (لا يظهر للزوار).')); ?></div>
         </div>
 
         <div class="mb-3">
-          <label class="form-label"><?= h(__('t_03a577f69a', 'الحالة المبدئية')) ?></label>
+          <label class="form-label"><?php echo h(__('t_03a577f69a', 'الحالة المبدئية')); ?></label>
           <select name="status" class="form-select">
-            <option value="visible" <?= $status === 'visible' ? 'selected' : '' ?>><?= h(__('t_2973521e00', 'ظاهر على الموقع')) ?></option>
-            <option value="hidden" <?= $status === 'hidden' ? 'selected' : '' ?>><?= h(__('t_a39aacaa71', 'مخفي')) ?></option>
-            <option value="archived" <?= $status === 'archived' ? 'selected' : '' ?>><?= h(__('t_c220a1c484', 'أرشيف')) ?></option>
+            <option value="visible" <?php echo $status === 'visible' ? 'selected' : ''; ?>><?php echo h(__('t_2973521e00', 'ظاهر على الموقع')); ?></option>
+            <option value="hidden" <?php echo $status === 'hidden' ? 'selected' : ''; ?>><?php echo h(__('t_a39aacaa71', 'مخفي')); ?></option>
+            <option value="archived" <?php echo $status === 'archived' ? 'selected' : ''; ?>><?php echo h(__('t_c220a1c484', 'أرشيف')); ?></option>
           </select>
         </div>
 
         <button type="submit" class="btn btn-primary">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_c4e40e27fb', 'حفظ التغطية')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?php echo h(__('t_c4e40e27fb', 'حفظ التغطية')); ?>
         </button>
       </form>
     </div>

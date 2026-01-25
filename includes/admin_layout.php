@@ -40,7 +40,7 @@ function render_page(string $title, string $activeHref, callable $contentCb): vo
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= h($title) ?></title>
+<title><?php echo h($title); ?></title>
 <style>
 html,body{margin:0;padding:0}
 :root{
@@ -96,8 +96,8 @@ body{
   </div>
   <nav class="nav-list">
     <?php foreach ($menu as $it): $href=rtrim($it['href'],'/'); $active = ($href === $currentPath)?'active':''; ?>
-      <a class="nav-item <?= $active ?>" href="<?= h($it['href']) ?>">
-        <svg class="gdy-icon h($it['icon']) ?>" aria-hidden="true" focusable="false"><use href="#news"></use></svg><span><?= h($it['text']) ?></span>
+      <a class="nav-item <?php echo $active; ?>" href="<?php echo h($it['href']); ?>">
+        <svg class="gdy-icon h($it['icon']) ?>" aria-hidden="true" focusable="false"><use href="#news"></use></svg><span><?php echo h($it['text']); ?></span>
       </a>
     <?php endforeach; ?>
   </nav>
@@ -108,14 +108,14 @@ body{
     <div class="d-flex align-items-center gap-2">
       <button class="btn-icon btn btn-sm d-lg-none" id="toggleSidebar" title="القائمة"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#toggle"></use></svg></button>
       <div class="user-chip">
-        <div class="user-avatar"><?= h($uInitial) ?></div>
-        <div><div class="fw-semibold"><?= h($u['name'] ?? 'Admin') ?></div><div class="text-white-50 small"><?= h($u['role'] ?? 'admin') ?></div></div>
+        <div class="user-avatar"><?php echo h($uInitial); ?></div>
+        <div><div class="fw-semibold"><?php echo h($u['name'] ?? 'Admin'); ?></div><div class="text-white-50 small"><?php echo h($u['role'] ?? 'admin'); ?></div></div>
       </div>
     </div>
     <div class="header-actions d-flex align-items-center gap-2">
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/settings" title="الإعدادات"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/inbox" title="الرسائل"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg></a>
-      <a class="btn-icon" href="<?= $ADMIN_BASE ?>/logout" title="خروج"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
+      <a class="btn-icon" href="<?php echo $ADMIN_BASE; ?>/settings" title="الإعدادات"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></a>
+      <a class="btn-icon" href="<?php echo $ADMIN_BASE; ?>/inbox" title="الرسائل"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg></a>
+      <a class="btn-icon" href="<?php echo $ADMIN_BASE; ?>/logout" title="خروج"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg></a>
     </div>
   </header>
 
@@ -124,10 +124,10 @@ body{
   </main>
 
   <footer class="footer">
-    <div class="text-white-50">© <?= date('Y') ?> Godyar Pro — جميع الحقوق محفوظة</div>
+    <div class="text-white-50">© <?php echo date('Y'); ?> Godyar Pro — جميع الحقوق محفوظة</div>
     <div class="links">
-      <a href="<?= $ADMIN_BASE ?>/settings">الإعدادات</a>
-      <a href="<?= $ADMIN_BASE ?>/reports">التقارير</a>
+      <a href="<?php echo $ADMIN_BASE; ?>/settings">الإعدادات</a>
+      <a href="<?php echo $ADMIN_BASE; ?>/reports">التقارير</a>
     </div>
   </footer>
 </div>

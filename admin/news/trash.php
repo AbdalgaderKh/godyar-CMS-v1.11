@@ -174,46 +174,46 @@ require_once __DIR__ . '/../layout/sidebar.php';
 <div class="admin-content container-fluid py-4">
   <div class="gdy-page-header d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h1 class="h4 mb-1"><?= h(__('t_3d903708f0', 'سلة المحذوفات — الأخبار')) ?></h1>
-      <p class="text-muted mb-0 small"><?= h(__('t_138b3fd7ad', 'الأخبار التي تم حذفها (حذف ناعم) ويمكن استعادتها أو حذفها نهائياً.')) ?></p>
+      <h1 class="h4 mb-1"><?php echo h(__('t_3d903708f0', 'سلة المحذوفات — الأخبار')); ?></h1>
+      <p class="text-muted mb-0 small"><?php echo h(__('t_138b3fd7ad', 'الأخبار التي تم حذفها (حذف ناعم) ويمكن استعادتها أو حذفها نهائياً.')); ?></p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
       <a href="index.php" class="btn btn-outline-light btn-sm">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_c95e4d9e70', 'عودة لقائمة الأخبار')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_c95e4d9e70', 'عودة لقائمة الأخبار')); ?>
       </a>
     </div>
   </div>
 
   <form class="row g-2 mb-3" method="get" action="">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <div class="col-sm-6 col-md-4 col-lg-3">
-      <input type="text" name="q" value="<?= h($search) ?>" class="form-control form-control-sm"
-             placeholder="<?= h(__('t_f3ac22dd80', 'بحث (العنوان/الرابط)...')) ?>">
+      <input type="text" name="q" value="<?php echo h($search); ?>" class="form-control form-control-sm"
+             placeholder="<?php echo h(__('t_f3ac22dd80', 'بحث (العنوان/الرابط)...')); ?>">
     </div>
     <div class="col-12">
       <div class="d-flex flex-wrap gap-3 align-items-center small">
         <label class="form-check form-check-inline mb-0">
-          <input class="form-check-input" type="checkbox" name="in_content" value="1" <?= $inContent ? 'checked' : '' ?>>
+          <input class="form-check-input" type="checkbox" name="in_content" value="1" <?php echo $inContent ? 'checked' : ''; ?>>
           <span class="form-check-label">بحث داخل المحتوى</span>
         </label>
         <label class="form-check form-check-inline mb-0">
-          <input class="form-check-input" type="checkbox" name="no_image" value="1" <?= $noImage ? 'checked' : '' ?>>
+          <input class="form-check-input" type="checkbox" name="no_image" value="1" <?php echo $noImage ? 'checked' : ''; ?>>
           <span class="form-check-label">بدون صورة</span>
         </label>
         <label class="form-check form-check-inline mb-0">
-          <input class="form-check-input" type="checkbox" name="no_desc" value="1" <?= $noDesc ? 'checked' : '' ?>>
+          <input class="form-check-input" type="checkbox" name="no_desc" value="1" <?php echo $noDesc ? 'checked' : ''; ?>>
           <span class="form-check-label">بدون وصف SEO</span>
         </label>
         <label class="form-check form-check-inline mb-0">
-          <input class="form-check-input" type="checkbox" name="no_keywords" value="1" <?= $noKeywords ? 'checked' : '' ?>>
+          <input class="form-check-input" type="checkbox" name="no_keywords" value="1" <?php echo $noKeywords ? 'checked' : ''; ?>>
           <span class="form-check-label">بدون كلمات مفتاحية</span>
         </label>
       </div>
     </div>
     <div class="col-auto">
       <button type="submit" class="btn btn-outline-secondary btn-sm">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_ab79fc1485', 'بحث')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_ab79fc1485', 'بحث')); ?>
       </button>
     </div>
   </form>
@@ -221,7 +221,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="card shadow-sm glass-card gdy-card">
     <div class="card-body p-0">
       <?php if (empty($items)): ?>
-        <p class="p-3 text-muted mb-0"><?= h(__('t_c1c961de79', 'لا توجد عناصر في سلة المحذوفات حالياً.')) ?></p>
+        <p class="p-3 text-muted mb-0"><?php echo h(__('t_c1c961de79', 'لا توجد عناصر في سلة المحذوفات حالياً.')); ?></p>
       <?php else: ?>
       <div class="gdy-bulkbar px-3 py-2 bg-dark text-light border-bottom border-secondary d-flex align-items-center gap-2 flex-wrap">
         <select id="bulkAction" class="form-select form-select-sm bg-dark border-secondary text-light" style="max-width:220px">
@@ -249,23 +249,23 @@ require_once __DIR__ . '/../layout/sidebar.php';
               <tr>
                 <th style="width:38px"><input type="checkbox" id="checkAll" title="تحديد الكل"></th>
                 <th style="width:70px">#</th>
-                <th style="width:38%"><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
-                <th style="width:20%"><?= h(__('t_615e66bc1b', 'الرابط')) ?></th>
-                <th style="width:140px"><?= h(__('t_4da1d32d5f', 'تاريخ النشر')) ?></th>
-                <th style="width:140px"><?= h(__('t_44b0275acc', 'تاريخ الحذف')) ?></th>
+                <th style="width:38%"><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
+                <th style="width:20%"><?php echo h(__('t_615e66bc1b', 'الرابط')); ?></th>
+                <th style="width:140px"><?php echo h(__('t_4da1d32d5f', 'تاريخ النشر')); ?></th>
+                <th style="width:140px"><?php echo h(__('t_44b0275acc', 'تاريخ الحذف')); ?></th>
                 <th style="width:260px">SEO</th>
-                <th style="width:260px"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <th style="width:260px"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($items as $row): ?>
                 <tr>
-                  <td><input type="checkbox" class="form-check-input row-check" value="<?= (int)$row['id'] ?>" aria-label="select"></td>
-                  <td><?= (int)$row['id'] ?></td>
-                  <td class="text-start"><?= h($row['title'] ?? '') ?></td>
-                  <td><code class="small"><?= h($row['slug'] ?? '') ?></code></td>
-                  <td><small><?= h($row['published_at'] ?? $row['created_at'] ?? '') ?></small></td>
-                  <td><small><?= h($row['deleted_at'] ?? '') ?></small></td>
+                  <td><input type="checkbox" class="form-check-input row-check" value="<?php echo (int)$row['id']; ?>" aria-label="select"></td>
+                  <td><?php echo (int)$row['id']; ?></td>
+                  <td class="text-start"><?php echo h($row['title'] ?? ''); ?></td>
+                  <td><code class="small"><?php echo h($row['slug'] ?? ''); ?></code></td>
+                  <td><small><?php echo h($row['published_at'] ?? $row['created_at'] ?? ''); ?></small></td>
+                  <td><small><?php echo h($row['deleted_at'] ?? ''); ?></small></td>
                   <?php
                     $title = (string)($row['title'] ?? '');
                     $slug  = (string)($row['slug'] ?? '');
@@ -303,22 +303,22 @@ require_once __DIR__ . '/../layout/sidebar.php';
                   ?>
                   <td class="text-start">
                     <div class="d-flex flex-wrap gap-1">
-                      <span class="badge <?= $titleLenOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="طول العنوان"><?= (int)$titleLen ?></span>
-                      <span class="badge <?= $descLenOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="وصف SEO"><?= (int)$seoDescLen ?></span>
-                      <span class="badge <?= $kwOk ? 'bg-success' : 'bg-warning text-dark' ?>" title="عدد الكلمات المفتاحية"><?= (int)$kwCount ?></span>
-                      <span class="badge <?= $slugOk ? 'bg-success' : 'bg-danger' ?>" title="Slug"><?= $slugOk ? 'OK' : '!' ?></span>
-                      <span class="badge <?= $altOk ? 'bg-success' : 'bg-danger' ?>" title="Alt للصور"><?= $altOk ? 'ALT' : 'NO ALT' ?></span>
-                      <span class="badge <?= $imgOk ? 'bg-success' : 'bg-danger' ?>" title="صورة"><?= $imgOk ? 'IMG' : 'NO IMG' ?></span>
+                      <span class="badge <?php echo $titleLenOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="طول العنوان"><?php echo (int)$titleLen; ?></span>
+                      <span class="badge <?php echo $descLenOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="وصف SEO"><?php echo (int)$seoDescLen; ?></span>
+                      <span class="badge <?php echo $kwOk ? 'bg-success' : 'bg-warning text-dark'; ?>" title="عدد الكلمات المفتاحية"><?php echo (int)$kwCount; ?></span>
+                      <span class="badge <?php echo $slugOk ? 'bg-success' : 'bg-danger'; ?>" title="Slug"><?php echo $slugOk ? 'OK' : '!'; ?></span>
+                      <span class="badge <?php echo $altOk ? 'bg-success' : 'bg-danger'; ?>" title="Alt للصور"><?php echo $altOk ? 'ALT' : 'NO ALT'; ?></span>
+                      <span class="badge <?php echo $imgOk ? 'bg-success' : 'bg-danger'; ?>" title="صورة"><?php echo $imgOk ? 'IMG' : 'NO IMG'; ?></span>
                     </div>
                   </td>
                   <td>
                     <div class="actions-wrap">
-                      <a href="restore.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-success">
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_763957a449', 'استعادة')) ?>
+                      <a href="restore.php?id=<?php echo (int)$row['id']; ?>" class="btn btn-sm btn-outline-success">
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_763957a449', 'استعادة')); ?>
                       </a>
-                      <a href="destroy.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-danger"
-                         data-confirm=<?= json_encode(__('t_7276017c1d', 'سيتم حذف الخبر نهائياً ولا يمكن التراجع. هل أنت متأكد؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>>
-                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_f0e389eb4c', 'حذف نهائي')) ?>
+                      <a href="destroy.php?id=<?php echo (int)$row['id']; ?>" class="btn btn-sm btn-outline-danger"
+                         data-confirm=<?php echo json_encode(__('t_7276017c1d', 'سيتم حذف الخبر نهائياً ولا يمكن التراجع. هل أنت متأكد؟'), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>>
+                        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?php echo h(__('t_f0e389eb4c', 'حذف نهائي')); ?>
                       </a>
                     </div>
                   </td>
@@ -335,8 +335,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <nav class="mt-3">
       <ul class="pagination pagination-sm justify-content-center mb-0 flex-wrap">
         <?php for ($i=1; $i<=$totalPages; $i++): ?>
-          <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-            <a class="page-link" href="?page=<?= $i ?>&amp;q=<?= urlencode($search) ?>"><?= $i ?></a>
+          <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+            <a class="page-link" href="?page=<?php echo $i; ?>&amp;q=<?php echo urlencode($search); ?>"><?php echo $i; ?></a>
           </li>
         <?php endfor; ?>
       </ul>
@@ -346,16 +346,16 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var CSRF = <?= json_encode(generate_csrf_token(), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-  var TOTAL = <?= (int)$total ?>;
-  var FILTERS = <?= json_encode([
+  var CSRF = <?php echo json_encode(generate_csrf_token(), JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+  var TOTAL = <?php echo (int)$total; ?>;
+  var FILTERS = <?php echo json_encode([
       'q' => $search,
       'in_content' => $inContent ? 1 : 0,
       'no_image' => $noImage ? 1 : 0,
       'no_desc' => $noDesc ? 1 : 0,
       'no_keywords' => $noKeywords ? 1 : 0,
       'trash' => 1,
-  ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
+  ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
   var checkAll = document.getElementById('checkAll');
   var rowChecks = Array.from(document.querySelectorAll('.row-check'));

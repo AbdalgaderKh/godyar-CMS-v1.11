@@ -52,17 +52,17 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <div class="admin-content gdy-page-header mb-3">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <div>
-          <h1 class="h4 mb-1 text-white fw-bold"><?= h(__('t_95bc86fefd', 'التقارير والإحصائيات')) ?></h1>
+          <h1 class="h4 mb-1 text-white fw-bold"><?php echo h(__('t_95bc86fefd', 'التقارير والإحصائيات')); ?></h1>
           <p class="mb-0" style="color:#e5e7eb;">
-            <?= h(__('t_8f22802321', 'نظرة عامة على أداء الموقع والمحتوى والتفاعل')) ?>
+            <?php echo h(__('t_8f22802321', 'نظرة عامة على أداء الموقع والمحتوى والتفاعل')); ?>
           </p>
         </div>
         <div class="d-flex gap-2 flex-wrap">
           <button class="btn btn-outline-light btn-sm" id="refreshStats">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_061401dc3f', 'تحديث')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_061401dc3f', 'تحديث')); ?>
           </button>
           <button class="btn btn-primary btn-sm" id="exportReport">
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_2204f96079', 'تصدير تقرير')) ?>
+            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_2204f96079', 'تصدير تقرير')); ?>
           </button>
         </div>
       </div>
@@ -73,27 +73,27 @@ require_once __DIR__ . '/../layout/sidebar.php';
       <div class="row g-2 align-items-center">
         <div class="col-md-4">
           <label for="reportRange" class="form-label form-label-sm mb-1">
-            <?= h(__('t_5614285d89', 'نطاق التقارير')) ?>
+            <?php echo h(__('t_5614285d89', 'نطاق التقارير')); ?>
           </label>
           <select id="reportRange" class="form-select form-select-sm">
-            <option value="today"><?= h(__('t_57702288e2', 'اليوم')) ?></option>
-            <option value="week"><?= h(__('t_6218ca9330', 'آخر 7 أيام')) ?></option>
-            <option value="month" selected><?= h(__('t_625082ab10', 'آخر 30 يوم')) ?></option>
-            <option value="custom"><?= h(__('t_7518b95c73', 'نطاق مخصص')) ?></option>
+            <option value="today"><?php echo h(__('t_57702288e2', 'اليوم')); ?></option>
+            <option value="week"><?php echo h(__('t_6218ca9330', 'آخر 7 أيام')); ?></option>
+            <option value="month" selected><?php echo h(__('t_625082ab10', 'آخر 30 يوم')); ?></option>
+            <option value="custom"><?php echo h(__('t_7518b95c73', 'نطاق مخصص')); ?></option>
           </select>
         </div>
         <div class="col-md-4">
           <div class="form-check mt-3 mt-md-4">
             <input class="form-check-input" type="checkbox" value="1" id="autoRefresh">
             <label class="form-check-label small" for="autoRefresh">
-              <?= h(__('t_adf5a7ad8b', 'تفعيل التحديث التلقائي كل 5 دقائق')) ?>
+              <?php echo h(__('t_adf5a7ad8b', 'تفعيل التحديث التلقائي كل 5 دقائق')); ?>
             </label>
           </div>
         </div>
         <div class="col-md-4 text-md-end mt-2 mt-md-4">
           <span class="small text-muted">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_46d91e6900', 'آخر تحديث تقريبي: الآن')) ?>
+            <?php echo h(__('t_46d91e6900', 'آخر تحديث تقريبي: الآن')); ?>
           </span>
         </div>
       </div>
@@ -106,19 +106,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card user-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_c51ea4d1fc', 'المستخدمين')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['users'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_c51ea4d1fc', 'المستخدمين')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['users']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_4559972ed6', 'إجمالي عدد المستخدمين في النظام')) ?></p>
+            <p class="card-description"><?php echo h(__('t_4559972ed6', 'إجمالي عدد المستخدمين في النظام')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../users/" class="card-link">
-              <span><?= h(__('t_796c8c5b15', 'عرض المستخدمين')) ?></span>
+              <span><?php echo h(__('t_796c8c5b15', 'عرض المستخدمين')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -130,19 +130,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card news-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_4f9d357332', 'مقالات الأخبار')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['news'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_4f9d357332', 'مقالات الأخبار')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['news']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_bbf26228e9', 'إجمالي المقالات المنشورة')) ?></p>
+            <p class="card-description"><?php echo h(__('t_bbf26228e9', 'إجمالي المقالات المنشورة')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../news/" class="card-link">
-              <span><?= h(__('t_e06a9f8f17', 'إدارة الأخبار')) ?></span>
+              <span><?php echo h(__('t_e06a9f8f17', 'إدارة الأخبار')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -154,19 +154,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card reports-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_4d4e102c5e', 'التقارير')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['reports'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_4d4e102c5e', 'التقارير')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['reports']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_16f1778bee', 'مؤشرات الأداء والإحصائيات التفصيلية')) ?></p>
+            <p class="card-description"><?php echo h(__('t_16f1778bee', 'مؤشرات الأداء والإحصائيات التفصيلية')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../reports/" class="card-link">
-              <span><?= h(__('t_f741547777', 'عرض التقارير')) ?></span>
+              <span><?php echo h(__('t_f741547777', 'عرض التقارير')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -181,19 +181,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card content-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_c6dac40d6a', 'إدارة المحتوى')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['news'] + $stats['pages'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_c6dac40d6a', 'إدارة المحتوى')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['news'] + $stats['pages']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_67286c3c09', 'الأخبار والمقالات والتصنيفات والوسوم')) ?></p>
+            <p class="card-description"><?php echo h(__('t_67286c3c09', 'الأخبار والمقالات والتصنيفات والوسوم')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../news/" class="card-link">
-              <span><?= h(__('t_c6dac40d6a', 'إدارة المحتوى')) ?></span>
+              <span><?php echo h(__('t_c6dac40d6a', 'إدارة المحتوى')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -205,19 +205,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card categories-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_c6386f9c0e', 'الأقسام')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['categories'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_c6386f9c0e', 'الأقسام')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['categories']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_a369c932e0', 'إدارة الأقسام والتصنيفات الرئيسية')) ?></p>
+            <p class="card-description"><?php echo h(__('t_a369c932e0', 'إدارة الأقسام والتصنيفات الرئيسية')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../categories/" class="card-link">
-              <span><?= h(__('t_6a61e53eba', 'عرض الأقسام')) ?></span>
+              <span><?php echo h(__('t_6a61e53eba', 'عرض الأقسام')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -229,19 +229,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card pages-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_0046fa59f3', 'الصفحات الثابتة')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['pages'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_0046fa59f3', 'الصفحات الثابتة')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['pages']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_dfb8990881', 'من نحن، اتصل بنا، الخدمات، السياسات')) ?></p>
+            <p class="card-description"><?php echo h(__('t_dfb8990881', 'من نحن، اتصل بنا، الخدمات، السياسات')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../pages/" class="card-link">
-              <span><?= h(__('t_01688690f2', 'عرض الصفحات')) ?></span>
+              <span><?php echo h(__('t_01688690f2', 'عرض الصفحات')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -256,19 +256,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card media-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_06dd6988d0', 'مكتبة الوسائط')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['media'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_06dd6988d0', 'مكتبة الوسائط')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['media']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_50442947a8', 'الصور والفيديو والملفات المرفوعة')) ?></p>
+            <p class="card-description"><?php echo h(__('t_50442947a8', 'الصور والفيديو والملفات المرفوعة')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../media/" class="card-link">
-              <span><?= h(__('t_0eecb21bce', 'عرض الوسائط')) ?></span>
+              <span><?php echo h(__('t_0eecb21bce', 'عرض الوسائط')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -280,19 +280,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card slider-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_58a041f8da', 'السلايدر')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['slider'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_58a041f8da', 'السلايدر')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['slider']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_36f5e77f85', 'إدارة شرائح العرض في الصفحة الرئيسية')) ?></p>
+            <p class="card-description"><?php echo h(__('t_36f5e77f85', 'إدارة شرائح العرض في الصفحة الرئيسية')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../slider/" class="card-link">
-              <span><?= h(__('t_eafc27904f', 'إدارة السلايدر')) ?></span>
+              <span><?php echo h(__('t_eafc27904f', 'إدارة السلايدر')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -304,19 +304,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card opinion-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_4a173870d1', 'كتّاب الرأي')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['opinion_authors'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_4a173870d1', 'كتّاب الرأي')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['opinion_authors']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_7ca83f265e', 'إدارة أعمدة وكتّاب الرأي وصفحاتهم')) ?></p>
+            <p class="card-description"><?php echo h(__('t_7ca83f265e', 'إدارة أعمدة وكتّاب الرأي وصفحاتهم')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../opinion_authors/" class="card-link">
-              <span><?= h(__('t_6996ffff9c', 'عرض الكتّاب')) ?></span>
+              <span><?php echo h(__('t_6996ffff9c', 'عرض الكتّاب')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -331,19 +331,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card team-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_cd54bc26ba', 'فريق العمل')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['team'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_cd54bc26ba', 'فريق العمل')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['team']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_ef3eaa6abd', 'إدارة أعضاء فريق التحرير والإدارة')) ?></p>
+            <p class="card-description"><?php echo h(__('t_ef3eaa6abd', 'إدارة أعضاء فريق التحرير والإدارة')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../team/" class="card-link">
-              <span><?= h(__('t_233ca8e8ec', 'عرض الفريق')) ?></span>
+              <span><?php echo h(__('t_233ca8e8ec', 'عرض الفريق')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -355,19 +355,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card ads-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_5750d13d2c', 'الإعلانات')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['ads_active'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_5750d13d2c', 'الإعلانات')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['ads_active']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_a7fbb72cc2', 'إدارة البانرات ومواقع الظهور والحملات')) ?></p>
+            <p class="card-description"><?php echo h(__('t_a7fbb72cc2', 'إدارة البانرات ومواقع الظهور والحملات')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../ads/" class="card-link">
-              <span><?= h(__('t_3d3316a8ed', 'إدارة الإعلانات')) ?></span>
+              <span><?php echo h(__('t_3d3316a8ed', 'إدارة الإعلانات')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>
@@ -379,19 +379,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
         <div class="report-card contact-card">
           <div class="card-header">
             <div class="card-title-section">
-              <h3 class="card-title"><?= h(__('t_cab8942d73', 'رسائل التواصل')) ?></h3>
-              <div class="card-badge"><?= (int)$stats['contacts_new'] ?></div>
+              <h3 class="card-title"><?php echo h(__('t_cab8942d73', 'رسائل التواصل')); ?></h3>
+              <div class="card-badge"><?php echo (int)$stats['contacts_new']; ?></div>
             </div>
             <div class="card-icon">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </div>
           </div>
           <div class="card-body">
-            <p class="card-description"><?= h(__('t_676df33996', 'إدارة الرسائل الواردة من نموذج اتصل بنا')) ?></p>
+            <p class="card-description"><?php echo h(__('t_676df33996', 'إدارة الرسائل الواردة من نموذج اتصل بنا')); ?></p>
           </div>
           <div class="card-footer">
             <a href="../contact/" class="card-link">
-              <span><?= h(__('t_e601e3e5a4', 'عرض الرسائل')) ?></span>
+              <span><?php echo h(__('t_e601e3e5a4', 'عرض الرسائل')); ?></span>
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
             </a>
           </div>

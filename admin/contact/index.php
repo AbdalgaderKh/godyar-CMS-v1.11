@@ -258,34 +258,34 @@ html, body{
 <div class="admin-content container-fluid py-4">
     <div class="admin-content gdy-page-header d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h1 class="h4 text-white mb-1"><?= h(__('t_cab8942d73', 'رسائل التواصل')) ?></h1>
-            <p class="text-muted mb-0 small"><?= h(__('t_e4184e64d9', 'إدارة الرسائل الواردة من نموذج اتصل بنا.')) ?></p>
+            <h1 class="h4 text-white mb-1"><?php echo h(__('t_cab8942d73', 'رسائل التواصل')); ?></h1>
+            <p class="text-muted mb-0 small"><?php echo h(__('t_e4184e64d9', 'إدارة الرسائل الواردة من نموذج اتصل بنا.')); ?></p>
         </div>
     </div>
 
     <?php if (!empty($_GET['error'])): ?>
         <div class="alert alert-danger py-2 mb-3">
-            <?= h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')) ?>
+            <?php echo h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')); ?>
         </div>
     <?php endif; ?>
 
     <div class="card shadow-sm gdy-glass-card">
         <div class="gdy-meta-bar">
             <div class="gdy-meta-stat">
-                <span><?= h(__('t_5258127f34', 'إجمالي الرسائل:')) ?> </span>
-                <strong><?= count($rows) ?></strong>
+                <span><?php echo h(__('t_5258127f34', 'إجمالي الرسائل:')); ?> </span>
+                <strong><?php echo count($rows); ?></strong>
             </div>
             <div class="gdy-meta-stat">
-                <span class="badge-gdy badge-new"><?= h(__('t_da694c6d97', 'جديدة')) ?></span>
-                <span class="badge-gdy badge-replied ms-1"><?= h(__('t_37d8352070', 'تم الرد')) ?></span>
-                <span class="badge-gdy badge-seen ms-1"><?= h(__('t_9e21ea7aee', 'مقروءة')) ?></span>
+                <span class="badge-gdy badge-new"><?php echo h(__('t_da694c6d97', 'جديدة')); ?></span>
+                <span class="badge-gdy badge-replied ms-1"><?php echo h(__('t_37d8352070', 'تم الرد')); ?></span>
+                <span class="badge-gdy badge-seen ms-1"><?php echo h(__('t_9e21ea7aee', 'مقروءة')); ?></span>
             </div>
         </div>
 
         <div class="card-body p-0 gdy-table-wrapper">
             <?php if (empty($rows)): ?>
                 <p class="mb-0 p-3 text-muted text-center">
-                    <?= h(__('t_d5cbdd3879', 'لا توجد رسائل حالياً.')) ?>
+                    <?php echo h(__('t_d5cbdd3879', 'لا توجد رسائل حالياً.')); ?>
                 </p>
             <?php else: ?>
                 <div class="table-responsive">
@@ -293,12 +293,12 @@ html, body{
                         <thead>
                         <tr>
                             <th class="gdy-col-id">#</th>
-                            <th><?= h(__('t_901675875a', 'المرسل')) ?></th>
-                            <th><?= h(__('t_c707d7f2bb', 'البريد')) ?></th>
-                            <th><?= h(__('t_881c23b1d1', 'الموضوع')) ?></th>
-                            <th class="gdy-col-status"><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                            <th class="gdy-col-date"><?= h(__('t_8456f22b47', 'التاريخ')) ?></th>
-                            <th class="gdy-col-actions"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                            <th><?php echo h(__('t_901675875a', 'المرسل')); ?></th>
+                            <th><?php echo h(__('t_c707d7f2bb', 'البريد')); ?></th>
+                            <th><?php echo h(__('t_881c23b1d1', 'الموضوع')); ?></th>
+                            <th class="gdy-col-status"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                            <th class="gdy-col-date"><?php echo h(__('t_8456f22b47', 'التاريخ')); ?></th>
+                            <th class="gdy-col-actions"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -307,39 +307,39 @@ html, body{
                             $status = $r['status'] ?? '';
                             $rowClass = $status === 'new' ? 'gdy-row-new' : '';
                             ?>
-                            <tr class="<?= $rowClass ?>">
-                                <td><?= (int)$r['id'] ?></td>
+                            <tr class="<?php echo $rowClass; ?>">
+                                <td><?php echo (int)$r['id']; ?></td>
                                 <td class="text-start gdy-cell-name">
-                                    <?= h($r['name']) ?>
+                                    <?php echo h($r['name']); ?>
                                 </td>
                                 <td class="gdy-cell-email">
-                                    <small><?= h($r['email']) ?></small>
+                                    <small><?php echo h($r['email']); ?></small>
                                 </td>
                                 <td class="text-start gdy-cell-subject">
-                                    <?= h($r['subject']) ?>
+                                    <?php echo h($r['subject']); ?>
                                 </td>
                                 <td>
                                     <?php if ($status === 'new'): ?>
-                                        <span class="badge-gdy badge-new"><?= h(__('t_da694c6d97', 'جديدة')) ?></span>
+                                        <span class="badge-gdy badge-new"><?php echo h(__('t_da694c6d97', 'جديدة')); ?></span>
                                     <?php elseif ($status === 'replied'): ?>
-                                        <span class="badge-gdy badge-replied"><?= h(__('t_37d8352070', 'تم الرد')) ?></span>
+                                        <span class="badge-gdy badge-replied"><?php echo h(__('t_37d8352070', 'تم الرد')); ?></span>
                                     <?php else: ?>
-                                        <span class="badge-gdy badge-seen"><?= h(__('t_9e21ea7aee', 'مقروءة')) ?></span>
+                                        <span class="badge-gdy badge-seen"><?php echo h(__('t_9e21ea7aee', 'مقروءة')); ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <small><?= h($r['created_at']) ?></small>
+                                    <small><?php echo h($r['created_at']); ?></small>
                                 </td>
                                 <td>
-                                    <a href="view.php?id=<?= (int)$r['id'] ?>"
+                                    <a href="view.php?id=<?php echo (int)$r['id']; ?>"
                                        class="btn btn-outline-info btn-gdy-xs"
-                                       title="<?= h(__('t_99081e2fc8', 'عرض الرسالة')) ?>">
+                                       title="<?php echo h(__('t_99081e2fc8', 'عرض الرسالة')); ?>">
                                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                     </a>
                                     <?php if ($status === 'new'): ?>
-                                        <a href="index.php?seen=<?= (int)$r['id'] ?>"
+                                        <a href="index.php?seen=<?php echo (int)$r['id']; ?>"
                                            class="btn btn-outline-secondary btn-gdy-xs"
-                                           title="<?= h(__('t_0eca496ea9', 'تعيين كمقروءة')) ?>">
+                                           title="<?php echo h(__('t_0eca496ea9', 'تعيين كمقروءة')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                     <?php endif; ?>

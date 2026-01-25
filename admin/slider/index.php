@@ -79,12 +79,12 @@ require_once __DIR__ . '/../layout/sidebar.php';
 <div class="admin-content container-fluid py-4">
   <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h4 mb-1 text-white"><?= h(__('t_58a041f8da', 'السلايدر')) ?></h1>
-      <p class="mb-0" style="color:#e5e7eb;"><?= h(__('t_06aa1b65da', 'إدارة شرائح العرض في الصفحة الرئيسية.')) ?></p>
+      <h1 class="h4 mb-1 text-white"><?php echo h(__('t_58a041f8da', 'السلايدر')); ?></h1>
+      <p class="mb-0" style="color:#e5e7eb;"><?php echo h(__('t_06aa1b65da', 'إدارة شرائح العرض في الصفحة الرئيسية.')); ?></p>
     </div>
     <div class="mt-3 mt-md-0">
       <a href="create.php" class="btn btn-primary">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')); ?>
       </a>
     </div>
   </div>
@@ -92,50 +92,50 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
     <div class="card-body p-0">
       <?php if (empty($rows)): ?>
-        <p class="p-3 mb-0" style="color:#9ca3af;"><?= h(__('t_305bcf385b', 'لا توجد شرائح حالياً.')) ?></p>
+        <p class="p-3 mb-0" style="color:#9ca3af;"><?php echo h(__('t_305bcf385b', 'لا توجد شرائح حالياً.')); ?></p>
       <?php else: ?>
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0 align-middle text-center" style="color:#e5e7eb;">
             <thead style="background:#020617;">
               <tr>
                 <th>#</th>
-                <th><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
-                <th><?= h(__('t_d31bde862c', 'النص الفرعي')) ?></th>
-                <th><?= h(__('t_59df47722a', 'الصورة')) ?></th>
-                <th><?= h(__('t_615e66bc1b', 'الرابط')) ?></th>
-                <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                <th><?= h(__('t_ddda59289a', 'الترتيب')) ?></th>
-                <th><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <th><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
+                <th><?php echo h(__('t_d31bde862c', 'النص الفرعي')); ?></th>
+                <th><?php echo h(__('t_59df47722a', 'الصورة')); ?></th>
+                <th><?php echo h(__('t_615e66bc1b', 'الرابط')); ?></th>
+                <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                <th><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></th>
+                <th><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($rows as $row): ?>
                 <tr>
-                  <td><small><?= (int)$row['id'] ?></small></td>
-                  <td class="text-start"><small><?= h($row['title']) ?></small></td>
-                  <td><small><?= h($row['subtitle']) ?></small></td>
+                  <td><small><?php echo (int)$row['id']; ?></small></td>
+                  <td class="text-start"><small><?php echo h($row['title']); ?></small></td>
+                  <td><small><?php echo h($row['subtitle']); ?></small></td>
                   <td>
                     <?php if (!empty($row['image_path'])): ?>
-                      <small><?= h($row['image_path']) ?></small>
+                      <small><?php echo h($row['image_path']); ?></small>
                     <?php else: ?>
-                      <span class="text-muted small"><?= h(__('t_9d7155f3e3', 'لا يوجد')) ?></span>
+                      <span class="text-muted small"><?php echo h(__('t_9d7155f3e3', 'لا يوجد')); ?></span>
                     <?php endif; ?>
                   </td>
                   <td>
                     <?php if (!empty($row['link_url'])): ?>
-                      <a href="<?= h($row['link_url']) ?>" target="_blank" class="small text-info"><?= h(__('t_b42b9ec2e8', 'فتح')) ?></a>
+                      <a href="<?php echo h($row['link_url']); ?>" target="_blank" class="small text-info"><?php echo h(__('t_b42b9ec2e8', 'فتح')); ?></a>
                     <?php else: ?>
-                      <span class="text-muted small"><?= h(__('t_9d7155f3e3', 'لا يوجد')) ?></span>
+                      <span class="text-muted small"><?php echo h(__('t_9d7155f3e3', 'لا يوجد')); ?></span>
                     <?php endif; ?>
                   </td>
                   <td>
-                    <span class="badge <?= !empty($row['is_active']) ? 'bg-success' : 'bg-secondary' ?>">
-                      <?= !empty($row['is_active']) ? __('t_641298ecec', 'مفعّلة') : __('t_ad0a598276', 'مخفية') ?>
+                    <span class="badge <?php echo !empty($row['is_active']) ? 'bg-success' : 'bg-secondary'; ?>">
+                      <?php echo !empty($row['is_active']) ? __('t_641298ecec', 'مفعّلة') : __('t_ad0a598276', 'مخفية'); ?>
                     </span>
                   </td>
-                  <td><small><?= (int)$row['sort_order'] ?></small></td>
+                  <td><small><?php echo (int)$row['sort_order']; ?></small></td>
                   <td>
-                    <a href="edit.php?id=<?= (int)$row['id'] ?>" class="btn btn-sm btn-outline-primary">
+                    <a href="edit.php?id=<?php echo (int)$row['id']; ?>" class="btn btn-sm btn-outline-primary">
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
                   </td>

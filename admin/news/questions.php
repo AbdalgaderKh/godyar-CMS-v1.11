@@ -164,19 +164,19 @@ require __DIR__ . '/sidebar.php';
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
     <h1 class="h4 m-0">اسأل الكاتب</h1>
     <form class="d-flex flex-wrap gap-2" method="get" action="questions.php">
-      <input type="number" class="form-control form-control-sm" name="news_id" placeholder="ID المقال" value="<?= (int)$filterNewsId ?>" style="max-width:140px">
+      <input type="number" class="form-control form-control-sm" name="news_id" placeholder="ID المقال" value="<?php echo (int)$filterNewsId; ?>" style="max-width:140px">
       <select class="form-select form-select-sm" name="status" style="max-width:160px">
         <option value="">كل الحالات</option>
-        <option value="pending" <?= $filterStatus==='pending'?'selected':'' ?>>قيد المراجعة</option>
-        <option value="approved" <?= $filterStatus==='approved'?'selected':'' ?>>مقبول</option>
-        <option value="rejected" <?= $filterStatus==='rejected'?'selected':'' ?>>مرفوض</option>
+        <option value="pending" <?php echo $filterStatus==='pending'?'selected':''; ?>>قيد المراجعة</option>
+        <option value="approved" <?php echo $filterStatus==='approved'?'selected':''; ?>>مقبول</option>
+        <option value="rejected" <?php echo $filterStatus==='rejected'?'selected':''; ?>>مرفوض</option>
       </select>
       <button class="btn btn-sm btn-outline-secondary">تصفية</button>
     </form>
   </div>
 
   <?php if ($flash['msg'] !== ''): ?>
-    <div class="alert alert-<?= h($flash['type']) ?>"><?= h($flash['msg']) ?></div>
+    <div class="alert alert-<?php echo h($flash['type']); ?>"><?php echo h($flash['msg']); ?></div>
   <?php endif; ?>
 
   <div class="card shadow-sm">
@@ -195,17 +195,17 @@ require __DIR__ . '/sidebar.php';
         <tbody>
         <?php foreach ($rows as $r): ?>
           <tr>
-            <td><?= (int)$r['id'] ?></td>
+            <td><?php echo (int)$r['id']; ?></td>
             <td>
-              <div class="fw-semibold"><?= h((string)$r['news_title']) ?></div>
-              <div class="small text-muted">ID: <?= (int)$r['news_id'] ?></div>
+              <div class="fw-semibold"><?php echo h((string)$r['news_title']); ?></div>
+              <div class="small text-muted">ID: <?php echo (int)$r['news_id']; ?></div>
             </td>
             <td>
               <div class="small text-muted mb-1">
-                <?= h(trim((string)($r['name'] ?? ''))) ?>
-                <?= ($r['email']? '• ' . h((string)$r['email']) : '') ?>
+                <?php echo h(trim((string)($r['name'] ?? ''))); ?>
+                <?php echo ($r['email']? '• ' . h((string)$r['email']) : ''); ?>
               </div>
-              <div><?= nl2br(h((string)$r['question'])) ?></div>
+              <div><?php echo nl2br(h((string)$r['question'])); ?></div>
             </td>
             <td>
               <?php $stt = (string)$r['status']; ?>
@@ -219,13 +219,13 @@ require __DIR__ . '/sidebar.php';
             </td>
             <td>
               <?php if (trim((string)$r['answer']) !== ''): ?>
-                <div><?= nl2br(h((string)$r['answer'])) ?></div>
-                <div class="small text-muted mt-1"><?= h((string)($r['answered_at'] ?? '')) ?></div>
+                <div><?php echo nl2br(h((string)$r['answer'])); ?></div>
+                <div class="small text-muted mt-1"><?php echo h((string)($r['answered_at'] ?? '')); ?></div>
               <?php else: ?>
                 <form method="post" action="questions.php" class="d-flex gap-2">
-                  <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                   <input type="hidden" name="action" value="answer">
-                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                   <textarea class="form-control form-control-sm" name="answer" rows="2" placeholder="اكتب الرد..."></textarea>
                   <button class="btn btn-sm btn-success" type="submit">حفظ</button>
                 </form>
@@ -234,23 +234,23 @@ require __DIR__ . '/sidebar.php';
             <td class="text-end">
               <div class="d-flex justify-content-end gap-2 flex-wrap">
                 <form method="post" action="questions.php">
-                  <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                   <input type="hidden" name="action" value="set_status">
-                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                   <input type="hidden" name="status" value="approved">
                   <button class="btn btn-sm btn-outline-success" type="submit">قبول</button>
                 </form>
                 <form method="post" action="questions.php">
-                  <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                   <input type="hidden" name="action" value="set_status">
-                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                   <input type="hidden" name="status" value="rejected">
                   <button class="btn btn-sm btn-outline-secondary" type="submit">رفض</button>
                 </form>
                 <form method="post" action="questions.php" data-confirm='حذف السؤال؟'>
-                  <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                  <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                   <input type="hidden" name="action" value="delete">
-                  <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                  <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                   <button class="btn btn-sm btn-outline-danger" type="submit">حذف</button>
                 </form>
               </div>

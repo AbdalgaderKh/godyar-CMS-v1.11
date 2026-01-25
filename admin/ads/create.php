@@ -392,17 +392,17 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning">
-            <?= h(__('t_64b2ab32d2', 'جدول')) ?> <code>ads</code> <?= h(__('t_6a688805de', 'غير موجود. الرجاء إنشاء الجدول أولاً.')) ?>
+            <?php echo h(__('t_64b2ab32d2', 'جدول')); ?> <code>ads</code> <?php echo h(__('t_6a688805de', 'غير موجود. الرجاء إنشاء الجدول أولاً.')); ?>
         </div>
     <?php endif; ?>
 
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h($success) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($success); ?>
             <?php if ($adId): ?>
                 <div class="mt-2">
-                    <a href="edit.php?id=<?= $adId ?>" class="btn btn-sm btn-success me-2"><?= h(__('t_e656de3c13', 'تعديل الإعلان')) ?></a>
-                    <a href="index.php" class="btn btn-sm btn-outline-success"><?= h(__('t_1acb4f4494', 'عرض جميع الإعلانات')) ?></a>
+                    <a href="edit.php?id=<?php echo $adId; ?>" class="btn btn-sm btn-success me-2"><?php echo h(__('t_e656de3c13', 'تعديل الإعلان')); ?></a>
+                    <a href="index.php" class="btn btn-sm btn-outline-success"><?php echo h(__('t_1acb4f4494', 'عرض جميع الإعلانات')); ?></a>
                 </div>
             <?php endif; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -411,10 +411,10 @@ require_once __DIR__ . '/../layout/app_start.php';
 
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong><?= h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')) ?></strong>
+            <strong><?php echo h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')); ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
-                    <li><?= h($err) ?></li>
+                    <li><?php echo h($err); ?></li>
                 <?php endforeach; ?>
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -422,7 +422,7 @@ require_once __DIR__ . '/../layout/app_start.php';
     <?php endif; ?>
 
     <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
         <div class="row g-4">
@@ -430,76 +430,76 @@ require_once __DIR__ . '/../layout/app_start.php';
                 <div class="gdy-form-card card shadow-sm">
                     <div class="card-body">
                         <!-- نوع الإعلان -->
-                        <h5 class="mb-3 text-white"><?= h(__('t_b56f6dfe69', 'نوع الإعلان')) ?></h5>
+                        <h5 class="mb-3 text-white"><?php echo h(__('t_b56f6dfe69', 'نوع الإعلان')); ?></h5>
                         <div class="ad-type-switch">
-                            <label class="ad-type-option <?= $data['ad_type'] === 'banner' ? 'active' : '' ?>" id="optBanner">
-                                <input type="radio" name="ad_type" value="banner" <?= $data['ad_type'] === 'banner' ? 'checked' : '' ?>>
-                                <div class="fw-semibold text-white mb-1"><?= h(__('t_3ab68064f1', 'إعلان مصوَّر')) ?></div>
-                                <div class="small text-muted"><?= h(__('t_84d4ccad1e', 'بانر بصورة + رابط')) ?></div>
+                            <label class="ad-type-option <?php echo $data['ad_type'] === 'banner' ? 'active' : ''; ?>" id="optBanner">
+                                <input type="radio" name="ad_type" value="banner" <?php echo $data['ad_type'] === 'banner' ? 'checked' : ''; ?>>
+                                <div class="fw-semibold text-white mb-1"><?php echo h(__('t_3ab68064f1', 'إعلان مصوَّر')); ?></div>
+                                <div class="small text-muted"><?php echo h(__('t_84d4ccad1e', 'بانر بصورة + رابط')); ?></div>
                             </label>
-                            <label class="ad-type-option <?= $data['ad_type'] === 'text' ? 'active' : '' ?>" id="optText">
-                                <input type="radio" name="ad_type" value="text" <?= $data['ad_type'] === 'text' ? 'checked' : '' ?>>
-                                <div class="fw-semibold text-white mb-1"><?= h(__('t_05f6894d94', 'إعلان نصي')) ?></div>
-                                <div class="small text-muted"><?= h(__('t_da4d1e2464', 'نص إعلاني منسق')) ?></div>
+                            <label class="ad-type-option <?php echo $data['ad_type'] === 'text' ? 'active' : ''; ?>" id="optText">
+                                <input type="radio" name="ad_type" value="text" <?php echo $data['ad_type'] === 'text' ? 'checked' : ''; ?>>
+                                <div class="fw-semibold text-white mb-1"><?php echo h(__('t_05f6894d94', 'إعلان نصي')); ?></div>
+                                <div class="small text-muted"><?php echo h(__('t_da4d1e2464', 'نص إعلاني منسق')); ?></div>
                             </label>
                         </div>
 
                         <!-- العنوان والوصف -->
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_8bb8a2cf87', 'عنوان الإعلان *')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_8bb8a2cf87', 'عنوان الإعلان *')); ?></label>
                             <input type="text"
                                    name="title"
                                    class="form-control"
-                                   value="<?= h($data['title']) ?>"
+                                   value="<?php echo h($data['title']); ?>"
                                    maxlength="255"
                                    required>
                             <div class="char-count mt-1" id="titleCount"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_81edd198f5', 'وصف مختصر')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_81edd198f5', 'وصف مختصر')); ?></label>
                             <textarea name="description"
                                       class="form-control"
                                       rows="2"
-                                      maxlength="500"><?= h($data['description']) ?></textarea>
+                                      maxlength="500"><?php echo h($data['description']); ?></textarea>
                             <div class="char-count mt-1" id="descCount"></div>
                         </div>
 
                         <!-- قسم البنر -->
                         <div id="bannerSection">
                             <hr class="border-secondary">
-                            <h5 class="mb-3 text-white"><?= h(__('t_572d7c464b', 'روابط الإعلان المصوَّر')) ?></h5>
+                            <h5 class="mb-3 text-white"><?php echo h(__('t_572d7c464b', 'روابط الإعلان المصوَّر')); ?></h5>
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label text-white">رابط الصورة <?= $data['ad_type']==='banner' ? '*' : '' ?></label>
+                                    <label class="form-label text-white">رابط الصورة <?php echo $data['ad_type']==='banner' ? '*' : ''; ?></label>
                                     <input type="url"
                                            name="image_url"
                                            id="imageUrl"
                                            class="form-control"
                                            placeholder="https://example.com/banner.jpg"
-                                           value="<?= h($data['image_url']) ?>">
+                                           value="<?php echo h($data['image_url']); ?>">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label text-white"><?= h(__('t_2a37b264ac', 'رابط الوجهة (اختياري)')) ?></label>
+                                    <label class="form-label text-white"><?php echo h(__('t_2a37b264ac', 'رابط الوجهة (اختياري)')); ?></label>
                                     <input type="url"
                                            name="target_url"
                                            id="bannerTargetUrl"
                                            class="form-control"
                                            placeholder="https://example.com"
-                                           value="<?= h($data['target_url']) ?>">
+                                           value="<?php echo h($data['target_url']); ?>">
                                 </div>
                             </div>
 
                             <div class="mt-3">
-                                <label class="form-label text-white"><?= h(__('t_0075044f10', 'معاينة الصورة')) ?></label>
+                                <label class="form-label text-white"><?php echo h(__('t_0075044f10', 'معاينة الصورة')); ?></label>
                                 <div class="image-preview" id="imagePreview">
                                     <?php if ($data['image_url']): ?>
-                                        <img src="<?= h($data['image_url']) ?>" alt="<?= h(__('t_529cb8b507', 'معاينة الإعلان')) ?>">
+                                        <img src="<?php echo h($data['image_url']); ?>" alt="<?php echo h(__('t_529cb8b507', 'معاينة الإعلان')); ?>">
                                     <?php else: ?>
                                         <div class="text-muted text-center">
                                             <svg class="gdy-icon mb-2 d-block" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            <small><?= h(__('t_8700a282e6', 'سيظهر معاينة الصورة هنا')) ?></small>
+                                            <small><?php echo h(__('t_8700a282e6', 'سيظهر معاينة الصورة هنا')); ?></small>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -509,25 +509,25 @@ require_once __DIR__ . '/../layout/app_start.php';
                         <!-- قسم النص -->
                         <div id="textSection">
                             <hr class="border-secondary">
-                            <h5 class="mb-3 text-white"><?= h(__('t_815decdd5a', 'المحتوى النصي للإعلان')) ?></h5>
+                            <h5 class="mb-3 text-white"><?php echo h(__('t_815decdd5a', 'المحتوى النصي للإعلان')); ?></h5>
                             <div class="mb-3">
-                                <label class="form-label text-white"><?= h(__('t_6037748e36', 'النص الإعلاني')) ?></label>
+                                <label class="form-label text-white"><?php echo h(__('t_6037748e36', 'النص الإعلاني')); ?></label>
                                 <textarea name="content"
                                           id="textContent"
                                           class="form-control"
                                           rows="6"
-                                          placeholder="<?= h(__('t_dc0087ab25', 'اكتب نص الإعلان هنا...')) ?>"><?= h($data['content']) ?></textarea>
-                                <div class="form-text"><?= h(__('t_fd9015e752', 'يمكنك إدخال HTML بسيط (روابط، أسطر، عناوين صغيرة).')) ?></div>
+                                          placeholder="<?php echo h(__('t_dc0087ab25', 'اكتب نص الإعلان هنا...')); ?>"><?php echo h($data['content']); ?></textarea>
+                                <div class="form-text"><?php echo h(__('t_fd9015e752', 'يمكنك إدخال HTML بسيط (روابط، أسطر، عناوين صغيرة).')); ?></div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label text-white"><?= h(__('t_2a37b264ac', 'رابط الوجهة (اختياري)')) ?></label>
+                                <label class="form-label text-white"><?php echo h(__('t_2a37b264ac', 'رابط الوجهة (اختياري)')); ?></label>
                                 <input type="url"
                                        name="target_url"
                                        id="textTargetUrl"
                                        class="form-control"
                                        placeholder="https://example.com"
-                                       value="<?= h($data['target_url']) ?>">
+                                       value="<?php echo h($data['target_url']); ?>">
                             </div>
                         </div>
 
@@ -540,69 +540,69 @@ require_once __DIR__ . '/../layout/app_start.php';
                 <div class="gdy-form-sidebar card shadow-sm mb-3">
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_1883ca2097', 'موضع ظهور الإعلان *')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_1883ca2097', 'موضع ظهور الإعلان *')); ?></label>
                             <select name="location" id="locationSelect" class="form-select" required>
-                                <option value=""><?= h(__('t_2f6be11313', 'اختر موضعاً...')) ?></option>
+                                <option value=""><?php echo h(__('t_2f6be11313', 'اختر موضعاً...')); ?></option>
                                 <?php foreach ($availableLocations as $key => $label): ?>
-                                    <option value="<?= h($key) ?>" <?= $data['location'] === $key ? 'selected' : '' ?>>
-                                        <?= h($label) ?>
+                                    <option value="<?php echo h($key); ?>" <?php echo $data['location'] === $key ? 'selected' : ''; ?>>
+                                        <?php echo h($label); ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                             <div class="location-info" id="locationDescription">
-                                <?= h(__('t_358a29880c', 'اختر موضعاً لعرض وصفه هنا.')) ?>
+                                <?php echo h(__('t_358a29880c', 'اختر موضعاً لعرض وصفه هنا.')); ?>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_cbd1188e75', 'إعدادات الحالة')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_cbd1188e75', 'إعدادات الحالة')); ?></label>
                             <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" <?= $data['is_active'] ? 'checked' : '' ?>>
-                                <label class="form-check-label text-muted" for="is_active"><?= h(__('t_4b0ef8d9d0', 'الإعلان نشط (يظهر للزوار)')) ?></label>
+                                <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" <?php echo $data['is_active'] ? 'checked' : ''; ?>>
+                                <label class="form-check-label text-muted" for="is_active"><?php echo h(__('t_4b0ef8d9d0', 'الإعلان نشط (يظهر للزوار)')); ?></label>
                             </div>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured" value="1" <?= $data['is_featured'] ? 'checked' : '' ?>>
-                                <label class="form-check-label text-muted" for="is_featured"><?= h(__('t_c87d21b5c4', 'إعلان مميز')) ?></label>
+                                <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured" value="1" <?php echo $data['is_featured'] ? 'checked' : ''; ?>>
+                                <label class="form-check-label text-muted" for="is_featured"><?php echo h(__('t_c87d21b5c4', 'إعلان مميز')); ?></label>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_0ae7138eb3', 'فترة العرض')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_0ae7138eb3', 'فترة العرض')); ?></label>
                             <div class="mb-2">
-                                <small class="text-muted d-block mb-1"><?= h(__('t_2c73fe3b1b', 'تاريخ البداية')) ?></small>
-                                <input type="datetime-local" name="starts_at" id="starts_at" class="form-control" value="<?= h($data['starts_at']) ?>">
+                                <small class="text-muted d-block mb-1"><?php echo h(__('t_2c73fe3b1b', 'تاريخ البداية')); ?></small>
+                                <input type="datetime-local" name="starts_at" id="starts_at" class="form-control" value="<?php echo h($data['starts_at']); ?>">
                             </div>
                             <div class="mb-2">
-                                <small class="text-muted d-block mb-1"><?= h(__('t_845e41c487', 'تاريخ الانتهاء')) ?></small>
-                                <input type="datetime-local" name="ends_at" id="ends_at" class="form-control" value="<?= h($data['ends_at']) ?>">
+                                <small class="text-muted d-block mb-1"><?php echo h(__('t_845e41c487', 'تاريخ الانتهاء')); ?></small>
+                                <input type="datetime-local" name="ends_at" id="ends_at" class="form-control" value="<?php echo h($data['ends_at']); ?>">
                             </div>
-                            <div class="form-text"><?= h(__('t_25aac2b06c', 'اترك الحقول فارغة لعدم تحديد فترة.')) ?></div>
+                            <div class="form-text"><?php echo h(__('t_25aac2b06c', 'اترك الحقول فارغة لعدم تحديد فترة.')); ?></div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-white"><?= h(__('t_1840c7c18b', 'حدود الحملة (اختياري)')) ?></label>
+                            <label class="form-label text-white"><?php echo h(__('t_1840c7c18b', 'حدود الحملة (اختياري)')); ?></label>
                             <div class="row g-2">
                                 <div class="col-6">
-                                    <small class="text-muted d-block mb-1"><?= h(__('t_d1f0764419', 'أقصى نقرات')) ?></small>
-                                    <input type="number" name="max_clicks" class="form-control" min="0" value="<?= h((string)$data['max_clicks']) ?>">
+                                    <small class="text-muted d-block mb-1"><?php echo h(__('t_d1f0764419', 'أقصى نقرات')); ?></small>
+                                    <input type="number" name="max_clicks" class="form-control" min="0" value="<?php echo h((string)$data['max_clicks']); ?>">
                                 </div>
                                 <div class="col-6">
-                                    <small class="text-muted d-block mb-1"><?= h(__('t_7bce279c87', 'أقصى مشاهدات')) ?></small>
-                                    <input type="number" name="max_views" class="form-control" min="0" value="<?= h((string)$data['max_views']) ?>">
+                                    <small class="text-muted d-block mb-1"><?php echo h(__('t_7bce279c87', 'أقصى مشاهدات')); ?></small>
+                                    <input type="number" name="max_views" class="form-control" min="0" value="<?php echo h((string)$data['max_views']); ?>">
                                 </div>
                             </div>
-                            <div class="form-text"><?= h(__('t_74e0062dd6', '0 يعني بدون حد.')) ?></div>
+                            <div class="form-text"><?php echo h(__('t_74e0062dd6', '0 يعني بدون حد.')); ?></div>
                         </div>
 
                         <div class="border-top pt-3 mt-3">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
-                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_9adf67ab83', 'حفظ الإعلان')) ?>
+                                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?php echo h(__('t_9adf67ab83', 'حفظ الإعلان')); ?>
                             </button>
                             <button type="submit" name="save_and_edit" class="btn btn-outline-primary w-100 mb-2">
-                                <?= h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')) ?>
+                                <?php echo h(__('t_dda4dd7c65', 'حفظ والمتابعة في التعديل')); ?>
                             </button>
                             <button type="submit" name="save_and_list" class="btn btn-outline-light w-100">
-                                <?= h(__('t_e934ff7404', 'حفظ والعودة للقائمة')) ?>
+                                <?php echo h(__('t_e934ff7404', 'حفظ والعودة للقائمة')); ?>
                             </button>
                         </div>
                     </div>
@@ -610,13 +610,13 @@ require_once __DIR__ . '/../layout/app_start.php';
 
                 <div class="card shadow-sm">
                     <div class="card-header bg-dark text-light">
-                        <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_cc272853cb', 'نصائح')) ?></strong>
+                        <strong><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_cc272853cb', 'نصائح')); ?></strong>
                     </div>
                     <div class="card-body small text-muted">
                         <ul class="mb-0">
-                            <li><?= h(__('t_9a34e3d290', 'استخدم صوراً بنسبة 16:9 لإعلانات البانر.')) ?></li>
-                            <li><?= h(__('t_97dffc932d', 'اختر موضع الإعلان حسب نوعه وجمهوره.')) ?></li>
-                            <li><?= h(__('t_09c7c0b7a6', 'يمكنك تحديد فترة وقيود للنقرات والمشاهدات.')) ?></li>
+                            <li><?php echo h(__('t_9a34e3d290', 'استخدم صوراً بنسبة 16:9 لإعلانات البانر.')); ?></li>
+                            <li><?php echo h(__('t_97dffc932d', 'اختر موضع الإعلان حسب نوعه وجمهوره.')); ?></li>
+                            <li><?php echo h(__('t_09c7c0b7a6', 'يمكنك تحديد فترة وقيود للنقرات والمشاهدات.')); ?></li>
                         </ul>
                     </div>
                 </div>

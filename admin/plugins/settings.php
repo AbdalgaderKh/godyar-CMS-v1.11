@@ -64,48 +64,48 @@ require_once __DIR__ . '/../layout/sidebar.php';
   <div class="gdy-page-header d-flex justify-content-between align-items-center mb-3">
     <div>
       <h1 class="h4 text-white mb-1">
-        إعدادات الإضافة: <?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>
+        إعدادات الإضافة: <?php echo htmlspecialchars($slug, ENT_QUOTES, 'UTF-8'); ?>
       </h1>
-      <p class="text-muted mb-0"><?= h(__('t_3b8df8cd4f', 'تحكم بالإعدادات الخاصة بهذه الإضافة.')) ?></p>
+      <p class="text-muted mb-0"><?php echo h(__('t_3b8df8cd4f', 'تحكم بالإعدادات الخاصة بهذه الإضافة.')); ?></p>
     </div>
   </div>
 
   <?php if ($error): ?>
-    <div class="alert alert-danger mb-3"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+    <div class="alert alert-danger mb-3"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div>
   <?php elseif (!empty($_GET['saved'])): ?>
-    <div class="alert alert-success mb-3"><?= h(__('t_71974f421e', 'تم حفظ الإعدادات بنجاح.')) ?></div>
+    <div class="alert alert-success mb-3"><?php echo h(__('t_71974f421e', 'تم حفظ الإعدادات بنجاح.')); ?></div>
   <?php endif; ?>
 
   <?php if (!$error): ?>
     <div class="card glass-card gdy-card mb-3">
       <div class="card-body">
         <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_43fdee9c45', 'تفعيل الإضافة في الواجهة')) ?></label>
+            <label class="form-label"><?php echo h(__('t_43fdee9c45', 'تفعيل الإضافة في الواجهة')); ?></label>
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" name="enabled_on_front"
                      id="enabled_on_front"
-                     <?= !empty($settings['enabled_on_front']) ? 'checked' : '' ?>>
-              <label class="form-check-label" for="enabled_on_front"><?= h(__('t_4759637ebc', 'مفعّل')) ?></label>
+                     <?php echo !empty($settings['enabled_on_front']) ? 'checked' : ''; ?>>
+              <label class="form-check-label" for="enabled_on_front"><?php echo h(__('t_4759637ebc', 'مفعّل')); ?></label>
             </div>
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_aa641933cd', 'عدد العناصر المعروضة')) ?></label>
+            <label class="form-label"><?php echo h(__('t_aa641933cd', 'عدد العناصر المعروضة')); ?></label>
             <input type="number" name="items_limit" class="form-control"
-                   value="<?= (int)($settings['items_limit'] ?? 5) ?>" min="1" max="50">
+                   value="<?php echo (int)($settings['items_limit'] ?? 5); ?>" min="1" max="50">
           </div>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_5a217e1a0d', 'عنوان مخصص بالعربية (اختياري)')) ?></label>
+            <label class="form-label"><?php echo h(__('t_5a217e1a0d', 'عنوان مخصص بالعربية (اختياري)')); ?></label>
             <input type="text" name="title_override_ar" class="form-control"
-                   value="<?= htmlspecialchars($settings['title_override_ar'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                   value="<?php echo htmlspecialchars($settings['title_override_ar'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
           </div>
 
-          <button type="submit" class="btn btn-primary"><?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?></button>
-          <a href="index.php" class="btn btn-secondary"><?= h(__('t_59e91d21d2', 'عودة لقائمة الإضافات')) ?></a>
+          <button type="submit" class="btn btn-primary"><?php echo h(__('t_32be3bade9', 'حفظ الإعدادات')); ?></button>
+          <a href="index.php" class="btn btn-secondary"><?php echo h(__('t_59e91d21d2', 'عودة لقائمة الإضافات')); ?></a>
         </form>
       </div>
     </div>

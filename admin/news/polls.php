@@ -254,7 +254,7 @@ require __DIR__ . '/sidebar.php';
   </div>
 
   <?php if ($flash['msg'] !== ''): ?>
-    <div class="alert alert-<?= h($flash['type']) ?>"><?= h($flash['msg']) ?></div>
+    <div class="alert alert-<?php echo h($flash['type']); ?>"><?php echo h($flash['msg']); ?></div>
   <?php endif; ?>
 
   <div class="row g-3">
@@ -275,12 +275,12 @@ require __DIR__ . '/sidebar.php';
             <tbody>
             <?php foreach ($polls as $p): ?>
               <tr>
-                <td><?= (int)$p['id'] ?></td>
+                <td><?php echo (int)$p['id']; ?></td>
                 <td>
-                  <div class="fw-semibold"><?= h((string)$p['news_title']) ?></div>
-                  <div class="small text-muted">ID: <?= (int)$p['news_id'] ?></div>
+                  <div class="fw-semibold"><?php echo h((string)$p['news_title']); ?></div>
+                  <div class="small text-muted">ID: <?php echo (int)$p['news_id']; ?></div>
                 </td>
-                <td><?= h((string)$p['question']) ?></td>
+                <td><?php echo h((string)$p['question']); ?></td>
                 <td>
                   <?php if ((int)$p['is_active'] === 1): ?>
                     <span class="badge text-bg-success">فعّال</span>
@@ -288,7 +288,7 @@ require __DIR__ . '/sidebar.php';
                     <span class="badge text-bg-secondary">موقوف</span>
                   <?php endif; ?>
                 </td>
-                <td class="text-end"><a class="btn btn-sm btn-primary" href="polls.php?edit=<?= (int)$p['id'] ?>">تحرير</a></td>
+                <td class="text-end"><a class="btn btn-sm btn-primary" href="polls.php?edit=<?php echo (int)$p['id']; ?>">تحرير</a></td>
               </tr>
             <?php endforeach; ?>
             <?php if (!$polls): ?>
@@ -302,12 +302,12 @@ require __DIR__ . '/sidebar.php';
 
     <div class="col-12 col-lg-5">
       <div class="card shadow-sm">
-        <div class="card-header fw-bold"><?= $editPoll ? 'تحرير استطلاع' : 'إنشاء استطلاع' ?></div>
+        <div class="card-header fw-bold"><?php echo $editPoll ? 'تحرير استطلاع' : 'إنشاء استطلاع'; ?></div>
         <div class="card-body">
 
           <?php if (!$editPoll): ?>
             <form method="post" action="polls.php">
-              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
               <input type="hidden" name="action" value="create">
 
               <div class="mb-2">
@@ -334,25 +334,25 @@ require __DIR__ . '/sidebar.php';
             </form>
           <?php else: ?>
             <form method="post" action="polls.php">
-              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
               <input type="hidden" name="action" value="save">
-              <input type="hidden" name="poll_id" value="<?= (int)$editPoll['id'] ?>">
+              <input type="hidden" name="poll_id" value="<?php echo (int)$editPoll['id']; ?>">
 
               <div class="mb-2">
                 <label class="form-label">المقال</label>
                 <div class="border rounded p-2 bg-light">
-                  <div class="fw-semibold"><?= h((string)$editPoll['news_title']) ?></div>
-                  <div class="small text-muted">ID: <?= (int)$editPoll['news_id'] ?> • الأصوات: <?= (int)$editVotes ?></div>
+                  <div class="fw-semibold"><?php echo h((string)$editPoll['news_title']); ?></div>
+                  <div class="small text-muted">ID: <?php echo (int)$editPoll['news_id']; ?> • الأصوات: <?php echo (int)$editVotes; ?></div>
                 </div>
               </div>
 
               <div class="mb-2">
                 <label class="form-label">السؤال</label>
-                <input class="form-control" name="question" value="<?= h((string)$editPoll['question']) ?>" required>
+                <input class="form-control" name="question" value="<?php echo h((string)$editPoll['question']); ?>" required>
               </div>
 
               <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="1" id="isActive2" name="is_active" <?= ((int)$editPoll['is_active']===1?'checked':'') ?>>
+                <input class="form-check-input" type="checkbox" value="1" id="isActive2" name="is_active" <?php echo ((int)$editPoll['is_active']===1?'checked':''); ?>>
                 <label class="form-check-label" for="isActive2">فعّال</label>
               </div>
 
@@ -364,9 +364,9 @@ require __DIR__ . '/sidebar.php';
                     <tbody>
                     <?php foreach ($editOpts as $o): ?>
                       <tr>
-                        <td><?= (int)$o['id'] ?><input type="hidden" name="opt_id[]" value="<?= (int)$o['id'] ?>"></td>
-                        <td><input class="form-control form-control-sm" name="opt_label[]" value="<?= h((string)$o['label']) ?>"></td>
-                        <td><input class="form-control form-control-sm" type="number" name="opt_order[]" value="<?= (int)$o['sort_order'] ?>"></td>
+                        <td><?php echo (int)$o['id']; ?><input type="hidden" name="opt_id[]" value="<?php echo (int)$o['id']; ?>"></td>
+                        <td><input class="form-control form-control-sm" name="opt_label[]" value="<?php echo h((string)$o['label']); ?>"></td>
+                        <td><input class="form-control form-control-sm" type="number" name="opt_order[]" value="<?php echo (int)$o['sort_order']; ?>"></td>
                       </tr>
                     <?php endforeach; ?>
                     <?php if (!$editOpts): ?>

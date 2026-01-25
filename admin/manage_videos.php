@@ -176,17 +176,17 @@ require_once __DIR__ . '/layout/app_start.php';
 <div class="container-fluid py-3">
   <div class="d-flex justify-content-end mb-3">
     <a href="index.php" class="btn btn-outline-secondary btn-sm">
-      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
+      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_2f09126266', 'العودة للوحة التحكم')); ?>
     </a>
   </div>
 
     <?php if ($errors): ?>
         <div class="alert alert-danger">
             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')) ?>
+            <?php echo h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')); ?>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $e): ?>
-                    <li><?= h($e) ?></li>
+                    <li><?php echo h($e); ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
@@ -194,7 +194,7 @@ require_once __DIR__ . '/layout/app_start.php';
 
     <?php if ($success): ?>
         <div class="alert alert-success">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($success) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($success); ?>
         </div>
     <?php endif; ?>
 
@@ -205,48 +205,48 @@ require_once __DIR__ . '/layout/app_start.php';
                 <div class="card-body">
                     <h2 class="h6 mb-3">
                         <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?= $editing ? __('t_3dc5805e67', 'تعديل الفيديو') : __('t_ae2be6f43c', 'إضافة فيديو جديد') ?>
+                        <?php echo $editing ? __('t_3dc5805e67', 'تعديل الفيديو') : __('t_ae2be6f43c', 'إضافة فيديو جديد'); ?>
                     </h2>
 
                     <form method="post" action="">
-                        <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
-                        <input type="hidden" name="id" value="<?= (int)($editing['id'] ?? 0) ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+                        <input type="hidden" name="id" value="<?php echo (int)($editing['id'] ?? 0); ?>">
 
                         <div class="mb-3">
-                            <label class="form-label"><?= h(__('t_91d18bfdaf', 'عنوان الفيديو')) ?></label>
+                            <label class="form-label"><?php echo h(__('t_91d18bfdaf', 'عنوان الفيديو')); ?></label>
                             <input type="text"
                                    name="title"
                                    class="form-control"
                                    required
-                                   value="<?= h($editing['title'] ?? '') ?>">
+                                   value="<?php echo h($editing['title'] ?? ''); ?>">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label">
-                                <?= h(__('t_b16a72514e', 'رابط الفيديو (YouTube / Facebook / TikTok / Instagram / Snapchat / Vimeo / Dailymotion)')) ?>
+                                <?php echo h(__('t_b16a72514e', 'رابط الفيديو (YouTube / Facebook / TikTok / Instagram / Snapchat / Vimeo / Dailymotion)')); ?>
                             </label>
                             <input type="url"
                                    name="url"
                                    id="video_url"
                                    class="form-control"
                                    required
-                                   value="<?= h($editing['video_url'] ?? '') ?>"
-                                   placeholder="<?= h(__('t_85dbfef47a', 'مثال: https://www.youtube.com/watch?v=XXXX أو https://www.tiktok.com/... أو https://fb.watch/...')) ?>">
+                                   value="<?php echo h($editing['video_url'] ?? ''); ?>"
+                                   placeholder="<?php echo h(__('t_85dbfef47a', 'مثال: https://www.youtube.com/watch?v=XXXX أو https://www.tiktok.com/... أو https://fb.watch/...')); ?>">
                             <div class="form-text text-muted">
-                                <?= h(__('t_3522381271', '✅ يدعم أغلب منصات الفيديو الشهيرة.')) ?><br>
-                                <?= h(__('t_d181fc0889', '⚠ بعض المنصات مثل Instagram و Snapchat قد لا تسمح بالتشغيل داخل الموقع،
-                                وفي هذه الحالة سيتم فتح الفيديو في تبويب جديد على المنصة الأصلية.')) ?>
+                                <?php echo h(__('t_3522381271', '✅ يدعم أغلب منصات الفيديو الشهيرة.')); ?><br>
+                                <?php echo h(__('t_d181fc0889', '⚠ بعض المنصات مثل Instagram و Snapchat قد لا تسمح بالتشغيل داخل الموقع،
+                                وفي هذه الحالة سيتم فتح الفيديو في تبويب جديد على المنصة الأصلية.')); ?>
                                 <br>
-                                <?= h(__('t_138a029459', 'لاختبار الرابط:')) ?>
-                                <a href="#" id="testVideoLink" target="_blank" rel="noopener noreferrer"><?= h(__('t_7b0fb866e4', 'افتح الرابط في نافذة جديدة')) ?></a>
+                                <?php echo h(__('t_138a029459', 'لاختبار الرابط:')); ?>
+                                <a href="#" id="testVideoLink" target="_blank" rel="noopener noreferrer"><?php echo h(__('t_7b0fb866e4', 'افتح الرابط في نافذة جديدة')); ?></a>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label"><?= h(__('t_81edd198f5', 'وصف مختصر')) ?></label>
+                            <label class="form-label"><?php echo h(__('t_81edd198f5', 'وصف مختصر')); ?></label>
                             <textarea name="description"
                                       class="form-control"
-                                      rows="3"><?= h($editing['description'] ?? '') ?></textarea>
+                                      rows="3"><?php echo h($editing['description'] ?? ''); ?></textarea>
                         </div>
 
                         <div class="form-check mb-3">
@@ -255,15 +255,15 @@ require_once __DIR__ . '/layout/app_start.php';
                                    name="is_active"
                                    id="is_active"
                                    value="1"
-                                <?= !isset($editing['is_active']) || (int)$editing['is_active'] === 1 ? 'checked' : '' ?>>
+                                <?php echo !isset($editing['is_active']) || (int)$editing['is_active'] === 1 ? 'checked' : ''; ?>>
                             <label class="form-check-label" for="is_active">
-                                <?= h(__('t_67be8c29d6', 'تفعيل عرض هذا الفيديو في الواجهة')) ?>
+                                <?php echo h(__('t_67be8c29d6', 'تفعيل عرض هذا الفيديو في الواجهة')); ?>
                             </label>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">
                             <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <?= $editing ? __('t_35f75fe13d', 'تحديث الفيديو') : __('t_417b6442fa', 'حفظ الفيديو') ?>
+                            <?php echo $editing ? __('t_35f75fe13d', 'تحديث الفيديو') : __('t_417b6442fa', 'حفظ الفيديو'); ?>
                         </button>
                     </form>
                 </div>
@@ -276,50 +276,50 @@ require_once __DIR__ . '/layout/app_start.php';
                 <div class="card-body">
                     <h2 class="h6 mb-3">
                         <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?= h(__('t_569c2cfc5d', 'قائمة الفيديوهات')) ?>
+                        <?php echo h(__('t_569c2cfc5d', 'قائمة الفيديوهات')); ?>
                     </h2>
 
                     <?php if (!$videos): ?>
-                        <p class="text-muted mb-0"><?= h(__('t_939b14dffe', 'لا توجد فيديوهات مضافة بعد.')) ?></p>
+                        <p class="text-muted mb-0"><?php echo h(__('t_939b14dffe', 'لا توجد فيديوهات مضافة بعد.')); ?></p>
                     <?php else: ?>
                         <div class="table-responsive">
                             <table class="table table-dark table-striped align-middle mb-0">
                                 <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th><?= h(__('t_6dc6588082', 'العنوان')) ?></th>
-                                    <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                                    <th><?= h(__('t_8456f22b47', 'التاريخ')) ?></th>
-                                    <th class="text-center"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                                    <th><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
+                                    <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                                    <th><?php echo h(__('t_8456f22b47', 'التاريخ')); ?></th>
+                                    <th class="text-center"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php foreach ($videos as $index => $v): ?>
                                     <tr>
-                                        <td><?= $index + 1 ?></td>
+                                        <td><?php echo $index + 1; ?></td>
                                         <td>
-                                            <div class="fw-semibold mb-1"><?= h($v['title'] ?? '') ?></div>
+                                            <div class="fw-semibold mb-1"><?php echo h($v['title'] ?? ''); ?></div>
                                             <div class="small text-muted text-truncate" style="max-width: 260px;">
-                                                <?= h($v['video_url'] ?? '') ?>
+                                                <?php echo h($v['video_url'] ?? ''); ?>
                                             </div>
                                         </td>
                                         <td>
                                             <?php if ((int)($v['is_active'] ?? 0) === 1): ?>
-                                                <span class="video-badge-active"><?= h(__('t_918499f2af', 'مفعل')) ?></span>
+                                                <span class="video-badge-active"><?php echo h(__('t_918499f2af', 'مفعل')); ?></span>
                                             <?php else: ?>
-                                                <span class="video-badge-inactive"><?= h(__('t_60dfc10f77', 'غير مفعل')) ?></span>
+                                                <span class="video-badge-inactive"><?php echo h(__('t_60dfc10f77', 'غير مفعل')); ?></span>
                                             <?php endif; ?>
                                         </td>
                                         <td class="small text-muted">
                                             <?php if (!empty($v['created_at'])): ?>
-                                                <?= h($v['created_at']) ?>
+                                                <?php echo h($v['created_at']); ?>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-center">
-                                            <a href="?edit=<?= (int)$v['id'] ?>" class="btn btn-sm btn-outline-info me-1">
+                                            <a href="?edit=<?php echo (int)$v['id']; ?>" class="btn btn-sm btn-outline-info me-1">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </a>
-                                            <a href="?delete=<?= (int)$v['id'] ?>"
+                                            <a href="?delete=<?php echo (int)$v['id']; ?>"
                                                class="btn btn-sm btn-outline-danger"
                                                data-confirm='هل أنت متأكد من حذف هذا الفيديو؟'>
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>

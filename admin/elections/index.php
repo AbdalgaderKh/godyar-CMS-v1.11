@@ -5,6 +5,7 @@ require_once __DIR__ . '/../_admin_guard.php';
 
 require_once __DIR__ . '/../../includes/bootstrap.php';
 require_once __DIR__ . '/../../includes/functions.php';
+require_once __DIR__ . '/../../includes/site_settings.php';
 require_once __DIR__ . '/_elections_lib.php';
 
 // محاولة تحميل نظام الصلاحيات إن وجد
@@ -63,6 +64,13 @@ if (!$authorized) {
 // =======================
 /** @var PDO|null $pdo */
 $pdo = gdy_pdo_safe();
+
+// إعداد: إظهار/إخفاء رابط الانتخابات في هيدر الواجهة
+// ملاحظة: الواجهة تقرأ هذا الإعداد من storage/settings/site.json (عبر get_setting)
+// لذلك نحافظ على نفس المصدر هنا لضمان أن التغيير يظهر مباشرةً في الهيدر.
+$siteSettings = site_settings_load($pdo);
+$showElectionsLinkInHeader = (((string)($siteSettings['show_elections_link'] ?? '1')) === '1');
+
 if (!($pdo instanceof PDO)) {
     http_response_code(500);
     exit(__('t_ed202270ee', 'قاعدة البيانات غير متاحة حالياً.'));
@@ -113,11 +121,13 @@ $flashError   = '';
 // =======================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    $csrf   = $_POST['csrf_token'] ?? '';
+    $csrf   = $_POST['csrf_token'] ?? $_POST['_csrf_token'] ?? '';
 
     if (!function_exists('verify_csrf_token') || !verify_csrf_token($csrf)) {
         $flashError = __('t_0f296c4fe0', 'فشل التحقق الأمني، يرجى إعادة المحاولة.');
     } else {
+
+        // ---- (A) تغيير حالة تغطية ----
         if ($action === 'set_status') {
             $id     = (int)($_POST['id'] ?? 0);
             $newSt  = (string)($_POST['new_status'] ?? '');
@@ -131,56 +141,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                          WHERE id = :id
                     ");
                     $stmt->execute([':st' => $newSt, ':id' => $id]);
-                    $flashSuccess = __('t_4770efc5dd', 'تم تحديث حالة التغطية بنجاح.');
+                    $flashSuccess = __('t_1b7ab16a1a', 'تم تحديث الحالة بنجاح.');
                 } catch (Throwable $e) {
-                    error_log('[elections index] set_status error: ' . $e->getMessage());
-                    $flashError = __('t_5b5f2fdf6e', 'حدث خطأ أثناء تحديث الحالة.');
+                    $flashError = __('t_7f51b1d6be', 'تعذر تحديث الحالة. حاول لاحقاً.');
                 }
             } else {
-                $flashError = __('t_bd129a6a7d', 'طلب غير صالح.');
+                $flashError = __('t_6a2f8b2544', 'طلب غير صالح.');
             }
 
-        } elseif ($action === 'delete') {
+        // ---- (B) إظهار/إخفاء رابط الانتخابات في الهيدر ----
+        } elseif ($action === 'toggle_header_link') {
+            // ---- (B) إظهار/إخفاء رابط الانتخابات في الهيدر (حفظ في قاعدة البيانات) ----
+            $newVal = isset($_POST['show_elections_link']) ? '1' : '0';
+            $isAjax = (strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest');
 
+            $ok = false;
+            try {
+                $ok = site_settings_set('show_elections_link', $newVal);
+            } catch (Throwable $e) {
+                $ok = false;
+            }
+
+            if ($ok) {
+                $showElectionsLinkInHeader = ($newVal === '1');
+                $flashSuccess = __('t_7c5d0a5f67', 'تم حفظ إعداد إظهار الرابط في الهيدر.');
+            } else {
+                $flashError = __('t_3a2c5d3d10', 'تعذر حفظ الإعداد. تأكد من صلاحيات قاعدة البيانات.');
+            }
+
+            if ($isAjax) {
+				if ($flashError !== '') {
+					http_response_code(500);
+				}
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode([
+                    'ok' => ($flashError === ''),
+                    'show' => ($newVal === '1'),
+                    'message' => ($flashError === '' ? $flashSuccess : $flashError),
+                ], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+        } elseif ($action === 'delete') {
             $id = (int)($_POST['id'] ?? 0);
+
             if ($id > 0) {
                 try {
                     $stmt = $pdo->prepare("DELETE FROM elections WHERE id = :id");
                     $stmt->execute([':id' => $id]);
-                    $flashSuccess = __('t_13538cf967', 'تم حذف التغطية بنجاح.');
+                    $flashSuccess = __('t_4d496c4b7c', 'تم الحذف بنجاح.');
                 } catch (Throwable $e) {
-                    error_log('[elections index] delete error: ' . $e->getMessage());
-                    $flashError = __('t_470e695a0c', 'تعذر حذف التغطية، ربما مرتبطة ببيانات أخرى.');
+                    $flashError = __('t_8f9fcbac9c', 'تعذر الحذف. حاول لاحقاً.');
                 }
+            } else {
+                $flashError = __('t_6a2f8b2544', 'طلب غير صالح.');
             }
 
+        // ---- (D) تحديث جماعي للحالة ----
         } elseif ($action === 'bulk_status') {
+            $ids   = $_POST['ids'] ?? [];
+            $newSt = (string)($_POST['new_status'] ?? '');
 
-            $newSt  = (string)($_POST['new_status'] ?? '');
-            $ids    = $_POST['ids'] ?? [];
-            if (!is_array($ids)) {
-                $ids = [];
-            }
-            $idList = array_map('intval', $ids);
-            $idList = array_filter($idList, static fn($v) => $v > 0);
-
-            if ($idList && in_array($newSt, ['visible','hidden','archived'], true)) {
-                try {
-                    $in  = implode(',', array_fill(0, count($idList), '?'));
-                    $sql = "UPDATE elections SET status = ?, updated_at = NOW() WHERE id IN ($in)";
-                    $stmt = $pdo->prepare($sql);
-                    $params = array_merge([$newSt], $idList);
-                    $stmt->execute($params);
-                    $flashSuccess = __('t_0eeaa2fe67', 'تم تحديث حالة التغطيات المحددة بنجاح.');
-                } catch (Throwable $e) {
-                    error_log('[elections index] bulk_status error: ' . $e->getMessage());
-                    $flashError = __('t_22ed99fb09', 'تعذر تنفيذ عملية التحديث الجماعي.');
+            if (is_array($ids) && in_array($newSt, ['visible','hidden','archived'], true) && count($ids) > 0) {
+                $ids = array_values(array_filter(array_map('intval', $ids), fn($v) => $v > 0));
+                if (count($ids) > 0) {
+                    try {
+                        $place = implode(',', array_fill(0, count($ids), '?'));
+                        $sql = "UPDATE elections SET status = ?, updated_at = NOW() WHERE id IN ($place)";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute(array_merge([$newSt], $ids));
+                        $flashSuccess = __('t_1b7ab16a1a', 'تم تحديث الحالة بنجاح.');
+                    } catch (Throwable $e) {
+                        $flashError = __('t_7f51b1d6be', 'تعذر تحديث الحالة. حاول لاحقاً.');
+                    }
+                } else {
+                    $flashError = __('t_6a2f8b2544', 'طلب غير صالح.');
                 }
+            } else {
+                $flashError = __('t_6a2f8b2544', 'طلب غير صالح.');
             }
+
+        } else {
+            $flashError = __('t_6a2f8b2544', 'طلب غير صالح.');
         }
     }
 }
-
 // =======================
 // 3) بناء شرط WHERE حسب الفلاتر
 // =======================
@@ -286,6 +330,18 @@ $csrf = generate_csrf_token();
       <span class="badge rounded-pill bg-danger">مؤرشف: <?php echo (int)$arcC; ?></span>
     </div>
 
+    <form id="headerLinkToggleForm" method="post" action="" class="d-flex align-items-center gap-2 flex-wrap">
+      <?php echo csrf_field(); ?>
+      <input type="hidden" name="action" value="toggle_header_link">
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" role="switch" id="toggleHeaderLink" name="show_elections_link" value="1" <?php echo $showElectionsLinkInHeader ? 'checked' : ''; ?>>
+        <label class="form-check-label" for="toggleHeaderLink"><?php echo h('إظهار رابط الانتخابات في الهيدر'); ?></label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-sm"><?php echo h('حفظ'); ?></button>
+      <span id="headerLinkSaveStatus" class="text-muted small"></span>
+    </form>
+
+
     <form class="row g-2 align-items-end w-100 w-lg-auto" method="get" action="">
       <div class="col-12 col-md-5">
         <label class="form-label text-muted mb-1"><?php echo h(__('t_ab79fc1485', 'بحث')); ?></label>
@@ -372,7 +428,7 @@ $csrf = generate_csrf_token();
                     <ul class="dropdown-menu dropdown-menu-dark">
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
+                          ">
                           <input type="hidden" name="action" value="set_status">
                           <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="visible">
@@ -381,7 +437,7 @@ $csrf = generate_csrf_token();
                       </li>
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
+                          ">
                           <input type="hidden" name="action" value="set_status">
                           <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="hidden">
@@ -390,7 +446,7 @@ $csrf = generate_csrf_token();
                       </li>
                       <li>
                         <form method="post" action="" class="px-3 py-1">
-                          <input type="hidden" name="_csrf_token" value="<?php echo h($csrf); ?>">
+                          ">
                           <input type="hidden" name="action" value="set_status">
                           <input type="hidden" name="id" value="<?php echo (int)$it['id']; ?>">
                           <input type="hidden" name="new_status" value="archived">
@@ -453,4 +509,50 @@ $csrf = generate_csrf_token();
   </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var form   = document.getElementById('headerLinkToggleForm');
+  var toggle = document.getElementById('toggleHeaderLink');
+  var status = document.getElementById('headerLinkSaveStatus');
+
+  if (!form || !toggle) return;
+
+  async function submitToggle() {
+    if (status) status.textContent = '...';
+    try {
+      var fd = new FormData(form);
+
+      // Ensure value is sent even when unchecked (FormData omits unchecked checkboxes)
+      if (!toggle.checked) {
+        fd.delete('show_elections_link');
+      }
+
+      var res = await fetch(form.getAttribute('action') || window.location.href, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: fd,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+
+      // Try read JSON response for success/failure message
+      var json = null;
+      try { json = await res.json(); } catch (err) { json = null; }
+
+      if (!res.ok || (json && json.ok === false)) {
+        throw new Error((json && json.message) ? json.message : ('HTTP ' + res.status));
+      }
+
+      if (status) status.textContent = 'تم الحفظ';
+      setTimeout(function () { window.location.reload(); }, 350);
+    } catch (e) {
+      if (status) status.textContent = 'فشل الحفظ';
+      alert((e && e.message) ? e.message : 'تعذر حفظ الإعدادات. حاول مرة أخرى.');
+    }
+  }
+
+  toggle.addEventListener('change', function () {
+    submitToggle();
+  });
+});
+</script>
 <?php require_once __DIR__ . '/../layout/app_end.php'; ?>

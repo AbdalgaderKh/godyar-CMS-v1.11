@@ -343,8 +343,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					$basePath = $baseUrl !== '' ? rtrim((string)(parse_url($baseUrl, PHP_URL_PATH) ?: ''), '/') : '';
 					$urlPrefix = ($basePath !== '' ? $basePath : '') . '/uploads/news';
 
-					$res = \Godyar\SafeUploader::upload($_FILES['image'], [
-						'max_bytes' => 5 * 1024 * 1024,
+						$destDir = dirname(__DIR__, 2) . '/uploads/news';
+						if (!is_dir($destDir)) {
+							@mkdir($destDir, 0755, true);
+						}
+						if (!is_dir($destDir) || !is_writable($destDir)) {
+							$errors['image'] = __('t_0a5d0c9fd7', 'مجلد رفع الصور غير موجود أو غير قابل للكتابة: ') . $destDir;
+							throw new RuntimeException('Uploads directory not writable: ' . $destDir);
+						}
+
+						$res = \Godyar\SafeUploader::upload($_FILES['image'], [
+							// Increase limit to reduce failures caused by typical phone images.
+							'max_bytes' => 12 * 1024 * 1024,
 						'allowed_ext' => ['jpg','jpeg','png','gif','webp'],
 						'allowed_mime' => [
 							'jpg'  => ['image/jpeg'],
@@ -353,7 +363,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							'gif'  => ['image/gif'],
 							'webp' => ['image/webp'],
 						],
-						'dest_abs_dir' => dirname(__DIR__, 2) . '/uploads/news',
+						'dest_abs_dir' => $destDir,
 						'url_prefix'   => $urlPrefix,
 					]);
 
@@ -371,8 +381,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				} catch (Throwable $e) {
 					$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
 				}
-			} else {
-				$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+				} else {
+					$code = (int)($_FILES['image']['error'] ?? 0);
+					$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.') . ' (Upload error: ' . $code . ')';
 			}
 		}
 

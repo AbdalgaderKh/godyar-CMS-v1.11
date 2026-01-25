@@ -1,127 +1,110 @@
-/* Service Worker for Godyar CMS - offline cache + push notifications */
-/* eslint-disable no-restricted-globals */
+/* Service Worker (safe defaults)
+ * - Avoids caching/admin interception to prevent CSRF/session issues
+ * - Caches only a minimal offline page
+ * - Runtime caches static assets for frontend GET requests
+ */
 
-const CACHE_VERSION = 'v1';
-const CACHE_NAME = `godyar-cache-${CACHE_VERSION}`;
+// Bump this value whenever you change caching behaviour to force a Service Worker refresh.
+const CACHE_NAME = 'godyar-cache-v4';
 const OFFLINE_URL = '/offline.html';
 
-const CORE_ASSETS = [
-  '/',
+// Minimal precache (keep this short and ensure files exist)
+const PRECACHE_URLS = [
   OFFLINE_URL,
-  '/assets/vendor/bootstrap/css/bootstrap.rtl.min.css',
-  '/assets/vendor/bootstrap/js/bootstrap.bundle.min.js',
-  '/assets/css/app.css',
-  '/assets/js/app.js',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
 ];
 
-/** Pre-cache core assets */
 self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    await cache.addAll(CORE_ASSETS);
-  })());
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting())
+      .catch(() => self.skipWaiting())
+  );
 });
 
-/** Cleanup old caches */
 self.addEventListener('activate', (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : null)));
-    await self.clients.claim();
-  })());
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : Promise.resolve())));
+      await self.clients.claim();
+    })()
+  );
 });
 
-/**
- * Fetch strategy:
- * - HTML navigations: network-first with offline fallback
- * - Other GET same-origin: cache-first then network; cache successful responses
- */
+self.addEventListener('message', (event) => {
+  if (event && event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+function isAdminRequest(url) {
+  try {
+    return url.pathname.startsWith('/admin');
+  } catch (e) {
+    return false;
+  }
+}
+
+function isStaticAsset(url) {
+  const p = url.pathname;
+  return (
+    p.endsWith('.css') || p.endsWith('.js') || p.endsWith('.png') || p.endsWith('.jpg') ||
+    p.endsWith('.jpeg') || p.endsWith('.webp') || p.endsWith('.svg') || p.endsWith('.woff') ||
+    p.endsWith('.woff2') || p.endsWith('.ttf') || p.endsWith('.ico')
+  );
+}
+
 self.addEventListener('fetch', (event) => {
-  const request = event.request;
+  const req = event.request;
 
-  // Only handle GET and same-origin
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
-
-  const accept = request.headers.get('accept') || '';
-  const isNavigation = request.mode === 'navigate' || accept.includes('text/html');
-
-  if (isNavigation) {
-    event.respondWith((async () => {
-      try {
-        const response = await fetch(request);
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(request, response.clone());
-        return response;
-      } catch (e) {
-        const cache = await caches.open(CACHE_NAME);
-        return (await cache.match(request)) || (await cache.match(OFFLINE_URL));
-      }
-    })());
+  // Never handle non-GET (prevents CSRF/session problems)
+  if (req.method !== 'GET') {
     return;
   }
 
-  event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(request);
-    if (cached) return cached;
+  const url = new URL(req.url);
 
-    try {
-      const response = await fetch(request);
-      if (response?.ok) {
-        cache.put(request, response.clone());
-      }
-      return response;
-    } catch (e) {
-      return new Response('', { status: 504 });
-    }
-  })());
-});
-
-/* Push Notifications (payload should include title/body/icon/url) */
-self.addEventListener('push', (event) => {
-  let data = {};
-  try {
-    data = event.data ? event.data.json() : {};
-  } catch (e) {
-    data = {};
+  // Do not intercept admin at all
+  if (isAdminRequest(url)) {
+    return;
   }
 
-  const title = data.title || 'Godyar News';
-  const options = {
-    body: data.body || 'خبر جديد',
-    icon: data.icon || '/icons/icon-192x192.png',
-    badge: data.badge || '/icons/badge-72x72.png',
-    data: { url: data.url || '/' },
-  };
-
-  event.waitUntil(self.registration.showNotification(title, options));
-});
-
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-
-  const urlToOpen = event.notification?.data?.url
-    ? event.notification.data.url
-    : '/';
-
-  event.waitUntil((async () => {
-    const allClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
-
-    for (const client of allClients) {
-      try {
-        if (client.url === urlToOpen && 'focus' in client) {
-          return client.focus();
+  // For same-origin static assets: cache-first
+  if (url.origin === self.location.origin && isStaticAsset(url)) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(req);
+        if (cached) return cached;
+        try {
+          const res = await fetch(req);
+          // Cache only successful (basic) responses
+          if (res && res.ok) {
+            cache.put(req, res.clone());
+          }
+          return res;
+        } catch (e) {
+          return cached || Response.error();
         }
-      } catch (e) {}
-    }
+      })()
+    );
+    return;
+  }
 
-    if (clients.openWindow) {
-      return clients.openWindow(urlToOpen);
-    }
-  })());
+  // For navigations: network-first with offline fallback
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      (async () => {
+        try {
+          const res = await fetch(req);
+          return res;
+        } catch (e) {
+          const cache = await caches.open(CACHE_NAME);
+          const offline = await cache.match(OFFLINE_URL);
+          return offline || new Response('Offline', { status: 503, statusText: 'Offline' });
+        }
+      })()
+    );
+  }
 });

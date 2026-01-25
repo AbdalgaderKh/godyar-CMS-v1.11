@@ -1,389 +1,246 @@
-/**
- * Godyar PWA helper (no inline handlers)
- * - Service Worker registration + update UX
- * - Install prompt banner (Chrome/Edge/Android)
-  // ---------------------------
-  let deferredPrompt = null;
- * - iOS Add-to-Home-Screen tip (Safari)
+/*
+ * PWA helper (stable)
+ * - Registers the service worker
+ * - Handles beforeinstallprompt with an explicit user gesture (button)
+ * - Prompts for update when a new service worker is waiting
  */
-(function () {
 
-        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
-        // عندها نعرض إرشاداً مختصراً للمستخدم.
-        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
-          alert(isIOS
-            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
-            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
-          return;
-        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
-        // عندها نعرض إرشاداً مختصراً للمستخدم.
-        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
-          customAlert(isIOS
-            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
-            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
-          return;
-      try { return localStorage.getItem(key); } catch (e) { return null; }
-    if (closeBtn) {
-      closeBtn.addEventListener("click", function () {
-        ls.set("gdy_install_dismissed", "1");
-        banner.remove();
-      // If controller changes, reload once (after user accepted)
-    navigator.serviceWorker.addEventListener("controllerchange", function () {
-      // We reload only if user already accepted update banner
-      if (ls.get("gdy_sw_reload") === "1") {
-        ls.set("gdy_sw_reload", "0");
-      if (btnLater) {
-      btnLater.addEventListener("click", function () {
-        banner.remove();
-      if (closeBtn) {
-      closeBtn.addEventListener("click", function () {
-        ls.set("gdy_install_dismissed", "1");
-        banner.remove();
-      });
-    });
+(function () {
+  'use strict';
+
+  var INSTALL_DISMISSED_KEY = 'pwa_install_dismissed_v1';
+  var UPDATE_DISMISSED_KEY  = 'pwa_update_dismissed_v1';
+
+  function lsGet(key) {
+    try {
+      return window.localStorage.getItem(key);
+    } catch (e) {
+      return null;
     }
   }
-    });
-    },
-    set(key, val) {
-      try { localStorage.setItem(key, val); } catch (e) {}
+
+  function lsSet(key, val) {
+    try {
+      window.localStorage.setItem(key, val);
+    } catch (e) {
+      // ignore
     }
-  };
+  }
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  const isStandalone = (function () {
-    const iosStandalone = (navigator.standalone === true);
-    const displayStandalone = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
-    return iosStandalone || displayStandalone;
-  })();
+  function removeEl(el) {
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
+  }
 
-  // ---------------------------
-  // Install prompt (Chromium)
-  // ---------------------------
-  let deferredPrompt = null;
+  function createBanner(id, titleText, bodyText, primaryText, secondaryText) {
+    // Avoid duplicates
+    if (document.getElementById(id)) return document.getElementById(id);
 
-  window.addEventListener("beforeinstallprompt", function (e) {
-    /*
-      ملاحظة مهمة:
-      بعض المتصفحات (Chromium) تعرض تحذير Console مثل:
-      "Banner not shown: beforeinstallpromptevent.preventDefault() called..."
-      إذا تم استدعاء preventDefault() ولم يتم استدعاء prompt() لاحقاً.
+    var wrap = document.createElement('div');
+    wrap.id = id;
+    wrap.setAttribute('dir', 'rtl');
+    wrap.style.position = 'fixed';
+    wrap.style.left = '16px';
+    wrap.style.right = '16px';
+    wrap.style.bottom = '16px';
+    wrap.style.zIndex = '99999';
+    wrap.style.background = 'rgba(10, 18, 30, 0.95)';
+    wrap.style.color = '#fff';
+    wrap.style.borderRadius = '12px';
+    wrap.style.padding = '14px';
+    wrap.style.boxShadow = '0 10px 30px rgba(0,0,0,.35)';
 
-      لتجنب هذا التحذير نهائياً، لا نستدعي preventDefault هنا.
-      نترك المتصفح يدير عرض التنبيه تلقائياً، ونستخدم البانر كإرشاد اختياري.
-    */
+    var title = document.createElement('div');
+    title.style.fontWeight = '700';
+    title.style.marginBottom = '6px';
+    title.textContent = titleText;
 
+    var body = document.createElement('div');
+    body.style.opacity = '0.9';
+    body.style.marginBottom = '12px';
+    body.textContent = bodyText;
+
+    var actions = document.createElement('div');
+    actions.style.display = 'flex';
+    actions.style.gap = '10px';
+
+    var primary = document.createElement('button');
+    primary.type = 'button';
+    primary.textContent = primaryText;
+    primary.style.flex = '0 0 auto';
+    primary.style.padding = '10px 14px';
+    primary.style.borderRadius = '10px';
+    primary.style.border = '0';
+    primary.style.cursor = 'pointer';
+    primary.style.fontWeight = '700';
+
+    var secondary = document.createElement('button');
+    secondary.type = 'button';
+    secondary.textContent = secondaryText;
+    secondary.style.flex = '0 0 auto';
+    secondary.style.padding = '10px 14px';
+    secondary.style.borderRadius = '10px';
+    secondary.style.border = '1px solid rgba(255,255,255,.25)';
+    secondary.style.background = 'transparent';
+    secondary.style.color = '#fff';
+    secondary.style.cursor = 'pointer';
+
+    actions.appendChild(primary);
+    actions.appendChild(secondary);
+
+    wrap.appendChild(title);
+    wrap.appendChild(body);
+    wrap.appendChild(actions);
+
+    document.body.appendChild(wrap);
+
+    // attach handles
+    wrap._primaryBtn = primary;
+    wrap._secondaryBtn = secondary;
+
+    return wrap;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Service Worker + Update flow
+  // ---------------------------------------------------------------------------
+
+  function showUpdateBanner(reg) {
+    if (!reg || !reg.waiting) return;
+    if (lsGet(UPDATE_DISMISSED_KEY) === '1') return;
+
+    var banner = createBanner(
+      'pwa-update-banner',
+      'تحديث متوفر',
+      'يوجد إصدار جديد. هل تريد تحديث الموقع الآن؟',
+      'تحديث الآن',
+      'لاحقاً'
+    );
+
+    banner._primaryBtn.onclick = function () {
+      try {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      } catch (e) {
+        // ignore
+      }
+      removeEl(banner);
+    };
+
+    banner._secondaryBtn.onclick = function () {
+      lsSet(UPDATE_DISMISSED_KEY, '1');
+      removeEl(banner);
+    };
+
+    // Reload on controller change
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (reloaded) return;
+      reloaded = true;
+      window.location.reload();
+    });
+  }
+
+  function registerServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+
+    navigator.serviceWorker
+      .register('/sw.js', { scope: '/' })
+      .then(function (reg) {
+        // If there's already a waiting SW (after refresh), offer update
+        if (reg.waiting) {
+          showUpdateBanner(reg);
+        }
+
+        reg.addEventListener('updatefound', function () {
+          var newWorker = reg.installing;
+          if (!newWorker) return;
+
+          newWorker.addEventListener('statechange', function () {
+            // Installed + controller exists => update ready
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateBanner(reg);
+            }
+          });
+        });
+      })
+      .catch(function () {
+        // ignore
+      });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Install prompt flow
+  // ---------------------------------------------------------------------------
+
+  var deferredPrompt = null;
+
+  function showInstallBanner() {
+    if (!deferredPrompt) return;
+    if (lsGet(INSTALL_DISMISSED_KEY) === '1') return;
+
+    var banner = createBanner(
+      'pwa-install-banner',
+      'تثبيت التطبيق',
+      'يمكنك تثبيت الموقع كتطبيق للوصول السريع.',
+      'تثبيت',
+      'لاحقاً'
+    );
+
+    banner._primaryBtn.onclick = function () {
+      // Must be triggered by a user gesture
+      var p = deferredPrompt;
+      deferredPrompt = null;
+
+      if (!p || !p.prompt) {
+        removeEl(banner);
+        return;
+      }
+
+      try {
+        p.prompt();
+      } catch (e) {
+        removeEl(banner);
+        return;
+      }
+
+      // userChoice may not exist in some browsers
+      if (p.userChoice && typeof p.userChoice.then === 'function') {
+        p.userChoice
+          .then(function (choice) {
+            if (choice && choice.outcome !== 'accepted') {
+              lsSet(INSTALL_DISMISSED_KEY, '1');
+            }
+          })
+          .finally(function () {
+            removeEl(banner);
+          });
+      } else {
+        removeEl(banner);
+      }
+    };
+
+    banner._secondaryBtn.onclick = function () {
+      lsSet(INSTALL_DISMISSED_KEY, '1');
+      deferredPrompt = null;
+      removeEl(banner);
+    };
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    // If you call preventDefault, Chrome will not auto-show the mini-infobar.
+    // You must later call prompt() from a user gesture.
+    e.preventDefault();
     deferredPrompt = e;
-
-    // Don't show if already dismissed recently
-    if (ls.get("gdy_install_dismissed") === "1") return;
-
-  window.addEventListener("appinstalled", function () {
-    deferredPrompt = null;
-    ls.set("gdy_install_dismissed", "1");
-    const b = document.getElementById("gdyInstallBanner");
-  window.addEventListener("appinstalled", function () {
-    deferredPrompt = null;
-    ls.set("gdy_install_dismissed", "1");
-    const b = document.getElementById("gdyInstallBanner");
     showInstallBanner();
   });
 
-  window.addEventListener("appinstalled", function () {
-    deferredPrompt = null;
-    ls.set("gdy_install_dismissed", "1");
-    const b = document.getElementById("gdyInstallBanner");
-    if (b) b.remove();
+  // ---------------------------------------------------------------------------
+  // Boot
+  // ---------------------------------------------------------------------------
+
+  document.addEventListener('DOMContentLoaded', function () {
+    registerServiceWorker();
   });
 
-  function showInstallBanner() {
-    if (isStandalone) return;
-    if (document.getElementById("gdyInstallBanner")) return;
-
-    const banner = document.createElement("div");
-    banner.id = "gdyInstallBanner";
-    banner.className = "gdy-install-banner";
-    banner.setAttribute("role", "dialog");
-    banner.setAttribute("aria-label", "تثبيت التطبيق");
-
-    const inner = document.createElement('div');
-    inner.className = 'gdy-install-banner__inner';
-
-    const text = document.createElement('div');
-    text.className = 'gdy-install-banner__text';
-
-    const title = document.createElement('div');
-    title.className = 'gdy-install-banner__title';
-    title.textContent = '📱 ثبّت غديار كتطبيق';
-
-    const desc = document.createElement('div');
-    desc.className = 'gdy-install-banner__desc';
-    desc.textContent = 'تجربة أسرع + دعم عدم الاتصال';
-
-    text.appendChild(title);
-    text.appendChild(desc);
-
-    const actions = document.createElement('div');
-    actions.className = 'gdy-install-banner__actions';
-
-    const installNow = document.createElement('button');
-    installNow.type = 'button';
-    installNow.id = 'gdyInstallNow';
-    installNow.className = 'gdy-install-banner__btn';
-    installNow.textContent = 'تثبيت';
-
-    const dismiss = document.createElement('button');
-    dismiss.type = 'button';
-    dismiss.id = 'gdyInstallDismiss';
-    dismiss.className = 'gdy-install-banner__close';
-    dismiss.setAttribute('aria-label', 'إغلاق');
-    dismiss.textContent = '×';
-
-    actions.appendChild(installNow);
-    actions.appendChild(dismiss);
-
-    inner.appendChild(text);
-    inner.appendChild(actions);
-    banner.appendChild(inner);
-
-    document.body.appendChild(banner);
-
-    const installBtn = document.getElementById("gdyInstallNow");
-    const closeBtn = document.getElementById("gdyInstallDismiss");
-
-    if (installBtn) {
-      installBtn.addEventListener("click", function () {
-        // في بعض المتصفحات/السيناريوهات قد لا يكون prompt متاحاً.
-        // عندها نعرض إرشاداً مختصراً للمستخدم.
-        if (!deferredPrompt || typeof deferredPrompt.prompt !== 'function') {
-          alert(isIOS
-            ? 'على iPhone/iPad: من زر المشاركة اختر "Add to Home Screen".'
-            : 'من قائمة المتصفح اختر "تثبيت التطبيق" أو "Add to Home screen".');
-          return;
-        }
-
-        deferredPrompt.prompt();
-        if (deferredPrompt.userChoice && typeof deferredPrompt.userChoice.then === 'function') {
-          deferredPrompt.userChoice.then(() => {
-            deferredPrompt = null;
-          });
-        } else {
-          deferredPrompt = null;
-        }
-      });
-    }
-
-    if (closeBtn) {
-      closeBtn.addEventListener("click", function () {
-        ls.set("gdy_install_dismissed", "1");
-        banner.remove();
-      });
-    }
-  }
-
-  // ---------------------------
-  // iOS A2HS tip (Safari)
-  // ---------------------------
-  function showIosTip() {
-    if (!isIOS || isStandalone) return;
-    if (ls.get("gdy_ios_a2hs_dismissed") === "1") return;
-    if (document.getElementById("gdyIosA2hsTip")) return;
-
-    const tip = document.createElement("div");
-    tip.id = "gdyIosA2hsTip";
-    tip.className = "gdy-ios-a2hs";
-    tip.setAttribute("role", "dialog");
-    tip.setAttribute("aria-label", "إضافة إلى الشاشة الرئيسية");
-
-    const inner = document.createElement('div');
-    inner.className = 'gdy-ios-a2hs__inner';
-
-    const txtWrap = document.createElement('div');
-    txtWrap.className = 'gdy-ios-a2hs__txt';
-
-    const strong = document.createElement('strong');
-    strong.textContent = 'ثبّت الموقع كتطبيق';
-
-    const line = document.createElement('div');
-    line.appendChild(document.createTextNode('اضغط زر المشاركة '));
-
-    // inline SVG icon
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('width', '14');
-    svg.setAttribute('height', '14');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('aria-hidden', 'true');
-    const path = document.createElementNS(svgNS, 'path');
-    path.setAttribute('fill', 'currentColor');
-    path.setAttribute('d', 'M12 3l4 4h-3v7h-2V7H8l4-4zm-7 9h2v7h10v-7h2v9H5v-9z');
-    svg.appendChild(path);
-    line.appendChild(svg);
-
-    line.appendChild(document.createTextNode(' ثم اختر '));
-    const b = document.createElement('b');
-    b.textContent = 'إضافة إلى الشاشة الرئيسية';
-    line.appendChild(b);
-    line.appendChild(document.createTextNode('.'));
-
-    txtWrap.appendChild(strong);
-    txtWrap.appendChild(line);
-
-    const closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-    closeBtn.className = 'gdy-ios-a2hs__close';
-    closeBtn.setAttribute('aria-label', 'إغلاق');
-    closeBtn.textContent = '×';
-
-    inner.appendChild(txtWrap);
-    inner.appendChild(closeBtn);
-    tip.appendChild(inner);
-
-    document.body.appendChild(tip);
-
-    const close = tip.querySelector(".gdy-ios-a2hs__close");
-    if (close) {
-      close.addEventListener("click", function () {
-        ls.set("gdy_ios_a2hs_dismissed", "1");
-        tip.remove();
-      });
-    }
-  }
-
-  // ---------------------------
-  // Service Worker + Updates
-  // ---------------------------
-  function registerSW() {
-    if (!("serviceWorker" in navigator)) return;
-
-        });
-      });
-    }).catch(function () {
-    if (!("serviceWorker" in navigator)) return;
-        });
-      });
-    }).catch(function () {
-      // ignore
-    });
-
-    // If controller changes, reload once (after user accepted)
-    navigator.serviceWorker.addEventListener("controllerchange", function () {
-      // We reload only if user already accepted update banner
-      if (ls.get("gdy_sw_reload") === "1") {
-        ls.set("gdy_sw_reload", "0");
-        window.location.reload();
-      }
-    });
-  }
-
-  function showUpdateBanner(reg) {
-    if (document.getElementById("gdyUpdateBanner")) return;
-
-    const banner = document.createElement("div");
-    banner.id = "gdyUpdateBanner";
-    banner.className = "gdy-update-banner";
-    banner.setAttribute("role", "dialog");
-    banner.setAttribute("aria-label", "تحديث متوفر");
-
-    const inner = document.createElement('div');
-    inner.className = 'gdy-install-banner__inner';
-
-    const text = document.createElement('div');
-    text.className = 'gdy-install-banner__text';
-
-    const title = document.createElement('div');
-    title.className = 'gdy-install-banner__title';
-    title.textContent = '📱 ثبّت غديار كتطبيق';
-
-    const desc = document.createElement('div');
-    desc.className = 'gdy-install-banner__desc';
-    desc.textContent = 'تجربة أسرع + دعم عدم الاتصال';
-
-    text.appendChild(title);
-    text.appendChild(desc);
-
-    const actions = document.createElement('div');
-    actions.className = 'gdy-install-banner__actions';
-
-    const installNow = document.createElement('button');
-    installNow.type = 'button';
-    installNow.id = 'gdyInstallNow';
-    installNow.className = 'gdy-install-banner__btn';
-    installNow.textContent = 'تثبيت';
-
-    const dismiss = document.createElement('button');
-    dismiss.type = 'button';
-    dismiss.id = 'gdyInstallDismiss';
-    dismiss.className = 'gdy-install-banner__close';
-    dismiss.setAttribute('aria-label', 'إغلاق');
-    dismiss.textContent = '×';
-
-    actions.appendChild(installNow);
-    actions.appendChild(dismiss);
-
-    inner.appendChild(text);
-    inner.appendChild(actions);
-    banner.appendChild(inner);
-
-    document.body.appendChild(banner);
-
-    const btnNow = document.getElementById("gdyUpdateNow");
-    if (btnNow) {
-      btnNow.addEventListener("click", function () {
-        try {
-          if (reg?.waiting) {
-            ls.set("gdy_sw_reload", "1");
-    const btnLater = document.getElementById("gdyUpdateLater");
-
-    if (btnNow) {
-      btnNow.addEventListener("click", function () {
-        try {
-          if (reg?.waiting) {
-            ls.set("gdy_sw_reload", "1");
-            reg.waiting?.postMessage({ action: "skipWaiting" });
-          } else {
-            // fallback
-            window.location.reload();
-          }
-        } catch (e) {
-          window.location.reload();
-        }
-      });
-    }
-
-    if (btnLater) {
-      btnLater.addEventListener("click", function () {
-        banner.remove();
-      });
-    }
-  }
-
-  // ---------------------------
-  // Init
-    if (btnNow) {
-      btnNow.addEventListener("click", function () {
-        try {
-          if (reg && reg.waiting) {
-            ls.set("gdy_sw_reload", "1");
-            reg.waiting.postMessage({ action: "skipWaiting" });
-          } else {
-    if (btnNow) {
-      btnNow.addEventListener("click", function () {
-        try {
-          if (reg?.waiting) {
-            ls.set("gdy_sw_reload", "1");
-            reg.waiting.postMessage({ action: "skipWaiting" });
-          } else {
-  // ---------------------------
-  function init() {
-    try { showIosTip(); } catch (e) { /* empty */ }
-    try { registerSW(); } catch (e) { /* empty */ }
-  }
-
-  // ---------------------------
-  let deferredPrompt = null;
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
 })();

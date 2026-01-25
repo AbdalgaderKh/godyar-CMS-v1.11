@@ -1,20 +1,27 @@
 <?php
-declare(strict_types=1);
+
 
 // admin/layout/footer.php
 // ملاحظة: Bootstrap JS يتم تحميله في header.php.
-// هذا الفوتر يضيف فقط سكربتات الصفحات (إن وُجدت).
-?>
-<?php
+// هذا الفوتر يضيف فقط سكربتات الإدارة الأساسية + سكربتات الصفحات (إن وُجدت).
+
 $__base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
 $__admin = $__base . '/admin';
-?>
-<script src="<?php echo htmlspecialchars($__admin . '/assets/js/saved-filters.js', ENT_QUOTES, 'UTF-8'); ?>" defer></script>
-<script src="<?php echo htmlspecialchars($__admin . '/assets/js/inline-edit.js', ENT_QUOTES, 'UTF-8'); ?>" defer></script>
-<script src="<?php echo htmlspecialchars($__admin . '/assets/js/admin-csp.js', ENT_QUOTES, 'UTF-8'); ?>" defer></script>
 
-<?php // Per-page scripts injected by pages (Saved Filters init, etc.) ?>
-<?php if (!empty($pageScripts)) { echo $pageScripts; } ?>
+// Cache-busting version (fallback إلى الوقت الحالي)
+$__v = defined('GODYAR_ADMIN_ASSET_VERSION')
+    ? (string)GODYAR_ADMIN_ASSET_VERSION
+    : (string)(file_exists(__DIR__ . '/../assets/js/admin-csp.js') ? filemtime(__DIR__ . '/../assets/js/admin-csp.js') : time());
+?>
+
+<script src="<?php echo htmlspecialchars($__admin . '/assets/js/admin-csp.js?v=' . urlencode($__v), ENT_QUOTES, 'UTF-8'); ?>"></script>
+
+<?php
+// Page specific scripts
+if (!empty($pageScripts)) {
+    echo $pageScripts;
+}
+?>
 
 </body>
 </html>

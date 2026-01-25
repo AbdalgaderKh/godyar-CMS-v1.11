@@ -787,7 +787,6 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/notifications.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/push_prompt.js?v=20260107_1" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_app.js" defer></script>
-<script src="<?php echo h($baseUrl); ?>/assets/js/pwa.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_tabbar.js?v=20260107_5" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_search_overlay.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/image_fallback.js" defer></script>

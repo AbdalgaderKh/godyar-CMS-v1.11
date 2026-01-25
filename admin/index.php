@@ -1534,12 +1534,12 @@ html[dir="rtl"] .gdy-activity-bars{
             <?php foreach ($popularNews as $index => $news): ?>
               <div class="gdy-news-item">
                 <div class="gdy-news-icon">
-                  <svg class="gdy-icon $index < 3 ? 'fire' : 'eye' ?> text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
+                  <svg class="gdy-icon <?php echo ($index < 3 ? 'fire' : 'eye'); ?> text-white" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
                 <div>
                   <div class="gdy-news-title"><?php echo h($news['title']); ?></div>
                   <div class="gdy-news-meta">
-                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo number_format($news['views']); ?> مشاهدة</span>
+                    <span><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo number_format((int)($news['views'] ?? 0)); ?> مشاهدة</span>
                   </div>
                 </div>
               </div>

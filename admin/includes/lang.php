@@ -163,6 +163,15 @@ function __(string $key, $varsOrFallback = [], array $vars2 = []): string
     return (string)$text;
 }
 
+// Backward-compat alias: some templates call __t() instead of __().
+// Define it as a thin wrapper to avoid fatal errors.
+if (!function_exists('__t')) {
+    function __t(string $key, string $fallback = '', array $vars = []): string
+    {
+        return __( $key, $fallback, $vars );
+    }
+}
+
 }
 
 if (!function_exists('gdy_lang_url')) {

@@ -42,6 +42,13 @@ if (!isset($isAdmin)) {
  * جلب إعدادات الموقع من HomeController (جدول settings)
  */
 $siteSettings = [];
+// تأكد من تحميل HomeController حتى تتوفر إعدادات الموقع في جميع الصفحات (خصوصاً الرئيسية).
+if (!class_exists('HomeController')) {
+    $hcFile = __DIR__ . '/../../controllers/HomeController.php';
+    if (file_exists($hcFile)) {
+        require_once $hcFile;
+    }
+}
 if (class_exists('HomeController')) {
     try {
         $siteSettings = HomeController::getSiteSettings();
@@ -54,24 +61,34 @@ if (class_exists('HomeController')) {
 }
 
 
-// Fallback: بعض الصفحات (مثل elections.php / صفحات قديمة) لا تمر عبر HomeController.
-// لضمان أن الثيم/الشعار/الأسماء تعمل في كل الصفحات، نحاول تحميل settings مباشرة من DB بشكل آمن.
-if (empty($siteSettings)) {
-    try {
-        $rootPath = dirname(__DIR__, 3); // project root
-        $dbHelper = $rootPath . '/includes/db.php';
-        $settingsHelper = $rootPath . '/includes/site_settings.php';
-        if (is_file($dbHelper)) { require_once $dbHelper; }
-        if (is_file($settingsHelper)) { require_once $settingsHelper; }
-        if (function_exists('gdy_pdo_safe') && function_exists('gdy_load_settings')) {
+// ضمان اتساق الإعدادات عبر كل المسارات (الرئيسية/الصفحات الداخلية/الأقسام).
+// بعض المسارات قد لا تمر عبر HomeController أو قد ترجع إعدادات ناقصة (مثل شعار الموقع أو إظهار رابط الانتخابات).
+// لذلك نحاول دائماً تحميل الإعدادات من قاعدة البيانات ودمجها مع ما وصلنا من الكنترولر.
+try {
+    $rootPath = dirname(__DIR__, 3); // project root
+    $dbHelper = $rootPath . '/includes/db.php';
+    $settingsHelper = $rootPath . '/includes/site_settings.php';
+    if (is_file($dbHelper)) { require_once $dbHelper; }
+    if (is_file($settingsHelper)) { require_once $settingsHelper; }
+
+    // Prefer an existing $pdo if the bootstrap already created it.
+    if (!isset($pdo) || !($pdo instanceof PDO)) {
+        if (function_exists('gdy_pdo_safe')) {
             $pdo = gdy_pdo_safe();
-            $siteSettings = gdy_load_settings($pdo);
-            if (!is_array($siteSettings)) { $siteSettings = []; }
         }
-    } catch (Throwable $e) {
-        // ignore
-        $siteSettings = [];
     }
+
+    if (isset($pdo) && ($pdo instanceof PDO) && function_exists('gdy_load_settings')) {
+        $dbSettings = gdy_load_settings($pdo);
+        if (is_array($dbSettings)) {
+            // DB settings override missing/older in-memory settings.
+            $siteSettings = is_array($siteSettings) ? $siteSettings : [];
+            $siteSettings = array_merge($siteSettings, $dbSettings);
+        }
+    }
+} catch (Throwable $e) {
+    // ignore
+    $siteSettings = is_array($siteSettings) ? $siteSettings : [];
 }
 
 // المتغيرات الأساسية مع أولوية لما يمرره السكربت ثم الإعدادات ثم الافتراضي
@@ -79,6 +96,11 @@ $siteName    = $siteName    ?? ($siteSettings['site_name']    ?? 'Godyar News');
 $siteTagline = $siteTagline ?? ($siteSettings['site_tagline'] ?? __('منصة إخبارية متكاملة'));
 $siteLogo    = $siteLogo    ?? ($siteSettings['site_logo']    ?? '');
 
+
+// normalize logo url for internal pages (avoid relative paths like "uploads/...")
+if (!empty($siteLogo) && !preg_match('~^https?://~i', (string)$siteLogo)) {
+    $siteLogo = base_url('/' . ltrim((string)$siteLogo, '/'));
+}
 // Front preset (Default vs Custom) - ensures Default palette is used sitewide
 $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
 $frontPreset = (string)($siteSettings['front_preset'] ?? $siteSettings['settings.front_preset'] ?? ($rawSettings['front_preset'] ?? '') ?? ($rawSettings['settings.front_preset'] ?? ''));
@@ -167,8 +189,30 @@ if ($_gdyLang === '') { $_gdyLang = 'ar'; }
 // لذلك نفصل بين:
 //  - $rootUrl: الجذر (للملفات الثابتة + الروابط العامة مثل login/logout)
 //  - $navBaseUrl: جذر الموقع مع بادئة اللغة (للصفحات/الروابط)
-// بعض إعدادات base_url() تعيد الرابط مع /ar، لذلك نزيله من الجذر إن وُجد.
-$rootUrl = $baseUrl;
+// base_url() قد تُرجع رابطاً يحتوي المسار الحالي (مثل /ar/category/...) في بعض إعدادات الـRewrite.
+// لذلك نحسب جذر الموقع بشكل صريح من السيرفر (scheme + host + مجلد التثبيت) حتى لا تنكسر روابط الأصول في الصفحات الداخلية.
+if (!function_exists('gdy_root_url')) {
+    function gdy_root_url(): string {
+        $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? null) == 443);
+        $scheme = $https ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? ($_SERVER['SERVER_NAME'] ?? 'localhost');
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '/index.php';
+        $dir = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        if ($dir === '' || $dir === '.') { $dir = ''; }
+
+        // When the frontend router lives under /frontend/index.php, assets still live at the project root.
+        // Strip the /frontend (and legacy /frontend/controllers) from the computed base path.
+        if ($dir !== '') {
+            $dir = preg_replace('#/frontend/controllers$#i', '', $dir);
+            $dir = preg_replace('#/frontend$#i', '', $dir);
+            $dir = rtrim((string)$dir, '/');
+        }
+
+        return $scheme . '://' . $host . $dir;
+    }
+}
+$rootUrl = rtrim(gdy_root_url(), '/');
+$baseUrl = $rootUrl;
 
 // Normalize logo path (avoid relative paths breaking on sub-pages / subdirectories)
 if (is_string($siteLogo) && $siteLogo !== '') {
@@ -260,6 +304,24 @@ if (empty($headerCategories)) {
 <html lang="<?php echo h($gdyLang); ?>" dir="<?php echo $gdyIsRtl ? 'rtl' : 'ltr'; ?>" data-theme="light" class="no-js">
 <head>
   <meta charset="utf-8">
+
+    <!-- PWA disabled: unregister any existing Service Worker and clear caches -->
+    <script>
+    (function(){
+      try{
+        if('serviceWorker' in navigator){
+          navigator.serviceWorker.getRegistrations().then(function(regs){
+            regs.forEach(function(r){ try{ r.unregister(); }catch(e){} });
+          }).catch(function(){});
+        }
+        if(window.caches && typeof caches.keys === 'function'){
+          caches.keys().then(function(keys){
+            keys.forEach(function(k){ try{ caches.delete(k); }catch(e){} });
+          }).catch(function(){});
+        }
+      }catch(e){}
+    })();
+    </script>
 <?php
 // CSP nonce (generated in includes/bootstrap.php). Some inline scripts/styles already reference $cspNonce;
 // ensure it is always defined so nonce is not empty (empty nonce breaks CSP and can't be auto-injected).
@@ -996,7 +1058,7 @@ $__gdyBasePath = $__gdyAppPath; // path فقط (بدون دومين)
 $__gdyManifestUrl = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/manifest.webmanifest?lang=' . rawurlencode($__gdyLang);
 $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 ?>
-<link rel="manifest" href="<?php echo h($__gdyManifestUrl); ?>">
+">
 <meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1143,9 +1205,19 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <span><?php echo h(__('الرئيسية')); ?></span>
           </a>
 
+          <?php
+            $showElectionsLink = '1';
+            if (function_exists('settings_get')) {
+                $showElectionsLink = (string) settings_get('show_elections_link', ($siteSettings['show_elections_link'] ?? '1'));
+            } else {
+                $showElectionsLink = (string) ($siteSettings['show_elections_link'] ?? '1');
+            }
+            if ($showElectionsLink === '1') :
+          ?>
           <a href="<?php echo h($baseUrl); ?>/elections.php" class="cats-link">
             <span><?php echo h(__('الانتخابات')); ?></span>
           </a>
+          <?php endif; ?>
 
           <?php if (!empty($headerCategories)): ?>
             <?php

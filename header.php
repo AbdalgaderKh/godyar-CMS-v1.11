@@ -972,8 +972,25 @@ $__gdyBasePath = $__gdyAppPath; // path فقط (بدون دومين)
 $__gdyManifestUrl = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/manifest.webmanifest?lang=' . rawurlencode($__gdyLang);
 $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 ?>
-<link rel="manifest" href="<?php echo h($__gdyManifestUrl); ?>">
+">
 <meta name="theme-color" content="#0b1220">
+
+<script>
+(function(){
+  try{
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){ try{ r.unregister(); }catch(e){} });
+      }).catch(function(){});
+    }
+    if(window.caches && typeof caches.keys === 'function'){
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ try{ caches.delete(k); }catch(e){} });
+      }).catch(function(){});
+    }
+  }catch(e){}
+})();
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1118,9 +1135,11 @@ $headerBgImage   = trim((string)($siteSettings['theme_header_bg_image'] ?? ''));
             <span><?php echo h(__('الرئيسية')); ?></span>
           </a>
 
-          <a href="<?php echo h($baseUrl); ?>/elections.php" class="cats-link">
-            <span><?php echo h(__('الانتخابات')); ?></span>
-          </a>
+	          <?php if (gdy_setting_bool($settings ?? [], 'show_elections_link', true)): ?>
+	          <a href="<?php echo h($baseUrl); ?>/elections.php" class="cats-link">
+	            <span><?php echo h(__('الانتخابات')); ?></span>
+	          </a>
+	          <?php endif; ?>
 
           <?php if (!empty($headerCategories)): ?>
             <?php

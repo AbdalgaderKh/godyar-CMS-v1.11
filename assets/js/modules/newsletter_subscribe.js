@@ -1,65 +1,43 @@
-/* Newsletter subscribe (AJAX) */
-  document.addEventListener('DOMContentLoaded', function () {
-    var form = qs('[data-newsletter-form]');
-    var msg = qs('[data-newsletter-msg]', form.parentElement || document);
-  function qs(sel, root) { return (root || document).querySelector(sel); }
-(function () {
-  document.addEventListener('DOMContentLoaded', function () {
-    var form = qs('[data-newsletter-form]');
+/*
+  Newsletter subscribe (safe, minimal)
+  - Enhances a form if present; does not break if endpoint differs.
+*/
+(() => {
+  'use strict';
 
-    var msg = qs('[data-newsletter-msg]', form.parentElement || document);
-  function qs(sel, root) { return (root || document).querySelector(sel); }
+  const form = document.querySelector('#newsletter-form') || document.querySelector('form[data-newsletter]');
+  if (!form) return;
 
-    }
-    if (!form) return;
+  const msgEl = document.querySelector('[data-newsletter-message]') || null;
 
-    if (!form) return;
-      if (!msg) return;
-      msg.textContent = text || '';
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // Basic email validation
-      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function setMsg(text) {
+    if (msgEl) msgEl.textContent = text;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    // Prefer AJAX, but fall back to normal submit if it fails
+    e.preventDefault();
+    setMsg('...');
+
+    try {
+      const fd = new FormData(form);
+      const res = await fetch(form.action || window.location.href, {
+        method: form.method || 'POST',
+        credentials: 'same-origin',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: fd,
+      });
+
+      if (!res.ok) throw new Error('Request failed');
+      setMsg('تم الاستلام.');
+      form.reset();
+    } catch (_err) {
+      // Allow server-side form handling
       try {
-        var res = await fetch(form.getAttribute('action') || '/api/newsletter/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ newsletter_email: email })
-      setMsg('جاري الاشتراك...', true);
-
-      // Basic email validation
-
-      // Basic email validation
-      var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!re.test(email)) { setMsg('البريد الإلكتروني غير صحيح', false); return; }
-
-      setMsg('جاري الاشتراك...', true);
-
-      try {
-        var res = await fetch(form.getAttribute('action') || '/api/newsletter/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ newsletter_email: email })
-        if (!res.ok || !data || !data.ok) {
-          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
-        });
-
-        var data = null;
-        if (!res.ok || !data || !data.ok) {
-          setMsg((data && data.message) ? data.message : 'تعذر الاشتراك الآن، حاول لاحقًا.', false);
-          return;
-        }
-        try { data = await res.json(); } catch (_) {}
-
-  function qs(sel, root) { return (root || document).querySelector(sel); }
-          return;
-        }
-
-        setMsg(data.message || 'تم الاشتراك بنجاح ✅', true);
-        if (input) input.value = '';
-      } catch (err) {
-        setMsg('تعذر الاتصال بالخادم. حاول لاحقًا.', false);
+        form.submit();
+      } catch (_ignored) {
+        setMsg('تعذر الإرسال.');
       }
-    });
+    }
   });
 })();

@@ -193,11 +193,11 @@ html, body{
 <div class="admin-content container-fluid.py-4">
   <div class="gdy-page-header d-flex justify-content-between align-items-center mb-3">
     <div>
-      <h1 class="h4 text-white mb-1"><?= h(__('t_ffed19b747', 'تعديل عضو')) ?></h1>
-      <p class="text-muted mb-0"><?= h(__('t_74711a8171', 'تعديل بيانات عضو في فريق العمل.')) ?></p>
+      <h1 class="h4 text-white mb-1"><?php echo h(__('t_ffed19b747', 'تعديل عضو')); ?></h1>
+      <p class="text-muted mb-0"><?php echo h(__('t_74711a8171', 'تعديل بيانات عضو في فريق العمل.')); ?></p>
     </div>
     <a href="index.php" class="btn btn-sm btn-secondary">
-      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_fed95e1016', 'عودة للقائمة')) ?>
+      <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_fed95e1016', 'عودة للقائمة')); ?>
     </a>
   </div>
 
@@ -205,7 +205,7 @@ html, body{
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $err): ?>
-          <li><?= h($err) ?></li>
+          <li><?php echo h($err); ?></li>
         <?php endforeach; ?>
       </ul>
     </div>
@@ -214,49 +214,49 @@ html, body{
   <div class="card shadow-sm glass-card">
     <div class="card-body">
       <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="row g-3">
           <div class="col-md-4">
-            <label class="form-label text-white"><?= h(__('t_90f9115ac9', 'الاسم الكامل')) ?></label>
-            <input type="text" name="name" class="form-control" required value="<?= h($name) ?>">
+            <label class="form-label text-white"><?php echo h(__('t_90f9115ac9', 'الاسم الكامل')); ?></label>
+            <input type="text" name="name" class="form-control" required value="<?php echo h($name); ?>">
           </div>
           <div class="col-md-4">
-            <label class="form-label text-white"><?= h(__('t_4ee2ec16ed', 'المنصب / الوظيفة')) ?></label>
-            <input type="text" name="role" class="form-control" value="<?= h($roleTxt) ?>">
+            <label class="form-label text-white"><?php echo h(__('t_4ee2ec16ed', 'المنصب / الوظيفة')); ?></label>
+            <input type="text" name="role" class="form-control" value="<?php echo h($roleTxt); ?>">
           </div>
           <div class="col-md-4">
-            <label class="form-label text-white"><?= h(__('t_2436aacc18', 'البريد الإلكتروني')) ?></label>
-            <input type="email" name="email" class="form-control" value="<?= h($email) ?>">
+            <label class="form-label text-white"><?php echo h(__('t_2436aacc18', 'البريد الإلكتروني')); ?></label>
+            <input type="email" name="email" class="form-control" value="<?php echo h($email); ?>">
           </div>
 
           <div class="col-md-6">
-            <label class="form-label text-white"><?= h(__('t_d5fe2d443f', 'رابط الصورة (URL)')) ?></label>
-            <input type="text" name="photo_url" class="form-control" value="<?= h($photoUrl) ?>">
+            <label class="form-label text-white"><?php echo h(__('t_d5fe2d443f', 'رابط الصورة (URL)')); ?></label>
+            <input type="text" name="photo_url" class="form-control" value="<?php echo h($photoUrl); ?>">
           </div>
 
           <div class="col-md-3">
-            <label class="form-label text.white"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+            <label class="form-label text.white"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
             <select name="status" class="form-select">
-              <option value="active" <?= $status === 'active' ? 'selected' : '' ?>><?= h(__('t_8caaf95380', 'نشط')) ?></option>
-              <option value="hidden" <?= $status === 'hidden' ? 'selected' : '' ?>><?= h(__('t_a39aacaa71', 'مخفي')) ?></option>
+              <option value="active" <?php echo $status === 'active' ? 'selected' : ''; ?>><?php echo h(__('t_8caaf95380', 'نشط')); ?></option>
+              <option value="hidden" <?php echo $status === 'hidden' ? 'selected' : ''; ?>><?php echo h(__('t_a39aacaa71', 'مخفي')); ?></option>
             </select>
           </div>
 
           <div class="col-md-3">
-            <label class="form-label text-white"><?= h(__('t_2fcc9e97b9', 'ترتيب العرض')) ?></label>
-            <input type="number" name="sort_order" class="form-control" value="<?= (int)$sortOrder ?>">
+            <label class="form-label text-white"><?php echo h(__('t_2fcc9e97b9', 'ترتيب العرض')); ?></label>
+            <input type="number" name="sort_order" class="form-control" value="<?php echo (int)$sortOrder; ?>">
           </div>
 
           <div class="col-12">
-            <label class="form-label text-white"><?= h(__('t_68bb9eb8bf', 'نبذة مختصرة')) ?></label>
-            <textarea name="bio" rows="4" class="form-control"><?= h($bio) ?></textarea>
+            <label class="form-label text-white"><?php echo h(__('t_68bb9eb8bf', 'نبذة مختصرة')); ?></label>
+            <textarea name="bio" rows="4" class="form-control"><?php echo h($bio); ?></textarea>
           </div>
         </div>
 
         <div class="mt-3 d-flex justify-content-end gap-2">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_91d6db7f39', 'حفظ التعديلات')); ?>
           </button>
         </div>
       </form>

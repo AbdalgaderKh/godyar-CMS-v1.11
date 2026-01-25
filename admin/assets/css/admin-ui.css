@@ -122,6 +122,8 @@ html,body{
 .btn-gdy-primary{background: linear-gradient(135deg, var(--gdy-accent), var(--gdy-accent-2));border:0;color:var(--gdy-accent-on);}
 .btn-gdy-outline{background: transparent;border: 1px solid rgba(148,163,184,.35);color: var(--gdy-text);}
 .btn-gdy-outline:hover{background: rgba(148,163,184,.10);}
+.btn-gdy-ghost{background: transparent;border: 1px solid rgba(148,163,184,.25);color: var(--gdy-text);}
+.btn-gdy-ghost:hover{background: rgba(148,163,184,.12);}
 
 /* Keep colors consistent + readable (override Bootstrap primary inside admin) */
 .admin-content .btn-primary{

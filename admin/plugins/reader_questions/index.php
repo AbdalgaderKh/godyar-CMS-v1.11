@@ -138,13 +138,13 @@ require_once __DIR__ . '/../../layout/sidebar.php';
   </div>
 
   <?php if ($flash): ?>
-    <div class="alert alert-<?= h($flash['type']) ?>"><?= h($flash['msg']) ?></div>
+    <div class="alert alert-<?php echo h($flash['type']); ?>"><?php echo h($flash['msg']); ?></div>
   <?php endif; ?>
 
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <strong>الحالة: <?= h($status) ?></strong>
-      <small class="text-muted">الإجمالي: <?= (int)$total ?></small>
+      <strong>الحالة: <?php echo h($status); ?></strong>
+      <small class="text-muted">الإجمالي: <?php echo (int)$total; ?></small>
     </div>
     <div class="table-responsive">
       <table class="table table-striped mb-0">
@@ -166,33 +166,33 @@ require_once __DIR__ . '/../../layout/sidebar.php';
           <?php else: ?>
             <?php foreach ($rows as $r): ?>
               <tr>
-                <td><?= (int)$r['id'] ?></td>
-                <td><?= (int)$r['news_id'] ?></td>
+                <td><?php echo (int)$r['id']; ?></td>
+                <td><?php echo (int)$r['news_id']; ?></td>
                 <td>
-                  <div><?= h((string)($r['author_name'] ?? 'زائر')) ?></div>
-                  <?php if (!empty($r['author_email'])): ?><small class="text-muted"><?= h((string)$r['author_email']) ?></small><?php endif; ?>
+                  <div><?php echo h((string)($r['author_name'] ?? 'زائر')); ?></div>
+                  <?php if (!empty($r['author_email'])): ?><small class="text-muted"><?php echo h((string)$r['author_email']); ?></small><?php endif; ?>
                 </td>
-                <td style="max-width:420px; white-space:pre-wrap;"><?= h((string)($r['question'] ?? '')) ?></td>
+                <td style="max-width:420px; white-space:pre-wrap;"><?php echo h((string)($r['question'] ?? '')); ?></td>
                 <td style="max-width:420px;">
                   <?php if (!empty($r['answer'])): ?>
-                    <div style="white-space:pre-wrap;"><?= h((string)$r['answer']) ?></div>
-                    <small class="text-muted">تمت الإجابة: <?= h((string)($r['answered_at'] ?? '')) ?></small>
+                    <div style="white-space:pre-wrap;"><?php echo h((string)$r['answer']); ?></div>
+                    <small class="text-muted">تمت الإجابة: <?php echo h((string)($r['answered_at'] ?? '')); ?></small>
                   <?php else: ?>
                     <form method="post">
                       <?php csrf_field(); ?>
-                      <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                      <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                       <input type="hidden" name="action" value="answer">
                       <textarea class="form-control form-control-sm" name="answer" rows="3" maxlength="2000" placeholder="اكتب الرد (نص فقط)"></textarea>
                       <button class="btn btn-sm btn-primary mt-1" type="submit">حفظ ونشر الرد</button>
                     </form>
                   <?php endif; ?>
                 </td>
-                <td><small class="text-muted"><?= h((string)($r['ip'] ?? '')) ?></small></td>
-                <td><small class="text-muted"><?= h((string)($r['created_at'] ?? '')) ?></small></td>
+                <td><small class="text-muted"><?php echo h((string)($r['ip'] ?? '')); ?></small></td>
+                <td><small class="text-muted"><?php echo h((string)($r['created_at'] ?? '')); ?></small></td>
                 <td>
                   <form method="post" class="d-flex gap-1 flex-wrap">
                     <?php csrf_field(); ?>
-                    <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                    <input type="hidden" name="id" value="<?php echo (int)$r['id']; ?>">
                     <?php if ($status !== 'approved' && $status !== 'answered'): ?>
                       <button class="btn btn-sm btn-success" name="action" value="approve" type="submit">موافقة</button>
                     <?php endif; ?>
@@ -221,8 +221,8 @@ require_once __DIR__ . '/../../layout/sidebar.php';
     <nav class="mt-3">
       <ul class="pagination">
         <?php for ($i=1; $i<=$pages; $i++): ?>
-          <li class="page-item <?= $i===$page ? 'active' : '' ?>">
-            <a class="page-link" href="?status=<?= h($status) ?>&page=<?= (int)$i ?>"><?= (int)$i ?></a>
+          <li class="page-item <?php echo $i===$page ? 'active' : ''; ?>">
+            <a class="page-link" href="?status=<?php echo h($status); ?>&page=<?php echo (int)$i; ?>"><?php echo (int)$i; ?></a>
           </li>
         <?php endfor; ?>
       </ul>

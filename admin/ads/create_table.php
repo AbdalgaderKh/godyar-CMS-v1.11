@@ -210,14 +210,14 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <!-- رأس الصفحة -->
     <div class="gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 text-white mb-1"><?= h(__('t_ac6f627f56', 'إنشاء جدول الإعلانات')) ?></h1>
+            <h1 class="h4 text-white mb-1"><?php echo h(__('t_ac6f627f56', 'إنشاء جدول الإعلانات')); ?></h1>
             <p class="text-muted mb-0">
-                <?= h(__('t_9fe8203d6d', 'إعداد قاعدة بيانات نظام الإعلانات')) ?>
+                <?php echo h(__('t_9fe8203d6d', 'إعداد قاعدة بيانات نظام الإعلانات')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_4143dddc4c', 'العودة للإعلانات')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_4143dddc4c', 'العودة للإعلانات')); ?>
             </a>
         </div>
     </div>
@@ -227,10 +227,10 @@ require_once __DIR__ . '/../layout/sidebar.php';
             <?php if ($success === true): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <strong><?= h(__('t_38f1d57b76', 'تم بنجاح!')) ?></strong> <?= h(__('t_194518b3c3', 'تم إنشاء جدول الإعلانات وإضافة بيانات تجريبية.')) ?>
+                    <strong><?php echo h(__('t_38f1d57b76', 'تم بنجاح!')); ?></strong> <?php echo h(__('t_194518b3c3', 'تم إنشاء جدول الإعلانات وإضافة بيانات تجريبية.')); ?>
                     <div class="mt-2">
-                        <a href="index.php" class="btn btn-sm btn-success me-2"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></a>
-                        <a href="create.php" class="btn btn-sm btn-outline-success"><?= h(__('t_289196f7a2', 'إضافة إعلان جديد')) ?></a>
+                        <a href="index.php" class="btn btn-sm btn-success me-2"><?php echo h(__('t_6304a4d00d', 'عرض الإعلانات')); ?></a>
+                        <a href="create.php" class="btn btn-sm btn-outline-success"><?php echo h(__('t_289196f7a2', 'إضافة إعلان جديد')); ?></a>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -239,7 +239,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
             <?php if ((empty($error) === false)): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <strong><?= h(__('t_5f1154f94b', 'خطأ:')) ?></strong> <?= h($error) ?>
+                    <strong><?php echo h(__('t_5f1154f94b', 'خطأ:')); ?></strong> <?php echo h($error); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php endif; ?>
@@ -247,9 +247,9 @@ require_once __DIR__ . '/../layout/sidebar.php';
             <?php if ($tableExists && ($success === false)): ?>
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <strong><?= h(__('t_ad0dcb7f3a', 'معلومة:')) ?></strong> <?= h(__('t_09d28e81fb', 'جدول الإعلانات موجود مسبقاً في قاعدة البيانات.')) ?>
+                    <strong><?php echo h(__('t_ad0dcb7f3a', 'معلومة:')); ?></strong> <?php echo h(__('t_09d28e81fb', 'جدول الإعلانات موجود مسبقاً في قاعدة البيانات.')); ?>
                     <div class="mt-2">
-                        <a href="index.php" class="btn btn-sm btn-info"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></a>
+                        <a href="index.php" class="btn btn-sm btn-info"><?php echo h(__('t_6304a4d00d', 'عرض الإعلانات')); ?></a>
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -262,8 +262,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <div class="text-center mb-4">
                             <div class="mb-4">
                                 <svg class="gdy-icon text-warning mb-3" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-                                <h3 class="text-white"><?= h(__('t_82a2e9c562', 'جدول الإعلانات غير موجود')) ?></h3>
-                                <p class="text-muted"><?= h(__('t_464951158a', 'يجب إنشاء جدول الإعلانات في قاعدة البيانات لبدء استخدام النظام.')) ?></p>
+                                <h3 class="text-white"><?php echo h(__('t_82a2e9c562', 'جدول الإعلانات غير موجود')); ?></h3>
+                                <p class="text-muted"><?php echo h(__('t_464951158a', 'يجب إنشاء جدول الإعلانات في قاعدة البيانات لبدء استخدام النظام.')); ?></p>
                             </div>
                         </div>
 
@@ -272,34 +272,34 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="card h-100 bg-dark border-secondary">
                                     <div class="card-header">
                                         <h6 class="card-title mb-0 text-white">
-                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_2eed2c3977', 'المميزات المتوفرة')) ?>
+                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_2eed2c3977', 'المميزات المتوفرة')); ?>
                                         </h6>
                                     </div>
                                     <div class="card-body">
                                         <ul class="feature-list text-light">
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_e5e01f78c0', 'إدارة إعلانات متعددة')) ?>
+                                                <?php echo h(__('t_e5e01f78c0', 'إدارة إعلانات متعددة')); ?>
                                             </li>
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_bf0c7c5555', 'مواضع ظهور مختلفة')) ?>
+                                                <?php echo h(__('t_bf0c7c5555', 'مواضع ظهور مختلفة')); ?>
                                             </li>
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_2cd6b0ec1c', 'إحصائيات النقرات والمشاهدات')) ?>
+                                                <?php echo h(__('t_2cd6b0ec1c', 'إحصائيات النقرات والمشاهدات')); ?>
                                             </li>
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_a00bce3bd3', 'فترات زمنية محددة')) ?>
+                                                <?php echo h(__('t_a00bce3bd3', 'فترات زمنية محددة')); ?>
                                             </li>
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_a54bcc26df', 'إعلانات مميزة')) ?>
+                                                <?php echo h(__('t_a54bcc26df', 'إعلانات مميزة')); ?>
                                             </li>
                                             <li>
                                                 <span class="badge bg-primary">✓</span>
-                                                <?= h(__('t_05400057b3', 'حدود قصوى للنقرات')) ?>
+                                                <?php echo h(__('t_05400057b3', 'حدود قصوى للنقرات')); ?>
                                             </li>
                                         </ul>
                                     </div>
@@ -310,7 +310,7 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                 <div class="card h-100 bg-dark border-secondary">
                                     <div class="card-header">
                                         <h6 class="card-title mb-0 text-white">
-                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_aacca2e364', 'تفاصيل الجدول')) ?>
+                                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_aacca2e364', 'تفاصيل الجدول')); ?>
                                         </h6>
                                     </div>
                                     <div class="card-body">
@@ -331,17 +331,17 @@ require_once __DIR__ . '/../layout/sidebar.php';
 
                         <div class="text-center mt-4 pt-4 border-top border-secondary">
                             <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
                                 <p class="text-muted mb-3">
-                                    <?= h(__('t_b0df462684', 'سيتم إنشاء الجدول مع بيانات تجريبية للبدء فوراً.')) ?>
+                                    <?php echo h(__('t_b0df462684', 'سيتم إنشاء الجدول مع بيانات تجريبية للبدء فوراً.')); ?>
                                 </p>
                                 <button type="submit" name="create_table" class="btn btn-primary btn-lg">
                                     <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                    <?= h(__('t_ac6f627f56', 'إنشاء جدول الإعلانات')) ?>
+                                    <?php echo h(__('t_ac6f627f56', 'إنشاء جدول الإعلانات')); ?>
                                 </button>
                                 <div class="form-text mt-2">
-                                    <small><?= h(__('t_afb55b06db', 'هذه العملية آمنة ولا تؤثر على الجداول الأخرى.')) ?></small>
+                                    <small><?php echo h(__('t_afb55b06db', 'هذه العملية آمنة ولا تؤثر على الجداول الأخرى.')); ?></small>
                                 </div>
                             </form>
                         </div>
@@ -351,8 +351,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <div class="text-center py-4">
                             <div class="mb-4">
                                 <svg class="gdy-icon text-success mb-3" aria-hidden="true" focusable="false"><use href="#check"></use></svg>
-                                <h3 class="text-white"><?= h(__('t_47b9a1019c', 'النظام جاهز للاستخدام')) ?></h3>
-                                <p class="text-muted"><?= h(__('t_9ea24d0763', 'جدول الإعلانات موجود ومهيأ في قاعدة البيانات.')) ?></p>
+                                <h3 class="text-white"><?php echo h(__('t_47b9a1019c', 'النظام جاهز للاستخدام')); ?></h3>
+                                <p class="text-muted"><?php echo h(__('t_9ea24d0763', 'جدول الإعلانات موجود ومهيأ في قاعدة البيانات.')); ?></p>
                             </div>
 
                             <div class="row g-3 justify-content-center">
@@ -360,8 +360,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                     <div class="card bg-dark border-success">
                                         <div class="card-body text-center">
                                             <svg class="gdy-icon text-info mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            <h6 class="text-white"><?= h(__('t_6304a4d00d', 'عرض الإعلانات')) ?></h6>
-                                            <a href="index.php" class="btn btn-sm btn-outline-info w-100"><?= h(__('t_bf981a1299', 'استعراض')) ?></a>
+                                            <h6 class="text-white"><?php echo h(__('t_6304a4d00d', 'عرض الإعلانات')); ?></h6>
+                                            <a href="index.php" class="btn btn-sm btn-outline-info w-100"><?php echo h(__('t_bf981a1299', 'استعراض')); ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -369,8 +369,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                     <div class="card bg-dark border-primary">
                                         <div class="card-body text-center">
                                             <svg class="gdy-icon text-primary mb-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            <h6 class="text-white"><?= h(__('t_2d64a37cdd', 'إعلان جديد')) ?></h6>
-                                            <a href="create.php" class="btn btn-sm btn-outline-primary w-100"><?= h(__('t_b9508aa2a9', 'إضافة')) ?></a>
+                                            <h6 class="text-white"><?php echo h(__('t_2d64a37cdd', 'إعلان جديد')); ?></h6>
+                                            <a href="create.php" class="btn btn-sm btn-outline-primary w-100"><?php echo h(__('t_b9508aa2a9', 'إضافة')); ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -378,8 +378,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
                                     <div class="card bg-dark border-warning">
                                         <div class="card-body text-center">
                                             <svg class="gdy-icon text-warning mb-2" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-                                            <h6 class="text-white"><?= h(__('t_84b1e0c6ed', 'الإحصائيات')) ?></h6>
-                                            <a href="index.php" class="btn btn-sm btn-outline-warning w-100"><?= h(__('t_6e63a5f0af', 'عرض')) ?></a>
+                                            <h6 class="text-white"><?php echo h(__('t_84b1e0c6ed', 'الإحصائيات')); ?></h6>
+                                            <a href="index.php" class="btn btn-sm btn-outline-warning w-100"><?php echo h(__('t_6e63a5f0af', 'عرض')); ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -393,26 +393,26 @@ require_once __DIR__ . '/../layout/sidebar.php';
             <div class="card shadow-sm mt-4 bg-dark border-secondary">
                 <div class="card-header">
                     <h6 class="card-title mb-0 text-white">
-                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_88d313a15e', 'معلومات تقنية')) ?>
+                        <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_88d313a15e', 'معلومات تقنية')); ?>
                     </h6>
                 </div>
                 <div class="card-body">
                     <div class="row g-3 text-center small">
                         <div class="col-md-3">
-                            <div class="text-muted"><?= h(__('t_fa8b328b33', 'نوع الجدول')) ?></div>
+                            <div class="text-muted"><?php echo h(__('t_fa8b328b33', 'نوع الجدول')); ?></div>
                             <div class="text-white">InnoDB</div>
                         </div>
                         <div class="col-md-3">
-                            <div class="text-muted"><?= h(__('t_b6a4dbf865', 'ترميز الأحرف')) ?></div>
+                            <div class="text-muted"><?php echo h(__('t_b6a4dbf865', 'ترميز الأحرف')); ?></div>
                             <div class="text-white">utf8mb4</div>
                         </div>
                         <div class="col-md-3">
-                            <div class="text-muted"><?= h(__('t_2e8aae4084', 'عدد الحقول')) ?></div>
-                            <div class="text-white"><?= h(__('t_51c3a573a2', '15 حقل')) ?></div>
+                            <div class="text-muted"><?php echo h(__('t_2e8aae4084', 'عدد الحقول')); ?></div>
+                            <div class="text-white"><?php echo h(__('t_51c3a573a2', '15 حقل')); ?></div>
                         </div>
                         <div class="col-md-3">
-                            <div class="text-muted"><?= h(__('t_c165189dcb', 'الفهارس')) ?></div>
-                            <div class="text-white"><?= h(__('t_3f32d97d93', '6 فهارس')) ?></div>
+                            <div class="text-muted"><?php echo h(__('t_c165189dcb', 'الفهارس')); ?></div>
+                            <div class="text-white"><?php echo h(__('t_3f32d97d93', '6 فهارس')); ?></div>
                         </div>
                     </div>
                 </div>

@@ -637,12 +637,12 @@ html, body { overflow-x: hidden; }
 
     <div class="gdy-header">
       <div>
-        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?= h(__('t_cdefdef2cf', 'إعدادات الطقس')) ?></h1>
-        <p class="mb-0"><?= h(__('t_8a8238d6f6', 'تهيئة ويدجيت الطقس لواجهة الموقع مع قاعدة بيانات مدن + اختبار سريع.')) ?></p>
+        <h1><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#settings"></use></svg> <?php echo h(__('t_cdefdef2cf', 'إعدادات الطقس')); ?></h1>
+        <p class="mb-0"><?php echo h(__('t_8a8238d6f6', 'تهيئة ويدجيت الطقس لواجهة الموقع مع قاعدة بيانات مدن + اختبار سريع.')); ?></p>
       </div>
       <div class="gdy-actions">
         <a href="index.php" class="btn btn-outline-light btn-sm">
-          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?>
+          <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_2f09126266', 'العودة للوحة التحكم')); ?>
         </a>
       </div>
     </div>
@@ -652,7 +652,7 @@ html, body { overflow-x: hidden; }
         <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <ul class="mb-0">
           <?php foreach ($errors as $e): ?>
-            <li><?= h($e) ?></li>
+            <li><?php echo h($e); ?></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -660,7 +660,7 @@ html, body { overflow-x: hidden; }
 
     <?php if ($success): ?>
       <div class="alert alert-success">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($success) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($success); ?>
       </div>
     <?php endif; ?>
 
@@ -669,7 +669,7 @@ html, body { overflow-x: hidden; }
         <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
         <ul class="mb-0">
           <?php foreach ($locErrors as $e): ?>
-            <li><?= h($e) ?></li>
+            <li><?php echo h($e); ?></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -677,7 +677,7 @@ html, body { overflow-x: hidden; }
 
     <?php if ($locSuccess): ?>
       <div class="alert alert-success">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h($locSuccess) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($locSuccess); ?>
       </div>
     <?php endif; ?>
 
@@ -686,36 +686,36 @@ html, body { overflow-x: hidden; }
       <div class="col-lg-8">
         <div class="gdy-card">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?= h(__('t_8af012a71b', 'إعدادات الاتصال وعرض الطقس')) ?></h2>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg> <?php echo h(__('t_8af012a71b', 'إعدادات الاتصال وعرض الطقس')); ?></h2>
             <div class="gdy-summary">
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الحالة: <?= (int)($current['is_active'] ?? 0) === 1 ? __('t_4759637ebc', 'مفعّل') : __('t_4c64abcbc3', 'غير مفعّل') ?></span>
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> المدينة: <?= h((string)($current['city'] ?? '—')) ?></span>
-              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تحديث: <?= (int)($current['refresh_minutes'] ?? 30) ?> دقيقة</span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> الحالة: <?php echo (int)($current['is_active'] ?? 0) === 1 ? __('t_4759637ebc', 'مفعّل') : __('t_4c64abcbc3', 'غير مفعّل'); ?></span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> المدينة: <?php echo h((string)($current['city'] ?? '—')); ?></span>
+              <span class="pill"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> تحديث: <?php echo (int)($current['refresh_minutes'] ?? 30); ?> دقيقة</span>
             </div>
           </div>
 
           <div class="gdy-card-body">
             <form method="post" action="" id="weather-settings-form" autocomplete="off">
-              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
               <input type="hidden" name="form_type" value="settings">
 
               <div class="mb-3">
-                <label class="form-label"><?= h(__('t_10c8be0aac', 'مفتاح واجهة الطقس (API key)')) ?></label>
+                <label class="form-label"><?php echo h(__('t_10c8be0aac', 'مفتاح واجهة الطقس (API key)')); ?></label>
                 <div class="input-group">
-                  <input type="password" name="api_key" id="api_key" class="form-control" required value="<?= h((string)($current['api_key'] ?? '')) ?>">
-                  <button class="btn btn-outline-light" type="button" id="toggle-key" title="<?= h(__('t_13404a383b', 'إظهار/إخفاء')) ?>">
+                  <input type="password" name="api_key" id="api_key" class="form-control" required value="<?php echo h((string)($current['api_key'] ?? '')); ?>">
+                  <button class="btn btn-outline-light" type="button" id="toggle-key" title="<?php echo h(__('t_13404a383b', 'إظهار/إخفاء')); ?>">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                   </button>
                 </div>
                 <div class="form-text">
-                  <?= h(__('t_decf2cd0a7', 'يدعم اختبار الاتصال الافتراضي')) ?> <b>OpenWeatherMap</b><?= h(__('t_9c0b02b5ac', '. إن كنت تستخدم مزوداً آخر، يكفي حفظ البيانات بدون الاختبار.')) ?>
+                  <?php echo h(__('t_decf2cd0a7', 'يدعم اختبار الاتصال الافتراضي')); ?> <b>OpenWeatherMap</b><?php echo h(__('t_9c0b02b5ac', '. إن كنت تستخدم مزوداً آخر، يكفي حفظ البيانات بدون الاختبار.')); ?>
                 </div>
               </div>
 
               <div class="mb-3">
-                <label class="form-label"><?= h(__('t_5f67dc9b82', 'اختر مدينة من قاعدة البيانات')) ?></label>
+                <label class="form-label"><?php echo h(__('t_5f67dc9b82', 'اختر مدينة من قاعدة البيانات')); ?></label>
                 <select name="location_id" id="location_id" class="form-select">
-                  <option value="0"><?= h(__('t_a6fd07d5a3', '— اختر مدينة (اختياري) —')) ?></option>
+                  <option value="0"><?php echo h(__('t_a6fd07d5a3', '— اختر مدينة (اختياري) —')); ?></option>
                   <?php foreach ($locations as $loc): ?>
                     <?php
                       $sel = ((int)($current['location_id'] ?? 0) === (int)$loc['id']) ? 'selected' : '';
@@ -723,70 +723,70 @@ html, body { overflow-x: hidden; }
                       if (!(int)$loc['is_active']) { $label .= __('t_4140f443ba', ' [معطّلة]'); }
                     ?>
                     <option
-                      value="<?= (int)$loc['id'] ?>"
-                      <?= $sel ?>
-                      data-city="<?= h($loc['city_name']) ?>"
-                      data-cc="<?= h($loc['country_code']) ?>"
-                      data-active="<?= (int)$loc['is_active'] ?>"
-                    ><?= h($label) ?></option>
+                      value="<?php echo (int)$loc['id']; ?>"
+                      <?php echo $sel; ?>
+                      data-city="<?php echo h($loc['city_name']); ?>"
+                      data-cc="<?php echo h($loc['country_code']); ?>"
+                      data-active="<?php echo (int)$loc['is_active']; ?>"
+                    ><?php echo h($label); ?></option>
                   <?php endforeach; ?>
                 </select>
                 <div class="form-text">
-                  <?= h(__('t_20020f964a', 'عند اختيار مدينة')) ?> <b><?= h(__('t_641298ecec', 'مفعّلة')) ?></b> <?= h(__('t_1643088d14', 'سيتم تعبئة المدينة/رمز الدولة تلقائياً وتعطيل الإدخال اليدوي.')) ?>
+                  <?php echo h(__('t_20020f964a', 'عند اختيار مدينة')); ?> <b><?php echo h(__('t_641298ecec', 'مفعّلة')); ?></b> <?php echo h(__('t_1643088d14', 'سيتم تعبئة المدينة/رمز الدولة تلقائياً وتعطيل الإدخال اليدوي.')); ?>
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-md-6 mb-3">
-                  <label class="form-label"><?= h(__('t_4b0c82b2e6', 'المدينة (يدويًا)')) ?></label>
-                  <input type="text" name="city" id="city" class="form-control" value="<?= h((string)($current['city'] ?? '')) ?>">
+                  <label class="form-label"><?php echo h(__('t_4b0c82b2e6', 'المدينة (يدويًا)')); ?></label>
+                  <input type="text" name="city" id="city" class="form-control" value="<?php echo h((string)($current['city'] ?? '')); ?>">
                 </div>
                 <div class="col-md-6 mb-3">
-                  <label class="form-label"><?= h(__('t_008a29c298', 'رمز الدولة (يدويًا)')) ?></label>
-                  <input type="text" name="country_code" id="country_code" class="form-control" placeholder="SA, EG, SD ..." value="<?= h((string)($current['country_code'] ?? '')) ?>">
+                  <label class="form-label"><?php echo h(__('t_008a29c298', 'رمز الدولة (يدويًا)')); ?></label>
+                  <input type="text" name="country_code" id="country_code" class="form-control" placeholder="SA, EG, SD ..." value="<?php echo h((string)($current['country_code'] ?? '')); ?>">
                 </div>
               </div>
 
               <div class="mb-3">
-                <label class="form-label d-block"><?= h(__('t_561b69c07c', 'وحدة القياس')) ?></label>
+                <label class="form-label d-block"><?php echo h(__('t_561b69c07c', 'وحدة القياس')); ?></label>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="units" id="units_metric" value="metric" <?= ((string)($current['units'] ?? 'metric')) === 'metric' ? 'checked' : '' ?>>
-                  <label class="form-check-label" for="units_metric"><?= h(__('t_7d1ed929bf', 'مئوية (°C)')) ?></label>
+                  <input class="form-check-input" type="radio" name="units" id="units_metric" value="metric" <?php echo ((string)($current['units'] ?? 'metric')) === 'metric' ? 'checked' : ''; ?>>
+                  <label class="form-check-label" for="units_metric"><?php echo h(__('t_7d1ed929bf', 'مئوية (°C)')); ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="units" id="units_imperial" value="imperial" <?= ((string)($current['units'] ?? '')) === 'imperial' ? 'checked' : '' ?>>
-                  <label class="form-check-label" for="units_imperial"><?= h(__('t_c44a730cb7', 'فهرنهايت (°F)')) ?></label>
+                  <input class="form-check-input" type="radio" name="units" id="units_imperial" value="imperial" <?php echo ((string)($current['units'] ?? '')) === 'imperial' ? 'checked' : ''; ?>>
+                  <label class="form-check-label" for="units_imperial"><?php echo h(__('t_c44a730cb7', 'فهرنهايت (°F)')); ?></label>
                 </div>
               </div>
 
               <div class="row align-items-center mb-3">
                 <div class="col-md-6 mb-3 mb-md-0">
-                  <label class="form-label"><?= h(__('t_927c173ba4', 'دقائق تحديث البيانات')) ?></label>
-                  <input type="number" min="5" max="1440" step="5" name="refresh_minutes" class="form-control" value="<?= (int)($current['refresh_minutes'] ?? 30) ?>">
-                  <div class="form-text"><?= h(__('t_45fe2bdded', 'الحد الأدنى 5 دقائق، والحد الأقصى 1440 دقيقة (يوم).')) ?></div>
+                  <label class="form-label"><?php echo h(__('t_927c173ba4', 'دقائق تحديث البيانات')); ?></label>
+                  <input type="number" min="5" max="1440" step="5" name="refresh_minutes" class="form-control" value="<?php echo (int)($current['refresh_minutes'] ?? 30); ?>">
+                  <div class="form-text"><?php echo h(__('t_45fe2bdded', 'الحد الأدنى 5 دقائق، والحد الأقصى 1440 دقيقة (يوم).')); ?></div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-check mt-3">
-                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" <?= (int)($current['is_active'] ?? 0) === 1 ? 'checked' : '' ?>>
-                    <label class="form-check-label" for="is_active"><?= h(__('t_c42fa2a10b', 'تفعيل ويدجيت الطقس في واجهة الموقع')) ?></label>
+                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" <?php echo (int)($current['is_active'] ?? 0) === 1 ? 'checked' : ''; ?>>
+                    <label class="form-check-label" for="is_active"><?php echo h(__('t_c42fa2a10b', 'تفعيل ويدجيت الطقس في واجهة الموقع')); ?></label>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex flex-wrap gap-2">
                 <button type="submit" class="btn btn-primary">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#save"></use></svg> <?php echo h(__('t_32be3bade9', 'حفظ الإعدادات')); ?>
                 </button>
 
                 <button type="button" class="btn btn-outline-light" id="test-weather">
-                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_f09cc50204', 'اختبار الاتصال')) ?>
+                  <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_f09cc50204', 'اختبار الاتصال')); ?>
                 </button>
               </div>
 
               <div class="gdy-test-box mt-3">
                 <div class="small text-muted">
                   <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                  <?= h(__('t_df8eebffd0', 'اختبار الاتصال يجرب جلب طقس المدينة الحالية باستخدام OpenWeatherMap (من المتصفح).')) ?>
+                  <?php echo h(__('t_df8eebffd0', 'اختبار الاتصال يجرب جلب طقس المدينة الحالية باستخدام OpenWeatherMap (من المتصفح).')); ?>
                 </div>
                 <div id="test-result" class="gdy-test-result"></div>
               </div>
@@ -799,37 +799,37 @@ html, body { overflow-x: hidden; }
       <div class="col-lg-4">
         <div class="gdy-card mb-4">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_e547f05ec6', 'إضافة مدينة/دولة')) ?></h2>
-            <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= (int)$locActiveCount ?>/<?= (int)$locTotal ?> مفعّلة</span>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_e547f05ec6', 'إضافة مدينة/دولة')); ?></h2>
+            <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo (int)$locActiveCount; ?>/<?php echo (int)$locTotal; ?> مفعّلة</span>
           </div>
           <div class="gdy-card-body">
             <form method="post" action="" autocomplete="off">
-              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
               <input type="hidden" name="form_type" value="location">
 
               <div class="mb-3">
-                <label class="form-label"><?= h(__('t_fa3fdcf7d8', 'اسم الدولة')) ?></label>
-                <input type="text" name="loc_country_name" class="form-control" placeholder="<?= h(__('t_f49e8c5a71', 'السعودية، السودان، مصر...')) ?>" required>
+                <label class="form-label"><?php echo h(__('t_fa3fdcf7d8', 'اسم الدولة')); ?></label>
+                <input type="text" name="loc_country_name" class="form-control" placeholder="<?php echo h(__('t_f49e8c5a71', 'السعودية، السودان، مصر...')); ?>" required>
               </div>
 
               <div class="mb-3">
-                <label class="form-label"><?= h(__('t_767ac60906', 'رمز الدولة')) ?></label>
+                <label class="form-label"><?php echo h(__('t_767ac60906', 'رمز الدولة')); ?></label>
                 <input type="text" name="loc_country_code" class="form-control" placeholder="SA, SD, EG ..." required>
-                <div class="form-text"><?= h(__('t_7616956b92', 'يفضل 2–3 أحرف (مثال: SA).')) ?></div>
+                <div class="form-text"><?php echo h(__('t_7616956b92', 'يفضل 2–3 أحرف (مثال: SA).')); ?></div>
               </div>
 
               <div class="mb-3">
-                <label class="form-label"><?= h(__('t_cfb670c977', 'اسم المدينة')) ?></label>
-                <input type="text" name="loc_city_name" class="form-control" placeholder="<?= h(__('t_70baf178c1', 'الرياض، الخرطوم، القاهرة...')) ?>" required>
+                <label class="form-label"><?php echo h(__('t_cfb670c977', 'اسم المدينة')); ?></label>
+                <input type="text" name="loc_city_name" class="form-control" placeholder="<?php echo h(__('t_70baf178c1', 'الرياض، الخرطوم، القاهرة...')); ?>" required>
               </div>
 
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="loc_is_active" id="loc_is_active" value="1" checked>
-                <label class="form-check-label" for="loc_is_active"><?= h(__('t_5d28eae667', 'مفعّلة للاختيار في الإعدادات')) ?></label>
+                <label class="form-check-label" for="loc_is_active"><?php echo h(__('t_5d28eae667', 'مفعّلة للاختيار في الإعدادات')); ?></label>
               </div>
 
               <button type="submit" class="btn btn-outline-light btn-sm w-100">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?= h(__('t_6b97427299', 'إضافة المدينة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_6b97427299', 'إضافة المدينة')); ?>
               </button>
             </form>
 
@@ -837,61 +837,61 @@ html, body { overflow-x: hidden; }
 
             <div class="mb-2 d-flex align-items-center justify-content-between">
               <div class="small text-muted">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_ce980312f5', 'المدن المسجّلة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_ce980312f5', 'المدن المسجّلة')); ?>
               </div>
-              <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= (int)$locTotal ?></span>
+              <span class="gdy-badge"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo (int)$locTotal; ?></span>
             </div>
 
             <div class="mb-2">
-              <input type="text" id="locations-search" class="form-control form-control-sm" placeholder="<?= h(__('t_e7ad92e879', 'بحث سريع داخل القائمة...')) ?>">
+              <input type="text" id="locations-search" class="form-control form-control-sm" placeholder="<?php echo h(__('t_e7ad92e879', 'بحث سريع داخل القائمة...')); ?>">
             </div>
 
             <div class="table-responsive" style="max-height:260px; overflow:auto;">
               <table class="table table-sm table-dark align-middle mb-0" id="locations-table">
                 <thead>
                   <tr>
-                    <th><?= h(__('t_55a3d09c71', 'الدولة')) ?></th>
-                    <th><?= h(__('t_a213cd1841', 'المدينة')) ?></th>
-                    <th><?= h(__('t_a7dae77bed', 'رمز')) ?></th>
-                    <th class="text-end"><?= h(__('t_155e7129d1', 'إجراء')) ?></th>
+                    <th><?php echo h(__('t_55a3d09c71', 'الدولة')); ?></th>
+                    <th><?php echo h(__('t_a213cd1841', 'المدينة')); ?></th>
+                    <th><?php echo h(__('t_a7dae77bed', 'رمز')); ?></th>
+                    <th class="text-end"><?php echo h(__('t_155e7129d1', 'إجراء')); ?></th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php if (!$locations): ?>
                     <tr>
-                      <td colspan="4" class="text-center text-muted"><?= h(__('t_21490c8eea', 'لا توجد مدن مسجّلة بعد.')) ?></td>
+                      <td colspan="4" class="text-center text-muted"><?php echo h(__('t_21490c8eea', 'لا توجد مدن مسجّلة بعد.')); ?></td>
                     </tr>
                   <?php else: ?>
                     <?php foreach ($locations as $loc): ?>
-                      <tr data-row="<?= (int)$loc['id'] ?>">
-                        <td><?= h($loc['country_name']) ?></td>
+                      <tr data-row="<?php echo (int)$loc['id']; ?>">
+                        <td><?php echo h($loc['country_name']); ?></td>
                         <td>
-                          <?= h($loc['city_name']) ?>
+                          <?php echo h($loc['city_name']); ?>
                           <?php if ((int)$loc['is_active'] === 1): ?>
-                            <span class="badge bg-success ms-1"><?= h(__('t_641298ecec', 'مفعّلة')) ?></span>
+                            <span class="badge bg-success ms-1"><?php echo h(__('t_641298ecec', 'مفعّلة')); ?></span>
                           <?php else: ?>
-                            <span class="badge bg-secondary ms-1"><?= h(__('t_2fab10b091', 'معطّلة')) ?></span>
+                            <span class="badge bg-secondary ms-1"><?php echo h(__('t_2fab10b091', 'معطّلة')); ?></span>
                           <?php endif; ?>
                         </td>
-                        <td><?= h($loc['country_code']) ?></td>
+                        <td><?php echo h($loc['country_code']); ?></td>
                         <td class="text-end">
                           <div class="gdy-mini-actions">
                             <form method="post" action="">
-                              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                               <input type="hidden" name="form_type" value="location_action">
                               <input type="hidden" name="action" value="toggle">
-                              <input type="hidden" name="location_row_id" value="<?= (int)$loc['id'] ?>">
-                              <button type="submit" class="btn btn-sm btn-outline-light" title="<?= h(__('t_47388f3138', 'تفعيل/تعطيل')) ?>">
+                              <input type="hidden" name="location_row_id" value="<?php echo (int)$loc['id']; ?>">
+                              <button type="submit" class="btn btn-sm btn-outline-light" title="<?php echo h(__('t_47388f3138', 'تفعيل/تعطيل')); ?>">
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                               </button>
                             </form>
 
                             <form method="post" action="" data-confirm='حذف هذه المدينة نهائياً؟'>
-                              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+                              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
                               <input type="hidden" name="form_type" value="location_action">
                               <input type="hidden" name="action" value="delete">
-                              <input type="hidden" name="location_row_id" value="<?= (int)$loc['id'] ?>">
-                              <button type="submit" class="btn btn-sm btn-outline-danger" title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                              <input type="hidden" name="location_row_id" value="<?php echo (int)$loc['id']; ?>">
+                              <button type="submit" class="btn btn-sm btn-outline-danger" title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                               </button>
                             </form>
@@ -905,7 +905,7 @@ html, body { overflow-x: hidden; }
             </div>
 
             <div class="small text-muted mt-2">
-              <?= h(__('t_b3d39c0c59', 'تلميح: يمكنك')) ?> <b><?= h(__('t_47388f3138', 'تفعيل/تعطيل')) ?></b> <?= h(__('t_eb00a8de42', 'المدن دون حذفها، وستختفي المدن المعطّلة من الاختيار عند الحفظ.')) ?>
+              <?php echo h(__('t_b3d39c0c59', 'تلميح: يمكنك')); ?> <b><?php echo h(__('t_47388f3138', 'تفعيل/تعطيل')); ?></b> <?php echo h(__('t_eb00a8de42', 'المدن دون حذفها، وستختفي المدن المعطّلة من الاختيار عند الحفظ.')); ?>
             </div>
 
           </div>
@@ -913,14 +913,14 @@ html, body { overflow-x: hidden; }
 
         <div class="gdy-card">
           <div class="gdy-card-header">
-            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_d5d2cdc290', 'تحسينات سريعة')) ?></h2>
+            <h2><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_d5d2cdc290', 'تحسينات سريعة')); ?></h2>
           </div>
           <div class="gdy-card-body">
             <ul class="small text-muted mb-0">
-              <li><?= h(__('t_b08da4f49b', 'عند اختيار مدينة من القائمة سيتم تعبئة المدينة/رمز الدولة تلقائياً.')) ?></li>
-              <li><?= h(__('t_de50a8f561', 'زر اختبار الاتصال يساعدك على التأكد من صحة المفتاح والمدينة قبل الحفظ.')) ?></li>
-              <li><?= h(__('t_0e779a651b', 'بحث سريع داخل جدول المدن لتسهيل الوصول.')) ?></li>
-              <li><?= h(__('t_3a1df3448e', 'زر تفعيل/تعطيل أو حذف للمدن من نفس الصفحة.')) ?></li>
+              <li><?php echo h(__('t_b08da4f49b', 'عند اختيار مدينة من القائمة سيتم تعبئة المدينة/رمز الدولة تلقائياً.')); ?></li>
+              <li><?php echo h(__('t_de50a8f561', 'زر اختبار الاتصال يساعدك على التأكد من صحة المفتاح والمدينة قبل الحفظ.')); ?></li>
+              <li><?php echo h(__('t_0e779a651b', 'بحث سريع داخل جدول المدن لتسهيل الوصول.')); ?></li>
+              <li><?php echo h(__('t_3a1df3448e', 'زر تفعيل/تعطيل أو حذف للمدن من نفس الصفحة.')); ?></li>
             </ul>
           </div>
         </div>

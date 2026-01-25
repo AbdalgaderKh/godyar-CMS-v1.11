@@ -31,27 +31,27 @@ $layout_sidebar_mode = settings_get('layout.sidebar_mode', 'visible');
     <div class="col-md-9">
       <div class="card p-4">
 <?php if ((empty($notice) === false)): ?>
-          <div class="alert alert-success"><?= h($notice) ?></div>
+          <div class="alert alert-success"><?php echo h($notice); ?></div>
         <?php endif; ?>
         <?php if ((empty($error) === false)): ?>
-          <div class="alert alert-danger"><?= h($error) ?></div>
+          <div class="alert alert-danger"><?php echo h($error); ?></div>
         <?php endif; ?>
 
         <form method="post">
           <?php if (function_exists('csrf_token') === true): ?>
-            <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(csrf_token()); ?>">
           <?php endif; ?>
 
           <div class="mb-3">
-            <label class="form-label"><?= h(__('t_acf5e83818', 'حالة القائمة الجانبية للواجهة (للزوار)')) ?></label>
+            <label class="form-label"><?php echo h(__('t_acf5e83818', 'حالة القائمة الجانبية للواجهة (للزوار)')); ?></label>
             <select class="form-select" name="layout_sidebar_mode">
-              <option value="visible" <?= $layout_sidebar_mode === 'visible' ? 'selected' : '' ?>><?= h(__('t_bc6a03bbaa', 'ظاهرة')) ?></option>
-              <option value="hidden"  <?= $layout_sidebar_mode === 'hidden'  ? 'selected' : '' ?>><?= h(__('t_ad0a598276', 'مخفية')) ?></option>
+              <option value="visible" <?php echo $layout_sidebar_mode === 'visible' ? 'selected' : ''; ?>><?php echo h(__('t_bc6a03bbaa', 'ظاهرة')); ?></option>
+              <option value="hidden"  <?php echo $layout_sidebar_mode === 'hidden'  ? 'selected' : ''; ?>><?php echo h(__('t_ad0a598276', 'مخفية')); ?></option>
             </select>
-            <div class="form-text"><?= h(__('t_bfd5336c62', 'هذا يخص سايدبار الزوار في الواجهة، وليس سايدبار لوحة التحكم.')) ?></div>
+            <div class="form-text"><?php echo h(__('t_bfd5336c62', 'هذا يخص سايدبار الزوار في الواجهة، وليس سايدبار لوحة التحكم.')); ?></div>
           </div>
 
-          <button class="btn btn-primary"><?= h(__('t_871a087a1d', 'حفظ')) ?></button>
+          <button class="btn btn-primary"><?php echo h(__('t_871a087a1d', 'حفظ')); ?></button>
         </form>
       </div>
     </div>

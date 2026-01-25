@@ -17,6 +17,19 @@ if (!function_exists('gdy_translation_enabled')) {
     }
 }
 
+if (!function_exists('gdy_ensure_news_translations_table')) {
+    /**
+     * Ensure translations table exists.
+     *
+     * In this build the translation feature is disabled; this is a safe no-op
+     * to avoid fatals in optional CRON scripts.
+     */
+    function gdy_ensure_news_translations_table(?PDO $pdo = null): void
+    {
+        // no-op
+    }
+}
+
 if (!function_exists('gdy_translation_auto_on_view')) {
     function gdy_translation_auto_on_view(): bool
     {

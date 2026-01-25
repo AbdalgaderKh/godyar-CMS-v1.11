@@ -14,8 +14,6 @@ if (!defined('APP_BOOT')) {
     }
     if (!defined('BASE_PATH')) define('BASE_PATH', $__root);
 }
-?>
-defined('ABSPATH') or 
 
 class News {
     private $db;

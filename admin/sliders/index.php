@@ -227,19 +227,19 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <!-- رأس الصفحة -->
     <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 mb-1 text-white"><?= h(__('t_eafc27904f', 'إدارة السلايدر')) ?></h1>
+            <h1 class="h4 mb-1 text-white"><?php echo h(__('t_eafc27904f', 'إدارة السلايدر')); ?></h1>
             <p class="mb-0" style="color:#e5e7eb;">
-                <?= h(__('t_278b35125c', 'إدارة شرائح العرض الرئيسية في الموقع')) ?>
+                <?php echo h(__('t_278b35125c', 'إدارة شرائح العرض الرئيسية في الموقع')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <?php if (!$tableExists): ?>
                 <a href="create_table.php" class="btn btn-warning">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_b65c728df7', 'إنشاء الجدول')); ?>
                 </a>
             <?php endif; ?>
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_5d1adeeb8d', 'إضافة شريحة جديدة')); ?>
             </a>
         </div>
     </div>
@@ -247,8 +247,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_3b529cf8d7', 'جدول السلايدر غير موجود.')) ?> 
-            <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
+            <strong><?php echo h(__('t_b83c3996d9', 'تنبيه:')); ?></strong> <?php echo h(__('t_3b529cf8d7', 'جدول السلايدر غير موجود.')); ?> 
+            <a href="create_table.php" class="alert-link"><?php echo h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')); ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -257,8 +257,8 @@ require_once __DIR__ . '/../layout/sidebar.php';
     <?php if ($tableExists && !empty($sliders)): ?>
         <div class="gdy-stats">
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($sliders) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_2c31e07b5a', 'إجمالي الشرائح')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($sliders); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_2c31e07b5a', 'إجمالي الشرائح')); ?></span>
             </div>
             <?php
             $activeSliders = array_filter($sliders, function($slider) {
@@ -269,12 +269,12 @@ require_once __DIR__ . '/../layout/sidebar.php';
             });
             ?>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($activeSliders) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_2df70bad69', 'شرائح نشطة')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($activeSliders); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_2df70bad69', 'شرائح نشطة')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($inactiveSliders) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_d8a00827ab', 'شرائح غير نشطة')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($inactiveSliders); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_d8a00827ab', 'شرائح غير نشطة')); ?></span>
             </div>
         </div>
     <?php endif; ?>
@@ -286,10 +286,10 @@ require_once __DIR__ . '/../layout/sidebar.php';
                 <div class="gdy-empty-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
-                <h4 class="text-muted mb-3"><?= h(__('t_95b00f88dc', 'لا توجد شرائح عرض')) ?></h4>
-                <p class="text-muted mb-4"><?= h(__('t_1d7ff935eb', 'ابدأ بإضافة أول شريحة عرض إلى السلايدر')) ?></p>
+                <h4 class="text-muted mb-3"><?php echo h(__('t_95b00f88dc', 'لا توجد شرائح عرض')); ?></h4>
+                <p class="text-muted mb-4"><?php echo h(__('t_1d7ff935eb', 'ابدأ بإضافة أول شريحة عرض إلى السلايدر')); ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_dc654e4e56', 'إضافة أول شريحة')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_dc654e4e56', 'إضافة أول شريحة')); ?>
                 </a>
             </div>
         <?php else: ?>
@@ -299,26 +299,26 @@ require_once __DIR__ . '/../layout/sidebar.php';
                         <div class="gdy-slider-card">
                             <!-- صورة السلايدر -->
                             <div class="gdy-slider-image">
-                                <img src="<?= htmlspecialchars($slider['image_path']) ?>" 
-                                     alt="<?= htmlspecialchars($slider['title']) ?>"
+                                <img src="<?php echo htmlspecialchars($slider['image_path']); ?>" 
+                                     alt="<?php echo htmlspecialchars($slider['title']); ?>"
                                      data-img-error="hide-show-next-flex">
                                 <div class="gdy-slider-overlay">
                                     <div class="gdy-slider-actions">
-                                        <a href="edit.php?id=<?= $slider['id'] ?>" 
+                                        <a href="edit.php?id=<?php echo $slider['id']; ?>" 
                                            class="gdy-slider-btn"
-                                           title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                                           title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <button class="gdy-slider-btn toggle-slider" 
-                                                data-id="<?= $slider['id'] ?>"
-                                                data-status="<?= $slider['is_active'] ?>"
-                                                title="<?= $slider['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
+                                                data-id="<?php echo $slider['id']; ?>"
+                                                data-status="<?php echo $slider['is_active']; ?>"
+                                                title="<?php echo $slider['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>">
                                             <svg class="gdy-icon $slider['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                         <button class="gdy-slider-btn delete-slider" 
-                                                data-id="<?= $slider['id'] ?>"
-                                                data-title="<?= htmlspecialchars($slider['title']) ?>"
-                                                title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                                                data-id="<?php echo $slider['id']; ?>"
+                                                data-title="<?php echo htmlspecialchars($slider['title']); ?>"
+                                                title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                     </div>
@@ -328,28 +328,28 @@ require_once __DIR__ . '/../layout/sidebar.php';
                             <!-- معلومات السلايدر -->
                             <div class="gdy-slider-info">
                                 <div class="gdy-slider-title">
-                                    <?= htmlspecialchars($slider['title']) ?>
+                                    <?php echo htmlspecialchars($slider['title']); ?>
                                 </div>
                                 
                                 <?php if (!empty($slider['description'])): ?>
                                     <div class="gdy-slider-desc">
-                                        <?= htmlspecialchars($slider['description']) ?>
+                                        <?php echo htmlspecialchars($slider['description']); ?>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <div class="gdy-slider-meta">
-                                    <span class="gdy-slider-status <?= $slider['is_active'] ? '' : 'inactive' ?>">
-                                        <?= $slider['is_active'] ? __('t_bad8af986e', '🟢 نشط') : __('t_9267eae6e2', '⚫ غير نشط') ?>
+                                    <span class="gdy-slider-status <?php echo $slider['is_active'] ? '' : 'inactive'; ?>">
+                                        <?php echo $slider['is_active'] ? __('t_bad8af986e', '🟢 نشط') : __('t_9267eae6e2', '⚫ غير نشط'); ?>
                                     </span>
-                                    <span>ترتيب: <?= $slider['display_order'] ?></span>
+                                    <span>ترتيب: <?php echo $slider['display_order']; ?></span>
                                 </div>
                                 
                                 <?php if (!empty($slider['button_text']) && !empty($slider['button_url'])): ?>
                                     <div class="mt-3">
-                                        <a href="<?= htmlspecialchars($slider['button_url']) ?>" 
+                                        <a href="<?php echo htmlspecialchars($slider['button_url']); ?>" 
                                            target="_blank" 
                                            class="btn btn-sm btn-outline-primary w-100">
-                                            <?= htmlspecialchars($slider['button_text']) ?>
+                                            <?php echo htmlspecialchars($slider['button_text']); ?>
                                         </a>
                                     </div>
                                 <?php endif; ?>

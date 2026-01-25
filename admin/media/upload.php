@@ -191,19 +191,19 @@ require_once __DIR__ . '/../partials/header.php';
 
 <div class="container-fluid py-3">
   <div class="d-flex align-items-center justify-content-between mb-3">
-    <h1 class="h4 mb-0"><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></h1>
-    <a class="btn btn-outline-secondary" href="index.php"><?= htmlspecialchars(__('t_7b8f1de1c0', 'العودة'), ENT_QUOTES, 'UTF-8') ?></a>
+    <h1 class="h4 mb-0"><?php echo htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8'); ?></h1>
+    <a class="btn btn-outline-secondary" href="index.php"><?php echo htmlspecialchars(__('t_7b8f1de1c0', 'العودة'), ENT_QUOTES, 'UTF-8'); ?></a>
   </div>
 
   <?php if ($success): ?>
-    <div class="alert alert-success"><?= htmlspecialchars($success, ENT_QUOTES, 'UTF-8') ?></div>
+    <div class="alert alert-success"><?php echo htmlspecialchars($success, ENT_QUOTES, 'UTF-8'); ?></div>
   <?php endif; ?>
 
   <?php if (!empty($errors)): ?>
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $e): ?>
-          <li><?= htmlspecialchars((string)$e, ENT_QUOTES, 'UTF-8') ?></li>
+          <li><?php echo htmlspecialchars((string)$e, ENT_QUOTES, 'UTF-8'); ?></li>
         <?php endforeach; ?>
       </ul>
     </div>
@@ -212,10 +212,10 @@ require_once __DIR__ . '/../partials/header.php';
   <?php if (is_array($uploaded) && !empty($uploaded['url'])): ?>
     <div class="card mb-3">
       <div class="card-body">
-        <div><strong><?= htmlspecialchars(__('t_8a0a8b9a3e', 'الملف'), ENT_QUOTES, 'UTF-8') ?>:</strong> <?= htmlspecialchars((string)$uploaded['name'], ENT_QUOTES, 'UTF-8') ?></div>
-        <div><strong>URL:</strong> <a href="<?= htmlspecialchars((string)$uploaded['url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener noreferrer"><?= htmlspecialchars((string)$uploaded['url'], ENT_QUOTES, 'UTF-8') ?></a></div>
-        <div><strong>MIME:</strong> <?= htmlspecialchars((string)$uploaded['mime'], ENT_QUOTES, 'UTF-8') ?></div>
-        <div><strong><?= htmlspecialchars(__('t_9d0db0c2f1', 'الحجم'), ENT_QUOTES, 'UTF-8') ?>:</strong> <?= (int)$uploaded['size'] ?> bytes</div>
+        <div><strong><?php echo htmlspecialchars(__('t_8a0a8b9a3e', 'الملف'), ENT_QUOTES, 'UTF-8'); ?>:</strong> <?php echo htmlspecialchars((string)$uploaded['name'], ENT_QUOTES, 'UTF-8'); ?></div>
+        <div><strong>URL:</strong> <a href="<?php echo htmlspecialchars((string)$uploaded['url'], ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><?php echo htmlspecialchars((string)$uploaded['url'], ENT_QUOTES, 'UTF-8'); ?></a></div>
+        <div><strong>MIME:</strong> <?php echo htmlspecialchars((string)$uploaded['mime'], ENT_QUOTES, 'UTF-8'); ?></div>
+        <div><strong><?php echo htmlspecialchars(__('t_9d0db0c2f1', 'الحجم'), ENT_QUOTES, 'UTF-8'); ?>:</strong> <?php echo (int)$uploaded['size']; ?> bytes</div>
       </div>
     </div>
   <?php endif; ?>
@@ -223,15 +223,15 @@ require_once __DIR__ . '/../partials/header.php';
   <div class="card">
     <div class="card-body">
       <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(function_exists('csrf_token') ? csrf_token() : '', ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(function_exists('csrf_token') ? csrf_token() : '', ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="mb-3">
-          <label class="form-label"><?= htmlspecialchars(__('t_3e61d45733', 'اختر ملفًا'), ENT_QUOTES, 'UTF-8') ?></label>
+          <label class="form-label"><?php echo htmlspecialchars(__('t_3e61d45733', 'اختر ملفًا'), ENT_QUOTES, 'UTF-8'); ?></label>
           <input class="form-control" type="file" name="file" required>
-          <div class="form-text"><?= htmlspecialchars(__('t_4a76188b70', 'الحد الأقصى: 100MB. الامتدادات المسموحة: صور، PDF، Office، أرشيفات، MP3/MP4.'), ENT_QUOTES, 'UTF-8') ?></div>
+          <div class="form-text"><?php echo htmlspecialchars(__('t_4a76188b70', 'الحد الأقصى: 100MB. الامتدادات المسموحة: صور، PDF، Office، أرشيفات، MP3/MP4.'), ENT_QUOTES, 'UTF-8'); ?></div>
         </div>
 
-        <button class="btn btn-primary" type="submit"><?= htmlspecialchars(__('t_5e3e0d8a11', 'رفع'), ENT_QUOTES, 'UTF-8') ?></button>
+        <button class="btn btn-primary" type="submit"><?php echo htmlspecialchars(__('t_5e3e0d8a11', 'رفع'), ENT_QUOTES, 'UTF-8'); ?></button>
       </form>
     </div>
   </div>

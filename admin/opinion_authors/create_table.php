@@ -72,10 +72,10 @@ if ($pdo instanceof PDO) {
 
 ?>
 <!doctype html>
-<html lang="<?= htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))), ENT_QUOTES, 'UTF-8') ?>" dir="<?= ((function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))) === 'ar' ? 'rtl' : 'ltr') ?>">
+<html lang="<?php echo htmlspecialchars((string)(function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))), ENT_QUOTES, 'UTF-8'); ?>" dir="<?php echo ((function_exists('current_lang') ? current_lang() : (string)((!empty($_SESSION['lang']) ? $_SESSION['lang'] : 'ar'))) === 'ar' ? 'rtl' : 'ltr'); ?>">
 <head>
   <meta charset="utf-8">
-  <title><?= h(__('t_7f6d379bac', 'إنشاء جدول كُتّاب الرأي')) ?></title>
+  <title><?php echo h(__('t_7f6d379bac', 'إنشاء جدول كُتّاب الرأي')); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link
     href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css"
@@ -84,20 +84,20 @@ if ($pdo instanceof PDO) {
 <body class="bg-dark text-light">
 <div class="container py-5">
 
-  <h1 class="h4 mb-4"><?= h(__('t_58f5f1e43d', 'إنشاء جدول كُتّاب الرأي (opinion_authors)')) ?></h1>
+  <h1 class="h4 mb-4"><?php echo h(__('t_58f5f1e43d', 'إنشاء جدول كُتّاب الرأي (opinion_authors)')); ?></h1>
 
   <?php if ($success === true): ?>
     <div class="alert alert-success">
-      <?= h(__('t_d4975cae6d', '✅ تم إنشاء جدول')) ?> <strong>opinion_authors</strong> <?= h(__('t_bea7cfeb79', 'بنجاح (أو كان موجودًا بالفعل).')) ?>
+      <?php echo h(__('t_d4975cae6d', '✅ تم إنشاء جدول')); ?> <strong>opinion_authors</strong> <?php echo h(__('t_bea7cfeb79', 'بنجاح (أو كان موجودًا بالفعل).')); ?>
     </div>
-    <a href="index.php" class="btn btn-primary"><?= h(__('t_6ccaa5091f', 'الذهاب لصفحة كُتّاب الرأي')) ?></a>
-    <a href="../index.php" class="btn btn-outline-light ms-2"><?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?></a>
+    <a href="index.php" class="btn btn-primary"><?php echo h(__('t_6ccaa5091f', 'الذهاب لصفحة كُتّاب الرأي')); ?></a>
+    <a href="../index.php" class="btn btn-outline-light ms-2"><?php echo h(__('t_2f09126266', 'العودة للوحة التحكم')); ?></a>
   <?php else: ?>
     <div class="alert alert-danger">
-      <?= h(__('t_344cdef245', '⚠️ تعذّر إنشاء الجدول.')) ?><br>
-      <?= (empty($error) === false) ? '<small>'.h($error).'</small>' : '' ?>
+      <?php echo h(__('t_344cdef245', '⚠️ تعذّر إنشاء الجدول.')); ?><br>
+      <?php echo (empty($error) === false) ? '<small>'.h($error).'</small>' : ''; ?>
     </div>
-    <a href="../index.php" class="btn btn-outline-light"><?= h(__('t_2f09126266', 'العودة للوحة التحكم')) ?></a>
+    <a href="../index.php" class="btn btn-outline-light"><?php echo h(__('t_2f09126266', 'العودة للوحة التحكم')); ?></a>
   <?php endif; ?>
 
 </div>

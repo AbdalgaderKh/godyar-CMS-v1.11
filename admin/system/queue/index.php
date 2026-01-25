@@ -93,29 +93,29 @@ require_once __DIR__ . '/../../layout/sidebar.php';
 
       <div class="gdy-page-header d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
         <div>
-          <h1 class="h4 text-white mb-1"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_6a694bd722', 'الطابور والجدولة')) ?></h1>
-          <p class="text-muted mb-0"><?= h(__('t_afed5076f5', 'تنفيذ المهام المؤجلة + جدولة نشر/إلغاء نشر الأخبار.')) ?></p>
+          <h1 class="h4 text-white mb-1"><svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_6a694bd722', 'الطابور والجدولة')); ?></h1>
+          <p class="text-muted mb-0"><?php echo h(__('t_afed5076f5', 'تنفيذ المهام المؤجلة + جدولة نشر/إلغاء نشر الأخبار.')); ?></p>
         </div>
         <div class="d-flex gap-2 flex-wrap">
           <form method="post" class="m-0">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
             <input type="hidden" name="action" value="run_scheduler_now">
-            <button class="btn btn-outline-info btn-sm"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_70c528f1d0', 'تشغيل جدولة الأخبار الآن')) ?></button>
+            <button class="btn btn-outline-info btn-sm"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_70c528f1d0', 'تشغيل جدولة الأخبار الآن')); ?></button>
           </form>
           <form method="post" class="m-0">
             <input type="hidden" name="action" value="clear_done">
-            <button class="btn btn-outline-warning btn-sm"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?= h(__('t_15dad1b337', 'حذف المكتمل')) ?></button>
+            <button class="btn btn-outline-warning btn-sm"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#trash"></use></svg> <?php echo h(__('t_15dad1b337', 'حذف المكتمل')); ?></button>
           </form>
-          <a class="btn btn-outline-success btn-sm" href="worker.php" target="_blank"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_eb011f743d', 'تشغيل العامل')) ?></a>
+          <a class="btn btn-outline-success btn-sm" href="worker.php" target="_blank"><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_eb011f743d', 'تشغيل العامل')); ?></a>
         </div>
       </div>
 
       <?php if (empty($_GET['ok']) === false): ?>
-        <div class="alert alert-success"><?= h(__('t_478e73c965', 'تمت إضافة مهمة الجدولة للطابور.')) ?></div>
+        <div class="alert alert-success"><?php echo h(__('t_478e73c965', 'تمت إضافة مهمة الجدولة للطابور.')); ?></div>
       <?php endif; ?>
       <?php if (isset($_GET['cleared'])): ?>
-        <div class="alert alert-info">تم حذف <?= (int)$_GET['cleared'] ?> مهمة مكتملة.</div>
+        <div class="alert alert-info">تم حذف <?php echo (int)$_GET['cleared']; ?> مهمة مكتملة.</div>
       <?php endif; ?>
 
       <div class="card glass-card gdy-card">
@@ -125,29 +125,29 @@ require_once __DIR__ . '/../../layout/sidebar.php';
               <thead>
                 <tr>
                   <th>#</th>
-                  <th><?= h(__('t_a70b017205', 'النوع')) ?></th>
-                  <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
+                  <th><?php echo h(__('t_a70b017205', 'النوع')); ?></th>
+                  <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
                   <th class="d-none d-md-table-cell">run_at</th>
-                  <th><?= h(__('t_e32b869f05', 'محاولات')) ?></th>
-                  <th class="d-none d-lg-table-cell"><?= h(__('t_c454b8eb8f', 'آخر خطأ')) ?></th>
+                  <th><?php echo h(__('t_e32b869f05', 'محاولات')); ?></th>
+                  <th class="d-none d-lg-table-cell"><?php echo h(__('t_c454b8eb8f', 'آخر خطأ')); ?></th>
                 </tr>
               </thead>
               <tbody>
               <?php if (empty($jobs)): ?>
-                <tr><td colspan="6" class="text-muted"><?= h(__('t_b5d8d30bfc', 'لا توجد مهام حالياً.')) ?></td></tr>
+                <tr><td colspan="6" class="text-muted"><?php echo h(__('t_b5d8d30bfc', 'لا توجد مهام حالياً.')); ?></td></tr>
               <?php else: foreach ($jobs as $i => $j): ?>
                 <?php $st = (string)($j['status'] ?? 'queued'); ?>
                 <tr>
-                  <td><?= (int)$i + 1 ?></td>
-                  <td><?= htmlspecialchars((string)($j['type'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+                  <td><?php echo (int)$i + 1; ?></td>
+                  <td><?php echo htmlspecialchars((string)($j['type'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                   <td>
-                    <span class="badge bg-<?= $st==='done' ? 'success' : ($st==='failed' ? 'danger' : 'secondary') ?>">
-                      <?= htmlspecialchars($st, ENT_QUOTES, 'UTF-8') ?>
+                    <span class="badge bg-<?php echo $st==='done' ? 'success' : ($st==='failed' ? 'danger' : 'secondary'); ?>">
+                      <?php echo htmlspecialchars($st, ENT_QUOTES, 'UTF-8'); ?>
                     </span>
                   </td>
-                  <td class="small d-none d-md-table-cell"><?= isset($j['run_at']) ? date('Y-m-d H:i:s', (int)$j['run_at']) : '' ?></td>
-                  <td><?= (int)($j['attempts'] ?? 0) ?></td>
-                  <td class="small text-warning d-none d-lg-table-cell"><?= htmlspecialchars((string)($j['last_error'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+                  <td class="small d-none d-md-table-cell"><?php echo isset($j['run_at']) ? date('Y-m-d H:i:s', (int)$j['run_at']) : ''; ?></td>
+                  <td><?php echo (int)($j['attempts'] ?? 0); ?></td>
+                  <td class="small text-warning d-none d-lg-table-cell"><?php echo htmlspecialchars((string)($j['last_error'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></td>
                 </tr>
               <?php endforeach; endif; ?>
               </tbody>
@@ -155,14 +155,14 @@ require_once __DIR__ . '/../../layout/sidebar.php';
           </div>
 
           <div class="alert alert-info mt-3 mb-0">
-            <div class="fw-bold mb-1"><?= h(__('t_e2f92dc484', 'تشغيل تلقائي (Cron)')) ?></div>
-            <div class="small"><?= h(__('t_234ab75780', 'فعّل Cron لاستدعاء العامل كل دقيقة أو دقيقتين:')) ?></div>
+            <div class="fw-bold mb-1"><?php echo h(__('t_e2f92dc484', 'تشغيل تلقائي (Cron)')); ?></div>
+            <div class="small"><?php echo h(__('t_234ab75780', 'فعّل Cron لاستدعاء العامل كل دقيقة أو دقيقتين:')); ?></div>
             <?php
               $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
               $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
               $cronUrl = $scheme . '://' . $host . $adminUrl . '/system/queue/worker.php?token=' . gdy_queue_get_token();
             ?>
-            <pre class="mb-0 small">curl -s "<?= htmlspecialchars($cronUrl, ENT_QUOTES, 'UTF-8') ?>" >/dev/null 2>&1</pre>
+            <pre class="mb-0 small">curl -s "<?php echo htmlspecialchars($cronUrl, ENT_QUOTES, 'UTF-8'); ?>" >/dev/null 2>&1</pre>
           </div>
         </div>
       </div>

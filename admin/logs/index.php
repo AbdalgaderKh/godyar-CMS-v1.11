@@ -93,7 +93,7 @@ require_once __DIR__ . '/../../layout/sidebar.php';
 
   <?php if ((empty($dbError) === false)): ?>
     <div class="alert alert-danger py-2 small">
-      <strong>خطأ قاعدة البيانات:</strong> <?= h($dbError) ?>
+      <strong>خطأ قاعدة البيانات:</strong> <?php echo h($dbError); ?>
     </div>
   <?php endif; ?>
 
@@ -122,22 +122,22 @@ require_once __DIR__ . '/../../layout/sidebar.php';
             <tbody>
               <?php foreach ($rows as $log): ?>
                 <tr>
-                  <td><?= (int)$log['id'] ?></td>
-                  <td><small><?= h($log['created_at']) ?></small></td>
-                  <td><code class="small"><?= h($log['action']) ?></code></td>
+                  <td><?php echo (int)$log['id']; ?></td>
+                  <td><small><?php echo h($log['created_at']); ?></small></td>
+                  <td><code class="small"><?php echo h($log['action']); ?></code></td>
                   <td>
                     <?php if ((empty($log['user_id']) === false)): ?>
-                      <small><?= h((empty($log['name']) === false) ?: (empty($log['username']) === false) ?: ('User #'.$log['user_id'])) ?></small>
+                      <small><?php echo h((empty($log['name']) === false) ?: (empty($log['username']) === false) ?: ('User #'.$log['user_id'])); ?></small>
                     <?php else: ?>
                       <span class="text-muted small">غير محدد</span>
                     <?php endif; ?>
                   </td>
                   <td>
-                    <small><?= h(($log['entity_type'] ?? '').'#'.($log['entity_id'] ?? '')) ?></small>
+                    <small><?php echo h(($log['entity_type'] ?? '').'#'.($log['entity_id'] ?? '')); ?></small>
                   </td>
                   <td style="max-width: 260px;">
                     <small class="text-muted">
-                      <?= h(mb_substr((string)($log['details'] ?? ''), 0, 120, 'UTF-8')) ?>
+                      <?php echo h(mb_substr((string)($log['details'] ?? ''), 0, 120, 'UTF-8')); ?>
                     </small>
                   </td>
                 </tr>

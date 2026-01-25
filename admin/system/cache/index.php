@@ -160,7 +160,7 @@ html, body{
 
   <?php if ((empty($flash) === false)): ?>
     <div class="alert alert-info py-2">
-      <?= h($flash) ?>
+      <?php echo h($flash); ?>
     </div>
   <?php endif; ?>
 
@@ -174,19 +174,19 @@ html, body{
         <dl class="row mb-0">
           <dt class="col-sm-3 col-md-2 mb-2">الحالة</dt>
           <dd class="col-sm-9 col-md-10 mb-2">
-            <span class="badge <?= (empty($cacheInfo['enabled']) === false) ? 'bg-success' : 'bg-warning text-dark' ?>">
-              <?= (empty($cacheInfo['enabled']) === false) ? 'يعمل بشكل سليم' : 'غير مفعّل أو غير مستقر' ?>
+            <span class="badge <?php echo (empty($cacheInfo['enabled']) === false) ? 'bg-success' : 'bg-warning text-dark'; ?>">
+              <?php echo (empty($cacheInfo['enabled']) === false) ? 'يعمل بشكل سليم' : 'غير مفعّل أو غير مستقر'; ?>
             </span>
           </dd>
 
           <dt class="col-sm-3 col-md-2 mb-2">المحرّك</dt>
           <dd class="col-sm-9 col-md-10 mb-2">
-            <code><?= h($cacheInfo['driver']) ?></code>
+            <code><?php echo h($cacheInfo['driver']); ?></code>
           </dd>
 
           <dt class="col-sm-3 col-md-2 mb-0">المسار</dt>
           <dd class="col-sm-9 col-md-10 mb-0">
-            <code><?= h($cacheInfo['path']) ?></code>
+            <code><?php echo h($cacheInfo['path']); ?></code>
           </dd>
         </dl>
       <?php endif; ?>
@@ -195,7 +195,7 @@ html, body{
 
   <?php if (class_exists('Cache') === true): ?>
     <form method="post" class="card gdy-glass-card">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
       <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
         <div class="mb-3 mb-md-0">

@@ -147,7 +147,7 @@ if ($menuCount < 5) {
 
 ?>
 
-<aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?= h(__("admin_sidebar")) ?>">
+<aside class="admin-sidebar" id="adminSidebar" role="navigation" aria-label="<?php echo h(__("admin_sidebar")); ?>">
   <div class="admin-sidebar__card">
 
     <header class="admin-sidebar__header">
@@ -157,35 +157,35 @@ if ($menuCount < 5) {
         </div>
         <div class="admin-sidebar__brand-text">
           <div class="admin-sidebar__title">Godyar News</div>
-          <div class="admin-sidebar__subtitle"><?= h(__("admin_panel")) ?></div>
+          <div class="admin-sidebar__subtitle"><?php echo h(__("admin_panel")); ?></div>
         </div>
       </div>
-      <button class="admin-sidebar__toggle" type="button" id="sidebarToggle" aria-label="<?= h(__("toggle_sidebar")) ?>">
+      <button class="admin-sidebar__toggle" type="button" id="sidebarToggle" aria-label="<?php echo h(__("toggle_sidebar")); ?>">
         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#menu"></use></svg>
       </button>
     </header>
 
     <div class="admin-sidebar__search-wrapper">
       <div class="admin-sidebar__search">
-        <input id="sidebarSearch" class="admin-sidebar__search-input" type="search" placeholder="<?= h(__("search_menus")) ?>" autocomplete="off" />
+        <input id="sidebarSearch" class="admin-sidebar__search-input" type="search" placeholder="<?php echo h(__("search_menus")); ?>" autocomplete="off" />
         <svg class="gdy-icon admin-sidebar__search-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg>
-        <div id="sidebarSearchResults" class="admin-sidebar__search-results" role="listbox" aria-label="<?= h(__("search_results")) ?>"></div>
+        <div id="sidebarSearchResults" class="admin-sidebar__search-results" role="listbox" aria-label="<?php echo h(__("search_results")); ?>"></div>
       </div>
     </div>
 
     <?php if (!$isWriter): ?>
-      <div class="admin-sidebar__quick" aria-label="<?= h(__("quick_stats")) ?>">
-        <div class="admin-sidebar__quick-item" title="<?= h(__("comments")) ?>">
+      <div class="admin-sidebar__quick" aria-label="<?php echo h(__("quick_stats")); ?>">
+        <div class="admin-sidebar__quick-item" title="<?php echo h(__("comments")); ?>">
           <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#comment"></use></svg></div>
-          <div class="admin-sidebar__quick-value"><?= (int)($quickStats['comments'] ?? 0) ?></div>
+          <div class="admin-sidebar__quick-value"><?php echo (int)($quickStats['comments'] ?? 0); ?></div>
         </div>
-        <div class="admin-sidebar__quick-item" title="<?= h(__("users")) ?>">
+        <div class="admin-sidebar__quick-item" title="<?php echo h(__("users")); ?>">
           <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#users"></use></svg></div>
-          <div class="admin-sidebar__quick-value"><?= (int)($quickStats['users'] ?? 0) ?></div>
+          <div class="admin-sidebar__quick-value"><?php echo (int)($quickStats['users'] ?? 0); ?></div>
         </div>
-        <div class="admin-sidebar__quick-item" title="<?= h(__("news")) ?>">
+        <div class="admin-sidebar__quick-item" title="<?php echo h(__("news")); ?>">
           <div class="admin-sidebar__quick-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
-          <div class="admin-sidebar__quick-value"><?= (int)($quickStats['posts'] ?? 0) ?></div>
+          <div class="admin-sidebar__quick-value"><?php echo (int)($quickStats['posts'] ?? 0); ?></div>
         </div>
       </div>
     <?php endif; ?>
@@ -193,8 +193,8 @@ if ($menuCount < 5) {
     <nav class="admin-sidebar__nav" role="list">
 <?php if (!empty($dbMenu)): ?>
   <?php foreach ($dbMenu as $secLabel => $items): ?>
-    <div class="admin-sidebar__section" aria-label="<?= h($secLabel) ?>">
-      <div class="admin-sidebar__section-title"><?= h($secLabel) ?></div>
+    <div class="admin-sidebar__section" aria-label="<?php echo h($secLabel); ?>">
+      <div class="admin-sidebar__section-title"><?php echo h($secLabel); ?></div>
       <?php foreach ($items as $it): ?>
         <?php
           $perm = $it['perm'] ?? '';
@@ -208,13 +208,13 @@ if ($menuCount < 5) {
           $label = $it['label'] ?? '';
           $sub   = $it['sub'] ?? '';
         ?>
-        <div class="admin-sidebar__link-card" data-search="<?= h($label) ?>">
-          <a class="admin-sidebar__link" href="<?= h($href) ?>">
+        <div class="admin-sidebar__link-card" data-search="<?php echo h($label); ?>">
+          <a class="admin-sidebar__link" href="<?php echo h($href); ?>">
             <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#<?= h($icon) ?>"></use></svg></div>
+              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/gdy-icons.svg#<?php echo h($icon); ?>"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h($label) ?></div>
-                <?php if ($sub !== ''): ?><div class="admin-sidebar__link-sub"><?= h($sub) ?></div><?php endif; ?>
+                <div class="admin-sidebar__link-label"><?php echo h($label); ?></div>
+                <?php if ($sub !== ''): ?><div class="admin-sidebar__link-sub"><?php echo h($sub); ?></div><?php endif; ?>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -225,16 +225,16 @@ if ($menuCount < 5) {
   <?php endforeach; ?>
 <?php else: ?>
 
-      <div class="admin-sidebar__section" aria-label="<?= h(__('نظرة عامة')) ?>">
-        <div class="admin-sidebar__section-title"><?= h(__('نظرة عامة')) ?></div>
+      <div class="admin-sidebar__section" aria-label="<?php echo h(__('نظرة عامة')); ?>">
+        <div class="admin-sidebar__section-title"><?php echo h(__('نظرة عامة')); ?></div>
 
-        <div class="admin-sidebar__link-card <?= $currentPage === 'dashboard' ? 'is-active' : '' ?>" data-search="الرئيسية لوحة التحكم dashboard">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'dashboard' ? 'is-active' : ''; ?>" data-search="الرئيسية لوحة التحكم dashboard">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الرئيسية')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('نظرة عامة على أداء النظام')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الرئيسية')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('نظرة عامة على أداء النظام')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -243,65 +243,65 @@ if ($menuCount < 5) {
 
         <?php if (!$isWriter): ?>
           
-<div class="admin-sidebar__link-card <?= ($currentPage === 'search') ? 'is-active' : '' ?>" data-search="بحث search global">
-  <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/search/index.php">
+<div class="admin-sidebar__link-card <?php echo ($currentPage === 'search') ? 'is-active' : ''; ?>" data-search="بحث search global">
+  <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/search/index.php">
     <div class="admin-sidebar__link-main">
       <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#search"></use></svg></div>
       <div class="admin-sidebar__link-text">
-        <div class="admin-sidebar__link-label"><?= h(__('بحث شامل')) ?></div>
-        <div class="admin-sidebar__link-sub"><?= h(__('ابحث داخل اللوحة')) ?></div>
+        <div class="admin-sidebar__link-label"><?php echo h(__('بحث شامل')); ?></div>
+        <div class="admin-sidebar__link-sub"><?php echo h(__('ابحث داخل اللوحة')); ?></div>
       </div>
     </div>
   </a>
 </div>
 
-<div class="admin-sidebar__link-card <?= ($currentPage === 'notifications') ? 'is-active' : '' ?>" data-search="إشعارات notifications">
-  <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/notifications/index.php">
+<div class="admin-sidebar__link-card <?php echo ($currentPage === 'notifications') ? 'is-active' : ''; ?>" data-search="إشعارات notifications">
+  <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/notifications/index.php">
     <div class="admin-sidebar__link-main">
       <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#bell"></use></svg></div>
       <div class="admin-sidebar__link-text">
-        <div class="admin-sidebar__link-label"><?= h(__('الإشعارات')) ?></div>
-        <div class="admin-sidebar__link-sub"><?= h(__('مركز الإشعارات')) ?></div>
+        <div class="admin-sidebar__link-label"><?php echo h(__('الإشعارات')); ?></div>
+        <div class="admin-sidebar__link-sub"><?php echo h(__('مركز الإشعارات')); ?></div>
       </div>
       <?php if (!empty($__notifUnread)): ?>
         <span class="badge bg-danger rounded-pill" style="margin-inline-start:auto;align-self:center;">
-          <?= (int)$__notifUnread ?>
+          <?php echo (int)$__notifUnread; ?>
         </span>
       <?php endif; ?>
     </div>
   </a>
 </div>
 
-<div class="admin-sidebar__link-card <?= ($currentPage === 'analytics') ? 'is-active' : '' ?>" data-search="تحليلات analytics heatmap">
-  <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/analytics/heatmap.php">
+<div class="admin-sidebar__link-card <?php echo ($currentPage === 'analytics') ? 'is-active' : ''; ?>" data-search="تحليلات analytics heatmap">
+  <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/analytics/heatmap.php">
     <div class="admin-sidebar__link-main">
       <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#map"></use></svg></div>
       <div class="admin-sidebar__link-text">
-        <div class="admin-sidebar__link-label"><?= h(__('خريطة النشاط')) ?></div>
-        <div class="admin-sidebar__link-sub"><?= h(__('اليوم / الساعة')) ?></div>
+        <div class="admin-sidebar__link-label"><?php echo h(__('خريطة النشاط')); ?></div>
+        <div class="admin-sidebar__link-sub"><?php echo h(__('اليوم / الساعة')); ?></div>
       </div>
     </div>
   </a>
 </div>
 
 <div class="admin-sidebar__link-card" data-search="تصدير export csv excel">
-  <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/export.php?entity=news">
+  <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/export.php?entity=news">
     <div class="admin-sidebar__link-main">
       <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#file-csv"></use></svg></div>
       <div class="admin-sidebar__link-text">
-        <div class="admin-sidebar__link-label"><?= h(__('تصدير CSV')) ?></div>
-        <div class="admin-sidebar__link-sub"><?= h(__('الأخبار (مثال)')) ?></div>
+        <div class="admin-sidebar__link-label"><?php echo h(__('تصدير CSV')); ?></div>
+        <div class="admin-sidebar__link-sub"><?php echo h(__('الأخبار (مثال)')); ?></div>
       </div>
     </div>
   </a>
 </div>
-<div class="admin-sidebar__link-card <?= $currentPage === 'reports' ? 'is-active' : '' ?>" data-search="التقارير analytics احصائيات">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/reports/index.php">
+<div class="admin-sidebar__link-card <?php echo $currentPage === 'reports' ? 'is-active' : ''; ?>" data-search="التقارير analytics احصائيات">
+            <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/reports/index.php">
               <div class="admin-sidebar__link-main">
                 <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#chart"></use></svg></div>
                 <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('التقارير')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('لوحة مؤشرات أداء')) ?></div>
+                  <div class="admin-sidebar__link-label"><?php echo h(__('التقارير')); ?></div>
+                  <div class="admin-sidebar__link-sub"><?php echo h(__('لوحة مؤشرات أداء')); ?></div>
                 </div>
               </div>
               <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -310,8 +310,8 @@ if ($menuCount < 5) {
         <?php endif; ?>
       </div>
 
-      <div class="admin-sidebar__section" aria-label="<?= h(__('المحتوى')) ?>">
-        <div class="admin-sidebar__section-title"><?= h(__('المحتوى')) ?></div>
+      <div class="admin-sidebar__section" aria-label="<?php echo h(__('المحتوى')); ?>">
+        <div class="admin-sidebar__section-title"><?php echo h(__('المحتوى')); ?></div>
         <?php
           // صفحات الأخبار قد تستخدم currentPage = posts في بعض النسخ
           $newsMenuOpen = in_array($currentPage, ['news','posts','posts_review','news_review','feeds'], true);
@@ -334,41 +334,41 @@ if ($menuCount < 5) {
               }
           }
         ?>
-        <div class="admin-sidebar__link-card <?= $newsMenuOpen ? 'is-active' : '' ?>" data-search="الأخبار المقالات المحتوى news articles rss feeds">
+        <div class="admin-sidebar__link-card <?php echo $newsMenuOpen ? 'is-active' : ''; ?>" data-search="الأخبار المقالات المحتوى news articles rss feeds">
           <button type="button"
                   class="admin-sidebar__link admin-sidebar__link--toggle"
                   data-bs-toggle="collapse"
                   data-bs-target="#gdyNewsMenu"
-                  aria-expanded="<?= $newsMenuOpen ? 'true' : 'false' ?>"
+                  aria-expanded="<?php echo $newsMenuOpen ? 'true' : 'false'; ?>"
                   aria-controls="gdyNewsMenu">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
               <div class="admin-sidebar__link-text">
                 <div class="admin-sidebar__link-label">
-                  <?= h(__('الأخبار')) ?>
+                  <?php echo h(__('الأخبار')); ?>
                   <?php if (!$isWriter && $pendingReviewCount > 0): ?>
-                    <span class="badge bg-danger ms-2" title="<?= h(__('بانتظار المراجعة')) ?>">
-                      <?= (int)$pendingReviewCount ?>
+                    <span class="badge bg-danger ms-2" title="<?php echo h(__('بانتظار المراجعة')); ?>">
+                      <?php echo (int)$pendingReviewCount; ?>
                     </span>
                   <?php endif; ?>
                 </div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة الأخبار والمقالات')) ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة الأخبار والمقالات')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </button>
         </div>
 
-        <div class="collapse <?= $newsMenuOpen ? 'show' : '' ?>" id="gdyNewsMenu">
+        <div class="collapse <?php echo $newsMenuOpen ? 'show' : ''; ?>" id="gdyNewsMenu">
           <div class="admin-sidebar__subnav">
 
-            <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= in_array($currentPage, ['news','posts'], true) ? 'is-active' : '' ?>" data-search="إدارة الأخبار posts news">
-              <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/index.php">
+            <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?php echo in_array($currentPage, ['news','posts'], true) ? 'is-active' : ''; ?>" data-search="إدارة الأخبار posts news">
+              <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/news/index.php">
                 <div class="admin-sidebar__link-main">
                   <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg></div>
                   <div class="admin-sidebar__link-text">
-                    <div class="admin-sidebar__link-label"><?= h(__('إدارة الأخبار')) ?></div>
-                    <div class="admin-sidebar__link-sub"><?= h(__('قائمة الأخبار والمسودات')) ?></div>
+                    <div class="admin-sidebar__link-label"><?php echo h(__('إدارة الأخبار')); ?></div>
+                    <div class="admin-sidebar__link-sub"><?php echo h(__('قائمة الأخبار والمسودات')); ?></div>
                   </div>
                 </div>
                 <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -376,26 +376,26 @@ if ($menuCount < 5) {
             </div>
 
             <?php if ($can('posts.view')): ?>
-              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='translations') ? 'is-active' : '' ?>" data-search="ترجمة ترجميات translations language">
-                <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/translations.php">
+              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?php echo ($currentPage==='translations') ? 'is-active' : ''; ?>" data-search="ترجمة ترجميات translations language">
+                <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/news/translations.php">
                   <div class="admin-sidebar__link-main">
                     <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg></div>
                     <div class="admin-sidebar__link-text">
-                      <div class="admin-sidebar__link-label"><?= h(__('ترجمات الأخبار')) ?></div>
-                      <div class="admin-sidebar__link-sub"><?= h(__('إدارة نسخ اللغات للمقالات')) ?></div>
+                      <div class="admin-sidebar__link-label"><?php echo h(__('ترجمات الأخبار')); ?></div>
+                      <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة نسخ اللغات للمقالات')); ?></div>
                     </div>
                   </div>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
                 </a>
               </div>
 
-              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= ($currentPage==='polls') ? 'is-active' : '' ?>" data-search="استطلاع استطلاعات polls vote">
-                <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/polls.php">
+              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?php echo ($currentPage==='polls') ? 'is-active' : ''; ?>" data-search="استطلاع استطلاعات polls vote">
+                <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/news/polls.php">
                   <div class="admin-sidebar__link-main">
                     <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#poll"></use></svg></div>
                     <div class="admin-sidebar__link-text">
-                      <div class="admin-sidebar__link-label"><?= h(__('استطلاعات الأخبار')) ?></div>
-                      <div class="admin-sidebar__link-sub"><?= h(__('إنشاء وإدارة استطلاعات داخل المقال')) ?></div>
+                      <div class="admin-sidebar__link-label"><?php echo h(__('استطلاعات الأخبار')); ?></div>
+                      <div class="admin-sidebar__link-sub"><?php echo h(__('إنشاء وإدارة استطلاعات داخل المقال')); ?></div>
                     </div>
                   </div>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -431,7 +431,7 @@ foreach ($staticPluginLinks as $it) {
 }
 ?>
 <?php if (!empty($adminMenu) && is_array($adminMenu)): ?>
-  <div class="admin-sidebar__section-title"><?= h(__('الإضافات')) ?></div>
+  <div class="admin-sidebar__section-title"><?php echo h(__('الإضافات')); ?></div>
   <?php foreach ($adminMenu as $item): ?>
     <?php
       if (!is_array($item)) continue;
@@ -442,14 +442,14 @@ foreach ($staticPluginLinks as $it) {
       $href  = (preg_match('~^https?://~i', $url)) ? $url : (rtrim((string)$siteBase, '/') . '/' . ltrim($url, '/'));
       $active = ($currentPage === $key);
     ?>
-    <div class="admin-sidebar__link-card <?= $active ? 'is-active' : '' ?>" data-search="<?= h($title) ?>">
-      <a class="admin-sidebar__link" href="<?= h($href) ?>">
+    <div class="admin-sidebar__link-card <?php echo $active ? 'is-active' : ''; ?>" data-search="<?php echo h($title); ?>">
+      <a class="admin-sidebar__link" href="<?php echo h($href); ?>">
         <div class="admin-sidebar__link-main">
-          <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#<?= h($icon) ?>"></use></svg></div>
+          <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#<?php echo h($icon); ?>"></use></svg></div>
           <div class="admin-sidebar__link-text">
-            <div class="admin-sidebar__link-label"><?= h($title) ?></div>
+            <div class="admin-sidebar__link-label"><?php echo h($title); ?></div>
             <?php if (!empty($item['sub'])): ?>
-              <div class="admin-sidebar__link-sub"><?= h((string)$item['sub']) ?></div>
+              <div class="admin-sidebar__link-sub"><?php echo h((string)$item['sub']); ?></div>
             <?php endif; ?>
           </div>
         </div>
@@ -462,18 +462,18 @@ foreach ($staticPluginLinks as $it) {
             <?php endif; ?>
 
             <?php if (!$isWriter): ?>
-              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= in_array($currentPage, ['posts_review','news_review'], true) ? 'is-active' : '' ?>" data-search="مراجعة الأخبار pending review queue">
-                <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/news/review.php">
+              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?php echo in_array($currentPage, ['posts_review','news_review'], true) ? 'is-active' : ''; ?>" data-search="مراجعة الأخبار pending review queue">
+                <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/news/review.php">
                   <div class="admin-sidebar__link-main">
                     <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#check"></use></svg></div>
                     <div class="admin-sidebar__link-text">
                       <div class="admin-sidebar__link-label">
-                        <?= h(__('مراجعة الأخبار')) ?>
+                        <?php echo h(__('مراجعة الأخبار')); ?>
                         <?php if ($pendingReviewCount > 0): ?>
-                          <span class="badge bg-danger ms-2"><?= (int)$pendingReviewCount ?></span>
+                          <span class="badge bg-danger ms-2"><?php echo (int)$pendingReviewCount; ?></span>
                         <?php endif; ?>
                       </div>
-                      <div class="admin-sidebar__link-sub"><?= h(__('طابور المراجعة والاعتماد')) ?></div>
+                      <div class="admin-sidebar__link-sub"><?php echo h(__('طابور المراجعة والاعتماد')); ?></div>
                     </div>
                   </div>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -482,13 +482,13 @@ foreach ($staticPluginLinks as $it) {
             <?php endif; ?>
 
             <?php if (!$isWriter): ?>
-              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?= $currentPage === 'feeds' ? 'is-active' : '' ?>" data-search="مصادر rss خلاصات feeds import">
-                <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/feeds/index.php">
+              <div class="admin-sidebar__link-card admin-sidebar__link-card--sub <?php echo $currentPage === 'feeds' ? 'is-active' : ''; ?>" data-search="مصادر rss خلاصات feeds import">
+                <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/feeds/index.php">
                   <div class="admin-sidebar__link-main">
                     <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#rss"></use></svg></div>
                     <div class="admin-sidebar__link-text">
-                      <div class="admin-sidebar__link-label"><?= h(__('مصادر RSS')) ?></div>
-                      <div class="admin-sidebar__link-sub"><?= h(__('استيراد أخبار كمَسودّات')) ?></div>
+                      <div class="admin-sidebar__link-label"><?php echo h(__('مصادر RSS')); ?></div>
+                      <div class="admin-sidebar__link-sub"><?php echo h(__('استيراد أخبار كمَسودّات')); ?></div>
                     </div>
                   </div>
                   <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -499,52 +499,52 @@ foreach ($staticPluginLinks as $it) {
           </div>
         </div>
 <?php if (!$isWriter): ?>
-          <div class="admin-sidebar__link-card <?= $currentPage === 'categories' ? 'is-active' : '' ?>" data-search="التصنيفات الأقسام categories sections">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/categories/index.php">
+          <div class="admin-sidebar__link-card <?php echo $currentPage === 'categories' ? 'is-active' : ''; ?>" data-search="التصنيفات الأقسام categories sections">
+            <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/categories/index.php">
               <div class="admin-sidebar__link-main">
                 <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#category"></use></svg></div>
                 <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('التصنيفات')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('إدارة التصنيفات والأقسام')) ?></div>
+                  <div class="admin-sidebar__link-label"><?php echo h(__('التصنيفات')); ?></div>
+                  <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة التصنيفات والأقسام')); ?></div>
                 </div>
               </div>
               <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
-          <div class="admin-sidebar__link-card <?= $currentPage === 'tags' ? 'is-active' : '' ?>" data-search="الوسوم tags">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/tags/index.php">
+          <div class="admin-sidebar__link-card <?php echo $currentPage === 'tags' ? 'is-active' : ''; ?>" data-search="الوسوم tags">
+            <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/tags/index.php">
               <div class="admin-sidebar__link-main">
                 <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#tag"></use></svg></div>
                 <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('الوسوم')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('إدارة وسوم الأخبار')) ?></div>
+                  <div class="admin-sidebar__link-label"><?php echo h(__('الوسوم')); ?></div>
+                  <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة وسوم الأخبار')); ?></div>
                 </div>
               </div>
               <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
-          <div class="admin-sidebar__link-card <?= $currentPage === 'media' ? 'is-active' : '' ?>" data-search="مكتبة الوسائط media رفع صور">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/media/index.php">
+          <div class="admin-sidebar__link-card <?php echo $currentPage === 'media' ? 'is-active' : ''; ?>" data-search="مكتبة الوسائط media رفع صور">
+            <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/media/index.php">
               <div class="admin-sidebar__link-main">
                 <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#image"></use></svg></div>
                 <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('مكتبة الوسائط')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('رفع وإدارة الصور والملفات')) ?></div>
+                  <div class="admin-sidebar__link-label"><?php echo h(__('مكتبة الوسائط')); ?></div>
+                  <div class="admin-sidebar__link-sub"><?php echo h(__('رفع وإدارة الصور والملفات')); ?></div>
                 </div>
               </div>
               <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
             </a>
           </div>
 
-          <div class="admin-sidebar__link-card <?= $currentPage === 'videos' ? 'is-active' : '' ?>" data-search="الفيديوهات المميزة فيديو featured videos">
-            <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/manage_videos.php">
+          <div class="admin-sidebar__link-card <?php echo $currentPage === 'videos' ? 'is-active' : ''; ?>" data-search="الفيديوهات المميزة فيديو featured videos">
+            <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/manage_videos.php">
               <div class="admin-sidebar__link-main">
                 <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#video"></use></svg></div>
                 <div class="admin-sidebar__link-text">
-                  <div class="admin-sidebar__link-label"><?= h(__('الفيديوهات المميزة')) ?></div>
-                  <div class="admin-sidebar__link-sub"><?= h(__('إدارة فيديوهات الصفحة الرئيسية')) ?></div>
+                  <div class="admin-sidebar__link-label"><?php echo h(__('الفيديوهات المميزة')); ?></div>
+                  <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة فيديوهات الصفحة الرئيسية')); ?></div>
                 </div>
               </div>
               <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -557,17 +557,17 @@ foreach ($staticPluginLinks as $it) {
       </div>
 
       <?php if (!$isWriter): ?>
-      <div class="admin-sidebar__section" aria-label="<?= h(__('الإدارة')) ?>">
-        <div class="admin-sidebar__section-title"><?= h(__('الإدارة')) ?></div>
+      <div class="admin-sidebar__section" aria-label="<?php echo h(__('الإدارة')); ?>">
+        <div class="admin-sidebar__section-title"><?php echo h(__('الإدارة')); ?></div>
 
         <?php if ($can('manage_users')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'users' ? 'is-active' : '' ?>" data-search="المستخدمون users">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/users/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'users' ? 'is-active' : ''; ?>" data-search="المستخدمون users">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/users/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#users"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('المستخدمون')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة الحسابات والصلاحيات')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('المستخدمون')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة الحسابات والصلاحيات')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -578,13 +578,13 @@ foreach ($staticPluginLinks as $it) {
         
 
         <?php if ($can('manage_roles')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'roles' ? 'is-active' : '' ?>" data-search="الأدوار roles">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/roles/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'roles' ? 'is-active' : ''; ?>" data-search="الأدوار roles">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/roles/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الأدوار')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('صلاحيات النظام')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الأدوار')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('صلاحيات النظام')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -594,13 +594,13 @@ foreach ($staticPluginLinks as $it) {
 
         
         <?php if ($can('opinion_authors.manage')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'opinion_authors' ? 'is-active' : '' ?>" data-search="كتاب الرأي opinion authors">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/opinion_authors/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'opinion_authors' ? 'is-active' : ''; ?>" data-search="كتاب الرأي opinion authors">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/opinion_authors/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#pen"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('كتاب الرأي')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة كتّاب الرأي')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('كتاب الرأي')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة كتّاب الرأي')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -609,13 +609,13 @@ foreach ($staticPluginLinks as $it) {
         <?php endif; ?>
 
         <?php if ($can('team.manage')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'team' ? 'is-active' : '' ?>" data-search="فريق العمل team">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/team/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'team' ? 'is-active' : ''; ?>" data-search="فريق العمل team">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/team/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#team"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('فريق العمل')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة صفحة فريق العمل')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('فريق العمل')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة صفحة فريق العمل')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -624,13 +624,13 @@ foreach ($staticPluginLinks as $it) {
         <?php endif; ?>
 
         <?php if ($can('contact.manage')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'contact' ? 'is-active' : '' ?>" data-search="رسائل التواصل contact">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/contact/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'contact' ? 'is-active' : ''; ?>" data-search="رسائل التواصل contact">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/contact/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#mail"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('رسائل التواصل')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('قراءة وإدارة رسائل الموقع')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('رسائل التواصل')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('قراءة وإدارة رسائل الموقع')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -639,13 +639,13 @@ foreach ($staticPluginLinks as $it) {
         <?php endif; ?>
 
         <?php if ($can('ads.manage')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'ads' ? 'is-active' : '' ?>" data-search="الإعلانات ads">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/ads/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'ads' ? 'is-active' : ''; ?>" data-search="الإعلانات ads">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/ads/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#ads"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الإعلانات')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة أماكن الإعلانات')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الإعلانات')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة أماكن الإعلانات')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -654,13 +654,13 @@ foreach ($staticPluginLinks as $it) {
         <?php endif; ?>
 
         <?php if ($can('glossary.manage')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'glossary' ? 'is-active' : '' ?>" data-search="القاموس glossary">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/glossary/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'glossary' ? 'is-active' : ''; ?>" data-search="القاموس glossary">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/glossary/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#book"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('القاموس')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة المصطلحات')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('القاموس')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة المصطلحات')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -669,13 +669,13 @@ foreach ($staticPluginLinks as $it) {
         <?php endif; ?>
 
 <?php if ($can('manage_plugins')): ?>
-        <div class="admin-sidebar__link-card <?= $currentPage === 'plugins' ? 'is-active' : '' ?>" data-search="الإضافات plugins">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/plugins/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'plugins' ? 'is-active' : ''; ?>" data-search="الإضافات plugins">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/plugins/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plugin"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الإضافات')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('تفعيل/تعطيل مكونات النظام')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الإضافات')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('تفعيل/تعطيل مكونات النظام')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -683,26 +683,26 @@ foreach ($staticPluginLinks as $it) {
         </div>
         <?php endif; ?>
 
-        <div class="admin-sidebar__link-card <?= $currentPage === 'settings' ? 'is-active' : '' ?>" data-search="الإعدادات settings">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/settings/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'settings' ? 'is-active' : ''; ?>" data-search="الإعدادات settings">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/settings/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#settings"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الإعدادات')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إعدادات الموقع العامة')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الإعدادات')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إعدادات الموقع العامة')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
           </a>
         </div>
 
-        <div class="admin-sidebar__link-card <?= $currentPage === 'elections' ? 'is-active' : '' ?>" data-search="الانتخابات elections">
-          <a class="admin-sidebar__link" href="<?= h($adminBase) ?>/elections/index.php">
+        <div class="admin-sidebar__link-card <?php echo $currentPage === 'elections' ? 'is-active' : ''; ?>" data-search="الانتخابات elections">
+          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/elections/index.php">
             <div class="admin-sidebar__link-main">
               <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#election"></use></svg></div>
               <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?= h(__('الانتخابات')) ?></div>
-                <div class="admin-sidebar__link-sub"><?= h(__('إدارة نظام الانتخابات')) ?></div>
+                <div class="admin-sidebar__link-label"><?php echo h(__('الانتخابات')); ?></div>
+                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة نظام الانتخابات')); ?></div>
               </div>
             </div>
             <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
@@ -720,24 +720,24 @@ foreach ($staticPluginLinks as $it) {
       <div class="admin-sidebar__user">
         <div class="admin-sidebar__user-avatar">
           <?php if ($userAvatar): ?>
-            <img src="<?= h($userAvatar) ?>" alt="صورة المستخدم" />
+            <img src="<?php echo h($userAvatar); ?>" alt="صورة المستخدم" />
           <?php else: ?>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
           <?php endif; ?>
         </div>
         <div class="admin-sidebar__user-info">
-          <div class="admin-sidebar__user-name"><?= h($userName) ?></div>
-          <div class="admin-sidebar__user-role"><?= h($userRole) ?></div>
+          <div class="admin-sidebar__user-name"><?php echo h($userName); ?></div>
+          <div class="admin-sidebar__user-role"><?php echo h($userRole); ?></div>
         </div>
       </div>
       <div class="admin-sidebar__footer-actions">
-        <a href="<?= h($siteBase) ?>/" class="admin-sidebar__action-btn" title="الموقع الرئيسي" aria-label="الانتقال للموقع الرئيسي" target="_blank" rel="noopener">
+        <a href="<?php echo h($siteBase); ?>/" class="admin-sidebar__action-btn" title="الموقع الرئيسي" aria-label="الانتقال للموقع الرئيسي" target="_blank" rel="noopener">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
         </a>
         <button class="admin-sidebar__action-btn" id="darkModeToggle" type="button" title="الوضع الليلي" aria-label="تبديل الوضع الليلي">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#moon"></use></svg>
         </button>
-        <a href="<?= h($adminBase) ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="تسجيل الخروج" aria-label="تسجيل الخروج">
+        <a href="<?php echo h($adminBase); ?>/logout.php" class="admin-sidebar__action-btn admin-sidebar__action-btn--danger" title="تسجيل الخروج" aria-label="تسجيل الخروج">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg>
         </a>
       </div>
@@ -745,12 +745,12 @@ foreach ($staticPluginLinks as $it) {
 
   </div>
 
-    <div class="admin-sidebar__section" aria-label="<?= h(__('language')) ?>">
-      <div class="admin-sidebar__section-title"><?= h(__('language')) ?></div>
+    <div class="admin-sidebar__section" aria-label="<?php echo h(__('language')); ?>">
+      <div class="admin-sidebar__section-title"><?php echo h(__('language')); ?></div>
       <div style="display:flex;gap:8px;padding:10px 6px;flex-wrap:wrap;">
-        <a class="admin-sidebar__pill <?= gdy_lang()==='ar' ? 'is-active' : '' ?>" href="<?= h(gdy_lang_url('ar')) ?>">AR</a>
-        <a class="admin-sidebar__pill <?= gdy_lang()==='en' ? 'is-active' : '' ?>" href="<?= h(gdy_lang_url('en')) ?>">EN</a>
-        <a class="admin-sidebar__pill <?= gdy_lang()==='fr' ? 'is-active' : '' ?>" href="<?= h(gdy_lang_url('fr')) ?>">FR</a>
+        <a class="admin-sidebar__pill <?php echo gdy_lang()==='ar' ? 'is-active' : ''; ?>" href="<?php echo h(gdy_lang_url('ar')); ?>">AR</a>
+        <a class="admin-sidebar__pill <?php echo gdy_lang()==='en' ? 'is-active' : ''; ?>" href="<?php echo h(gdy_lang_url('en')); ?>">EN</a>
+        <a class="admin-sidebar__pill <?php echo gdy_lang()==='fr' ? 'is-active' : ''; ?>" href="<?php echo h(gdy_lang_url('fr')); ?>">FR</a>
       </div>
     </div>
 

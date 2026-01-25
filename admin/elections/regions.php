@@ -266,94 +266,94 @@ require __DIR__ . '/../layout/sidebar.php';
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
       <div>
-        <h1 class="h4 mb-1"><?= h(__('t_97493e2ddc', 'إدارة الولايات / المناطق')) ?></h1>
+        <h1 class="h4 mb-1"><?php echo h(__('t_97493e2ddc', 'إدارة الولايات / المناطق')); ?></h1>
         <p class="text-muted small mb-0">
-          <?= h(__('t_6e1a488764', 'التغطية:')) ?> <strong><?= h($currentElection['title']) ?></strong>
-          <span class="text-muted">(ID: <?= (int)$currentElection['id'] ?>)</span>
+          <?php echo h(__('t_6e1a488764', 'التغطية:')); ?> <strong><?php echo h($currentElection['title']); ?></strong>
+          <span class="text-muted">(ID: <?php echo (int)$currentElection['id']; ?>)</span>
         </p>
       </div>
       <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
         <a href="index.php" class="btn btn-outline-secondary btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')) ?>
+          <?php echo h(__('t_6e51c4765e', 'رجوع لقائمة التغطيات')); ?>
         </a>
-        <a href="parties.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-secondary btn-sm">
+        <a href="parties.php?election_id=<?php echo (int)$currentElection['id']; ?>" class="btn btn-outline-secondary btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_e36f3293e2', 'إدارة الأحزاب')) ?>
+          <?php echo h(__('t_e36f3293e2', 'إدارة الأحزاب')); ?>
         </a>
-        <a href="results.php?election_id=<?= (int)$currentElection['id'] ?>" class="btn btn-outline-success btn-sm">
+        <a href="results.php?election_id=<?php echo (int)$currentElection['id']; ?>" class="btn btn-outline-success btn-sm">
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-          <?= h(__('t_53ffc98339', 'إدارة النتائج العامة')) ?>
+          <?php echo h(__('t_53ffc98339', 'إدارة النتائج العامة')); ?>
         </a>
       </div>
     </div>
 
     <?php if ($flashSuccess): ?>
-      <div class="alert alert-success py-2"><?= h($flashSuccess) ?></div>
+      <div class="alert alert-success py-2"><?php echo h($flashSuccess); ?></div>
     <?php endif; ?>
     <?php if ($flashError): ?>
-      <div class="alert alert-danger py-2"><?= h($flashError) ?></div>
+      <div class="alert alert-danger py-2"><?php echo h($flashError); ?></div>
     <?php endif; ?>
 
     <!-- فورم إضافة/تعديل ولاية -->
     <div class="card mb-3">
       <div class="card-header">
-        <strong class="small"><?= $editRegion ? __('t_9b12b41f32', 'تعديل ولاية / منطقة') : __('t_765bccc9a7', 'إضافة ولاية / منطقة') ?></strong>
+        <strong class="small"><?php echo $editRegion ? __('t_9b12b41f32', 'تعديل ولاية / منطقة') : __('t_765bccc9a7', 'إضافة ولاية / منطقة'); ?></strong>
       </div>
       <div class="card-body">
         <form method="post" class="row g-3">
           <?php if (function_exists('csrf_field')): ?>
-            <?= csrf_field() ?>
+            <?php echo csrf_field(); ?>
           <?php else: ?>
-            <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($_SESSION['csrf_token'] ?? ''); ?>">
           <?php endif; ?>
           <input type="hidden" name="action" value="save_region">
-          <input type="hidden" name="region_id" value="<?= $editRegion ? (int)$editRegion['id'] : 0 ?>">
+          <input type="hidden" name="region_id" value="<?php echo $editRegion ? (int)$editRegion['id'] : 0; ?>">
 
           <div class="col-md-4">
-            <label class="form-label small"><?= h(__('t_4c994b13d7', 'اسم الولاية بالعربية')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_4c994b13d7', 'اسم الولاية بالعربية')); ?></label>
             <input type="text" name="name_ar" class="form-control form-control-sm"
-                   value="<?= h($editRegion['name_ar'] ?? '') ?>">
+                   value="<?php echo h($editRegion['name_ar'] ?? ''); ?>">
           </div>
           <div class="col-md-4">
-            <label class="form-label small"><?= h(__('t_b2240bc40c', 'اسم الولاية بالإنجليزية')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_b2240bc40c', 'اسم الولاية بالإنجليزية')); ?></label>
             <input type="text" name="name_en" class="form-control form-control-sm"
-                   value="<?= h($editRegion['name_en'] ?? '') ?>">
+                   value="<?php echo h($editRegion['name_en'] ?? ''); ?>">
           </div>
           <div class="col-md-4">
             <label class="form-label small">
-              <?= h(__('t_936bda7cb8', 'المعرف (slug)')) ?>
-              <span class="text-muted"><?= h(__('t_653a350888', '(يُستخدم في الروابط، يملأ تلقائيًا إذا تُرك فارغًا)')) ?></span>
+              <?php echo h(__('t_936bda7cb8', 'المعرف (slug)')); ?>
+              <span class="text-muted"><?php echo h(__('t_653a350888', '(يُستخدم في الروابط، يملأ تلقائيًا إذا تُرك فارغًا)')); ?></span>
             </label>
             <input type="text" name="slug" class="form-control form-control-sm"
-                   value="<?= h($editRegion['slug'] ?? '') ?>">
+                   value="<?php echo h($editRegion['slug'] ?? ''); ?>">
           </div>
 
           <div class="col-md-4">
             <label class="form-label small">
               map_code
-              <span class="text-muted"><?= h(__('t_c3b4b94e38', '(مثل: KHARTOUM, RED_SEA، مطابق لـ ID في خريطة SVG)')) ?></span>
+              <span class="text-muted"><?php echo h(__('t_c3b4b94e38', '(مثل: KHARTOUM, RED_SEA، مطابق لـ ID في خريطة SVG)')); ?></span>
             </label>
             <input type="text" name="map_code" class="form-control form-control-sm"
-                   value="<?= h($editRegion['map_code'] ?? '') ?>">
+                   value="<?php echo h($editRegion['map_code'] ?? ''); ?>">
           </div>
 
           <div class="col-md-3">
-            <label class="form-label small"><?= h(__('t_cf4f202226', 'عدد المقاعد / الدوائر')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_cf4f202226', 'عدد المقاعد / الدوائر')); ?></label>
             <input type="number" name="total_seats" class="form-control form-control-sm"
-                   value="<?= h((string)($editRegion['total_seats'] ?? 0)) ?>">
+                   value="<?php echo h((string)($editRegion['total_seats'] ?? 0)); ?>">
           </div>
 
           <div class="col-md-3">
-            <label class="form-label small"><?= h(__('t_2fcc9e97b9', 'ترتيب العرض')) ?></label>
+            <label class="form-label small"><?php echo h(__('t_2fcc9e97b9', 'ترتيب العرض')); ?></label>
             <input type="number" name="sort_order" class="form-control form-control-sm"
-                   value="<?= h((string)($editRegion['sort_order'] ?? 0)) ?>">
+                   value="<?php echo h((string)($editRegion['sort_order'] ?? 0)); ?>">
           </div>
 
           <div class="col-md-2 d-flex align-items-end">
             <button type="submit" class="btn btn-primary btn-sm w-100">
               <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-              <?= h(__('t_871a087a1d', 'حفظ')) ?>
+              <?php echo h(__('t_871a087a1d', 'حفظ')); ?>
             </button>
           </div>
         </form>
@@ -363,58 +363,58 @@ require __DIR__ . '/../layout/sidebar.php';
     <!-- جدول الولايات -->
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span class="small fw-semibold"><?= h(__('t_33bfe1f47d', 'الولايات / المناطق المسجلة')) ?></span>
-        <span class="small text-muted">إجمالي: <?= count($regions) ?></span>
+        <span class="small fw-semibold"><?php echo h(__('t_33bfe1f47d', 'الولايات / المناطق المسجلة')); ?></span>
+        <span class="small text-muted">إجمالي: <?php echo count($regions); ?></span>
       </div>
       <div class="table-responsive">
         <table class="table table-sm align-middle mb-0">
           <thead class="table-light">
             <tr>
               <th>#</th>
-              <th><?= h(__('t_2e8b171b46', 'الاسم')) ?></th>
+              <th><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></th>
               <th>slug</th>
               <th>map_code</th>
-              <th class="text-center"><?= h(__('t_91bfba79c3', 'المقاعد')) ?></th>
-              <th class="text-center"><?= h(__('t_ddda59289a', 'الترتيب')) ?></th>
-              <th class="text-center"><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+              <th class="text-center"><?php echo h(__('t_91bfba79c3', 'المقاعد')); ?></th>
+              <th class="text-center"><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></th>
+              <th class="text-center"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
             </tr>
           </thead>
           <tbody>
             <?php if ($regions): ?>
               <?php foreach ($regions as $r): ?>
                 <tr>
-                  <td><?= (int)$r['id'] ?></td>
+                  <td><?php echo (int)$r['id']; ?></td>
                   <td>
-                    <div class="fw-semibold small"><?= h($r['name_ar'] ?: $r['name_en'] ?: '—') ?></div>
+                    <div class="fw-semibold small"><?php echo h($r['name_ar'] ?: $r['name_en'] ?: '—'); ?></div>
                     <?php if (!empty($r['name_en']) && $r['name_ar']): ?>
-                      <div class="small text-muted"><?= h($r['name_en']) ?></div>
+                      <div class="small text-muted"><?php echo h($r['name_en']); ?></div>
                     <?php endif; ?>
                   </td>
-                  <td class="small"><code><?= h($r['slug']) ?></code></td>
-                  <td class="small"><code><?= h($r['map_code']) ?></code></td>
-                  <td class="text-center small"><?= (int)($r['total_seats'] ?? 0) ?></td>
-                  <td class="text-center small"><?= (int)($r['sort_order'] ?? 0) ?></td>
+                  <td class="small"><code><?php echo h($r['slug']); ?></code></td>
+                  <td class="small"><code><?php echo h($r['map_code']); ?></code></td>
+                  <td class="text-center small"><?php echo (int)($r['total_seats'] ?? 0); ?></td>
+                  <td class="text-center small"><?php echo (int)($r['sort_order'] ?? 0); ?></td>
                   <td class="text-center">
                     <div class="d-flex flex-wrap justify-content-center gap-1">
-                      <a href="regions.php?election_id=<?= (int)$electionId ?>&id=<?= (int)$r['id'] ?>"
+                      <a href="regions.php?election_id=<?php echo (int)$electionId; ?>&id=<?php echo (int)$r['id']; ?>"
                          class="btn btn-outline-primary btn-sm"
-                         title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                         title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
-                      <a href="region_results.php?election_id=<?= (int)$electionId ?>&region_id=<?= (int)$r['id'] ?>"
+                      <a href="region_results.php?election_id=<?php echo (int)$electionId; ?>&region_id=<?php echo (int)$r['id']; ?>"
                          class="btn btn-outline-success btn-sm"
-                         title="<?= h(__('t_129a4c31a0', 'نتائج هذه الولاية')) ?>">
+                         title="<?php echo h(__('t_129a4c31a0', 'نتائج هذه الولاية')); ?>">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                       </a>
                       <form method="post"
                             data-confirm='حذف هذه الولاية / المنطقة؟ قد يحذف النتائج المرتبطة بها.'>
                         <?php if (function_exists('csrf_field')): ?>
-                          <?= csrf_field() ?>
+                          <?php echo csrf_field(); ?>
                         <?php else: ?>
-                          <input type="hidden" name="csrf_token" value="<?= h($_SESSION['csrf_token'] ?? '') ?>">
+                          <input type="hidden" name="csrf_token" value="<?php echo h($_SESSION['csrf_token'] ?? ''); ?>">
                         <?php endif; ?>
                         <input type="hidden" name="action" value="delete_region">
-                        <input type="hidden" name="region_id" value="<?= (int)$r['id'] ?>">
+                        <input type="hidden" name="region_id" value="<?php echo (int)$r['id']; ?>">
                         <button type="submit" class="btn btn-outline-danger btn-sm">
                           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                         </button>
@@ -426,7 +426,7 @@ require __DIR__ . '/../layout/sidebar.php';
             <?php else: ?>
               <tr>
                 <td colspan="7" class="text-center small text-muted py-3">
-                  <?= h(__('t_a6c9c3084d', 'لا توجد ولايات / مناطق مسجلة لهذه التغطية حتى الآن.')) ?>
+                  <?php echo h(__('t_a6c9c3084d', 'لا توجد ولايات / مناطق مسجلة لهذه التغطية حتى الآن.')); ?>
                 </td>
               </tr>
             <?php endif; ?>

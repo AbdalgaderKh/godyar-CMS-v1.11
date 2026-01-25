@@ -223,36 +223,36 @@ require_once __DIR__ . '/../layout/app_start.php';
 <!-- content starts -->
 
   <?php if (empty($_GET['saved']) === false): ?>
-    <div class="alert alert-success py-2"><?= h(__('t_b9b21964e8', 'تم حفظ البيانات بنجاح.')) ?></div>
+    <div class="alert alert-success py-2"><?php echo h(__('t_b9b21964e8', 'تم حفظ البيانات بنجاح.')); ?></div>
   <?php elseif (empty($_GET['deleted']) === false): ?>
-    <div class="alert alert-success py-2"><?= h(__('t_d05889192d', 'تم حذف العضو بنجاح.')) ?></div>
+    <div class="alert alert-success py-2"><?php echo h(__('t_d05889192d', 'تم حذف العضو بنجاح.')); ?></div>
   <?php elseif (empty($_GET['error']) === false): ?>
-    <div class="alert alert-danger py-2"><?= h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')) ?></div>
+    <div class="alert alert-danger py-2"><?php echo h(__('t_8390c993b9', 'حدث خطأ، الرجاء المحاولة لاحقاً.')); ?></div>
   <?php endif; ?>
 
   <form method="get" class="row g-2 align-items-center mb-3">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <div class="col-sm-4">
       <input type="text"
              name="q"
-             value="<?= h($search) ?>"
+             value="<?php echo h($search); ?>"
              class="form-control form-control-sm"
-             placeholder="<?= h(__('t_86fa8c5827', 'بحث بالاسم أو المنصب أو البريد')) ?>">
+             placeholder="<?php echo h(__('t_86fa8c5827', 'بحث بالاسم أو المنصب أو البريد')); ?>">
     </div>
     <div class="col-sm-3">
       <select name="status" class="form-select form-select-sm">
-        <option value="all" <?= $filterStatus === 'all' ? 'selected' : '' ?>><?= h(__('t_c2193d082c', 'كل الحالات')) ?></option>
-        <option value="active" <?= $filterStatus === 'active' ? 'selected' : '' ?>><?= h(__('t_6dff5cfb62', 'نشط فقط')) ?></option>
-        <option value="hidden" <?= $filterStatus === 'hidden' ? 'selected' : '' ?>><?= h(__('t_ce0c605438', 'مخفي فقط')) ?></option>
+        <option value="all" <?php echo $filterStatus === 'all' ? 'selected' : ''; ?>><?php echo h(__('t_c2193d082c', 'كل الحالات')); ?></option>
+        <option value="active" <?php echo $filterStatus === 'active' ? 'selected' : ''; ?>><?php echo h(__('t_6dff5cfb62', 'نشط فقط')); ?></option>
+        <option value="hidden" <?php echo $filterStatus === 'hidden' ? 'selected' : ''; ?>><?php echo h(__('t_ce0c605438', 'مخفي فقط')); ?></option>
       </select>
     </div>
     <div class="col-sm-3">
       <button type="submit" class="btn btn-sm btn-outline-light">
-        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?= h(__('t_1f53aa4f51', 'تطبيق التصفية')) ?>
+        <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg> <?php echo h(__('t_1f53aa4f51', 'تطبيق التصفية')); ?>
       </button>
       <a href="index.php" class="btn btn-sm btn-outline-secondary">
-        <?= h(__('t_6e666bfed1', 'تصفية جديدة')) ?>
+        <?php echo h(__('t_6e666bfed1', 'تصفية جديدة')); ?>
       </a>
     </div>
   </form>
@@ -260,48 +260,48 @@ require_once __DIR__ . '/../layout/app_start.php';
   <div class="card shadow-sm glass-card">
     <div class="card-body p-0">
       <?php if (empty($rows)): ?>
-        <p class="mb-0 p-3 text-muted"><?= h(__('t_1c873a284c', 'لا يوجد أعضاء في فريق العمل حالياً.')) ?></p>
+        <p class="mb-0 p-3 text-muted"><?php echo h(__('t_1c873a284c', 'لا يوجد أعضاء في فريق العمل حالياً.')); ?></p>
       <?php else: ?>
         <div class="table-responsive">
           <table class="table table-sm table-hover mb-0 align-middle text-center table-team">
             <thead>
               <tr>
                 <th>#</th>
-                <th><?= h(__('t_2e8b171b46', 'الاسم')) ?></th>
-                <th><?= h(__('t_c4c510267f', 'المنصب')) ?></th>
-                <th><?= h(__('t_c707d7f2bb', 'البريد')) ?></th>
-                <th><?= h(__('t_1253eb5642', 'الحالة')) ?></th>
-                <th><?= h(__('t_ddda59289a', 'الترتيب')) ?></th>
-                <th><?= h(__('t_901efe9b1c', 'إجراءات')) ?></th>
+                <th><?php echo h(__('t_2e8b171b46', 'الاسم')); ?></th>
+                <th><?php echo h(__('t_c4c510267f', 'المنصب')); ?></th>
+                <th><?php echo h(__('t_c707d7f2bb', 'البريد')); ?></th>
+                <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
+                <th><?php echo h(__('t_ddda59289a', 'الترتيب')); ?></th>
+                <th><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($rows as $r): ?>
                 <tr>
-                  <td><?= (int)$r['id'] ?></td>
+                  <td><?php echo (int)$r['id']; ?></td>
                   <td class="team-name-cell">
                     <?php if (!empty($r['photo_url'])): ?>
-                      <img src="<?= h($r['photo_url']) ?>" alt="" class="rounded-circle me-2" style="width:32px;height:32px;object-fit:cover;">
+                      <img src="<?php echo h($r['photo_url']); ?>" alt="" class="rounded-circle me-2" style="width:32px;height:32px;object-fit:cover;">
                     <?php endif; ?>
-                    <?= h($r['name']) ?>
+                    <?php echo h($r['name']); ?>
                   </td>
-                  <td><?= h($r['role']) ?></td>
+                  <td><?php echo h($r['role']); ?></td>
                   <td>
-                    <small class="team-email"><?= h($r['email']) ?></small>
+                    <small class="team-email"><?php echo h($r['email']); ?></small>
                   </td>
                   <td>
                     <?php if (($r['status'] ?? '') === 'active'): ?>
-                      <span class="badge bg-success"><?= h(__('t_8caaf95380', 'نشط')) ?></span>
+                      <span class="badge bg-success"><?php echo h(__('t_8caaf95380', 'نشط')); ?></span>
                     <?php else: ?>
-                      <span class="badge bg-secondary"><?= h(__('t_a39aacaa71', 'مخفي')) ?></span>
+                      <span class="badge bg-secondary"><?php echo h(__('t_a39aacaa71', 'مخفي')); ?></span>
                     <?php endif; ?>
                   </td>
-                  <td><?= (int)$r['sort_order'] ?></td>
+                  <td><?php echo (int)$r['sort_order']; ?></td>
                   <td>
-                    <a href="edit.php?id=<?= (int)$r['id'] ?>" class="btn btn-xs btn-outline-info">
+                    <a href="edit.php?id=<?php echo (int)$r['id']; ?>" class="btn btn-xs btn-outline-info">
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>
-                    <a href="index.php?delete=<?= (int)$r['id'] ?>" class="btn btn-xs btn-outline-danger"
+                    <a href="index.php?delete=<?php echo (int)$r['id']; ?>" class="btn btn-xs btn-outline-danger"
                        data-confirm='حذف هذا العضو؟'>
                       <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                     </a>

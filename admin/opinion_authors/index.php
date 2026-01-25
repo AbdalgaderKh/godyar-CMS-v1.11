@@ -255,19 +255,19 @@ html, body{ overflow-x:hidden; }
     <!-- رأس الصفحة -->
     <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 mb-1 text-white"><?= h(__('t_0e0c340c99', 'إدارة كُتاب الرأي')) ?></h1>
+            <h1 class="h4 mb-1 text-white"><?php echo h(__('t_0e0c340c99', 'إدارة كُتاب الرأي')); ?></h1>
             <p class="mb-0" style="color:#e5e7eb;">
-                <?= h(__('t_2e295a8ad7', 'إدارة كُتاب الأعمدة ومقالات الرأي في الموقع')) ?>
+                <?php echo h(__('t_2e295a8ad7', 'إدارة كُتاب الأعمدة ومقالات الرأي في الموقع')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0 d-flex gap-2">
             <?php if (!$tableExists): ?>
                 <a href="create_table.php" class="btn btn-warning">
-                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_b65c728df7', 'إنشاء الجدول')) ?>
+                    <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_b65c728df7', 'إنشاء الجدول')); ?>
                 </a>
             <?php endif; ?>
             <a href="create.php" class="btn btn-primary">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_7332c59999', 'إضافة كاتب جديد')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_7332c59999', 'إضافة كاتب جديد')); ?>
             </a>
         </div>
     </div>
@@ -275,8 +275,8 @@ html, body{ overflow-x:hidden; }
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')) ?> 
-            <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
+            <strong><?php echo h(__('t_b83c3996d9', 'تنبيه:')); ?></strong> <?php echo h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')); ?> 
+            <a href="create_table.php" class="alert-link"><?php echo h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')); ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -285,8 +285,8 @@ html, body{ overflow-x:hidden; }
     <?php if ($tableExists && !empty($authors)): ?>
         <div class="gdy-stats">
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($authors) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_07206b00d1', 'إجمالي الكُتاب')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($authors); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_07206b00d1', 'إجمالي الكُتاب')); ?></span>
             </div>
             <?php
             $activeAuthors = array_filter($authors, function($author) {
@@ -298,16 +298,16 @@ html, body{ overflow-x:hidden; }
             $totalArticles = array_sum(array_column($authors, 'articles_count'));
             ?>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($activeAuthors) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_0afacdf2c8', 'كتّاب نشطين')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($activeAuthors); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_0afacdf2c8', 'كتّاب نشطين')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($inactiveAuthors) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_16579fc60a', 'كتّاب غير نشطين')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($inactiveAuthors); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_16579fc60a', 'كتّاب غير نشطين')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= $totalArticles ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_828a77c5d7', 'مقالات منشورة')) ?></span>
+                <span class="gdy-stat-value"><?php echo $totalArticles; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_828a77c5d7', 'مقالات منشورة')); ?></span>
             </div>
         </div>
     <?php endif; ?>
@@ -319,10 +319,10 @@ html, body{ overflow-x:hidden; }
                 <div class="gdy-empty-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
-                <h4 class="text-muted mb-3"><?= h(__('t_cab4c070f1', 'لا توجد كُتاب مسجلين')) ?></h4>
-                <p class="text-muted mb-4"><?= h(__('t_77ef440b11', 'ابدأ بإضافة أول كاتب إلى النظام')) ?></p>
+                <h4 class="text-muted mb-3"><?php echo h(__('t_cab4c070f1', 'لا توجد كُتاب مسجلين')); ?></h4>
+                <p class="text-muted mb-4"><?php echo h(__('t_77ef440b11', 'ابدأ بإضافة أول كاتب إلى النظام')); ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_d88c3f927a', 'إضافة أول كاتب')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_d88c3f927a', 'إضافة أول كاتب')); ?>
                 </a>
             </div>
         <?php else: ?>
@@ -333,34 +333,34 @@ html, body{ overflow-x:hidden; }
                             <!-- صورة الكاتب -->
                             <div class="gdy-author-avatar">
                                 <?php if (!empty($author['avatar'])): ?>
-                                    <img src="<?= htmlspecialchars($author['avatar']) ?>" 
-                                         alt="<?= htmlspecialchars($author['name']) ?>"
+                                    <img src="<?php echo htmlspecialchars($author['avatar']); ?>" 
+                                         alt="<?php echo htmlspecialchars($author['name']); ?>"
                                          data-img-error="hide-show-next-flex">
                                 <?php endif; ?>
                                 <div class="gdy-author-overlay">
                                     <div class="gdy-author-actions">
-                                        <a href="edit.php?id=<?= $author['id'] ?>" 
+                                        <a href="edit.php?id=<?php echo $author['id']; ?>" 
                                            class="gdy-author-btn"
-                                           title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                                           title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <!-- ✅ زر كتابة مقال رأي لهذا الكاتب -->
-                                        <a href="../news/create.php?opinion_author_id=<?= (int)$author['id'] ?>" 
+                                        <a href="../news/create.php?opinion_author_id=<?php echo (int)$author['id']; ?>" 
                                            class="gdy-author-btn" 
-                                           title="<?= h(__('t_a327aa077e', 'إضافة مقال رأي جديد لهذا الكاتب')) ?>">
+                                           title="<?php echo h(__('t_a327aa077e', 'إضافة مقال رأي جديد لهذا الكاتب')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <button class="gdy-author-btn toggle-author" 
-                                                data-id="<?= $author['id'] ?>"
-                                                data-status="<?= $author['is_active'] ?>"
-                                                title="<?= $author['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
+                                                data-id="<?php echo $author['id']; ?>"
+                                                data-status="<?php echo $author['is_active']; ?>"
+                                                title="<?php echo $author['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>">
                                             <svg class="gdy-icon $author['is_active'] ? 'eye' : 'eye-slash' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                         <button class="gdy-author-btn delete-author" 
-                                                data-id="<?= $author['id'] ?>"
+                                                data-id="<?php echo $author['id']; ?>"
 
-                                                data-name="<?= htmlspecialchars($author['name']) ?>"
-                                                title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                                                data-name="<?php echo htmlspecialchars($author['name']); ?>"
+                                                title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </button>
                                     </div>
@@ -375,58 +375,58 @@ html, body{ overflow-x:hidden; }
                             <!-- معلومات الكاتب -->
                             <div class="gdy-author-info">
                                 <div class="gdy-author-name">
-                                    <?= htmlspecialchars($author['name']) ?>
+                                    <?php echo htmlspecialchars($author['name']); ?>
                                 </div>
                                 
                                 <?php if (!empty($author['specialization'])): ?>
                                     <div class="gdy-author-specialization">
-                                        <?= htmlspecialchars($author['specialization']) ?>
+                                        <?php echo htmlspecialchars($author['specialization']); ?>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <?php if (!empty($author['email'])): ?>
                                     <div class="gdy-author-email">
-                                        <?= htmlspecialchars($author['email']) ?>
+                                        <?php echo htmlspecialchars($author['email']); ?>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <?php if (!empty($author['bio'])): ?>
                                     <div class="gdy-author-bio">
-                                        <?= htmlspecialchars($author['bio']) ?>
+                                        <?php echo htmlspecialchars($author['bio']); ?>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <div class="gdy-author-meta">
-                                    <span class="gdy-author-status <?= $author['is_active'] ? '' : 'inactive' ?>">
-                                        <?= $author['is_active'] ? __('t_bad8af986e', '🟢 نشط') : __('t_9267eae6e2', '⚫ غير نشط') ?>
+                                    <span class="gdy-author-status <?php echo $author['is_active'] ? '' : 'inactive'; ?>">
+                                        <?php echo $author['is_active'] ? __('t_bad8af986e', '🟢 نشط') : __('t_9267eae6e2', '⚫ غير نشط'); ?>
                                     </span>
-                                    <span><?= $author['articles_count'] ?> مقال</span>
+                                    <span><?php echo $author['articles_count']; ?> مقال</span>
                                 </div>
                                 
                                 <!-- وسائل التواصل الاجتماعي -->
                                 <?php if (!empty($author['social_twitter']) || !empty($author['social_linkedin']) || !empty($author['social_website'])): ?>
                                     <div class="mt-3 d-flex justify-content-center gap-2">
                                         <?php if (!empty($author['social_twitter'])): ?>
-                                            <a href="<?= htmlspecialchars($author['social_twitter']) ?>" 
+                                            <a href="<?php echo htmlspecialchars($author['social_twitter']); ?>" 
                                                target="_blank" 
                                                class="text-info"
-                                               title="<?= h(__('t_989510d6cd', 'تويتر')) ?>">
+                                               title="<?php echo h(__('t_989510d6cd', 'تويتر')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#x"></use></svg>
                                             </a>
                                         <?php endif; ?>
                                         <?php if (!empty($author['social_linkedin'])): ?>
-                                            <a href="<?= htmlspecialchars($author['social_linkin']) ?>" 
+                                            <a href="<?php echo htmlspecialchars($author['social_linkin']); ?>" 
                                                target="_blank" 
                                                class="text-primary"
-                                               title="<?= h(__('t_d0a32019c9', 'لينكدإن')) ?>">
+                                               title="<?php echo h(__('t_d0a32019c9', 'لينكدإن')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </a>
                                         <?php endif; ?>
                                         <?php if (!empty($author['social_website'])): ?>
-                                            <a href="<?= htmlspecialchars($author['social_website']) ?>" 
+                                            <a href="<?php echo htmlspecialchars($author['social_website']); ?>" 
                                                target="_blank" 
                                                class="text-success"
-                                               title="<?= h(__('t_d5b4c8ec57', 'موقع شخصي')) ?>">
+                                               title="<?php echo h(__('t_d5b4c8ec57', 'موقع شخصي')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#globe"></use></svg>
                                             </a>
                                         <?php endif; ?>

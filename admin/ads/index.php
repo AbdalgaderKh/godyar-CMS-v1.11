@@ -539,8 +539,8 @@ input:checked + .slider:before {
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_c17dd3f8eb', 'جدول الإعلانات غير موجود.')) ?> 
-            <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
+            <strong><?php echo h(__('t_b83c3996d9', 'تنبيه:')); ?></strong> <?php echo h(__('t_c17dd3f8eb', 'جدول الإعلانات غير موجود.')); ?> 
+            <a href="create_table.php" class="alert-link"><?php echo h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')); ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
@@ -548,7 +548,7 @@ input:checked + .slider:before {
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h($_SESSION['success_message']) ?>
+            <?php echo h($_SESSION['success_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <?php unset($_SESSION['success_message']); ?>
@@ -557,7 +557,7 @@ input:checked + .slider:before {
     <?php if (isset($_SESSION['error_message'])): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h($_SESSION['error_message']) ?>
+            <?php echo h($_SESSION['error_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <?php unset($_SESSION['error_message']); ?>
@@ -566,24 +566,24 @@ input:checked + .slider:before {
     <!-- إعدادات التحكم في البنر الجانبي -->
     <div class="gdy-settings-card">
         <h5 class="text-white mb-3">
-            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#settings"></use></svg><?= h(__('t_8f4adebed7', 'إعدادات التحكم في البنر الجانبي')) ?>
+            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#settings"></use></svg><?php echo h(__('t_8f4adebed7', 'إعدادات التحكم في البنر الجانبي')); ?>
         </h5>
         
         <form method="post">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
             <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
             <div class="setting-toggle">
                 <div class="setting-info">
-                    <div class="setting-title"><?= h(__('t_86ee560fe0', 'إظهار البنر الإعلاني في الشريط الجانبي')) ?></div>
+                    <div class="setting-title"><?php echo h(__('t_86ee560fe0', 'إظهار البنر الإعلاني في الشريط الجانبي')); ?></div>
                     <div class="setting-desc">
-                        <?= h(__('t_16a3dfb642', 'التحكم في ظهور البنر الإعلاني في الشريط الجانبي لصفحات المقالات')) ?>
+                        <?php echo h(__('t_16a3dfb642', 'التحكم في ظهور البنر الإعلاني في الشريط الجانبي لصفحات المقالات')); ?>
                     </div>
                 </div>
                 <div class="setting-control">
                     <label class="switch">
                         <input type="checkbox" name="sidebar_ad_enabled" value="1" 
-                               <?= $sidebarAdEnabled ? 'checked' : '' ?>>
+                               <?php echo $sidebarAdEnabled ? 'checked' : ''; ?>>
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -591,13 +591,13 @@ input:checked + .slider:before {
             
             <div class="mt-3">
                 <button type="submit" name="update_sidebar_setting" class="btn btn-primary">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#save"></use></svg><?= h(__('t_32be3bade9', 'حفظ الإعدادات')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#save"></use></svg><?php echo h(__('t_32be3bade9', 'حفظ الإعدادات')); ?>
                 </button>
                 
                 <span class="ms-3 text-muted small">
-                    <?= h(__('t_eb82250678', 'الحالة الحالية:')) ?> 
-                    <span class="<?= $sidebarAdEnabled ? 'text-success' : 'text-danger' ?>">
-                        <?= $sidebarAdEnabled ? __('t_918499f2af', 'مفعل') : __('t_0bad9c165c', 'معطل') ?>
+                    <?php echo h(__('t_eb82250678', 'الحالة الحالية:')); ?> 
+                    <span class="<?php echo $sidebarAdEnabled ? 'text-success' : 'text-danger'; ?>">
+                        <?php echo $sidebarAdEnabled ? __('t_918499f2af', 'مفعل') : __('t_0bad9c165c', 'معطل'); ?>
                     </span>
                 </span>
             </div>
@@ -608,20 +608,20 @@ input:checked + .slider:before {
     <?php if ($tableExists): ?>
         <div class="gdy-stats">
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$totalAds ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_3f3dde8f4a', 'إجمالي الإعلانات')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$totalAds; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_3f3dde8f4a', 'إجمالي الإعلانات')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$activeAds ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_c5fb63b3b0', 'إعلانات نشطة')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$activeAds; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_c5fb63b3b0', 'إعلانات نشطة')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= (int)$expiredAds ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_09b10c6d40', 'إعلانات منتهية')) ?></span>
+                <span class="gdy-stat-value"><?php echo (int)$expiredAds; ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_09b10c6d40', 'إعلانات منتهية')); ?></span>
             </div>
             <div class="gdy-stat">
-                <span class="gdy-stat-value"><?= count($ads) ?></span>
-                <span class="gdy-stat-label"><?= h(__('t_8dea9c0652', 'نتائج البحث')) ?></span>
+                <span class="gdy-stat-value"><?php echo count($ads); ?></span>
+                <span class="gdy-stat-label"><?php echo h(__('t_8dea9c0652', 'نتائج البحث')); ?></span>
             </div>
         </div>
     <?php endif; ?>
@@ -630,27 +630,27 @@ input:checked + .slider:before {
     <div class="gdy-filter-bar">
         <form method="get" class="row g-3 align-items-end">
             <div class="col-12 col-md-3">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_ab79fc1485', 'بحث')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_ab79fc1485', 'بحث')); ?></label>
                 <input type="text" name="search" class="form-control bg-dark text-light border-secondary" 
-                       value="<?= h($search) ?>" 
-                       placeholder="<?= h(__('t_88e1b31a27', 'ابحث في العناوين...')) ?>">
+                       value="<?php echo h($search); ?>" 
+                       placeholder="<?php echo h(__('t_88e1b31a27', 'ابحث في العناوين...')); ?>">
             </div>
             <div class="col-12 col-md-3">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
                 <select name="status" class="form-select bg-dark text-light border-secondary">
-                    <option value=""><?= h(__('t_a4028d028a', 'جميع الحالات')) ?></option>
-                    <option value="active"   <?= $status === 'active'   ? 'selected' : '' ?>><?= h(__('t_5074192c69', 'نشطة فقط')) ?></option>
-                    <option value="inactive" <?= $status === 'inactive' ? 'selected' : '' ?>><?= h(__('t_bdb3ebb25d', 'غير نشطة')) ?></option>
-                    <option value="expired"  <?= $status === 'expired'  ? 'selected' : '' ?>><?= h(__('t_42c40cf608', 'منتهية')) ?></option>
+                    <option value=""><?php echo h(__('t_a4028d028a', 'جميع الحالات')); ?></option>
+                    <option value="active"   <?php echo $status === 'active'   ? 'selected' : ''; ?>><?php echo h(__('t_5074192c69', 'نشطة فقط')); ?></option>
+                    <option value="inactive" <?php echo $status === 'inactive' ? 'selected' : ''; ?>><?php echo h(__('t_bdb3ebb25d', 'غير نشطة')); ?></option>
+                    <option value="expired"  <?php echo $status === 'expired'  ? 'selected' : ''; ?>><?php echo h(__('t_42c40cf608', 'منتهية')); ?></option>
                 </select>
             </div>
             <div class="col-12 col-md-3">
-                <label class="form-label small mb-1" style="color: #e5e7eb;"><?= h(__('t_b799144cc2', 'الموضع')) ?></label>
+                <label class="form-label small mb-1" style="color: #e5e7eb;"><?php echo h(__('t_b799144cc2', 'الموضع')); ?></label>
                 <select name="location" class="form-select bg-dark text-light border-secondary">
-                    <option value="all"><?= h(__('t_9915aece7e', 'جميع المواضع')) ?></option>
+                    <option value="all"><?php echo h(__('t_9915aece7e', 'جميع المواضع')); ?></option>
                     <?php foreach ($locations as $loc): ?>
-                        <option value="<?= h($loc) ?>" <?= $location === $loc ? 'selected' : '' ?>>
-                            <?= h($loc) ?>
+                        <option value="<?php echo h($loc); ?>" <?php echo $location === $loc ? 'selected' : ''; ?>>
+                            <?php echo h($loc); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -658,12 +658,12 @@ input:checked + .slider:before {
             <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-primary w-100 mb-2">
                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                    <?= h(__('t_04d478c0e8', 'تطبيق الفلتر')) ?>
+                    <?php echo h(__('t_04d478c0e8', 'تطبيق الفلتر')); ?>
                 </button>
                 <?php if ($status || $location || $search): ?>
                     <a href="index.php" class="btn btn-outline-light w-100">
                         <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?= h(__('t_2cb0b85c56', 'إعادة تعيين')) ?>
+                        <?php echo h(__('t_2cb0b85c56', 'إعادة تعيين')); ?>
                     </a>
                 <?php endif; ?>
             </div>
@@ -677,10 +677,10 @@ input:checked + .slider:before {
                 <div class="gdy-empty-icon">
                     <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                 </div>
-                <h4 class="text-muted mb-3"><?= h(__('t_95cbfbd50d', 'لا توجد إعلانات')) ?></h4>
-                <p class="text-muted mb-4"><?= h(__('t_d58c55f24d', 'ابدأ بإضافة أول إعلان إلى النظام')) ?></p>
+                <h4 class="text-muted mb-3"><?php echo h(__('t_95cbfbd50d', 'لا توجد إعلانات')); ?></h4>
+                <p class="text-muted mb-4"><?php echo h(__('t_d58c55f24d', 'ابدأ بإضافة أول إعلان إلى النظام')); ?></p>
                 <a href="create.php" class="btn btn-primary btn-lg">
-                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?= h(__('t_90ce81832d', 'إضافة أول إعلان')) ?>
+                    <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#plus"></use></svg><?php echo h(__('t_90ce81832d', 'إضافة أول إعلان')); ?>
                 </a>
             </div>
         <?php else: ?>
@@ -696,30 +696,30 @@ input:checked + .slider:before {
                             <!-- صورة الإعلان -->
                             <div class="gdy-ad-image">
                                 <?php if (!empty($ad['image_url'])): ?>
-                                    <img src="<?= h($ad['image_url']) ?>" 
-                                         alt="<?= h($ad['title']) ?>"
+                                    <img src="<?php echo h($ad['image_url']); ?>" 
+                                         alt="<?php echo h($ad['title']); ?>"
                                          data-img-error="hide-show-next-unhide">
                                 <?php endif; ?>
                                 <div class="gdy-ad-overlay">
                                     <div class="gdy-ad-actions">
-                                        <a href="edit.php?id=<?= (int)$ad['id'] ?>" 
+                                        <a href="edit.php?id=<?php echo (int)$ad['id']; ?>" 
                                            class="gdy-ad-btn"
-                                           title="<?= h(__('t_759fdc242e', 'تعديل')) ?>">
+                                           title="<?php echo h(__('t_759fdc242e', 'تعديل')); ?>">
                                             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                         </a>
                                         <form method="post" class="d-inline"
-                                              data-confirm='هل تريد <?= $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?> هذا الإعلان؟'>
+                                              data-confirm='هل تريد <?php echo $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?> هذا الإعلان؟'>
                                             <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
-                                            <input type="hidden" name="toggle_id" value="<?= (int)$ad['id'] ?>">
-                                            <button type="submit" class="gdy-ad-btn" title="<?= $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل') ?>">
+                                            <input type="hidden" name="toggle_id" value="<?php echo (int)$ad['id']; ?>">
+                                            <button type="submit" class="gdy-ad-btn" title="<?php echo $ad['is_active'] ? __('t_43ead21245', 'تعطيل') : __('t_8403358516', 'تفعيل'); ?>">
                                                 <svg class="gdy-icon $ad['is_active'] ? 'pause' : 'play' ?>" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         </form>
                                         <form method="post" class="d-inline"
                                               data-confirm='هل أنت متأكد من حذف هذا الإعلان؟'>
                                             <?php if (function_exists('csrf_field')) echo csrf_field(); ?>
-                                            <input type="hidden" name="delete_id" value="<?= (int)$ad['id'] ?>">
-                                            <button type="submit" class="gdy-ad-btn" title="<?= h(__('t_3b9854e1bb', 'حذف')) ?>">
+                                            <input type="hidden" name="delete_id" value="<?php echo (int)$ad['id']; ?>">
+                                            <button type="submit" class="gdy-ad-btn" title="<?php echo h(__('t_3b9854e1bb', 'حذف')); ?>">
                                                 <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
                                             </button>
                                         </form>
@@ -735,33 +735,33 @@ input:checked + .slider:before {
                             <!-- معلومات الإعلان -->
                             <div class="gdy-ad-info">
                                 <div class="gdy-ad-title">
-                                    <?= h($ad['title']) ?>
+                                    <?php echo h($ad['title']); ?>
                                 </div>
                                 
                                 <div class="gdy-ad-location">
                                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                    <?= h($ad['location']) ?>
+                                    <?php echo h($ad['location']); ?>
                                 </div>
                                 
                                 <?php if (!empty($ad['target_url'])): ?>
                                     <div class="gdy-ad-url">
                                         <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                        <?= h($ad['target_url']) ?>
+                                        <?php echo h($ad['target_url']); ?>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <div class="gdy-ad-meta">
-                                    <span class="gdy-ad-status <?= $statusClass ?>">
-                                        <?= $statusText ?>
+                                    <span class="gdy-ad-status <?php echo $statusClass; ?>">
+                                        <?php echo $statusText; ?>
                                     </span>
                                     
                                     <?php if ($ad['starts_at'] || $ad['ends_at']): ?>
                                         <div class="text-muted small">
                                             <?php if ($ad['starts_at']): ?>
-                                                <?= h(date('Y-m-d', strtotime($ad['starts_at']))) ?>
+                                                <?php echo h(date('Y-m-d', strtotime($ad['starts_at']))); ?>
                                             <?php endif; ?>
                                             <?php if ($ad['ends_at']): ?>
-                                                - <?= h(date('Y-m-d', strtotime($ad['ends_at']))) ?>
+                                                - <?php echo h(date('Y-m-d', strtotime($ad['ends_at']))); ?>
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
@@ -771,12 +771,12 @@ input:checked + .slider:before {
                                 <div class="mt-3 pt-3 border-top border-secondary">
                                     <div class="row text-center">
                                         <div class="col-6">
-                                            <small class="text-muted"><?= h(__('t_389466dde4', 'النقرات')) ?></small>
-                                            <div class="small text-primary"><?= (int)($ad['click_count'] ?? 0) ?></div>
+                                            <small class="text-muted"><?php echo h(__('t_389466dde4', 'النقرات')); ?></small>
+                                            <div class="small text-primary"><?php echo (int)($ad['click_count'] ?? 0); ?></div>
                                         </div>
                                         <div class="col-6">
-                                            <small class="text-muted"><?= h(__('t_4bfff8c6af', 'المشاهدات')) ?></small>
-                                            <div class="small text-info"><?= (int)($ad['view_count'] ?? 0) ?></div>
+                                            <small class="text-muted"><?php echo h(__('t_4bfff8c6af', 'المشاهدات')); ?></small>
+                                            <div class="small text-info"><?php echo (int)($ad['view_count'] ?? 0); ?></div>
                                         </div>
                                     </div>
                                 </div>

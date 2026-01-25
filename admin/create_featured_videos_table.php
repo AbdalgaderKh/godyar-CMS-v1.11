@@ -85,12 +85,12 @@ require __DIR__ . '/layout/app_start.php';
 ?>
 
 <div class="container py-4">
-  <h1 class="h4 mb-3"><?= h($pageTitle) ?></h1>
+  <h1 class="h4 mb-3"><?php echo h($pageTitle); ?></h1>
 
   <?php if ($success): ?>
     <div class="alert alert-success">✅ تم إنشاء جدول featured_videos بنجاح.</div>
   <?php elseif ($error): ?>
-    <div class="alert alert-danger">❌ <?= h($error) ?></div>
+    <div class="alert alert-danger">❌ <?php echo h($error); ?></div>
   <?php endif; ?>
 
   <?php if ($tableExists): ?>

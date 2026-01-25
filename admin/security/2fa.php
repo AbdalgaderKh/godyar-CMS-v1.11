@@ -70,22 +70,22 @@ $qrUrl = '';
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= h($title) ?></title>
+  <title><?php echo h($title); ?></title>
   <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
 </head>
 <body class="p-3">
 <div class="container" style="max-width:760px;">
-  <h1 class="h4 mb-3"><?= h($title) ?></h1>
+  <h1 class="h4 mb-3"><?php echo h($title); ?></h1>
 
-  <?php if ($msg): ?><div class="alert alert-success"><?= h($msg) ?></div><?php endif; ?>
-  <?php if ($error): ?><div class="alert alert-danger"><?= h($error) ?></div><?php endif; ?>
+  <?php if ($msg): ?><div class="alert alert-success"><?php echo h($msg); ?></div><?php endif; ?>
+  <?php if ($error): ?><div class="alert alert-danger"><?php echo h($error); ?></div><?php endif; ?>
 
   <div class="card mb-3">
     <div class="card-body">
       <?php if ($enabled): ?>
         <p>2FA مفعل على حسابك.</p>
         <form method="post">
-          <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
+          <input type="hidden" name="csrf_token" value="<?php echo h(generate_csrf_token()); ?>">
           <button class="btn btn-outline-danger" name="action" value="disable" type="submit"
                   data-confirm='تأكيد إيقاف 2FA؟'>إيقاف 2FA</button>
         </form>
@@ -94,7 +94,7 @@ $qrUrl = '';
 
         <?php if ($setupSecret === ''): ?>
           <form method="post">
-            <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h(generate_csrf_token()); ?>">
             <button class="btn btn-primary" name="action" value="start" type="submit">بدء التفعيل</button>
           </form>
         <?php else: ?>
@@ -103,16 +103,16 @@ $qrUrl = '';
               <div class="p-3 border rounded" style="background: rgba(0,0,0,.03);">
                 <div class="fw-semibold mb-2">إضافة يدوية</div>
                 <div class="small text-muted mb-2">إذا لم يظهر QR (أو لا ترغب في استخدام خدمات خارجية)، أدخل البيانات يدويًا في تطبيق المصادقة.</div>
-                <div class="mb-2">Secret: <code><?= h($setupSecret) ?></code></div>
-                <div class="mb-0">OTPAuth URI: <code style="word-break:break-all;"><?= h($otpauth) ?></code></div>
+                <div class="mb-2">Secret: <code><?php echo h($setupSecret); ?></code></div>
+                <div class="mb-0">OTPAuth URI: <code style="word-break:break-all;"><?php echo h($otpauth); ?></code></div>
               </div>
             </div>
             <div class="col-md-8">
-              <div class="mb-2">الرمز (Secret): <code><?= h($setupSecret) ?></code></div>
+              <div class="mb-2">الرمز (Secret): <code><?php echo h($setupSecret); ?></code></div>
               <div class="text-muted small mb-3">امسح QR ثم أدخل الرمز المكوّن من 6 أرقام للتأكيد.</div>
 
               <form method="post" class="d-flex gap-2 flex-wrap">
-                <input type="hidden" name="csrf_token" value="<?= h(generate_csrf_token()) ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo h(generate_csrf_token()); ?>">
                 <input type="text" name="code" class="form-control" style="max-width:220px;" placeholder="123456" required>
                 <button class="btn btn-success" name="action" value="confirm" type="submit">تأكيد التفعيل</button>
               </form>

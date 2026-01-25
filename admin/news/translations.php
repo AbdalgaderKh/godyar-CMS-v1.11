@@ -192,7 +192,7 @@ require __DIR__ . '/../layout/app_start.php';
 ?>
 
 <?php if ($flash['msg'] !== ''): ?>
-  <div class="alert alert-<?= h($flash['type']) ?>"><?= h($flash['msg']) ?></div>
+  <div class="alert alert-<?php echo h($flash['type']); ?>"><?php echo h($flash['msg']); ?></div>
 <?php endif; ?>
 
 <div class="row g-3">
@@ -204,13 +204,13 @@ require __DIR__ . '/../layout/app_start.php';
           <form class="d-flex gap-2" method="get" action="translations.php">
             <select name="lang" class="form-select form-select-sm" style="min-width:120px">
               <option value="">كل اللغات</option>
-              <option value="en" <?= $filterLang==='en'?'selected':'' ?>>EN</option>
-              <option value="fr" <?= $filterLang==='fr'?'selected':'' ?>>FR</option>
+              <option value="en" <?php echo $filterLang==='en'?'selected':''; ?>>EN</option>
+              <option value="fr" <?php echo $filterLang==='fr'?'selected':''; ?>>FR</option>
             </select>
             <select name="status" class="form-select form-select-sm" style="min-width:140px">
               <option value="">كل الحالات</option>
-              <option value="draft" <?= $filterStatus==='draft'?'selected':'' ?>>مسودة</option>
-              <option value="published" <?= $filterStatus==='published'?'selected':'' ?>>منشور</option>
+              <option value="draft" <?php echo $filterStatus==='draft'?'selected':''; ?>>مسودة</option>
+              <option value="published" <?php echo $filterStatus==='published'?'selected':''; ?>>منشور</option>
             </select>
             <button class="btn btn-sm btn-outline-secondary">تصفية</button>
           </form>
@@ -229,12 +229,12 @@ require __DIR__ . '/../layout/app_start.php';
             <tbody>
               <?php foreach ($rows as $r): ?>
                 <tr>
-                  <td><?= (int)$r['id'] ?></td>
+                  <td><?php echo (int)$r['id']; ?></td>
                   <td>
-                    <div class="fw-semibold"><?= h((string)$r['news_title']) ?></div>
-                    <div class="small text-muted">ID: <?= (int)$r['news_id'] ?> • <?= h((string)$r['tr_title']) ?></div>
+                    <div class="fw-semibold"><?php echo h((string)$r['news_title']); ?></div>
+                    <div class="small text-muted">ID: <?php echo (int)$r['news_id']; ?> • <?php echo h((string)$r['tr_title']); ?></div>
                   </td>
-                  <td><span class="badge text-bg-secondary"><?= h(strtoupper((string)$r['lang'])) ?></span></td>
+                  <td><span class="badge text-bg-secondary"><?php echo h(strtoupper((string)$r['lang'])); ?></span></td>
                   <td>
                     <?php if ((string)$r['status'] === 'published'): ?>
                       <span class="badge text-bg-success">منشور</span>
@@ -243,7 +243,7 @@ require __DIR__ . '/../layout/app_start.php';
                     <?php endif; ?>
                   </td>
                   <td class="text-end">
-                    <a class="btn btn-sm btn-primary" href="translations.php?edit=<?= (int)$r['id'] ?>">تحرير</a>
+                    <a class="btn btn-sm btn-primary" href="translations.php?edit=<?php echo (int)$r['id']; ?>">تحرير</a>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -259,20 +259,20 @@ require __DIR__ . '/../layout/app_start.php';
     <div class="col-12 col-lg-5">
       <div class="card shadow-sm">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <div class="fw-bold"><?= $editRow ? 'تحرير ترجمة' : 'إنشاء ترجمة' ?></div>
+          <div class="fw-bold"><?php echo $editRow ? 'تحرير ترجمة' : 'إنشاء ترجمة'; ?></div>
           <div class="small text-muted">* يدعم توليد آلي (زر)</div>
         </div>
         <div class="card-body">
           <form method="post" action="translations.php">
-            <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+            <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
             <input type="hidden" name="action" value="save">
-            <input type="hidden" name="id" value="<?= (int)($editRow['id'] ?? 0) ?>">
+            <input type="hidden" name="id" value="<?php echo (int)($editRow['id'] ?? 0); ?>">
 
             <div class="mb-2">
               <label class="form-label">ID المقال</label>
-              <input class="form-control" name="news_id" type="number" min="1" value="<?= (int)($editRow['news_id'] ?? (int)($_GET['news_id'] ?? 0)) ?>" <?= $editRow ? 'readonly' : '' ?> required>
+              <input class="form-control" name="news_id" type="number" min="1" value="<?php echo (int)($editRow['news_id'] ?? (int)($_GET['news_id'] ?? 0)); ?>" <?php echo $editRow ? 'readonly' : ''; ?> required>
               <?php if ($editRow): ?>
-                <div class="small text-muted mt-1"><?= h((string)$editRow['news_title']) ?></div>
+                <div class="small text-muted mt-1"><?php echo h((string)$editRow['news_title']); ?></div>
               <?php endif; ?>
             </div>
 
@@ -280,27 +280,27 @@ require __DIR__ . '/../layout/app_start.php';
               <div class="col-6">
                 <label class="form-label">اللغة</label>
                 <select class="form-select" name="lang">
-                  <option value="en" <?= (($editRow['lang'] ?? '')==='en'?'selected':'') ?>>EN</option>
-                  <option value="fr" <?= (($editRow['lang'] ?? '')==='fr'?'selected':'') ?>>FR</option>
+                  <option value="en" <?php echo (($editRow['lang'] ?? '')==='en'?'selected':''); ?>>EN</option>
+                  <option value="fr" <?php echo (($editRow['lang'] ?? '')==='fr'?'selected':''); ?>>FR</option>
                 </select>
               </div>
               <div class="col-6">
                 <label class="form-label">الحالة</label>
                 <select class="form-select" name="status">
-                  <option value="draft" <?= (($editRow['status'] ?? '')!=='published'?'selected':'') ?>>مسودة</option>
-                  <option value="published" <?= (($editRow['status'] ?? '')==='published'?'selected':'') ?>>منشور</option>
+                  <option value="draft" <?php echo (($editRow['status'] ?? '')!=='published'?'selected':''); ?>>مسودة</option>
+                  <option value="published" <?php echo (($editRow['status'] ?? '')==='published'?'selected':''); ?>>منشور</option>
                 </select>
               </div>
             </div>
 
             <div class="mb-2 mt-2">
               <label class="form-label">العنوان</label>
-              <input class="form-control" name="title" value="<?= h((string)($editRow['title'] ?? '')) ?>">
+              <input class="form-control" name="title" value="<?php echo h((string)($editRow['title'] ?? '')); ?>">
             </div>
 
             <div class="mb-2">
               <label class="form-label">المحتوى (HTML)</label>
-              <textarea class="form-control" name="content" rows="10"><?= h((string)($editRow['content'] ?? '')) ?></textarea>
+              <textarea class="form-control" name="content" rows="10"><?php echo h((string)($editRow['content'] ?? '')); ?></textarea>
             </div>
 
             <div class="d-flex flex-wrap gap-2">
@@ -313,9 +313,9 @@ require __DIR__ . '/../layout/app_start.php';
 
           <?php if ($editRow): ?>
             <form method="post" action="translations.php" class="mt-2" data-confirm='حذف الترجمة نهائيًا؟'>
-              <input type="hidden" name="csrf_token" value="<?= h($csrfToken) ?>">
+              <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
               <input type="hidden" name="action" value="delete">
-              <input type="hidden" name="id" value="<?= (int)$editRow['id'] ?>">
+              <input type="hidden" name="id" value="<?php echo (int)$editRow['id']; ?>">
               <button class="btn btn-outline-danger" type="submit">حذف الترجمة</button>
             </form>
           <?php endif; ?>

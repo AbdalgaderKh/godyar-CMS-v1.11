@@ -49,27 +49,27 @@ $pageHead = $pageHead ?? '';
 $jsonFlags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
 ?>
 <!doctype html>
-<html lang="<?= h($lang) ?>" dir="<?= h($dir) ?>">
+<html lang="<?php echo h($lang); ?>" dir="<?php echo h($dir); ?>">
 <head>
     <meta charset="utf-8">
-    <title><?= h($pageTitle) ?> — <?= h(function_exists('__') ? __('dashboard', [], 'لوحة التحكم') : 'لوحة التحكم') ?></title>
+    <title><?php echo h($pageTitle); ?> — <?php echo h(function_exists('__') ? __('dashboard', [], 'لوحة التحكم') : 'لوحة التحكم'); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script>
-        window.GODYAR_BASE_URL = <?= json_encode($base, $jsonFlags) ?>;
-        window.GDY_ADMIN_URL   = <?= json_encode($adminBase, $jsonFlags) ?>;
+        window.GODYAR_BASE_URL = <?php echo json_encode($base, $jsonFlags); ?>;
+        window.GDY_ADMIN_URL   = <?php echo json_encode($adminBase, $jsonFlags); ?>;
     </script>
 
-    <link rel="stylesheet" href="<?= h($bootstrapCss) ?>">
-    <link rel="stylesheet" href="<?= h($adminBase . '/assets/css/admin-ui.css?v=' . $uiVer) ?>">
-    <link rel="stylesheet" href="<?= h($adminBase . '/assets/css/admin-shell.css?v=' . $shellVer) ?>">
+    <link rel="stylesheet" href="<?php echo h($bootstrapCss); ?>">
+    <link rel="stylesheet" href="<?php echo h($adminBase . '/assets/css/admin-ui.css?v=' . $uiVer); ?>">
+    <link rel="stylesheet" href="<?php echo h($adminBase . '/assets/css/admin-shell.css?v=' . $shellVer); ?>">
 
     <?php if ($pageHead !== '') { echo $pageHead; } ?>
 </head>
 <body>
 
 <?php if (function_exists('csrf_token')): ?>
-  <input type="hidden" id="gdyGlobalCsrfToken" value="<?= h(csrf_token()) ?>" style="display:none">
+  <input type="hidden" id="gdyGlobalCsrfToken" value="<?php echo h(csrf_token()); ?>" style="display:none">
 <?php endif; ?>
 
 <?php
@@ -84,4 +84,4 @@ try {
 }
 ?>
 
-<script src="<?= h($bootstrapJs) ?>"></script>
+<script src="<?php echo h($bootstrapJs); ?>"></script>

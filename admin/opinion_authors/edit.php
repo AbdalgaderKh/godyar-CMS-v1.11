@@ -329,14 +329,14 @@ html, body{
 <div class="admin-content container-fluid py-4">
     <div class="admin-content gdy-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <div>
-            <h1 class="h4 text-white mb-1"><?= h(__('t_e3d3c2b7c1', 'تعديل كاتب رأي')) ?></h1>
+            <h1 class="h4 text-white mb-1"><?php echo h(__('t_e3d3c2b7c1', 'تعديل كاتب رأي')); ?></h1>
             <p class="text-muted mb-0 small">
-                <?= h(__('t_39742f0789', 'تعديل بيانات كاتب رأي موجود في النظام')) ?>
+                <?php echo h(__('t_39742f0789', 'تعديل بيانات كاتب رأي موجود في النظام')); ?>
             </p>
         </div>
         <div class="mt-3 mt-md-0">
             <a href="index.php" class="btn btn-outline-light">
-                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg><?= h(__('t_19ae074cbf', 'العودة للقائمة')) ?>
+                <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg><?php echo h(__('t_19ae074cbf', 'العودة للقائمة')); ?>
             </a>
         </div>
     </div>
@@ -344,10 +344,10 @@ html, body{
     <?php if ($success): ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?= h($success) ?>
+            <?php echo h($success); ?>
             <div class="mt-2">
-                <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?= h(__('t_1eab5c6c10', 'عرض الكل')) ?></a>
-                <a href="create.php" class="btn btn-sm btn-success"><?= h(__('t_7332c59999', 'إضافة كاتب جديد')) ?></a>
+                <a href="index.php" class="btn btn-sm btn-outline-success me-2"><?php echo h(__('t_1eab5c6c10', 'عرض الكل')); ?></a>
+                <a href="create.php" class="btn btn-sm btn-success"><?php echo h(__('t_7332c59999', 'إضافة كاتب جديد')); ?></a>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -356,10 +356,10 @@ html, body{
     <?php if ($errors): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_c83b645dc3', 'حدث خطأ:')) ?></strong>
+            <strong><?php echo h(__('t_c83b645dc3', 'حدث خطأ:')); ?></strong>
             <ul class="mb-0 mt-2">
                 <?php foreach ($errors as $err): ?>
-                    <li><?= h($err) ?></li>
+                    <li><?php echo h($err); ?></li>
                 <?php endforeach; ?>
             </ul>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -369,14 +369,14 @@ html, body{
     <?php if (!$tableExists): ?>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <strong><?= h(__('t_b83c3996d9', 'تنبيه:')) ?></strong> <?= h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')) ?> 
-            <a href="create_table.php" class="alert-link"><?= h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')) ?></a>
+            <strong><?php echo h(__('t_b83c3996d9', 'تنبيه:')); ?></strong> <?php echo h(__('t_95f05efc73', 'جدول كُتاب الرأي غير موجود.')); ?> 
+            <a href="create_table.php" class="alert-link"><?php echo h(__('t_98b74d89fa', 'انقر هنا لإنشاء الجدول')); ?></a>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     <?php endif; ?>
 
     <form method="post" id="authorForm">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
         <div class="row g-4">
             <!-- العمود الرئيسي -->
@@ -384,14 +384,14 @@ html, body{
                 <div class="gdy-form-card card shadow-sm">
                     <div class="card-body">
                         <!-- المعلومات الأساسية -->
-                        <h5 class="card-title mb-4"><?= h(__('t_0f6bc67891', 'المعلومات الأساسية')) ?></h5>
+                        <h5 class="card-title mb-4"><?php echo h(__('t_0f6bc67891', 'المعلومات الأساسية')); ?></h5>
                         
                         <!-- الاسم -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_b27a56a1d8', 'اسم الكاتب *')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_b27a56a1d8', 'اسم الكاتب *')); ?></label>
                             <input type="text" name="name" class="form-control form-control-lg"
-                                   value="<?= h($data['name']) ?>" 
-                                   placeholder="<?= h(__('t_2c2da2cd5e', 'أدخل اسم الكاتب...')) ?>" 
+                                   value="<?php echo h($data['name']); ?>" 
+                                   placeholder="<?php echo h(__('t_2c2da2cd5e', 'أدخل اسم الكاتب...')); ?>" 
                                    required
                                    maxlength="255">
                             <div class="char-count mt-1" id="nameCount">0/255</div>
@@ -399,69 +399,69 @@ html, body{
 
                         <!-- slug -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_0781965540', 'الرابط (Slug)')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></label>
                             <input type="text" name="slug" class="form-control"
-                                   value="<?= h($data['slug']) ?>" 
-                                   placeholder="<?= h(__('t_1ff4d5864e', 'اتركه فارغاً ليُولّد آلياً من الاسم')) ?>">
+                                   value="<?php echo h($data['slug']); ?>" 
+                                   placeholder="<?php echo h(__('t_1ff4d5864e', 'اتركه فارغاً ليُولّد آلياً من الاسم')); ?>">
                         </div>
 
                         <!-- اسم صفحة الكاتب -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_054a8d7cb9', 'اسم صفحة الكاتب')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_054a8d7cb9', 'اسم صفحة الكاتب')); ?></label>
                             <input type="text" name="page_title" class="form-control"
-                                   value="<?= h($data['page_title']) ?>" 
-                                   placeholder="<?= h(__('t_7ac3494fc7', 'اتركه فارغاً ليُولّد آلياً مثل: مقالات اسم الكاتب')) ?>">
-                            <div class="form-text"><?= h(__('t_1e5a8ed8fa', 'يستخدم كعنوان رئيسي لصفحة الكاتب ويمكن الاستفادة منه في الـ SEO.')) ?></div>
+                                   value="<?php echo h($data['page_title']); ?>" 
+                                   placeholder="<?php echo h(__('t_7ac3494fc7', 'اتركه فارغاً ليُولّد آلياً مثل: مقالات اسم الكاتب')); ?>">
+                            <div class="form-text"><?php echo h(__('t_1e5a8ed8fa', 'يستخدم كعنوان رئيسي لصفحة الكاتب ويمكن الاستفادة منه في الـ SEO.')); ?></div>
                         </div>
 
                         <!-- التخصص -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_73cc87b77c', 'التخصص')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_73cc87b77c', 'التخصص')); ?></label>
                             <input type="text" name="specialization" class="form-control"
-                                   value="<?= h($data['specialization']) ?>" 
-                                   placeholder="<?= h(__('t_2e7e431ee1', 'مثال: كاتب رأي سياسي، محلل اقتصادي...')) ?>"
+                                   value="<?php echo h($data['specialization']); ?>" 
+                                   placeholder="<?php echo h(__('t_2e7e431ee1', 'مثال: كاتب رأي سياسي، محلل اقتصادي...')); ?>"
                                    maxlength="255">
                             <div class="char-count mt-1" id="specializationCount">0/255</div>
                         </div>
 
                         <!-- السيرة الذاتية -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_07bdba3bb4', 'السيرة الذاتية')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_07bdba3bb4', 'السيرة الذاتية')); ?></label>
                             <textarea name="bio" rows="5" class="form-control"
-                                      placeholder="<?= h(__('t_481b769690', 'اكتب سيرة ذاتية مختصرة عن الكاتب...')) ?>"
-                                      maxlength="1000"><?= h($data['bio']) ?></textarea>
+                                      placeholder="<?php echo h(__('t_481b769690', 'اكتب سيرة ذاتية مختصرة عن الكاتب...')); ?>"
+                                      maxlength="1000"><?php echo h($data['bio']); ?></textarea>
                             <div class="char-count mt-1" id="bioCount">0/1000</div>
                         </div>
 
                         <!-- وسائل التواصل الاجتماعي -->
-                        <h5 class="card-title mb-4"><?= h(__('t_1d59fa44bb', 'وسائل التواصل الاجتماعي')) ?></h5>
+                        <h5 class="card-title mb-4"><?php echo h(__('t_1d59fa44bb', 'وسائل التواصل الاجتماعي')); ?></h5>
                         
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label"><?= h(__('t_989510d6cd', 'تويتر')) ?></label>
+                                <label class="form-label"><?php echo h(__('t_989510d6cd', 'تويتر')); ?></label>
                                 <input type="url" name="social_twitter" class="form-control"
-                                       value="<?= h($data['social_twitter']) ?>" 
+                                       value="<?php echo h($data['social_twitter']); ?>" 
                                        placeholder="https://twitter.com/...">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><?= h(__('t_d5b4c8ec57', 'موقع شخصي')) ?></label>
+                                <label class="form-label"><?php echo h(__('t_d5b4c8ec57', 'موقع شخصي')); ?></label>
                                 <input type="url" name="social_website" class="form-control"
-                                       value="<?= h($data['social_website']) ?>" 
+                                       value="<?php echo h($data['social_website']); ?>" 
                                        placeholder="https://example.com">
                             </div>
                         </div>
 
                         <div class="row g-3 mt-2">
                             <div class="col-md-6">
-                                <label class="form-label"><?= h(__('t_efa3efaed6', 'فيسبوك')) ?></label>
+                                <label class="form-label"><?php echo h(__('t_efa3efaed6', 'فيسبوك')); ?></label>
                                 <input type="url" name="social_facebook" class="form-control"
-                                       value="<?= h($data['social_facebook']) ?>" 
+                                       value="<?php echo h($data['social_facebook']); ?>" 
                                        placeholder="https://facebook.com/...">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label"><?= h(__('t_2436aacc18', 'البريد الإلكتروني')) ?></label>
+                                <label class="form-label"><?php echo h(__('t_2436aacc18', 'البريد الإلكتروني')); ?></label>
                                 <input type="email" name="email" class="form-control"
-                                       value="<?= h($data['email']) ?>" 
+                                       value="<?php echo h($data['email']); ?>" 
                                        placeholder="admin@example.com">
                             </div>
                         </div>
@@ -475,36 +475,36 @@ html, body{
                     <div class="card-body">
                         <!-- الصورة الشخصية -->
                         <div class="mb-4 text-center">
-                            <label class="form-label fw-semibold"><?= h(__('t_d55b78f864', 'الصورة الشخصية')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_d55b78f864', 'الصورة الشخصية')); ?></label>
                             <div id="avatarPreview" class="d-flex justify-content-center mb-3">
-                                <img src="<?= !empty($data['avatar']) ? h($data['avatar']) : __('t_314796b748', 'https://via.placeholder.com/120x120/0f172a/64748b?text=صورة') ?>" 
+                                <img src="<?php echo !empty($data['avatar']) ? h($data['avatar']) : __('t_314796b748', 'https://via.placeholder.com/120x120/0f172a/64748b?text=صورة'); ?>" 
                                      class="avatar-preview" 
                                      id="avatarImage"
                                      data-fallback-src="https://via.placeholder.com/120x120/0f172a/64748b?text=صورة">
                             </div>
                             <input type="url" name="avatar" class="form-control"
-                                   value="<?= h($data['avatar']) ?>" 
-                                   placeholder="<?= h(__('t_4c1f195836', 'رابط الصورة...')) ?>"
+                                   value="<?php echo h($data['avatar']); ?>" 
+                                   placeholder="<?php echo h(__('t_4c1f195836', 'رابط الصورة...')); ?>"
                                    id="avatarInput">
-                            <div class="form-text mt-2"><?= h(__('t_9f92f83048', 'أدخل رابط الصورة أو اتركه فارغاً للصورة الافتراضية')) ?></div>
+                            <div class="form-text mt-2"><?php echo h(__('t_9f92f83048', 'أدخل رابط الصورة أو اتركه فارغاً للصورة الافتراضية')); ?></div>
                         </div>
 
                         <!-- ترتيب العرض -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold"><?= h(__('t_2fcc9e97b9', 'ترتيب العرض')) ?></label>
+                            <label class="form-label fw-semibold"><?php echo h(__('t_2fcc9e97b9', 'ترتيب العرض')); ?></label>
                             <input type="number" name="display_order" class="form-control"
-                                   value="<?= h((string)$data['display_order']) ?>" 
+                                   value="<?php echo h((string)$data['display_order']); ?>" 
                                    min="0" step="1">
-                            <div class="form-text"><?= h(__('t_73765703c9', 'رقم أقل يعني ظهوراً أبكر')) ?></div>
+                            <div class="form-text"><?php echo h(__('t_73765703c9', 'رقم أقل يعني ظهوراً أبكر')); ?></div>
                         </div>
 
                         <!-- الحالة -->
                         <div class="mb-4">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" name="is_active" 
-                                       id="isActive" value="1" <?= $data['is_active'] ? 'checked' : '' ?>>
+                                       id="isActive" value="1" <?php echo $data['is_active'] ? 'checked' : ''; ?>>
                                 <label class="form-check-label fw-semibold" for="isActive">
-                                    <?= h(__('t_cb1d45be00', '✅ كاتب نشط')) ?>
+                                    <?php echo h(__('t_cb1d45be00', '✅ كاتب نشط')); ?>
                                 </label>
                             </div>
                         </div>
@@ -513,17 +513,17 @@ html, body{
                         <div class="border-top pt-4">
                             <button type="submit" name="save" class="btn btn-primary w-100 mb-2">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+                                <?php echo h(__('t_91d6db7f39', 'حفظ التعديلات')); ?>
                             </button>
                             
                             <button type="submit" name="save_and_new" class="btn btn-outline-primary w-100 mb-2">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#user"></use></svg>
-                                <?= h(__('t_2554146e52', 'حفظ وإضافة كاتب جديد')) ?>
+                                <?php echo h(__('t_2554146e52', 'حفظ وإضافة كاتب جديد')); ?>
                             </button>
                             
                             <button type="submit" name="save_and_list" class="btn btn-outline-light w-100">
                                 <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                <?= h(__('t_e934ff7404', 'حفظ والعودة للقائمة')) ?>
+                                <?php echo h(__('t_e934ff7404', 'حفظ والعودة للقائمة')); ?>
                             </button>
                         </div>
                     </div>
@@ -533,21 +533,21 @@ html, body{
                 <div class="card shadow-sm mt-4">
                     <div class="card-header bg-dark text-light">
                         <h6 class="card-title mb-0">
-                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?= h(__('t_fb8f3b0519', 'نصائح سريعة')) ?>
+                            <svg class="gdy-icon me-2" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_fb8f3b0519', 'نصائح سريعة')); ?>
                         </h6>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <strong><?= h(__('t_0334979124', '👤 المعلومات:')) ?></strong>
-                            <p class="small text-muted mb-0"><?= h(__('t_23e5bc04e1', 'حدّث المعلومات الأساسية بدقة لتسهيل التعرف على الكاتب.')) ?></p>
+                            <strong><?php echo h(__('t_0334979124', '👤 المعلومات:')); ?></strong>
+                            <p class="small text-muted mb-0"><?php echo h(__('t_23e5bc04e1', 'حدّث المعلومات الأساسية بدقة لتسهيل التعرف على الكاتب.')); ?></p>
                         </div>
                         <div class="mb-3">
-                            <strong><?= h(__('t_84d00bb6b5', '📸 الصورة:')) ?></strong>
-                            <p class="small text-muted mb-0"><?= h(__('t_06e92c18ba', 'استخدم صوراً شخصية واضحة وبجودة مناسبة.')) ?></p>
+                            <strong><?php echo h(__('t_84d00bb6b5', '📸 الصورة:')); ?></strong>
+                            <p class="small text-muted mb-0"><?php echo h(__('t_06e92c18ba', 'استخدم صوراً شخصية واضحة وبجودة مناسبة.')); ?></p>
                         </div>
                         <div class="mb-3">
-                            <strong><?= h(__('t_14df2374ce', '🔗 الروابط:')) ?></strong>
-                            <p class="small text-muted mb-0"><?= h(__('t_7857751550', 'حدّث روابط التواصل لزيادة التفاعل.')) ?></p>
+                            <strong><?php echo h(__('t_14df2374ce', '🔗 الروابط:')); ?></strong>
+                            <p class="small text-muted mb-0"><?php echo h(__('t_7857751550', 'حدّث روابط التواصل لزيادة التفاعل.')); ?></p>
                         </div>
                     </div>
                 </div>

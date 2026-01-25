@@ -273,12 +273,12 @@ html, body{
 
   <div class="d-flex justify-content-between align-items-start align-items-md-center mb-3">
     <div>
-      <h1 class="h4 mb-1">تعديل مستخدم #<?= (int)$id ?></h1>
-      <p class="text-muted mb-0"><?= h($data['username']) ?> - <?= h($data['email']) ?></p>
+      <h1 class="h4 mb-1">تعديل مستخدم #<?php echo (int)$id; ?></h1>
+      <p class="text-muted mb-0"><?php echo h($data['username']); ?> - <?php echo h($data['email']); ?></p>
     </div>
     <div class="mt-2 mt-md-0">
       <a href="index.php" class="btn btn-sm btn-outline-secondary">
-        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?= h(__('t_5c3059454f', 'الرجوع للقائمة')) ?>
+        <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h(__('t_5c3059454f', 'الرجوع للقائمة')); ?>
       </a>
     </div>
   </div>
@@ -287,7 +287,7 @@ html, body{
     <div class="alert alert-danger">
       <ul class="mb-0">
         <?php foreach ($errors as $err): ?>
-          <li><?= h($err) ?></li>
+          <li><?php echo h($err); ?></li>
         <?php endforeach; ?>
       </ul>
     </div>
@@ -296,25 +296,25 @@ html, body{
   <div class="card shadow-sm">
     <div class="card-body">
       <form method="post" action="">
-    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
-        <input type="hidden" name="_token" value="<?= h($csrf) ?>">
+        <input type="hidden" name="_token" value="<?php echo h($csrf); ?>">
 
         <div class="row g-3">
           <div class="col-md-4">
-            <label class="form-label"><?= h(__('t_f6767f689d', 'اسم المستخدم *')) ?></label>
+            <label class="form-label"><?php echo h(__('t_f6767f689d', 'اسم المستخدم *')); ?></label>
             <input type="text" name="username" class="form-control" required
-                   value="<?= h($dataForm['username']) ?>">
+                   value="<?php echo h($dataForm['username']); ?>">
           </div>
           <div class="col-md-4">
-            <label class="form-label"><?= h(__('t_90f9115ac9', 'الاسم الكامل')) ?></label>
+            <label class="form-label"><?php echo h(__('t_90f9115ac9', 'الاسم الكامل')); ?></label>
             <input type="text" name="name" class="form-control"
-                   value="<?= h($dataForm['name']) ?>">
+                   value="<?php echo h($dataForm['name']); ?>">
           </div>
           <div class="col-md-4">
-            <label class="form-label"><?= h(__('t_b052caae3b', 'البريد الإلكتروني *')) ?></label>
+            <label class="form-label"><?php echo h(__('t_b052caae3b', 'البريد الإلكتروني *')); ?></label>
             <input type="email" name="email" class="form-control" required
-                   value="<?= h($dataForm['email']) ?>">
+                   value="<?php echo h($dataForm['email']); ?>">
           </div>
         </div>
 
@@ -322,36 +322,36 @@ html, body{
 
         <div class="row g-3">
           <div class="col-md-4">
-            <label class="form-label"><?= h(__('t_9d5f0f2c2c', 'كلمة المرور الجديدة (اختياري)')) ?></label>
+            <label class="form-label"><?php echo h(__('t_9d5f0f2c2c', 'كلمة المرور الجديدة (اختياري)')); ?></label>
             <input type="password" name="password" class="form-control">
           </div>
           <div class="col-md-4">
-            <label class="form-label"><?= h(__('t_6a507e0aa9', 'تأكيد كلمة المرور')) ?></label>
+            <label class="form-label"><?php echo h(__('t_6a507e0aa9', 'تأكيد كلمة المرور')); ?></label>
             <input type="password" name="password_confirm" class="form-control">
           </div>
           <div class="col-md-2">
-            <label class="form-label"><?= h(__('t_1647921065', 'الدور')) ?></label>
+            <label class="form-label"><?php echo h(__('t_1647921065', 'الدور')); ?></label>
             <select name="role" class="form-select">
               <?php foreach ($roles as $r): ?>
-                <option value="<?= h($r) ?>" <?= $dataForm['role']===$r?'selected':'' ?>>
-                  <?= h($r) ?>
+                <option value="<?php echo h($r); ?>" <?php echo $dataForm['role']===$r?'selected':''; ?>>
+                  <?php echo h($r); ?>
                 </option>
               <?php endforeach; ?>
             </select>
           </div>
           <div class="col-md-2">
-            <label class="form-label"><?= h(__('t_1253eb5642', 'الحالة')) ?></label>
+            <label class="form-label"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
             <select name="status" class="form-select">
-              <option value="active"   <?= $dataForm['status']==='active'?'selected':'' ?>><?= h(__('t_8caaf95380', 'نشط')) ?></option>
-              <option value="inactive" <?= $dataForm['status']==='inactive'?'selected':'' ?>><?= h(__('t_1e0f5f1adc', 'غير نشط')) ?></option>
-              <option value="banned"   <?= $dataForm['status']==='banned'?'selected':'' ?>><?= h(__('t_e59b95cb50', 'محظور')) ?></option>
+              <option value="active"   <?php echo $dataForm['status']==='active'?'selected':''; ?>><?php echo h(__('t_8caaf95380', 'نشط')); ?></option>
+              <option value="inactive" <?php echo $dataForm['status']==='inactive'?'selected':''; ?>><?php echo h(__('t_1e0f5f1adc', 'غير نشط')); ?></option>
+              <option value="banned"   <?php echo $dataForm['status']==='banned'?'selected':''; ?>><?php echo h(__('t_e59b95cb50', 'محظور')); ?></option>
             </select>
           </div>
         </div>
 
         <div class="mt-4">
           <button type="submit" class="btn btn-primary">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?= h(__('t_91d6db7f39', 'حفظ التعديلات')) ?>
+            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#edit"></use></svg> <?php echo h(__('t_91d6db7f39', 'حفظ التعديلات')); ?>
           </button>
         </div>
       </form>

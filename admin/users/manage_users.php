@@ -35,13 +35,13 @@ html, body{
 
 <div class="admin-content container-fluid py-4">
   <div class="gdy-page-header mb-3">
-    <h1 class="h4 mb-2 text-white"><?= h(__('t_5aa71f1bf6', 'إدارة المستخدمين')) ?></h1>
-    <p class="text-muted mb-0 small"><?= h(__('t_173ec20769', 'من هنا يمكنك إدارة المستخدمين وصلاحياتهم في النظام.')) ?></p>
+    <h1 class="h4 mb-2 text-white"><?php echo h(__('t_5aa71f1bf6', 'إدارة المستخدمين')); ?></h1>
+    <p class="text-muted mb-0 small"><?php echo h(__('t_173ec20769', 'من هنا يمكنك إدارة المستخدمين وصلاحياتهم في النظام.')); ?></p>
   </div>
 
   <div class="card glass-card gdy-card" style="background:rgba(15,23,42,.95);color:#e5e7eb;">
     <div class="card-body">
-      <p class="mb-0"><?= h(__('t_173ec20769', 'من هنا يمكنك إدارة المستخدمين وصلاحياتهم في النظام.')) ?></p>
+      <p class="mb-0"><?php echo h(__('t_173ec20769', 'من هنا يمكنك إدارة المستخدمين وصلاحياتهم في النظام.')); ?></p>
     </div>
   </div>
 </div>

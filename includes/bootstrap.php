@@ -134,6 +134,10 @@ require_once ROOT_PATH . '/includes/lang.php';
 // DB helpers (PDO source of truth)
 require_once ROOT_PATH . '/includes/db.php';
 
+// Site settings (DB-backed). Loaded here so legacy standalone scripts that only
+// include bootstrap.php can safely call gdy_load_settings()/site_setting().
+require_once ROOT_PATH . '/includes/site_settings.php';
+
 if (!function_exists('normalize_display_name')) {
     /**
      * Normalize display name input (Unicode-safe):

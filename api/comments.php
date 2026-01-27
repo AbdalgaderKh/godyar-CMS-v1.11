@@ -163,8 +163,8 @@ try {
             gdy_json_fail(422, 'invalid_email');
         }
 
-        // Decide status: admins auto-approved, others pending (default)
-        $status = (strtolower($userRole) === 'admin') ? 'approved' : 'pending';
+        // Decide status: auto-approve (requested)
+        $status = 'approved';
 
         $st = $pdo->prepare(
             "INSERT INTO news_comments (news_id, user_id, name, email, body, parent_id, status, ip, user_agent, created_at)\n".

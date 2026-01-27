@@ -258,13 +258,11 @@ final class NewsService
             $total = (int)($cnt->fetchColumn() ?: 0);
             $pages = max(1, (int)ceil($total / $perPage));
 
-            $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $dateCol . ' DESC, id DESC LIMIT :lim OFFSET :off';
+            $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $dateCol . ' DESC, id DESC LIMIT ' . (int)$perPage . ' OFFSET ' . (int)$offset . '';
             $st = $this->pdo->prepare($sql);
             foreach ($params as $k => $v) {
                 $st->bindValue($k, (int)$v, PDO::PARAM_INT);
             }
-            $st->bindValue(':lim', $perPage, PDO::PARAM_INT);
-            $st->bindValue(':off', $offset, PDO::PARAM_INT);
             $st->execute();
             $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
@@ -363,7 +361,7 @@ final class NewsService
             $total = (int)($cnt->fetchColumn() ?: 0);
             $pages = max(1, (int)ceil($total / $perPage));
 
-            $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $dateCol . ' DESC, id DESC LIMIT :lim OFFSET :off';
+            $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $dateCol . ' DESC, id DESC LIMIT ' . (int)$perPage . ' OFFSET ' . (int)$offset . '';
             $st = $this->pdo->prepare($sql);
             foreach ($params as $k => $v) {
                 if ($k === ':cid') {
@@ -372,8 +370,6 @@ final class NewsService
                     $st->bindValue($k, $v);
                 }
             }
-            $st->bindValue(':lim', $perPage, PDO::PARAM_INT);
-            $st->bindValue(':off', $offset, PDO::PARAM_INT);
             $st->execute();
             $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
 

@@ -163,3 +163,112 @@ if (!function_exists('site_settings_set')) {
         }
     }
 }
+
+// -------------------------------------------------------------
+// Frontend options helper
+// -------------------------------------------------------------
+// بعض أجزاء الواجهة (PageController/ContactController/صفحات قديمة)
+// تعتمد على دالة موحّدة لتجهيز متغيرات الثيم/الهوية.
+// كانت مفقودة في بعض النسخ بعد التنظيف، ما يسبب Fatal Error.
+
+if (!function_exists('gdy_prepare_frontend_options')) {
+    /**
+     * Build a normalized set of frontend variables from the settings array.
+     * This function must be side-effect free (no DB calls) and safe to call
+     * from any controller.
+     *
+     * @param array<string,string> $settings
+     * @return array<string,mixed>
+     */
+    function gdy_prepare_frontend_options(array $settings): array {
+        // Base URL
+        $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : (defined('GODYAR_BASE_URL') ? (string)GODYAR_BASE_URL : '');
+        if ($baseUrl === '') { $baseUrl = '/'; }
+
+        // Language
+        $lang = function_exists('gdy_lang') ? (string)gdy_lang() : (string)($settings['site_lang'] ?? $settings['lang'] ?? 'ar');
+        $lang = trim($lang);
+        if ($lang === '') { $lang = 'ar'; }
+
+        // Identity
+        $siteName    = (string)($settings['site_name'] ?? $settings['settings.site_name'] ?? 'Godyar');
+        $siteTagline = (string)($settings['site_tagline'] ?? $settings['settings.site_tagline'] ?? '');
+        $siteLogo    = (string)($settings['site_logo'] ?? $settings['settings.site_logo'] ?? '');
+
+        // Theme / palette
+        $frontPreset = (string)($settings['front_preset'] ?? $settings['settings.front_preset'] ?? 'default');
+        $frontPreset = strtolower(trim($frontPreset)) ?: 'default';
+
+        $primaryColor = (string)($settings['primary_color']
+            ?? $settings['theme_primary']
+            ?? $settings['settings.primary_color']
+            ?? '#111111');
+
+        // Force default palette unless explicitly custom
+        if ($frontPreset !== 'custom') {
+            $primaryColor = '#111111';
+        }
+
+        $primaryDark = (string)($settings['primary_dark']
+            ?? $settings['theme_primary_dark']
+            ?? $settings['settings.primary_dark']
+            ?? '');
+
+        if ($primaryDark === '') {
+            $hex = ltrim($primaryColor, '#');
+            if (preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+                $r = max(0, hexdec(substr($hex, 0, 2)) - 40);
+                $g = max(0, hexdec(substr($hex, 2, 2)) - 40);
+                $b = max(0, hexdec(substr($hex, 4, 2)) - 40);
+                $primaryDark = sprintf('#%02x%02x%02x', $r, $g, $b);
+            } else {
+                $primaryDark = '#000000';
+            }
+        }
+
+        $primaryRgb = '17, 17, 17';
+        try {
+            $hex = ltrim($primaryColor, '#');
+            if (preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+                $r = hexdec(substr($hex, 0, 2));
+                $g = hexdec(substr($hex, 2, 2));
+                $b = hexdec(substr($hex, 4, 2));
+                $primaryRgb = $r . ', ' . $g . ', ' . $b;
+            }
+        } catch (Throwable $e) {
+            $primaryRgb = '17, 17, 17';
+        }
+
+        $themeClass = (string)($settings['theme_class'] ?? 'theme-default');
+        if ($themeClass === '') { $themeClass = 'theme-default'; }
+
+        // Header background
+        $headerBgEnabled = ((string)($settings['theme_header_bg_enabled'] ?? $settings['settings.theme_header_bg_enabled'] ?? '0') === '1');
+
+        // Search placeholder
+        $searchPlaceholder = (string)($settings['search_placeholder'] ?? $settings['settings.search_placeholder'] ?? 'ابحث...');
+
+        // Navigation base URL (language-prefixed) for page routes
+        $navBaseUrl = rtrim($baseUrl, '/') . '/' . trim($lang, '/');
+        if ($baseUrl === '/' || $baseUrl === '') { $navBaseUrl = '/' . trim($lang, '/'); }
+
+        return [
+            // commonly extracted variables
+            'baseUrl'            => $baseUrl,
+            'navBaseUrl'         => $navBaseUrl,
+            '_gdyLang'           => $lang,
+            'siteName'           => $siteName,
+            'siteTagline'        => $siteTagline,
+            'siteLogo'           => $siteLogo,
+            'frontPreset'        => $frontPreset,
+            'primaryColor'       => $primaryColor,
+            'primaryDark'        => $primaryDark,
+            'primaryRgb'         => $primaryRgb,
+            'themeClass'         => $themeClass,
+            'headerBgEnabled'    => $headerBgEnabled,
+            'searchPlaceholder'  => $searchPlaceholder,
+            // keep raw settings available for templates that read it directly
+            'settings'           => $settings,
+        ];
+    }
+}

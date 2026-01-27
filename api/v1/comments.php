@@ -24,11 +24,6 @@ if ($method === 'OPTIONS') {
     exit;
 }
 
-// Start session (for logged-in user detection)
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
-}
-
 // Load bootstrap / DB access (best effort)
 $ROOT_PATH = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__, 2);
 
@@ -42,6 +37,16 @@ foreach ($bootstrapCandidates as $bf) {
     if (is_file($bf)) {
         require_once $bf;
         break;
+    }
+}
+
+// Start session (for logged-in user detection)
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } else {
+        // Safe fallback for endpoints that run before full bootstrap
+        @session_start();
     }
 }
 
@@ -163,8 +168,8 @@ try {
             gdy_json_fail(422, 'invalid_email');
         }
 
-        // Decide status: admins auto-approved, others pending (default)
-        $status = (strtolower($userRole) === 'admin') ? 'approved' : 'pending';
+        // Decide status: auto-approve (requested)
+        $status = 'approved';
 
         $st = $pdo->prepare(
             "INSERT INTO news_comments (news_id, user_id, name, email, body, parent_id, status, ip, user_agent, created_at)\n".

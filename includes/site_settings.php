@@ -84,8 +84,13 @@ if (!function_exists('gdy_load_settings')) {
     /**
      * Return associative array of settings.
      */
-    function gdy_load_settings(PDO $pdo, bool $forceRefresh = false): array {
+    function gdy_load_settings($pdo, bool $forceRefresh = false): array {
         static $cache = null;
+
+        // If DB is not available (e.g., during install or misconfigured env), return an empty settings array.
+        if (!($pdo instanceof PDO)) {
+            return [];
+        }
 
         if ($cache !== null && !$forceRefresh) {
             return $cache;
@@ -110,7 +115,7 @@ if (!function_exists('gdy_load_settings')) {
  * Backward-compatibility alias.
  * بعض أجزاء النظام القديمة تستخدم site_settings_load().
  */
-function site_settings_load(PDO $pdo, bool $forceRefresh = false): array {
+function site_settings_load($pdo, bool $forceRefresh = false): array {
     return gdy_load_settings($pdo, $forceRefresh);
 }
 
@@ -118,14 +123,16 @@ if (!function_exists('site_setting')) {
     /**
      * Fetch a single setting value (string). Returns $default if missing.
      */
-    function site_setting(PDO $pdo, string $key, $default = ''): string {
+    function site_setting($pdo, string $key, $default = ''): string {
+        if (!($pdo instanceof PDO)) { return (string)$default; }
         $all = gdy_load_settings($pdo, false);
         return array_key_exists($key, $all) ? (string)$all[$key] : (string)$default;
     }
 }
 
 if (!function_exists('site_settings_all')) {
-    function site_settings_all(PDO $pdo): array {
+    function site_settings_all($pdo): array {
+        if (!($pdo instanceof PDO)) { return []; }
         return gdy_load_settings($pdo, false);
     }
 }
@@ -134,7 +141,8 @@ if (!function_exists('site_settings_set')) {
     /**
      * Set a setting key to a string value (upsert).
      */
-    function site_settings_set(PDO $pdo, string $key, string $value): bool {
+    function site_settings_set($pdo, string $key, string $value): bool {
+        if (!($pdo instanceof PDO)) { return false; }
         $key = trim($key);
         if ($key === '') { return false; }
 
@@ -180,7 +188,16 @@ if (!function_exists('gdy_prepare_frontend_options')) {
      * @param array<string,string> $settings
      * @return array<string,mixed>
      */
-    function gdy_prepare_frontend_options(array $settings): array {
+    function gdy_prepare_frontend_options($settings = null): array {
+        if (!is_array($settings)) {
+            // Backward compatible: allow calling with no args.
+            try {
+                $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+            } catch (Throwable $e) {
+                $pdo = null;
+            }
+            $settings = ($pdo instanceof PDO) ? gdy_load_settings($pdo, false) : [];
+        }
         // Base URL
         $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : (defined('GODYAR_BASE_URL') ? (string)GODYAR_BASE_URL : '');
         if ($baseUrl === '') { $baseUrl = '/'; }

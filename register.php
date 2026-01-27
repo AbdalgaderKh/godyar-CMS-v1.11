@@ -147,8 +147,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $placeholders = implode(',', array_fill(0, count($fields), '?'));
                     $sql = 'INSERT INTO users (' . implode(',', $fields) . ') VALUES (' . $placeholders . ')';
                     $stmt = $pdo->prepare($sql);
-                    $stmt->execute($params);
-                    $ok = true;
+                    try {
+                        $stmt->execute($params);
+                        $ok = true;
+                    } catch (Throwable $e) {
+                        $em = (string)$e->getMessage();
+                        $looksMissingDisplay = (stripos($em, 'display_name') !== false) && (stripos($em, 'unknown column') !== false || stripos($em, '42S22') !== false);
+                        if ($looksMissingDisplay) {
+                            // Retry without display_name if the column doesn't exist on this install
+                            $idx = array_search('display_name', $fields, true);
+                            if ($idx !== false) {
+                                array_splice($fields, $idx, 1);
+                                array_splice($params, $idx, 1);
+                                $placeholders = implode(',', array_fill(0, count($fields), '?'));
+                                $sql2 = 'INSERT INTO users (' . implode(',', $fields) . ') VALUES (' . $placeholders . ')';
+                                $stmt2 = $pdo->prepare($sql2);
+                                $stmt2->execute($params);
+                                $ok = true;
+                            } else {
+                                throw $e;
+                            }
+                        } else {
+                            throw $e;
+                        }
+                    }
                 }
             }
         } catch (Throwable $e) {

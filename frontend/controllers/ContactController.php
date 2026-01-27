@@ -43,6 +43,18 @@ if (!function_exists('gdy_has_column')) {
 // تحميل الإعدادات والخيارات الأمامية
 $settings        = gdy_load_settings($pdo);
 $frontendOptions = gdy_prepare_frontend_options($settings);
+
+
+// Home/UI labels (avoid undefined variable warnings)
+$homeLatestTitle        = (string)($settings['home_latest_title'] ?? $settings['settings.home_latest_title'] ?? 'الأحدث');
+$homeFeaturedTitle      = (string)($settings['home_featured_title'] ?? $settings['settings.home_featured_title'] ?? 'مختارات');
+$homeTabsTitle          = (string)($settings['home_tabs_title'] ?? $settings['settings.home_tabs_title'] ?? 'الأقسام');
+$homeMostReadTitle      = (string)($settings['home_most_read_title'] ?? $settings['settings.home_most_read_title'] ?? 'الأكثر قراءة');
+$homeMostCommentedTitle = (string)($settings['home_most_commented_title'] ?? $settings['settings.home_most_commented_title'] ?? 'الأكثر تفاعلاً');
+$homeRecommendedTitle   = (string)($settings['home_recommended_title'] ?? $settings['settings.home_recommended_title'] ?? 'موصى به');
+$carbonBadgeText        = (string)($settings['carbon_badge_text'] ?? $settings['settings.carbon_badge_text'] ?? '');
+$showCarbonBadge        = ((string)($settings['show_carbon_badge'] ?? $settings['settings.show_carbon_badge'] ?? '0') === '1');
+
 extract($frontendOptions, EXTR_OVERWRITE);
 
 // حالة المستخدم

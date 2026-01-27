@@ -35,8 +35,8 @@ $bookmarkedNews = [];
 
 if ($pdo instanceof PDO) {
     try {
-        $check = function_exists('gdy_db_table_exists') ? (gdy_db_table_exists($pdo, 'user_bookmarks') ? 1 : 0) : 0;
-        if ($check && $check->fetchColumn()) {
+        $hasBookmarksTable = function_exists('gdy_db_table_exists') ? (bool)gdy_db_table_exists($pdo, 'user_bookmarks') : false;
+        if ($hasBookmarksTable) {
             $stmt = $pdo->prepare("
                 SELECT n.id, n.title, n.slug, n.published_at, n.image
                 FROM user_bookmarks b

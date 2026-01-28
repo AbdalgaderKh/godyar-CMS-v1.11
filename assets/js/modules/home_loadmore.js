@@ -1,257 +1,152 @@
-/* Home Load More (Godyar CMS)
- * Adds "تحميل المزيد" buttons for Latest + Category sections on the home page.
- * Requires: /api/v1/home_loadmore.php
- */
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function resolveUrl(path) {
-  function newsUrl(id) {
-    // Keep consistent with server helper: /news/id/{id}
-    return base + '/news/id/' + encodeURIComponent(String(id));
+/*
+  Home Load More (Godyar CMS)
+  - Adds "تحميل المزيد" buttons for latest/category sections on the home page.
+  - Endpoint (default): /api/v1/home_loadmore.php
+  - This script is defensive: if the expected markup/endpoint is absent, it does nothing.
+
+  Expected markup (flexible):
+    <button data-home-loadmore
+            data-type="latest|category"
+            data-category-id="123"        (for category)
+            data-target="#latestList"     (CSS selector where items are appended)
+            data-page="1">تحميل المزيد</button>
+
+  Server response supported:
+    - JSON with { ok:true, html:"<li>...</li>", next_page:2, has_more:true }
+    - OR { ok:true, items:[...], next_page:2, has_more:true }
+*/
+
+'use strict';
+
+const base = String(window.GDY_BASE || '').replace(/\/$/, '');
+const API_URL = `${base}/api/v1/home_loadmore.php`;
+
+const $ = (sel, root = document) => root.querySelector(sel);
+
+const escapeHtml = (s) =>
+  String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+const safeFragmentFromHTML = (html) => {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = String(html || '');
+
+  tpl.content.querySelectorAll('script, iframe, object, embed, style, link, meta').forEach((n) => n.remove());
+  tpl.content.querySelectorAll('*').forEach((el) => {
+    Array.from(el.attributes).forEach((a) => {
+      const name = a.name.toLowerCase();
+      const val = String(a.value || '');
+      if (name.startsWith('on')) el.removeAttribute(a.name);
+      if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(val)) el.removeAttribute(a.name);
+    });
+  });
+
+  return tpl.content;
+};
+
+const safeJson = async (res) => {
+  const txt = await res.text();
+  const t = (txt || '').trim();
+  if (!t) return {};
+  try {
+    return JSON.parse(t);
+  } catch (_) {
+    return { ok: false, message: t, status: res.status };
   }
-    if (!path) return '';
-    if (/^https?:\/\//i.test(path)) return path;
-    if (path.startsWith('/')) return ${base}${path};
-    return ${base}/${path};
-  }
- * Requires: /api/v1/home_loadmore.php
- */
-(function () {
-  'use strict';
-    if (/^https?:\/\//i.test(path)) return path;
-    if (path.startsWith('/')) return ${base}${path};
-    return ${base}/${path};
-  }
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
+};
 
-  const base = (window.GDY_BASE || '').replace(/\/$/, '');
-  const API_URL = base + '/api/v1/home_loadmore.php';
-  function $(sel, root) { return (root || document).querySelector(sel); }
-  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+const newsUrl = (id) => `${base}/news/id/${encodeURIComponent(String(id))}`;
 
-  const base = (window.GDY_BASE || '').replace(/\/$/, '');
-  const API_URL = base + '/api/v1/home_loadmore.php';
-  const API_URL = base + '/api/v1/home_loadmore.php';
+const buildItem = (item) => {
+  const url = item?.url ? String(item.url) : newsUrl(item?.id);
+  const title = escapeHtml(item?.title || '');
+  const excerpt = escapeHtml(item?.excerpt || '');
+  const thumb = item?.thumb ? String(item.thumb) : '';
 
- * Requires: /api/v1/home_loadmore.php
- */
-(function () {
-  'use strict';
-  const base = (window.GDY_BASE || '').replace(/\/$/, '');
-  const API_URL = base + '/api/v1/home_loadmore.php';
+  const li = document.createElement('li');
+  li.className = 'gdy-home-item';
 
-  function resolveUrl(path) {
-  function newsUrl(id) {
-    // Keep consistent with server helper: /news/id/{id}
-    return base + '/news/id/' + encodeURIComponent(String(id));
-  }
-    if (!path) return '';
-    if (/^https?:\/\//i.test(path)) return path;
-    if (path.startsWith('/')) return `${base}${path}`;
-    return `${base}/${path}`;
-  }
+  li.innerHTML = `
+    <a class="gdy-home-item__link" href="${escapeHtml(url)}">
+      ${thumb ? `<img class="gdy-home-item__img" loading="lazy" src="${escapeHtml(thumb)}" alt="${title}">` : ''}
+      <div class="gdy-home-item__body">
+        <div class="gdy-home-item__title">${title}</div>
+        ${excerpt ? `<div class="gdy-home-item__excerpt">${excerpt}</div>` : ''}
+      </div>
+    </a>
+  `.trim();
 
-  function newsUrl(id) {
-    // Keep consistent with server helper: /news/id/{id}
-    return base + '/news/id/' + encodeURIComponent(String(id));
-  }
+  return li;
+};
 
-  function newsUrl(id) {
-    // Keep consistent with server helper: /news/id/{id}
-    return `${base}/news/id/${encodeURIComponent(String(id))}`;
-  }
-  function cardNode(item, badgeText) {
-    const id = item && item.id ? item.id : 0;
-    const title = (item && item.title) ? String(item.title) : '';
-    return base + '/assets/images/placeholder-thumb.jpg';
-  }
+const requestMore = async (payload) => {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    body: JSON.stringify(payload || {})
+  });
+  return safeJson(res);
+};
 
-  
-  function cardNode(item, badgeText) {
-    const id = item && item.id ? item.id : 0;
-    const title = (item && item.title) ? String(item.title) : '';
-    const excerpt = (item && item.excerpt) ? String(item.excerpt).trim() : '';
-    const img = (item && item.image) ? resolveUrl(item.image) : defaultThumb();
-    const excerpt = item?.excerpt ? String(item.excerpt).trim() : '';
-    const img = item?.image ? resolveUrl(item.image) : defaultThumb();
-    const url = newsUrl(id);
-    const date = item?.date ? String(item.date) : '';
+const initButton = (btn) => {
+  const type = (btn.getAttribute('data-type') || 'latest').toLowerCase();
+  const categoryId = btn.getAttribute('data-category-id') || '';
+  const targetSel = btn.getAttribute('data-target') || '';
+  const target = targetSel ? $(targetSel) : btn.closest('[data-home-section]')?.querySelector('ul,ol,div');
 
-    const aThumb = document.createElement('a');
-    aThumb.className = 'hm-card-thumb';
-    aThumb.href = url;
+  if (!target) return;
 
-    const aThumb = document.createElement('a');
-    aThumb.className = 'hm-card-thumb';
-    aThumb.href = url;
+  const getPage = () => {
+    const v = Number.parseInt(btn.getAttribute('data-page') || '1', 10);
+    return Number.isFinite(v) ? v : 1;
+  };
 
-    const badge = document.createElement('span');
-    badge.className = 'hm-card-badge';
-    badge.textContent = String(badgeText || 'خبر');
-    aThumb.appendChild(badge);
+  const setPage = (p) => btn.setAttribute('data-page', String(p));
 
-    const image = document.createElement('img');
-    image.loading = 'lazy';
-    image.src = img;
-    image.alt = title;
-    aThumb.appendChild(image);
+  btn.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-    article.appendChild(aThumb);
-
-    const body = document.createElement('div');
-    body.className = 'hm-card-body';
-
-    const h3 = document.createElement('h3');
-    h3.className = 'hm-card-title';
-    const aTitle = document.createElement('a');
-    aTitle.href = url;
-    aTitle.textContent = title.length > 90 ? (title.slice(0, 90) + '…') : title;
-    h3.appendChild(aTitle);
-    body.appendChild(h3);
-
-    if (excerpt) {
-      const p = document.createElement('p');
-      p.className = 'hm-card-excerpt';
-      p.textContent = excerpt;
-      body.appendChild(p);
-    }
-
-    if (date) {
-      const meta = document.createElement('div');
-      meta.className = 'hm-card-meta';
-      const span = document.createElement('span');
-      span.className = 'hm-date';
-      span.textContent = date;
-      meta.appendChild(span);
-      body.appendChild(meta);
-    }
-
-    article.appendChild(body);
-    return article;
-  }
-
-  refactor: remove unnecessary return await
-JS-0111
- Performance
-Created a few seconds ago
-JavaScript
-abdalgaderkh
-Created by abdalgaderkh
-Autofix Session
-1 occurrence can be fixed
-1 file will be affected
-  async function fetchJSON(url) {
-    const r = await fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  }
-
-  function getSectionBadge(btn) {
-    // Try to read the section title text
-    const section = btn.closest('.hm-section');
-    if (!section) return 'خبر';
-    const t = section.querySelector('.hm-section-title');
-    if (!t) return 'خبر';
-    const text = (t.textContent || '').trim();
-    return text || 'خبر';
-  }
-
-  async function onLoadMoreClick(btn) {
-    const type = btn.getAttribute('data-loadmore') || '';
-    const targetId = btn.getAttribute('data-target') || '';
-    const grid = targetId ? document.getElementById(targetId) : null;
-    if (!grid) return;
-
-    const limit = parseInt(btn.getAttribute('data-limit') || '8', 10) || 8;
-    const offset = parseInt(btn.getAttribute('data-offset') || '0', 10) || 0;
-
+    const page = getPage();
     btn.disabled = true;
-    const oldText = btn.textContent;
-    try {
-      let url = API_URL + '?type=' + encodeURIComponent(type) + '&offset=' + encodeURIComponent(String(offset)) + '&limit=' + encodeURIComponent(String(limit));
 
     try {
-      let url = ${API_URL}?type=${encodeURIComponent(type)}&offset=${encodeURIComponent(String(offset))}&limit=${encodeURIComponent(String(limit))};
+      const payload = { type, page };
+      if (type === 'category' && categoryId) payload.category_id = categoryId;
 
-      if (type === 'latest') {
-        const period = btn.getAttribute('data-period') || 'today';
-        url += '&period=' + encodeURIComponent(period);
-      } else if (type === 'category') {
-        const cid = btn.getAttribute('data-category-id') || '';
-        url += '&cid=' + encodeURIComponent(cid);
-        url = `${url}&period=${encodeURIComponent(period)}`;
-      } else if (type === 'category') {
-        const cid = btn.getAttribute('data-category-id') || '';
-        url = `${url}&cid=${encodeURIComponent(cid)}`;
+      const data = await requestMore(payload);
+
+      if (!data?.ok) throw new Error(data?.message || 'Request failed');
+
+      if (data.html) {
+        target.appendChild(safeFragmentFromHTML(data.html));
+      } else if (Array.isArray(data.items) && data.items.length) {
+        data.items.forEach((it) => target.appendChild(buildItem(it)));
       } else {
-        throw new Error('Invalid type');
+        throw new Error('empty');
       }
 
-      const data = await fetchJSON(url);
+      const nextPage = Number.parseInt(String(data.next_page || page + 1), 10);
+      setPage(Number.isFinite(nextPage) ? nextPage : page + 1);
 
-      if (!data || !data.ok || !Array.isArray(data.items)) {
-        throw new Error('Bad response');
-      }
-
-      const badge = (type === 'latest') ? 'خبر' : getSectionBadge(btn);
-
-      data.items.forEach(function (it) {
-        frag.appendChild(cardNode(it, badge));
-      });
-
-      data.items.forEach(function (it) {
-        frag.appendChild(cardNode(it, badge));
-      });
-
-      data.items.forEach(function (it) {
-        frag.appendChild(cardNode(it, badge));
-      });
-      const nextOffset = (typeof data.next_offset === 'number') ? data.next_offset : (offset + data.items.length);
-      btn.setAttribute('data-offset', String(nextOffset));
-
-      // Hide if no more
-      if (!data.has_more || data.items.length === 0) {
-        btn.closest('.hm-loadmore-wrap')?.remove();
-      }
-    } catch (e) {
-      // Restore button so user can retry
-      console.error('[home_loadmore] failed', e);
+      const hasMore = data.has_more !== undefined ? !!data.has_more : true;
+      if (!hasMore) btn.remove();
+      else btn.disabled = false;
+    } catch (_) {
       btn.disabled = false;
-      btn.textContent = oldText || 'تحميل المزيد';
-      return;
+      // Keep UX minimal without console usage
+      btn.textContent = 'تعذر التحميل - حاول مرة أخرى';
+      setTimeout(() => {
+        if (btn.isConnected) btn.textContent = 'تحميل المزيد';
+      }, 2000);
     }
+  });
+};
 
-    btn.disabled = false;
-    btn.textContent = oldText || 'تحميل المزيد';
-  }
-
-  function init() {
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        onLoadMoreClick(btn);
-      });
-    });
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        onLoadMoreClick(btn);
-      });
-    const buttons = $all('.hm-loadmore-btn[data-loadmore][data-target]');
-    if (!buttons.length) return;
-
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        onLoadMoreClick(btn);
-      });
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-home-loadmore]').forEach((btn) => initButton(btn));
+});

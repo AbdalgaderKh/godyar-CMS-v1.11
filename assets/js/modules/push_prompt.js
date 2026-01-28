@@ -2,45 +2,42 @@
   PWA install prompt helper (safe, minimal)
   Looks for a button/link with attribute: data-pwa-install
 */
-(() => {
-  'use strict';
 
-  let deferredPrompt = null;
+'use strict';
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the default mini-infobar
-    e.preventDefault();
-    deferredPrompt = e;
+let deferredPrompt = null;
 
-    const btn = document.querySelector('[data-pwa-install]');
-    if (!btn) return;
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the default mini-infobar
+  e.preventDefault();
+  deferredPrompt = e;
 
-    btn.style.display = '';
+  const btn = document.querySelector('[data-pwa-install]');
+  if (!btn) return;
 
-    btn.addEventListener(
-      'click',
-      async () => {
-        if (!deferredPrompt) return;
-        try {
-          deferredPrompt.prompt();
-          // userChoice exists on most browsers; ignore if missing
-          if (deferredPrompt.userChoice) {
-            await deferredPrompt.userChoice;
-          }
-        } catch (err) {
-          // ignore
-        } finally {
-          deferredPrompt = null;
-          btn.style.display = 'none';
-        }
-      },
-      { once: true }
-    );
-  });
+  btn.style.display = '';
 
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    const btn = document.querySelector('[data-pwa-install]');
-    if (btn) btn.style.display = 'none';
-  });
-})();
+  btn.addEventListener(
+    'click',
+    async () => {
+      if (!deferredPrompt) return;
+
+      try {
+        deferredPrompt.prompt?.();
+        if (deferredPrompt.userChoice?.then) await deferredPrompt.userChoice;
+      } catch (_) {
+        // ignore
+      } finally {
+        deferredPrompt = null;
+        btn.style.display = 'none';
+      }
+    },
+    { once: true }
+  );
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  const btn = document.querySelector('[data-pwa-install]');
+  if (btn) btn.style.display = 'none';
+});

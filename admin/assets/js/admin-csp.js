@@ -1,94 +1,80 @@
 /**
- * Admin CSP / security helpers.
+ * Admin CSP/CSRF helpers
+ * - Exposes AdminSecurity namespace:
+ *    - getNonce()
+ *    - getCsrfToken()
+ *    - setNonce(el)
+ * - Wraps fetch() for same-origin requests to include standard headers + CSRF token.
  *
- * - Adds CSP nonce to dynamically created SCRIPT/STYLE/LINK tags when a nonce exists.
- * - Wraps window.fetch to automatically include CSRF token (if present on the page).
- *
- * This file is intentionally small and defensive; it should never break the admin UI.
+ * This is a *best-effort* helper; it must never break admin pages if something fails.
  */
 
-(function () {
-  'use strict';
+'use strict';
 
-  function getMetaContent(name) {
+const getMetaContent = (name) => {
+  try {
+    const el = document.querySelector(`meta[name="${name}"]`);
+    return el ? el.getAttribute('content') || '' : '';
+  } catch (_) {
+    return '';
+  }
+};
+
+const getNonce = () => getMetaContent('csp-nonce');
+
+const getCsrfToken = () => {
+  try {
+    const meta = getMetaContent('csrf-token');
+    if (meta) return meta;
+
+    const inp = document.querySelector('input[name="csrf_token"], input[name="_csrf_token"]');
+    return inp ? inp.value || '' : '';
+  } catch (_) {
+    return '';
+  }
+};
+
+const setNonce = (el) => {
+  try {
+    const nonce = getNonce();
+    if (!nonce || !el?.setAttribute) return;
+    if (!el.getAttribute('nonce')) el.setAttribute('nonce', nonce);
+  } catch (_) {
+    // ignore
+  }
+};
+
+// Expose a tiny namespace for other admin scripts.
+window.AdminSecurity = window.AdminSecurity || { getNonce, getCsrfToken, setNonce };
+
+// Wrap fetch() to include standard headers & CSRF.
+(() => {
+  if (typeof window.fetch !== 'function') return;
+  if (window.fetch.__csrfWrapped) return;
+
+  const originalFetch = window.fetch;
+
+  const wrapped = (input, init) => {
     try {
-      var el = document.querySelector('meta[name="' + name + '"]');
-      return el ? (el.getAttribute('content') || '') : '';
-    } catch (e) {
-      return '';
+      init = init || {};
+      // Ensure cookies for same-origin requests.
+      if (!init.credentials) init.credentials = 'same-origin';
+
+      // Normalise headers.
+      const headers = new Headers(init.headers || {});
+      if (!headers.has('X-Requested-With')) headers.set('X-Requested-With', 'XMLHttpRequest');
+
+      const csrf = getCsrfToken();
+      if (csrf && !headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', csrf);
+
+      init.headers = headers;
+    } catch (_) {
+      // If something fails, fall back to the original request.
     }
-  }
 
-  function getNonce() {
-    return (
-      getMetaContent('csp-nonce') ||
-      getMetaContent('nonce') ||
-      (typeof window.__CSP_NONCE === 'string' ? window.__CSP_NONCE : '') ||
-      ''
-    );
-  }
-
-  function getCsrfToken() {
-    try {
-      var meta = getMetaContent('csrf-token');
-      if (meta) return meta;
-
-      var inp = document.querySelector('input[name="csrf_token"], input[name="_csrf_token"]');
-      return inp ? (inp.value || '') : '';
-    } catch (e) {
-      return '';
-    }
-  }
-
-  function setNonce(el) {
-    try {
-      var nonce = getNonce();
-      if (!nonce || !el || !el.setAttribute) return;
-      if (!el.getAttribute('nonce')) el.setAttribute('nonce', nonce);
-    } catch (e) {
-      // ignore
-    }
-  }
-
-  // Expose a tiny namespace for other admin scripts.
-  window.AdminSecurity = window.AdminSecurity || {
-    getNonce: getNonce,
-    getCsrfToken: getCsrfToken,
-    setNonce: setNonce,
+    return originalFetch(input, init);
   };
 
-  // Wrap fetch() to include standard headers & CSRF.
-  (function wrapFetch() {
-    if (typeof window.fetch !== 'function') return;
-    if (window.fetch.__csrfWrapped) return;
-
-    var originalFetch = window.fetch;
-
-    var wrapped = function (input, init) {
-      try {
-        init = init || {};
-
-        // Ensure cookies for same-origin requests.
-        if (!init.credentials) init.credentials = 'same-origin';
-
-        // Normalise headers.
-        var headers = new Headers(init.headers || {});
-        if (!headers.has('X-Requested-With')) headers.set('X-Requested-With', 'XMLHttpRequest');
-
-        var csrf = getCsrfToken();
-        if (csrf && !headers.has('X-CSRF-Token')) {
-          headers.set('X-CSRF-Token', csrf);
-        }
-
-        init.headers = headers;
-      } catch (e) {
-        // If something fails, fall back to the original request.
-      }
-
-      return originalFetch(input, init);
-    };
-
-    wrapped.__csrfWrapped = true;
-    window.fetch = wrapped;
-  })();
+  wrapped.__csrfWrapped = true;
+  window.fetch = wrapped;
 })();

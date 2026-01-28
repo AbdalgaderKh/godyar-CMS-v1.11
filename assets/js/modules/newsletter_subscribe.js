@@ -34,7 +34,7 @@ if (form) {
       // Allow server-side form handling
       try {
         form.submit();
-      } catch (err) {
+      } catch (submitErr) {
         setMsg('تعذر الإرسال.');
       }
     }

@@ -6,22 +6,26 @@
 
 'use strict';
 
-const $ = (sel, root = document) => root.querySelector(sel);
+const qs = (selector, rootEl = document) => rootEl.querySelector(selector);
 
-const menuBtn = $('[data-mobile-menu-toggle]') || $('.mobile-menu-toggle') || document.getElementById('mobileMenuToggle');
-const menu = $('[data-mobile-menu]') || document.getElementById('mobileMenu') || $('.mobile-menu');
+const menuToggleBtn =
+  qs('[data-mobile-menu-toggle]') ||
+  qs('.mobile-menu-toggle') ||
+  document.getElementById('mobileMenuToggle');
 
-if (menuBtn && menu) {
-  menuBtn.addEventListener('click', () => {
-    menu.classList.toggle('is-open');
-    menuBtn.classList.toggle('is-open');
+const menuEl = qs('[data-mobile-menu]') || document.getElementById('mobileMenu') || qs('.mobile-menu');
+
+if (menuToggleBtn && menuEl) {
+  menuToggleBtn.addEventListener('click', () => {
+    menuEl.classList.toggle('is-open');
+    menuToggleBtn.classList.toggle('is-open');
   });
 }
 
 // Close menu when clicking any link inside it
-menu?.addEventListener('click', (e) => {
-  const anchor = e.target?.closest?.('a') || null;
-  if (!anchor) return;
-  menu.classList.remove('is-open');
-  menuBtn?.classList.remove('is-open');
+menuEl?.addEventListener('click', (e) => {
+  const anchorEl = e.target?.closest?.('a') || null;
+  if (!anchorEl) return;
+  menuEl.classList.remove('is-open');
+  menuToggleBtn?.classList.remove('is-open');
 });

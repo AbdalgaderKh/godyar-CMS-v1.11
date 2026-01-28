@@ -21,10 +21,10 @@
 const base = String(window.GDY_BASE || '').replace(/\/$/, '');
 const API_URL = `${base}/api/v1/home_loadmore.php`;
 
-const $ = (sel, root = document) => root.querySelector(sel);
+const qs = (selector, rootEl = document) => rootEl.querySelector(selector);
 
-const escapeHtml = (s) =>
-  String(s ?? '')
+const escapeHtml = (inputStr) =>
+  String(inputStr ?? '')
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -50,12 +50,12 @@ const safeFragmentFromHTML = (html) => {
 
 const safeJson = async (res) => {
   const txt = await res.text();
-  const t = (txt || '').trim();
-  if (!t) return {};
+  const trimmedText = (txt || '').trim();
+  if (!trimmedText) return {};
   try {
-    return JSON.parse(t);
+    return JSON.parse(trimmedText);
   } catch (_) {
-    return { ok: false, message: t, status: res.status };
+    return { ok: false, message: trimmedText, status: res.status };
   }
 };
 
@@ -97,16 +97,16 @@ const initButton = (btn) => {
   const type = (btn.getAttribute('data-type') || 'latest').toLowerCase();
   const categoryId = btn.getAttribute('data-category-id') || '';
   const targetSel = btn.getAttribute('data-target') || '';
-  const target = targetSel ? $(targetSel) : btn.closest('[data-home-section]')?.querySelector('ul,ol,div');
+  const target = targetSel ? qs(targetSel) : btn.closest('[data-home-section]')?.querySelector('ul,ol,div');
 
   if (!target) return;
 
   const getPage = () => {
-    const v = Number.parseInt(btn.getAttribute('data-page') || '1', 10);
-    return Number.isFinite(v) ? v : 1;
+    const pageValue = Number.parseInt(btn.getAttribute('data-page') || '1', 10);
+    return Number.isFinite(pageValue) ? pageValue : 1;
   };
 
-  const setPage = (p) => btn.setAttribute('data-page', String(p));
+  const setPage = (pageNumber) => btn.setAttribute('data-page', String(pageNumber));
 
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -133,7 +133,7 @@ const initButton = (btn) => {
       const nextPage = Number.parseInt(String(data.next_page || page + 1), 10);
       setPage(Number.isFinite(nextPage) ? nextPage : page + 1);
 
-      const hasMore = data.has_more !== undefined ? !!data.has_more : true;
+      const hasMore = data.has_more !== undefined ? Boolean(data.has_more) : true;
       if (!hasMore) btn.remove();
       else btn.disabled = false;
     } catch (_) {

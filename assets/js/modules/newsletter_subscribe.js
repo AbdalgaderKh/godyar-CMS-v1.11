@@ -30,11 +30,11 @@ if (form) {
       if (!res.ok) throw new Error('Request failed');
       setMsg('تم الاستلام.');
       form.reset();
-    } catch (_) {
+    } catch (err) {
       // Allow server-side form handling
       try {
         form.submit();
-      } catch (_) {
+      } catch (err) {
         setMsg('تعذر الإرسال.');
       }
     }

@@ -13,7 +13,7 @@ if (pubKey) {
     return outputArray;
   };
 
-  const ensureSw = async () => {
+  const ensureSw = () => {
     if (!('serviceWorker' in navigator)) throw new Error('no-sw');
     return navigator.serviceWorker.ready;
   };

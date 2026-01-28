@@ -6,38 +6,38 @@
 
 'use strict';
 
-const $ = (sel, root = document) => root.querySelector(sel);
+const qs = (selector, rootEl = document) => rootEl.querySelector(selector);
 
-const input =
-  $("input[name='q']") ||
-  $("input[name='query']") ||
-  $("input[type='search']") ||
-  $('#search') ||
-  $('#searchInput') ||
-  $('.search-input');
+const inputEl =
+  qs("input[name='q']") ||
+  qs("input[name='query']") ||
+  qs("input[type='search']") ||
+  document.getElementById('search') ||
+  document.getElementById('searchInput') ||
+  qs('.search-input');
 
-const form = input?.closest('form') || $('form.search-form') || $('#searchForm');
+const formEl = inputEl?.closest('form') || qs('form.search-form') || document.getElementById('searchForm');
 
-const buildUrl = (q) => {
+const buildUrl = (queryString) => {
   const url = new URL(`${window.location.origin}/search`);
-  url.searchParams.set('q', q);
+  url.searchParams.set('q', queryString);
   return url.toString();
 };
 
-const go = (q) => {
-  const query = String(q || '').trim();
+const go = (queryString) => {
+  const query = String(queryString || '').trim();
   if (!query) return;
   window.location.href = buildUrl(query);
 };
 
-if (form) {
-  form.addEventListener('submit', (e) => {
-    const q = input?.value || form.querySelector("input[type='search']")?.value || '';
-    if (String(q).trim()) {
+if (formEl) {
+  formEl.addEventListener('submit', (e) => {
+    const queryValue = inputEl?.value || formEl.querySelector("input[type='search']")?.value || '';
+    if (String(queryValue).trim()) {
       // allow normal submit if action exists; otherwise route to /search?q=
-      if (!form.getAttribute('action')) {
+      if (!formEl.getAttribute('action')) {
         e.preventDefault();
-        go(q);
+        go(queryValue);
       }
     }
   });
@@ -48,5 +48,5 @@ document.addEventListener('click', (e) => {
   const btn = e.target?.closest?.('[data-search-submit]') || null;
   if (!btn) return;
   e.preventDefault();
-  go(input?.value || '');
+  go(inputEl?.value || '');
 });

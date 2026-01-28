@@ -109,9 +109,9 @@ const buildToolbar = (editor) => {
 
   select.addEventListener('change', () => {
     editor.focus();
-    const v = select.value;
-    if (v === 'blockquote') exec('formatBlock', '<blockquote>');
-    else exec('formatBlock', `<${v}>`);
+    const blockTag = select.value;
+    if (blockTag === 'blockquote') exec('formatBlock', '<blockquote>');
+    else exec('formatBlock', `<${blockTag}>`);
     select.value = 'p';
   });
 

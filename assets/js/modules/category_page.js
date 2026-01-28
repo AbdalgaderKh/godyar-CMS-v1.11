@@ -56,16 +56,16 @@ const setupViewToggle = () => {
   const btnList = document.getElementById('categoryViewList') || document.querySelector('[data-category-view="list"]');
 
   const apply = (mode) => {
-    const m = mode === 'list' ? 'list' : 'grid';
-    grid.classList.toggle('is-list', m === 'list');
-    grid.classList.toggle('is-grid', m === 'grid');
+    const viewMode = mode === 'list' ? 'list' : 'grid';
+    grid.classList.toggle('is-list', viewMode === 'list');
+    grid.classList.toggle('is-grid', viewMode === 'grid');
     try {
-      window.localStorage.setItem(VIEW_KEY, m);
+      window.localStorage.setItem(VIEW_KEY, viewMode);
     } catch (_) {
       // ignore
     }
-    btnGrid?.classList.toggle('active', m === 'grid');
-    btnList?.classList.toggle('active', m === 'list');
+    btnGrid?.classList.toggle('active', viewMode === 'grid');
+    btnList?.classList.toggle('active', viewMode === 'list');
   };
 
   // Load persisted mode
@@ -89,12 +89,12 @@ const setupViewToggle = () => {
 
 const safeJson = async (res) => {
   const txt = await res.text();
-  const t = (txt || '').trim();
-  if (!t) return {};
+  const trimmedText = (txt || '').trim();
+  if (!trimmedText) return {};
   try {
-    return JSON.parse(t);
+    return JSON.parse(trimmedText);
   } catch (_) {
-    return { ok: false, message: t, status: res.status };
+    return { ok: false, message: trimmedText, status: res.status };
   }
 };
 

@@ -103,3 +103,29 @@ html[dir="rtl"] .gdy-admin-app{
     padding: 1rem;
   }
 }
+
+
+/* -----------------------------------------
+   SVG icon sizing (fallback)
+   - Some hosts may block/skip admin-ui.css caching; keep icons sane
+   - Prevent default 300x150 SVG rendering
+----------------------------------------- */
+svg.gdy-icon{
+  width:20px;
+  height:20px;
+  max-width:100%;
+  max-height:100%;
+  display:inline-block;
+  vertical-align:middle;
+  fill:currentColor;
+}
+.admin-sidebar svg.gdy-icon,
+.admin-sidebar__link-icon svg.gdy-icon,
+.admin-sidebar__quick-icon svg.gdy-icon,
+.admin-sidebar__search-icon{
+  width:18px;
+  height:18px;
+}
+/* Dashboard decorative icons must never exceed a sane size */
+.gdy-page-header svg.gdy-icon{ width:28px; height:28px; }
+.gdy-stat-card svg.gdy-icon{ width:32px; height:32px; }

@@ -1,30 +1,30 @@
 /*
   Mobile search overlay (safe, minimal)
 */
-(() => {
-  'use strict';
 
-  const openBtn = document.querySelector('[data-search-open]') || document.querySelector('.search-open');
-  const closeBtn = document.querySelector('[data-search-close]') || document.querySelector('.search-close');
-  const overlay = document.querySelector('[data-search-overlay]') || document.querySelector('.search-overlay');
+'use strict';
 
-  if (!overlay) return;
+const openBtn = document.querySelector('[data-search-open]') || document.querySelector('.search-open');
+const closeBtn = document.querySelector('[data-search-close]') || document.querySelector('.search-close');
+const overlay = document.querySelector('[data-search-overlay]') || document.querySelector('.search-overlay');
 
-  function open() {
+if (overlay) {
+  const open = () => {
     overlay.classList.add('is-open');
     const inp = overlay.querySelector('input[type="search"],input[name="q"],input[name="query"],input');
     if (inp) setTimeout(() => inp.focus(), 0);
-  }
+  };
 
-  function close() {
+  const close = () => {
     overlay.classList.remove('is-open');
-  }
+  };
 
-  if (openBtn) openBtn.addEventListener('click', (e) => {
+  openBtn?.addEventListener('click', (e) => {
     e.preventDefault();
     open();
   });
-  if (closeBtn) closeBtn.addEventListener('click', (e) => {
+
+  closeBtn?.addEventListener('click', (e) => {
     e.preventDefault();
     close();
   });
@@ -32,4 +32,4 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') close();
   });
-})();
+}

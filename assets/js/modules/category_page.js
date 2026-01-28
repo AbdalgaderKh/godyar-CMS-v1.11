@@ -1,103 +1,126 @@
-  function safeFragmentFromHTML(html) {
-    const frag = document.createDocumentFragment();
-/* Godyar — Category Page UX (grid/list + Load More) */
-(function () {
+/*
+  Category page enhancements
+  - View toggle (grid/list) with persistence
+  - Load more (AJAX) if endpoint returns JSON { html, has_more, total_pages }
+*/
 
-    while (wrap.firstChild) frag.appendChild(wrap.firstChild);
-    return frag;
-  }
-  // nosemgrep
-    const doc = parser.parseFromString('<div>' + String(html || '') + '</div>', 'text/html');
-    const wrap = doc.body?.firstElementChild;
-    if (!wrap) return frag;
+'use strict';
 
-    // Drop dangerous nodes
-    wrap.querySelectorAll('script, style, link[rel="import"], object, embed').forEach(n => n.remove());
+const VIEW_KEY = 'gdy_category_view_v1';
 
-    // Remove event handlers & javascript: URLs
-    wrap.querySelectorAll('*').forEach(el => {
-      [...el.attributes].forEach(attr => {
-        const name = attr.name.toLowerCase();
-        const val = String(attr.value || '');
-        if (name.startsWith('on')) el.removeAttribute(attr.name);
-        if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(val)) el.setAttribute(attr.name, '#');
-      });
+const safeFragmentFromHTML = (html) => {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = String(html || '');
+
+  // Remove dangerous elements
+  tpl.content.querySelectorAll('script, iframe, object, embed, style, link, meta').forEach((n) => n.remove());
+
+  // Remove inline handlers + javascript: urls
+  tpl.content.querySelectorAll('*').forEach((el) => {
+    Array.from(el.attributes).forEach((a) => {
+      const name = a.name.toLowerCase();
+      const val = String(a.value || '');
+      if (name.startsWith('on')) el.removeAttribute(a.name);
+      if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(val)) el.removeAttribute(a.name);
     });
+  });
 
-    while (wrap.firstChild) frag.appendChild(wrap.firstChild);
-    return frag;
-  }
+  return tpl.content;
+};
 
-  function fadeInImages(scope) {
-    const images = (scope || document).querySelectorAll('#gdy-category-page .news-thumb img');
-    images.forEach((img) => {
-      try {
-        img.style.opacity = img.complete ? '1' : '0';
-        if (!img.complete) {
-          img.addEventListener('load', function () { img.style.opacity = '1'; }, { once: true });
-          img.addEventListener('error', function () { img.style.opacity = '1'; }, { once: true });
-        }
-      } catch (e) {}
-    });
-  }
-
-  function setupViewToggle() {
-    const newsGrid = document.getElementById('newsGrid');
-    if (!newsGrid) return;
-
-    const viewBtns = document.querySelectorAll('[data-view]');
-    if (!viewBtns.length) return;
-
-    const KEY = 'gdy_cat_view';
-    const savedView = localStorage.getItem(KEY) || 'grid';
-
-    function setView(view) {
-      newsGrid.classList.toggle('list-view', view === 'list');
-      viewBtns.forEach((btn) => {
-        btn.classList.toggle('active', btn.getAttribute('data-view') === view);
-        btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
-      });
-      localStorage.setItem(KEY, view);
+const fadeInImages = (root) => {
+  const scope = root?.querySelectorAll ? root : document;
+  scope.querySelectorAll('img').forEach((img) => {
+    try {
+      img.style.transition = img.style.transition || 'opacity .2s ease';
+      if (!img.style.opacity) img.style.opacity = '0';
+      const done = () => {
+        img.style.opacity = '1';
+      };
+      if (img.complete) done();
+      else {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+      }
+    } catch (_) {
+      // ignore
     }
+  });
+};
 
-    viewBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const view = btn.getAttribute('data-view') || 'grid';
-        setView(view);
+const setupViewToggle = () => {
+  const grid = document.getElementById('newsGrid');
+  if (!grid) return;
 
-    viewBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        const view = btn.getAttribute('data-view') || 'grid';
-        setView(view);
-      });
-    });
+  const btnGrid = document.getElementById('categoryViewGrid') || document.querySelector('[data-category-view="grid"]');
+  const btnList = document.getElementById('categoryViewList') || document.querySelector('[data-category-view="list"]');
+
+  const apply = (mode) => {
+    const m = mode === 'list' ? 'list' : 'grid';
+    grid.classList.toggle('is-list', m === 'list');
+    grid.classList.toggle('is-grid', m === 'grid');
+    try {
+      window.localStorage.setItem(VIEW_KEY, m);
+    } catch (_) {
+      // ignore
+    }
+    btnGrid?.classList.toggle('active', m === 'grid');
+    btnList?.classList.toggle('active', m === 'list');
+  };
+
+  // Load persisted mode
+  try {
+    const saved = window.localStorage.getItem(VIEW_KEY);
+    if (saved) apply(saved);
+  } catch (_) {
+    // ignore
   }
 
-  async function fetchLoadMore(btn, newsGrid, statusEl) {
-    const endpoint = btn.dataset.endpoint || '';
-    const catId = btn.dataset.categoryId || '';
-    const sort = btn.dataset.sort || 'latest';
-    const period = btn.dataset.period || 'all';
-    const totalPages = parseInt(btn.dataset.totalPages || '1', 10);
-    const currentPage = parseInt(btn.dataset.currentPage || '1', 10);
+  btnGrid?.addEventListener('click', (e) => {
+    e.preventDefault();
+    apply('grid');
+  });
+
+  btnList?.addEventListener('click', (e) => {
+    e.preventDefault();
+    apply('list');
+  });
+};
+
+const safeJson = async (res) => {
+  const txt = await res.text();
+  const t = (txt || '').trim();
+  if (!t) return {};
+  try {
+    return JSON.parse(t);
+  } catch (_) {
+    return { ok: false, message: t, status: res.status };
+  }
+};
+
+const setupLoadMore = () => {
+  const btn = document.getElementById('gdyCategoryLoadMore') || document.querySelector('[data-load-more]');
+  const newsGrid = document.getElementById('newsGrid');
+  const statusEl = document.getElementById('gdyLoadMoreStatus') || document.querySelector('[data-load-more-status]');
+
+  if (!btn || !newsGrid || !statusEl) return;
+
+  const baseUrl = btn.getAttribute('data-endpoint') || btn.getAttribute('data-url') || btn.getAttribute('href') || window.location.pathname;
+
+  const parseIntSafe = (v, def) => {
+    const n = Number.parseInt(String(v || ''), 10);
+    return Number.isFinite(n) ? n : def;
+  };
+
+  const onClick = async (e) => {
+    e.preventDefault();
+
+    const currentPage = parseIntSafe(btn.dataset.currentPage, 1);
+    const totalPages = parseIntSafe(btn.dataset.totalPages, 1);
     const nextPage = currentPage + 1;
 
-    if (!endpoint || !catId) {
-      statusEl.textContent = 'إعدادات غير مكتملة.';
-      return;
-    }
-    if (nextPage > totalPages) {
-      btn.remove();
-      statusEl.textContent = 'تم عرض كل الأخبار.';
-      return;
-    }
-
-    const url = new URL(endpoint, window.location.origin);
-    url.searchParams.set('category_id', catId);
+    const url = new URL(baseUrl, window.location.origin);
     url.searchParams.set('page', String(nextPage));
-    url.searchParams.set('per_page', '8');
-    url.searchParams.set('sort', sort);
-    url.searchParams.set('period', period);
 
     btn.disabled = true;
     statusEl.textContent = 'جارٍ تحميل المزيد...';
@@ -105,36 +128,23 @@
     try {
       const res = await fetch(url.toString(), {
         method: 'GET',
-        headers: { 'Accept': 'application/json' },
+        headers: { Accept: 'application/json' },
         credentials: 'same-origin'
       });
 
-      const data = await res.json();
-      const html = data?.html ? String(data.html) : '';
-        credentials: 'same-origin'
-      });
-
-      const data = await res.json();
+      const data = await safeJson(res);
       const html = data?.html ? String(data.html) : '';
 
-          img.addEventListener('load', function () { img.style.opacity = '1'; }, { once: true });
-          img.addEventListener('error', function () { img.style.opacity = '1'; }, { once: true });
-        }
-      } catch (e) {}
-    });
-  }
-          img.addEventListener('load', function () { img.style.opacity = '1'; }, { once: true });
-          img.addEventListener('error', function () { img.style.opacity = '1'; }, { once: true });
-        }
-      } catch (e) { /* empty */ }
-    });
-  }
-        fadeInImages(newsGrid);
-      }
+      if (!html) throw new Error(data?.message || 'empty');
+
+      const frag = safeFragmentFromHTML(html);
+      newsGrid.appendChild(frag);
+      fadeInImages(newsGrid);
 
       btn.dataset.currentPage = String(nextPage);
 
-      const hasMore = (typeof data.has_more === 'boolean') ? data.has_more : (nextPage < totalPages);
+      const hasMore = typeof data.has_more === 'boolean' ? data.has_more : nextPage < totalPages;
+
       if (!hasMore || nextPage >= totalPages) {
         btn.remove();
         statusEl.textContent = 'تم عرض كل الأخبار.';
@@ -142,25 +152,17 @@
         btn.disabled = false;
         statusEl.textContent = '';
       }
-    } catch (err) {
-      console.error(err);
+    } catch (_) {
       btn.disabled = false;
       statusEl.textContent = 'تعذر تحميل المزيد. حاول مرة أخرى.';
     }
-  }
+  };
 
-  function setupLoadMore() {
-    const btn = document.getElementById('gdyCategoryLoadMore');
-    const newsGrid = document.getElementById('newsGrid');
-    const statusEl = document.getElementById('gdyLoadMoreStatus');
+  btn.addEventListener('click', onClick);
+};
 
-    if (!btn || !newsGrid || !statusEl) return;
-
-    if (!btn || !newsGrid || !statusEl) return;
-
-  document.addEventListener('DOMContentLoaded', function () {
-    fadeInImages(document);
-    setupViewToggle();
-    setupLoadMore();
-  });
-})();
+document.addEventListener('DOMContentLoaded', () => {
+  fadeInImages(document);
+  setupViewToggle();
+  setupLoadMore();
+});

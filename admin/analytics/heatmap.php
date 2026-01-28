@@ -46,12 +46,12 @@ if ($pdo) {
 
   // Comments heatmap (optional)
   try {
-    $chk = gdy_db_stmt_table_exists($pdo, 'comments');
+    $chk = gdy_db_stmt_table_exists($pdo, 'news_comments');
     $has = $chk && $chk->fetchColumn();
     if ($has) {
       $stmt = $pdo->prepare("
         SELECT DAYOFWEEK(created_at) AS dow, HOUR(created_at) AS hr, COUNT(*) AS c
-        FROM comments
+         FROM news_comments
         WHERE created_at >= (NOW() - INTERVAL :days DAY)
         GROUP BY dow, hr
       ");

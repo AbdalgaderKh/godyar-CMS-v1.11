@@ -8,3 +8,5 @@ if (!defined('ROOT_PATH')) {
 
 require_once __DIR__ . '/includes/bootstrap.php';
 require_once __DIR__ . '/frontend/controllers/Auth/LoginController.php';
+
+return;

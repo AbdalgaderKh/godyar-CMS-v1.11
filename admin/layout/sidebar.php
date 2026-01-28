@@ -408,13 +408,8 @@ $adminMenu = [];
 if (function_exists('g_do_hook')) {
     g_do_hook('admin.menu', $adminMenu);
 }
-// روابط ثابتة لإدارة إضافات التعليقات/أسئلة القرّاء (حتى لو لم تُسجّل عبر hook لأي سبب)
+// روابط ثابتة لإدارة إضافات لوحة التحكم (حتى لو لم تُسجّل عبر hook لأي سبب)
 $staticPluginLinks = [
-    [
-        'title' => 'التعليقات',
-        'url'   => '/admin/plugins/comments/index.php',
-        'icon'  => 'bi-chat',
-    ],
     [
         'title' => 'أسئلة القرّاء',
         'url'   => '/admin/plugins/reader_questions/index.php',

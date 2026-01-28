@@ -59,24 +59,24 @@ try {
       while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) row($r);
       break;
 
-    case 'comments':
-      // table optional
-      $chk = gdy_db_stmt_table_exists($pdo, 'comments');
-      $has = $chk && $chk->fetchColumn();
-      if (($has === false)) { row(['error']); row(['comments table missing']); break; }
-      // column name differs between installs (body/comment)
-      $col = 'body';
-      try {
-        $c = gdy_db_stmt_column_like($pdo, 'comments', 'body');
-        $hasBody = $c && $c->fetchColumn();
-        if (($hasBody === false)) $col = 'comment';
-      } catch (\Throwable $e) {
-        $col = 'comment';
-      }
-      row(['id','name','email','status','created_at','body']);
-      $stmt = $pdo->query("SELECT id,name,email,status,created_at,`$col` AS body FROM comments ORDER BY id DESC LIMIT 5000");
-      while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) row($r);
-      break;
+case 'comments':
+  // news_comments only (legacy comments table removed)
+  $chk = gdy_db_stmt_table_exists($pdo, 'news_comments');
+  $has = $chk && $chk->fetchColumn();
+  if (($has === false)) { row(['error']); row(['news_comments table missing']); break; }
+
+  $hasScore = true;
+  try {
+    if (function_exists('gdy_db_column_exists')) { $hasScore = gdy_db_column_exists($pdo, 'news_comments', 'score'); }
+    elseif (function_exists('db_column_exists')) { $hasScore = db_column_exists($pdo, 'news_comments', 'score'); }
+  } catch (Throwable $e) { $hasScore = true; }
+
+  $scoreSel = $hasScore ? 'score' : '0 AS score';
+
+  row(['id','news_id','user_id','parent_id','name','email','status','score','created_at','body']);
+  $stmt = $pdo->query("SELECT id,news_id,user_id,parent_id,name,email,status,{$scoreSel} AS score,created_at,body FROM news_comments ORDER BY id DESC LIMIT 5000");
+  while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) row($r);
+  break;
 
     case 'tags':
       row(['id','name','slug','created_at']);

@@ -124,36 +124,31 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
 
         <!-- قائمة الأخبار على شكل بطاقات -->
         <div class="cat-content-wrap mt-2">
-              <div class="cat-cards-grid">
-                <?php foreach ($newsList as $row): ?>
-                  <?php
-          <!-- قائمة الأخبار -->
           <div class="cat-list">
-            <?php if (!empty($newsList)): ?>
-              <?php
-                if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
-                    $buildNewsUrl = function($row) {
-                        return isset($row['url']) ? (string)$row['url'] : '';
-                    };
-                }
-              ?>
+            <?php
+              if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
+                  $buildNewsUrl = function(array $row): string {
+                      return isset($row['url']) ? (string)$row['url'] : '';
+                  };
+              }
+            ?>
+            <?php if (!empty($newsList) && is_array($newsList)): ?>
               <div class="cat-cards-grid">
                 <?php foreach ($newsList as $row): ?>
                   <?php
-              <div class="cat-cards-grid">
-                <?php foreach ($newsList as $row): ?>
-                  <?php
-                  $title    = (string)($row['title'] ?? '');
-                  $date     = !empty($row['created_at']) ? date('Y-m-d', strtotime((string)$row['created_at'])) : '';
-                  $views    = isset($row['views']) ? (int)$row['views'] : null;
-                  $newsUrl  = $buildNewsUrl($row);
-                  $videoUrl = isset($row['video_url']) ? trim((string)$row['video_url']) : '';
-                  $excerpt  = isset($row['excerpt']) ? trim((string)$row['excerpt']) : '';
+                    $title    = (string)($row['title'] ?? '');
+                    $newsUrl  = (string)$buildNewsUrl($row);
 
-                  $thumbRaw = $row['featured_image'] ?? $row['image'] ?? null;
-                  $thumb    = build_image_url($baseUrl, $thumbRaw);
+                    $date     = !empty($row['created_at']) ? date('Y-m-d', strtotime((string)$row['created_at'])) : '';
+                    $views    = isset($row['views']) ? (int)$row['views'] : null;
 
-                  $isVideo  = (!empty($videoUrl));
+                    $videoUrl = isset($row['video_url']) ? trim((string)$row['video_url']) : '';
+                    $excerpt  = isset($row['excerpt']) ? trim((string)$row['excerpt']) : '';
+
+                    $thumbRaw = $row['featured_image'] ?? ($row['image'] ?? null);
+                    $thumb    = build_image_url($baseUrl, $thumbRaw);
+
+                    $isVideo  = ($videoUrl !== '');
                   ?>
                   <article class="cat-card-modern<?php echo $isVideo ? ' cat-card-video' : ''; ?>">
                     <a href="<?php echo h($newsUrl); ?>" class="cat-card-thumb-wrap">
@@ -198,13 +193,9 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
                 <?php endforeach; ?>
               </div>
             <?php else: ?>
-              <!-- لا توجد أخبار فعلاً -->
-              <div class="cat-empty">
-                لا توجد أخبار ضمن هذا التصنيف حالياً.
-              </div>
+              <div class="cat-empty">لا توجد أخبار ضمن هذا التصنيف حالياً.</div>
             <?php endif; ?>
           </div>
-
         </div>
       </div>
 
@@ -212,45 +203,41 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
         <div class="col-lg-4 mt-3 mt-lg-0">
           <!-- عمود جانبي: الأكثر قراءة في هذا التصنيف -->
           <?php if (!empty($catTrending)): ?>
-            <div class="cat-sidebar-card">
-              <div class="cat-sidebar-title">
-                <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
-                  <?php
-                    $tTitle  = (string)($row['title'] ?? '');
-                    $tUrl    = $buildNewsUrl($row);
-                <span>الأكثر قراءة في هذا التصنيف</span>
-              </div>
-              <ul class="cat-sidebar-list">
-                  <?php if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
-                    $buildNewsUrl = function(array $row): string { return ''; };
-                  } ?>
-                  <?php foreach ($catTrending as $row): ?>
-                  <?php
-                    $tTitle  = (string)($row['title'] ?? '');
-                    $tUrl    = $buildNewsUrl($row);
-                  <?php
-                    $tTitle  = (string)($row['title'] ?? '');
-                    $tUrl    = $buildNewsUrl($row);
-                    $tViews  = isset($row['views']) ? (int)$row['views'] : null;
-                    $tDate   = !empty($row['created_at']) ? date('Y-m-d', strtotime((string)$row['created_at'])) : '';
-                  ?>
-                  <li class="cat-sidebar-item">
-                    <a href="<?php echo h($tUrl); ?>">
-                      <?php echo h(mb_substr($tTitle, 0, 70, 'UTF-8')); ?><?php echo mb_strlen($tTitle, 'UTF-8')>70 ? '…':''; ?>
-                    </a>
-                    <div class="cat-sidebar-meta">
-                      <?php if ($tDate): ?>
-                        <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($tDate); ?></span>
-                      <?php endif; ?>
-                      <?php if ($tViews !== null): ?>
-                        <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo number_format($tViews); ?></span>
-                      <?php endif; ?>
-                    </div>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
-            </div>
-          <?php endif; ?>
+  <div class="cat-sidebar-card">
+    <div class="cat-sidebar-title">
+      <svg class="gdy-icon text-warning" aria-hidden="true" focusable="false"><use href="#alert"></use></svg>
+      <span>الأكثر قراءة في هذا التصنيف</span>
+    </div>
+    <ul class="cat-sidebar-list">
+      <?php
+        if (!isset($buildNewsUrl) || !is_callable($buildNewsUrl)) {
+            $buildNewsUrl = function(array $row): string { return ''; };
+        }
+      ?>
+      <?php foreach ($catTrending as $row): ?>
+        <?php
+          $tTitle = (string)($row['title'] ?? '');
+          $tUrl   = (string)$buildNewsUrl($row);
+          $tViews = isset($row['views']) ? (int)$row['views'] : null;
+          $tDate  = !empty($row['created_at']) ? date('Y-m-d', strtotime((string)$row['created_at'])) : '';
+        ?>
+        <li class="cat-sidebar-item">
+          <a href="<?php echo h($tUrl); ?>">
+            <?php echo h(mb_substr($tTitle, 0, 70, 'UTF-8')); ?><?php echo mb_strlen($tTitle, 'UTF-8')>70 ? '…':''; ?>
+          </a>
+          <div class="cat-sidebar-meta">
+            <?php if ($tDate): ?>
+              <span><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($tDate); ?></span>
+            <?php endif; ?>
+            <?php if ($tViews !== null): ?>
+              <span class="ms-2"><svg class="gdy-icon ms-1" aria-hidden="true" focusable="false"><use href="#external-link"></use></svg><?php echo number_format($tViews); ?></span>
+            <?php endif; ?>
+          </div>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
 
           <?php
           // لو عندك سايدبار جاهز

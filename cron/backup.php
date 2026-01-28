@@ -22,19 +22,32 @@ $results = [
 if ($pdo instanceof PDO) {
     try {
         $sql = "-- Godyar CMS DB backup\n-- Generated at: " . date('c') . "\n\n";
+        $driver = (string)$pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        if ($driver !== 'mysql') {
+            // This lightweight dumper currently supports MySQL/MariaDB only.
+            throw new RuntimeException('DB backup is supported only for MySQL/MariaDB in this script.');
+        }
+
         $tables = $pdo->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN) ?: [];
         foreach ($tables as $table) {
             $table = (string)$table;
             if ($table === '') continue;
 
-            $row = $pdo->query('SHOW CREATE TABLE `' . str_replace('`','``',$table) . '`')->fetch(PDO::FETCH_ASSOC);
+            if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+                // Defensive: skip unexpected table names
+                continue;
+            }
+
+            $qt = \Godyar\DB::quoteIdent($table);
+
+            $row = $pdo->query('SHOW CREATE TABLE ' . $qt)->fetch(PDO::FETCH_ASSOC);
             $create = $row['Create Table'] ?? null;
             if (!$create) continue;
 
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
             $sql .= $create . ";\n\n";
 
-            $stmt = $pdo->query('SELECT * FROM `' . str_replace('`','``',$table) . '`');
+            $stmt = $pdo->query('SELECT * FROM ' . $qt);
             while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $cols = array_keys($r);
                 $vals = [];

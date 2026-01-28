@@ -95,7 +95,7 @@ if ((empty($year) === false)) {
             $url = $archiveBasePath . '/page/' . $i;
           ?>
           <a href="<?php echo h($url); ?>" class="btn btn-sm <?php echo (empty($isActive) === false) ? 'btn-primary' : 'btn-outline-secondary'; ?>">
-            <?php echo $i; ?>
+            <?php echo (int)$i; ?>
           </a>
         <?php endfor; ?>
       </div>

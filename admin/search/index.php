@@ -180,7 +180,7 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
   // ---------------- Comments ----------------
   try {
     $commentRows = [];
-    foreach (['comments','news_comments'] as $tbl) {
+    foreach (['news_comments'] as $tbl) {
       if (!table_exists($pdo, $tbl)) continue;
 
       $textCol = null;
@@ -353,8 +353,8 @@ if ($searchTerm !== '' && $pdo instanceof PDO) {
                   $body = (string)($c['body'] ?? '');
                   $body = mb_substr($body, 0, 160, 'UTF-8');
                   $body = highlight_html(h($body), $searchTerm);
-                  $tbl = (string)($c['_table'] ?? 'comments');
-                  $href = '/admin/comments/index.php';
+                  $tbl = (string)($c['_table'] ?? 'news_comments');
+                  $href = '/admin/comments.php';
                 ?>
                 <a class="list-group-item list-group-item-action" href="<?php echo h($href); ?>">
                   <div class="small text-muted mb-1"><?php echo h($tbl); ?> • #<?php echo (int)$c['id']; ?></div>

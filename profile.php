@@ -164,7 +164,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
             $st->execute([':id' => $uid]);
             $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
             foreach ($out as $k => $v) {
-                if (array_key_exists($k, $row) && (empty($row) === false)[$k] !== null) {
+                if (array_key_exists($k, $row) && $row[$k] !== null) {
                     $out[$k] = is_numeric($v) ? (int)$row[$k] : (string)$row[$k];
                 }
             }
@@ -180,7 +180,7 @@ function load_user_profile(PDO $pdo, int $uid): array {
             $st->execute([':id' => $uid]);
             $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
             foreach ($out as $k => $v) {
-                if (isset($row[$k]) && (empty($row) === false)[$k] !== null) {
+                if (array_key_exists($k, $row) && $row[$k] !== null) {
                     if (is_int($v)) $out[$k] = (int)$row[$k];
                     else $out[$k] = (string)$row[$k];
                 }
@@ -285,7 +285,7 @@ function sanitize_profile_url(string $url): string {
     }
 
     // Reject userinfo (user:pass@host)
-    if (empty($parts['user']) || !empty($parts['pass']) === false) {
+    if (!empty($parts['user']) || !empty($parts['pass'])) {
         return '';
     }
 
@@ -955,3 +955,5 @@ if (!empty($profile['cover'])) $coverUi = $baseUrl . '/' . ltrim((string)$profil
 </main>
 
 <?php require __DIR__ . '/frontend/views/partials/footer.php'; ?>
+
+return;

@@ -202,11 +202,7 @@ $expectedSchema = [
         ],
     ],
 
-    // التعليقات (قد يكون لديك comments + news_comments)
-    'comments' => [
-        'required' => [
-            'id',
-            ['news_id', 'post_id'],
+    // التعليقات (news_comments)
             // نص التعليق
             ['body', 'comment', 'content'],
             ['created_at', 'created_on'],

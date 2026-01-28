@@ -613,3 +613,51 @@ if (!function_exists('e')) {
         return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
+
+
+// ------------------------------
+// Input sanitization helpers
+// ------------------------------
+if (!function_exists('gdy_strip_controls')) {
+    /**
+     * Remove control characters (including NULL bytes) except tab/newline.
+     */
+    function gdy_strip_controls(string $s): string {
+        // Normalize newlines first
+        $s = str_replace(["\r\n", "\r"], "\n", $s);
+        // Remove all C0 controls except \t and \n
+        $s = preg_replace('~[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+~u', '', $s) ?? $s;
+        return $s;
+    }
+}
+
+if (!function_exists('gdy_clean_user_text')) {
+    /**
+     * Clean user-provided text for safe storage (text-only).
+     * - strips HTML tags
+     * - removes control chars
+     * - collapses excessive whitespace
+     * - enforces max length (UTF-8)
+     */
+    function gdy_clean_user_text($v, int $maxLen = 2000): string {
+        $s = is_string($v) ? $v : (is_null($v) ? '' : (string)$v);
+        $s = trim($s);
+        $s = gdy_strip_controls($s);
+        // Text-only storage
+        $s = strip_tags($s);
+        // Collapse whitespace (but keep newlines)
+        $s = preg_replace('~[ \t]+~u', ' ', $s) ?? $s;
+        $s = preg_replace('~\n{4,}~u', "\n\n\n", $s) ?? $s;
+        $s = trim($s);
+
+        if ($maxLen > 0 && function_exists('mb_strlen') && function_exists('mb_substr')) {
+            if (mb_strlen($s, 'UTF-8') > $maxLen) {
+                $s = mb_substr($s, 0, $maxLen, 'UTF-8');
+            }
+        } elseif ($maxLen > 0 && strlen($s) > $maxLen) {
+            $s = substr($s, 0, $maxLen);
+        }
+        return $s;
+    }
+}
+

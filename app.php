@@ -47,6 +47,42 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 // ---------------------------------------------------------
+// Fallback routes (defense-in-depth)
+// If rewrite rules fail or are bypassed, keep common endpoints working.
+// ---------------------------------------------------------
+$__path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$__path = trim($__path, '/');
+
+// Normalize for subdirectory installs: strip base prefix if present (e.g. /godyar)
+if (function_exists('godyar_route_base_prefix')) {
+    $__bp = trim((string)godyar_route_base_prefix(), '/');
+    if ($__bp !== '') {
+        if ($__path === $__bp) { $__path = ''; }
+        elseif (str_starts_with($__path, $__bp . '/')) { $__path = substr($__path, strlen($__bp) + 1); }
+    }
+}
+
+// Support optional language prefixes: /ar, /en, /fr
+if ($__path !== '') {
+    $parts = explode('/', $__path);
+    if (count($parts) >= 2 && in_array($parts[0], ['ar', 'en', 'fr'], true)) {
+        array_shift($parts);
+        $__path = implode('/', $parts);
+    }
+}
+
+if (in_array($__path, ['login', 'register', 'profile', 'logout'], true)) {
+    require __DIR__ . '/' . $__path . '.php';
+    exit;
+}
+
+if ($__path === 'admin/login') {
+    require __DIR__ . '/admin/login.php';
+    exit;
+}
+
+
+// ---------------------------------------------------------
 // Input helpers (reduce direct superglobal access & harden)
 // ---------------------------------------------------------
 if (!function_exists('gdy_qs_int')) {
@@ -356,6 +392,21 @@ $extrasApi = new NewsExtrasController($container->pdo(), $container->news(), $co
 
 $legacy = new LegacyIncludeController(__DIR__);
 $router = new Router();
+
+// ---------------------------------------------------------
+// Core auth routes (defense-in-depth)
+// Keep /login working even if rewrite rules are bypassed.
+// ---------------------------------------------------------
+$router->get('#^/login/?$#', fn() => require __DIR__ . '/login.php');
+$router->post('#^/login/?$#', fn() => require __DIR__ . '/login.php');
+$router->get('#^/register/?$#', fn() => require __DIR__ . '/register.php');
+$router->post('#^/register/?$#', fn() => require __DIR__ . '/register.php');
+$router->get('#^/profile/?$#', fn() => require __DIR__ . '/profile.php');
+$router->post('#^/profile/?$#', fn() => require __DIR__ . '/profile.php');
+$router->get('#^/logout/?$#', fn() => require __DIR__ . '/logout.php');
+$router->post('#^/logout/?$#', fn() => require __DIR__ . '/logout.php');
+$router->get('#^/admin/login/?$#', fn() => require __DIR__ . '/admin/login.php');
+$router->post('#^/admin/login/?$#', fn() => require __DIR__ . '/admin/login.php');
 
 // SEO endpoints
 $router->get('#^/sitemap\.xml$#', function () : void { require __DIR__ . '/seo/sitemap.php'; });

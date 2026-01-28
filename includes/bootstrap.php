@@ -1,6 +1,19 @@
 <?php
 declare(strict_types=1);
 
+// -------------------------------------------------
+// PHP error logging (hosting-friendly)
+// - Writes to /storage/logs/php_error.log (not web-accessible)
+// -------------------------------------------------
+@ini_set('display_errors', '0');
+@ini_set('log_errors', '1');
+$__gdyLogDir = dirname(__DIR__) . '/storage/logs';
+if (!is_dir($__gdyLogDir)) { @mkdir($__gdyLogDir, 0755, true); }
+if (is_dir($__gdyLogDir) && is_writable($__gdyLogDir)) {
+    @ini_set('error_log', $__gdyLogDir . '/php_error.log');
+}
+
+
 
 // Safety helpers (sanitizers + req_* helpers)
 require_once __DIR__ . '/safe_runtime.php';
@@ -120,6 +133,10 @@ require_once ROOT_PATH . '/includes/lang.php';
 
 // DB helpers (PDO source of truth)
 require_once ROOT_PATH . '/includes/db.php';
+
+// Site settings (DB-backed). Loaded here so legacy standalone scripts that only
+// include bootstrap.php can safely call gdy_load_settings()/site_setting().
+require_once ROOT_PATH . '/includes/site_settings.php';
 
 if (!function_exists('normalize_display_name')) {
     /**

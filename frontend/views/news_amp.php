@@ -38,7 +38,7 @@ $canonicalUrl = (preg_match('~^https?://~i', $canonicalPath))
                width="1200" height="675" layout="responsive"
                alt="<?php echo htmlspecialchars($news['title'] ?? ''); ?>"></amp-img>
     <?php endif; ?>
-    <div class="content"><?php echo $news['content'] ?? ''; ?></div>
+    <div class="content"><?php echo gdy_sanitize_basic_html($news['content'] ?? ''); ?></div>
   </article>
 </body>
 </html>

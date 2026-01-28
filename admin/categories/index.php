@@ -13,7 +13,8 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $pdo = gdy_pdo_safe();
 
 // ===== حماية لوحة التحكم =====
-if (empty($_SESSION['user']['id']) || empty($_SESSION['user']['role']) || (empty($_SESSION) === false)['user']['role'] !== 'admin') {
+$role = (string)($_SESSION['user']['role'] ?? '');
+if (empty($_SESSION['user']['id']) || $role !== 'admin') {
     header('Location: ' . base_url('/login'));
     exit;
 }

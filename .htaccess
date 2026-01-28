@@ -11,8 +11,9 @@
 
 RewriteEngine On
 RewriteBase /
+DirectoryIndex index.php index.html
 
-Options -Indexes
+Options -Indexes -MultiViews
 ServerSignature Off
 
 # ---------------------------------------------------------
@@ -74,7 +75,7 @@ RewriteRule ^\.well-known/ - [L,NC]
 # ---------------------------------------------------------
 # Favicon & PWA icons (adjust if your paths differ)
 # ---------------------------------------------------------
-RewriteRule ^favicon\.ico$ /assets/icons/favicon.ico [L,NC]
+RewriteRule ^favicon\.ico$ assets/icons/favicon.ico [L,NC]
 RewriteRule ^apple-touch-icon\.png$ /assets/icons/apple-touch-icon.png [L,NC]
 RewriteRule ^favicon-16x16\.png$ /assets/icons/favicon-16x16.png [L,NC]
 RewriteRule ^favicon-32x32\.png$ /assets/icons/favicon-32x32.png [L,NC]
@@ -115,12 +116,12 @@ RewriteRule ^(login|register|profile|logout)\.php$ /$1 [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+admin/login\.php[\s?] [NC]
 RewriteRule ^admin/login\.php$ /admin/login [R=301,L]
 
-# Quick routes
-RewriteRule ^login$ /login.php [L,QSA]
-RewriteRule ^register$ /register.php [L,QSA]
-RewriteRule ^profile$ /profile.php [L,QSA]
-RewriteRule ^logout$ /logout.php [L,QSA]
-RewriteRule ^admin/login$ /admin/login.php [L,QSA]
+# Quick routes (support optional trailing slash)
+RewriteRule ^login/?$ login.php [L,QSA,NC]
+RewriteRule ^register/?$ register.php [L,QSA,NC]
+RewriteRule ^profile/?$ profile.php [L,QSA,NC]
+RewriteRule ^logout/?$ logout.php [L,QSA,NC]
+RewriteRule ^admin/login/?$ admin/login.php [L,QSA,NC]
 
 # Legacy ad-click endpoint (dash) -> canonical underscore
 RewriteRule ^ad-click\.php$ /ad_click.php [R=301,L]
@@ -166,6 +167,7 @@ RewriteRule ^pages_static/ - [G,L]
 RewriteRule ^(assets|icons|splash|screenshots|uploads)/ - [L,NC]
 
 # Allow admin to pass (directory + files under it)
+RewriteRule ^admin/?$ admin/index.php [L,QSA,NC]
 RewriteRule ^admin(/|$) - [L,NC]
 
 # ---------------------------------------------------------

@@ -9,7 +9,10 @@ header('Cache-Control: public, max-age=900');
 $pdo  = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 $base = function_exists('gdy_base_url') ? rtrim((string)gdy_base_url(), '/') : '';
 if ($base === '') {
-  $scheme = ((empty($_SERVER['HTTPS']) === false) && (empty($_SERVER) === false)['HTTPS'] !== 'off') ? 'https' : 'http';
+  $https = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+    || (!empty($_SERVER['SERVER_PORT']) && (string)($_SERVER['SERVER_PORT']) === '443');
+$scheme = $https ? 'https' : 'http';
   $host = (string)($_SERVER['HTTP_HOST'] ?? 'localhost');
   $base = $scheme . '://' . $host;
 }

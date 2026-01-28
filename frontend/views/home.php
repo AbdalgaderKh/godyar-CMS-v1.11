@@ -29,28 +29,31 @@ if (!function_exists('godyar_news_date')) {
     }
 }
 
+if (!function_exists('h')) {
+    function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
+}
+
+
 // دالة كرت خبر في الشبكة
 if (!function_exists('godyar_news_card')) {
-    function godyar_news_card(array $n, string $baseUrl = ''): void {
-        $slug   = $n['slug']   ?? '';
-        $title  = $n['title']  ?? '';
-            return; // نحتاج على الأقل slug + title
-        }
-        $ex     = $n['excerpt']?? '';
-        $img    = $n['featured_image'] ?? ($n['image_url'] ?? '');
-        $date   = godyar_news_date($n);
-        $id     = isset($n['id']) ? (int)$n['id'] : 0;
+    function godyar_news_card(array $n, string $baseUrl = ''): void
+    {
+        $title = (string)($n['title'] ?? '');
+        $id    = (int)($n['id'] ?? 0);
 
-        $ex     = $n['excerpt']?? '';
-        $img    = $n['featured_image'] ?? ($n['image_url'] ?? '');
-        $date   = godyar_news_date($n); // نحتاج على الأقل slug + title
+        if ($id <= 0 || $title === '') {
+            return;
         }
 
-        $url  = $baseUrl ? rtrim($baseUrl, '/') . '/news/id/' . (int)$id : '/news/id/' . (int)$id;
-        $date = $date ?: '';
+        $ex   = (string)($n['excerpt'] ?? '');
+        $img  = (string)($n['featured_image'] ?? ($n['image_url'] ?? ''));
+        $date = godyar_news_date($n);
+
+        $urlBase = $baseUrl !== '' ? rtrim($baseUrl, '/') : '';
+        $url  = $urlBase !== '' ? ($urlBase . '/news/id/' . $id) : ('/news/id/' . $id);
         ?>
         <article class="card h-100 border-0 shadow-sm" style="border-radius:18px;overflow:hidden;background:#ffffff;">
-            <?php if (!empty($img)): ?>
+            <?php if ($img !== ''): ?>
                 <div style="position:relative;height:180px;overflow:hidden;">
                     <img src="/img.php?src=<?php echo rawurlencode($img); ?>&w=600"
                          alt="<?php echo h($title); ?>"
@@ -63,12 +66,12 @@ if (!function_exists('godyar_news_card')) {
                         <?php echo h($title); ?>
                     </a>
                 </h3>
-                <?php if ($ex): ?>
+                <?php if ($ex !== ''): ?>
                     <p class="text-muted small mb-2" style="font-size:.8rem;">
                         <?php echo h(mb_substr($ex, 0, 120)); ?><?php echo mb_strlen($ex) > 120 ? '…' : ''; ?>
                     </p>
                 <?php endif; ?>
-                <?php if ($date): ?>
+                <?php if ($date !== ''): ?>
                     <div class="mt-auto d-flex align-items-center justify-content-between text-muted" style="font-size:.75rem;">
                         <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?></span>
                         <span><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#news"></use></svg><?php echo h(__('خبر')); ?></span>
@@ -82,28 +85,25 @@ if (!function_exists('godyar_news_card')) {
 
 // دالة عنصر صغير في "الأكثر قراءة / تعليقاً"
 if (!function_exists('godyar_news_small_item')) {
-    function godyar_news_small_item(array $n, string $baseUrl = ''): void {
-            return;
-        }
-        if (!$slug || !$title) {
-            return;
-        $slug  = $n['slug']   ?? '';
-        $title = $n['title']  ?? '';
-        $date  = godyar_news_date($n);
+    function godyar_news_small_item(array $n, string $baseUrl = ''): void
+    {
+        $title = (string)($n['title'] ?? '');
         $id    = (int)($n['id'] ?? 0);
-        $id    = $n['id']      ?? 0;
 
-        if (!$slug || !$title) {
+        if ($id <= 0 || $title === '') {
             return;
         }
 
-        $url = $baseUrl ? rtrim($baseUrl, '/') . '/news/id/' . (int)$id : '/news/id/' . (int)$id;
+        $date = godyar_news_date($n);
+
+        $urlBase = $baseUrl !== '' ? rtrim($baseUrl, '/') : '';
+        $url = $urlBase !== '' ? ($urlBase . '/news/id/' . $id) : ('/news/id/' . $id);
         ?>
         <div class="d-flex flex-column mb-2">
             <a href="<?php echo h($url); ?>" class="text-decoration-none" style="font-size:.85rem;font-weight:600;">
                 <?php echo h($title); ?>
             </a>
-            <?php if ($date): ?>
+            <?php if ($date !== ''): ?>
                 <span class="text-muted" style="font-size:.75rem;">
                     <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h($date); ?>
                 </span>

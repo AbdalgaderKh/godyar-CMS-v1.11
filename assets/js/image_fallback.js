@@ -9,123 +9,99 @@
  *
  * This script is defensive and safe to run multiple times.
  */
-(function () {
-  'use strict';
 
-  var ATTR_FALLBACK = 'data-gdy-fallback-src';
-  var ATTR_HIDE = 'data-gdy-hide-onerror';
-  var ATTR_SHOW = 'data-gdy-show-onload';
-  var ATTR_BOUND = 'data-gdy-fallback-bound';
-  var ATTR_TRIED = 'data-gdy-fallback-tried';
+'use strict';
 
-  function isImg(el) {
-    return el?.tagName?.toLowerCase() === 'img';
+const ATTR_FALLBACK = 'data-gdy-fallback-src';
+const ATTR_HIDE = 'data-gdy-hide-onerror';
+const ATTR_SHOW = 'data-gdy-show-onload';
+const ATTR_BOUND = 'data-gdy-fallback-bound';
+const ATTR_TRIED = 'data-gdy-fallback-tried';
+
+const isImg = (el) => el?.tagName?.toLowerCase() === 'img';
+
+const shouldManage = (img) =>
+  img.hasAttribute(ATTR_FALLBACK) || img.hasAttribute(ATTR_HIDE) || img.hasAttribute(ATTR_SHOW);
+
+const safeSetHidden = (img, hidden) => {
+  try {
+    if (!img?.style) return;
+    img.style.display = hidden ? 'none' : '';
+  } catch (_) {
+    // Some environments may throw if element is detached; ignore.
   }
+};
 
-  function shouldManage(img) {
-    return (
-      img.hasAttribute(ATTR_FALLBACK) ||
-      img.hasAttribute(ATTR_HIDE) ||
-      img.hasAttribute(ATTR_SHOW)
-    );
+const safeSetOpacity = (img, value) => {
+  try {
+    if (!img?.style) return;
+    img.style.opacity = value;
+  } catch (_) {
+    // ignore
   }
+};
 
-  function safeSetHidden(img, hidden) {
-    try {
-      img.style.display = hidden ? 'none' : '';
-    } catch (_) {}
-  }
+const onLoad = (img) => {
+  if (img.getAttribute(ATTR_SHOW) === '1') safeSetOpacity(img, '');
+};
 
-  function safeSetOpacity(img, value) {
-    try {
-      img.style.opacity = value;
-    } catch (_) {}
-  }
+const onError = (img) => {
+  // 1) Try fallback once if provided
+  const fallback = img.getAttribute(ATTR_FALLBACK);
+  const tried = img.getAttribute(ATTR_TRIED) === '1';
 
-  function onLoad(img) {
-    if (img.getAttribute(ATTR_SHOW) === '1') {
-      safeSetOpacity(img, '1');
+  if (fallback && !tried) {
+    img.setAttribute(ATTR_TRIED, '1');
+    // Prevent infinite loops if fallback equals current src
+    const current = String(img.getAttribute('src') || '').trim();
+    if (current !== fallback) {
+      img.setAttribute('src', fallback);
+      return;
     }
   }
 
-  function onError(img) {
-    // 1) Try fallback once if provided
-    var fallback = img.getAttribute(ATTR_FALLBACK);
-    var tried = img.getAttribute(ATTR_TRIED) === '1';
+  // 2) Hide if configured
+  if (img.getAttribute(ATTR_HIDE) === '1') safeSetHidden(img, true);
+};
 
-    if (fallback && !tried) {
-      img.setAttribute(ATTR_TRIED, '1');
-      // Prevent infinite loops if fallback equals current src
-      var current = (img.getAttribute('src') || '').trim();
-      if (current !== fallback) {
-        img.setAttribute('src', fallback);
-        return;
-      }
-    }
+const bindOne = (img) => {
+  if (!img || !isImg(img) || !shouldManage(img)) return;
+  if (img.getAttribute(ATTR_BOUND) === '1') return;
+  img.setAttribute(ATTR_BOUND, '1');
 
-    // 2) If requested, hide the image
-    if (img.getAttribute(ATTR_HIDE) === '1') {
-      safeSetHidden(img, true);
-    }
-  }
+  // Default to hidden while loading if show-onload is enabled.
+  if (img.getAttribute(ATTR_SHOW) === '1') safeSetOpacity(img, '0');
 
-  function bindOne(img) {
-    if (!isImg(img) || !shouldManage(img)) return;
-    if (img.getAttribute(ATTR_BOUND) === '1') return;
+  img.addEventListener('load', () => onLoad(img), { passive: true });
+  img.addEventListener('error', () => onError(img), { passive: true });
 
-    img.setAttribute(ATTR_BOUND, '1');
+  // If image is already complete from cache
+  if (img.complete && img.naturalWidth > 0) onLoad(img);
+};
 
-    // If the page wants images hidden until loaded, start hidden.
-    if (img.getAttribute(ATTR_SHOW) === '1') {
-      // Avoid layout shift by using opacity rather than display.
-      safeSetOpacity(img, '0');
-    }
+const scan = (root) => {
+  const scope = root?.querySelectorAll ? root : document;
+  const imgs = scope.querySelectorAll(`img[${ATTR_FALLBACK}],img[${ATTR_HIDE}],img[${ATTR_SHOW}]`);
+  for (const img of imgs) bindOne(img);
+};
 
-    img.addEventListener('load', function () { onLoad(img); }, { passive: true });
-    img.addEventListener('error', function () { onError(img); }, { passive: true });
+const init = () => {
+  scan(document);
 
-    // If image is already complete from cache
-    if (img.complete && img.naturalWidth > 0) {
-      onLoad(img);
-    } else if (img.complete && img.naturalWidth === 0) {
-      onError(img);
-    }
-  }
-
-  function scan(root) {
-    var scope = root?.querySelectorAll ? root : document;
-    var imgs = scope.querySelectorAll(
-      'img[' + ATTR_FALLBACK + '],img[' + ATTR_HIDE + '],img[' + ATTR_SHOW + ']'
-    );
-    for (var i = 0; i < imgs.length; i++) bindOne(imgs[i]);
-  }
-
-  function init() {
-    scan(document);
-
-    // Watch for dynamically inserted images
-    if (typeof MutationObserver === 'function') {
-      var obs = new MutationObserver(function (mutations) {
-        for (var i = 0; i < mutations.length; i++) {
-          var m = mutations[i];
-          if (!m.addedNodes) continue;
-          for (var j = 0; j < m.addedNodes.length; j++) {
-            var n = m.addedNodes[j];
-            if (isImg(n)) {
-              bindOne(n);
-            } else if (n?.querySelectorAll) {
-              scan(n);
-            }
-          }
+  // Watch for dynamically inserted images
+  if (typeof MutationObserver === 'function') {
+    const obs = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (!m.addedNodes) continue;
+        for (const n of m.addedNodes) {
+          if (isImg(n)) bindOne(n);
+          else if (n?.querySelectorAll) scan(n);
         }
-      });
-      obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
-    }
+      }
+    });
+    obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
   }
+};
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true });
-  } else {
-    init();
-  }
-})();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();

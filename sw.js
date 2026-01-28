@@ -4,18 +4,19 @@
  * - Runtime caches static assets for frontend GET requests
  */
 
+'use strict';
+
 // Bump this value whenever you change caching behaviour to force a Service Worker refresh.
 const CACHE_NAME = 'godyar-cache-v4';
 const OFFLINE_URL = '/offline.html';
 
 // Minimal precache (keep this short and ensure files exist)
-const PRECACHE_URLS = [
-  OFFLINE_URL,
-];
+const PRECACHE_URLS = [OFFLINE_URL];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
+    caches
+      .open(CACHE_NAME)
       .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
       .catch(() => self.skipWaiting())
@@ -33,25 +34,31 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('message', (event) => {
-  if (event && event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+  if (event?.data?.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 function isAdminRequest(url) {
   try {
-    return url.pathname.startsWith('/admin');
-  } catch (e) {
+    return url?.pathname?.startsWith('/admin') === true;
+  } catch (_) {
     return false;
   }
 }
 
 function isStaticAsset(url) {
-  const p = url.pathname;
+  const pathname = url?.pathname || '';
   return (
-    p.endsWith('.css') || p.endsWith('.js') || p.endsWith('.png') || p.endsWith('.jpg') ||
-    p.endsWith('.jpeg') || p.endsWith('.webp') || p.endsWith('.svg') || p.endsWith('.woff') ||
-    p.endsWith('.woff2') || p.endsWith('.ttf') || p.endsWith('.ico')
+    pathname.endsWith('.css') ||
+    pathname.endsWith('.js') ||
+    pathname.endsWith('.png') ||
+    pathname.endsWith('.jpg') ||
+    pathname.endsWith('.jpeg') ||
+    pathname.endsWith('.webp') ||
+    pathname.endsWith('.svg') ||
+    pathname.endsWith('.woff') ||
+    pathname.endsWith('.woff2') ||
+    pathname.endsWith('.ttf') ||
+    pathname.endsWith('.ico')
   );
 }
 
@@ -59,16 +66,12 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
 
   // Never handle non-GET (prevents CSRF/session problems)
-  if (req.method !== 'GET') {
-    return;
-  }
+  if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
 
   // Do not intercept admin at all
-  if (isAdminRequest(url)) {
-    return;
-  }
+  if (isAdminRequest(url)) return;
 
   // For same-origin static assets: cache-first
   if (url.origin === self.location.origin && isStaticAsset(url)) {
@@ -77,14 +80,13 @@ self.addEventListener('fetch', (event) => {
         const cache = await caches.open(CACHE_NAME);
         const cached = await cache.match(req);
         if (cached) return cached;
+
         try {
           const res = await fetch(req);
           // Cache only successful (basic) responses
-          if (res && res.ok) {
-            cache.put(req, res.clone());
-          }
+          if (res?.ok) cache.put(req, res.clone());
           return res;
-        } catch (e) {
+        } catch (_) {
           return cached || Response.error();
         }
       })()
@@ -97,9 +99,8 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         try {
-          const res = await fetch(req);
-          return res;
-        } catch (e) {
+          return await fetch(req);
+        } catch (_) {
           const cache = await caches.open(CACHE_NAME);
           const offline = await cache.match(OFFLINE_URL);
           return offline || new Response('Offline', { status: 503, statusText: 'Offline' });

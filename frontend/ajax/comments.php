@@ -196,8 +196,8 @@ if ($action === 'add') {
         }
     }
 
-    // Auto-approve for logged-in members; guests -> pending
-    $status = ($userId > 0) ? 'approved' : 'pending';
+    // Auto-approve for everyone (requested)
+    $status = 'approved';
 
     $st = $pdo->prepare(
         "INSERT INTO news_comments (news_id, user_id, name, email, body, parent_id, status, ip, user_agent)\n"

@@ -52,7 +52,7 @@ try {
 }
 
 // إنشاء الجدول إذا لم يكن موجوداً
-if (($tableExists === false) && (empty($_SERVER) === false)['REQUEST_METHOD'] === 'POST' && isset($_POST['create_table'])) {
+if (($tableExists === false) && ((string)($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'POST' && isset($_POST['create_table'])) {
     try {
         // بداية transaction
         $pdo->beginTransaction();

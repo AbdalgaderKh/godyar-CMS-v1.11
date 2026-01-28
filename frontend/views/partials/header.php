@@ -7,6 +7,34 @@ if (!function_exists('h')) {
     }
 }
 
+
+
+if (!function_exists('u')) {
+    function u($url): string {
+        $url = (string)$url;
+        $url = preg_replace('/[\x00-\x1F\x7F]/u', '', $url) ?? '';
+        $trim = trim($url);
+        if ($trim === '') {
+            return '#';
+        }
+        if (preg_match('/^(\/|\.|\?|#)/', $trim) || !preg_match('/^[a-zA-Z][a-zA-Z0-9+.-]*:/', $trim)) {
+            return h($trim);
+        }
+        $parts = parse_url($trim);
+        $scheme = strtolower((string)($parts['scheme'] ?? ''));
+        if (in_array($scheme, ['http','https','mailto','tel'], true)) {
+            return h($trim);
+        }
+        return '#';
+    }
+}
+
+if (!function_exists('gdy_jsonld_safe')) {
+    function gdy_jsonld_safe($json): string {
+        $json = (string)$json;
+        return str_ireplace('</script', '<\/script', $json);
+    }
+}
 /**
  * قراءة حالة العضو من الجلسة
  */
@@ -388,16 +416,16 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     $metaKeywords = (string)($siteSettings['seo.meta_keywords'] ?? '');
 
   ?>
-  <title><?php echo $seoTitle; ?></title>
+  <title><?php echo h($seoTitle); ?></title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="<?php echo $seoDesc; ?>">
+  <meta name="description" content="<?php echo h($seoDesc); ?>">
   <meta name="robots" content="<?php echo h($robotsMeta); ?>">
   <?php if ($metaKeywords !== ''): ?><meta name="keywords" content="<?php echo h($metaKeywords); ?>"><?php endif; ?>
 
   
-  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo h(rtrim($rootUrl,'/')); ?>/rss.xml">
-  <link rel="sitemap" type="application/xml" href="<?php echo h(rtrim($rootUrl,'/')); ?>/sitemap.xml">
-<link rel="canonical" href="<?php echo h($seoUrl); ?>">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="<?php echo u(rtrim($rootUrl,'/') . '/rss.xml'); ?>">
+  <link rel="sitemap" type="application/xml" href="<?php echo u(rtrim($rootUrl,'/') . '/sitemap.xml'); ?>">
+<link rel="canonical" href="<?php echo u($seoUrl); ?>">
 
   <?php
     // Preload images مهمة (LCP) إذا مررتها الصفحة عبر $pagePreloadImages
@@ -419,15 +447,15 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     $ogImage = $seoImage !== '' ? $seoImage : '';
   ?>
   <meta property="og:type" content="<?php echo h($seoType); ?>">
-  <meta property="og:title" content="<?php echo $ogTitle; ?>">
-  <meta property="og:description" content="<?php echo $ogDesc; ?>">
-  <?php if ($ogUrl !== ''): ?><meta property="og:url" content="<?php echo h($ogUrl); ?>"><?php endif; ?>
-  <?php if ($ogImage !== ''): ?><meta property="og:image" content="<?php echo h($ogImage); ?>"><?php endif; ?>
+  <meta property="og:title" content="<?php echo h($ogTitle); ?>">
+  <meta property="og:description" content="<?php echo h($ogDesc); ?>">
+  <?php if ($ogUrl !== ''): ?><meta property="og:url" content="<?php echo u($ogUrl); ?>"><?php endif; ?>
+  <?php if ($ogImage !== ''): ?><meta property="og:image" content="<?php echo u($ogImage); ?>"><?php endif; ?>
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?php echo $ogTitle; ?>">
-  <meta name="twitter:description" content="<?php echo $ogDesc; ?>">
-  <?php if ($ogImage !== ''): ?><meta name="twitter:image" content="<?php echo h($ogImage); ?>"><?php endif; ?>
+  <meta name="twitter:title" content="<?php echo h($ogTitle); ?>">
+  <meta name="twitter:description" content="<?php echo h($ogDesc); ?>">
+  <?php if ($ogImage !== ''): ?><meta name="twitter:image" content="<?php echo u($ogImage); ?>"><?php endif; ?>
 
   <?php if ($seoPublished !== ''): ?><meta property="article:published_time" content="<?php echo h($seoPublished); ?>"><?php endif; ?>
   <?php if ($seoModified !== ''): ?><meta property="article:modified_time" content="<?php echo h($seoModified); ?>"><?php endif; ?>
@@ -1058,7 +1086,6 @@ $__gdyBasePath = $__gdyAppPath; // path فقط (بدون دومين)
 $__gdyManifestUrl = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/manifest.webmanifest?lang=' . rawurlencode($__gdyLang);
 $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 ?>
-">
 <meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1122,10 +1149,10 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
 <header class="site-header<?php echo $hdrClass; ?>"<?php echo $hdrStyle; ?>>
   <div class="container">
     <div class="header-inner">
-      <a href="<?php echo h($navBaseUrl); ?>" class="brand-block">
+      <a href="<?php echo u($navBaseUrl); ?>" class="brand-block">
         <div class="brand-logo">
           <?php if ($siteLogo): ?>
-            <img src="<?php echo h($siteLogo); ?>" alt="<?php echo h($siteName); ?>">
+            <img src="<?php echo u($siteLogo); ?>" alt="<?php echo h($siteName); ?>">
           <?php else: ?>
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
           <?php endif; ?>
@@ -1200,7 +1227,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <svg class="gdy-icon chev" aria-hidden="true" focusable="false"><use href="#chevron-down"></use></svg>
           </button>
           <nav id="gdyCatsNav" class="cats-nav" aria-label="أقسام الموقع">
-          <a href="<?php echo h($navBaseUrl); ?>" class="cats-link cats-link--home">
+          <a href="<?php echo u($navBaseUrl); ?>" class="cats-link cats-link--home">
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
             <span><?php echo h(__('الرئيسية')); ?></span>
           </a>

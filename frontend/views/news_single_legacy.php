@@ -678,10 +678,145 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<?php
-if (is_file($footer)) {
-    if (!defined("GDY_TPL_WRAPPED")) {
-        require $footer;
+<?php if (is_file($footer) && !defined("GDY_TPL_WRAPPED")): ?>
+
+<!-- Comments -->
+<section class="gdy-comments" id="gdy-comments" style="margin-top:24px">
+  <h3 style="margin:0 0 12px">التعليقات</h3>
+
+  <div id="gdy-comments-list" style="margin-bottom:16px"></div>
+
+  <div class="gdy-comments-form" style="border:1px solid #e5e7eb; border-radius:10px; padding:12px">
+    <div id="gdy-comments-msg" style="margin-bottom:10px; color:#b91c1c; display:none"></div>
+
+    <form id="gdy-comment-form" method="post" action="" autocomplete="off">
+      <input type="hidden" name="news_id" value="<?php echo (int)($news['id'] ?? 0); ?>">
+      <input type="hidden" name="parent_id" value="0">
+
+      <?php
+        $isLogged = false;
+        try {
+            $isLogged = (session_status() === PHP_SESSION_ACTIVE) && !empty($_SESSION['user_id'] ?? ($_SESSION['user']['id'] ?? 0));
+        } catch (Throwable $e) { $isLogged = false; }
+      ?>
+
+      <?php if (!$isLogged): ?>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px">
+        <input name="name" placeholder="الاسم" required maxlength="150" style="flex:1; min-width:180px; padding:10px; border:1px solid #e5e7eb; border-radius:8px">
+        <input name="email" placeholder="البريد الإلكتروني" required maxlength="190" style="flex:1; min-width:220px; padding:10px; border:1px solid #e5e7eb; border-radius:8px">
+      </div>
+      <?php endif; ?>
+
+      <textarea name="body" placeholder="اكتب تعليقك..." required maxlength="2000" rows="4" style="width:100%; padding:10px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical"></textarea>
+
+      <div style="margin-top:10px; display:flex; justify-content:flex-end; gap:10px; align-items:center">
+        <button type="submit" style="padding:10px 14px; border-radius:8px; border:0; background:#111827; color:#fff; cursor:pointer">إرسال</button>
+      </div>
+    </form>
+
+    <div style="margin-top:8px; color:#6b7280; font-size:13px">
+      ملاحظة: قد تتم مراجعة التعليق قبل النشر.
+    </div>
+  </div>
+</section>
+
+<script nonce="<?php echo h($cspNonce ?? ''); ?>">
+(function(){
+  var base = (window.GDY_BASE || '');
+  function api(path){ return (base ? base.replace(/\/$/,'') : '') + path; }
+
+  var newsId = <?php echo (int)($news['id'] ?? 0); ?>;
+  var listEl = document.getElementById('gdy-comments-list');
+  var msgEl  = document.getElementById('gdy-comments-msg');
+  var form   = document.getElementById('gdy-comment-form');
+
+  function showMsg(text){
+    if(!msgEl) return;
+    msgEl.style.display = text ? 'block' : 'none';
+    msgEl.textContent = text || '';
+  }
+
+  function el(tag, props){
+    var e = document.createElement(tag);
+    if(props){
+      Object.keys(props).forEach(function(k){
+        if(k === 'text') e.textContent = props[k];
+        else if(k === 'class') e.className = props[k];
+        else e.setAttribute(k, props[k]);
+      });
     }
-}
-?>
+    return e;
+  }
+
+  function render(items){
+    if(!listEl) return;
+    listEl.innerHTML = '';
+    if(!items || !items.length){
+      listEl.appendChild(el('div',{text:'لا توجد تعليقات بعد.', style:'color:#6b7280'}));
+      return;
+    }
+    items.forEach(function(c){
+      var wrap = el('div',{style:'padding:10px 0; border-bottom:1px solid #f3f4f6'});
+      var head = el('div',{style:'display:flex; justify-content:space-between; gap:10px; margin-bottom:6px'});
+      var name = el('strong',{text:(c.name || 'زائر')});
+      var time = el('span',{text:(c.created_at || ''), style:'color:#6b7280; font-size:12px'});
+      head.appendChild(name); head.appendChild(time);
+      var body = el('div',{text:(c.body || ''), style:'white-space:pre-wrap; line-height:1.6'});
+      wrap.appendChild(head); wrap.appendChild(body);
+      listEl.appendChild(wrap);
+    });
+  }
+
+  async function load(){
+    try{
+      showMsg('');
+      var res = await fetch(api('/api/v1/comments.php?news_id=' + encodeURIComponent(String(newsId))), {credentials:'same-origin'});
+      var txt = await res.text();
+      var data = {};
+      try{ data = JSON.parse(txt || '{}'); }catch(e){ data = {}; }
+      if(!res.ok || data.ok === false){
+        render([]);
+        return;
+      }
+      render(data.items || []);
+    }catch(e){
+      render([]);
+    }
+  }
+
+  if(form){
+    form.addEventListener('submit', async function(ev){
+      ev.preventDefault();
+      showMsg('');
+      var fd = new FormData(form);
+      var payload = {};
+      fd.forEach(function(v,k){ payload[k] = String(v); });
+
+      try{
+        var res = await fetch(api('/api/v1/comments.php'), {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload),
+          credentials:'same-origin'
+        });
+        var txt = await res.text();
+        var data = {};
+        try{ data = JSON.parse(txt || '{}'); }catch(e){ data = {}; }
+        if(!res.ok || data.ok === false){
+          showMsg('تعذر إرسال التعليق. حاول مرة أخرى.');
+          return;
+        }
+        form.reset();
+        showMsg('تم إرسال التعليق. قد ينتظر المراجعة قبل الظهور.');
+        load();
+      }catch(e){
+        showMsg('تعذر إرسال التعليق. حاول مرة أخرى.');
+      }
+    });
+  }
+
+  if(newsId > 0) load();
+})();
+</script>
+
+<?php require $footer; endif; ?>

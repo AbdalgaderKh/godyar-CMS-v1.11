@@ -85,9 +85,8 @@ function render(string $title, string $body): void {
     .theme-toggle:focus{outline:none;box-shadow:var(--focus)}
 CSS;
 
-    $cfg = $cfg ?? [];
 
-$step = (int)($_GET['step'] ?? 1);
+	$step = (int)($_GET['step'] ?? 1);
     echo "<!doctype html><html lang='ar' dir='rtl'><head><meta charset='utf-8'>".
          "<meta name='viewport' content='width=device-width,initial-scale=1'>".
          "<title>".h($title)." - Godyar CMS Installer</title><style>{$css}</style><script>
@@ -105,13 +104,27 @@ function __gdySetInstallerTheme(t){
 }
 </script></head><body><div class='wrap'><div class='card'>";
     echo "<div class='hdr'><div class='hdr-title'><h1>مثبّت Godyar CMS</h1><p class='sub'>حزمة خام نظيفة — بدون محتوى تجريبي</p></div>"."<button type='button' class='theme-toggle' id='themeToggle' aria-label='تبديل الوضع'>🌙</button></div>";
-    echo "<div class='steps'>".
-         "<div class='step ".($step===1?'on':'')."'>1) بدء</div>".
-         "<div class='step ".($step===2?'on':'')."'>2) قاعدة البيانات</div>".
-         "<div class='step ".($step===3?'on':'')."'>3) إنشاء الجداول</div>".
-         "</div>";
-}
-}
+	    echo "<div class='steps'>".
+	         "<div class='step ".($step===1?'on':'')."'>1) بدء</div>".
+	         "<div class='step ".($step===2?'on':'')."'>2) قاعدة البيانات</div>".
+	         "<div class='step ".($step===3?'on':'')."'>3) إنشاء الجداول</div>".
+	         "</div>";
+
+	    echo $body;
+
+	    echo "</div></div><script>(function(){\n".
+	         "var btn=document.getElementById('themeToggle');\n".
+	         "if(!btn) return;\n".
+	         "function icon(){var t=document.documentElement.dataset.theme||'light';btn.textContent=(t==='dark'?'☀️':'🌙');}\n".
+	         "icon();\n".
+	         "btn.addEventListener('click',function(){\n".
+	         "var t=document.documentElement.dataset.theme||'light';\n".
+	         "t=(t==='dark'?'light':'dark');\n".
+	         "__gdySetInstallerTheme(t);\n".
+	         "icon();\n".
+	         "});\n".
+	         "})();</script></body></html>";
+	}
 
 /**
  * Split SQL into statements safely:

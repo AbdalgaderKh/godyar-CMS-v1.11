@@ -84,8 +84,13 @@ if (!function_exists('gdy_load_settings')) {
     /**
      * Return associative array of settings.
      */
-    function gdy_load_settings(PDO $pdo, bool $forceRefresh = false): array {
+    function gdy_load_settings($pdo, bool $forceRefresh = false): array {
         static $cache = null;
+
+        // If DB is not available (e.g., during install or misconfigured env), return an empty settings array.
+        if (!($pdo instanceof PDO)) {
+            return [];
+        }
 
         if ($cache !== null && !$forceRefresh) {
             return $cache;
@@ -110,7 +115,7 @@ if (!function_exists('gdy_load_settings')) {
  * Backward-compatibility alias.
  * بعض أجزاء النظام القديمة تستخدم site_settings_load().
  */
-function site_settings_load(PDO $pdo, bool $forceRefresh = false): array {
+function site_settings_load($pdo, bool $forceRefresh = false): array {
     return gdy_load_settings($pdo, $forceRefresh);
 }
 
@@ -118,14 +123,16 @@ if (!function_exists('site_setting')) {
     /**
      * Fetch a single setting value (string). Returns $default if missing.
      */
-    function site_setting(PDO $pdo, string $key, $default = ''): string {
+    function site_setting($pdo, string $key, $default = ''): string {
+        if (!($pdo instanceof PDO)) { return (string)$default; }
         $all = gdy_load_settings($pdo, false);
         return array_key_exists($key, $all) ? (string)$all[$key] : (string)$default;
     }
 }
 
 if (!function_exists('site_settings_all')) {
-    function site_settings_all(PDO $pdo): array {
+    function site_settings_all($pdo): array {
+        if (!($pdo instanceof PDO)) { return []; }
         return gdy_load_settings($pdo, false);
     }
 }
@@ -134,7 +141,8 @@ if (!function_exists('site_settings_set')) {
     /**
      * Set a setting key to a string value (upsert).
      */
-    function site_settings_set(PDO $pdo, string $key, string $value): bool {
+    function site_settings_set($pdo, string $key, string $value): bool {
+        if (!($pdo instanceof PDO)) { return false; }
         $key = trim($key);
         if ($key === '') { return false; }
 
@@ -161,5 +169,123 @@ if (!function_exists('site_settings_set')) {
         } catch (Throwable $e) {
             return false;
         }
+    }
+}
+
+// -------------------------------------------------------------
+// Frontend options helper
+// -------------------------------------------------------------
+// بعض أجزاء الواجهة (PageController/ContactController/صفحات قديمة)
+// تعتمد على دالة موحّدة لتجهيز متغيرات الثيم/الهوية.
+// كانت مفقودة في بعض النسخ بعد التنظيف، ما يسبب Fatal Error.
+
+if (!function_exists('gdy_prepare_frontend_options')) {
+    /**
+     * Build a normalized set of frontend variables from the settings array.
+     * This function must be side-effect free (no DB calls) and safe to call
+     * from any controller.
+     *
+     * @param array<string,string> $settings
+     * @return array<string,mixed>
+     */
+    function gdy_prepare_frontend_options($settings = null): array {
+        if (!is_array($settings)) {
+            // Backward compatible: allow calling with no args.
+            try {
+                $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
+            } catch (Throwable $e) {
+                $pdo = null;
+            }
+            $settings = ($pdo instanceof PDO) ? gdy_load_settings($pdo, false) : [];
+        }
+        // Base URL
+        $baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : (defined('GODYAR_BASE_URL') ? (string)GODYAR_BASE_URL : '');
+        if ($baseUrl === '') { $baseUrl = '/'; }
+
+        // Language
+        $lang = function_exists('gdy_lang') ? (string)gdy_lang() : (string)($settings['site_lang'] ?? $settings['lang'] ?? 'ar');
+        $lang = trim($lang);
+        if ($lang === '') { $lang = 'ar'; }
+
+        // Identity
+        $siteName    = (string)($settings['site_name'] ?? $settings['settings.site_name'] ?? 'Godyar');
+        $siteTagline = (string)($settings['site_tagline'] ?? $settings['settings.site_tagline'] ?? '');
+        $siteLogo    = (string)($settings['site_logo'] ?? $settings['settings.site_logo'] ?? '');
+
+        // Theme / palette
+        $frontPreset = (string)($settings['front_preset'] ?? $settings['settings.front_preset'] ?? 'default');
+        $frontPreset = strtolower(trim($frontPreset)) ?: 'default';
+
+        $primaryColor = (string)($settings['primary_color']
+            ?? $settings['theme_primary']
+            ?? $settings['settings.primary_color']
+            ?? '#111111');
+
+        // Force default palette unless explicitly custom
+        if ($frontPreset !== 'custom') {
+            $primaryColor = '#111111';
+        }
+
+        $primaryDark = (string)($settings['primary_dark']
+            ?? $settings['theme_primary_dark']
+            ?? $settings['settings.primary_dark']
+            ?? '');
+
+        if ($primaryDark === '') {
+            $hex = ltrim($primaryColor, '#');
+            if (preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+                $r = max(0, hexdec(substr($hex, 0, 2)) - 40);
+                $g = max(0, hexdec(substr($hex, 2, 2)) - 40);
+                $b = max(0, hexdec(substr($hex, 4, 2)) - 40);
+                $primaryDark = sprintf('#%02x%02x%02x', $r, $g, $b);
+            } else {
+                $primaryDark = '#000000';
+            }
+        }
+
+        $primaryRgb = '17, 17, 17';
+        try {
+            $hex = ltrim($primaryColor, '#');
+            if (preg_match('/^[0-9a-f]{6}$/i', $hex)) {
+                $r = hexdec(substr($hex, 0, 2));
+                $g = hexdec(substr($hex, 2, 2));
+                $b = hexdec(substr($hex, 4, 2));
+                $primaryRgb = $r . ', ' . $g . ', ' . $b;
+            }
+        } catch (Throwable $e) {
+            $primaryRgb = '17, 17, 17';
+        }
+
+        $themeClass = (string)($settings['theme_class'] ?? 'theme-default');
+        if ($themeClass === '') { $themeClass = 'theme-default'; }
+
+        // Header background
+        $headerBgEnabled = ((string)($settings['theme_header_bg_enabled'] ?? $settings['settings.theme_header_bg_enabled'] ?? '0') === '1');
+
+        // Search placeholder
+        $searchPlaceholder = (string)($settings['search_placeholder'] ?? $settings['settings.search_placeholder'] ?? 'ابحث...');
+
+        // Navigation base URL (language-prefixed) for page routes
+        $navBaseUrl = rtrim($baseUrl, '/') . '/' . trim($lang, '/');
+        if ($baseUrl === '/' || $baseUrl === '') { $navBaseUrl = '/' . trim($lang, '/'); }
+
+        return [
+            // commonly extracted variables
+            'baseUrl'            => $baseUrl,
+            'navBaseUrl'         => $navBaseUrl,
+            '_gdyLang'           => $lang,
+            'siteName'           => $siteName,
+            'siteTagline'        => $siteTagline,
+            'siteLogo'           => $siteLogo,
+            'frontPreset'        => $frontPreset,
+            'primaryColor'       => $primaryColor,
+            'primaryDark'        => $primaryDark,
+            'primaryRgb'         => $primaryRgb,
+            'themeClass'         => $themeClass,
+            'headerBgEnabled'    => $headerBgEnabled,
+            'searchPlaceholder'  => $searchPlaceholder,
+            // keep raw settings available for templates that read it directly
+            'settings'           => $settings,
+        ];
     }
 }

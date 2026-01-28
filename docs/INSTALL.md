@@ -1,4 +1,4 @@
-# Godyar CMS v1.09 — Installation Guide
+# Godyar CMS v1.11 — Installation Guide
 
 > This repository is a cleaned, GitHub-ready distribution intended for deployment on shared hosting (cPanel) or a VPS.
 
@@ -13,7 +13,7 @@ Upload the repository contents into your web root (typically `public_html/`).
 
 ## 2) Create database
 From cPanel:
-1. Create a database (e.g. `cpuser_myar`)
+1. Create a database (e.g. `your_db_name`)
 2. Create a DB user and assign it **ALL PRIVILEGES**
 3. Note the DB host: usually `localhost`
 
@@ -31,8 +31,8 @@ APP_URL=https://example.com
 
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=cpuser_myar
-DB_USERNAME=cpuser_dbuser
+DB_DATABASE=your_db_name
+DB_USERNAME=your_db_user
 DB_PASSWORD=YOUR_PASSWORD
 DB_CHARSET=utf8mb4
 DB_COLLATION=utf8mb4_unicode_ci

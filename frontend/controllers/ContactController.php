@@ -43,6 +43,18 @@ if (!function_exists('gdy_has_column')) {
 // تحميل الإعدادات والخيارات الأمامية
 $settings        = gdy_load_settings($pdo);
 $frontendOptions = gdy_prepare_frontend_options($settings);
+
+
+// Home/UI labels (avoid undefined variable warnings)
+$homeLatestTitle        = (string)($settings['home_latest_title'] ?? $settings['settings.home_latest_title'] ?? 'الأحدث');
+$homeFeaturedTitle      = (string)($settings['home_featured_title'] ?? $settings['settings.home_featured_title'] ?? 'مختارات');
+$homeTabsTitle          = (string)($settings['home_tabs_title'] ?? $settings['settings.home_tabs_title'] ?? 'الأقسام');
+$homeMostReadTitle      = (string)($settings['home_most_read_title'] ?? $settings['settings.home_most_read_title'] ?? 'الأكثر قراءة');
+$homeMostCommentedTitle = (string)($settings['home_most_commented_title'] ?? $settings['settings.home_most_commented_title'] ?? 'الأكثر تفاعلاً');
+$homeRecommendedTitle   = (string)($settings['home_recommended_title'] ?? $settings['settings.home_recommended_title'] ?? 'موصى به');
+$carbonBadgeText        = (string)($settings['carbon_badge_text'] ?? $settings['settings.carbon_badge_text'] ?? '');
+$showCarbonBadge        = ((string)($settings['show_carbon_badge'] ?? $settings['settings.show_carbon_badge'] ?? '0') === '1');
+
 extract($frontendOptions, EXTR_OVERWRITE);
 
 // حالة المستخدم
@@ -81,10 +93,11 @@ if (function_exists('base_url')) {
  * معالجة إرسال النموذج (POST)
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name    = trim((string)($_POST['name'] ?? ''));
-    $email   = trim((string)($_POST['email'] ?? ''));
-    $subject = trim((string)($_POST['subject'] ?? ''));
-    $message = trim((string)($_POST['message'] ?? ''));
+    $name    = gdy_clean_user_text($_POST['name'] ?? '', 190);
+    $email   = strtolower(trim((string)($_POST['email'] ?? '')));
+    $email   = gdy_strip_controls($email);
+    $subject = gdy_clean_user_text($_POST['subject'] ?? '', 255);
+    $message = gdy_clean_user_text($_POST['message'] ?? '', 4000);
 
     $errors = [];
 

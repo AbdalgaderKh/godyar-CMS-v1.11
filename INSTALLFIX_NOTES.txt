@@ -15,7 +15,7 @@ Godyar CMS v1.1.9 - Install Fix Pack (Jan 14, 2026)
 
 2) تحديث schema_core.sql:
    - إضافة جدول opinion_authors (المطلوب للواجهة والصفحة الرئيسية).
-   - إضافة جدول comments (لتفادي أعطال صفحات/مزايا التعليقات).
+   - إضافة جدول news_comments (لتفادي أعطال صفحات/مزايا التعليقات).
    - إضافة العمود opinion_author_id في news مع فهرس.
    - إصلاح DEFAULT false في حقول INT إلى 0 (sort_order و view_count).
 

@@ -2,17 +2,16 @@
   Newsletter subscribe (safe, minimal)
   - Enhances a form if present; does not break if endpoint differs.
 */
-(() => {
-  'use strict';
 
-  const form = document.querySelector('#newsletter-form') || document.querySelector('form[data-newsletter]');
-  if (!form) return;
+'use strict';
 
+const form = document.querySelector('#newsletter-form') || document.querySelector('form[data-newsletter]');
+if (form) {
   const msgEl = document.querySelector('[data-newsletter-message]') || null;
 
-  function setMsg(text) {
+  const setMsg = (text) => {
     if (msgEl) msgEl.textContent = text;
-  }
+  };
 
   form.addEventListener('submit', async (e) => {
     // Prefer AJAX, but fall back to normal submit if it fails
@@ -25,19 +24,19 @@
         method: form.method || 'POST',
         credentials: 'same-origin',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        body: fd,
+        body: fd
       });
 
       if (!res.ok) throw new Error('Request failed');
       setMsg('تم الاستلام.');
       form.reset();
-    } catch (_err) {
+    } catch (_) {
       // Allow server-side form handling
       try {
         form.submit();
-      } catch (_ignored) {
+      } catch (_) {
         setMsg('تعذر الإرسال.');
       }
     }
   });
-})();
+}

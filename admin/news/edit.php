@@ -343,7 +343,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					$basePath = $baseUrl !== '' ? rtrim((string)(parse_url($baseUrl, PHP_URL_PATH) ?: ''), '/') : '';
 					$urlPrefix = ($basePath !== '' ? $basePath : '') . '/uploads/news';
 
-						$destDir = dirname(__DIR__, 2) . '/uploads/news';
+						$rootPath = defined('ROOT_PATH') ? (string)ROOT_PATH : (string)dirname(__DIR__, 2);
+						$rootPath = rtrim($rootPath, "/\\");
+						$destDir = $rootPath . '/uploads/news';
 						if (!is_dir($destDir)) {
 							@mkdir($destDir, 0755, true);
 						}
@@ -367,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						'url_prefix'   => $urlPrefix,
 					]);
 
-					if (!empty($res['ok'])) {
+					if (!empty($res['success'])) {
 						$fileName = basename((string)($res['abs_path'] ?? ''));
 						if ($fileName !== '') {
 							$imagePath = 'uploads/news/' . $fileName;
@@ -379,7 +381,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						$errors['image'] = (string)($res['error'] ?? __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.'));
 					}
 				} catch (Throwable $e) {
-					$errors['image'] = __('t_14a4dd5d81', 'حدث خطأ أثناء رفع الصورة. حاول مرة أخرى.');
+					// Preserve any specific uploader error already set; otherwise expose a safe message and log details.
+					error_log('[News Edit Upload] ' . $e->getMessage());
+					if (empty($errors['image'])) {
+						$errors['image'] = (string)$e->getMessage();
+					}
 				}
 				} else {
 					$code = (int)($_FILES['image']['error'] ?? 0);

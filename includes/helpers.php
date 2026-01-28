@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 if (function_exists('h') === false) {
     function h($v): string {
-        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }
 
@@ -234,6 +234,96 @@ if (function_exists('gdy_ai_glossary_annotate') === false) {
             // نستبدل أول 3 مرات فقط من كل مصطلح
             $html = preg_replace($pattern, $replacement, $html, 3);
         }
+
+        return $html;
+    }
+}
+
+
+if (function_exists('u') === false) {
+    /**
+     * Escape + validate URL to mitigate javascript: / data: injection in href/src.
+     * Allows: relative URLs, http/https, mailto, tel.
+     * Returns '#' for unsafe values.
+     */
+    function u($url): string {
+        $url = (string)$url;
+        // Remove ASCII control characters
+        $url = preg_replace('/[\x00-\x1F\x7F]/u', '', $url) ?? '';
+        $trim = trim($url);
+        if ($trim === '') {
+            return '#';
+        }
+
+        // Relative URL (starts with / or no scheme)
+        if (preg_match('/^(\/|\.|\?|#)/', $trim) || !preg_match('/^[a-zA-Z][a-zA-Z0-9+.-]*:/', $trim)) {
+            return h($trim);
+        }
+
+        $parts = parse_url($trim);
+        $scheme = strtolower((string)($parts['scheme'] ?? ''));
+        if (in_array($scheme, ['http','https','mailto','tel'], true)) {
+            return h($trim);
+        }
+
+        return '#';
+    }
+}
+
+if (function_exists('gdy_jsonld_safe') === false) {
+    /**
+     * Safely output JSON-LD inside <script type="application/ld+json">.
+     * Prevents breaking out of the script tag.
+     */
+    function gdy_jsonld_safe($json): string {
+        $json = (string)$json;
+        // Prevent </script> injection
+        $json = str_ireplace('</script', '<\/script', $json);
+        return $json;
+    }
+}
+
+
+
+if (function_exists('gdy_sanitize_basic_html') === false) {
+    /**
+     * Minimal HTML sanitizer for user-generated / CMS content when full HTML is not required.
+     * This is NOT a replacement for a dedicated HTML purifier, but mitigates obvious XSS.
+     */
+    function gdy_sanitize_basic_html($html): string {
+        $html = (string)$html;
+
+        // Remove script/style blocks
+        $html = preg_replace('#<(script|style)\b[^>]*>.*?</\1>#is', '', $html) ?? '';
+
+        // Allow a conservative set of tags
+        $allowed = '<p><br><b><strong><i><em><u><small><span><div><blockquote><ul><ol><li><h1><h2><h3><h4><h5><h6><a><img>';
+        $html = strip_tags($html, $allowed);
+
+        // Remove on* event handlers and style attributes
+        $html = preg_replace('/\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $html) ?? '';
+        $html = preg_replace('/\s+style\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $html) ?? '';
+
+        // Neutralize javascript: and data: URLs in href/src
+        $html = preg_replace_callback('/\s+(href|src)\s*=\s*("([^"]*)"|\'([^\']*)\')/i', function($m) {
+            $attr = strtolower($m[1]);
+            $val  = $m[3] !== '' ? $m[3] : ($m[4] ?? '');
+            $val  = preg_replace('/[\x00-\x1F\x7F]/u', '', (string)$val) ?? '';
+            $valt = trim($val);
+            if ($valt === '') {
+                return ' ' . $attr . '="#"';
+            }
+            // allow relative or safe schemes only
+            if (preg_match('/^(\/|\.|\?|#)/', $valt) || !preg_match('/^[a-zA-Z][a-zA-Z0-9+.-]*:/', $valt)) {
+                return ' ' . $attr . '="' . htmlspecialchars($valt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
+            }
+            $parts = parse_url($valt);
+            $scheme = strtolower((string)($parts['scheme'] ?? ''));
+            if (in_array($scheme, ['http','https','mailto','tel'], true)) {
+                return ' ' . $attr . '="' . htmlspecialchars($valt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
+            }
+            return ' ' . $attr . '="#"';
+        }, $html) ?? $html;
 
         return $html;
     }

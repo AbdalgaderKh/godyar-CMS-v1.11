@@ -1,24 +1,22 @@
-declare(strict_types=1);
+<?php
 declare(strict_types=1);
 
 // /godyar/public/news/view.php
 require_once __DIR__ . '/../../includes/bootstrap.php';
 require_once __DIR__ . '/../../includes/front_ads.php';
 
-$pdo = gdy_pdo_safe();
+$pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 
 if (!function_exists('h')) {
-    function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+    function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
 }
 
-$id   = isset($_GET['id'])   ? (int)$_GET['id']   : 0;
+$id   = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
 
 $news = null;
+
 if ($pdo instanceof PDO) {
-$news = null;
-if ($pdo instanceof PDO) {
-    $stmt = null;
     try {
         if ($slug !== '') {
             $stmt = $pdo->prepare("SELECT * FROM news WHERE slug = :slug AND status='published' LIMIT 1");
@@ -26,10 +24,14 @@ if ($pdo instanceof PDO) {
         } elseif ($id > 0) {
             $stmt = $pdo->prepare("SELECT * FROM news WHERE id = :id AND status='published' LIMIT 1");
             $stmt->execute([':id' => $id]);
+        } else {
+            $stmt = null;
         }
+
         $news = $stmt ? $stmt->fetch(PDO::FETCH_ASSOC) : null;
     } catch (Throwable $e) {
         error_log('[Front News View] ' . $e->getMessage());
+        $news = null;
     }
 }
 

@@ -110,14 +110,28 @@ final class TopicController
                 elseif (in_array('created_at', $names, true)) $dateCol = 'created_at';
             }
 
-            $order = $byViews ? "n.views DESC, n.id DESC" : "n.$dateCol DESC, n.id DESC";
+            // ORDER BY is internal-only, but we still harden it by whitelisting columns.
+$dateCol = preg_match('/^[A-Za-z0-9_]+$/', $dateCol) ? $dateCol : 'id';
+$allowedDateCols = ['publish_at','published_at','created_at','id'];
+if (!in_array($dateCol, $allowedDateCols, true)) {
+    $dateCol = 'id';
+}
 
-            $sql = "SELECT n.id, n.title, n.slug, n.image, n.views, n.publish_at, n.published_at, n.created_at
-                FROM news_tags nt
-                JOIN news n ON n.id = nt.news_id
-                WHERE nt.tag_id = :tid
-                ORDER BY $order
-                LIMIT $limit";
+$orderSafe = $byViews ? "n.views DESC, n.id DESC" : ("n." . $dateCol . " DESC, n.id DESC");
+
+// Quote identifier defensively when possible (for the date column only)
+if (class_exists('Godyar' . chr(92) . 'DB') && method_exists('Godyar' . chr(92) . 'DB', 'quoteIdent')) {
+    $DBClass = 'Godyar' . chr(92) . 'DB';
+    $quoted = $DBClass::quoteIdent('n.' . $dateCol);
+    $orderSafe = $byViews ? "n.views DESC, n.id DESC" : ($quoted . " DESC, n.id DESC");
+}
+
+$sql = "SELECT n.id, n.title, n.slug, n.image, n.views, n.publish_at, n.published_at, n.created_at
+    FROM news_tags nt
+    JOIN news n ON n.id = nt.news_id
+    WHERE nt.tag_id = :tid
+    ORDER BY {$orderSafe}
+    LIMIT $limit";
             $st = $this->pdo->prepare($sql);
             $st->execute([':tid'=>$tagId]);
             return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];

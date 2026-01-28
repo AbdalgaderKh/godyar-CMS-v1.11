@@ -142,14 +142,14 @@ $defaults = [
     'DB_DRIVER'      => 'auto',
     'DB_HOST'        => 'localhost',
     'DB_PORT'        => '3306',
-    'DB_DATABASE'    => 'geqzylcq_myar',
-    'DB_USERNAME'    => 'geqzylcq_meera',
-    'DB_PASSWORD'    => 'Myar2018@',
+    'DB_DATABASE'    => '',
+    'DB_USERNAME'    => '',
+    'DB_PASSWORD'    => '',
     'DB_CHARSET'     => 'utf8mb4',
     'DB_COLLATION'   => 'utf8mb4_unicode_ci',
     'DB_DSN'         => '',
     'TIMEZONE'       => 'Asia/Riyadh',
-    'ENCRYPTION_KEY' => '311a8cea10b1b836d566b3e082a0d9570ffb29abd6e387925a61b7dd424e6eae',
+    'ENCRYPTION_KEY' => '',
 ];
 
 if (!function_exists('gody_env_db')) {
@@ -186,6 +186,24 @@ foreach ($defaults as $key => $def) {
             define($key, (string)$val);
         }
     }
+}
+
+
+
+// -------------------------------------------------
+// Backwards-compatible DB constant aliases
+// Many older deployments set DB_DATABASE / DB_USERNAME / DB_PASSWORD.
+// Newer code may reference DB_NAME / DB_USER / DB_PASS.
+// Define aliases so both styles work reliably.
+// -------------------------------------------------
+if (!defined('DB_NAME') && defined('DB_DATABASE')) {
+    define('DB_NAME', (string)DB_DATABASE);
+}
+if (!defined('DB_USER') && defined('DB_USERNAME')) {
+    define('DB_USER', (string)DB_USERNAME);
+}
+if (!defined('DB_PASS') && defined('DB_PASSWORD')) {
+    define('DB_PASS', (string)DB_PASSWORD);
 }
 
 // Build DB_DSN if empty

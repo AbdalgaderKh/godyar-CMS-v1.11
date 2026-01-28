@@ -15,7 +15,9 @@ $items = $items ?? [];
 $page  = (int)($page ?? 1);
 $pages = (int)($pages ?? 1);
 
-$baseUrl = (!empty($baseUrl) ? $baseUrl : (function_exists('base_url')) ? rtrim((string)base_url(), '/') : '');
+$baseUrl = !empty($baseUrl)
+    ? (string) $baseUrl
+    : (function_exists('base_url') ? rtrim((string) base_url(), '/') : '');
 
 $name = (string)($tag['name'] ?? '');
 $slug = (string)($tag['slug'] ?? '');
@@ -41,7 +43,7 @@ if ($cover !== '') {
           <div class="text-muted small mb-1"><?php echo h(__('الموضوع')); ?></div>
           <h1 class="h4 mb-0">#<?php echo h($name); ?></h1>
         </div>
-        <a class="btn btn-outline-light" href="<?php echo h($baseUrl . '/tag/' . rawurlencode((empty($slug) === false) ?: $name)); ?>">
+	        <a class="btn btn-outline-light" href="<?php echo h($baseUrl . '/tag/' . rawurlencode($slug !== '' ? $slug : $name)); ?>">
           <?php echo h(__('عرض الوسم الكلاسيكي')); ?>
         </a>
       </div>

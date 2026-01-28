@@ -69,7 +69,7 @@ if ($pdo instanceof PDO) {
         $hasNews       = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'news') : false;
         $hasCategories = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'categories') : false;
         $hasUsers      = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'users') : false;
-        $hasComments   = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'comments') : false;
+        $hasComments   = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'news_comments') : false;
         $hasContact    = function_exists('gdy_db_table_exists') ? gdy_db_table_exists($pdo, 'contact_messages') : false;
 
         // الإحصائيات الأساسية للأخبار
@@ -151,10 +151,10 @@ if ($pdo instanceof PDO) {
         }
 
         if ($hasComments) {
-            $stats['comments'] = (int) $pdo->query("SELECT COUNT(*) FROM comments")->fetchColumn();
+            $stats['comments'] = (int) $pdo->query("SELECT COUNT(*) FROM news_comments")->fetchColumn();
             // التعليقات المضافة اليوم (لو حقل created_at موجود)
             try {
-                $stats['today_comments'] = (int) $pdo->query("SELECT COUNT(*) FROM comments WHERE DATE(created_at) = CURRENT_DATE")->fetchColumn();
+                $stats['today_comments'] = (int) $pdo->query("SELECT COUNT(*) FROM news_comments WHERE DATE(created_at) = CURRENT_DATE")->fetchColumn();
             } catch (Throwable $e) {
                 error_log('[Dashboard] today_comments error: ' . $e->getMessage());
             }

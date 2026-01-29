@@ -4,6 +4,10 @@ declare(strict_types=1);
 // Same identity as the rest of the site
 $__header = __DIR__ . '/partials/header.php';
 $__footer = __DIR__ . '/partials/footer.php';
+
+// ✅ إضافة علامة أن هذه صفحة بحث (للفوتر)
+$GLOBALS['isSearchPage'] = true;
+
 if (is_file($__header) === true) { require $__header; }
 
 if (function_exists('h') === false) {
@@ -35,7 +39,7 @@ $baseUrl = rtrim((string)($baseUrl ?? ''), '/');
 
 // Full current URL for copy/share
 $https = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
-    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolayer((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
     || (!empty($_SERVER['SERVER_PORT']) && (string)($_SERVER['SERVER_PORT']) === '443');
 $scheme = $https ? 'https' : 'http';
 $currentUrl = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '');

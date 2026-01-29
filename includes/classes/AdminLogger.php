@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use PDO;
 
 /**
  * AdminLogger
@@ -9,9 +8,9 @@ use PDO;
  */
 class AdminLogger
 {
-    private ?PDO $pdo;
+    private ?\PDO $pdo;
 
-    public function __construct(?PDO $pdo = null)
+    public function __construct(?\PDO $pdo = null)
     {
         $this->pdo = $pdo;
     }
@@ -29,11 +28,11 @@ class AdminLogger
         ?string $entityType = null,
         ?int $entityId = null,
         ?array $extra = null,
-        ?PDO $pdo = null
+        ?\PDO $pdo = null
     ): void {
         // Support DI (preferred): pass $pdo from caller.
         // Backward compatibility: if not passed, we use the unified DB layer.
-        if (($pdo instanceof PDO) === false) {
+        if (($pdo instanceof \PDO) === false) {
             try {
                 $pdo = class_exists('DB') && method_exists('DB', 'pdo') ? DB::pdo() : null;
             } catch (Throwable $e) {
@@ -42,7 +41,7 @@ class AdminLogger
             }
         }
 
-        if (($pdo instanceof PDO) === false) {
+        if (($pdo instanceof \PDO) === false) {
             return;
         }
 

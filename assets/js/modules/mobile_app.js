@@ -1,31 +1,44 @@
 /*
-  Mobile app shell behaviors (safe, minimal)
-  - toggles mobile menu
-  - closes overlays on navigation
-*/
+ * Mobile UI helpers (idempotent)
+ *
+ * Defensive wrapping prevents duplicate script inclusion from throwing
+ * top-level redeclaration errors in some deployments.
+ */
 
-'use strict';
+(function () {
+  window.__godyar_js_loaded = window.__godyar_js_loaded || {};
+  if (window.__godyar_js_loaded['mobile_app']) return;
+  window.__godyar_js_loaded['mobile_app'] = true;
 
-const qs = (selector, rootEl = document) => rootEl.querySelector(selector);
+  if (window.__gdyMobileAppLoaded) return;
+  window.__gdyMobileAppLoaded = true;
 
-const menuToggleBtn =
-  qs('[data-mobile-menu-toggle]') ||
-  qs('.mobile-menu-toggle') ||
-  document.getElementById('mobileMenuToggle');
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
 
-const menuEl = qs('[data-mobile-menu]') || document.getElementById('mobileMenu') || qs('.mobile-menu');
+  ready(function () {
+    // Toggle mobile navigation
+    var menuBtn = document.querySelector('.mobile-menu-btn');
+    var mobileNav = document.querySelector('.mobile-nav');
 
-if (menuToggleBtn && menuEl) {
-  menuToggleBtn.addEventListener('click', () => {
-    menuEl.classList.toggle('is-open');
-    menuToggleBtn.classList.toggle('is-open');
+    if (menuBtn && mobileNav) {
+      menuBtn.addEventListener('click', function () {
+        mobileNav.classList.toggle('active');
+      });
+    }
+
+    // Back-to-top
+    var backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+      backToTop.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   });
-}
-
-// Close menu when clicking any link inside it
-menuEl?.addEventListener('click', (e) => {
-  const anchorEl = e.target?.closest?.('a') || null;
-  if (!anchorEl) return;
-  menuEl.classList.remove('is-open');
-  menuToggleBtn?.classList.remove('is-open');
-});
+})();

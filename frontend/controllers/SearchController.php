@@ -3,6 +3,9 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
+// ✅ إضافة علامة أن هذه صفحة بحث (للفوتر)
+$GLOBALS['isSearchPage'] = true;
+
 // PDO fallback (لتجنب متغير غير معرف في التحليلات الثابتة)
 if (!isset($pdo) || !($pdo instanceof \PDO)) {
   $pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
@@ -29,4 +32,10 @@ $footer_links = json_decode($settings['menu_footer'] ?? '[]', true) ?: [];
 $social_links = json_decode($settings['social_links']?? '[]', true) ?: [];
 $footer_about = $settings['footer_about'] ?? '';
 
-require __DIR__ . '/../views/search.php';
+// نفّذ منطق البحث الفعلي (فلترة/صفحات/عدد النتائج) ثم اعرض القالب.
+// الملف التالي يجهّز المتغيرات ($q, $results, $pagination, ...) ويستدعي view/search.php.
+if (!headers_sent()) {
+  // Use this header to confirm which build is deployed.
+  header('X-Godyar-Build: godyar_CMS_v1.11_CLEAN_SECURE_v10');
+}
+require __DIR__ . '/../news/search.php';

@@ -1,42 +1,65 @@
 /*
-  Newsletter subscribe (safe, minimal)
-  - Enhances a form if present; does not break if endpoint differs.
-*/
+ * Newsletter subscribe (idempotent)
+ *
+ * This script may be included on more than one layout/partial.
+ * To avoid "Identifier has already been declared" errors we:
+ *  - avoid top-level const/let
+ *  - guard against double-initialization
+ */
 
-'use strict';
+(function () {
+  window.__godyar_js_loaded = window.__godyar_js_loaded || {};
+  if (window.__godyar_js_loaded['newsletter_subscribe']) return;
+  window.__godyar_js_loaded['newsletter_subscribe'] = true;
 
-const form = document.querySelector('#newsletter-form') || document.querySelector('form[data-newsletter]');
-if (form) {
-  const msgEl = document.querySelector('[data-newsletter-message]') || null;
+  if (window.__gdyNewsletterSubscribeLoaded) return;
+  window.__gdyNewsletterSubscribeLoaded = true;
 
-  const setMsg = (text) => {
-    if (msgEl) msgEl.textContent = text;
-  };
+  function init() {
+    var form = document.getElementById('newsletter-form');
+    if (!form) return;
 
-  form.addEventListener('submit', async (e) => {
-    // Prefer AJAX, but fall back to normal submit if it fails
-    e.preventDefault();
-    setMsg('...');
+    // If the same DOM is rendered twice (edge-cases), don't bind twice
+    if (form.dataset.gdyBound === '1') return;
+    form.dataset.gdyBound = '1';
 
-    try {
-      const fd = new FormData(form);
-      const res = await fetch(form.action || window.location.href, {
-        method: form.method || 'POST',
-        credentials: 'same-origin',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        body: fd
-      });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var emailInput = document.getElementById('newsletter-email');
+      var message = document.getElementById('newsletter-message');
 
-      if (!res.ok) throw new Error('Request failed');
-      setMsg('تم الاستلام.');
-      form.reset();
-    } catch (err) {
-      // Allow server-side form handling
-      try {
-        form.submit();
-      } catch (submitErr) {
-        setMsg('تعذر الإرسال.');
+      if (!emailInput || !message) return;
+
+      var email = (emailInput.value || '').trim();
+      if (!email) {
+        message.textContent = 'يرجى إدخال بريد إلكتروني صحيح.';
+        return;
       }
-    }
-  });
-}
+
+      fetch('/ajax/newsletter_subscribe.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ email: email }).toString(),
+        credentials: 'same-origin'
+      })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          if (data && data.success) {
+            message.textContent = 'تم الاشتراك بنجاح!';
+            emailInput.value = '';
+          } else {
+            message.textContent = (data && data.message) ? data.message : 'حدث خطأ. حاول مرة أخرى.';
+          }
+        })
+        .catch(function () {
+          message.textContent = 'تعذر الاتصال بالخادم. حاول مرة أخرى.';
+        });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

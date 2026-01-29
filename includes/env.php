@@ -255,14 +255,19 @@ if (defined('TIMEZONE') && TIMEZONE) {
 }
 
 // Error reporting
+$eDeprecated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
+$eUserDeprecated = defined('E_USER_DEPRECATED') ? E_USER_DEPRECATED : 0;
+$deprecatedMask = $eDeprecated | $eUserDeprecated;
+
 if (defined('APP_DEBUG') && APP_DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
-    error_reporting(E_ALL);
+    // Keep debug visibility, but silence deprecation noise in logs.
+    error_reporting(E_ALL & ~$deprecatedMask);
 } else {
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
-    error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
+    error_reporting(E_ALL & ~E_NOTICE & ~$deprecatedMask);
 }
 
 // PDO helpers

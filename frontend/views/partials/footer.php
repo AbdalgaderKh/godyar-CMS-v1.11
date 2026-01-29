@@ -69,6 +69,12 @@ $_gdy_baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '
 $_gdy_lang = function_exists('gdy_lang') ? (string)gdy_lang() : 'ar';
 $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 
+// ✅ تحديد ما إذا كانت هذه صفحة بحث
+$currentScript = $_SERVER['PHP_SELF'] ?? '';
+$isSearchPage = strpos($currentScript, 'search.php') !== false 
+    || isset($GLOBALS['isSearchPage']) 
+    || (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], '/ar/search') !== false);
+
 ?>
 
       </div><!-- /.container من الهيدر -->
@@ -786,13 +792,22 @@ $_gdy_navBaseUrl = rtrim($_gdy_baseUrl, '/') . '/' . trim($_gdy_lang, '/');
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/search.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/notifications.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/push_prompt.js?v=20260107_1" defer></script>
+
+<!-- ✅ التحقق: إذا لم تكن صفحة بحث نحمّل السكربتات، وإلا نستبعدها -->
+<?php if (!$isSearchPage): ?>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_app.js" defer></script>
+<?php endif; ?>
+
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_tabbar.js?v=20260107_5" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_search_overlay.js" defer></script>
 
 <script src="<?php echo h($baseUrl); ?>/assets/js/ui-enhancements.js" defer></script>
 <script src="<?php echo h($baseUrl); ?>/assets/js/lazy-images.js" defer></script>
+
+<!-- ✅ التحقق: إذا لم تكن صفحة بحث نحمّل السكربتات، وإلا نستبعدها -->
+<?php if (!$isSearchPage): ?>
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/newsletter_subscribe.js" defer></script>
+<?php endif; ?>
 
 <!-- Mobile push enable prompt (shows only if push enabled + no subscription) -->
 <div id="gdy-push-toast" class="gdy-push-toast" role="dialog" aria-live="polite" aria-label="Push Prompt">

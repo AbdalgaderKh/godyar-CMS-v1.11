@@ -1,19 +1,22 @@
-# Changelog
+# Godyar CMS v1.11.1
+Release date: 2026-01-29
 
-All notable changes to this repository are documented in this file.
+## Fixed
+- Search engine logic bug (multi-term queries)
+- Incorrect SQL WHERE clause generation
 
-## [Unreleased]
-- (Reserved)
+## Security
+- Hardened output against XSS
+- Improved parameter binding safety (SQL Injection prevention)
+- Prepared codebase for CSRF token integration
 
-## [1.12.0-clean.1] - 2026-01-21
+## Maintenance
+- Removed demo content
+- Clean release build
+- Added VERSION metadata
+
+## v1.11.2 Hotfix – 2026-01-29
 ### Fixed
-- Stabilized admin bootstrap loading and i18n initialization (ensures `__()` is available across admin/frontend).
-- Resolved common PHP syntax issues discovered during hardening (unbalanced braces, stray tokens).
-- Normalized admin layout wrapper usage (`app_start/app_end`) to prevent overflow and sidebar overlap.
-
-### Security
-- Removed runtime artifacts from version control (logs, uploads, private `.env`).
-- Added safe defaults and hardening notes in installation guide.
-
-### Repo
-- Added GitHub Actions workflow to lint PHP files on push/PR.
+- Fixed PDO HY093 error in SearchController
+- Ensured SQL placeholders always match bindings
+- Stabilized search with empty or filtered terms

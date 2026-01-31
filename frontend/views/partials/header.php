@@ -1,6 +1,11 @@
 <?php
 // /frontend/views/partials/header.php
 
+
+// Prevent double header include (avoids duplicate scripts/styles & logo glitches)
+if (defined('GDY_HEADER_RENDERED')) { return; }
+define('GDY_HEADER_RENDERED', true);
+
 if (!function_exists('h')) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');

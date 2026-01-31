@@ -1,6 +1,11 @@
 <?php
 // /frontend/views/partials/footer.php
 
+
+// Prevent double footer include (avoids duplicate JS inclusion errors)
+if (defined('GDY_FOOTER_RENDERED')) { return; }
+define('GDY_FOOTER_RENDERED', true);
+
 if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -795,7 +800,7 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
 
 <!-- ✅ التحقق: إذا لم تكن صفحة بحث نحمّل السكربتات، وإلا نستبعدها -->
 <?php if (!$isSearchPage): ?>
-<script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_app.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_app.js?v=20260131_1" defer></script>
 <?php endif; ?>
 
 <script src="<?php echo h($baseUrl); ?>/assets/js/modules/mobile_tabbar.js?v=20260107_5" defer></script>
@@ -806,7 +811,7 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
 
 <!-- ✅ التحقق: إذا لم تكن صفحة بحث نحمّل السكربتات، وإلا نستبعدها -->
 <?php if (!$isSearchPage): ?>
-<script src="<?php echo h($baseUrl); ?>/assets/js/modules/newsletter_subscribe.js" defer></script>
+<script src="<?php echo h($baseUrl); ?>/assets/js/modules/newsletter_subscribe.js?v=20260131_1" defer></script>
 <?php endif; ?>
 
 <!-- Mobile push enable prompt (shows only if push enabled + no subscription) -->

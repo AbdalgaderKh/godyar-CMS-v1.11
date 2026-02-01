@@ -690,6 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div id="gdy-comments-msg" style="margin-bottom:10px; color:#b91c1c; display:none"></div>
 
     <form id="gdy-comment-form" method="post" action="" autocomplete="off">
+        <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
       <input type="hidden" name="news_id" value="<?php echo (int)($news['id'] ?? 0); ?>">
       <input type="hidden" name="parent_id" value="0">
 
@@ -795,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
       try{
         var res = await fetch(api('/api/v1/comments.php'), {
           method:'POST',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'application/json','X-CSRF-Token':(payload && payload.csrf_token ? payload.csrf_token : (document.querySelector('input[name=csrf_token]')?.value || ''))},
           body: JSON.stringify(payload),
           credentials:'same-origin'
         });

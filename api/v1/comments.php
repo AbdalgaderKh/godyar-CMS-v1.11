@@ -40,6 +40,10 @@ foreach ($bootstrapCandidates as $bf) {
     }
 }
 
+// Best-effort rate limiter (portable)
+$__rl = $ROOT_PATH . '/includes/rate_limit.php';
+if (is_file($__rl)) { require_once $__rl; }
+
 // Start session (for logged-in user detection)
 if (session_status() !== PHP_SESSION_ACTIVE) {
     if (function_exists('gdy_session_start')) {
@@ -50,6 +54,20 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     }
 }
 
+// Rate limit per method (portable, IP-based)
+if (function_exists('gody_rate_limit')) {
+    $bucket = 'api_comments:' . strtolower($method);
+    $max = 300; $window = 60; // default: 300 req/min for GET
+    if ($method === 'POST') { $max = 12; $window = 300; }
+    if (!gody_rate_limit($bucket, $max, $window)) {
+        $retry = function_exists('gody_rate_limit_retry_after') ? gody_rate_limit_retry_after($bucket) : $window;
+        http_response_code(429);
+        header('Retry-After: ' . max(1, $retry));
+        echo json_encode(['ok' => false, 'error' => 'rate_limited', 'retry_after' => max(1, $retry)], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+}
+
 // Resolve PDO
 $pdo = null;
 try {
@@ -57,7 +75,17 @@ try {
         $pdo = \Godyar\DB::pdo();
     } elseif (function_exists('gdy_pdo_safe')) {
         $pdo = gdy_pdo_safe();
-    } elseif (isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof \PDO) {
+    
+// CSRF for browser POSTs (if request carries session cookies)
+if ($method === 'POST' && function_exists('csrf_verify_any_or_die')) {
+    $sn = function_exists('session_name') ? session_name() : 'PHPSESSID';
+    $hasCookie = !empty($_COOKIE[$sn]) || (isset($_SERVER['HTTP_COOKIE']) && stripos((string)$_SERVER['HTTP_COOKIE'], $sn . '=') !== false);
+    if ($hasCookie) {
+        // Token must be provided via X-CSRF-Token header (recommended) or csrf_token field
+        csrf_verify_any_or_die();
+    }
+}
+} elseif (isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof \PDO) {
         $pdo = $GLOBALS['pdo'];
     }
 } catch (Throwable $e) {

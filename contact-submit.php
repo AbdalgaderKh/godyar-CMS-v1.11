@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
+require_once __DIR__ . '/includes/rate_limit.php';
 
 // Always ensure session is available (for CSRF helpers / flash messages)
 if (session_status() !== PHP_SESSION_ACTIVE && function_exists('gdy_session_start')) {
@@ -24,6 +25,19 @@ if (function_exists('csrf_verify_or_die')) {
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
     header('Location: contact.php');
     exit;
+}
+
+// Rate limit (portable)
+if (function_exists('gody_rate_limit')) {
+    if (!gody_rate_limit('contact', 8, 600)) { // 8 submissions / 10 minutes per IP
+        $retry = function_exists('gody_rate_limit_retry_after') ? gody_rate_limit_retry_after('contact') : 600;
+        http_response_code(429);
+        header('Retry-After: ' . max(1, $retry));
+        // preserve UX: redirect with a safe message
+        $_SESSION['flash_error'] = 'تم تجاوز الحد المسموح لإرسال الرسائل. حاول لاحقاً.';
+        header('Location: contact.php');
+        exit;
+    }
 }
 
 if (!function_exists('sanitize_value')) {

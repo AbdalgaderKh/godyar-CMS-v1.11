@@ -192,6 +192,35 @@ if (function_exists('csrf_verify_or_die') === false) {
             die('CSRF validation failed');
         }
     }
+
+
+/**
+ * CSRF verification that accepts token from POST field OR X-CSRF-Token header.
+ * Useful for JSON/AJAX endpoints.
+ */
+if (function_exists('csrf_verify_any_or_die') === false) {
+    function csrf_verify_any_or_die(string $fieldName = 'csrf_token'): void {
+        // Only protect state-changing requests
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        if (!in_array($method, ['POST','PUT','PATCH','DELETE'], true)) {
+            return;
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            gdy_session_start();
+        }
+
+        $token = (string)($_POST[$fieldName] ?? '');
+        if ($token === '') {
+            $token = (string)($_SERVER['HTTP_X_CSRF_TOKEN'] ?? $_SERVER['HTTP_X_CSRFTOKEN'] ?? '');
+        }
+
+        if (!verify_csrf_token($token)) {
+            http_response_code(403);
+            die('CSRF validation failed');
+        }
+    }
+}
 }
 
 /**

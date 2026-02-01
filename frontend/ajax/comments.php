@@ -7,6 +7,7 @@ declare(strict_types=1);
 // - vote up/down
 
 require_once __DIR__ . '/../../includes/bootstrap.php';
+require_once __DIR__ . '/../../includes/rate_limit.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -77,10 +78,48 @@ function normalize_body(string $body): string {
 // ACTION
 $action = (string)($_POST['action'] ?? $_GET['action'] ?? 'list');
 
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
+
+// Rate limit per action (portable, IP-based)
+if (function_exists('gody_rate_limit')) {
+    $bucket = 'comments:' . $action;
+    $max = 120; $window = 60; // default: 120 req/min
+    if ($action === 'add' || $action === 'edit' || $action === 'delete') { $max = 12; $window = 300; }
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
+    if ($action === 'vote') { $max = 60; $window = 60; }
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
+
+    if (!gody_rate_limit($bucket, $max, $window)) {
+        $retry = function_exists('gody_rate_limit_retry_after') ? gody_rate_limit_retry_after($bucket) : $window;
+        header('Retry-After: ' . max(1, $retry));
+        json_out(['ok' => false, 'error' => 'rate_limited', 'retry_after' => max(1, $retry)], 429);
+    }
+}
+
 // ---------------------------------------------------------------------
 // LIST
 // ---------------------------------------------------------------------
 if ($action === 'list') {
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
     $newsId = (int)($_GET['news_id'] ?? 0);
     if ($newsId <= 0) {
         json_out(['ok'=>false,'error'=>'news_id'], 400);
@@ -174,6 +213,12 @@ $me = current_member();
 // ADD / REPLY
 // ---------------------------------------------------------------------
 if ($action === 'add') {
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
     $newsId = (int)($_POST['news_id'] ?? 0);
     $parentId = (int)($_POST['parent_id'] ?? 0);
     $body = normalize_body((string)($_POST['body'] ?? ''));
@@ -225,6 +270,12 @@ if ($action === 'add') {
 // EDIT
 // ---------------------------------------------------------------------
 if ($action === 'edit') {
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
     $id = (int)($_POST['id'] ?? 0);
     $body = normalize_body((string)($_POST['body'] ?? ''));
     if ($id <= 0 || $body === '') {
@@ -250,6 +301,12 @@ if ($action === 'edit') {
 // DELETE
 // ---------------------------------------------------------------------
 if ($action === 'delete') {
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
     $id = (int)($_POST['id'] ?? 0);
     if ($id <= 0) json_out(['ok'=>false,'error'=>'validation'], 422);
 
@@ -273,6 +330,12 @@ if ($action === 'delete') {
 // VOTE
 // ---------------------------------------------------------------------
 if ($action === 'vote') {
+
+// CSRF for state-changing actions (AJAX/JSON via header)
+if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+    csrf_verify_any_or_die();
+}
+
     $id = (int)($_POST['id'] ?? 0);
     $value = (int)($_POST['value'] ?? 0);
     if ($id <= 0 || !in_array($value, [-1, 1], true)) {

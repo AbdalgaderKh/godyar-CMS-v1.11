@@ -13,7 +13,7 @@ $st=$pdo->prepare("SELECT * FROM categories WHERE slug=:s AND is_active=1 LIMIT 
 $st->execute([':s'=>$slug]); $category=$st->fetch(PDO::FETCH_ASSOC) ?: null;
 if (($category === false)){ http_response_code(404); exit; }
 $lim=(int)$perPage; $off=(int)$offset;
-$sql="SELECT slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND category_id=:cid ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
+$sql="SELECT id,slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND category_id=:cid ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
 // MySQL may not allow native prepared statements for LIMIT/OFFSET.
 // Enable emulation for this statement to ensure consistent behavior.
 $prevEmulate = (bool)$pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
@@ -25,4 +25,8 @@ $st->bindValue(':off', (int)$off, PDO::PARAM_INT);
 $st->execute();
 $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
 $items=$st->fetchAll(PDO::FETCH_ASSOC);
+// Performance: attach comment counts (single query)
+if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
+}
 require __DIR__ . '/../views/category_amp.php';

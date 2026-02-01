@@ -14,7 +14,7 @@ try {
   $cnt->execute([':q'=>$like]);
   $total = (int)$cnt->fetchColumn();
   $lim=(int)$perPage; $off=(int)$offset;
-  $sql = "SELECT slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND (title LIKE :q OR excerpt LIKE :q OR content LIKE :q) ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
+  $sql = "SELECT id,slug,title,excerpt,COALESCE(featured_image,image_path,image) AS featured_image,publish_at FROM news WHERE status='published' AND (title LIKE :q OR excerpt LIKE :q OR content LIKE :q) ORDER BY publish_at DESC LIMIT :lim OFFSET :off";
   $prevEmulate = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
   $st = $pdo->prepare($sql);
@@ -24,5 +24,8 @@ try {
   $st->execute();
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
   $items = $st->fetchAll(PDO::FETCH_ASSOC);
+  if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
+  }
   echo json_encode(['ok'=>true,'total'=>$total,'items'=>$items], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 } catch (Throwable $e) { error_log('API_SEARCH: '.$e->getMessage()); http_response_code(500); echo json_encode(['ok'=>false]); }

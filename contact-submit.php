@@ -31,6 +31,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
 if (function_exists('gody_rate_limit')) {
     if (!gody_rate_limit('contact', 8, 600)) { // 8 submissions / 10 minutes per IP
         $retry = function_exists('gody_rate_limit_retry_after') ? gody_rate_limit_retry_after('contact') : 600;
+        if (function_exists('gdy_security_log')) { gdy_security_log('rate_limited', ['bucket'=>'contact','retry_after'=>$retry]); }
         http_response_code(429);
         header('Retry-After: ' . max(1, $retry));
         // preserve UX: redirect with a safe message

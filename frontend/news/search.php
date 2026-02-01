@@ -127,9 +127,19 @@ function gdy_build_text_where(string $query, string $mode, array $columns, strin
     $clauses = [];
     $bindings = [];
     foreach ($terms as $tIdx => $term) {
-$1}
+        $ors = [];
+        $needle = '%' . $term . '%';
+        foreach ($columns as $cIdx => $col) {
+            $p = ":{$paramPrefix}t{$tIdx}_{$cIdx}";
+            $ors[] = "{$col} LIKE {$p}";
+            $bindings[$p] = $needle;
+        }
+        $clauses[] = '(' . implode(' OR ', $ors) . ')';
+    }
 
-return [$2];
+    return ['(' . implode($join, $clauses) . ')', $bindings];
+}
+
 
 /**
  * Make a safe, short excerpt for UI.
@@ -275,7 +285,7 @@ $results = [];
  * Normalize result rows for the UI.
  *
  * @param array<string,mixed> $row
- * @return array{kind:string,title:string,url:string,image:?string,excerpt:string,created_at:?string,category_slug:?string,category_name:?string}
+ * @return array{kind:string,title:string,url:string,image:?string,excerpt:string,created_at:?string,category_slug:?string,category_name:?string,news_id:?int,comments_count:?int}
  */
 function gdy_normalize_row(array $row, string $baseUrl): array
 {
@@ -306,6 +316,8 @@ function gdy_normalize_row(array $row, string $baseUrl): array
         'created_at' => $createdAt ? (string)$createdAt : null,
         'category_slug' => $categorySlug ? (string)$categorySlug : null,
         'category_name' => $categoryName ? (string)$categoryName : null,
+        'news_id' => isset($row['news_id']) ? (int)$row['news_id'] : null,
+        'comments_count' => isset($row['comments_count']) ? (int)$row['comments_count'] : null,
     ];
 }
 
@@ -352,7 +364,7 @@ try {
         }
 
         $sql =
-            "SELECT CASE WHEN n.opinion_author_id IS NOT NULL THEN 'opinion' ELSE 'news' END AS kind, n.title, n.slug, n.image, n.excerpt, n.created_at, c.slug AS category_slug, c.name AS category_name\n" .
+            "SELECT CASE WHEN n.opinion_author_id IS NOT NULL THEN 'opinion' ELSE 'news' END AS kind, n.id AS news_id, n.title, n.slug, n.image, n.excerpt, n.created_at, c.slug AS category_slug, c.name AS category_name\n" .
             "FROM news n\n" .
             "LEFT JOIN categories c ON c.id = n.category_id\n" .
             "WHERE {$extra} AND {$newsWhere}\n" .
@@ -372,7 +384,7 @@ try {
         // all: UNION across news/opinion + pages + authors
         $unionSql =
             "(\n" .
-            "  SELECT CASE WHEN n.opinion_author_id IS NOT NULL THEN 'opinion' ELSE 'news' END AS kind, n.title, n.slug, n.image, n.excerpt, n.created_at, c.slug AS category_slug, c.name AS category_name\n" .
+            "  SELECT CASE WHEN n.opinion_author_id IS NOT NULL THEN 'opinion' ELSE 'news' END AS kind, n.id AS news_id, n.title, n.slug, n.image, n.excerpt, n.created_at, c.slug AS category_slug, c.name AS category_name\n" .
             "  FROM news n\n" .
             "  LEFT JOIN categories c ON c.id = n.category_id\n" .
             "  WHERE {$newsExtra} AND {$newsWhere}\n" .
@@ -410,6 +422,32 @@ try {
     // Also log the exception so the hosting error log reveals the actual root cause.
     error_log('[GodyarSearch] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
     $results = [];
+}
+
+// Performance: attach comment counts for news/opinion results (single query)
+if (function_exists('gdy_comment_counts_for_news') && $pdo instanceof \PDO && !empty($results)) {
+    try {
+        $ids = [];
+        foreach ($results as $r) {
+            if (($r['kind'] ?? '') === 'news' || ($r['kind'] ?? '') === 'opinion') {
+                $nid = (int)($r['news_id'] ?? 0);
+                if ($nid > 0) $ids[] = $nid;
+            }
+        }
+        $ids = array_values(array_unique($ids));
+        if ($ids) {
+            $map = gdy_comment_counts_for_news($pdo, $ids);
+            foreach ($results as &$r) {
+                if (($r['kind'] ?? '') === 'news' || ($r['kind'] ?? '') === 'opinion') {
+                    $nid = (int)($r['news_id'] ?? 0);
+                    $r['comments_count'] = (int)($map[$nid] ?? 0);
+                }
+            }
+            unset($r);
+        }
+    } catch (Throwable $e) {
+        // ignore
+    }
 }
 
 // Pagination: total depends on type

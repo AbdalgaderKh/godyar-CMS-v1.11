@@ -12,7 +12,7 @@ try {
   $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC);
   if (($tag === false)) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
   $lim=min(50,max(1,(int)($_GET['limit']??12)));
-  $sql="SELECT n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
+  $sql="SELECT n.id,n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
        FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id
        WHERE nt.tag_id=:tid AND n.status='published'
        ORDER BY n.publish_at DESC
@@ -27,5 +27,8 @@ try {
   $st2->execute();
   $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
   $items=$st2->fetchAll(PDO::FETCH_ASSOC) ?: [];
+  if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
+  }
   echo json_encode(['ok'=>true,'tag'=>$tag,'items'=> $items], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 } catch (Throwable $e){ error_log('API_TAG: '.$e->getMessage()); http_response_code(500); echo json_encode(['ok'=>false,'error'=>'internal']); }

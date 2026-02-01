@@ -19,6 +19,7 @@ if (is_dir($__gdyLogDir) && is_writable($__gdyLogDir)) {
 require_once __DIR__ . '/safe_runtime.php';
 // Security headers (portable hardening)
 require_once __DIR__ . '/security_headers.php';
+require_once __DIR__ . '/security_log.php';
 if (function_exists('gdy_apply_security_headers')) { gdy_apply_security_headers(); }
 
 // -------------------------------------------------

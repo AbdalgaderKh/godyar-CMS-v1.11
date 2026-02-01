@@ -111,6 +111,11 @@ try {
     $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
     $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
+    // Performance: attach comment counts in one query (avoid N+1 in views)
+    if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+        try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) { /* ignore */ }
+    }
+
 } catch (Throwable $e) {
     error_log('[CategoryController] news fetch failed: ' . $e->getMessage());
 }

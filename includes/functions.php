@@ -216,7 +216,10 @@ if (function_exists('csrf_verify_any_or_die') === false) {
         }
 
         if (!verify_csrf_token($token)) {
-            http_response_code(403);
+            if (function_exists('gdy_security_log')) { gdy_security_log('csrf_block', ['path'=>($_SERVER['REQUEST_URI']??''),'ip'=>($_SERVER['REMOTE_ADDR']??''),'ua'=>substr((string)($_SERVER['HTTP_USER_AGENT']??''),0,200)]); }
+if (function_exists('gdy_security_log')) { gdy_security_log('origin_block', ['path'=>($_SERVER['REQUEST_URI']??''),'ip'=>($_SERVER['REMOTE_ADDR']??''),'origin'=>($_SERVER['HTTP_ORIGIN']??''),'referer'=>($_SERVER['HTTP_REFERER']??'')]); }
+if (function_exists('gdy_security_log')) { gdy_security_log('csrf_block', ['path'=>($_SERVER['REQUEST_URI']??''),'ip'=>($_SERVER['REMOTE_ADDR']??''),'ua'=>substr((string)($_SERVER['HTTP_USER_AGENT']??''),0,200)]); }
+http_response_code(403);
             die('CSRF validation failed');
         }
     }
@@ -298,7 +301,8 @@ function gdy_origin_guard_or_die(): void {
     }
 
     if ($ok === false || ($ok === null && $strict)) {
-            http_response_code(403);
+            if (function_exists('gdy_security_log')) { gdy_security_log('origin_block', ['path'=>($_SERVER['REQUEST_URI']??''),'ip'=>($_SERVER['REMOTE_ADDR']??''),'origin'=>($_SERVER['HTTP_ORIGIN']??''),'referer'=>($_SERVER['HTTP_REFERER']??'')]); }
+http_response_code(403);
 
             $accept = (string)($_SERVER['HTTP_ACCEPT'] ?? '');
             $xhr = strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';

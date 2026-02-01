@@ -36,7 +36,7 @@ try {
     $prevEmulate = (bool)$pdo->getAttribute(\PDO::ATTR_EMULATE_PREPARES);
     $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
 
-    $sql = "SELECT slug, title, excerpt, COALESCE(featured_image, image_path, image) AS featured_image, publish_at
+    $sql = "SELECT id, slug, title, excerpt, COALESCE(featured_image, image_path, image) AS featured_image, publish_at
             FROM news
             WHERE status = 'published' AND category_id = :cid
             ORDER BY publish_at DESC
@@ -50,6 +50,11 @@ try {
     $pdo->setAttribute(\PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
 
     $items = $st2->fetchAll(\PDO::FETCH_ASSOC);
+
+    // Performance: attach comment counts (single query)
+    if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+        try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
+    }
 
     echo json_encode(
         ['ok' => true, 'category' => $cat, 'items' => $items],

@@ -245,12 +245,9 @@ $contactOld     = $contactOld     ?? [];
         </div>
       </div>
 
-        <form class="gdy-contact-form" method="post" action="<?php echo h($baseUrl); ?>
-          <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
-          <div class="row g-2 mb-2">
-        <form class="gdy-contact-form" method="post" action="<?php echo h($baseUrl); ?>
-          <?php if (function_exists('csrf_field')) { csrf_field(); } ?>/contact.php">
-          <div class="row g-2 mb-2">
+	        <form class="gdy-contact-form" method="post" action="<?php echo h(rtrim($baseUrl, '/')); ?>/contact.php">
+	          <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
+	          <div class="row g-2 mb-2">
             <div class="col-md-6">
               <label for="contact_name">
                 الاسم <span class="required">*</span>
@@ -260,6 +257,7 @@ $contactOld     = $contactOld     ?? [];
                 name="name"
                 id="contact_name"
                 class="form-control"
+	                autocomplete="name"
                 required
                 value="<?php echo h($contactOld['name'] ?? ''); ?>"
               >
@@ -273,6 +271,7 @@ $contactOld     = $contactOld     ?? [];
                 name="email"
                 id="contact_email"
                 class="form-control"
+	                autocomplete="email"
                 required
                 value="<?php echo h($contactOld['email'] ?? ''); ?>"
               >
@@ -288,6 +287,7 @@ $contactOld     = $contactOld     ?? [];
               name="subject"
               id="contact_subject"
               class="form-control"
+	              autocomplete="off"
               value="<?php echo h($contactOld['subject'] ?? ''); ?>"
             >
           </div>
@@ -301,6 +301,7 @@ $contactOld     = $contactOld     ?? [];
               id="contact_message"
               rows="8"
               class="form-control"
+	              autocomplete="off"
               required
             ><?php echo h($contactOld['message'] ?? ''); ?></textarea>
           </div>

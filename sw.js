@@ -28,7 +28,11 @@ self.addEventListener('activate', (event) => {
     (async () => {
       const keys = await caches.keys();
       await Promise.all(keys.map((key) => (key !== CACHE_NAME ? caches.delete(key) : Promise.resolve())));
-      await self.clients.claim();
+      try {
+        // Some browsers can throw "Only the active worker can claim clients" during
+        // rapid unregister/register or update races. Ignore and keep activating.
+        await self.clients.claim();
+      } catch (e) {}
     })()
   );
 });

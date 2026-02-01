@@ -718,9 +718,21 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
 ?>
 <script>
   window.GDY_VAPID_PUBLIC_KEY = <?php echo json_encode($vapidPublic, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('<?php echo h($baseUrl); ?>/sw.js').catch(function(){});
-  }
+  // ✅ Register SW only when PWA is enabled.
+  // Avoid unregister/register loops that can trigger:
+  // "InvalidStateError: Only the active worker can claim clients"
+  (function(){
+    try {
+      if (window.GDY_PWA_DISABLED) return;
+      if (!('serviceWorker' in navigator)) return;
+      if (location.protocol !== 'https:') return;
+
+      var swUrl = (window.GDY_SW_URL || '<?php echo h($baseUrl); ?>/sw.js');
+      try { swUrl = new URL(swUrl, location.origin).toString(); } catch(e) {}
+
+      navigator.serviceWorker.register(swUrl).catch(function(){});
+    } catch(e) {}
+  })();
 </script>
 
 <?php

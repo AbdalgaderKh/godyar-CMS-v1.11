@@ -98,18 +98,69 @@ if (class_exists('HomeController')) {
 // بعض المسارات قد لا تمر عبر HomeController أو قد ترجع إعدادات ناقصة (مثل شعار الموقع أو إظهار رابط الانتخابات).
 // لذلك نحاول دائماً تحميل الإعدادات من قاعدة البيانات ودمجها مع ما وصلنا من الكنترولر.
 try {
-    $rootPath = dirname(__DIR__, 3); // project root
-    $dbHelper = $rootPath . '/includes/db.php';
-    $settingsHelper = $rootPath . '/includes/site_settings.php';
-    if (is_file($dbHelper)) { require_once $dbHelper; }
-    if (is_file($settingsHelper)) { require_once $settingsHelper; }
-
-    // Prefer an existing $pdo if the bootstrap already created it.
-    if (!isset($pdo) || !($pdo instanceof PDO)) {
-        if (function_exists('gdy_pdo_safe')) {
-            $pdo = gdy_pdo_safe();
-        }
+    # اكتشف جذر المشروع بشكل موثوق (public_html)
+$rootPath = __DIR__;
+for ($i=0; $i<8; $i++) {
+  $candidate = dirname($rootPath, $i);
+  if (is_dir($candidate . '/includes') && is_file($candidate . '/includes/db.php')) { $rootPath = $candidate; break; }
+}
+  // ---------------------------------------------------------------------------
+  // Project root (robust includes regardless of caller scope)
+  // ---------------------------------------------------------------------------
+  // بعض الصفحات القديمة (مثل contact.php و /page/*) قد تستدعي الـ partial بدون
+  // تحميل bootstrap أو تعريف $pdo، وهذا كان يسبب اختفاء الشعار/الإعدادات.
+  // هنا نضمن تحميل db.php + site_settings.php من جذر المشروع دائماً.
+  $GDY_ROOT = __DIR__;
+  for ($i = 0; $i < 8; $i++) {
+    $candidate = dirname(__DIR__, $i);
+    if (is_dir($candidate . '/includes') && is_file($candidate . '/includes/db.php')) {
+      $GDY_ROOT = $candidate;
+      break;
     }
+  }
+
+  // Load DB + settings helpers early so functions/classes exist before we try to use them.
+  $dbFile = $GDY_ROOT . '/includes/db.php';
+  if (is_file($dbFile)) {
+    require_once $dbFile;
+  }
+  $settingsFile = $GDY_ROOT . '/includes/site_settings.php';
+  if (is_file($settingsFile)) {
+    require_once $settingsFile;
+  }
+
+
+  // Ensure core helpers are available (some pages render views inside functions, so $pdo may not be in scope)
+  if (!function_exists('gdy_load_settings')) {
+    $settingsFile = $GDY_ROOT . '/includes/site_settings.php';
+    if (is_file($settingsFile)) {
+      require_once $settingsFile;
+    }
+  }
+
+  // Resolve PDO safely from multiple places
+  $pdoCandidate = null;
+  if (isset($pdo) && $pdo instanceof PDO) {
+    $pdoCandidate = $pdo;
+  } elseif (isset($GLOBALS['pdo']) && $GLOBALS['pdo'] instanceof PDO) {
+    $pdoCandidate = $GLOBALS['pdo'];
+  } elseif (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
+    try { $pdoCandidate = \Godyar\DB::pdo(); } catch (Throwable $e) { /* ignore */ }
+  }
+
+  // Final fallback: attempt local DB loader if present
+  if (!$pdoCandidate) {
+    $dbFile = $GDY_ROOT . '/includes/db.php';
+    if (!class_exists('Godyar\\DB') && is_file($dbFile)) {
+      require_once $dbFile;
+    }
+    if (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
+      try { $pdoCandidate = \Godyar\DB::pdo(); } catch (Throwable $e) { /* ignore */ }
+    }
+  }
+
+  // Expose as $pdo for downstream code
+  $pdo = $pdoCandidate ?: null;
 
     if (isset($pdo) && ($pdo instanceof PDO) && function_exists('gdy_load_settings')) {
         $dbSettings = gdy_load_settings($pdo);
@@ -126,6 +177,18 @@ try {
 
 // المتغيرات الأساسية مع أولوية لما يمرره السكربت ثم الإعدادات ثم الافتراضي
 $siteName    = $siteName    ?? ($siteSettings['site_name']    ?? 'Godyar News');
+$logoFallbackChar = 'G';
+try {
+    $n = trim((string)$siteName);
+    if ($n !== '') {
+        if (function_exists('mb_substr')) {
+            $logoFallbackChar = mb_substr($n, 0, 1, 'UTF-8');
+        } else {
+            $logoFallbackChar = substr($n, 0, 1);
+        }
+    }
+} catch (Throwable $e) { /* ignore */ }
+
 $siteTagline = $siteTagline ?? ($siteSettings['site_tagline'] ?? __('منصة إخبارية متكاملة'));
 $siteLogo    = $siteLogo    ?? ($siteSettings['site_logo']    ?? '');
 
@@ -244,7 +307,7 @@ if (!function_exists('gdy_root_url')) {
         return $scheme . '://' . $host . $dir;
     }
 }
-$rootUrl = rtrim(gdy_root_url(), '/');
+$rootUrl = function_exists('base_url') ? rtrim(base_url(), '/') : rtrim(gdy_root_url(), '/');
 $baseUrl = $rootUrl;
 
 // Normalize logo path (avoid relative paths breaking on sub-pages / subdirectories)
@@ -338,23 +401,13 @@ if (empty($headerCategories)) {
 <head>
   <meta charset="utf-8">
 
-    <!-- PWA disabled: unregister any existing Service Worker and clear caches -->
-    <script>
-    (function(){
-      try{
-        if('serviceWorker' in navigator){
-          navigator.serviceWorker.getRegistrations().then(function(regs){
-            regs.forEach(function(r){ try{ r.unregister(); }catch(e){} });
-          }).catch(function(){});
-        }
-        if(window.caches && typeof caches.keys === 'function'){
-          caches.keys().then(function(keys){
-            keys.forEach(function(k){ try{ caches.delete(k); }catch(e){} });
-          }).catch(function(){});
-        }
-      }catch(e){}
-    })();
-    </script>
+    <!-- PWA: ملاحظة
+         كانت هناك كتلة تقوم بإلغاء تسجيل Service Worker ومسح الكاش في كل صفحة.
+         هذا يسبب خطأ: "Only the active worker can claim clients" عند وجود SW جديد يُفعّل.
+         تم حذفها.
+         إذا رغبت بإيقاف الـPWA مؤقتاً لأي سبب، يمكنك تعريف المتغير التالي قبل تسجيل SW:
+         window.GDY_PWA_OFF = true;
+    -->
 <?php
 // CSP nonce (generated in includes/bootstrap.php). Some inline scripts/styles already reference $cspNonce;
 // ensure it is always defined so nonce is not empty (empty nonce breaks CSP and can't be auto-injected).
@@ -502,7 +555,7 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
 
       $hasThemeCss = false;
       if ($themeFront !== 'default') {
-        $themeCssDisk = dirname(__DIR__, 3) . '/assets/css/themes/theme-' . $themeFront . '.css';
+        $themeCssDisk = dirname(__DIR__, 4) . '/assets/css/themes/theme-' . $themeFront . '.css';
         if (is_file($themeCssDisk)) {
           $hasThemeCss = true;
           $themeCssHref = rtrim((string)($rootUrl ?? ''), '/') . '/assets/css/themes/theme-' . $themeFront . '.css';
@@ -706,10 +759,28 @@ html[dir="rtl"] .site-header .brand-text{ text-align: right; }
     }
 
     .brand-logo img,
-    .brand-logo i{
+    .brand-logo i,
+    .brand-logo .brand-logo__fallback{
       position: relative;
       z-index: 1;
     }
+
+	    /* ✅ fallback حرف الشعار: يظهر دائماً في الوسط خلف الصورة */
+	    .brand-logo{ position: relative; }
+	    .brand-logo .brand-logo__fallback{
+	      position: absolute;
+	      inset: 0;
+	      display: flex;
+	      align-items: center;
+	      justify-content: center;
+	      font-weight: 900;
+	      font-size: 1.45rem;
+	      letter-spacing: .5px;
+	      color: var(--on-primary, #0f172a);
+	      z-index: 1;
+	      pointer-events: none;
+	    }
+	    .brand-logo img{ position: relative; z-index: 2; }
 
     .brand-logo img {
       width: 100%;
@@ -1155,13 +1226,14 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
   <div class="container">
     <div class="header-inner">
       <a href="<?php echo u($navBaseUrl); ?>" class="brand-block">
-        <div class="brand-logo">
-          <?php if ($siteLogo): ?>
-            <img src="<?php echo u($siteLogo); ?>" alt="<?php echo h($siteName); ?>">
-          <?php else: ?>
-            <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
-          <?php endif; ?>
-        </div>
+	        <div class="brand-logo" aria-hidden="true">
+	          <?php if (!empty($siteLogo)): ?>
+	            <img class="js-site-logo" src="<?php echo htmlspecialchars($siteLogo, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?>" loading="eager" decoding="async">
+	          <?php endif; ?>
+	          <!-- ✅ fallback دائماً حتى لو فشل تحميل الصورة (خصوصاً في صفحات بدون بادئة لغة) -->
+	          <span class="brand-logo__fallback" aria-hidden="true"><?php echo htmlspecialchars($logoFallbackChar, ENT_QUOTES, 'UTF-8'); ?></span>
+	        </div>
+
         <div class="brand-text">
           <div class="brand-title"><?php echo h($siteName); ?></div>
           <div class="brand-subtitle"><?php echo h($siteTagline); ?></div>
@@ -1447,6 +1519,13 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
       }
       setHeaderH();
       window.addEventListener('resize', setHeaderH);
+
+      try{
+        var logoImg = document.querySelector('.brand-logo img.js-site-logo');
+        if(logoImg){
+          logoImg.addEventListener('error', function(){ try{ this.remove(); }catch(e){} });
+        }
+      }catch(e){} 
     
 
       // ✅ عرض/إخفاء قائمة الفئات على الجوال

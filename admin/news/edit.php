@@ -655,15 +655,15 @@ html, body { overflow-x: hidden; }
 
       <div class="gdy-card-body gdy-form-body">
         <form method="post" action="" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+    <input id="csrf_token" type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
           <div class="row g-3">
             <div class="col-md-8">
 
               <div class="mb-3">
-                <label class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_6dc6588082', 'العنوان')); ?></label>
-                <input type="text" name="title"
-                  class="form-control form-control-sm <?php echo isset($errors['title']) ? 'is-invalid' : ''; ?>"
+                <label for="title" class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_6dc6588082', 'العنوان')); ?></label>
+                <input id="title" type="text" name="title"
+                <input type="text" name="title" id="title" class="form-control form-control-sm <?php echo isset($errors['title']) ? 'is-invalid' : ''; ?>" autocomplete="off" value="<?php echo h($news['title'] ?? ''); ?>" placeholder="<?php echo h(__('title_placeholder','أدخل عنوان الخبر هنا...')); ?>">
                   value="<?php echo h($title); ?>" placeholder="<?php echo h(__('t_d48cac613d', 'أدخل عنوان الخبر هنا...')); ?>">
                 <?php if (isset($errors['title'])): ?>
                   <div class="invalid-feedback"><?php echo h($errors['title']); ?></div>
@@ -674,10 +674,10 @@ html, body { overflow-x: hidden; }
 
               <div class="mb-3">
                 <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label class="gdy-form-label mb-0"><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></label>
+                  <label for="excerpt" class="gdy-form-label mb-0"><?php echo h(__('t_0781965540', 'الرابط (Slug)')); ?></label>
                   <span class="badge-soft"><?php echo h(__('t_f756530783', 'يمكنك تغييره بعناية، يؤثر على رابط الخبر')); ?></span>
                 </div>
-                <input type="text" name="slug"
+                <input type="text" id="slug" autocomplete="off" name="slug"
                   class="form-control form-control-sm <?php echo isset($errors['slug']) ? 'is-invalid' : ''; ?>"
                   value="<?php echo h($slug); ?>" placeholder="<?php echo h(__('t_0f7738c806', 'مثال: breaking-news-2024')); ?>">
                 <?php if (isset($errors['slug'])): ?>
@@ -687,13 +687,13 @@ html, body { overflow-x: hidden; }
 
               <div class="mb-3">
                 <label class="gdy-form-label"><?php echo h(__('t_17220bb323', 'ملخص قصير (اختياري)')); ?></label>
-                <textarea name="excerpt" rows="3" class="form-control form-control-sm"
+                <textarea id="excerpt" name="excerpt" rows="3" class="form-control form-control-sm"
                   placeholder="<?php echo h(__('t_774de80702', 'يمكن كتابة فقرة قصيرة تلخص أهم ما في الخبر.')); ?>"><?php echo h($excerpt); ?></textarea>
               </div>
 
               <div class="mb-3">
-                <label class="gdy-form-label"><?php echo h(__('t_1db9e4530e', 'نص الخبر / المقال')); ?></label>
-                <textarea data-gdy-editor="1" name="content" rows="10" class="form-control form-control-sm"
+                <label for="content" class="gdy-form-label"><?php echo h(__('t_1db9e4530e', 'نص الخبر / المقال')); ?></label>
+                <textarea id="content" data-gdy-editor="1" name="content" rows="10" class="form-control form-control-sm"
                   placeholder="<?php echo h(__('t_52461cefbe', 'اكتب نص الخبر كاملاً أو الصقه هنا.')); ?>"><?php echo h($content); ?></textarea>
 
                 <!-- Professional: Internal links suggestions -->
@@ -704,7 +704,7 @@ html, body { overflow-x: hidden; }
                     </button>
                     <input type="text" class="form-control form-control-sm" id="internal-link-query"
                       style="max-width: 260px"
-                      placeholder="<?php echo h(__('t_il_query','كلمة/عبارة (اختياري)')); ?>">
+                      placeholder="<?php echo h(__('t_il_query','كلمة/عبارة (اختياري)')); ?>" autocomplete="off">
                     <span class="text-muted small"><?php echo h(__('t_il_tip','حدد نصًا داخل المحتوى ثم اضغط "اقتراح".')); ?></span>
                   </div>
                   <div class="results mt-2" id="internal-links-results"></div>
@@ -716,7 +716,7 @@ html, body { overflow-x: hidden; }
               
               <?php $currentImage = (string)($news['image'] ?? ''); ?>
               <div class="mb-3">
-                <label class="gdy-form-label"><?php echo h(__('t_cd376ca9a8', 'صورة الخبر (اختياري)')); ?></label>
+                <label for="attachments-input" class="gdy-form-label"><?php echo h(__('t_cd376ca9a8', 'صورة الخبر (اختياري)')); ?></label>
                 <div id="image-dropzone" class="gdy-dropzone">
                   <input type="file" name="image" id="image-input" accept="image/*" class="d-none">
                   <div class="gdy-dropzone-inner">
@@ -728,7 +728,7 @@ html, body { overflow-x: hidden; }
   <button type="button" id="gdy-pick-featured" class="btn btn-sm btn-outline-light">اختيار من المكتبة</button>
   <small class="text-muted">يمكنك اختيار صورة الخبر من مكتبة الوسائط بدون رفع جديد.</small>
 </div>
-<input type="hidden" name="image_url" value="<?php echo isset($image_url) ? h($image_url) : ''; ?>">
+<input id="image_url" type="hidden" name="image_url" value="<?php echo isset($image_url) ? h($image_url) : ''; ?>">
 
                 </div>
 
@@ -802,8 +802,8 @@ html, body { overflow-x: hidden; }
                 <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_cf14329701', 'التصنيف')); ?></h3>
 
                 <div class="mb-3">
-                  <label class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_cf14329701', 'التصنيف')); ?></label>
-                  <select name="category_id" class="form-select form-select-sm <?php echo isset($errors['category_id']) ? 'is-invalid' : ''; ?>">
+                  <label for="category_id" class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_cf14329701', 'التصنيف')); ?></label>
+                  <select id="category_id" name="category_id" class="form-select form-select-sm <?php echo isset($errors['category_id']) ? 'is-invalid' : ''; ?>">
                     <option value="0"><?php echo h(__('t_0a8d417cf7', '-- اختر التصنيف --')); ?></option>
                     <?php foreach ($categoriesTree as $parent): ?>
                       <optgroup label="<?php echo h($parent['name']); ?>">
@@ -828,8 +828,8 @@ html, body { overflow-x: hidden; }
 
                 <?php if (!empty($opinionAuthors)): ?>
                   <div class="mb-3">
-                    <label class="gdy-form-label"><?php echo h(__('t_9fd4be08b2', 'كاتب الرأي (إن كان مقال رأي)')); ?></label>
-                    <select name="opinion_author_id" class="form-select form-select-sm">
+                    <label for="opinion_author_id" class="gdy-form-label"><?php echo h(__('t_9fd4be08b2', 'كاتب الرأي (إن كان مقال رأي)')); ?></label>
+                    <select id="opinion_author_id" name="opinion_author_id" class="form-select form-select-sm">
                       <option value="0"><?php echo h(__('t_7f3152db47', '-- ليس مقال رأي --')); ?></option>
                       <?php foreach ($opinionAuthors as $oa): ?>
                         <option value="<?php echo (int)$oa['id']; ?>" <?php echo (int)$oa['id'] === (int)$opinion_author_id ? 'selected' : ''; ?>>
@@ -846,8 +846,8 @@ html, body { overflow-x: hidden; }
                 <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_78865bbc36', 'حالة النشر')); ?></h3>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
-                  <select name="status" class="form-select form-select-sm">
+                  <label for="status" class="gdy-form-label"><?php echo h(__('t_1253eb5642', 'الحالة')); ?></label>
+                  <select id="status" name="status" class="form-select form-select-sm">
                     <option value="published" <?php echo $status === 'published' ? 'selected' : ''; ?>><?php echo h(__('t_ecfb62b400', 'منشور')); ?></option>
                     <option value="approved" <?php echo $status === 'approved' ? 'selected' : ''; ?>><?php echo h(__('t_aeb4d514db', 'جاهز للنشر')); ?></option>
                     <option value="draft" <?php echo $status === 'draft' ? 'selected' : ''; ?>><?php echo h(__('t_9071af8f2d', 'مسودة')); ?></option>
@@ -857,18 +857,18 @@ html, body { overflow-x: hidden; }
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?php echo h(__('t_9260bd801b', 'جدولة نشر (publish_at)')); ?></label>
-                  <input type="datetime-local" name="publish_at" class="form-control form-control-sm" value="<?php echo h($publish_at ?? ''); ?>">
+                  <label for="publish_at" class="gdy-form-label"><?php echo h(__('t_9260bd801b', 'جدولة نشر (publish_at)')); ?></label>
+                  <input id="publish_at" type="datetime-local" name="publish_at" class="form-control form-control-sm" value="<?php echo h($publish_at ?? ''); ?>">
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?php echo h(__('t_58e272983c', 'جدولة إلغاء نشر (unpublish_at)')); ?></label>
-                  <input type="datetime-local" name="unpublish_at" class="form-control form-control-sm" value="<?php echo h($unpublish_at ?? ''); ?>">
+                  <label for="unpublish_at" class="gdy-form-label"><?php echo h(__('t_58e272983c', 'جدولة إلغاء نشر (unpublish_at)')); ?></label>
+                  <input id="unpublish_at" type="datetime-local" name="unpublish_at" class="form-control form-control-sm" value="<?php echo h($unpublish_at ?? ''); ?>">
                 </div>
 
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?php echo h(__('t_9928bed160', 'تاريخ النشر (اختياري)')); ?></label>
-                  <input type="datetime-local" name="published_at" class="form-control form-control-sm" value="<?php echo h($published_at); ?>">
+                  <label for="published_at" class="gdy-form-label"><?php echo h(__('t_9928bed160', 'تاريخ النشر (اختياري)')); ?></label>
+                  <input id="published_at" type="datetime-local" name="published_at" class="form-control form-control-sm" value="<?php echo h($published_at); ?>">
                   <div class="form-text"><?php echo h(__('t_47d90f80b5', 'إذا تركته فارغاً، يظل كما هو.')); ?></div>
                 </div>
 
@@ -886,24 +886,24 @@ html, body { overflow-x: hidden; }
               <div class="gdy-options-box mb-3">
                 <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#search"></use></svg><?php echo h(__('t_5584163b0c', 'إعدادات SEO')); ?></h3>
                 <div class="mb-2">
-                  <label class="gdy-form-label">SEO Title</label>
-                  <input type="text" name="seo_title" class="form-control form-control-sm" value="<?php echo h($seo_title ?? ''); ?>" placeholder="<?php echo h(__('t_439b74907d', 'عنوان لمحركات البحث (اختياري)')); ?>">
+                  <label class="gdy-form-label" for="seo_title">SEO Title</label>
+                  <input type="text" id="seo_title" autocomplete="off" name="seo_title" class="form-control form-control-sm" value="<?php echo h($seo_title ?? ''); ?>" placeholder="<?php echo h(__('t_439b74907d', 'عنوان لمحركات البحث (اختياري)')); ?>">
                 </div>
                 <div class="mb-2">
-                  <label class="gdy-form-label">SEO Description</label>
-                  <textarea name="seo_description" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_29002a42e6', 'وصف مختصر لمحركات البحث (اختياري)')); ?>"><?php echo h($seo_description ?? ''); ?></textarea>
+                  <label class="gdy-form-label" for="seo_description">SEO Description</label>
+                  <textarea id="seo_description" name="seo_description" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_29002a42e6', 'وصف مختصر لمحركات البحث (اختياري)')); ?>"><?php echo h($seo_description ?? ''); ?></textarea>
                 </div>
                 <div class="mb-2">
-                  <label class="gdy-form-label">SEO Keywords</label>
-                  <input type="text" name="seo_keywords" class="form-control form-control-sm" value="<?php echo h($seo_keywords ?? ''); ?>" placeholder="<?php echo h(__('t_dd1cc5fb86', 'كلمات مفتاحية (اختياري)')); ?>">
+                  <label class="gdy-form-label" for="seo_keywords">SEO Keywords</label>
+                  <input type="text" id="seo_keywords" autocomplete="off" name="seo_keywords" class="form-control form-control-sm" value="<?php echo h($seo_keywords ?? ''); ?>" placeholder="<?php echo h(__('t_dd1cc5fb86', 'كلمات مفتاحية (اختياري)')); ?>">
                 </div>
               </div>
 
               <div class="gdy-options-box mb-3">
                 <h3><svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg><?php echo h(__('t_84c1b773c5', 'الوسوم')); ?></h3>
                 <div class="mb-2">
-                  <label class="gdy-form-label"><?php echo h(__('t_51071ad5c6', 'وسوم (Tags)')); ?></label>
-                  <textarea name="tags" rows="2" class="form-control form-control-sm tags-input"
+                  <label for="tags" class="gdy-form-label"><?php echo h(__('t_51071ad5c6', 'وسوم (Tags)')); ?></label>
+                  <textarea id="tags" name="tags" rows="2" class="form-control form-control-sm tags-input"
                     placeholder="<?php echo h(__('t_4669e64c64', 'اكتب الوسوم مفصولة بفاصلة')); ?>"><?php echo h($tags_input); ?></textarea>
                   <div class="form-text"><?php echo h(__('t_feeeca0c74', 'تساعد الوسوم في تنظيم المحتوى وتحسين البحث.')); ?></div>
                 </div>
@@ -970,7 +970,7 @@ html, body { overflow-x: hidden; }
 
                 <!-- ملاحظة: لا تضع <form> داخل <form> (يسبب تعطل أزرار الحفظ/النشر في المتصفح) -->
                 <div class="mb-2">
-                  <textarea name="new_note" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_7f7c715e6d', 'اكتب ملاحظة للخبر (تظهر داخل لوحة التحكم فقط)')); ?>"></textarea>
+                  <textarea id="new_note" name="new_note" rows="3" class="form-control form-control-sm" placeholder="<?php echo h(__('t_7f7c715e6d', 'اكتب ملاحظة للخبر (تظهر داخل لوحة التحكم فقط)')); ?>"></textarea>
                   <div class="d-flex justify-content-between align-items-center mt-2">
                     <div class="form-text"><?php echo h(__('t_ebe14519dc', 'للتعليقات الداخلية بين المحرر والكاتب (لا تظهر للزوار).')); ?></div>
                     <button type="submit" name="add_note" value="1" class="gdy-btn gdy-btn-secondary" formnovalidate>

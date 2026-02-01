@@ -9,6 +9,85 @@
 
 declare(strict_types=1);
 
+/**
+ * Normalize a logo path stored in DB.
+ *
+ * الهدف: توحيد قيمة site_logo لتكون مساراً يبدأ بـ "/" داخل نفس الدومين.
+ *
+ * أمثلة:
+ *  - uploads/logo.png          => /uploads/logo.png
+ *  - /uploads/logo.png         => /uploads/logo.png
+ *  - https://godyar.org/x.png  => /x.png (إذا كان نفس الدومين)
+ *  - data:image/...            => تُترك كما هي
+ */
+if (!function_exists('gdy_normalize_site_logo_value')) {
+    function gdy_normalize_site_logo_value(string $raw, string $baseUrl = ''): string {
+        $v = trim($raw);
+        if ($v === '') return '';
+
+        // Keep data URIs (rare but valid)
+        if (stripos($v, 'data:') === 0) return $v;
+
+        // Remove surrounding quotes (some DB tools store with quotes)
+        $v = trim($v, " \t\n\r\0\x0B\"'");
+        if ($v === '') return '';
+
+        // Normalize BASE_URL
+        $baseUrl = trim($baseUrl);
+
+        // If it's an absolute URL and belongs to our domain, strip it to path
+        if (preg_match('~^https?://~i', $v)) {
+            $u = @parse_url($v);
+            if (is_array($u)) {
+                $path = $u['path'] ?? '';
+                $host = strtolower((string)($u['host'] ?? ''));
+                $baseHost = '';
+                if ($baseUrl !== '') {
+                    $bu = @parse_url($baseUrl);
+                    if (is_array($bu)) $baseHost = strtolower((string)($bu['host'] ?? ''));
+                }
+                if ($baseHost !== '' && $host === $baseHost && $path !== '') {
+                    $v = $path;
+                }
+            }
+        }
+
+        // Convert protocol-relative //example.com/path to /path if same host
+        if (strpos($v, '//') === 0 && $baseUrl !== '') {
+            $maybe = 'https:' . $v;
+            $u = @parse_url($maybe);
+            $bu = @parse_url($baseUrl);
+            if (is_array($u) && is_array($bu)) {
+                $host = strtolower((string)($u['host'] ?? ''));
+                $baseHost = strtolower((string)($bu['host'] ?? ''));
+                $path = $u['path'] ?? '';
+                if ($baseHost !== '' && $host === $baseHost && $path !== '') {
+                    $v = $path;
+                }
+            }
+        }
+
+        // Remove any leading BASE_URL fragments accidentally stored.
+        if ($baseUrl !== '') {
+            $b = rtrim($baseUrl, '/');
+            if ($b !== '' && stripos($v, $b) === 0) {
+                $v = substr($v, strlen($b));
+            }
+        }
+
+        // Ensure it is a site-root path
+        $v = ltrim($v);
+        if ($v !== '' && $v[0] !== '/') {
+            $v = '/' . $v;
+        }
+
+        // Collapse duplicate slashes: //uploads//logo.png => /uploads/logo.png
+        $v = preg_replace('~/{2,}~', '/', $v) ?? $v;
+
+        return $v;
+    }
+}
+
 if (!function_exists('gdy_pdo_is_pgsql')) {
     function gdy_pdo_is_pgsql(PDO $pdo): bool {
         try {
@@ -104,6 +183,51 @@ if (!function_exists('gdy_load_settings')) {
             $k = (string)($r['setting_key'] ?? '');
             if ($k === '') { continue; }
             $out[$k] = (string)($r['setting_value'] ?? '');
+        }
+
+	    // ------------------------------------------------------------------
+	    // ✅ Compatibility aliases for dotted setting keys
+	    // لوحة التحكم تخزن بعض المفاتيح بصيغة "site.logo" بينما واجهة الموقع
+	    // تعتمد على مفاتيح تقليدية مثل "site_logo" (خصوصاً الصفحات التي تستخدم
+	    // include للـ header مباشرة مثل contact.php و /page/*).
+	    // لذلك ننشئ Alias حتى لا يفشل إظهار الشعار/الاسم في هذه الصفحات.
+	    $aliases = [
+	        'site.logo'       => 'site_logo',
+	        'site.name'       => 'site_name',
+	        'site.desc'       => 'site_desc',
+	        'site.url'        => 'site_url',
+	        'site.email'      => 'site_email',
+	        'site.phone'      => 'site_phone',
+	        'site.address'    => 'site_address',
+	        'site.favicon'    => 'site_favicon',
+	        'site.theme_color'=> 'theme_color',
+	    ];
+	    foreach ($aliases as $from => $to) {
+	        if ((!array_key_exists($to, $out) || trim((string)$out[$to]) === '') && array_key_exists($from, $out)) {
+	            $out[$to] = (string)$out[$from];
+	        }
+	    }
+
+        // ✅ Auto-fix: normalize site_logo value and write back to DB if needed.
+        // هذا يحل مشكلة اختلاف المسار بين صفحات بروتيرات مختلفة (/ar vs /page/...)
+        // حيث كانت قيمة الشعار أحياناً تُحفظ بدون "/" أو كـ URL كامل.
+        if (array_key_exists('site_logo', $out)) {
+            $base = defined('BASE_URL') ? (string)BASE_URL : '';
+            $fixed = gdy_normalize_site_logo_value((string)$out['site_logo'], $base);
+            if ($fixed !== (string)$out['site_logo']) {
+                try {
+	                // حاول UPDATE أولاً، وإذا لم توجد السطر (لأن المفتاح محفوظ بصيغة site.logo) قم بإدراجه.
+	                $stmt = $pdo->prepare('UPDATE settings SET setting_value = :v WHERE setting_key = :k');
+	                $stmt->execute([':v' => $fixed, ':k' => 'site_logo']);
+	                if ((int)$stmt->rowCount() === 0) {
+	                    $ins = $pdo->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (:k, :v)');
+	                    $ins->execute([':k' => 'site_logo', ':v' => $fixed]);
+	                }
+	                $out['site_logo'] = $fixed;
+                } catch (Throwable $e) {
+                    // ignore (read-only DB / permissions)
+                }
+            }
         }
 
         $cache = $out;

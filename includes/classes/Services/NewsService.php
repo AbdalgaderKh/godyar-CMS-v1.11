@@ -28,10 +28,24 @@ final class NewsService
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
-        if (!self::$versionLogged) {
+        // لا تُسجّل نسخة الخدمة إلا عند تفعيل وضع التصحيح (Debug)
+        // لتجنب إغراق سجل الأخطاء برسائل متكررة في كل طلب.
+        if (!self::$versionLogged && $this->isDebugEnabled()) {
             self::$versionLogged = true;
             error_log('[NewsService] loaded ' . self::VERSION);
         }
+    }
+
+    /**
+     * تفعيل الـ Debug عبر:
+     * - define('GDY_DEBUG', true);
+     * - أو متغير بيئة GDY_DEBUG=1
+     */
+    private function isDebugEnabled(): bool
+    {
+        if (defined('GDY_DEBUG') && GDY_DEBUG) return true;
+        $env = getenv('GDY_DEBUG');
+        return ($env === '1' || strtolower((string)$env) === 'true');
     }
 
     /** @return array<string,mixed>|null */
@@ -50,6 +64,11 @@ final class NewsService
 
             $sql = 'SELECT * FROM news WHERE ' . $where . ' LIMIT 1';
             $st = $this->pdo->prepare($sql);
+            $ph2 = substr_count($sql, '?');
+            if ($ph2 !== count($params)) {
+                $this->log('[NewsService] placeholder mismatch (select) ph=' . $ph2 . ' params=' . count($params));
+                if (count($params) > $ph2) $params = array_slice($params, 0, $ph2);
+            }
             $st->execute($params);
             $row = $st->fetch(PDO::FETCH_ASSOC);
             return $row ?: null;
@@ -75,6 +94,11 @@ final class NewsService
 
             $sql = 'SELECT * FROM news WHERE ' . $where . ' LIMIT 1';
             $st = $this->pdo->prepare($sql);
+            $ph2 = substr_count($sql, '?');
+            if ($ph2 !== count($params)) {
+                $this->log('[NewsService] placeholder mismatch (select) ph=' . $ph2 . ' params=' . count($params));
+                if (count($params) > $ph2) $params = array_slice($params, 0, $ph2);
+            }
             $st->execute($params);
             $row = $st->fetch(PDO::FETCH_ASSOC);
             return $row ?: null;
@@ -180,6 +204,12 @@ final class NewsService
         try {
             $cntSql = 'SELECT COUNT(*) FROM news WHERE ' . $where;
             $cnt = $this->pdo->prepare($cntSql);
+            $ph = substr_count($cntSql, '?');
+            if ($ph !== count($params)) {
+                $this->log('[NewsService] placeholder mismatch (count) ph=' . $ph . ' params=' . count($params));
+                // Trim or pad defensively to avoid HY093 on some hosts
+                if (count($params) > $ph) $params = array_slice($params, 0, $ph);
+            }
             $cnt->execute($params);
             $total = (int)($cnt->fetchColumn() ?: 0);
             $pages = max(1, (int)ceil($total / $perPage));
@@ -189,6 +219,11 @@ final class NewsService
                 . ' LIMIT ' . (int)$perPage . ' OFFSET ' . (int)$offset;
 
             $st = $this->pdo->prepare($sql);
+            $ph2 = substr_count($sql, '?');
+            if ($ph2 !== count($params)) {
+                $this->log('[NewsService] placeholder mismatch (select) ph=' . $ph2 . ' params=' . count($params));
+                if (count($params) > $ph2) $params = array_slice($params, 0, $ph2);
+            }
             $st->execute($params);
             $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
@@ -216,7 +251,7 @@ final class NewsService
             return ['items'=>$items, 'total'=>$total, 'total_pages'=>$pages, 'page'=>$page, 'per_page'=>$perPage, 'counts'=>$counts];
         } catch (Throwable $e) {
             // Diagnostic: count placeholders vs params (helps if hosting still throws HY093)
-            $this->log('[NewsService] search error: ' . $e->getMessage() . ' | params=' . count($params));
+            $this->log('[NewsService] search error: ' . $e->getMessage() . ' | params=' . count($params) . ' | where=' . $where);
             return ['items'=>[], 'total'=>0, 'total_pages'=>1, 'page'=>$page, 'per_page'=>$perPage, 'counts'=>[]];
         }
     }

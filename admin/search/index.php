@@ -58,7 +58,7 @@ function build_like_or(array $expressions, string $paramPrefix, string $like, ar
     $params[$key] = $like;
     $i++;
   }
-  if (($parts === false)) return '(1=0)';
+  if (empty($parts)) return '(1=0)';
   return '(' . implode(' OR ', $parts) . ')';
 }
 

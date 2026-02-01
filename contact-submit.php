@@ -7,7 +7,11 @@ require_once __DIR__ . '/includes/bootstrap.php';
 if (session_status() !== PHP_SESSION_ACTIVE && function_exists('gdy_session_start')) {
     gdy_session_start();
 } elseif (session_status() !== PHP_SESSION_ACTIVE) {
+if (function_exists('gdy_session_start')) {
+    gdy_session_start();
+} elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
     session_start();
+}
 }
 
 // CSRF protection (if provided by the project)

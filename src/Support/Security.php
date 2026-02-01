@@ -6,7 +6,11 @@ class Security
     public static function csrfToken(): string
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
+            if (function_exists('gdy_session_start')) {
+                gdy_session_start();
+            } else {
+                session_start();
+            }
         }
 
         if (empty($_SESSION['csrf_token'])) {
@@ -19,7 +23,11 @@ class Security
     public static function checkCsrf(?string $token): bool
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
+            if (function_exists('gdy_session_start')) {
+                gdy_session_start();
+            } else {
+                session_start();
+            }
         }
 
         return is_string($token)

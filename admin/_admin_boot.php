@@ -11,13 +11,18 @@ if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', $__root);
 }
 
-// Start session safely
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    @session_start();
-}
-
+// Start session safely (hardened defaults from includes/safe_runtime.php)
 // Load global bootstrap (DB, helpers, i18n)
 require_once ROOT_PATH . '/includes/bootstrap.php';
+
+// Ensure session is started using hardened defaults
+if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } else {
+        session_start();
+    }
+}
 
 // Ensure translation function exists (fallback only)
 if (!function_exists('__')) {

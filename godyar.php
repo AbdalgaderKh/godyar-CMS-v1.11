@@ -101,28 +101,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors) && isset($pdo)) {
             'id'           => $id,
         ]);
 
-        // رفع صورة جديدة (إن وجدت)
-        if (!empty($_FILES['featured_image']['name'])) {
-            $uploadDir  = __DIR__ . '/../../uploads/news/';
-            if (!is_dir($uploadDir)) {
-                // تجنب صلاحيات واسعة
-                gdy_mkdir($uploadDir, 0755, true);
-            }
+        // رفع صورة جديدة (إن وجدت) - آمن عبر SafeUploader
+if (!empty($_FILES['featured_image']['name'])) {
+    try {
+        $uploadDirAbs = __DIR__ . '/../../uploads/news';
+        $opt = [
+            'dest_abs_dir' => $uploadDirAbs,
+            'url_prefix'   => '/uploads/news',
+            'max_bytes'    => 5 * 1024 * 1024,
+            'allowed_ext'  => ['jpg','jpeg','png','webp','gif'],
+            'allowed_mime' => [
+                'jpg'  => ['image/jpeg'],
+                'jpeg' => ['image/jpeg'],
+                'png'  => ['image/png'],
+                'webp' => ['image/webp'],
+                'gif'  => ['image/gif'],
+            ],
+            'prefix'       => 'news_' . (int)$id . '_',
+        ];
 
-            $ext = pathinfo($_FILES['featured_image']['name'], PATHINFO_EXTENSION);
-            $ext = strtolower($ext ?: 'jpg');
-            $newName = 'news_' . $id . '_' . time() . '.' . $ext;
-            $destPath = $uploadDir . $newName;
-
-            if (move_uploaded_file($_FILES['featured_image']['tmp_name'], $destPath)) {
-                // نحفظ المسار النسبي في قاعدة البيانات
-                $publicPath = '/uploads/news/' . $newName;
+        if (class_exists('Godyar\\SafeUploader')) {
+            $res = \Godyar\SafeUploader::upload($_FILES['featured_image'], $opt);
+            if (!empty($res['success']) && !empty($res['rel_url'])) {
                 $u = $pdo->prepare("UPDATE news SET featured_image = :img WHERE id = :id LIMIT 1");
-                $u->execute(['img' => $publicPath, 'id' => $id]);
+                $u->execute(['img' => (string)$res['rel_url'], 'id' => $id]);
+            } else {
+                $errors[] = 'فشل رفع الصورة: ' . (string)($res['error'] ?? 'Unknown');
             }
+        } else {
+            $errors[] = 'SafeUploader غير متوفر.';
         }
+    } catch (Throwable $e) {
+        $errors[] = 'فشل رفع الصورة (استثناء): ' . $e->getMessage();
+    }
+}
 
-        if ($ok) {
+if ($ok) {
+
             $success = "تم حفظ التعديلات بنجاح.";
             // إعادة تحميل الخبر بعد الحفظ
             $stmt = $pdo->prepare("SELECT * FROM news WHERE id = :id LIMIT 1");

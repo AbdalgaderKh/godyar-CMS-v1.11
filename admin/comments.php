@@ -2,7 +2,11 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/_admin_guard.php';
-session_start();
+if (function_exists('gdy_session_start')) {
+    gdy_session_start();
+} elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+    session_start();
+}
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 if (!function_exists('h')) {

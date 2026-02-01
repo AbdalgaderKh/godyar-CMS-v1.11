@@ -27,6 +27,6 @@ if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
     if (function_exists('gdy_session_start')) {
         gdy_session_start();
     } else {
-        @session_start();
+        session_start();
     }
 }

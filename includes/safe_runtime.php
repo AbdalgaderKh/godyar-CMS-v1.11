@@ -32,10 +32,47 @@ if (!function_exists('gdy_suppress_errors')) {
 }
 
 if (!function_exists('gdy_session_start')) {
+    /**
+     * Start a hardened session with safe defaults.
+     *
+     * - Forces cookies-only sessions
+     * - Enables strict mode
+     * - Sets HttpOnly + SameSite and Secure when on HTTPS
+     *
+     * You may override any option by passing $options.
+     */
     function gdy_session_start(array $options = []): bool {
         if (session_status() === PHP_SESSION_ACTIVE) return true;
-        return (bool)gdy_suppress_errors(static function () use ($options) {
-            return session_start($options);
+
+        // Apply best-practice INI defaults (safe no-ops if ini_set is disabled)
+        if (function_exists('ini_set')) {
+            @ini_set('session.use_only_cookies', '1');
+            @ini_set('session.use_strict_mode', '1');
+            @ini_set('session.use_trans_sid', '0');
+        }
+
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || ((string)($_SERVER['SERVER_PORT'] ?? '') === '443')
+            || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+
+        $defaults = [
+            // PHP session_start options (supported in modern PHP versions)
+            'use_strict_mode'  => true,
+            'cookie_httponly'  => true,
+            'cookie_secure'    => $isHttps,
+            // If your app relies on cross-site POSTs/iframes, change to 'None' and ensure HTTPS.
+            'cookie_samesite'  => 'Lax',
+        ];
+
+        // Caller overrides defaults
+        $startOptions = array_merge($defaults, $options);
+
+        return (bool)gdy_suppress_errors(static function () use ($startOptions) {
+            // Avoid warnings if headers already sent
+            if (headers_sent()) {
+                return session_start();
+            }
+            return session_start($startOptions);
         });
     }
 }

@@ -471,87 +471,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (mb_strlen($whatsapp,'UTF-8') > 80) $whatsapp = mb_substr($whatsapp,0,80,'UTF-8');
 
                 // رفع الصورة الشخصية (اختياري)
-                $avatarPath = (string)($profile['avatar'] ?? '');
-                $removeAvatar = isset($_POST['remove_avatar']);
-                if ($removeAvatar) $avatarPath = '';
+$avatarPath = (string)($profile['avatar'] ?? '');
+$removeAvatar = isset($_POST['remove_avatar']);
+if ($removeAvatar) $avatarPath = '';
 
-                if (!empty($_FILES['avatar']['name']) && is_array($_FILES['avatar'])) {
-                    $f = $_FILES['avatar'];
-                    if (($f['error'] ?? UPLOAD_ERR_OK) !== UPLOAD_ERR_OK) {
-                        throw new RuntimeException('حدث خطأ أثناء رفع صورة الملف الشخصي.');
-                    }
-                    if (($f['size'] ?? 0) > 2 * 1024 * 1024) {
-                        throw new RuntimeException('حجم صورة الملف الشخصي كبير (الحد الأقصى 2MB).');
-                    }
-                    $tmp = (string)($f['tmp_name'] ?? '');
-                    $info = gdy_getimagesize($tmp);
-                    if (!$info) {
-                        throw new RuntimeException('الملف المرفوع ليس صورة صحيحة.');
-                    }
-                    $mime = (string)($info['mime'] ?? '');
-                    $extMap = [
-                        'image/jpeg' => 'jpg',
-                        'image/png'  => 'png',
-                        'image/gif'  => 'gif',
-                        'image/webp' => 'webp',
-                    ];
-                    if (!isset($extMap[$mime])) {
-                        throw new RuntimeException('صيغة صورة الملف الشخصي غير مدعومة.');
-                    }
+if (!empty($_FILES['avatar']['name']) && is_array($_FILES['avatar'])) {
+    $f = $_FILES['avatar'];
 
-                    $dir = __DIR__ . '/uploads/avatars';
-                    if (!is_dir($dir)) {
-                        gdy_mkdir($dir, 0755, true);
-                    }
-                    $name = 'user_' . $uid . '_' . date('Ymd_His') . '.' . $extMap[$mime];
-                    $dest = $dir . '/' . $name;
-                    if (!gdy_move_uploaded_file($tmp, $dest)) {
-                        throw new RuntimeException('تعذر حفظ صورة الملف الشخصي.');
-                    }
-                    $avatarPath = 'uploads/avatars/' . $name;
-                }
+    // Use centralised SafeUploader (MIME+ext checks + random filename)
+    if (class_exists(\Godyar\SafeUploader::class)) {
+        $res = \Godyar\SafeUploader::upload($f, [
+            'dest_abs_dir' => __DIR__ . '/uploads/avatars',
+            'url_prefix'   => '/uploads/avatars',
+            'max_bytes'    => 2 * 1024 * 1024,
+            'allowed_ext'  => ['jpg','jpeg','png','gif','webp'],
+            'allowed_mime' => [
+                'jpg'  => ['image/jpeg'],
+                'jpeg' => ['image/jpeg'],
+                'png'  => ['image/png'],
+                'gif'  => ['image/gif'],
+                'webp' => ['image/webp'],
+            ],
+            'prefix'       => 'av_',
+        ]);
+        if (empty($res['success'])) {
+            throw new RuntimeException('حدث خطأ أثناء رفع صورة الملف الشخصي: ' . ($res['error'] ?? 'unknown'));
+        }
+        $avatarPath = ltrim((string)$res['rel_url'], '/');
+    } else {
+        throw new RuntimeException('Uploader غير متاح على هذا النظام.');
+    }
+}
 
-                // رفع صورة الغلاف (اختياري)
-                $coverPath = (string)($profile['cover'] ?? '');
-                $removeCover = isset($_POST['remove_cover']);
-                if ($removeCover) $coverPath = '';
+// رفع صورة الغلاف (اختياري)
+$coverPath = (string)($profile['cover'] ?? '');
+$removeCover = isset($_POST['remove_cover']);
+if ($removeCover) $coverPath = '';
 
-                if (!empty($_FILES['cover']['name']) && is_array($_FILES['cover'])) {
-                    $f = $_FILES['cover'];
-                    if (($f['error'] ?? UPLOAD_ERR_OK) !== UPLOAD_ERR_OK) {
-                        throw new RuntimeException('حدث خطأ أثناء رفع صورة الغلاف.');
-                    }
-                    if (($f['size'] ?? 0) > 4 * 1024 * 1024) {
-                        throw new RuntimeException('حجم صورة الغلاف كبير (الحد الأقصى 4MB).');
-                    }
-                    $tmp = (string)($f['tmp_name'] ?? '');
-                    $info = gdy_getimagesize($tmp);
-                    if (!$info) {
-                        throw new RuntimeException('ملف الغلاف ليس صورة صحيحة.');
-                    }
-                    $mime = (string)($info['mime'] ?? '');
-                    $extMap = [
-                        'image/jpeg' => 'jpg',
-                        'image/png'  => 'png',
-                        'image/webp' => 'webp',
-                    ];
-                    if (!isset($extMap[$mime])) {
-                        throw new RuntimeException('صيغة صورة الغلاف غير مدعومة (JPG/PNG/WEBP فقط).');
-                    }
+if (!empty($_FILES['cover']['name']) && is_array($_FILES['cover'])) {
+    $f = $_FILES['cover'];
 
-                    $dir = __DIR__ . '/uploads/covers';
-                    if (!is_dir($dir)) {
-                        gdy_mkdir($dir, 0755, true);
-                    }
-                    $name = 'cover_' . $uid . '_' . date('Ymd_His') . '.' . $extMap[$mime];
-                    $dest = $dir . '/' . $name;
-                    if (!gdy_move_uploaded_file($tmp, $dest)) {
-                        throw new RuntimeException('تعذر حفظ صورة الغلاف.');
-                    }
-                    $coverPath = 'uploads/covers/' . $name;
-                }
+    if (class_exists(\Godyar\SafeUploader::class)) {
+        $res = \Godyar\SafeUploader::upload($f, [
+            'dest_abs_dir' => __DIR__ . '/uploads/covers',
+            'url_prefix'   => '/uploads/covers',
+            'max_bytes'    => 4 * 1024 * 1024,
+            'allowed_ext'  => ['jpg','jpeg','png','webp'],
+            'allowed_mime' => [
+                'jpg'  => ['image/jpeg'],
+                'jpeg' => ['image/jpeg'],
+                'png'  => ['image/png'],
+                'webp' => ['image/webp'],
+            ],
+            'prefix'       => 'cv_',
+        ]);
+        if (empty($res['success'])) {
+            throw new RuntimeException('حدث خطأ أثناء رفع صورة الغلاف: ' . ($res['error'] ?? 'unknown'));
+        }
+        $coverPath = ltrim((string)$res['rel_url'], '/');
+    } else {
+        throw new RuntimeException('Uploader غير متاح على هذا النظام.');
+    }
+}
 
-                // تحديث users إن كانت الأعمدة موجودة
+// تحديث users إن كانت الأعمدة موجودة
                 $cols = function_exists('db_table_columns') ? db_table_columns($pdo, 'users') : [];
                 $set = [];
                 $bind = [':id' => $uid];

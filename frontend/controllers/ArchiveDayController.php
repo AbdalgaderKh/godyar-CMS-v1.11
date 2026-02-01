@@ -1,12 +1,19 @@
 <?php
-// عرض أخطاء مؤقتًا أثناء التشخيص (احذف لاحقًا)
-ini_set('display_errors', 1);
-function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
-error_reporting(E_ALL);
+declare(strict_types=1);
+
+// NOTE: Never enable display_errors from within controllers.
+// Error output is controlled centrally via includes/bootstrap.php (APP_DEBUG).
 
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
+// Keep full error reporting for logs.
 error_reporting(E_ALL);
+
+if (!function_exists('h')) {
+    function h($v): string {
+        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+    }
+}
 
 $slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 if ($slug === '') {

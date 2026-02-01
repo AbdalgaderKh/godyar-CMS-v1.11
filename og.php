@@ -169,10 +169,13 @@ function og_render_gd(string $title, string $siteName, string $tagline, array $o
         }
     }
 
-    // Title
+    // Title (limit length to avoid abuse/DoS)
     $title = trim($title);
     if ($title === '') {
         $title = (string)($_GET['t'] ?? '');
+    }
+    if (mb_strlen($title, 'UTF-8') > 140) {
+        $title = mb_substr($title, 0, 140, 'UTF-8');
     }
     $title = $title !== '' ? $title : ' '; // keep non-empty for bbox calc
 

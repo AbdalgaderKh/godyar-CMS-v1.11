@@ -17,6 +17,14 @@ $type = isset($_GET['type']) ? strtolower((string)$_GET['type']) : 'page';
 $title = isset($_GET['title']) ? trim((string)$_GET['title']) : '';
 $subtitle = isset($_GET['subtitle']) ? trim((string)$_GET['subtitle']) : '';
 
+// Length limits to reduce abuse/DoS
+if (mb_strlen($title, 'UTF-8') > 140) {
+    $title = mb_substr($title, 0, 140, 'UTF-8');
+}
+if (mb_strlen($subtitle, 'UTF-8') > 220) {
+    $subtitle = mb_substr($subtitle, 0, 220, 'UTF-8');
+}
+
 if ($title === '') {
     $title = ($type === 'category') ? 'تصنيف' : (($type === 'tag') ? 'وسم' : 'Godyar News');
 }

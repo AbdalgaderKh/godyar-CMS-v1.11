@@ -28,6 +28,29 @@ if (!preg_match('#^https?://#i', $url)) {
     $url = $base !== '' ? ($base . '/' . ltrim($url, '/')) : $url;
 }
 
+// Safety: allow only same-host URLs to prevent abuse.
+try {
+    $u = parse_url($url) ?: [];
+    $host = strtolower((string)($u['host'] ?? ''));
+
+    $allowedHost = '';
+    if ($base !== '') {
+        $b = parse_url($base) ?: [];
+        $allowedHost = strtolower((string)($b['host'] ?? ''));
+    }
+    if ($allowedHost === '' && !empty($_SERVER['HTTP_HOST'])) {
+        $allowedHost = strtolower((string)$_SERVER['HTTP_HOST']);
+    }
+
+    if ($allowedHost !== '' && $host !== '' && $host !== $allowedHost) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'error' => 'host not allowed'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+} catch (Throwable $e) {
+    // ignore and continue
+}
+
 if (!function_exists('gdy_indexnow_submit')) {
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => 'indexnow not available'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);

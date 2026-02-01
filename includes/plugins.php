@@ -64,11 +64,12 @@ final class PluginManager
     public function loadAll(?string $baseDir = null): void
     {
         $base = $baseDir ?: dirname(__DIR__) . '/plugins';
-        if (!is_dir($base)) {
+        $baseReal = realpath($base) ?: $base;
+        if (!is_dir($baseReal)) {
             return;
         }
 
-        $dirs = scandir($base);
+        $dirs = scandir($baseReal);
         if (!is_array($dirs)) {
             return;
         }
@@ -78,26 +79,45 @@ final class PluginManager
                 continue;
             }
 
-            $pluginPath = $base . '/' . $dir;
-            if (!is_dir($pluginPath)) {
+            // اسم المجلد هو الـ slug: نقيّد الأحرف لتقليل مخاطر traversal / weird paths
+            if (!preg_match('~^[A-Za-z0-9_\-]{1,64}$~', (string)$dir)) {
+                continue;
+            }
+
+            $pluginPath = rtrim($baseReal, '/\\') . '/' . $dir;
+
+            // تمنيع symlink داخل plugins
+            if (is_link($pluginPath)) {
+                continue;
+            }
+
+            $pluginPathReal = realpath($pluginPath);
+            if ($pluginPathReal === false || strpos($pluginPathReal, rtrim($baseReal, '/\\') . DIRECTORY_SEPARATOR) !== 0) {
+                continue;
+            }
+
+            if (!is_dir($pluginPathReal)) {
                 continue;
             }
 
             $slug = $dir;
 
-            // قراءة meta من plugin.json (إن وجد)
+            // قراءة meta من plugin.json (إلزامي)
             $meta = [
                 'slug'    => $slug,
                 'enabled' => true,
             ];
-            $metaFile = $pluginPath . '/plugin.json';
-            if (is_file($metaFile)) {
-                $json = gdy_file_get_contents($metaFile);
-                if (is_string($json) && $json !== '') {
-                    $decoded = json_decode($json, true);
-                    if (is_array($decoded)) {
-                        $meta = array_merge($meta, $decoded);
-                    }
+            $metaFile = $pluginPathReal . '/plugin.json';
+            if (!is_file($metaFile)) {
+                // لتقليل المفاجآت الأمنية: لا نحمّل إضافات بدون manifest.
+                continue;
+            }
+
+            $json = gdy_file_get_contents($metaFile);
+            if (is_string($json) && $json !== '') {
+                $decoded = json_decode($json, true);
+                if (is_array($decoded)) {
+                    $meta = array_merge($meta, $decoded);
                 }
             }
 
@@ -112,7 +132,7 @@ final class PluginManager
                 continue; // الإضافة معطّلة
             }
 
-            $main = $pluginPath . '/Plugin.php';
+            $main = $pluginPathReal . '/Plugin.php';
             if (!is_file($main)) {
                 continue;
             }
@@ -123,7 +143,7 @@ final class PluginManager
 
                 if ($instance instanceof GodyarPluginInterface) {
                     // Install/Migrate عند التفعيل (قبل register)
-                    $this->maybeMigratePlugin($slug, $pluginPath, $meta, $instance);
+                    $this->maybeMigratePlugin($slug, $pluginPathReal, $meta, $instance);
 
                     $this->meta[$slug]    = $meta;
                     $this->plugins[$slug] = $instance;
@@ -149,20 +169,29 @@ final class PluginManager
         }
 
         $base = $baseDir ?: dirname(__DIR__) . '/plugins';
-        $pluginPath = rtrim($base, '/\\') . DIRECTORY_SEPARATOR . $slug;
-        if (!is_dir($pluginPath)) {
+        $baseReal = realpath($base) ?: $base;
+        $pluginPath = rtrim($baseReal, '/\\') . DIRECTORY_SEPARATOR . $slug;
+        if (is_link($pluginPath)) {
+            return ['ok' => false, 'message' => 'Symlinked plugin folders are not allowed'];
+        }
+        $pluginPathReal = realpath($pluginPath);
+        if ($pluginPathReal === false || strpos($pluginPathReal, rtrim($baseReal, '/\\') . DIRECTORY_SEPARATOR) !== 0) {
+            return ['ok' => false, 'message' => 'Invalid plugin path'];
+        }
+        if (!is_dir($pluginPathReal)) {
             return ['ok' => false, 'message' => 'Plugin folder not found'];
         }
 
         $meta = ['slug' => $slug, 'enabled' => true];
-        $metaFile = $pluginPath . '/plugin.json';
-        if (is_file($metaFile)) {
-            $json = gdy_file_get_contents($metaFile);
-            if (is_string($json) && $json !== '') {
-                $decoded = json_decode($json, true);
-                if (is_array($decoded)) {
-                    $meta = array_merge($meta, $decoded);
-                }
+        $metaFile = $pluginPathReal . '/plugin.json';
+        if (!is_file($metaFile)) {
+            return ['ok' => false, 'message' => 'plugin.json not found'];
+        }
+        $json = gdy_file_get_contents($metaFile);
+        if (is_string($json) && $json !== '') {
+            $decoded = json_decode($json, true);
+            if (is_array($decoded)) {
+                $meta = array_merge($meta, $decoded);
             }
         }
 
@@ -171,7 +200,7 @@ final class PluginManager
             return ['ok' => false, 'message' => 'No schema_version configured'];
         }
 
-        $main = $pluginPath . '/Plugin.php';
+        $main = $pluginPathReal . '/Plugin.php';
         if (!is_file($main)) {
             return ['ok' => false, 'message' => 'Plugin.php not found'];
         }
@@ -205,7 +234,7 @@ final class PluginManager
             if ($from === 0 && method_exists($instance, 'install')) {
                 $ref = new \ReflectionMethod($instance, 'install');
                 $argc = $ref->getNumberOfParameters();
-                $args = [$pdo, $pluginPath, $meta];
+                $args = [$pdo, $pluginPathReal, $meta];
                 $ref->invokeArgs($instance, array_slice($args, 0, $argc));
                 $this->setInstalledSchemaVersion($pdo, $slug, $target);
                 return ['ok' => true, 'message' => 'Install executed', 'from' => 0, 'to' => $target];

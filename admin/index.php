@@ -15,13 +15,15 @@ require_once __DIR__ . '/../includes/auth.php';
 use Godyar\Auth;
 
 if (!Auth::isLoggedIn()) {
-    header('Location: /admin/login');
+    $loginUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/login.php') : 'login.php';
+    header('Location: ' . $loginUrl);
     exit;
 }
 
 // الكاتب يذهب مباشرة للوحة الأخبار
 if (Auth::isWriter()) {
-    header('Location: /admin/news/index.php');
+    $newsUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/news/index.php') : 'news/index.php';
+    header('Location: ' . $newsUrl);
     exit;
 }
 

@@ -36,6 +36,8 @@ $allowedPrefixes = [
 $allowedExact = [
     '/admin/logout.php',
     '/admin/login',
+    '/admin/login.php',
+    '/admin/login/',
 ];
 
 foreach ($allowedExact as $ok) {
@@ -51,5 +53,6 @@ foreach ($allowedPrefixes as $prefix) {
 }
 
 // أي شيء آخر -> إعادة توجيه لمقالات الكاتب
-header('Location: /admin/news/index.php');
+$newsUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/news/index.php') : 'news/index.php';
+header('Location: ' . $newsUrl);
 exit;

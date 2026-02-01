@@ -207,11 +207,21 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
             ]);
         }
 
-// ✅ تحويل إلى لوحة التحكم بعد نجاح الدخول (مسار مطلق)
+        // ✅ تحويل إلى لوحة التحكم بعد نجاح الدخول
+        // ملاحظة: لا نعتمد على مسارات مطلقة تبدأ بـ "/" لأن بعض الاستضافات
+        // تشغّل المشروع داخل مجلد (subfolder). base_url() تعالج ذلك.
+        $adminHome = (function_exists('base_url') === TRUE)
+            ? base_url('/admin/index.php')
+            : 'index.php';
+
+        $adminNews = (function_exists('base_url') === TRUE)
+            ? base_url('/admin/news/index.php')
+            : 'news/index.php';
+
         if (in_array((string)($_SESSION['user']['role'] ?? ''), ['writer','author'], true)) {
-            header('Location: /admin/news/index.php');
+            header('Location: ' . $adminNews);
         } else {
-            header('Location: /admin/index.php');
+            header('Location: ' . $adminHome);
         }
         exit;
 
@@ -421,7 +431,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
           <div class="alert alert-danger py-2 small mb-3"><?php echo h($error); ?></div>
         <?php endif; ?>
 
-        <form method="post" action="login.php" novalidate>
+        <form method="post" action="<?= (function_exists('base_url') === TRUE) ? h(base_url('/admin/login.php')) : 'login.php' ?>" novalidate>
           <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
 
           <div class="mb-3">

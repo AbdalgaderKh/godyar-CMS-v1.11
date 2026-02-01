@@ -26,6 +26,19 @@ $items = [];
 $page    = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 12;
 $offset  = ($page - 1) * $perPage;
+
+// output cache (anonymous GET only)
+$__didOutputCache = false;
+$__pageCacheKey = '';
+$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
+if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+    $__pageCacheKey = 'tag_' . gdy_page_cache_key('tag', [$slug, $page, $perPage]);
+    if (PageCache::serveIfCached($__pageCacheKey)) {
+        exit;
+    }
+    ob_start();
+    $__didOutputCache = true;
+}
 $total   = 0;
 $pages   = 1;
 
@@ -160,6 +173,11 @@ if (is_file($header)) require $header;
 
 if (is_file($view) === true) {
     require $view;
+
+if ($__didOutputCache && $__pageCacheKey !== '') {
+    PageCache::store($__pageCacheKey, $__ttl);
+    @ob_end_flush();
+}
 } else {
     echo "View not found: " . h($view);
 }

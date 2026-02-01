@@ -839,3 +839,69 @@ if (!function_exists('gdy_cache_remember')) {
         return $fn();
     }
 }
+
+
+// ------------------------------
+// Output/Page cache helpers (portable)
+// ------------------------------
+
+if (function_exists('gdy_output_cache_ttl') === false) {
+  function gdy_output_cache_ttl(): int {
+    $v = getenv('GDY_OUTPUT_CACHE_TTL');
+    if ($v === false || $v === '') {
+      return 60; // default 60s
+    }
+    $n = (int)$v;
+    return ($n < 0) ? 0 : $n;
+  }
+}
+
+if (function_exists('gdy_should_bypass_output_cache') === false) {
+  function gdy_should_bypass_output_cache(): bool {
+    if (isset($_GET['nocache']) && (string)$_GET['nocache'] === '1') {
+      return true;
+    }
+    return false;
+  }
+}
+
+if (function_exists('gdy_should_output_cache') === false) {
+  function gdy_should_output_cache(): bool {
+    // Only cache safe GET requests for anonymous users.
+    if (gdy_output_cache_ttl() <= 0) {
+      return false;
+    }
+    if (gdy_should_bypass_output_cache()) {
+      return false;
+    }
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
+      return false;
+    }
+    $uri = (string)($_SERVER['REQUEST_URI'] ?? '');
+    if ($uri !== '' && strpos($uri, '/admin') !== false) {
+      return false;
+    }
+    // If session indicates a logged-in user/admin, do not cache.
+    if (session_status() === PHP_SESSION_ACTIVE) {
+      if (!empty($_SESSION['user_id']) || !empty($_SESSION['admin'])) {
+        return false;
+      }
+    }
+    // If any auth cookies exist, skip (defensive).
+    foreach ($_COOKIE as $k => $v) {
+      $lk = strtolower((string)$k);
+      if (strpos($lk, 'sess') !== false || strpos($lk, 'auth') !== false || strpos($lk, 'admin') !== false) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+
+if (function_exists('gdy_page_cache_key') === false) {
+  function gdy_page_cache_key(string $prefix, array $parts = []): string {
+    $host = (string)($_SERVER['HTTP_HOST'] ?? 'host');
+    $base = $prefix . '|' . $host . '|' . implode('|', array_map('strval', $parts));
+    return substr(sha1($base), 0, 24);
+  }
+}

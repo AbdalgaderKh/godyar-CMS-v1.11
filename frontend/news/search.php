@@ -79,6 +79,19 @@ $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 10;
 $offset = ($page - 1) * $perPage;
 
+// output cache (anonymous GET only)
+$__didOutputCache = false;
+$__pageCacheKey = '';
+$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
+if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+    $__pageCacheKey = 'search_' . gdy_page_cache_key('search', [$q, $type, $mode, $page, $perPage]);
+    if (PageCache::serveIfCached($__pageCacheKey)) {
+        exit;
+    }
+    ob_start();
+    $__didOutputCache = true;
+}
+
 // Some MySQL/PDO configurations (especially when native prepared statements
 // are used) may fail when LIMIT/OFFSET are bound as parameters. We embed
 // them after forcing safe integer values.
@@ -513,3 +526,8 @@ if ($__listTtl > 0 && class_exists('Cache') && method_exists('Cache', 'put')) {
 
 render_search:
 require __DIR__ . '/../views/search.php';
+
+if ($__didOutputCache && $__pageCacheKey !== '') {
+    PageCache::store($__pageCacheKey, $__ttl);
+    @ob_end_flush();
+}

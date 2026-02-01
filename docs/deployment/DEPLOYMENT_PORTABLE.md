@@ -44,3 +44,7 @@
 - [ ] تعطيل عرض الأخطاء في الإنتاج (display_errors=0)
 - [ ] تفعيل HTTPS + HSTS (إن كان مناسباً)
 - [ ] صلاحيات الملفات: 644 والـ folders: 755 (ومجلدات الكتابة 775)
+
+
+## Recommended: Set Document Root to `webroot/`
+If your hosting allows, point the site document root to `webroot/`. This keeps application code one level above the web server, reducing exposure.

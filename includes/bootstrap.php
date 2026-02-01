@@ -17,6 +17,10 @@ if (is_dir($__gdyLogDir) && is_writable($__gdyLogDir)) {
 
 // Safety helpers (sanitizers + req_* helpers)
 require_once __DIR__ . '/safe_runtime.php';
+// Security headers (portable hardening)
+require_once __DIR__ . '/security_headers.php';
+if (function_exists('gdy_apply_security_headers')) { gdy_apply_security_headers(); }
+
 // -------------------------------------------------
 // Global constants used across admin + frontend
 // -------------------------------------------------

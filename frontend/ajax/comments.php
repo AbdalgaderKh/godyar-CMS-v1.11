@@ -79,7 +79,7 @@ function normalize_body(string $body): string {
 $action = (string)($_POST['action'] ?? $_GET['action'] ?? 'list');
 
 // CSRF for state-changing actions (AJAX/JSON via header)
-if ($action !== 'list' && function_exists('csrf_verify_any_or_die')) {
+if ($action !== 'list' && function_exists('\n// Same-origin guard (blocks cross-site cookie requests)\nif (function_exists('gdy_origin_guard_or_die')) {\n    gdy_origin_guard_or_die();\n}\n\ncsrf_verify_any_or_die')) {
     csrf_verify_any_or_die();
 }
 

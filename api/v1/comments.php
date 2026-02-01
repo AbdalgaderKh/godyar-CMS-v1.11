@@ -77,7 +77,7 @@ try {
         $pdo = gdy_pdo_safe();
     
 // CSRF for browser POSTs (if request carries session cookies)
-if ($method === 'POST' && function_exists('csrf_verify_any_or_die')) {
+if ($method === 'POST' && function_exists('\n// Same-origin guard (blocks cross-site cookie requests)\nif (function_exists('gdy_origin_guard_or_die')) {\n    gdy_origin_guard_or_die();\n}\n\ncsrf_verify_any_or_die')) {
     $sn = function_exists('session_name') ? session_name() : 'PHPSESSID';
     $hasCookie = !empty($_COOKIE[$sn]) || (isset($_SERVER['HTTP_COOKIE']) && stripos((string)$_SERVER['HTTP_COOKIE'], $sn . '=') !== false);
     if ($hasCookie) {

@@ -221,6 +221,99 @@ if (function_exists('csrf_verify_any_or_die') === false) {
         }
     }
 }
+/**
+ * Same-Origin guard for cookie-authenticated state-changing requests.
+ * Portable across hosts: if Origin is present it must match the current host.
+ * If Origin is absent, Referer (if present) must match. If both are absent,
+ * allow by default unless GDY_ORIGIN_GUARD_STRICT=1.
+ *
+ * You can allow additional trusted origins via GDY_TRUSTED_ORIGINS (comma-separated).
+ */
+function gdy_origin_guard_or_die(): void {
+    if ((string)($_ENV['GDY_ORIGIN_GUARD'] ?? getenv('GDY_ORIGIN_GUARD') ?? '1') === '0') {
+        return;
+    }
+
+    $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+    if (!in_array($method, ['POST','PUT','PATCH','DELETE'], true)) {
+        return;
+    }
+    // Preflight should not be blocked here
+    if ($method === 'OPTIONS') {
+        return;
+    }
+
+    // Only enforce when browser cookies are in play
+    $hasCookies = !empty($_COOKIE);
+    if (!$hasCookies) {
+        return;
+    }
+
+    $strict = ((string)($_ENV['GDY_ORIGIN_GUARD_STRICT'] ?? getenv('GDY_ORIGIN_GUARD_STRICT') ?? '0') === '1');
+
+    $host = (string)($_SERVER['HTTP_HOST'] ?? '');
+    if ($host === '') {
+        return;
+    }
+    $host = strtolower(preg_replace('/:\\d+$/', '', $host));
+
+    $trusted = (string)($_ENV['GDY_TRUSTED_ORIGINS'] ?? getenv('GDY_TRUSTED_ORIGINS') ?? '');
+    $trustedList = [];
+    if ($trusted !== '') {
+        foreach (explode(',', $trusted) as $o) {
+            $o = trim($o);
+            if ($o !== '') {
+                $trustedList[] = $o;
+            }
+        }
+    }
+
+    $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
+    $referer = (string)($_SERVER['HTTP_REFERER'] ?? '');
+
+    $ok = null; // null=unknown (no headers), true/false otherwise
+
+    $matchesHost = static function (string $url) use ($host, $trustedList): bool {
+        $u = parse_url($url);
+        if (!is_array($u)) return false;
+        $h = strtolower((string)($u['host'] ?? ''));
+        if ($h === '') return false;
+        if ($h === $host) return true;
+        foreach ($trustedList as $t) {
+            $tu = parse_url($t);
+            if (is_array($tu)) {
+                $th = strtolower((string)($tu['host'] ?? ''));
+                if ($th !== '' && $th === $h) return true;
+            }
+        }
+        return false;
+    };
+
+    if ($origin !== '') {
+        $ok = $matchesHost($origin);
+    } elseif ($referer !== '') {
+        $ok = $matchesHost($referer);
+    } else {
+        $ok = null;
+    }
+
+    if ($ok === false || ($ok === null && $strict)) {
+            http_response_code(403);
+
+            $accept = (string)($_SERVER['HTTP_ACCEPT'] ?? '');
+            $xhr = strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '')) === 'xmlhttprequest';
+            $wantsJson = $xhr || stripos($accept, 'application/json') !== false;
+
+            if ($wantsJson) {
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['ok' => false, 'error' => 'origin_not_allowed'], JSON_UNESCAPED_UNICODE);
+            } else {
+                header('Content-Type: text/plain; charset=utf-8');
+                echo 'Forbidden';
+            }
+            exit;
+        }
+}
 }
 
 /**

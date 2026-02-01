@@ -16,7 +16,7 @@ if (function_exists('gdy_session_start')) {
 }
 
 // CSRF protection (if provided by the project)
-if (function_exists('csrf_verify_or_die')) {
+if (function_exists('\n// Same-origin guard (blocks cross-site cookie requests)\nif (function_exists('gdy_origin_guard_or_die')) {\n    gdy_origin_guard_or_die();\n}\n\ncsrf_verify_or_die')) {
     csrf_verify_or_die();
 } elseif (function_exists('verify_csrf')) {
     verify_csrf();

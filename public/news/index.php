@@ -27,6 +27,12 @@ if ($pdo instanceof PDO) {
     }
 }
 
+
+// Performance: bulk-load comment counts to avoid N+1
+if ($pdo instanceof PDO && !empty($items) && function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    $items = gdy_attach_comment_counts_to_news_rows($pdo, $items);
+}
+
 // هنا يفترض أنك لديك هيدر القالب الأمامي
 // include __DIR__ . '/../layout/header.php';
 ?>

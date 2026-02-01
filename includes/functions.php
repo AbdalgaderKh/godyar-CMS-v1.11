@@ -692,3 +692,85 @@ if (!function_exists('is_ajax_request')) {
         return false;
     }
 }
+
+
+// -----------------------------------------------------------------------------
+// Bulk comment counts for news lists (performance: avoids N+1)
+// -----------------------------------------------------------------------------
+if (!function_exists('gdy_comment_counts_for_news')) {
+    /**
+     * @param PDO $pdo
+     * @param array<int|string> $newsIds
+     * @return array<int,int> map news_id => approved_count
+     */
+    function gdy_comment_counts_for_news(PDO $pdo, array $newsIds): array
+    {
+        $ids = [];
+        foreach ($newsIds as $id) {
+            $i = (int)$id;
+            if ($i > 0) $ids[$i] = $i;
+        }
+        if (!$ids) return [];
+
+        $ids = array_values($ids);
+        $ph  = implode(',', array_fill(0, count($ids), '?'));
+
+        // Prefer counting approved comments when the column exists; fall back gracefully.
+        $sqlApproved = "SELECT news_id, COUNT(*) AS c FROM news_comments WHERE status = 'approved' AND news_id IN ($ph) GROUP BY news_id";
+        $sqlAny      = "SELECT news_id, COUNT(*) AS c FROM news_comments WHERE news_id IN ($ph) GROUP BY news_id";
+
+        try {
+            $st = $pdo->prepare($sqlApproved);
+            $st->execute($ids);
+        } catch (Throwable $e) {
+            try {
+                $st = $pdo->prepare($sqlAny);
+                $st->execute($ids);
+            } catch (Throwable $e2) {
+                return [];
+            }
+        }
+
+        $map = [];
+        while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
+            $nid = (int)($row['news_id'] ?? 0);
+            $cnt = (int)($row['c'] ?? 0);
+            if ($nid > 0) $map[$nid] = $cnt;
+        }
+        return $map;
+    }
+}
+
+if (!function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    /**
+     * Adds 'comments_count' to each news row (by id).
+     * @param PDO $pdo
+     * @param array<int,array<string,mixed>> $rows
+     * @return array<int,array<string,mixed>>
+     */
+    function gdy_attach_comment_counts_to_news_rows(PDO $pdo, array $rows): array
+    {
+        if (!$rows) return $rows;
+        $ids = [];
+        foreach ($rows as $r) {
+            if (is_array($r) && isset($r['id'])) $ids[] = (int)$r['id'];
+        }
+        $counts = gdy_comment_counts_for_news($pdo, $ids);
+        if (!$counts) {
+            foreach ($rows as &$r) {
+                if (is_array($r) && !isset($r['comments_count'])) $r['comments_count'] = 0;
+            }
+            unset($r);
+            return $rows;
+        }
+
+        foreach ($rows as &$r) {
+            if (!is_array($r)) continue;
+            $id = (int)($r['id'] ?? 0);
+            $r['comments_count'] = $counts[$id] ?? 0;
+        }
+        unset($r);
+        return $rows;
+    }
+}
+

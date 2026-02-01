@@ -49,6 +49,12 @@ if ($slug !== '' && isset($pdo) && $pdo instanceof PDO) {
         $st->bindValue(':off', $offset, PDO::PARAM_INT);
         $st->execute();
         $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        // Performance: bulk-load comment counts to avoid N+1
+        if ($pdo instanceof PDO && !empty($items) && function_exists('gdy_attach_comment_counts_to_news_rows')) {
+            $items = gdy_attach_comment_counts_to_news_rows($pdo, $items);
+        }
+
     }
 }
 

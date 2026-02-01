@@ -97,6 +97,11 @@ $baseUrl = base_url();
 
 // تحميل الأخبار الشائعة (الأكثر مشاهدة)
 $trendingNews = [];
+
+// Performance: bulk-load comment counts to avoid N+1
+if ($pdo instanceof PDO && !empty($trendingNews) && function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    $trendingNews = gdy_attach_comment_counts_to_news_rows($pdo, $trendingNews);
+}
 try {
     if ($pdo instanceof PDO) {
 	    	$sql = "SELECT id, title, excerpt, COALESCE(featured_image,image_path,image) AS featured_image, published_at, views

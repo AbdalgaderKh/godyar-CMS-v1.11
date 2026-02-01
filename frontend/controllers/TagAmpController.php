@@ -9,6 +9,21 @@ if (($pdo instanceof \PDO) === false) {
 }
 $slug = (!empty($_GET['slug']) ? $_GET['slug'] : null); if (($slug === false)){ http_response_code(404); exit; }
 $page = max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
+
+
+// output cache (anonymous GET only)
+$__didOutputCache = false;
+$__pageCacheKey = '';
+$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
+if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+    $__pageCacheKey = 'tagamp_' . gdy_page_cache_key('tagamp', [$slug, $page, $perPage]);
+    if (PageCache::serveIfCached($__pageCacheKey)) {
+        exit;
+    }
+    ob_start();
+    $__didOutputCache = true;
+}
+
 $st=$pdo->prepare("SELECT * FROM tags WHERE slug=:s LIMIT 1");
 $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC) ?: null;
 if (($tag === false)){ http_response_code(404); exit; }
@@ -55,3 +70,9 @@ if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
     try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
 }
 require __DIR__ . '/../views/tag_amp.php';
+
+if ($__didOutputCache && $__pageCacheKey !== '') {
+    PageCache::store($__pageCacheKey, $__ttl);
+    @ob_end_flush();
+}
+

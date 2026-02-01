@@ -13,6 +13,21 @@ declare(strict_types=1);
  */
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
+
+
+// output cache (anonymous GET only)
+$__didOutputCache = false;
+$__pageCacheKey = '';
+$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
+if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+    $__pageCacheKey = 'trending_' . gdy_page_cache_key('trending', ['page' => 1]);
+    if (PageCache::serveIfCached($__pageCacheKey)) {
+        exit;
+    }
+    ob_start();
+    $__didOutputCache = true;
+}
+
 $container = $GLOBALS['container'] ?? null;
 if (($container instanceof \Godyar\Container) === false) {
     try { $container = new \Godyar\Container(\Godyar\DB::pdo()); } catch (\Throwable $e) { $container = null; }
@@ -59,3 +74,9 @@ if (!$items) {
 echo '</main>';
 
 if (is_file($footer)) require $footer;
+
+if ($__didOutputCache && $__pageCacheKey !== '') {
+    PageCache::store($__pageCacheKey, $__ttl);
+    @ob_end_flush();
+}
+

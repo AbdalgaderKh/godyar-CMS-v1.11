@@ -36,6 +36,21 @@ final class ArchiveController
             $month = null;
         }
 
+
+
+        // output cache (anonymous GET only)
+        $__didOutputCache = false;
+        $__pageCacheKey = '';
+        $__ttl = \function_exists('gdy_output_cache_ttl') ? \gdy_output_cache_ttl() : 0;
+        if ($__ttl > 0 && \function_exists('gdy_should_output_cache') && \gdy_should_output_cache() && \class_exists('PageCache')) {
+            $__pageCacheKey = 'archive_' . \gdy_page_cache_key('archive', [$page, ($year ?? 0), ($month ?? 0)]);
+            if (\PageCache::serveIfCached($__pageCacheKey)) {
+                return;
+            }
+            \ob_start();
+            $__didOutputCache = true;
+        }
+
         $list = $this->news->archive($page, $perPage, $year, $month);
 
         $title = 'الأرشيف';
@@ -60,5 +75,11 @@ final class ArchiveController
                 'pageSeo' => $this->seo->archive($year, $month),
             ]
         );
+
+        if ($__didOutputCache && $__pageCacheKey !== '') {
+            \PageCache::store($__pageCacheKey, $__ttl);
+            @\ob_end_flush();
+        }
+
     }
 }

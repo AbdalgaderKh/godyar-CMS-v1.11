@@ -92,20 +92,36 @@ $__isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
     || ((string)($_SERVER['SERVER_PORT'] ?? '') === '443')
     || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
 
+// Some hosts set session.cookie_path/domain in a way that makes the __Host- prefix invalid.
+// Browsers will reject cookies that start with "__Host-" unless:
+// - Secure is set
+// - Path is exactly "/"
+// - No Domain attribute is set
+// To keep admin login portable across shared hosting setups, only use __Host- when safe.
+$__cookiePath = (string)ini_get('session.cookie_path');
+$__cookieDomain = (string)ini_get('session.cookie_domain');
+$__canUseHostPrefix = ($__isHttps === true)
+    && ($__cookiePath === '' || $__cookiePath === '/')
+    && ($__cookieDomain === '' || $__cookieDomain === '0');
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    // Set a predictable, separate session name for admin vs public
-    // __Host- requires: Secure + Path=/ + no Domain attribute.
+    // Set a predictable, separate session name for admin vs public.
+    // Prefer __Host- only when safe (see $__canUseHostPrefix above) to avoid browsers rejecting the cookie.
     if ($__isAdminArea) {
-        $name = $__isHttps ? '__Host-GDYADMIN' : 'GDYADMIN';
+        $name = $__canUseHostPrefix ? '__Host-GDYADMIN' : 'GDYADMIN';
     } else {
-        $name = $__isHttps ? '__Host-GDYSESSID' : 'GDYSESSID';
+        $name = $__canUseHostPrefix ? '__Host-GDYSESSID' : 'GDYSESSID';
     }
     if (!headers_sent()) {
         @session_name($name);
     }
 
     if (function_exists('gdy_session_start')) {
-        $opts = [];
+        $opts = [
+            // Force a sane path/domain to maximize portability across hosting panels.
+            'cookie_path' => '/',
+            'cookie_domain' => '',
+        ];
         // Admin gets tighter SameSite.
         if ($__isAdminArea) {
             $opts['cookie_samesite'] = 'Strict';

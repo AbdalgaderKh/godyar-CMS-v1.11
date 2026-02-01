@@ -118,6 +118,16 @@ final class NewsService
     }
 
     /**
+     * Compatibility helper used by some legacy routes.
+     * Returns the numeric news id for a slug (or 0 if not found).
+     */
+    public function idBySlug(string $slug, bool $includeDrafts = false): int
+    {
+        $row = $this->findBySlug($slug, $includeDrafts);
+        return (int)($row['id'] ?? 0);
+    }
+
+    /**
      * البحث في جدول news فقط (يدعم title/content/excerpt إن وجدت)
      * @return array{items: array<int,array<string,mixed>>, total:int, total_pages:int, page:int, per_page:int, counts: array<string,int>}
      */

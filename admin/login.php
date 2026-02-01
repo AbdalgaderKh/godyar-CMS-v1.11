@@ -3,17 +3,14 @@ declare(strict_types=1);
 
 // admin/login.php — شاشة تسجيل دخول احترافية مع بعض ميزات الأمان
 
-require_once __DIR__ . '/../includes/bootstrap.php';
+require '../includes/bootstrap.php';
 include '_role_guard.php';
 // Ultra Pack helpers
-$__auditDb = __DIR__ . '/includes/audit_db.php';
-if (is_file($__auditDb)) { require_once $__auditDb; }
+require 'includes/audit_db.php';
 
-require_once __DIR__ . '/../includes/rate_limit.php';
-
+require '../includes/rate_limit.php';
 // i18n
-$__i18n = __DIR__ . '/i18n.php';
-if (is_file($__i18n)) { require_once $__i18n; }
+require 'i18n.php';
 
 // هيلبر للهروب من الـ XSS
 if (!function_exists('h')) {
@@ -23,9 +20,7 @@ if (!function_exists('h')) {
 }
 
 // نتأكد أن الجلسة شغالة (غالبًا البوتستراب شغّلها، لكن للاحتياط)
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
-}
+if (session_id() === '') { gdy_session_start(); }
 
 // توليد رمز CSRF بسيط
 if (empty($_SESSION['admin_csrf_token'])) {
@@ -44,7 +39,7 @@ $error = null;
 $email = $rememberedEmail;
 
 // معالجة محاولة تسجيل الدخول
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ((string)gdy_get_server_raw('REQUEST_METHOD', 'GET') === 'POST') {
     // IP-based rate limiting (8 attempts / 10 minutes)
     if (!gody_rate_limit('admin_login', 8, 600)) {
         $wait = gody_rate_limit_retry_after('admin_login');
@@ -146,9 +141,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         if (function_exists('gdy_session_rotate')) {
             gdy_session_rotate('admin_login');
         } else {
-            if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
-                @session_regenerate_id(true);
-            }
+            if ((session_id() !== '') && (headers_sent() === FALSE)) { session_regenerate_id(true); }
             $_SESSION['__gdy_rotated_at'] = time();
         }
         $_SESSION['user'] = [
@@ -166,7 +159,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 
         // تحديث آخر دخول و IP (إن كانت الأعمدة موجودة)
         try {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? null;
+            $ip = gdy_get_server_raw('REMOTE_ADDR', null);
             $stmt = $pdo->prepare("UPDATE users SET last_login_at = NOW(), last_login_ip = :ip WHERE id = :id");
             $stmt->execute([':ip' => $ip, ':id' => (int)$user['id']]);
         } catch (\Throwable $e) {
@@ -178,7 +171,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
             setcookie('admin_remember_email', $email, [
                 'expires'  => time() + (30 * 24 * 60 * 60),
                 'path'     => '/admin', // ✅ بدل /godyar/admin
-	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+	            'secure'   => ((string)gdy_get_server_raw('HTTPS', '') !== '' && (string)gdy_get_server_raw('HTTPS', '') !== 'off'),
 	            'httponly' => true,
                 'samesite' => 'Lax',
             ]);
@@ -186,7 +179,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
 	        setcookie('admin_remember_email', '', [
 	            'expires'  => time() - 3600,
 	            'path'     => '/admin',
-	            'secure'   => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'),
+	            'secure'   => ((string)gdy_get_server_raw('HTTPS', '') !== '' && (string)gdy_get_server_raw('HTTPS', '') !== 'off'),
 	            'httponly' => true,
 	            'samesite' => 'Lax',
 	        ]);

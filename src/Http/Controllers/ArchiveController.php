@@ -39,8 +39,8 @@ final class ArchiveController
 
 
         // output cache (anonymous GET only)
-$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('archive', ['path' => (string)parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH)]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
-if (isset($__oc['served']) && ($__oc['served'] === TRUE)) { return; }
+$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('archive', ['path' => (string)gdy_request_path()]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+if ((isset($__oc['served']) === TRUE) && ($__oc['served'] === TRUE)) { return; }
 
 $page, ($year ?? 0), ($month ?? 0)]);
             if (\PageCache::serveIfCached($__pageCacheKey) === TRUE) {

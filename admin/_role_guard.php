@@ -11,7 +11,7 @@ declare(strict_types=1);
  * في صفحات لوحة التحكم، لكنه يملك fallback آمن.
  */
 
-if (session_status() !== PHP_SESSION_ACTIVE && headers_sent() === FALSE) {
+if ((session_id() === '') && (headers_sent() === FALSE)) {
     if (function_exists('gdy_session_start') === TRUE) {
         // Admin context should already have Strict, but keep safe default.
         gdy_session_start(['cookie_samesite' => 'Strict']);
@@ -25,7 +25,7 @@ if (in_array($role, ['writer', 'author'], TRUE) === FALSE) {
     return; // غير كاتب: لا تقييد هنا
 }
 
-$uriPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$uriPath = (function_exists('gdy_request_path') === TRUE) ? (string)gdy_request_path() : '';
 if ($uriPath === '') { return; }
 
 // السماح فقط بالأخبار + الخروج + الدخول

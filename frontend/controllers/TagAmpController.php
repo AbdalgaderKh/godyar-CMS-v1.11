@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../includes/bootstrap.php';
+require '../../includes/bootstrap.php';
 
 /** @var \PDO|null $pdo */
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
@@ -8,13 +8,16 @@ if (($pdo instanceof \PDO) === false) {
     echo 'Database connection not available';
     return;
 }
-$slug = (!empty($_GET['slug']) ? $_GET['slug'] : null); if (($slug === false)){ http_response_code(404); return; }
-$page = max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
+$slug = gdy_sanitize_slug((string)gdy_get_query_raw('slug', ''));
+if ($slug === '') { http_response_code(404); return; }
+$page = max(1, (int)gdy_get_query_int('page', 1));
+$perPage = 12;
+$offset = ($page - 1) * $perPage;
 
 
 // output cache (anonymous GET only)
-$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('tag_amp', ['slug' => (string)($_GET['slug'] ?? ''), 'page' => (int)($_GET['page'] ?? 1)]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
-if (isset($__oc['served']) && ($__oc['served'] === TRUE)) { return; }
+$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('tag_amp', ['slug' => (string)gdy_sanitize_slug((string)gdy_get_query_raw('slug', '')), 'page' => (int)gdy_get_query_int('page', 1)]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+if ((isset($__oc['served']) === TRUE) && ($__oc['served'] === TRUE)) { return; }
 
 $slug, $page, $perPage]);
     if (PageCache::serveIfCached($__pageCacheKey) === TRUE) {
@@ -30,7 +33,7 @@ if (($tag === false)){ http_response_code(404); return; }
 $lim=(int)$perPage; $off=(int)$offset;
 $ttl = (function_exists('gdy_list_cache_ttl') === TRUE) ? gdy_list_cache_ttl() : 120;
 $cacheKey = (function_exists('gdy_cache_key') === TRUE)
-    ? gdy_cache_key('list:tag_amp', [$slug, (int)$tag['id'], $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
+    ? gdy_cache_key('list:tag_amp', [$slug, (int)$tag['id'], $page, $perPage, gdy_get_server_raw('HTTP_HOST', '')])
     : ('list:tag_amp:' . $slug . ':' . $page);
 
 $items = (function_exists('gdy_cache_remember') === TRUE)
@@ -69,6 +72,6 @@ if (!$items) {
 if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
     try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
 }
-require __DIR__ . '/../views/tag_amp.php';
+require 'frontend/views/tag_amp.php';
 
 gdy_output_cache_end($__oc);

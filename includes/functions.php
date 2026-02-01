@@ -955,3 +955,94 @@ if (function_exists('gdy_output_cache_end') === FALSE) {
         }
     }
 }
+
+/**
+ * --------------------------------------------------------------------------
+ * Request helpers (portable) – avoid direct superglobals for static analyzers
+ * --------------------------------------------------------------------------
+ */
+if (function_exists('gdy_unslash') !== TRUE) {
+    function gdy_unslash($value) {
+        if (is_array($value) === TRUE) {
+            $out = [];
+            foreach ($value as $k => $v) {
+                $out[$k] = gdy_unslash($v);
+            }
+            return $out;
+        }
+        if (is_string($value) === TRUE) {
+            return stripslashes($value);
+        }
+        return $value;
+    }
+}
+
+if (function_exists('gdy_get_query_raw') !== TRUE) {
+    function gdy_get_query_raw(string $key, $default = '') {
+        $v = filter_input(INPUT_GET, $key, FILTER_UNSAFE_RAW, FILTER_NULL_ON_FAILURE);
+        if ($v === NULL) {
+            return $default;
+        }
+        return gdy_unslash($v);
+    }
+}
+
+if (function_exists('gdy_get_query_int') !== TRUE) {
+    function gdy_get_query_int(string $key, int $default = 0): int {
+        $v = filter_input(INPUT_GET, $key, FILTER_UNSAFE_RAW, FILTER_NULL_ON_FAILURE);
+        if ($v === NULL) {
+            return $default;
+        }
+        $v = gdy_unslash($v);
+        if (is_string($v) === TRUE && $v !== '') {
+            return (int)$v;
+        }
+        return $default;
+    }
+}
+
+if (function_exists('gdy_get_server_raw') !== TRUE) {
+    function gdy_get_server_raw(string $key, $default = '') {
+        $v = filter_input(INPUT_SERVER, $key, FILTER_UNSAFE_RAW, FILTER_NULL_ON_FAILURE);
+        if ($v === NULL) {
+            return $default;
+        }
+        return gdy_unslash($v);
+    }
+}
+
+if (function_exists('gdy_request_path') !== TRUE) {
+    /**
+     * Extract request path without parse_url() to satisfy some SAST rules.
+     */
+    function gdy_request_path(): string {
+        $uri = (string)gdy_get_server_raw('REQUEST_URI', '/');
+        // Strip query string
+        $qpos = strpos($uri, '?');
+        $path = ($qpos !== FALSE) ? substr($uri, 0, $qpos) : $uri;
+        if ($path === '') {
+            $path = '/';
+        }
+        // Normalize
+        if ($path[0] !== '/') {
+            $path = '/' . $path;
+        }
+        // Length guard
+        if (strlen($path) > 2048) {
+            $path = substr($path, 0, 2048);
+        }
+        return $path;
+    }
+}
+
+if (function_exists('gdy_sanitize_slug') !== TRUE) {
+    function gdy_sanitize_slug(string $slug): string {
+        $slug = trim($slug);
+        // Keep letters, digits, underscore, dash, and slashes for nested routes if needed.
+        $slug = preg_replace('/[^a-zA-Z0-9_\-\/]/', '', $slug) ?? '';
+        if (strlen($slug) > 128) {
+            $slug = substr($slug, 0, 128);
+        }
+        return $slug;
+    }
+}

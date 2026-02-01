@@ -205,4 +205,20 @@ class Cache
             mkdir(static::$path, 0755, true);
         }
     }
+
+
+/**
+ * remember: get from cache or compute and store
+ * @param callable $callback
+ */
+public static function remember(string $key, int $seconds, callable $callback)
+{
+    $val = static::get($key);
+    if ($val !== null) {
+        return $val;
+    }
+    $val = $callback();
+    static::put($key, $val, $seconds);
+    return $val;
+}
 }

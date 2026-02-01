@@ -174,6 +174,14 @@ if (!function_exists('gdy_load_settings')) {
         if ($cache !== null && !$forceRefresh) {
             return $cache;
         }
+if (!$forceRefresh && class_exists('\\Cache')) {
+    $cached = \Cache::get('site_settings_all_v1');
+    if (is_array($cached)) {
+        $cache = $cached;
+        return $cache;
+    }
+}
+
 
         gdy_ensure_settings_table($pdo);
 
@@ -231,6 +239,7 @@ if (!function_exists('gdy_load_settings')) {
         }
 
         $cache = $out;
+        if (class_exists('\\Cache')) { \Cache::put('site_settings_all_v1', $out, 600); }
         return $out;
     }
 }

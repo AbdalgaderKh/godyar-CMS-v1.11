@@ -13,7 +13,7 @@ class PageCache
         }
 
         $html = Cache::get('page_' . $key);
-        if (is_string($html) || $html !== '') {
+        if (!is_string($html) || $html === '') {
             return false;
         }
 

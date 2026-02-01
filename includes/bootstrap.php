@@ -69,6 +69,15 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH . '/includes/fs.php';
 
+// Cache (portable file/APCu)
+require_once ROOT_PATH . '/includes/cache.php';
+Cache::init([
+    'enabled' => (getenv('CACHE_ENABLED') === false || getenv('CACHE_ENABLED') === '') ? true : (bool)(int)getenv('CACHE_ENABLED'),
+    'driver'  => 'file',
+    'path'    => (defined('GODYAR_STORAGE') ? (GODYAR_STORAGE . '/cache') : (ROOT_PATH . '/storage/cache')),
+]);
+
+
 // Start session as early as possible (before any output) so CSRF and plugins work reliably.
 // Some templates render output before widgets run; starting the session here prevents
 // Start session early (before any output) to support CSRF and auth.

@@ -136,13 +136,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             } elseif ($action === 'duplicate') {
                 // Duplicate rows one by one (schema-flexible)
                 $duplicated = 0;
-                foreach ($idList as $id) {
-                    $st = $pdo->prepare('SELECT * FROM news WHERE id=? LIMIT 1');
-                    $st->execute([$id]);
-                    $row = $st->fetch(PDO::FETCH_ASSOC);
-                    if (!$row) continue;
-
-                    $now = date('Y-m-d H:i:s');
+                // fetch all selected rows in one query to avoid N+1
+                $placeholders = implode(',', array_fill(0, count($idList), '?'));
+                $st = $pdo->prepare('SELECT * FROM news WHERE id IN (' . $placeholders . ')');
+                $st->execute($idList);
+                $rowsToDup = $st->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($rowsToDup as $row) {
+$now = date('Y-m-d H:i:s');
                     $title = (string)($row['title'] ?? '');
                     $slug  = (string)($row['slug'] ?? '');
 

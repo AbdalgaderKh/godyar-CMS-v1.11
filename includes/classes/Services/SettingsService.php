@@ -20,21 +20,41 @@ final class SettingsService
         $this->pdo = $pdo;
     }
 
-    public function getValue(string $key, $default = null)
-    {
-        try {
-            $st = $this->pdo->prepare("SELECT value FROM settings WHERE setting_key=:k");
-            $st->execute([':k' => $key]);
-            $val = $st->fetchColumn();
-            if ($val === false) {
-                return $default;
+private function loadAllCached(int $ttl = 600): array
+{
+    $loader = function (): array {
+        $out = [];
+        $st = $this->pdo->query("SELECT setting_key, `value` FROM settings");
+        foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $k = (string)($row['setting_key'] ?? '');
+            if ($k === '') { continue; }
+            $v = $row['value'] ?? null;
+            if (is_string($v)) {
+                $decoded = json_decode($v, true);
+                $out[$k] = ($decoded === null && json_last_error() !== JSON_ERROR_NONE) ? $v : $decoded;
+            } else {
+                $out[$k] = $v;
             }
-            $decoded = json_decode((string)$val, true);
-            return ($decoded === null && json_last_error() !== JSON_ERROR_NONE) ? $val : $decoded;
-        } catch (\Throwable $e) {
-            return $default;
         }
+        return $out;
+    };
+
+    if (class_exists('\Cache')) {
+        return \Cache::remember('settings_all_v1', $ttl, $loader);
     }
+    return $loader();
+}
+
+    public function getValue(string $key, $default = null)
+{
+    try {
+        $all = $this->loadAllCached(600);
+        return array_key_exists($key, $all) ? $all[$key] : $default;
+    } catch (\Throwable $e) {
+        return $default;
+    }
+}
+
 
     public function setValue(string $key, $value): void
     {

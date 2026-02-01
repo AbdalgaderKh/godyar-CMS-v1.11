@@ -24,7 +24,8 @@ declare(strict_types=1);
 	    }
 	}
 
-	$loginUrl = '/admin/login';
+    // Use explicit login.php (no rewrite dependency; works on shared hosting)
+    $loginUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/login.php') : '/admin/login.php';
 
 // Language / i18n (Admin)
 $__i18n = __DIR__ . '/i18n.php';

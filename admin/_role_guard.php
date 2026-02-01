@@ -9,6 +9,16 @@ declare(strict_types=1);
  * ملاحظة: هذا الملف لا يفترض وجود bootstrap/auth. يعتمد فقط على $_SESSION.
  */
 
+$bootstrap = __DIR__ . "/../includes/bootstrap.php";
+if (!function_exists("gdy_session_start") && is_file($bootstrap)) {
+    require_once $bootstrap;
+}
+
+$bootstrap = __DIR__ . '/../includes/bootstrap.php';
+if (!function_exists('gdy_session_start') && is_file($bootstrap)) {
+    require_once $bootstrap;
+}
+
 if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
     if (function_exists('gdy_session_start')) {
         gdy_session_start(['cookie_samesite' => 'Strict']);
@@ -16,7 +26,6 @@ if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
         session_start();
     }
 }
-
 $role = (string)($_SESSION['user']['role'] ?? 'guest');
 if (!in_array($role, ['writer', 'author'], true)) {
     return; // غير كاتب: لا تقييد هنا

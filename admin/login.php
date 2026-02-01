@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/_role_guard.php';
 // admin/login.php — شاشة تسجيل دخول احترافية مع بعض ميزات الأمان
 
 require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . "/_role_guard.php";
 // Ultra Pack helpers
 $__auditDb = __DIR__ . '/includes/audit_db.php';
 if (is_file($__auditDb)) { require_once $__auditDb; }
@@ -135,7 +135,8 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
                 admin_audit_db('login_2fa_required', ['email' => $email]);
             }
 
-            header('Location: /admin/security/2fa_verify.php');
+            $twofaUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/security/2fa_verify.php') : '/admin/security/2fa_verify.php';
+            header('Location: ' . $twofaUrl);
             exit;
         }
 

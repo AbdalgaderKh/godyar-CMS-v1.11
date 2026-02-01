@@ -1,7 +1,13 @@
 <?php
 // UTF-8 no BOM
 require_once __DIR__ . '/../../includes/bootstrap.php';
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (!headers_sent()) {
+        session_start();
+    }
+}
 
 // ✅ إضافة علامة أن هذه صفحة بحث (للفوتر)
 $GLOBALS['isSearchPage'] = true;

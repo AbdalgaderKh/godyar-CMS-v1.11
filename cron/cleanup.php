@@ -87,7 +87,7 @@ class SystemCleanup {
     }
     
     private function cleanupOldLogs() {
-        $logDir = '../logs/';
+        $logDir = ROOT_PATH . '/storage/logs/';
         $deleted = 0;
         
         if (is_dir($logDir)) {
@@ -132,7 +132,7 @@ foreach ($results as $type => $count) {
     $logMessage .= " - $type: $count\n";
 }
 
-file_put_contents('../logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
+file_put_contents(ROOT_PATH . '/storage/logs/cleanup.log', $logMessage . "\n", FILE_APPEND);
 
 // Avoid leaking runtime info in web context. For CLI debugging only:
 $verbose = getenv('CLEANUP_VERBOSE');

@@ -18,7 +18,15 @@ declare(strict_types=1);
 
 // Safe session start (no suppression)
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    session_start();
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (!headers_sent()) {
+        if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+        if (function_exists('gdy_session_start')) { gdy_session_start(); } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) { session_start(); }
+    }
+    }
 }
 
 // Polyfill (PHP < 8)
@@ -94,7 +102,15 @@ if (!function_exists('gdy_set_lang')) {
             $lang = 'ar';
         }
         if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            session_start();
+            if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (!headers_sent()) {
+        if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+        if (function_exists('gdy_session_start')) { gdy_session_start(); } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) { session_start(); }
+    }
+    }
         }
         $_SESSION['gdy_lang'] = $lang;
         $_SESSION['lang'] = $lang;

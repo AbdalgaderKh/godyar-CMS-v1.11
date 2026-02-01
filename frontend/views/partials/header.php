@@ -44,7 +44,17 @@ if (!function_exists('gdy_jsonld_safe')) {
  * قراءة حالة العضو من الجلسة
  */
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
-    session_start();
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (function_exists('gdy_session_start')) {
+            gdy_session_start();
+        } elseif (!headers_sent()) {
+            if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+        if (function_exists('gdy_session_start')) { gdy_session_start(); } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) { session_start(); }
+    }
+        }
+    }
 }
 
 $currentUser = $_SESSION['user'] ?? null;

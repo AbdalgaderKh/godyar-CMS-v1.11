@@ -33,7 +33,7 @@ if ($isDirect) {
 
 final class GdyQueue {
     private static function baseDir(): string {
-        return dirname(__DIR__, 1) . '/cache/queue'; // /admin/cache/queue
+        return ROOT_PATH . '/storage/queue'; // /storage/queue
     }
     private static function jobsFile(): string {
         return self::baseDir() . '/jobs.json';

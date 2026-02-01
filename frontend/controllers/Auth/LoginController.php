@@ -29,7 +29,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     if (function_exists('gdy_session_start')) {
         gdy_session_start();
     } else {
-        @session_start();
+        if (!headers_sent()) { session_start(); }
     }
 }
 

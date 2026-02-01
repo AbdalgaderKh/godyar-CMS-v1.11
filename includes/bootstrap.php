@@ -24,6 +24,7 @@ require_once __DIR__ . '/safe_runtime.php';
 // includes/bootstrap.php can safely rely on them.
 if (!defined('GODYAR_ROOT')) {
     define('GODYAR_ROOT', dirname(__DIR__));
+    define('GODYAR_STORAGE', GODYAR_ROOT . '/storage');
 }
 
 // Base URL constant used by parts of the admin layer.

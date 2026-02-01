@@ -5,20 +5,25 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
 if (($pdo instanceof \PDO) === false) {
     http_response_code(500);
-    exit('Database connection not available');
+    echo 'Database connection not available';
+    return;
 }
-$slug = (!empty($_GET['slug']) ? $_GET['slug'] : null); if (($slug === false)){ http_response_code(404); exit; }
+$slug = (!empty($_GET['slug']) ? $_GET['slug'] : null); if (($slug === false)){ http_response_code(404); return; }
 $page = max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
 
 
 // output cache (anonymous GET only)
 $__didOutputCache = false;
 $__pageCacheKey = '';
-$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
-if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+$__ttl = (function_exists('gdy_output_cache_ttl') === TRUE) ? gdy_output_cache_ttl() : 0;
+if (($__ttl > 0)
+    && (function_exists('gdy_should_output_cache') === TRUE)
+    && (gdy_should_output_cache() === TRUE)
+    && (class_exists('PageCache') === TRUE)
+) {
     $__pageCacheKey = 'tagamp_' . gdy_page_cache_key('tagamp', [$slug, $page, $perPage]);
-    if (PageCache::serveIfCached($__pageCacheKey)) {
-        exit;
+    if (PageCache::serveIfCached($__pageCacheKey) === TRUE) {
+        return;
     }
     ob_start();
     $__didOutputCache = true;
@@ -26,14 +31,14 @@ if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_outpu
 
 $st=$pdo->prepare("SELECT * FROM tags WHERE slug=:s LIMIT 1");
 $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC) ?: null;
-if (($tag === false)){ http_response_code(404); exit; }
+if (($tag === false)){ http_response_code(404); return; }
 $lim=(int)$perPage; $off=(int)$offset;
-$ttl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
-$cacheKey = function_exists('gdy_cache_key')
+$ttl = (function_exists('gdy_list_cache_ttl') === TRUE) ? gdy_list_cache_ttl() : 120;
+$cacheKey = (function_exists('gdy_cache_key') === TRUE)
     ? gdy_cache_key('list:tag_amp', [$slug, (int)$tag['id'], $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
     : ('list:tag_amp:' . $slug . ':' . $page);
 
-$items = function_exists('gdy_cache_remember')
+$items = (function_exists('gdy_cache_remember') === TRUE)
     ? (array)gdy_cache_remember($cacheKey, (int)$ttl, function () use ($pdo, $tag, $lim, $off) {
         $sql="SELECT n.id,n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id WHERE nt.tag_id=:tid AND n.status='published' ORDER BY n.publish_at DESC LIMIT :lim OFFSET :off";
 
@@ -71,7 +76,7 @@ if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
 }
 require __DIR__ . '/../views/tag_amp.php';
 
-if ($__didOutputCache && $__pageCacheKey !== '') {
+if (($__didOutputCache === TRUE) && ($__pageCacheKey !== '')) {
     PageCache::store($__pageCacheKey, $__ttl);
     @ob_end_flush();
 }

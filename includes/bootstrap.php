@@ -136,6 +136,13 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 if ($__isAdminArea && function_exists('gdy_admin_session_guard')) {
     // Defaults: 30 min idle, rotate every 15 min
     gdy_admin_session_guard(1800, 900);
+
+
+// Admin-only fingerprint guard (lightweight binding)
+if ($__isAdminArea && function_exists('gdy_admin_session_fingerprint_guard')) {
+    // Best-effort: invalidates session on mismatch
+    gdy_admin_session_fingerprint_guard();
+}
 }
 
 

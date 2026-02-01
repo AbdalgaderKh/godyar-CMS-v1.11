@@ -4,7 +4,7 @@ declare(strict_types=1);
 // admin/login.php — شاشة تسجيل دخول احترافية مع بعض ميزات الأمان
 
 require_once __DIR__ . '/../includes/bootstrap.php';
-require_once __DIR__ . "/_role_guard.php";
+include '_role_guard.php';
 // Ultra Pack helpers
 $__auditDb = __DIR__ . '/includes/audit_db.php';
 if (is_file($__auditDb)) { require_once $__auditDb; }

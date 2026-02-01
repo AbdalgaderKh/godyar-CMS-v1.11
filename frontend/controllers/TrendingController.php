@@ -16,19 +16,8 @@ require_once __DIR__ . '/../../includes/bootstrap.php';
 
 
 // output cache (anonymous GET only)
-$__didOutputCache = false;
-$__pageCacheKey = '';
-$__ttl = (function_exists('gdy_output_cache_ttl') === TRUE) ? gdy_output_cache_ttl() : 0;
-if (($__ttl > 0)
-    && (function_exists('gdy_should_output_cache') === TRUE)
-    && (gdy_should_output_cache() === TRUE)
-    && (class_exists('PageCache') === TRUE)
-) {
-    $__pageCacheKey = 'trending_' . gdy_page_cache_key('trending', ['page' => 1]);
-    if (PageCache::serveIfCached($__pageCacheKey) === TRUE) { return; }
-    ob_start();
-    $__didOutputCache = true;
-}
+$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('trending', ['page' => 1]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+if (isset($__oc['served']) && ($__oc['served'] === TRUE)) { return; }
 
 $container = $GLOBALS['container'] ?? null;
 if (($container instanceof \Godyar\Container) === false) {
@@ -77,8 +66,4 @@ echo '</main>';
 
 if (is_file($footer)) require $footer;
 
-if (($__didOutputCache === TRUE) && ($__pageCacheKey !== '')) {
-    PageCache::store($__pageCacheKey, $__ttl);
-    @ob_end_flush();
-}
-
+gdy_output_cache_end($__oc);

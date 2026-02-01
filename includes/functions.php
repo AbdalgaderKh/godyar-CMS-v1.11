@@ -905,3 +905,53 @@ if (function_exists('gdy_page_cache_key') === false) {
     return substr(sha1($base), 0, 24);
   }
 }
+
+
+// -----------------------------------------------------------------------------
+// Output cache helpers (reduce duplication across controllers)
+// -----------------------------------------------------------------------------
+if (function_exists('gdy_output_cache_begin') === FALSE) {
+    /**
+     * Begin output caching for anonymous GET requests.
+     *
+     * @return array{served:bool,did:bool,key:string,ttl:int}
+     */
+    function gdy_output_cache_begin(string $namespace, array $keyParams = []): array {
+        $ttl = (function_exists('gdy_output_cache_ttl') === TRUE) ? (int)gdy_output_cache_ttl() : 0;
+
+        if ($ttl > 0
+            && (function_exists('gdy_should_output_cache') === TRUE)
+            && (gdy_should_output_cache() === TRUE)
+            && (class_exists('PageCache') === TRUE)
+        ) {
+            $key = $namespace . '_' . gdy_page_cache_key($namespace, $keyParams);
+
+            if (PageCache::serveIfCached($key) === TRUE) {
+                return ['served' => TRUE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+            }
+
+            ob_start();
+            return ['served' => FALSE, 'did' => TRUE, 'key' => $key, 'ttl' => $ttl];
+        }
+
+        return ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+    }
+}
+
+if (function_exists('gdy_output_cache_end') === FALSE) {
+    /**
+     * Finalize output caching if it was started.
+     * @param array{served:bool,did:bool,key:string,ttl:int} $ctx
+     */
+    function gdy_output_cache_end(array $ctx): void {
+        if (
+            (isset($ctx['did']) && ($ctx['did'] === TRUE))
+            && (isset($ctx['key']) && is_string($ctx['key']) && ($ctx['key'] !== ''))
+            && (isset($ctx['ttl']) && (int)$ctx['ttl'] > 0)
+            && (class_exists('PageCache') === TRUE)
+        ) {
+            PageCache::store((string)$ctx['key'], (int)$ctx['ttl']);
+            @ob_end_flush();
+        }
+    }
+}

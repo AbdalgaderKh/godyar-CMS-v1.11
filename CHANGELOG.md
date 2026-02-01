@@ -1,3 +1,23 @@
+# Godyar CMS v1.24.1
+Release date: 2026-02-01
+
+## Security
+- Hardened admin sessions (Strict cookies, rotation, idle timeout) and added lightweight session fingerprint (UA + coarse IP prefix) with proxy-tolerant mode.
+- Added CSRF protection + Same-Origin guard for state-changing requests (forms + AJAX/JSON).
+- Hardened file uploads with allow-list + MIME verification and disabled script execution inside upload directories.
+- Added portable security headers (CSP/HSTS/COOP/CORP, configurable via env) and security event logging (JSONL).
+
+## Performance
+- Fixed and enabled page cache, added list-level caching for search/category/tag, and added optional anonymous output cache (TTL configurable).
+- Reduced N+1 queries by bulk-loading comment counts across list pages (frontend + API).
+
+## Maintenance
+- Portable deployment option via webroot/ and multi-environment server config snippets (Apache/Nginx/IIS).
+- Added deploy_check.php for safe, token-gated deployment verification.
+- General refactors to reduce duplication/complexity and satisfy strict static analysis rules.
+
+---
+
 # Godyar CMS v1.11.1
 Release date: 2026-01-29
 

@@ -760,3 +760,93 @@ if (!function_exists('gdy_clean_user_text')) {
     }
 }
 
+
+
+// -----------------------------------------------------------------------------
+// Admin session fingerprint (lightweight, proxy-tolerant)
+// -----------------------------------------------------------------------------
+if (!function_exists('gdy_client_ip_for_fingerprint')) {
+    /**
+     * Returns a coarse client-IP representation suitable for session binding.
+     * - IPv4: first 3 octets ( /24 )
+     * - IPv6: first 4 hextets ( /64-ish )
+     *
+     * Set GDY_TRUST_PROXY=1 to trust X-Forwarded-For.
+     */
+    function gdy_client_ip_for_fingerprint(): string {
+        $trustProxy = (string)($_ENV['GDY_TRUST_PROXY'] ?? getenv('GDY_TRUST_PROXY') ?? '');
+        $ip = '';
+        if ($trustProxy === '1') {
+            $xff = (string)($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '');
+            if ($xff !== '') {
+                // Take the first IP in the list
+                $parts = explode(',', $xff);
+                $ip = trim((string)($parts[0] ?? ''));
+            }
+        }
+        if ($ip === '') {
+            $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
+        }
+        if ($ip === '') { return ''; }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $oct = explode('.', $ip);
+            return implode('.', array_slice($oct, 0, 3)); // /24
+        }
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $norm = strtolower($ip);
+            // Keep first 4 hextets
+            $hextets = explode(':', $norm);
+            $hextets = array_values(array_filter($hextets, static fn($x) => $x !== ''));
+            return implode(':', array_slice($hextets, 0, 4));
+        }
+        return '';
+    }
+}
+
+if (!function_exists('gdy_admin_session_fingerprint_guard')) {
+    /**
+     * Binds an admin session to a lightweight fingerprint:
+     * - User-Agent hash
+     * - Coarse IP prefix (/24 or /64-ish)
+     *
+     * Designed to be tolerant of proxies and mobile IP churn while still
+     * stopping basic session theft.
+     *
+     * Toggle with GDY_ADMIN_SESSION_FINGERPRINT=0
+     */
+    function gdy_admin_session_fingerprint_guard(): bool {
+        if (session_status() !== PHP_SESSION_ACTIVE) { return true; }
+
+        $enabled = (string)($_ENV['GDY_ADMIN_SESSION_FINGERPRINT'] ?? getenv('GDY_ADMIN_SESSION_FINGERPRINT') ?? '1');
+        if ($enabled === '0') { return true; }
+
+        $role = (string)($_SESSION['user']['role'] ?? '');
+        if ($role === '' || in_array($role, ['admin','superadmin','writer','author'], true) === FALSE) {
+            return true; // not an admin-style session
+        }
+
+        $ua = (string)($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $ipPrefix = gdy_client_ip_for_fingerprint();
+
+        $fp = hash('sha256', $ua . '|' . $ipPrefix);
+
+        if (!isset($_SESSION['__gdy_admin_fp'])) {
+            $_SESSION['__gdy_admin_fp'] = $fp;
+            return true;
+        }
+
+        $prev = (string)($_SESSION['__gdy_admin_fp'] ?? '');
+        if ($prev === $fp) { return true; }
+
+        // mismatch => invalidate admin session
+        error_log('[Godyar Admin FP] mismatch - invalidating session');
+        $_SESSION = [];
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 3600, $params['path'] ?? '/', $params['domain'] ?? '', (bool)($params['secure'] ?? false), (bool)($params['httponly'] ?? true));
+        }
+        @session_destroy();
+        return false;
+    }
+}

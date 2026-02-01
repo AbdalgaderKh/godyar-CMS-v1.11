@@ -13,15 +13,10 @@ $page = max(1,(int)($_GET['page']??1)); $perPage=12; $offset=($page-1)*$perPage;
 
 
 // output cache (anonymous GET only)
-$__didOutputCache = false;
-$__pageCacheKey = '';
-$__ttl = (function_exists('gdy_output_cache_ttl') === TRUE) ? gdy_output_cache_ttl() : 0;
-if (($__ttl > 0)
-    && (function_exists('gdy_should_output_cache') === TRUE)
-    && (gdy_should_output_cache() === TRUE)
-    && (class_exists('PageCache') === TRUE)
-) {
-    $__pageCacheKey = 'tagamp_' . gdy_page_cache_key('tagamp', [$slug, $page, $perPage]);
+$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('tag_amp', ['slug' => (string)($_GET['slug'] ?? ''), 'page' => (int)($_GET['page'] ?? 1)]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
+if (isset($__oc['served']) && ($__oc['served'] === TRUE)) { return; }
+
+$slug, $page, $perPage]);
     if (PageCache::serveIfCached($__pageCacheKey) === TRUE) {
         return;
     }
@@ -76,8 +71,4 @@ if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
 }
 require __DIR__ . '/../views/tag_amp.php';
 
-if (($__didOutputCache === TRUE) && ($__pageCacheKey !== '')) {
-    PageCache::store($__pageCacheKey, $__ttl);
-    @ob_end_flush();
-}
-
+gdy_output_cache_end($__oc);

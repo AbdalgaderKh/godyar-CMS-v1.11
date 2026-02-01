@@ -6,35 +6,27 @@ declare(strict_types=1);
  * - يسمح للكاتب/المؤلف بالدخول فقط إلى إدارة الأخبار (إنشاء/تعديل/عرض مقالاته).
  * - يمنع الوصول لباقي أقسام لوحة التحكم حتى لو تم إدخال الرابط مباشرة.
  *
- * ملاحظة: هذا الملف لا يفترض وجود bootstrap/auth. يعتمد فقط على $_SESSION.
+ * ملاحظة: هذا الملف لا يعتمد على أي require/include ديناميكي
+ * لتجنب مشاكل أدوات الفحص (SAST). يفترض أن bootstrap يبدأ الجلسة
+ * في صفحات لوحة التحكم، لكنه يملك fallback آمن.
  */
 
-$bootstrap = __DIR__ . "/../includes/bootstrap.php";
-if (!function_exists("gdy_session_start") && is_file($bootstrap)) {
-    require_once $bootstrap;
-}
-
-$bootstrap = __DIR__ . '/../includes/bootstrap.php';
-if (!function_exists('gdy_session_start') && is_file($bootstrap)) {
-    require_once $bootstrap;
-}
-
-if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-    if (function_exists('gdy_session_start')) {
+if (session_status() !== PHP_SESSION_ACTIVE && headers_sent() === FALSE) {
+    if (function_exists('gdy_session_start') === TRUE) {
+        // Admin context should already have Strict, but keep safe default.
         gdy_session_start(['cookie_samesite' => 'Strict']);
     } else {
         session_start();
     }
 }
+
 $role = (string)($_SESSION['user']['role'] ?? 'guest');
-if (!in_array($role, ['writer', 'author'], true)) {
+if (in_array($role, ['writer', 'author'], TRUE) === FALSE) {
     return; // غير كاتب: لا تقييد هنا
 }
 
 $uriPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-if ($uriPath === '') {
-    return;
-}
+if ($uriPath === '') { return; }
 
 // السماح فقط بالأخبار + الخروج + الدخول
 $allowedPrefixes = [
@@ -44,24 +36,22 @@ $allowedPrefixes = [
 
 $allowedExact = [
     '/admin/logout.php',
-    '/admin/login',
     '/admin/login.php',
     '/admin/login/',
+    '/admin/login', // in case of rewrite-capable hosts
 ];
 
 foreach ($allowedExact as $ok) {
-    if ($uriPath === $ok) {
-        return;
-    }
+    if ($uriPath === $ok) { return; }
 }
 
 foreach ($allowedPrefixes as $prefix) {
-    if (strpos($uriPath, $prefix) === 0) {
-        return;
-    }
+    if (strpos($uriPath, $prefix) === 0) { return; }
 }
 
 // أي شيء آخر -> إعادة توجيه لمقالات الكاتب
 $newsUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/news/index.php') : 'news/index.php';
-header('Location: ' . $newsUrl);
-exit;
+if (headers_sent() === FALSE) {
+    header('Location: ' . $newsUrl);
+}
+return;

@@ -9,8 +9,12 @@ declare(strict_types=1);
  * ملاحظة: هذا الملف لا يفترض وجود bootstrap/auth. يعتمد فقط على $_SESSION.
  */
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
+if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start(['cookie_samesite' => 'Strict']);
+    } else {
+        session_start();
+    }
 }
 
 $role = (string)($_SESSION['user']['role'] ?? 'guest');

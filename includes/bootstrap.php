@@ -71,10 +71,47 @@ require_once ROOT_PATH . '/includes/fs.php';
 
 // Start session as early as possible (before any output) so CSRF and plugins work reliably.
 // Some templates render output before widgets run; starting the session here prevents
-// "CSRF validation failed" due to headers already being sent.
-if (function_exists('gdy_session_start')) {
-    gdy_session_start();
+// Start session early (before any output) to support CSRF and auth.
+// This bootstrap supports multi-environment deployments.
+// - Uses a dedicated admin session cookie (Stricter settings)
+// - Uses __Host- prefix on HTTPS when possible (more resistant to cookie injection)
+$__uriPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$__isAdminArea = (strpos($__uriPath, '/admin') === 0);
+
+$__isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || ((string)($_SERVER['SERVER_PORT'] ?? '') === '443')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    // Set a predictable, separate session name for admin vs public
+    // __Host- requires: Secure + Path=/ + no Domain attribute.
+    if ($__isAdminArea) {
+        $name = $__isHttps ? '__Host-GDYADMIN' : 'GDYADMIN';
+    } else {
+        $name = $__isHttps ? '__Host-GDYSESSID' : 'GDYSESSID';
+    }
+    if (!headers_sent()) {
+        @session_name($name);
+    }
+
+    if (function_exists('gdy_session_start')) {
+        $opts = [];
+        // Admin gets tighter SameSite.
+        if ($__isAdminArea) {
+            $opts['cookie_samesite'] = 'Strict';
+        }
+        gdy_session_start($opts);
+    } elseif (!headers_sent()) {
+        session_start();
+    }
 }
+
+// Admin-only guard: idle timeout + periodic rotation
+if ($__isAdminArea && function_exists('gdy_admin_session_guard')) {
+    // Defaults: 30 min idle, rotate every 15 min
+    gdy_admin_session_guard(1800, 900);
+}
+
 
 
 // Audit log helper

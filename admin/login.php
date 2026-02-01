@@ -140,6 +140,16 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         }
 
         // نجاح الدخول → تخزين المستخدم في السيشن
+
+        // Rotate session ID on privilege change (mitigate session fixation)
+        if (function_exists('gdy_session_rotate')) {
+            gdy_session_rotate('admin_login');
+        } else {
+            if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+                @session_regenerate_id(true);
+            }
+            $_SESSION['__gdy_rotated_at'] = time();
+        }
         $_SESSION['user'] = [
             'id'       => (int)$user['id'],
             'name'     => $user['username'] ?? $user['email'],

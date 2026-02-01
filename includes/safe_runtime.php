@@ -77,6 +77,68 @@ if (!function_exists('gdy_session_start')) {
     }
 }
 
+if (!function_exists('gdy_session_rotate')) {
+    /**
+     * Regenerate session ID (best-effort) to mitigate fixation/hijacking.
+     * Safe to call multiple times; will no-op if headers already sent.
+     */
+    function gdy_session_rotate(string $reason = ''): void {
+        if (session_status() !== PHP_SESSION_ACTIVE) return;
+        if (!headers_sent()) {
+            // true => delete old session
+            @session_regenerate_id(true);
+        }
+        $_SESSION['__gdy_rotated_at'] = time();
+        if ($reason !== '') {
+            $_SESSION['__gdy_rotated_reason'] = $reason;
+        }
+    }
+}
+
+if (!function_exists('gdy_admin_session_guard')) {
+    /**
+     * Admin-only session hardening:
+     * - idle timeout
+     * - periodic rotation
+     *
+     * Returns true if session is valid, false if invalidated.
+     */
+    function gdy_admin_session_guard(int $idleSeconds = 1800, int $rotateEverySeconds = 900): bool {
+        if (session_status() !== PHP_SESSION_ACTIVE) return true;
+
+        $now = time();
+
+        // Idle timeout (only if user is logged-in for admin)
+        $role = (string)($_SESSION['user']['role'] ?? '');
+        if ($role !== '' && ($role === 'admin' || $role === 'superadmin' || $role === 'writer' || $role === 'author')) {
+            $last = (int)($_SESSION['__gdy_last_activity'] ?? 0);
+            if ($last > 0 && ($now - $last) > $idleSeconds) {
+                // Invalidate
+                $_SESSION = [];
+                if (ini_get('session.use_cookies')) {
+                    $params = session_get_cookie_params();
+                    setcookie(session_name(), '', $now - 3600, $params['path'] ?? '/', $params['domain'] ?? '', (bool)($params['secure'] ?? false), (bool)($params['httponly'] ?? true));
+                }
+                @session_destroy();
+                return false;
+            }
+
+            // Update activity timestamp
+            $_SESSION['__gdy_last_activity'] = $now;
+
+            // Periodic rotation
+            $rot = (int)($_SESSION['__gdy_rotated_at'] ?? 0);
+            if ($rot === 0 || ($now - $rot) >= $rotateEverySeconds) {
+                gdy_session_rotate('periodic');
+            }
+        }
+
+        return true;
+    }
+}
+
+
+
 if (!function_exists('gdy_mkdir')) {
     function gdy_mkdir(string $path, int $mode = 0775, bool $recursive = true): bool {
         if ($path === '') return false;

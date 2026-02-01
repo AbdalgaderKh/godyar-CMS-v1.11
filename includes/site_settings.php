@@ -239,7 +239,7 @@ if (!$forceRefresh && class_exists('\\Cache')) {
         }
 
         $cache = $out;
-        if (class_exists('\\Cache')) { \Cache::put('site_settings_all_v1', $out, 600); }
+        if (class_exists('\\Cache')) { \Cache::put('site_settings_all_v1', $out, 3600); }
         return $out;
     }
 }

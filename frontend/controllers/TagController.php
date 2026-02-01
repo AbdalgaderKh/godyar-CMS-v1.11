@@ -42,37 +42,52 @@ try {
             exit;
         }
 
-        // إجمالي الأخبار تحت هذا الوسم
-        $cnt = $pdo->prepare("
-            SELECT COUNT(*)
-            FROM news n
-            INNER JOIN news_tags nt ON nt.news_id = n.id
-            WHERE nt.tag_id = :tid
-              AND n.status = 'published'
-        ");
-        $cnt->execute([':tid' => (int)$tag['id']]);
-        $total = (int)$cnt->fetchColumn();
-        $pages = max(1, (int)ceil($total / $perPage));
+                // إجمالي الأخبار + قائمة الأخبار (short-lived cache)
+        $ttl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
+        $cacheKey = function_exists('gdy_cache_key')
+            ? gdy_cache_key('list:tag', [$slug, (int)$tag['id'], $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
+            : ('list:tag:' . $slug . ':' . $page);
 
-        // قائمة الأخبار
-        $sql = "SELECT n.id,
-                       n.slug,
-                       n.featured_image,
-                       n.title,
-                       n.excerpt,
-                       n.publish_at
-                FROM news n
-                INNER JOIN news_tags nt ON nt.news_id = n.id
-                WHERE nt.tag_id = :tid
-                  AND n.status = 'published'
-                ORDER BY n.publish_at DESC, n.id DESC
-                LIMIT :limit OFFSET :offset";
-        $st = $pdo->prepare($sql);
-        $st->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
-        $st->bindValue(':limit', $perPage, PDO::PARAM_INT);
-        $st->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $st->execute();
-        $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        $payload = function_exists('gdy_cache_remember')
+            ? gdy_cache_remember($cacheKey, (int)$ttl, function () use ($pdo, $tag, $perPage, $offset) {
+                $out = ['total' => 0, 'items' => []];
+
+                $cnt = $pdo->prepare("
+                    SELECT COUNT(*)
+                    FROM news n
+                    INNER JOIN news_tags nt ON nt.news_id = n.id
+                    WHERE nt.tag_id = :tid
+                      AND n.status = 'published'
+                ");
+                $cnt->execute([':tid' => (int)$tag['id']]);
+                $out['total'] = (int)$cnt->fetchColumn();
+
+                $sql = "SELECT n.id,
+                               n.slug,
+                               n.featured_image,
+                               n.title,
+                               n.excerpt,
+                               n.publish_at
+                        FROM news n
+                        INNER JOIN news_tags nt ON nt.news_id = n.id
+                        WHERE nt.tag_id = :tid
+                          AND n.status = 'published'
+                        ORDER BY n.publish_at DESC, n.id DESC
+                        LIMIT :limit OFFSET :offset";
+                $st = $pdo->prepare($sql);
+                $st->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
+                $st->bindValue(':limit', (int)$perPage, PDO::PARAM_INT);
+                $st->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+                $st->execute();
+                $out['items'] = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+                return $out;
+            })
+            : null;
+
+        $total = (int)($payload['total'] ?? 0);
+        $pages = max(1, (int)ceil($total / $perPage));
+        $items = (array)($payload['items'] ?? []);
 
         // Performance: attach comment counts in one query (avoid N+1 in views)
         if (function_exists('gdy_attach_comment_counts_to_news_rows')) {

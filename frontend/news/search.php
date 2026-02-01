@@ -188,6 +188,32 @@ $counts = [
 ];
 
 
+
+// -----------------------------------------------------------------------------
+// Short-lived cache for search results (portable, cross-env)
+// Caches DB-heavy count + results for a short TTL to reduce load during spikes.
+// Control via env: GDY_LIST_CACHE_TTL (seconds). Disable with 0. Bypass with ?nocache=1
+// -----------------------------------------------------------------------------
+$__listTtl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
+$__listKey = function_exists('gdy_cache_key')
+    ? gdy_cache_key('list:search', [$q, $mode, $type, $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
+    : ('list:search:' . sha1($q . '|' . $type . '|' . $page));
+
+$__cached = null;
+if ($__listTtl > 0 && function_exists('gdy_should_bypass_list_cache') && !gdy_should_bypass_list_cache() && class_exists('Cache') && method_exists('Cache', 'get')) {
+    $__cached = Cache::get($__listKey);
+}
+
+if (is_array($__cached)) {
+    $counts   = (array)($__cached['counts'] ?? $counts);
+    $total    = (int)($__cached['total'] ?? 0);
+    $results  = (array)($__cached['results'] ?? []);
+    $typeTotal = (int)($__cached['typeTotal'] ?? $total);
+    $pages = max(1, (int)ceil(($typeTotal ?: 0) / $perPage));
+    if ($page > $pages) $page = $pages;
+    goto render_search;
+}
+
 // Build WHERE fragments (fix: undefined vars caused empty results/SQL errors).
 $now = date('Y-m-d H:i:s');
 
@@ -470,4 +496,20 @@ if ($page > $pages) {
 }
 
 // Render
+
+// Save to cache (best-effort)
+if ($__listTtl > 0 && class_exists('Cache') && method_exists('Cache', 'put')) {
+    try {
+        Cache::put($__listKey, [
+            'counts'    => $counts,
+            'total'     => (int)($total ?? 0),
+            'results'   => $results,
+            'typeTotal' => (int)($typeTotal ?? 0),
+        ], (int)$__listTtl);
+    } catch (Throwable $e) {
+        // ignore
+    }
+}
+
+render_search:
 require __DIR__ . '/../views/search.php';

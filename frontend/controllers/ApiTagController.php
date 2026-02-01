@@ -12,21 +12,44 @@ try {
   $st->execute([':s'=>$slug]); $tag=$st->fetch(PDO::FETCH_ASSOC);
   if (($tag === false)) { http_response_code(404); echo json_encode(['ok'=>false]); exit; }
   $lim=min(50,max(1,(int)($_GET['limit']??12)));
-  $sql="SELECT n.id,n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
-       FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id
-       WHERE nt.tag_id=:tid AND n.status='published'
-       ORDER BY n.publish_at DESC
-       LIMIT :lim";
-  // Ensure placeholders are bound (query() does not support binding).
-  // MySQL may not allow native prepared statements for LIMIT.
-  $prevEmulate = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
-  $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
-  $st2 = $pdo->prepare($sql);
-  $st2->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
-  $st2->bindValue(':lim', (int)$lim, PDO::PARAM_INT);
-  $st2->execute();
-  $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
-  $items=$st2->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    $ttl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
+  $cacheKey = function_exists('gdy_cache_key')
+    ? gdy_cache_key('list:api_tag', [(string)$slug, (int)($tag['id'] ?? 0), $lim, $_SERVER['HTTP_HOST'] ?? ''])
+    : ('list:api_tag:' . (string)$slug . ':' . $lim);
+
+  $items = function_exists('gdy_cache_remember')
+    ? (array)gdy_cache_remember($cacheKey, (int)$ttl, function () use ($pdo, $tag, $lim) {
+        $sql="SELECT n.id,n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
+             FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id
+             WHERE nt.tag_id=:tid AND n.status='published'
+             ORDER BY n.publish_at DESC
+             LIMIT :lim";
+        $prevEmulate = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+        $st2 = $pdo->prepare($sql);
+        $st2->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
+        $st2->bindValue(':lim', (int)$lim, PDO::PARAM_INT);
+        $st2->execute();
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
+        return $st2->fetchAll(PDO::FETCH_ASSOC) ?: [];
+      })
+    : [];
+
+  if (!$items) {
+    $sql="SELECT n.id,n.slug,n.title,n.excerpt,COALESCE(n.featured_image,n.image_path,n.image) AS featured_image,n.publish_at
+         FROM news n INNER JOIN news_tags nt ON nt.news_id=n.id
+         WHERE nt.tag_id=:tid AND n.status='published'
+         ORDER BY n.publish_at DESC
+         LIMIT :lim";
+    $prevEmulate = $pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+    $st2 = $pdo->prepare($sql);
+    $st2->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
+    $st2->bindValue(':lim', (int)$lim, PDO::PARAM_INT);
+    $st2->execute();
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
+    $items=$st2->fetchAll(PDO::FETCH_ASSOC) ?: [];
+  }
   if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
     try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
   }

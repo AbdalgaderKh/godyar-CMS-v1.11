@@ -778,3 +778,64 @@ if (!function_exists('gdy_attach_comment_counts_to_news_rows')) {
     }
 }
 
+
+
+// -----------------------------------------------------------------------------
+// Short-lived list caching helpers (portable, cross-env)
+// Used to cache category/tag/search lists for 60-180s to reduce DB load.
+// -----------------------------------------------------------------------------
+if (!function_exists('gdy_should_bypass_list_cache')) {
+    function gdy_should_bypass_list_cache(): bool
+    {
+        if (defined('APP_DEBUG') && APP_DEBUG) return true;
+        if (!empty($_GET['nocache'])) return true;
+
+        $cc = $_SERVER['HTTP_CACHE_CONTROL'] ?? '';
+        if (is_string($cc) && stripos($cc, 'no-cache') !== false) return true;
+
+        return false;
+    }
+}
+
+if (!function_exists('gdy_list_cache_ttl')) {
+    function gdy_list_cache_ttl(): int
+    {
+        $v = getenv('GDY_LIST_CACHE_TTL');
+        if ($v === false || $v === '') return 120; // default 2 minutes
+        return max(0, (int)$v);
+    }
+}
+
+if (!function_exists('gdy_cache_key')) {
+    /**
+     * Build a stable cache key; hashes parameters to keep keys short.
+     * @param string $prefix
+     * @param array<mixed> $parts
+     */
+    function gdy_cache_key(string $prefix, array $parts): string
+    {
+        $raw = $prefix . '|' . json_encode($parts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        return $prefix . ':' . sha1((string)$raw);
+    }
+}
+
+if (!function_exists('gdy_cache_remember')) {
+    /**
+     * Portable wrapper around Cache::remember (falls back to direct execution).
+     * @template T
+     * @param string $key
+     * @param int $ttlSeconds
+     * @param callable():T $fn
+     * @return T
+     */
+    function gdy_cache_remember(string $key, int $ttlSeconds, callable $fn)
+    {
+        if ($ttlSeconds <= 0 || gdy_should_bypass_list_cache()) {
+            return $fn();
+        }
+        if (class_exists('Cache') && method_exists('Cache', 'remember')) {
+            return Cache::remember($key, $ttlSeconds, $fn);
+        }
+        return $fn();
+    }
+}

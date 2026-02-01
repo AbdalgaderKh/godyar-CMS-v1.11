@@ -85,41 +85,58 @@ if (!$category) {
     gdy_render_not_found_page('القسم غير موجود', 'لم يتم العثور على القسم المطلوب.');
 }
 
-// fetch items + total
+// fetch items + total (short-lived cache to reduce DB load)
 $totalItems = 0;
 $items = [];
+$ttl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
+$cacheKey = function_exists('gdy_cache_key')
+    ? gdy_cache_key('list:cat', [$slug, (int)$category['id'], $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
+    : ('list:cat:' . $slug . ':' . $page);
+
 try {
-    $st = $pdo->prepare("SELECT COUNT(*) FROM news WHERE status='published' AND category_id = :cid");
-    $st->execute([':cid' => (int)$category['id']]);
-    $totalItems = (int)$st->fetchColumn();
+    $payload = function_exists('gdy_cache_remember')
+        ? gdy_cache_remember($cacheKey, (int)$ttl, function () use ($pdo, $category, $perPage, $offset) {
+            $out = ['total' => 0, 'items' => []];
 
-    $sql = "SELECT *
-            FROM news
-            WHERE status='published' AND category_id = :cid
-            ORDER BY publish_at DESC
-            LIMIT :lim OFFSET :off";
+            $st = $pdo->prepare("SELECT COUNT(*) FROM news WHERE status='published' AND category_id = :cid");
+            $st->execute([':cid' => (int)$category['id']]);
+            $out['total'] = (int)$st->fetchColumn();
 
-    // Ensure LIMIT/OFFSET bindings work on MySQL by enabling emulation for this statement.
-    $prevEmulate = (bool)$pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+            $sql = "SELECT *
+                    FROM news
+                    WHERE status='published' AND category_id = :cid
+                    ORDER BY publish_at DESC
+                    LIMIT :lim OFFSET :off";
 
-    $st = $pdo->prepare($sql);
-    $st->bindValue(':cid', (int)$category['id'], PDO::PARAM_INT);
-    $st->bindValue(':lim', (int)$perPage, PDO::PARAM_INT);
-    $st->bindValue(':off', (int)$offset, PDO::PARAM_INT);
-    $st->execute();
-    $items = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $prevEmulate = (bool)$pdo->getAttribute(PDO::ATTR_EMULATE_PREPARES);
+            $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
+            $st = $pdo->prepare($sql);
+            $st->bindValue(':cid', (int)$category['id'], PDO::PARAM_INT);
+            $st->bindValue(':lim', (int)$perPage, PDO::PARAM_INT);
+            $st->bindValue(':off', (int)$offset, PDO::PARAM_INT);
+            $st->execute();
+            $out['items'] = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+            $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, $prevEmulate);
+
+            return $out;
+        })
+        : null;
+
+    if (is_array($payload)) {
+        $totalItems = (int)($payload['total'] ?? 0);
+        $items      = (array)($payload['items'] ?? []);
+    }
+
     // Performance: attach comment counts in one query (avoid N+1 in views)
-    if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+    if (function_exists('gdy_attach_comment_counts_to_news_rows') && $pdo instanceof PDO) {
         try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) { /* ignore */ }
     }
 
 } catch (Throwable $e) {
     error_log('[CategoryController] news fetch failed: ' . $e->getMessage());
 }
-
 $pages = max(1, (int)ceil($totalItems / $perPage));
 $pagination = [
     'total_items' => $totalItems,

@@ -39,15 +39,17 @@ final class ArchiveController
 
 
         // output cache (anonymous GET only)
-$__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('archive', ['path' => (string)gdy_request_path()]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
-if ((isset($__oc['served']) === TRUE) && ($__oc['served'] === TRUE)) { return; }
+        $__oc = (function_exists('gdy_output_cache_begin') === TRUE)
+            ? gdy_output_cache_begin('archive', [
+                'path' => (string)gdy_request_path(),
+                'page' => (int)$page,
+                'year' => (int)($year ?? 0),
+                'month' => (int)($month ?? 0),
+            ])
+            : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
 
-$page, ($year ?? 0), ($month ?? 0)]);
-            if (\PageCache::serveIfCached($__pageCacheKey) === TRUE) {
-                return;
-            }
-            \ob_start();
-            $__didOutputCache = true;
+        if ((isset($__oc['served']) === TRUE) && ($__oc['served'] === TRUE)) {
+            return;
         }
 
         $list = $this->news->archive($page, $perPage, $year, $month);
@@ -74,10 +76,8 @@ $page, ($year ?? 0), ($month ?? 0)]);
                 'pageSeo' => $this->seo->archive($year, $month),
             ]
         );
-
-        if (($__didOutputCache === TRUE) && ($__pageCacheKey !== '')) {
-            \PageCache::store($__pageCacheKey, $__ttl);
-            @\ob_end_flush();
+        if (function_exists('gdy_output_cache_end') === TRUE) {
+            gdy_output_cache_end($__oc);
         }
 
     }

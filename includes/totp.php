@@ -72,3 +72,57 @@ function totp_otpauth_url(string $issuer, string $account, string $secret): stri
     $secretEnc = rawurlencode($secret);
     return "otpauth://totp/{$label}?secret={$secretEnc}&issuer={$issuerEnc}&algorithm=SHA1&digits=6&period=30";
 }
+
+// --------------------------
+// Backup codes (one-time)
+// --------------------------
+
+function totp_generate_backup_codes(int $count = 10): array {
+    $codes = [];
+    for ($i = 0; $i < $count; $i++) {
+        $raw = bin2hex(random_bytes(4)); // 8 hex chars
+        $codes[] = strtoupper(substr($raw, 0, 4) . '-' . substr($raw, 4, 4));
+    }
+    return $codes;
+}
+
+/**
+ * Store backup codes as JSON array of password_hash() values.
+ */
+function totp_hash_backup_codes(array $codes): string {
+    $hashes = [];
+    foreach ($codes as $c) {
+        $c = strtoupper(trim((string)$c));
+        if ($c === '') { continue; }
+        $hashes[] = password_hash($c, PASSWORD_DEFAULT);
+    }
+    return json_encode($hashes, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+}
+
+/**
+ * Verify and consume a backup code.
+ * Returns TRUE when a code matches; $newJson contains remaining hashes.
+ */
+function totp_consume_backup_code(string $input, string $jsonHashes, string &$newJson): bool {
+    $input = strtoupper(trim($input));
+    $newJson = $jsonHashes;
+    if ($input === '' || $jsonHashes === '') { return false; }
+    $arr = json_decode($jsonHashes, true);
+    if (!is_array($arr) || count($arr) === 0) { return false; }
+
+    $remaining = [];
+    $matched = false;
+
+    foreach ($arr as $h) {
+        if (!is_string($h) || $h === '') { continue; }
+        if ($matched === false && password_verify($input, $h)) {
+            $matched = true;
+            continue; // consume
+        }
+        $remaining[] = $h;
+    }
+
+    $newJson = json_encode(array_values($remaining), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    return $matched;
+}
+

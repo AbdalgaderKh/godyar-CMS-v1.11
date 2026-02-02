@@ -1,20 +1,24 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../includes/bootstrap.php';
-require_once __DIR__ . '/../../includes/totp.php';
+include '../../includes/bootstrap.php';
+include '../../includes/totp.php';
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
+// بدء الجلسة (idempotent)
+if (function_exists('gdy_session_start')) {
     gdy_session_start();
+} else {
+    session_start();
 }
 
 if (empty($_SESSION['twofa_pending']) || !is_array($_SESSION['twofa_pending'])) {
-    header('Location: /admin/login.php');
+    $loginUrl = (function_exists('base_url') === TRUE) ? base_url('/admin/login.php') : '/admin/login.php';
+    header('Location: ' . $loginUrl);
     exit;
 }
 
 $pending = $_SESSION['twofa_pending'];
-$uid = (int)($pending['id'] ?? 0);
+$userId = (int)($pending['id'] ?? 0);
 
 $pdo = null;
 if (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
@@ -23,91 +27,86 @@ if (class_exists('Godyar\\DB') && method_exists('Godyar\\DB', 'pdo')) {
     $pdo = gdy_pdo_safe();
 }
 
-if (($pdo instanceof PDO) === false || $uid <= 0) {
-    http_response_code(500);
-    die('DB not available');
-}
+function e(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
-$st = $pdo->prepare("SELECT id, username, email, role, status, twofa_enabled, twofa_secret, session_version FROM users WHERE id = ? LIMIT 1");
-$st->execute([$uid]);
-$user = $st->fetch(PDO::FETCH_ASSOC);
+$err = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (function_exists('csrf_verify_any_or_die')) {
+        csrf_verify_any_or_die();
+    }
 
-if (!$user || (int)($user['twofa_enabled'] ?? 0) !== 1 || empty($user['twofa_secret'])) {
-    unset($_SESSION['twofa_pending']);
-    header('Location: /admin/login.php');
-    exit;
-}
+    $code = trim((string)($_POST['code'] ?? ''));
 
-$error = null;
-
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-    $code = (string)($_POST['code'] ?? '');
-    if (!totp_verify((string)$user['twofa_secret'], $code)) {
-        $error = 'رمز 2FA غير صحيح.';
-    } else {
-        // login success now
-        $_SESSION['user'] = [
-            'id'       => (int)$user['id'],
-            'name'     => $user['username'] ?? $user['email'],
-            'username' => $user['username'] ?? null,
-            'role'     => $user['role'] ?? 'admin',
-            'email'    => $user['email'],
-            'status'   => $user['status'] ?? 'active',
-        ];
-
-        $sv = is_numeric($user['session_version'] ?? null) ? (int)$user['session_version'] : 0;
-        $_SESSION['session_version'] = $sv;
-
-        // update last_login_at + ip if columns exist
+    // جلب secret + backup codes (إن وُجد)
+    $secret = '';
+    $backupJson = '';
+    if ($pdo instanceof PDO) {
         try {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? null;
-            $pdo->prepare("UPDATE users SET last_login_at = NOW(), last_login_ip = ? WHERE id = ? LIMIT 1")
-                ->execute([$ip, (int)$user['id']]);
-        } catch (Throwable $e) {}
+            $st = $pdo->prepare("SELECT twofa_secret, COALESCE(twofa_backup_codes, '') AS twofa_backup_codes FROM users WHERE id = :id LIMIT 1");
+            $st->execute([':id' => $userId]);
+            $u = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+            $secret = (string)($u['twofa_secret'] ?? '');
+            $backupJson = (string)($u['twofa_backup_codes'] ?? '');
+        } catch (Throwable $t) {
+            // ignore
+        }
+    }
 
-        // audit
-        if (function_exists('admin_audit_db')) {
-            admin_audit_db('login_2fa_success');
+    $ok = false;
+    if ($secret !== '' && totp_verify($secret, $code)) {
+        $ok = true;
+    } else {
+        // backup code
+        $newJson = $backupJson;
+        if (totp_consume_backup_code($code, $backupJson, $newJson)) {
+            $ok = true;
+            if ($pdo instanceof PDO) {
+                try {
+                    $pdo->prepare("UPDATE users SET twofa_backup_codes = :b WHERE id = :id")->execute([':b' => $newJson, ':id' => $userId]);
+                } catch (Throwable $t) {}
+            }
+        }
+    }
+
+    if ($ok) {
+        // نجاح 2FA → تثبيت الجلسة
+        $_SESSION['user'] = [
+            'id'       => (int)($pending['id'] ?? 0),
+            'email'    => (string)($pending['email'] ?? ''),
+            'role'     => (string)($pending['role'] ?? ''),
+            'username' => (string)($pending['username'] ?? ''),
+        ];
+        $_SESSION['admin'] = true;
+        unset($_SESSION['twofa_pending']);
+
+        if (function_exists('gdy_session_rotate')) {
+            gdy_session_rotate('admin_2fa');
         }
 
-        unset($_SESSION['twofa_pending']);
-        header('Location: /admin/index.php');
+        $dest = (function_exists('base_url') === TRUE) ? base_url('/admin/index.php') : '/admin/index.php';
+        header('Location: ' . $dest);
         exit;
     }
+
+    $err = 'رمز التحقق غير صحيح.';
 }
 
-function h2(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
+// عرض بسيط
+include '../../frontend/views/partials/header.php';
 ?>
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>تأكيد 2FA</title>
-  <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
-</head>
-<body class="p-3">
-<div class="container" style="max-width:520px;">
-  <h1 class="h5 mb-3">التحقق بخطوتين</h1>
-
-  <?php if ($error): ?>
-    <div class="alert alert-danger"><?php echo h2($error); ?></div>
+<div class="container" style="max-width:560px;margin:1rem auto;">
+  <h1>تأكيد الدخول (2FA)</h1>
+  <?php if ($err !== ''): ?>
+    <div class="alert alert-warning"><?= e($err) ?></div>
   <?php endif; ?>
-
-  <div class="card">
-    <div class="card-body">
-      <p class="text-muted small mb-3">افتح تطبيق المصادقة وأدخل الرمز المكوّن من 6 أرقام.</p>
-
-      <form method="post" class="d-flex gap-2">
-        <input class="form-control" name="code" inputmode="numeric" autocomplete="one-time-code" placeholder="123456" required>
-        <button class="btn btn-primary" type="submit">تأكيد</button>
-      </form>
-
-      <div class="mt-3 small">
-        <a href="/admin/login.php">العودة لتسجيل الدخول</a>
-      </div>
+  <form method="post">
+    <?php if (function_exists('csrf_field')) { csrf_field(); } ?>
+    <div style="margin:.5rem 0;">
+      <input name="code" inputmode="numeric" placeholder="رمز 2FA أو Backup Code" required style="padding:.5rem;width:260px;">
     </div>
-  </div>
+    <button class="btn btn-primary" type="submit">تأكيد</button>
+  </form>
+  <p style="margin-top:1rem;color:#666;">يمكنك إدخال رمز 6 أرقام من التطبيق، أو أحد Backup Codes.</p>
 </div>
-</body>
-</html>
+<?php
+include '../../frontend/views/partials/footer.php';

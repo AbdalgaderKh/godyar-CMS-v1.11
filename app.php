@@ -479,7 +479,7 @@ $router->get('#^/tag/([^/]+)/page/([0-9]+)/?$#', fn(array $m) => $tagController-
 $router->get('#^/tag/([^/]+)/?$#', fn(array $m) => $tagController->show(gdy_slug_clean(rawurldecode((string)$m[1])), gdy_qs_int('page', 1)));
 
 // /trending
-$router->get('#^/trending/?$#', fn() => $legacy->include('frontend/controllers/TrendingController.php'));
+$router->get('#^/trending/?$#', fn() => $legacy->include('frontend/views/trending.php'));
 
 // Auth
 $router->get('#^/login/?$#', fn() => $legacy->include('login.php'));

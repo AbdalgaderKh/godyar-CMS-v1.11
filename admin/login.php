@@ -140,7 +140,7 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         if (function_exists('gdy_session_rotate')) {
             gdy_session_rotate('admin_login');
         } else {
-            if (headers_sent() === FALSE) { session_regenerate_id(true); }
+            if (function_exists('gdy_session_rotate') === TRUE) { gdy_session_rotate('admin_login'); }
 $_SESSION['__gdy_rotated_at'] = time();
         }
         $_SESSION['user'] = [

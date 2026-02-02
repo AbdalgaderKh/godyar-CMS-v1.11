@@ -48,6 +48,120 @@ final class NewsService
         return ($env === '1' || strtolower((string)$env) === 'true');
     }
 
+/**
+ * Increment views counter for a news item.
+ * - Prepared statement (safe).
+ * - Schema-tolerant: no-op if "views" column missing.
+ */
+public function incrementViews(int $newsId): bool
+{
+    $newsId = (int)$newsId;
+    if ($newsId <= 0) return false;
+    if (!$this->tableExists('news')) return false;
+    if (!$this->hasColumn('news', 'views')) return false;
+
+    try {
+        $sql = 'UPDATE news SET views = COALESCE(views, 0) + 1 WHERE id = ?';
+        $st = $this->pdo->prepare($sql);
+        $ok = $st->execute([$newsId]);
+        return ($ok === TRUE);
+    } catch (Throwable $e) {
+        $this->log('[NewsService] incrementViews error: ' . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Fetch related news by category (excluding current post).
+ *
+ * @return array<int, array<string,mixed>>
+ */
+public function relatedByCategory(int $categoryId, int $excludeId, int $limit = 6): array
+{
+    $categoryId = (int)$categoryId;
+    $excludeId = (int)$excludeId;
+    $limit = (int)$limit;
+
+    if ($categoryId <= 0 || $limit <= 0) return [];
+    if (!$this->tableExists('news')) return [];
+    if (!$this->hasColumn('news', 'category_id')) return [];
+
+    try {
+        $where = 'category_id = ? AND id <> ?';
+        $params = [$categoryId, $excludeId];
+
+        // Only published
+        $where .= ' AND ' . $this->publishedWhere();
+
+        $order = $this->dateColumn();
+        $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $this->qi($order) . ' DESC LIMIT ' . $limit;
+
+        $st = $this->pdo->prepare($sql);
+        $st->execute($params);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        return $rows;
+    } catch (Throwable $e) {
+        $this->log('[NewsService] relatedByCategory error: ' . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Latest news list.
+ *
+ * @return array<int, array<string,mixed>>
+ */
+public function latest(int $limit = 10, bool $includeDrafts = false): array
+{
+    $limit = (int)$limit;
+    if ($limit <= 0) $limit = 10;
+    if (!$this->tableExists('news')) return [];
+
+    try {
+        $where = '1=1';
+        if (!$includeDrafts) {
+            $where = $this->publishedWhere();
+        }
+
+        $order = $this->dateColumn();
+        $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $this->qi($order) . ' DESC LIMIT ' . $limit;
+        $st = $this->pdo->prepare($sql);
+        $st->execute([]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $rows;
+    } catch (Throwable $e) {
+        $this->log('[NewsService] latest error: ' . $e->getMessage());
+        return [];
+    }
+}
+
+/**
+ * Most read list (falls back to latest if "views" column missing).
+ *
+ * @return array<int, array<string,mixed>>
+ */
+public function mostRead(int $limit = 10): array
+{
+    $limit = (int)$limit;
+    if ($limit <= 0) $limit = 10;
+    if (!$this->tableExists('news')) return [];
+
+    try {
+        $orderCol = $this->hasColumn('news', 'views') ? 'views' : $this->dateColumn();
+        $where = $this->publishedWhere();
+
+        $sql = 'SELECT * FROM news WHERE ' . $where . ' ORDER BY ' . $this->qi($orderCol) . ' DESC LIMIT ' . $limit;
+        $st = $this->pdo->prepare($sql);
+        $st->execute([]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        return $rows;
+    } catch (Throwable $e) {
+        $this->log('[NewsService] mostRead error: ' . $e->getMessage());
+        return [];
+    }
+}
+
     /** @return array<string,mixed>|null */
     public function findById(int $id, bool $includeDrafts = false): ?array
     {

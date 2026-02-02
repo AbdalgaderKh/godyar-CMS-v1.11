@@ -1,0 +1,185 @@
+<?php
+declare(strict_types=1);
+
+// /godyar/frontend/controllers/TagController.php
+
+require_once __DIR__ . '/../../includes/bootstrap.php';
+
+$pdo = gdy_pdo_safe();
+
+if (function_exists('h') === false) {
+    function h($v): string {
+        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// slug من الرابط: /tag/slug
+$slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
+if ($slug === '') {
+    header("HTTP/1.1 404 Not Found");
+    echo 'الوسم غير موجود';
+    exit;
+}
+
+$tag   = null;
+$items = [];
+$page    = max(1, (int)($_GET['page'] ?? 1));
+$perPage = 12;
+$offset  = ($page - 1) * $perPage;
+
+// output cache (anonymous GET only)
+$__didOutputCache = false;
+$__pageCacheKey = '';
+$__ttl = function_exists('gdy_output_cache_ttl') ? gdy_output_cache_ttl() : 0;
+if ($__ttl > 0 && function_exists('gdy_should_output_cache') && gdy_should_output_cache() && class_exists('PageCache')) {
+    $__pageCacheKey = 'tag_' . gdy_page_cache_key('tag', [$slug, $page, $perPage]);
+    if (PageCache::serveIfCached($__pageCacheKey)) {
+        exit;
+    }
+    ob_start();
+    $__didOutputCache = true;
+}
+$total   = 0;
+$pages   = 1;
+
+try {
+    if ($pdo instanceof PDO) {
+        // البيانات الأساسية للوسم
+        $stmt = $pdo->prepare("SELECT id, name, slug, description FROM tags WHERE slug = :slug LIMIT 1");
+        $stmt->execute([':slug' => $slug]);
+        $tag = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+        if (($tag === false)) {
+            header("HTTP/1.1 404 Not Found");
+            echo 'الوسم غير موجود';
+            exit;
+        }
+
+                // إجمالي الأخبار + قائمة الأخبار (short-lived cache)
+        $ttl = function_exists('gdy_list_cache_ttl') ? gdy_list_cache_ttl() : 120;
+        $cacheKey = function_exists('gdy_cache_key')
+            ? gdy_cache_key('list:tag', [$slug, (int)$tag['id'], $page, $perPage, $_SERVER['HTTP_HOST'] ?? ''])
+            : ('list:tag:' . $slug . ':' . $page);
+
+        $payload = function_exists('gdy_cache_remember')
+            ? gdy_cache_remember($cacheKey, (int)$ttl, function () use ($pdo, $tag, $perPage, $offset) {
+                $out = ['total' => 0, 'items' => []];
+
+                $cnt = $pdo->prepare("
+                    SELECT COUNT(*)
+                    FROM news n
+                    INNER JOIN news_tags nt ON nt.news_id = n.id
+                    WHERE nt.tag_id = :tid
+                      AND n.status = 'published'
+                ");
+                $cnt->execute([':tid' => (int)$tag['id']]);
+                $out['total'] = (int)$cnt->fetchColumn();
+
+                $sql = "SELECT n.id,
+                               n.slug,
+                               n.featured_image,
+                               n.title,
+                               n.excerpt,
+                               n.publish_at
+                        FROM news n
+                        INNER JOIN news_tags nt ON nt.news_id = n.id
+                        WHERE nt.tag_id = :tid
+                          AND n.status = 'published'
+                        ORDER BY n.publish_at DESC, n.id DESC
+                        LIMIT :limit OFFSET :offset";
+                $st = $pdo->prepare($sql);
+                $st->bindValue(':tid', (int)$tag['id'], PDO::PARAM_INT);
+                $st->bindValue(':limit', (int)$perPage, PDO::PARAM_INT);
+                $st->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+                $st->execute();
+                $out['items'] = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+                return $out;
+            })
+            : null;
+
+        $total = (int)($payload['total'] ?? 0);
+        $pages = max(1, (int)ceil($total / $perPage));
+        $items = (array)($payload['items'] ?? []);
+
+        // Performance: attach comment counts in one query (avoid N+1 in views)
+        if (function_exists('gdy_attach_comment_counts_to_news_rows')) {
+            try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) { /* ignore */ }
+        }
+    }
+} catch (Throwable $e) {
+    error_log('[TagController] ' . $e->getMessage());
+    $tag   = null;
+    $items = [];
+}
+
+if (!$tag) {
+    header("HTTP/1.1 404 Not Found");
+    echo 'الوسم غير موجود';
+    exit;
+}
+
+// SEO + عنوان ووصف الصفحة
+$tagName        = (string)($tag['name'] ?? '');
+$tagSlug        = (string)($tag['slug'] ?? '');
+$tagDescription = (string)($tag['description'] ?? '');
+if ($tagDescription === '') {
+    $tagDescription = "الأخبار المرتبطة بالوسم {$tagName}.";
+}
+
+// baseUrl
+$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+if ($baseUrl === '') {
+    $https = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+    || (!empty($_SERVER['SERVER_PORT']) && (string)($_SERVER['SERVER_PORT']) === '443');
+$scheme = $https ? 'https' : 'http';
+    $host    = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $baseUrl = $scheme . '://' . $host;
+}
+
+$canonicalUrl = $baseUrl . '/tag/' . rawurlencode($tagSlug !== '' ? $tagSlug : $tagName);
+if ($page > 1) {
+    $canonicalUrl .= '?page=' . (int)$page;
+}
+
+$homeUrl = rtrim($baseUrl, '/') . '/';
+
+// OG image ديناميكي للوسم
+$ogImage = $baseUrl . '/og_image.php?type=tag&title=' . rawurlencode($tagName);
+
+$pageSeo = [
+    'title' => 'الوسم: ' . $tagName,
+    'description' => $tagDescription,
+    'url' => $canonicalUrl,
+    'type' => 'website',
+    'image' => $ogImage,
+    'jsonld' => json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type'=>'ListItem','position'=>1,'name'=>'الرئيسية','item'=>$homeUrl],
+            ['@type'=>'ListItem','position'=>2,'name'=>'وسم: ' . $tagName,'item'=>$canonicalUrl],
+        ],
+    ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+];
+
+// تضمين الهيدر + الـ view + الفوتر
+$header = __DIR__ . '/../templates/header.php';
+$footer = __DIR__ . '/../templates/footer.php';
+$view   = __DIR__ . '/../views/tag.php';
+
+if (is_file($header)) require $header;
+
+if (is_file($view) === true) {
+    require $view;
+
+if ($__didOutputCache && $__pageCacheKey !== '') {
+    PageCache::store($__pageCacheKey, $__ttl);
+    @ob_end_flush();
+}
+} else {
+    echo "View not found: " . h($view);
+}
+
+if (is_file($footer)) require $footer;

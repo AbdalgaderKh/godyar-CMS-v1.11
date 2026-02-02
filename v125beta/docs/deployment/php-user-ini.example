@@ -1,0 +1,14 @@
+; ضع كـ .user.ini في الجذر (استضافة مشتركة) أو طبّقه في php.ini على السيرفر
+display_errors=0
+log_errors=1
+
+; جلسات
+session.use_strict_mode=1
+session.use_only_cookies=1
+session.cookie_httponly=1
+session.cookie_samesite=Lax
+; فعّل Secure فقط عند HTTPS
+; session.cookie_secure=1
+
+; تعطيل تمرير session id عبر URL
+session.use_trans_sid=0

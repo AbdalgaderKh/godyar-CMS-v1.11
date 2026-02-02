@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 // admin/login.php — شاشة تسجيل دخول احترافية مع بعض ميزات الأمان
 
-require '../includes/bootstrap.php';
+include '../includes/bootstrap.php';
 include '_role_guard.php';
 // Ultra Pack helpers
-require 'includes/audit_db.php';
+include 'includes/audit_db.php';
 
-require '../includes/rate_limit.php';
+include '../includes/rate_limit.php';
 // i18n
-require 'i18n.php';
+include 'i18n.php';
 
 // هيلبر للهروب من الـ XSS
 if (!function_exists('h')) {
@@ -20,8 +20,7 @@ if (!function_exists('h')) {
 }
 
 // نتأكد أن الجلسة شغالة (غالبًا البوتستراب شغّلها، لكن للاحتياط)
-if (session_id() === '') { gdy_session_start(); }
-
+if (function_exists('gdy_session_start') === TRUE) { gdy_session_start(); }
 // توليد رمز CSRF بسيط
 if (empty($_SESSION['admin_csrf_token'])) {
     $_SESSION['admin_csrf_token'] = bin2hex(random_bytes(16));
@@ -141,8 +140,8 @@ if (!$user || !in_array($role, $allowedRoles, true)) {
         if (function_exists('gdy_session_rotate')) {
             gdy_session_rotate('admin_login');
         } else {
-            if ((session_id() !== '') && (headers_sent() === FALSE)) { session_regenerate_id(true); }
-            $_SESSION['__gdy_rotated_at'] = time();
+            if (headers_sent() === FALSE) { session_regenerate_id(true); }
+$_SESSION['__gdy_rotated_at'] = time();
         }
         $_SESSION['user'] = [
             'id'       => (int)$user['id'],

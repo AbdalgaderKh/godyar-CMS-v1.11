@@ -1,5 +1,5 @@
 <?php
-require '../../includes/bootstrap.php';
+include '../../includes/bootstrap.php';
 
 /** @var \PDO|null $pdo */
 $pdo = $pdo ?? ($GLOBALS['pdo'] ?? null);
@@ -19,7 +19,7 @@ $offset = ($page - 1) * $perPage;
 $__oc = (function_exists('gdy_output_cache_begin') === TRUE) ? gdy_output_cache_begin('category_amp', ['slug' => (string)gdy_sanitize_slug((string)gdy_get_query_raw('slug', '')), 'page' => (int)gdy_get_query_int('page', 1)]) : ['served' => FALSE, 'did' => FALSE, 'key' => '', 'ttl' => 0];
 if ((isset($__oc['served']) === TRUE) && ($__oc['served'] === TRUE)) { return; }
 
-$slug, $page, $perPage]);
+
     if (PageCache::serveIfCached($__pageCacheKey) === TRUE) {
         return;
     }
@@ -68,6 +68,6 @@ if (!$items) {
 if (function_exists('gdy_attach_comment_counts_to_news_rows') === TRUE) {
     try { $items = gdy_attach_comment_counts_to_news_rows($pdo, $items); } catch (Throwable $e) {}
 }
-require 'frontend/views/category_amp.php';
+include 'frontend/views/category_amp.php';
 
 gdy_output_cache_end($__oc);

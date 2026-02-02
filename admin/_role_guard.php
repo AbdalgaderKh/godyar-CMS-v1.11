@@ -11,7 +11,7 @@ declare(strict_types=1);
  * في صفحات لوحة التحكم، لكنه يملك fallback آمن.
  */
 
-if ((session_id() === '') && (headers_sent() === FALSE)) {
+if (headers_sent() === FALSE) {
     if (function_exists('gdy_session_start') === TRUE) {
         // Admin context should already have Strict, but keep safe default.
         gdy_session_start(['cookie_samesite' => 'Strict']);

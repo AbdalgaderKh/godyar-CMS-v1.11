@@ -16,10 +16,19 @@ if (!function_exists('gdy_indexnow_key')) {
         if (isset($GLOBALS['site_settings']) && is_array($GLOBALS['site_settings'])) {
             $k = (string)($GLOBALS['site_settings']['seo.indexnow_key'] ?? '');
         }
-        if ($k !== '') return trim($k);
+        $k = trim($k);
+        if ($k !== '') {
+            return $k;
+        }
 
-        // Fallback to bundled key
-        return '6e896143ae5ccb7b9d7c29790ae431f3';
+        // Fallback: environment variable (do NOT commit real keys to repo)
+        $env = getenv('GDY_INDEXNOW_KEY');
+        if (is_string($env) && trim($env) !== '') {
+            return trim($env);
+        }
+
+        // No bundled key in repository.
+        return '';
     }
 }
 

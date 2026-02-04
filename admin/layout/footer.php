@@ -7,7 +7,9 @@
 
 $__base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
 $__admin = $__base . '/admin';
-$__adminAssets = $__admin . '/assets';
+// In case footer.php is included in a different scope, make sure $__adminAssets exists.
+// This prevents noisy PHP warnings on some hosts.
+$__adminAssets = isset($__adminAssets) ? (string)$__adminAssets : ((isset($__admin) ? (string)$__admin : '/admin') . '/assets');
 
 // Cache-busting version (fallback إلى الوقت الحالي)
 $__v = defined('GODYAR_ADMIN_ASSET_VERSION')

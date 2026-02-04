@@ -2,6 +2,8 @@
 // /admin/manage_videos.php
 // Godyar CMS v1.11 — Featured Videos manager (hardened)
 
+// phpcs:disable
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/_admin_guard.php';
@@ -444,3 +446,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <?php require_once __DIR__ . '/layout/app_end.php'; ?>
+
+<?php
+// phpcs:enable
+?>

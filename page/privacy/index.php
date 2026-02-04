@@ -1,88 +1,85 @@
-<?php
-declare(strict_types=1);
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>سياسة الخصوصية وشروط الاستخدام — Godyar</title>
+  <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css">
+  <link rel="stylesheet" href="/assets/css/app.css">
+</head>
+<body>
+<header class="border-bottom bg-white">
+  <div class="container py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+    <a class="text-decoration-none fw-bold" href="/">Godyar</a>
+    <nav class="d-flex flex-wrap gap-3">
+      <a class="text-decoration-none" href="/">الرئيسية</a>
+      <a class="text-decoration-none" href="/page/about/">حول</a>
+      <a class="text-decoration-none" href="/page/privacy/">الخصوصية</a>
+      <a class="text-decoration-none" href="/login">دخول</a>
+      <a class="text-decoration-none" href="/register">تسجيل</a>
+    </nav>
+  </div>
+</header>
 
-// صفحة ثابتة: شروط الاستخدام وسياسة الخصوصية
-require_once __DIR__ . '/../../includes/bootstrap.php';
-require_once __DIR__ . '/../../header.php';
-?>
+<main class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="h4 mb-3">سياسة الخصوصية وشروط استخدام السكربت</h1>
+          <p class="text-muted">هذه السياسة تخص استخدام سكربت <strong>Godyar CMS</strong> وإدارة الموقع المبني عليه. يمكن تعديل البنود حسب احتياجك القانوني.</p>
 
-<main class="container" style="max-width: 980px; padding: 28px 12px;">
-  <header class="mb-4">
-    <h1 class="h3 mb-2">سياسة الخصوصية وشروط الاستخدام</h1>
-    <p class="text-muted mb-0">هذه صفحة ثابتة لعرض الشروط والسياسات الخاصة باستخدام السكربت.</p>
-  </header>
+          <h2 class="h6 mt-4">1) جمع البيانات</h2>
+          <ul>
+            <li>قد نجمع بيانات الحساب عند التسجيل (مثل البريد الإلكتروني واسم المستخدم).</li>
+            <li>قد نسجل بيانات تقنية تلقائية مثل عنوان IP ونوع المتصفح لأغراض الأمان وتحسين الخدمة.</li>
+          </ul>
 
-  <section class="mb-4">
-    <h2 class="h5">1) التعريفات</h2>
-    <ul>
-      <li><strong>السكربت</strong>: نظام إدارة المحتوى (Godyar CMS) وما يتضمنه من ملفات وبرمجيات.</li>
-      <li><strong>الموقع</strong>: الموقع الذي يشغّل السكربت على نطاقك.</li>
-      <li><strong>المستخدم</strong>: أي شخص يقوم بتسجيل حساب أو استخدام خدمات الموقع.</li>
-      <li><strong>المالك/المشرف</strong>: الجهة التي تدير الموقع وتتحكم بإعداداته ومحتواه.</li>
-    </ul>
-  </section>
+          <h2 class="h6 mt-4">2) استخدام البيانات</h2>
+          <ul>
+            <li>لتشغيل الموقع وتمكين تسجيل الدخول وإدارة الجلسات.</li>
+            <li>لتحسين التجربة، ومراقبة الأداء، واكتشاف إساءة الاستخدام.</li>
+          </ul>
 
-  <section class="mb-4">
-    <h2 class="h5">2) قبول الشروط</h2>
-    <p>باستخدامك للموقع أو تسجيلك لحساب، فإنك تقرّ بقراءتك لهذه الشروط وموافقتك عليها. إذا لم توافق، يرجى عدم استخدام الموقع.</p>
-  </section>
+          <h2 class="h6 mt-4">3) ملفات تعريف الارتباط (Cookies)</h2>
+          <p>يستخدم الموقع ملفات تعريف الارتباط لتسجيل الدخول وتفضيلات المستخدم. يمكنك تعطيلها من إعدادات المتصفح لكن قد تتأثر بعض الوظائف.</p>
 
-  <section class="mb-4">
-    <h2 class="h5">3) إنشاء الحساب واستخدامه</h2>
-    <ul>
-      <li>تتحمل مسؤولية صحة بياناتك عند التسجيل.</li>
-      <li>تتحمل مسؤولية الحفاظ على سرية كلمة المرور وعدم مشاركتها.</li>
-      <li>قد يتم تعطيل الحساب عند إساءة الاستخدام أو مخالفة الشروط أو القوانين.</li>
-    </ul>
-  </section>
+          <h2 class="h6 mt-4">4) المحتوى والمسؤولية</h2>
+          <ul>
+            <li>المسؤول عن المحتوى هو مالك الموقع/المشرفون المعتمدون.</li>
+            <li>يُمنع نشر محتوى مخالف للأنظمة أو ينتهك حقوق الملكية الفكرية.</li>
+          </ul>
 
-  <section class="mb-4">
-    <h2 class="h5">4) المحتوى والنشر</h2>
-    <ul>
-      <li>المحتوى المنشور يعبر عن كاتبه/ناشره، ويتحمل المسؤولية عنه.</li>
-      <li>يمنع نشر محتوى مخالف للقانون أو ينتهك حقوق الملكية الفكرية أو الخصوصية أو يحض على الكراهية أو العنف.</li>
-      <li>يحق للمالك/المشرف تعديل أو حذف أي محتوى مخالف دون إشعار مسبق.</li>
-    </ul>
-  </section>
+          <h2 class="h6 mt-4">5) الاستخدام المسموح</h2>
+          <ul>
+            <li>يُمنع محاولة اختراق الموقع أو تجاوز الصلاحيات أو العبث بالبيانات.</li>
+            <li>يُمنع إرسال روابط أو أكواد خبيثة أو إجراء هجمات حجب الخدمة.</li>
+          </ul>
 
-  <section class="mb-4">
-    <h2 class="h5">5) الخصوصية والبيانات</h2>
-    <p>قد نجمع بيانات أساسية لازمة لتشغيل الموقع مثل: البريد الإلكتروني، اسم المستخدم، وعناوين IP وسجلات الدخول لأغراض الأمان.</p>
-    <ul>
-      <li>لا نبيع بياناتك الشخصية لطرف ثالث.</li>
-      <li>قد نشارك بيانات محدودة عند الحاجة للامتثال للقانون أو حماية الموقع من إساءة الاستخدام.</li>
-      <li>يمكنك طلب حذف حسابك وفق آلية الدعم/التواصل المعتمدة لدى إدارة الموقع.</li>
-    </ul>
-  </section>
+          <h2 class="h6 mt-4">6) إنهاء الحساب</h2>
+          <p>يحق لإدارة الموقع إيقاف أو حذف أي حساب عند مخالفة الشروط أو الاشتباه بسلوك ضار.</p>
 
-  <section class="mb-4">
-    <h2 class="h5">6) ملفات تعريف الارتباط (Cookies)</h2>
-    <p>قد يستخدم الموقع ملفات تعريف الارتباط لتحسين تجربة الاستخدام وتذكر جلسات الدخول. يمكنك تعطيلها من إعدادات المتصفح، وقد يؤثر ذلك على بعض الوظائف.</p>
-  </section>
+          <h2 class="h6 mt-4">7) التعديلات على السياسة</h2>
+          <p>قد نقوم بتحديث هذه السياسة من وقت لآخر. يُنصح بمراجعتها دوريًا.</p>
 
-  <section class="mb-4">
-    <h2 class="h5">7) الروابط الخارجية</h2>
-    <p>قد يحتوي الموقع على روابط لمواقع خارجية. لسنا مسؤولين عن محتوى أو سياسات تلك المواقع.</p>
-  </section>
-
-  <section class="mb-4">
-    <h2 class="h5">8) إخلاء المسؤولية</h2>
-    <ul>
-      <li>يُقدَّم الموقع "كما هو" دون ضمانات صريحة أو ضمنية.</li>
-      <li>لا نضمن توافر الخدمة دون انقطاع أو خلوّها من الأخطاء بنسبة 100%.</li>
-      <li>لا نتحمل المسؤولية عن أي أضرار غير مباشرة ناتجة عن استخدام الموقع.</li>
-    </ul>
-  </section>
-
-  <section class="mb-4">
-    <h2 class="h5">9) التعديلات على الشروط</h2>
-    <p>قد نقوم بتحديث هذه الشروط من وقت لآخر. استمرارك في استخدام الموقع بعد التحديث يعني موافقتك على النسخة المحدّثة.</p>
-  </section>
-
-  <section class="mb-1">
-    <h2 class="h5">10) التواصل</h2>
-    <p class="mb-0">للاستفسارات أو طلبات الخصوصية، يرجى استخدام صفحة التواصل أو البريد المخصص لدى إدارة الموقع.</p>
-  </section>
+          <hr class="my-4">
+          <p class="small text-muted mb-0">آخر تحديث: 04 فبراير 2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
-<?php require_once __DIR__ . '/../../footer.php'; ?>
+<footer class="border-top bg-white">
+  <div class="container py-3 d-flex flex-wrap justify-content-between gap-2 small text-muted">
+    <div>© 2026 Godyar CMS</div>
+    <div class="d-flex gap-3">
+      <a class="text-decoration-none" href="/page/about/">حول</a>
+      <a class="text-decoration-none" href="/page/privacy/">الخصوصية</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

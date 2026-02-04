@@ -1,77 +1,53 @@
 <?php
 declare(strict_types=1);
 
+// صفحة ثابتة: تقرير عن السكربت
 require_once __DIR__ . '/../../includes/bootstrap.php';
-
-if (!function_exists('h')) {
-    function h($v): string
-    {
-        return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
-    }
-}
-
-// Page meta (used by the shared frontend header)
-$pageTitle       = "حول السكربت";
-$metaTitle       = $pageTitle;
-$metaDescription = "تقرير مختصر عن سكربت Godyar CMS ومكوناته وميزاته.";
-
-// Optional helpers used by some templates
-$currentLang = $currentLang ?? 'ar';
-$pageDir = 'rtl';
-
-require_once __DIR__ . '/../../frontend/views/partials/header.php';
+require_once __DIR__ . '/../../header.php';
 ?>
-<main class="gdy-page" style="padding:18px 0 42px;">
-  <div class="container">
-    <?php
-      $html = <<<GDYHTML
-<div class="container">
-        <div class="header">
-            <h1>عن السكربت — <span class="cms-name">Godyar CMS</span></h1>
-        </div>
-        
-        <div class="content-block">
-            <p class="intro"><span class="cms-name">Godyar CMS</span> — نظام إدارة محتوى إخباري متعدد اللغات</p>
-            
-            <p>هذا السكربت مخصص لإدارة مواقع الأخبار والمقالات مع دعم تعدد اللغات (مثل العربية/الفرنسية/الإنجليزية)، ولوحة تحكم لإدارة المحتوى، والوسائط، والتصنيفات، والوسوم، والمستخدمين والصلاحيات.</p>
-        </div>
-        
-        <div class="content-block">
-            <h2>أهم المزايا</h2>
-            
-            <ul class="feature-list">
-                <li><strong>إدارة الأخبار والمقالات:</strong> إنشاء/تعديل/حذف، مسودات، ومراجعة المحتوى.</li>
-                <li><strong>تصنيفات ووسوم:</strong> تنظيم المحتوى لسهولة التصفح والبحث.</li>
-                <li><strong>مكتبة وسائط:</strong> رفع الصور والملفات وإدارتها.</li>
-                <li><strong>كتّاب الرأي والفريق:</strong> صفحات تعريفية قابلة للإدارة من لوحة التحكم.</li>
-                <li><strong>إعدادات الموقع:</strong> التحكم في بيانات الموقع العامة من مكان واحد.</li>
-                <li><strong>دعم لغات متعددة:</strong> إمكانية تقديم المحتوى بعدة لغات حسب إعدادات الموقع.</li>
-            </ul>
-        </div>
-        
-        <div class="content-block">
-            <h2>ملاحظات تقنية</h2>
-            
-            <div class="highlight">
-                <p>يعتمد السكربت على قاعدة بيانات (MySQL أو PostgreSQL حسب النسخة/الإعداد).</p>
-                <p>يوصى باستخدام PHP 8.1+ وقاعدة بيانات MySQL 5.7+/8.0+.</p>
-                <p>يتم تطبيق تحسينات أمنية بشكل دوري، مع الاهتمام بتحديثات الحماية والأداء.</p>
-            </div>
-        </div>
-        
-        <div class="content-block">
-            <h2>الدعم والتطوير</h2>
-            
-            <p>يتم تطوير السكربت بهدف توفير منصة مستقرة وسهلة الاستخدام. في حال واجهت مشكلة أو رغبت في طلب ميزة جديدة يمكنك التواصل عبر صفحة "اتصل بنا" أو بريد الدعم (إن كان مضافًا داخل إعدادات الموقع).</p>
-        </div>
-        
-        <div class="footer">
-            <p>Godyar CMS - نظام إدارة محتوى متعدد اللغات</p>
-        </div>
+
+<main class="container" style="max-width: 980px; padding: 28px 12px;">
+  <div class="mb-4">
+    <h1 class="h3 mb-2">حول السكربت</h1>
+    <p class="text-muted mb-0">تقرير مختصر عن Godyar CMS ومكوناته وهدفه.</p>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      <h2 class="h5">ما هو Godyar CMS؟</h2>
+      <p>
+        Godyar CMS سكربت إدارة محتوى خفيف يركز على نشر الأخبار والمقالات مع دعم تعدد اللغات ولوحة تحكم
+        لإدارة المحتوى، التصنيفات، الوسوم، المستخدمين، والإعدادات الأساسية.
+      </p>
+
+      <hr class="my-4">
+
+      <h2 class="h5">أهم الميزات</h2>
+      <ul class="mb-0">
+        <li>نظام أخبار/مقالات مع تصنيفات ووسوم.</li>
+        <li>دعم لغات متعددة (مثل AR / EN / FR) حسب إعدادات الموقع.</li>
+        <li>لوحة تحكم لإدارة المحتوى والمستخدمين والأدوار.</li>
+        <li>مكتبة وسائط لرفع الصور والملفات.</li>
+        <li>صفحات ثابتة مثل (حول / سياسة الخصوصية) ضمن هوية الموقع.</li>
+        <li>إعدادات عامة للموقع (الاسم، الشعار، روابط التواصل، …).</li>
+      </ul>
+
+      <hr class="my-4">
+
+      <h2 class="h5">ملاحظات تشغيل مهمة</h2>
+      <ul>
+        <li>تأكد من اكتمال الجداول في قاعدة البيانات بعد التثبيت.</li>
+        <li>اضبط صلاحيات المجلدات القابلة للكتابة (مثل: uploads / cache إن وجدت).</li>
+        <li>فعّل HTTPS وطبّق ترويسات الأمان عبر إعدادات الخادم / .htaccess.</li>
+      </ul>
+
+      <div class="alert alert-info mb-0" role="alert">
+        هذه الصفحة ثابتة (لا تعتمد على قاعدة البيانات) لتقليل الأعطال وتعزيز الاستقرار.
+      </div>
+
     </div>
-GDYHTML;
-      echo $html;
-    ?>
   </div>
 </main>
-<?php require_once __DIR__ . '/../../frontend/views/partials/footer.php'; ?>
+
+<?php require_once __DIR__ . '/../../footer.php'; ?>

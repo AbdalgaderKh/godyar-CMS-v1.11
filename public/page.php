@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-// /godyar/public/page.php?slug=about — عرض صفحة ثابتة من جدول pages
+// Legacy / fallback page endpoint (querystring based).
+// Ensures pages render with the SAME site header/footer.
 
 require_once __DIR__ . '/../includes/bootstrap.php';
 
@@ -12,117 +13,103 @@ if (!function_exists('h')) {
     }
 }
 
-$pdo = gdy_pdo_safe();
-$slug = isset($_GET['slug']) ? trim((string)$_GET['slug']) : '';
+/** @var PDO|null $pdo */
+$pdo = function_exists('gdy_pdo_safe') ? gdy_pdo_safe() : null;
 
-$pageColumns = [];
-$page        = null;
+$slugRaw = $_GET['slug'] ?? '';
+$slug    = is_string($slugRaw) ? trim($slugRaw) : '';
+$slug    = preg_replace('~[^a-z0-9\-_/]~i', '', $slug) ?: '';
+$slug    = trim($slug, '/');
 
-if ($pdo instanceof PDO && $slug !== '') {
+// Language (optional)
+$langRaw = $_GET['lang'] ?? '';
+$currentLang = is_string($langRaw) && $langRaw !== ''
+    ? preg_replace('~[^a-z]~i', '', strtolower($langRaw))
+    : (function_exists('current_lang') ? (string)current_lang() : 'ar');
+
+$page = null;
+
+if (($pdo instanceof PDO) && $slug !== '') {
     try {
-        $stmt = gdy_db_stmt_columns($pdo, 'pages');
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $pageColumns[$row['Field']] = true;
+        // Support either a simple pages schema (slug/title/content)
+        // or a multilingual schema (slug/lang/title/content ...).
+        $stmt = $pdo->prepare(
+            "SELECT * FROM pages \
+             WHERE slug = :slug \
+             AND (lang = :lang OR lang IS NULL OR lang = '') \
+             ORDER BY (lang = :lang) DESC, id DESC \
+             LIMIT 1"
+        );
+        $stmt->execute([
+            ':slug' => $slug,
+            ':lang' => $currentLang,
+        ]);
+        $page = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+
+        // Fallback if lang column does not exist
+        if ($page === null) {
+            $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = :slug ORDER BY id DESC LIMIT 1");
+            $stmt->execute([':slug' => $slug]);
+            $page = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
         }
     } catch (Throwable $e) {
-        error_log('[Front Page] columns pages: ' . $e->getMessage());
-    }
-
-    $sql = "SELECT * FROM pages WHERE slug = :slug";
-    if (isset($pageColumns['status'])) {
-        $sql .= " AND status = 'published'";
-    }
-    if (isset($pageColumns['is_published'])) {
-        $sql .= " AND is_published = 1";
-    }
-    $sql .= " LIMIT 1";
-
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([':slug' => $slug]);
-        $page = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-    } catch (Throwable $e) {
-        error_log('[Front Page] select: ' . $e->getMessage());
+        // If query fails (different schema), try the simplest possible one
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM pages WHERE slug = :slug ORDER BY id DESC LIMIT 1");
+            $stmt->execute([':slug' => $slug]);
+            $page = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        } catch (Throwable $e2) {
+            error_log('[public/page.php] fetch error: ' . $e2->getMessage());
+            $page = null;
+        }
     }
 }
 
-if (!$page) {
-    http_response_code(404);
+// Variables used by the global header
+$pageTitle = (string)($page['title'] ?? ($page['page_title'] ?? ''));
+$metaTitle = (string)($page['meta_title'] ?? $pageTitle);
+$metaDescription = (string)($page['meta_description'] ?? '');
+
+// Render with site identity
+$__view = __DIR__ . '/../frontend/views/partials/header.php';
+$__footer = __DIR__ . '/../frontend/views/partials/footer.php';
+
+if (is_file($__view)) {
+    require $__view;
+} else {
+    // Absolute fallback so the page isn't blank
+    echo "<!doctype html><html lang=\"" . h($currentLang) . "\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>" . h($metaTitle) . "</title></head><body>";
 }
-
-$siteName = (string)env('SITE_NAME', 'Godyar News');
-
-$title   = $page['title']   ?? 'الصفحة غير موجودة';
-$content = $page['content'] ?? ($page['body'] ?? '');
 ?>
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-  
-    <?php require ROOT_PATH . '/frontend/views/partials/theme_head.php'; ?>
-<meta charset="utf-8">
-  <title><?php echo h($title); ?> - <?php echo h($siteName); ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap -->
-  <link href="/assets/vendor/bootstrap/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f5f5f5;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    .page-hero {
-      background: linear-gradient(135deg, #0891b2, #06b6d4);
-      color: #fff;
-      padding: 28px 0;
-      margin-bottom: 20px;
-    }
-    .page-hero h1 {
-      font-size: 1.7rem;
-      margin: 0;
-    }
-    .page-card {
-      border-radius: 18px;
-      border: none;
-      box-shadow: 0 10px 24px rgba(15,23,42,.1);
-      background-color: #ffffff;
-    }
-    .page-content {
-      font-size: 1rem;
-      line-height: 1.8;
-    }
-    .page-content img {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
-</head>
-<body>
 
-<header class="page-hero">
-  <div class="container">
-    <h1><?php echo h($title); ?></h1>
-  </div>
-</header>
+<main class="gdy-page" role="main">
+  <div class="container py-4">
 
-<main class="py-3">
-  <div class="container">
-    <?php if (!$page): ?>
-      <div class="alert alert-warning text-center">
-        عذراً، لم يتم العثور على هذه الصفحة.
+    <?php if (!is_array($page)) : ?>
+      <div class="alert alert-warning" role="alert" style="border-radius:12px;">
+        <?php echo h(function_exists('__') ? __('t_404_page', 'الصفحة غير موجودة.') : 'الصفحة غير موجودة.'); ?>
       </div>
-    <?php else: ?>
-      <article class="page-card p-3 p-md-4">
-        <div class="page-content">
-          <?php echo $content // محتوى موثوق من لوحة التحكم; ?>
+
+    <?php else : ?>
+      <article class="card border-0 shadow-sm" style="border-radius:16px;">
+        <div class="card-body">
+          <h1 class="h4 mb-3"><?php echo h($pageTitle); ?></h1>
+          <div class="page-content">
+            <?php
+              // Content is authored by admins; allow HTML.
+              echo (string)($page['content'] ?? $page['page_content'] ?? '');
+            ?>
+          </div>
         </div>
       </article>
     <?php endif; ?>
+
   </div>
 </main>
 
-<footer class="py-4 text-center text-muted small">
-  &copy; <?php echo date('Y'); ?> <?php echo h($siteName); ?> . جميع الحقوق محفوظة.
-</footer>
-
-</body>
-</html>
+<?php
+if (is_file($__footer)) {
+    require $__footer;
+} else {
+    echo "</body></html>";
+}

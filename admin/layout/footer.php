@@ -7,6 +7,7 @@
 
 $__base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
 $__admin = $__base . '/admin';
+$__adminAssets = $__admin . '/assets';
 
 // Cache-busting version (fallback إلى الوقت الحالي)
 $__v = defined('GODYAR_ADMIN_ASSET_VERSION')

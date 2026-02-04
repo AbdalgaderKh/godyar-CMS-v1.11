@@ -11,7 +11,7 @@ declare(strict_types=1);
  *
  * Requires:
  * - /admin/api/saved_filters.php
- * - /admin/assets/js/saved-filters.js
+ * - /assets/admin/js/saved-filters.js
  */
 
 if (function_exists('gdy_saved_filters_ui') === false) {

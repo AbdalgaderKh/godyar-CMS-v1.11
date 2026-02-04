@@ -707,6 +707,54 @@ if (!function_exists('db_table_columns')) {
 }
 
 /* =========================
+   Runtime schema compatibility
+   - Prevent "Unknown column" errors on mixed/legacy DBs
+   ========================= */
+try {
+    if (isset($pdo) && $pdo instanceof PDO) {
+        // settings: some DBs have only setting_value; codebase expects value
+        if (db_table_exists($pdo, 'settings')) {
+            if (!db_column_exists($pdo, 'settings', 'setting_value')) {
+                // keep compatibility with older installers
+                $pdo->exec("ALTER TABLE `settings` ADD COLUMN `setting_value` TEXT NULL");
+            }
+            if (!db_column_exists($pdo, 'settings', 'value')) {
+                $pdo->exec("ALTER TABLE `settings` ADD COLUMN `value` LONGTEXT NULL");
+            }
+            // Keep the two columns in sync (best effort)
+            $pdo->exec("UPDATE `settings` SET `value` = COALESCE(`value`, `setting_value`) WHERE `setting_value` IS NOT NULL");
+            $pdo->exec("UPDATE `settings` SET `setting_value` = COALESCE(`setting_value`, LEFT(`value`, 65535)) WHERE `value` IS NOT NULL");
+        }
+
+        // opinion_authors.page_title (optional column)
+        if (db_table_exists($pdo, 'opinion_authors') && !db_column_exists($pdo, 'opinion_authors', 'page_title')) {
+            $pdo->exec("ALTER TABLE `opinion_authors` ADD COLUMN `page_title` VARCHAR(255) NULL AFTER `avatar`");
+        }
+
+        // team_members table (used by front/team)
+        if (!db_table_exists($pdo, 'team_members')) {
+            $pdo->exec("CREATE TABLE `team_members` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                `name` VARCHAR(190) NOT NULL,
+                `role` VARCHAR(190) NULL,
+                `bio` TEXT NULL,
+                `photo` VARCHAR(255) NULL,
+                `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+                `display_order` INT NOT NULL DEFAULT 0,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`),
+                KEY `idx_active` (`is_active`),
+                KEY `idx_order` (`display_order`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+        }
+    }
+} catch (Throwable $e) {
+    // Don't block the app if schema tweaks fail; just log.
+    error_log('[bootstrap] schema compatibility: ' . $e->getMessage());
+}
+
+/* =========================
    Visits table (auto create)
    ========================= */
 if (!db_table_exists($pdo, 'visits')) {

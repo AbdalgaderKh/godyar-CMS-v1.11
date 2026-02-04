@@ -105,7 +105,7 @@ if (class_exists('HomeController')) {
 
 
 // ضمان اتساق الإعدادات عبر كل المسارات (الرئيسية/الصفحات الداخلية/الأقسام).
-// بعض المسارات قد لا تمر عبر HomeController أو قد ترجع إعدادات ناقصة (مثل شعار الموقع أو إظهار رابط الانتخابات).
+// بعض المسارات قد لا تمر عبر HomeController أو قد ترجع إعدادات ناقصة (مثل شعار الموقع أو إظهار روابط إضافية).
 // لذلك نحاول دائماً تحميل الإعدادات من قاعدة البيانات ودمجها مع ما وصلنا من الكنترولر.
 try {
     # اكتشف جذر المشروع بشكل موثوق (public_html)
@@ -1318,22 +1318,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#home"></use></svg>
             <span><?php echo h(__('الرئيسية')); ?></span>
           </a>
-
-          <?php
-            $showElectionsLink = '1';
-            if (function_exists('settings_get')) {
-                $showElectionsLink = (string) settings_get('show_elections_link', ($siteSettings['show_elections_link'] ?? '1'));
-            } else {
-                $showElectionsLink = (string) ($siteSettings['show_elections_link'] ?? '1');
-            }
-            if ($showElectionsLink === '1') :
-          ?>
-          <a href="<?php echo h($baseUrl); ?>/elections.php" class="cats-link">
-            <span><?php echo h(__('الانتخابات')); ?></span>
-          </a>
-          <?php endif; ?>
-
-          <?php if (!empty($headerCategories)): ?>
+<?php if (!empty($headerCategories)): ?>
             <?php
               // بناء شجرة للتصنيفات (رئيسية + فرعية)
               $headerCategoriesTree = $headerCategoriesTree ?? null;
@@ -1517,7 +1502,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
   </div>
 
   <script>
-    // منطق إخفاء/إظهار زر الانتخابات + ضبط ارتفاع الهيدر تلقائياً
+    // منطق إخفاء/إظهار زر الفئات + ضبط ارتفاع الهيدر تلقائياً
     document.addEventListener('DOMContentLoaded', function () {
 
 

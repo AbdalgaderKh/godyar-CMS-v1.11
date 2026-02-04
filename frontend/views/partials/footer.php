@@ -6,6 +6,16 @@
 if (defined('GDY_FOOTER_RENDERED')) { return; }
 define('GDY_FOOTER_RENDERED', true);
 
+// CMS version badge (safe, optional)
+try {
+    $vfile = __DIR__ . '/../../../includes/version.php';
+    if (is_file($vfile)) {
+        require_once $vfile;
+    }
+} catch (Throwable $e) {
+    // ignore
+}
+
 if (function_exists('h') === false) {
     function h($v): string {
         return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
@@ -242,6 +252,19 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
       padding-top: 6px;
     }
 
+    .gdy-footer-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:.35rem;
+      padding:.15rem .5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(var(--primary-rgb), .18);
+      background: rgba(255,255,255,.72);
+      color: var(--footer-text, #0f172a);
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
     .gdy-footer-team-link{
       position: relative;
       display:inline-flex;
@@ -364,6 +387,11 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
       <div class="gdy-footer-bottom">
         <?php if (!isset($year) || !$year) { $year = (int)date('Y'); } // ✅ حارس نهائي لمنع أي Warning ?>
         <span>© <?php echo $year; ?> <?php echo h($siteName); ?>. <?php echo h(__("all_rights_reserved")); ?>.</span>
+        <?php if (function_exists('gdy_cms_badge')): ?>
+          <span class="gdy-footer-badge"><?php echo h(gdy_cms_badge()); ?></span>
+        <?php else: ?>
+          <span class="gdy-footer-badge"><?php echo h('Godyar CMS v1.11'); ?></span>
+        <?php endif; ?>
 
         <?php if (!empty($teamUrl)): ?>
           <a href="<?php echo h($teamUrl); ?>" class="gdy-footer-team-link">

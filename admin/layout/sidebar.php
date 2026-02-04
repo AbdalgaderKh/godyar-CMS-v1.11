@@ -5,6 +5,16 @@ declare(strict_types=1);
 require_once __DIR__ . '/../_admin_guard.php';
 require_once __DIR__ . '/../../includes/lang.php';
 
+// CMS version badge (safe, optional)
+try {
+    $vfile = __DIR__ . '/../../includes/version.php';
+    if (is_file($vfile)) {
+        require_once $vfile;
+    }
+} catch (Throwable $e) {
+    // ignore
+}
+
 if (!function_exists('h')) {
     function h($v): string
     {
@@ -691,19 +701,6 @@ foreach ($staticPluginLinks as $it) {
           </a>
         </div>
 
-        <div class="admin-sidebar__link-card <?php echo $currentPage === 'elections' ? 'is-active' : ''; ?>" data-search="الانتخابات elections">
-          <a class="admin-sidebar__link" href="<?php echo h($adminBase); ?>/elections/index.php">
-            <div class="admin-sidebar__link-main">
-              <div class="admin-sidebar__link-icon"><svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#election"></use></svg></div>
-              <div class="admin-sidebar__link-text">
-                <div class="admin-sidebar__link-label"><?php echo h(__('الانتخابات')); ?></div>
-                <div class="admin-sidebar__link-sub"><?php echo h(__('إدارة نظام الانتخابات')); ?></div>
-              </div>
-            </div>
-            <svg class="gdy-icon admin-sidebar__link-arrow" aria-hidden="true" focusable="false"><use href="#chevron-left"></use></svg>
-          </a>
-        </div>
-
       </div>
       <?php endif; ?>
 
@@ -736,6 +733,11 @@ foreach ($staticPluginLinks as $it) {
           <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#logout"></use></svg>
         </a>
       </div>
+      <div class="admin-sidebar__footer-version" style="margin-top:10px;color:rgba(255,255,255,.70);font-size:.78rem;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+        <span>© <?php echo (int)date('Y'); ?> <?php echo h(defined('GODYAR_CMS_COPYRIGHT') ? (string)GODYAR_CMS_COPYRIGHT : 'Godyar CMS'); ?></span>
+        <span style="font-weight:800;"><?php echo h(function_exists('gdy_cms_badge') ? gdy_cms_badge() : 'Godyar CMS v1.11'); ?></span>
+      </div>
+
     </footer>
 
   </div>

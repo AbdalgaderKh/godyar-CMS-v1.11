@@ -1,7 +1,0 @@
-{
-  "name": "News Comments",
-  "slug": "news_comments",
-  "enabled": true,
-  "description": "Adds a comments widget under news posts.",
-  "version": "1.0.0"
-}

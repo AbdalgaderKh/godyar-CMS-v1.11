@@ -555,8 +555,8 @@ gdy_unlink($root . '/cache/rss.xml');
 // الواجهة
 // -----------------------------------------------------------------------------
 $__base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
-$pageHead = '<link rel="stylesheet" href="' . $__base . '/admin/assets/editor/gdy-editor.css">';
-$pageScripts = '<script src="' . $__base . '/admin/assets/editor/gdy-editor.js"></script>';
+$pageHead = '<link rel="stylesheet" href="' . $__base . '/assets/admin/editor/gdy-editor.css">';
+$pageScripts = '<script src="' . $__base . '/assets/admin/editor/gdy-editor.js"></script>';
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/sidebar.php';
 ?>

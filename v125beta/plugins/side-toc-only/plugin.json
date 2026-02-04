@@ -1,7 +1,0 @@
-{
-  "name": "Side TOC Only (Legacy)",
-  "slug": "side-toc-only",
-  "enabled": false,
-  "description": "Legacy plugin not compatible with Godyar CMS.",
-  "version": "1.0.0"
-}

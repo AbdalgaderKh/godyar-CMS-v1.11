@@ -459,8 +459,8 @@ gdy_unlink($root . '/cache/rss.xml');
 // الواجهة
 // -----------------------------------------------------------------------------
 $__base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
-$pageHead = '<link rel="stylesheet" href="' . $__base . '/admin/assets/editor/gdy-editor.css">';
-$pageScripts = '<script src="' . $__base . '/admin/assets/editor/gdy-editor.js"></script>';
+$pageHead = '<link rel="stylesheet" href="' . $__base . '/assets/admin/editor/gdy-editor.css">';
+$pageScripts = '<script src="' . $__base . '/assets/admin/editor/gdy-editor.js"></script>';
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/sidebar.php';
 ?>
@@ -567,7 +567,7 @@ html, body { overflow-x: hidden; }
               <div class="mb-3">
                 <label for="title" class="gdy-form-label"><span class="text-danger">*</span><?php echo h(__('t_6dc6588082', 'العنوان')); ?></label>
                 <input id="title" type="text" name="title"
-                  class="form-control form-control-sm <?php echo isset($errors['title']) ? 'is-invalid' : ''; ? autocomplete="off">"
+                  class="form-control form-control-sm <?php echo isset($errors['title']) ? 'is-invalid' : ''; ?>" autocomplete="off">
                   value="<?php echo h($title); ?>" placeholder="<?php echo h(__('t_64a18e598a', 'اكتب عنوان الخبر هنا')); ?>">
                 <?php if (isset($errors['title'])): ?>
                   <div class="invalid-feedback"><?php echo h($errors['title']); ?></div>
@@ -620,7 +620,7 @@ html, body { overflow-x: hidden; }
                     </button>
                     <input type="text" class="form-control form-control-sm" id="internal-link-query"
                       style="max-width: 260px"
-                      placeholder="<?php echo h(__('t_il_query','كلمة/عبارة (اختياري)')); ? autocomplete="off">">
+                      placeholder="<?php echo h(__('t_il_query','كلمة/عبارة (اختياري)')); ?>" autocomplete="off">
                     <span class="text-muted small"><?php echo h(__('t_il_tip','حدد نصًا داخل المحتوى ثم اضغط "اقتراح".')); ?></span>
                   </div>
                   <div class="results mt-2" id="internal-links-results"></div>
@@ -773,7 +773,7 @@ html, body { overflow-x: hidden; }
                   <div class="tags-input-wrapper">
                     <div id="tags-container" class="tags-container" data-initial-tags="<?php echo h($tags); ?>"></div>
                     <div class="input-group input-group-sm mt-2">
-                      <input type="text" id="tag-input" class="form-control form-control-sm" placeholder="<?php echo h(__('t_d533eba2ee', 'اكتب الوسم ثم اضغط إضافة أو Enter')); ? autocomplete="off">">
+                      <input type="text" id="tag-input" class="form-control form-control-sm" placeholder="<?php echo h(__('t_d533eba2ee', 'اكتب الوسم ثم اضغط إضافة أو Enter')); ?>" autocomplete="off">
                       <button type="button" class="btn btn-outline-secondary" id="add-tag-btn">
                         <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#plus"></use></svg> <?php echo h(__('t_7764b0999a', 'إضافة وسم')); ?>
                       </button>
@@ -1300,6 +1300,6 @@ document.addEventListener('DOMContentLoaded', function() {
   <iframe id="gdy-media-frame" src="../media/picker.php?target=content" style="width:100%;height:calc(90vh - 54px);border:0;"></iframe>
 </div>
 
-<!-- Editor initialized by /admin/assets/editor/gdy-editor.js -->
+<!-- Editor initialized by /assets/admin/editor/gdy-editor.js -->
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>

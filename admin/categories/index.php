@@ -81,9 +81,9 @@ $newsJoinMode = 'none'; // none | by_id | by_slug
 if ($pdo instanceof PDO) {
     try {
         $stmtT = gdy_db_stmt_table_exists($pdo, 'news');
-        $hasNewsTable = $stmtT && (empty($stmtT) === false)->fetchColumn() ? true : false;
+        $hasNewsTable = ($stmtT && $stmtT->fetchColumn()) ? true : false;
 
-        if ((empty($hasNewsTable) === false)) {
+        if ($hasNewsTable) {
             $colsStmt = gdy_db_stmt_columns($pdo, 'news');
             $cols = $colsStmt ? $colsStmt->fetchAll(PDO::FETCH_COLUMN) : [];
 

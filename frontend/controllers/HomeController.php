@@ -45,24 +45,47 @@ final class HomeController
      * @param string $column
      * @return bool
      */
-    protected static function columnExists(string $table, string $column): bool
-    {
+    /**
+ * فحص وجود عمود في جدول معيّن (متوافق مع الاستدعاءات القديمة).
+ *
+ * دعم طريقتين:
+ *   - columnExists($pdo, 'table', 'column')
+ *   - columnExists('table', 'column')  // سيجلب الاتصال من self::db()
+ */
+protected static function columnExists($pdoOrTable, $tableOrColumn, $column = null): bool
+{
+    $pdo = null;
+    $table = null;
+    $col = null;
+
+    if ($pdoOrTable instanceof \PDO) {
+        $pdo = $pdoOrTable;
+        $table = is_string($tableOrColumn) ? $tableOrColumn : null;
+        $col = is_string($column) ? $column : null;
+    } else {
         $pdo = self::db();
-        if (!$pdo) {
-            return false;
+        $table = is_string($pdoOrTable) ? $pdoOrTable : null;
+        $col = is_string($tableOrColumn) ? $tableOrColumn : null;
+    }
+
+    if (!$pdo || !$table || !$col) {
+        return false;
+    }
+
+    try {
+        if (function_exists('db_column_exists')) {
+            return db_column_exists($pdo, $table, $col);
         }
 
-        try {
-            if (function_exists('db_column_exists')) {
-                return db_column_exists($pdo, $table, $column);
-            }
-            $safeTable = str_replace('`', '', $table);            $stmt = gdy_db_stmt_column_like($pdo, $safeTable, $column);
-            return (bool)($stmt && $stmt->fetchColumn());
-        } catch (\Throwable $e) {
-            error_log('[HomeController] columnExists error: ' . $e->getMessage());
-            return false;
-        }
+        $safeTable = str_replace('`', '', $table);
+        $stmt = gdy_db_stmt_column_like($pdo, $safeTable, $col);
+        return (bool)($stmt && $stmt->fetchColumn());
+    } catch (\Throwable $e) {
+        error_log('[HomeController] columnExists error: ' . $e->getMessage());
+        return false;
     }
+}
+
 
     /**
      * جلب إعدادات عامة للموقع من جدول settings
@@ -103,7 +126,23 @@ final class HomeController
                 return $cache;
             }
 
-            $stmt = $pdo->query("SELECT setting_key, `value` FROM `settings`");
+            // Compatibility: some DBs use `setting_value` instead of `value`
+            $valueCol = self::columnExists($pdo, 'settings', 'value') ? 'value' : null;
+            if ($valueCol === null && self::columnExists($pdo, 'settings', 'setting_value')) {
+                $valueCol = 'setting_value';
+            }
+
+            // If we still couldn't detect a usable value column, don't query (avoid SQLSTATE 42S22)
+            if ($valueCol === null) {
+                $cache = [
+                    'site_name'          => 'Godyar News',
+                    'site_tagline'       => 'منصة إخبارية متكاملة',
+                    'layout_sidebar_mode'=> 'visible',
+                ];
+                return $cache;
+            }
+
+            $stmt = $pdo->query("SELECT setting_key, `{$valueCol}` AS `value` FROM `settings`");
             $rows = $stmt ? $stmt->fetchAll(\PDO::FETCH_ASSOC) : [];
 
             $raw = [];
@@ -364,25 +403,45 @@ final class HomeController
 
         $limit = max(1, min($limit, 100));
 
-        $sql = "
-            SELECT 
-                id,
-                name,
-                slug,
-                avatar,
-                page_title,
-                email,
-                social_facebook,
-                social_website,
-                social_twitter,
-                created_at,
-                updated_at
-	            FROM opinion_authors
-	            WHERE is_active = 1
-	              AND TRIM(name) <> 'هيئة التحرير'
-            ORDER BY updated_at DESC, id DESC
-            LIMIT {$limit}
-        ";
+        // Build a safe SELECT that works even if some optional columns are missing
+        $cols = [];
+        $cols[] = 'id';
+        $cols[] = 'name';
+
+        // slug
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'slug') ? 'slug' : "''") . ' AS slug';
+        // avatar
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'avatar') ? 'avatar' : "''") . ' AS avatar';
+        // page_title
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'page_title') ? 'page_title' : "''") . ' AS page_title';
+        // email
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'email') ? 'email' : "''") . ' AS email';
+
+        // social_facebook (fallback legacy `facebook`)
+        $fb = self::columnExists($pdo, 'opinion_authors', 'social_facebook') ? 'social_facebook' : (self::columnExists($pdo, 'opinion_authors', 'facebook') ? 'facebook' : null);
+        $cols[] = ($fb ? $fb : "''") . ' AS social_facebook';
+
+        // social_twitter (fallback legacy `twitter`)
+        $tw = self::columnExists($pdo, 'opinion_authors', 'social_twitter') ? 'social_twitter' : (self::columnExists($pdo, 'opinion_authors', 'twitter') ? 'twitter' : null);
+        $cols[] = ($tw ? $tw : "''") . ' AS social_twitter';
+
+        // social_website (fallback legacy `website`)
+        $wb = self::columnExists($pdo, 'opinion_authors', 'social_website') ? 'social_website' : (self::columnExists($pdo, 'opinion_authors', 'website') ? 'website' : null);
+        $cols[] = ($wb ? $wb : "''") . ' AS social_website';
+
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'created_at') ? 'created_at' : 'NULL') . ' AS created_at';
+        $cols[] = (self::columnExists($pdo, 'opinion_authors', 'updated_at') ? 'updated_at' : 'NULL') . ' AS updated_at';
+
+        $where = [];
+        if (self::columnExists($pdo, 'opinion_authors', 'is_active')) {
+            $where[] = 'is_active = 1';
+        }
+        $where[] = "TRIM(name) <> 'هيئة التحرير'";
+        $whereSql = implode(' AND ', $where);
+
+        $orderBy = self::columnExists($pdo, 'opinion_authors', 'updated_at') ? 'updated_at DESC, id DESC' : 'id DESC';
+
+        $sql = "SELECT " . implode(",\n                ", $cols) . "\n            FROM opinion_authors\n            WHERE {$whereSql}\n            ORDER BY {$orderBy}\n            LIMIT {$limit}";
 
         try {
             $stmt = $pdo->query($sql);

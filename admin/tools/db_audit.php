@@ -583,7 +583,7 @@ if ($format === 'sql') {
 
     <div class="card p-3 mb-3">
       <h5 class="mb-2">جداول موجودة في قاعدة البيانات وغير معرفة في الأداة</h5>
-      <div class="text-secondary small mb-2">هذه الجداول ليست ضمن قائمة "الأساسيات"—غالبًا تخص وحدات إضافية (مثل elections/weather/news_*). راجعها فقط إذا كنت تشك بوجود بقايا قديمة.</div>
+      <div class="text-secondary small mb-2">هذه الجداول ليست ضمن قائمة "الأساسيات"—غالبًا تخص وحدات إضافية (مثل weather/news_*). راجعها فقط إذا كنت تشك بوجود بقايا قديمة.</div>
       <div class="small">
         <?php if (!$unknown): ?>
           —

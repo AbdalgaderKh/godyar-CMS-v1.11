@@ -496,18 +496,6 @@ a:hover{
   border-color: var(--primary-dark);
 }
 
-/* Elections widgets/cards (generic) */
-.elections-card, .election-card, .election-widget, .elections-widget,
-.election-result, .election-results, .election-box {
-  border: 1px solid rgba(var(--primary-rgb), .18);
-}
-.elections-card .badge, .election-card .badge, .election-widget .badge,
-.election-results .badge {
-  background: var(--badge-bg);
-  color: var(--badge-text);
-  border-color: var(--badge-border);
-}
-
 /* ============================================================
    Pro UI System (Light identity)
    - Buttons / Cards / Inputs unified

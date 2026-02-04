@@ -144,7 +144,7 @@ if (($tableExists === false) && ((string)($_SERVER['REQUEST_METHOD'] ?? 'GET')) 
         }
 
         // تأكيد العملية
-        $pdo->commit();
+        if ($pdo->inTransaction()) { $pdo->commit(); }
         $success = true;
         $tableExists = true;
 

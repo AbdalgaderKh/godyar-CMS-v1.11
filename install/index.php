@@ -27,6 +27,60 @@ header('Content-Type: text/html; charset=utf-8');
 
 function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }
 
+
+// Minimal session bootstrap for installer (standalone).
+// The main app may define gdy_session_start(); installer must not rely on it.
+if (!function_exists('gdy_session_start')) {
+    function gdy_session_start(): void {
+        if (session_status() == PHP_SESSION_ACTIVE) { return; }
+        $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+        // Harden cookies; keep compatible with shared hosting.
+        $params = [
+            'lifetime' => 0,
+            'path' => '/',
+            'domain' => '',
+            'secure' => $secure,
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ];
+
+        if (PHP_VERSION_ID >= 70300) {
+            session_set_cookie_params($params);
+        } else {
+            // PHP < 7.3: SameSite must be appended to the path.
+            session_set_cookie_params(
+                $params['lifetime'],
+                $params['path'] . '; samesite=' . $params['samesite'],
+                $params['domain'],
+                $params['secure'],
+                $params['httponly']
+            );
+        }
+
+        if (session_name() !== 'gdy_installer') { @session_name('gdy_installer'); }
+        @session_start();
+    }
+}
+
+// Polyfill: installer is standalone and must not rely on app helpers.
+if (!function_exists('gdy_file_put_contents')) {
+    /**
+     * Write file safely (mkdir parent dir if needed).
+     * Supports $flags like LOCK_EX for compatibility with existing calls.
+     */
+    function gdy_file_put_contents(string $path, string $content, int $flags = 0): bool
+    {
+        $dir = dirname($path);
+        if (!is_dir($dir)) {
+            if (!@mkdir($dir, 0755, true) && !is_dir($dir)) {
+                return false;
+            }
+        }
+        return file_put_contents($path, $content, $flags) !== false;
+    }
+}
+
 function csrf_token(): string {
     if (session_status() !== PHP_SESSION_ACTIVE) { gdy_session_start(); }
     if (empty($_SESSION['csrf'])) { $_SESSION['csrf'] = bin2hex(random_bytes(16)); }
@@ -85,8 +139,7 @@ function render(string $title, string $body): void {
     .theme-toggle:focus{outline:none;box-shadow:var(--focus)}
 CSS;
 
-
-	$step = (int)($_GET['step'] ?? 1);
+    $step = (int)($_GET['step'] ?? 1);
     echo "<!doctype html><html lang='ar' dir='rtl'><head><meta charset='utf-8'>".
          "<meta name='viewport' content='width=device-width,initial-scale=1'>".
          "<title>".h($title)." - Godyar CMS Installer</title><style>{$css}</style><script>
@@ -104,27 +157,27 @@ function __gdySetInstallerTheme(t){
 }
 </script></head><body><div class='wrap'><div class='card'>";
     echo "<div class='hdr'><div class='hdr-title'><h1>مثبّت Godyar CMS</h1><p class='sub'>حزمة خام نظيفة — بدون محتوى تجريبي</p></div>"."<button type='button' class='theme-toggle' id='themeToggle' aria-label='تبديل الوضع'>🌙</button></div>";
-	    echo "<div class='steps'>".
-	         "<div class='step ".($step===1?'on':'')."'>1) بدء</div>".
-	         "<div class='step ".($step===2?'on':'')."'>2) قاعدة البيانات</div>".
-	         "<div class='step ".($step===3?'on':'')."'>3) إنشاء الجداول</div>".
-	         "</div>";
+    echo "<div class='steps'>".
+         "<div class='step ".($step===1?'on':'')."'>1) بدء</div>".
+         "<div class='step ".($step===2?'on':'')."'>2) قاعدة البيانات</div>".
+         "<div class='step ".($step===3?'on':'')."'>3) إنشاء الجداول</div>".
+         "</div>";
 
-	    echo $body;
+    echo $body;
 
-	    echo "</div></div><script>(function(){\n".
-	         "var btn=document.getElementById('themeToggle');\n".
-	         "if(!btn) return;\n".
-	         "function icon(){var t=document.documentElement.dataset.theme||'light';btn.textContent=(t==='dark'?'☀️':'🌙');}\n".
-	         "icon();\n".
-	         "btn.addEventListener('click',function(){\n".
-	         "var t=document.documentElement.dataset.theme||'light';\n".
-	         "t=(t==='dark'?'light':'dark');\n".
-	         "__gdySetInstallerTheme(t);\n".
-	         "icon();\n".
-	         "});\n".
-	         "})();</script></body></html>";
-	}
+    echo "</div></div><script>(function(){\n".
+         "var btn=document.getElementById('themeToggle');\n".
+         "if(!btn) return;\n".
+         "function icon(){var t=document.documentElement.dataset.theme||'light';btn.textContent=(t==='dark'?'☀️':'🌙');}\n".
+         "icon();\n".
+         "btn.addEventListener('click',function(){\n".
+         "var t=document.documentElement.dataset.theme||'light';\n".
+         "t=(t==='dark'?'light':'dark');\n".
+         "__gdySetInstallerTheme(t);\n".
+         "icon();\n".
+         "});\n".
+         "})();</script></body></html>";
+}
 
 /**
  * Split SQL into statements safely:
@@ -132,33 +185,40 @@ function __gdySetInstallerTheme(t){
  * - splits on semicolons outside strings
  */
 function split_sql_statements(string $sql): array {
+    // Split SQL into statements without losing quoted strings.
+    // Removes line/block comments, but preserves everything else.
     $sql = preg_replace('~^\xEF\xBB\xBF~', '', $sql); // BOM
     $len = strlen($sql);
     $out = [];
     $buf = '';
-    $inS = false; $inD = false; $inB = false;
-    $inLine = false; $inBlock = false;
 
-    for ($i=0; $i<$len; $i++) {
+    $inS = false; // single-quote string
+    $inD = false; // double-quote string
+    $inB = false; // backtick identifier
+    $inLine = false;
+    $inBlock = false;
+
+    for ($i = 0; $i < $len; $i++) {
         $ch = $sql[$i];
-        $next = ($i+1<$len) ? $sql[$i+1] : '';
+        $next = ($i + 1 < $len) ? $sql[$i + 1] : '';
+        $prev = ($i > 0) ? $sql[$i - 1] : '';
 
-        // End line comment
+        // Handle line comment mode
         if ($inLine) {
             if ($ch === "\n") { $inLine = false; }
             continue;
         }
-        // End block comment
+        // Handle block comment mode
         if ($inBlock) {
             if ($ch === '*' && $next === '/') { $inBlock = false; $i++; }
             continue;
         }
 
-        // Start comments (only if not in quotes)
+        // Start comments (only if not inside quotes/identifiers)
         if (!$inS && !$inD && !$inB) {
-            // -- comment (MySQL: must be followed by space or EOL)
+            // -- comment (MySQL: must be followed by space/tab/EOL)
             if ($ch === '-' && $next === '-') {
-                $next2 = ($i+2<$len) ? $sql[$i+2] : '';
+                $next2 = ($i + 2 < $len) ? $sql[$i + 2] : '';
                 if ($next2 === ' ' || $next2 === "\t" || $next2 === "\r" || $next2 === "\n" || $next2 === '') {
                     $inLine = true; $i++; continue;
                 }
@@ -169,20 +229,18 @@ function split_sql_statements(string $sql): array {
             if ($ch === '/' && $next === '*') { $inBlock = true; $i++; continue; }
         }
 
-        // Quote toggles (respect escaping)
-        if (!$inD && !$inB && $ch === "'" ) {
-            $escaped = ($i>0 && $sql[$i-1] === '\\');
+        // Quote/identifier toggles (respect escaping)
+        if (!$inD && !$inB && $ch === "'") {
+            $escaped = ($prev === '\\');
             if (!$escaped) { $inS = !$inS; }
-        } elseif (!$inS && !$inB && $ch === '"' ) {
-            $escaped = ($i>0 && $sql[$i-1] === '\\');
+        } elseif (!$inS && !$inB && $ch === '"') {
+            $escaped = ($prev === '\\');
             if (!$escaped) { $inD = !$inD; }
         } elseif (!$inS && !$inD && $ch === '`') {
             $inB = !$inB;
         }
-        if ($inS || $inD || $inB) continue;
-        if ($ch === '(') $depth++;
 
-        // Split on semicolon when not in quotes
+        // Split on semicolon only when not inside quotes/identifiers
         if (!$inS && !$inD && !$inB && $ch === ';') {
             $stmt = trim($buf);
             if ($stmt !== '') { $out[] = $stmt; }
@@ -225,6 +283,15 @@ function normalize_sql(string $stmt): string {
     // Strip FK clauses inside CREATE TABLE
     if (preg_match('/^\s*CREATE\s+TABLE\b/i', $s) && preg_match('/\bFOREIGN\s+KEY\b/i', $s)) {
         $s = strip_fk_from_create_table($s);
+    }
+
+    // Ensure AUTO_INCREMENT id is defined as a key (MariaDB/MySQL requirement)
+    if (($GLOBALS['INSTALL_DB_DRIVER'] ?? 'mysql') !== 'pgsql' && preg_match('/^\s*CREATE\s+TABLE\b/i', $s)) {
+        // Only patch when there is an AUTO_INCREMENT id column and no primary key is present
+        if (preg_match('/\bid\b[^,\n\r]*\bAUTO_INCREMENT\b/i', $s) && !preg_match('/\bPRIMARY\s+KEY\b/i', $s)) {
+            // Insert PRIMARY KEY (id) before the closing parenthesis of the column/constraint list
+            $s = preg_replace('/\)\s*(ENGINE\b|DEFAULT\b|CHARSET\b|COLLATE\b|;|$)/i', ', PRIMARY KEY (id)) $1', $s, 1);
+        }
     }
 
     return trim($s);
@@ -358,6 +425,80 @@ function run_sql_file(PDO $pdo, string $file): void {
     }
 }
 
+function ensure_schema_migrations_table(PDO $pdo, string $drv): void
+{
+    if ($drv === 'pgsql') {
+        $sql = "CREATE TABLE IF NOT EXISTS schema_migrations (
+            id BIGSERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL UNIQUE,
+            checksum CHAR(64) NOT NULL,
+            applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )";
+    } else {
+        $sql = "CREATE TABLE IF NOT EXISTS schema_migrations (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            checksum CHAR(64) NOT NULL,
+            applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY uq_schema_migrations_name (name)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+    }
+    $pdo->exec($sql);
+}
+
+function list_migration_files(string $root, string $drv): array
+{
+    $dirs = [
+        $root . '/database/migrations',
+        $root . '/admin/db/migrations',
+        $root . '/migrations',
+    ];
+
+    $files = [];
+    foreach ($dirs as $dir) {
+        if (!is_dir($dir)) { continue; }
+
+        $candidate = $dir;
+        if ($drv === 'pgsql' && is_dir($dir . '/postgresql')) {
+            $candidate = $dir . '/postgresql';
+        }
+        $glob = glob($candidate . '/*.sql') ?: [];
+        sort($glob, SORT_STRING);
+
+        foreach ($glob as $p) {
+            $base = basename((string)$p);
+            if (!isset($files[$base])) {
+                $files[$base] = (string)$p;
+            }
+        }
+    }
+
+    ksort($files, SORT_STRING);
+    return array_values($files);
+}
+
+function mark_migrations_applied(PDO $pdo, string $drv, array $paths): void
+{
+    ensure_schema_migrations_table($pdo, $drv);
+
+    if ($drv === 'pgsql') {
+        $stmt = $pdo->prepare("INSERT INTO schema_migrations (name, checksum) VALUES (:name, :checksum) ON CONFLICT (name) DO NOTHING");
+    } else {
+        $stmt = $pdo->prepare("INSERT IGNORE INTO schema_migrations (name, checksum) VALUES (:name, :checksum)");
+    }
+
+    foreach ($paths as $p) {
+        $name = basename((string)$p);
+        $raw = (string)file_get_contents((string)$p);
+        $checksum = hash('sha256', $raw);
+        $stmt->execute([
+            ':name' => $name,
+            ':checksum' => $checksum,
+        ]);
+    }
+}
+
 function run_sql_dir(PDO $pdo, string $dir, array $skipFiles = []): array {
     if (!is_dir($dir)) return [];
     $files = glob(rtrim($dir, '/\\') . '/*.sql');
@@ -480,16 +621,16 @@ if ($step === 2) {
     $body .= '<div><label>رابط الموقع (APP_URL)</label><input name="APP_URL" value="'.h($_SERVER['REQUEST_SCHEME'].'://'.($_SERVER['HTTP_HOST'] ?? 'localhost')).'" required></div>';
     $body .= '<div><label>المنطقة الزمنية (TIMEZONE)</label><input name="TIMEZONE" value="Asia/Riyadh" required></div>';
     $selected = function(string $v) use ($cfg): string {
-    return (($cfg['DB_DRIVER'] ?? 'auto') === $v) ? 'selected' : '';
-};
+        return (($cfg['DB_DRIVER'] ?? 'auto') === $v) ? 'selected' : '';
+    };
 
-$body .= '<div><label>نوع قاعدة البيانات</label>'
-      .  '<select name="DB_DRIVER">'
-      .    '<option value="auto" ' . $selected('auto') . '>تلقائي (مقترح)</option>'
-      .    '<option value="mysql" ' . $selected('mysql') . '>MySQL / MariaDB</option>'
-      .    '<option value="pgsql" ' . $selected('pgsql') . '>PostgreSQL</option>'
-      .  '</select>'
-      .  '<label>DB_HOST</label><input name="DB_HOST" value="localhost" required></div>';
+    $body .= '<div><label>نوع قاعدة البيانات</label>'
+          .  '<select name="DB_DRIVER">'
+          .    '<option value="auto" ' . $selected('auto') . '>تلقائي (مقترح)</option>'
+          .    '<option value="mysql" ' . $selected('mysql') . '>MySQL / MariaDB</option>'
+          .    '<option value="pgsql" ' . $selected('pgsql') . '>PostgreSQL</option>'
+          .  '</select>'
+          .  '<label>DB_HOST</label><input name="DB_HOST" value="localhost" required></div>';
     $body .= '<div><label>DB_NAME</label><input name="DB_NAME" value="" required></div>';
     $body .= '<div><label>DB_USER</label><input name="DB_USER" value="" required></div>';
     $body .= '<div><label>DB_PASS</label><input name="DB_PASS" type="password" value=""></div>';
@@ -555,7 +696,7 @@ if ($step === 3) {
             if (!extension_loaded('pdo_pgsql')) {
                 throw new Exception('PDO PostgreSQL extension is required for DB_DRIVER=pgsql.');
             }
-            $dsn = "pgsql:host={$cfg['DB_HOST']};dbname={$cfg['DB_NAME']};port={$cfg['DB_PORT']}"; 
+            $dsn = "pgsql:host={$cfg['DB_HOST']};dbname={$cfg['DB_NAME']};port={$cfg['DB_PORT']}";
         } else {
             if (!extension_loaded('pdo_mysql')) {
                 throw new Exception('PDO MySQL extension is required for DB_DRIVER=mysql.');
@@ -568,44 +709,59 @@ if ($step === 3) {
         ]);
 
         // Driver-specific SQL base for schema/patch files
-$sqlBase = $ROOT . '/install/sql' . (($drv === 'pgsql' && is_dir($ROOT . '/install/sql/postgresql')) ? '/postgresql' : '');
+        $sqlBase = $ROOT . '/install/sql' . (($drv === 'pgsql' && is_dir($ROOT . '/install/sql/postgresql')) ? '/postgresql' : '');
 
-// Driver-specific session settings
-if ($drv !== 'pgsql') {
-    // MySQL/MariaDB
-    $pdo->exec("SET NAMES utf8mb4");
-    $pdo->exec("SET FOREIGN_KEY_CHECKS=0");
-} else {
-    // PostgreSQL (best-effort)
-    try { $pdo->exec("SET client_encoding TO 'UTF8'"); } catch (Throwable $e) {}
-}
+        // Driver-specific session settings
+        if ($drv !== 'pgsql') {
+            // MySQL/MariaDB
+            $pdo->exec("SET NAMES utf8mb4");
+            $pdo->exec("SET FOREIGN_KEY_CHECKS=0");
+        } else {
+            // PostgreSQL (best-effort)
+            try { $pdo->exec("SET client_encoding TO 'UTF8'"); } catch (Throwable $e) {}
+        }
 
-$ran = [];
+        $ran = [];
 
-// 1) Core schema
-$core = $sqlBase . '/schema_core.sql';
-if (!is_file($core)) { $core = $ROOT . '/install/sql/schema_core.sql'; }
-if (!is_file($core)) throw new RuntimeException('schema_core.sql غير موجود');
-run_sql_file($pdo, $core);
-$ran[] = basename($core);
+        // 1) Core schema
+        $schema = ($drv === 'pgsql') ? ($ROOT . '/database/postgresql/schema.sql') : ($ROOT . '/database/schema.sql');
+        if (!is_file($schema)) {
+            // Fallback to installer core schema (legacy)
+            $schema = $sqlBase . '/schema_core.sql';
+            if (!is_file($schema)) { $schema = $ROOT . '/install/sql/schema_core.sql'; }
+        }
+        if (!is_file($schema)) { throw new RuntimeException('schema.sql غير موجود'); }
+        run_sql_file($pdo, $schema);
+        $ran[] = basename($schema);
 
-// 2) Migrations (no demo seeds)
-$skip = [
-    '2025_11_21_0008_seed_default_pages.sql', // removed in RAW package
-];
-$ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/database/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/database/migrations/postgresql')) ? '/postgresql' : ''), $skip));
-$ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/admin/db/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/admin/db/migrations/postgresql')) ? '/postgresql' : ''), []));
-$ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/migrations/postgresql')) ? '/postgresql' : ''), []));
+        // 2) Migrations (apply/record)
+        $migPaths = list_migration_files($ROOT, $drv);
 
-// 2b) Runtime compatibility patch (missing columns/tables expected by UI)
-$patch = $sqlBase . '/patch_existing_runtime.sql';
-if (!is_file($patch)) { $patch = $ROOT . '/install/sql/patch_existing_runtime.sql'; }
-if (is_file($patch)) {
-    run_sql_file($pdo, $patch);
-    $ran[] = basename($patch);
-}
+        // If we used the generated schema.sql, it already contains all migrations.
+        // Still record migration checksums so upgrade tooling works.
+        if (basename($schema) === 'schema.sql') {
+            mark_migrations_applied($pdo, $drv, $migPaths);
+        } else {
+            // Legacy path: apply migrations after core schema
+            $skip = [
+                '2025_11_21_0008_seed_default_pages.sql', // removed in RAW package
+            ];
+            $ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/database/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/database/migrations/postgresql')) ? '/postgresql' : ''), $skip));
+            $ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/admin/db/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/admin/db/migrations/postgresql')) ? '/postgresql' : ''), []));
+            $ran = array_merge($ran, run_sql_dir($pdo, $ROOT . '/migrations' . (($drv === 'pgsql' && is_dir($ROOT . '/migrations/postgresql')) ? '/postgresql' : ''), []));
+            mark_migrations_applied($pdo, $drv, $migPaths);
+        }
 
-// 3) Create admin user & assign admin role
+        // 2b) Runtime
+        // compatibility patch (missing columns/tables expected by UI)
+        $patch = $sqlBase . '/patch_existing_runtime.sql';
+        if (!is_file($patch)) { $patch = $ROOT . '/install/sql/patch_existing_runtime.sql'; }
+        if (is_file($patch)) {
+            run_sql_file($pdo, $patch);
+            $ran[] = basename($patch);
+        }
+
+        // 3) Create admin user & assign admin role
 
         $passHash = password_hash($cfg['ADMIN_PASSWORD'], PASSWORD_BCRYPT);
         if (!$passHash) throw new RuntimeException('فشل توليد كلمة المرور');
@@ -646,7 +802,8 @@ if (is_file($patch)) {
 
         // Assign role (idempotent)
         gdy_db_insert_ignore($pdo, 'user_roles', ['user_id' => $uid, 'role_id' => $rid], ['user_id','role_id']);
-// 4) Write .env
+
+        // 4) Write .env
         $key = bin2hex(random_bytes(32));
         $env = [];
         $env[] = env_line('APP_ENV','production');

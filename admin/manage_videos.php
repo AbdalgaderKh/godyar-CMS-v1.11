@@ -33,9 +33,9 @@ $editing = null;
 $videos  = [];
 $tableMissing = false;
 
-// ========================
-// حذف فيديو
-// ========================
+/* ========================
+   حذف فيديو
+======================== */
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     if ($id > 0) {
@@ -44,35 +44,35 @@ if (isset($_GET['delete'])) {
             $stmt->execute([':id' => $id]);
             $success = __('t_a0aac81546', 'تم حذف الفيديو بنجاح.');
         } catch (Throwable $e) {
-            $errors[] = __('t_efb6890f77', 'تعذّر حذف الفيديو، يرجى المحاولة لاحقاً.');
+            $errors[] = __('t_efb6890f77', 'تعذّر حذف الفيديو.');
             error_log('[Manage Videos] Delete error: ' . $e->getMessage());
         }
     }
 }
 
-// ========================
-// تحميل بيانات فيديو للتعديل
-// ========================
+/* ========================
+   تحميل فيديو للتعديل
+======================== */
 if (isset($_GET['edit'])) {
     $id = (int)$_GET['edit'];
     if ($id > 0) {
         try {
-            $stmt    = $pdo->prepare("SELECT * FROM featured_videos WHERE id = :id");
+            $stmt = $pdo->prepare("SELECT * FROM featured_videos WHERE id = :id");
             $stmt->execute([':id' => $id]);
             $editing = $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
         } catch (Throwable $e) {
-            error_log('[Manage Videos] Load edit error: ' . $e->getMessage());
+            error_log('[Manage Videos] Edit load error: ' . $e->getMessage());
         }
     }
 }
 
-// ========================
-// حفظ / تحديث فيديو
-// ========================
+/* ========================
+   حفظ / تحديث
+======================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrf = $_POST['csrf_token'] ?? '';
     if (function_exists('validate_csrf_token') && !validate_csrf_token($csrf)) {
-        $errors[] = __('t_fbbc004136', 'رمز الحماية (CSRF) غير صالح، يرجى إعادة المحاولة.');
+        $errors[] = __('t_fbbc004136', 'رمز CSRF غير صالح.');
     } else {
         $id          = (int)($_POST['id'] ?? 0);
         $title       = trim($_POST['title'] ?? '');
@@ -80,301 +80,173 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = trim($_POST['description'] ?? '');
         $isActive    = isset($_POST['is_active']) ? 1 : 0;
 
-        // التحقق من المدخلات
         if ($title === '') {
             $errors[] = __('t_38d6011714', 'يرجى إدخال عنوان الفيديو.');
         }
 
-        if ($url === '') {
-            $errors[] = __('t_7ee97cc87f', 'يرجى إدخال رابط الفيديو.');
-        } elseif (!filter_var($url, FILTER_VALIDATE_URL)) {
-            $errors[] = __('t_0ab6a291ed', 'يرجى إدخال رابط صحيح يبدأ بـ http أو https.');
+        if ($url === '' || !filter_var($url, FILTER_VALIDATE_URL)) {
+            $errors[] = __('t_0ab6a291ed', 'يرجى إدخال رابط صحيح.');
         }
 
         if (!$errors) {
             try {
                 if ($id > 0) {
-                    // تحديث
                     $stmt = $pdo->prepare("
-                        UPDATE featured_videos
-                        SET title       = :title,
-                            video_url   = :video_url,
+                        UPDATE featured_videos SET
+                            title = :title,
+                            video_url = :url,
                             description = :description,
-                            is_active   = :is_active,
-                            updated_at  = NOW()
+                            is_active = :active,
+                            updated_at = NOW()
                         WHERE id = :id
                     ");
                     $stmt->execute([
-                        ':title'       => $title,
-                        ':video_url'   => $url,          // نخزن الرابط الخام
+                        ':title' => $title,
+                        ':url'   => $url,
                         ':description' => $description,
-                        ':is_active'   => $isActive,
-                        ':id'          => $id,
+                        ':active' => $isActive,
+                        ':id' => $id,
                     ]);
-                    $success = __('t_0f4f44d63c', 'تم تحديث الفيديو بنجاح.');
+                    $success = __('t_0f4f44d63c', 'تم تحديث الفيديو.');
                 } else {
-                    // إضافة
                     $stmt = $pdo->prepare("
                         INSERT INTO featured_videos
-                            (title, video_url, description, is_active, created_by, created_at, updated_at)
-                        VALUES
-                            (:title, :video_url, :description, :is_active, :created_by, NOW(), NOW())
+                        (title, video_url, description, is_active, created_by, created_at, updated_at)
+                        VALUES (:title, :url, :description, :active, :uid, NOW(), NOW())
                     ");
                     $stmt->execute([
-                        ':title'       => $title,
-                        ':video_url'   => $url,
+                        ':title' => $title,
+                        ':url'   => $url,
                         ':description' => $description,
-                        ':is_active'   => $isActive,
-                        ':created_by'  => (int)($_SESSION['user']['id'] ?? 0),
+                        ':active' => $isActive,
+                        ':uid' => (int)($_SESSION['user']['id'] ?? 0),
                     ]);
-                    $success = __('t_b8238932d4', 'تمت إضافة الفيديو بنجاح.');
+                    $success = __('t_b8238932d4', 'تمت إضافة الفيديو.');
                 }
-
                 $editing = null;
             } catch (Throwable $e) {
-                $msg      = $e->getMessage();
-                $errors[] = __('t_a7e651d555', 'حدث خطأ أثناء حفظ البيانات في قاعدة البيانات: ') . $msg;
-                error_log('[Manage Videos] Save error: ' . $msg);
+                $errors[] = $e->getMessage();
+                error_log('[Manage Videos] Save error: ' . $e->getMessage());
             }
         }
     }
 }
 
-// ========================
-// تحميل جميع الفيديوهات
-// ========================
+/* ========================
+   تحميل القائمة
+======================== */
 try {
-    $stmt   = $pdo->query("SELECT * FROM featured_videos ORDER BY created_at DESC, id DESC");
+    $stmt = $pdo->query("SELECT * FROM featured_videos ORDER BY created_at DESC, id DESC");
     $videos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Throwable $e) {
-    error_log('[Manage Videos] Fetch error: ' . $e->getMessage());
     $tableMissing = true;
 }
 
-// CSRF
-$csrfToken = function_exists('csrf_token')
-    ? csrf_token()
-    : (function_exists('generate_csrf_token') ? generate_csrf_token() : bin2hex(random_bytes(16)));
+$csrfToken = function_exists('csrf_token') ? csrf_token() : bin2hex(random_bytes(16));
 
-// Shell (unified admin layout)
-$pageSubtitle = __('t_8dbe1cbde5', 'إدارة الفيديوهات المميزة من المنصات المختلفة.');
-$adminBase = (function_exists('base_url') ? rtrim(base_url(), '/') : '') . '/admin';
-$breadcrumbs = [
-    __('t_3aa8578699', 'الرئيسية') => $adminBase . '/index.php',
-    __('t_c930ea3a42', 'الفيديوهات') => null,
-];
 require_once __DIR__ . '/layout/app_start.php';
 ?>
-<?php if (!empty($tableMissing)): ?>
-  <div class="alert alert-warning" style="margin:12px 18px;border-radius:10px;">
-    تنبيه: جدول <code>featured_videos</code> غير موجود. 
-    <a href="/admin/create_featured_videos_table.php" style="font-weight:700;">انقر هنا لإنشاء الجدول</a>.
-  </div>
+
+<?php if ($tableMissing): ?>
+<div class="alert alert-warning">
+    جدول <code>featured_videos</code> غير موجود.
+</div>
 <?php endif; ?>
 
-
 <div class="container-fluid py-3">
-  <div class="d-flex justify-content-end mb-3">
-    <a href="index.php" class="btn btn-outline-secondary btn-sm">
-      <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#arrow-left"></use></svg> <?php echo h(__('t_2f09126266', 'العودة للوحة التحكم')); ?>
-    </a>
-  </div>
 
-    <?php if ($errors): ?>
-        <div class="alert alert-danger">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-            <?php echo h(__('t_4e7e8d83c3', 'حدثت الأخطاء التالية:')); ?>
-            <ul class="mb-0 mt-2">
-                <?php foreach ($errors as $e): ?>
-                    <li><?php echo h($e); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
+<?php if ($errors): ?>
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        <?php foreach ($errors as $e): ?><li><?php echo h($e); ?></li><?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
 
-    <?php if ($success): ?>
-        <div class="alert alert-success">
-            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg> <?php echo h($success); ?>
-        </div>
-    <?php endif; ?>
+<?php if ($success): ?>
+<div class="alert alert-success"><?php echo h($success); ?></div>
+<?php endif; ?>
 
-    <div class="row g-4">
-        <!-- نموذج إضافة / تعديل -->
-        <div class="col-lg-4">
-            <div class="card video-card border-0">
-                <div class="card-body">
-                    <h2 class="h6 mb-3">
-                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?php echo $editing ? __('t_3dc5805e67', 'تعديل الفيديو') : __('t_ae2be6f43c', 'إضافة فيديو جديد'); ?>
-                    </h2>
+<div class="row g-4">
 
-                    <form method="post" action="">
-                        <input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
-                        <input type="hidden" name="id" value="<?php echo (int)($editing['id'] ?? 0); ?>">
+<!-- النموذج -->
+<div class="col-lg-4">
+<div class="card border-0">
+<div class="card-body">
 
-                        <div class="mb-3">
-                            <label class="form-label"><?php echo h(__('t_91d18bfdaf', 'عنوان الفيديو')); ?></label>
-                            <input type="text"
-                                   name="title"
-                                   class="form-control"
-                                   required
-                                   value="<?php echo h($editing['title'] ?? ''); ?>">
-                        </div>
+<h2 class="h6 mb-3"><?php echo $editing ? 'تعديل الفيديو' : 'إضافة فيديو'; ?></h2>
 
-                        <div class="mb-3">
-                            <label class="form-label">
-                                <?php echo h(__('t_b16a72514e', 'رابط الفيديو (YouTube / Facebook / TikTok / Instagram / Snapchat / Vimeo / Dailymotion)')); ?>
-                            </label>
-                            <input type="url"
-                                   name="url"
-                                   id="video_url"
-                                   class="form-control"
-                                   required
-                                   value="<?php echo h($editing['video_url'] ?? ''); ?>"
-                                   placeholder="<?php echo h(__('t_85dbfef47a', 'مثال: https://www.youtube.com/watch?v=XXXX أو https://www.tiktok.com/... أو https://fb.watch/...')); ?>">
-                            <div class="form-text text-muted">
-                                <?php echo h(__('t_3522381271', '✅ يدعم أغلب منصات الفيديو الشهيرة.')); ?><br>
-                                <?php echo h(__('t_d181fc0889', '⚠ بعض المنصات مثل Instagram و Snapchat قد لا تسمح بالتشغيل داخل الموقع،
-                                وفي هذه الحالة سيتم فتح الفيديو في تبويب جديد على المنصة الأصلية.')); ?>
-                                <br>
-                                <?php echo h(__('t_138a029459', 'لاختبار الرابط:')); ?>
-                                <a href="#" id="testVideoLink" target="_blank" rel="noopener noreferrer"><?php echo h(__('t_7b0fb866e4', 'افتح الرابط في نافذة جديدة')); ?></a>
-                            </div>
-                        </div>
+<form method="post">
+<input type="hidden" name="csrf_token" value="<?php echo h($csrfToken); ?>">
+<input type="hidden" name="id" value="<?php echo (int)($editing['id'] ?? 0); ?>">
 
-                        <div class="mb-3">
-                            <label class="form-label"><?php echo h(__('t_81edd198f5', 'وصف مختصر')); ?></label>
-                            <textarea name="description"
-                                      class="form-control"
-                                      rows="3"><?php echo h($editing['description'] ?? ''); ?></textarea>
-                        </div>
-
-                        <div class="form-check mb-3">
-                            <input class="form-check-input"
-                                   type="checkbox"
-                                   name="is_active"
-                                   id="is_active"
-                                   value="1"
-                                <?php echo !isset($editing['is_active']) || (int)$editing['is_active'] === 1 ? 'checked' : ''; ?>>
-                            <label class="form-check-label" for="is_active">
-                                <?php echo h(__('t_67be8c29d6', 'تفعيل عرض هذا الفيديو في الواجهة')); ?>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">
-                            <svg class="gdy-icon me-1" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                            <?php echo $editing ? __('t_35f75fe13d', 'تحديث الفيديو') : __('t_417b6442fa', 'حفظ الفيديو'); ?>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- قائمة الفيديوهات -->
-        <div class="col-lg-8">
-            <div class="card video-card border-0">
-                <div class="card-body">
-                    <h2 class="h6 mb-3">
-                        <svg class="gdy-icon me-2 text-info" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                        <?php echo h(__('t_569c2cfc5d', 'قائمة الفيديوهات')); ?>
-                    </h2>
-
-                    <?php if (!$videos): ?>
-                        <p class="text-muted mb-0"><?php echo h(__('t_939b14dffe', 'لا توجد فيديوهات مضافة بعد.')); ?></p>
-                    <?php else: ?>
-                        <div class="table-responsive">
-                            <table class="table table-dark table-striped align-middle mb-0">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th><?php echo h(__('t_6dc6588082', 'العنوان')); ?></th>
-                                    <th><?php echo h(__('t_1253eb5642', 'الحالة')); ?></th>
-                                    <th><?php echo h(__('t_8456f22b47', 'التاريخ')); ?></th>
-                                    <th class="text-center"><?php echo h(__('t_901efe9b1c', 'إجراءات')); ?></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach ($videos as $index => $v): ?>
-                                    <tr>
-                                        <td><?php echo $index + 1; ?></td>
-                                        <td>
-                                            <div class="fw-semibold mb-1"><?php echo h($v['title'] ?? ''); ?></div>
-                                            <div class="small text-muted text-truncate" style="max-width: 260px;">
-                                                <?php echo h($v['video_url'] ?? ''); ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <?php if ((int)($v['is_active'] ?? 0) === 1): ?>
-                                                <span class="video-badge-active"><?php echo h(__('t_918499f2af', 'مفعل')); ?></span>
-                                            <?php else: ?>
-                                                <span class="video-badge-inactive"><?php echo h(__('t_60dfc10f77', 'غير مفعل')); ?></span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="small text-muted">
-                                            <?php if (!empty($v['created_at'])): ?>
-                                                <?php echo h($v['created_at']); ?>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="?edit=<?php echo (int)$v['id']; ?>" class="btn btn-sm btn-outline-info me-1">
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            </a>
-                                            <a href="?delete=<?php echo (int)$v['id']; ?>"
-                                               class="btn btn-sm btn-outline-danger"
-                                               data-confirm='هل أنت متأكد من حذف هذا الفيديو؟'>
-                                                <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#more-h"></use></svg>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php endif; ?>
-
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="mb-3">
+<label for="video_title" class="form-label">عنوان الفيديو</label>
+<input id="video_title" name="title" class="form-control" required
+value="<?php echo h($editing['title'] ?? ''); ?>">
 </div>
 
-<script>
-// دعم اختبار الرابط والتحقق البسيط من صحة الـ URL
-document.addEventListener('DOMContentLoaded', function() {
-    const videoUrlInput = document.getElementById('video_url');
-    const testLink = document.getElementById('testVideoLink');
-    const form = document.querySelector('form');
+<div class="mb-3">
+<label for="video_url" class="form-label">رابط الفيديو</label>
+<input id="video_url" name="url" type="url" class="form-control" required
+value="<?php echo h($editing['video_url'] ?? ''); ?>">
+</div>
 
-    if (videoUrlInput && testLink) {
-        // تحديث رابط الاختبار
-        function syncTestLink() {
-            const url = videoUrlInput.value.trim();
-            testLink.href = url || '#';
-        }
+<div class="mb-3">
+<label for="video_desc" class="form-label">وصف مختصر</label>
+<textarea id="video_desc" name="description" class="form-control" rows="3"><?php
+echo h($editing['description'] ?? '');
+?></textarea>
+</div>
 
-        syncTestLink();
-        videoUrlInput.addEventListener('input', syncTestLink);
-    }
+<div class="form-check mb-3">
+<input id="is_active" class="form-check-input" type="checkbox" name="is_active" value="1"
+<?php echo !isset($editing['is_active']) || (int)$editing['is_active'] === 1 ? 'checked' : ''; ?>>
+<label class="form-check-label" for="is_active">تفعيل العرض</label>
+</div>
 
-    if (form && videoUrlInput) {
-        form.addEventListener('submit', function(e) {
-            const url = videoUrlInput.value.trim();
-            if (!url) {
-                alert('يرجى إدخال رابط الفيديو.');
-                videoUrlInput.focus();
-                e.preventDefault();
-                return;
-            }
+<button class="btn btn-primary w-100">حفظ</button>
+</form>
 
-            // تحقق بسيط أن الرابط يبدأ بـ http أو https
-            if (!/^https?:\/\/.+/i.test(url)) {
-                alert('يرجى إدخال رابط صحيح يبدأ بـ http أو https.');
-                videoUrlInput.focus();
-                e.preventDefault();
-            }
-        });
-    }
-});
-</script>
+</div>
+</div>
+</div>
+
+<!-- القائمة -->
+<div class="col-lg-8">
+<div class="card border-0">
+<div class="card-body">
+
+<h2 class="h6 mb-3">قائمة الفيديوهات</h2>
+
+<?php if (!$videos): ?>
+<p class="text-muted">لا توجد فيديوهات.</p>
+<?php else: ?>
+<table class="table table-striped">
+<thead>
+<tr><th>#</th><th>العنوان</th><th>الحالة</th><th>إجراءات</th></tr>
+</thead>
+<tbody>
+<?php foreach ($videos as $i => $v): ?>
+<tr>
+<td><?php echo $i + 1; ?></td>
+<td><?php echo h($v['title']); ?></td>
+<td><?php echo $v['is_active'] ? 'مفعل' : 'غير مفعل'; ?></td>
+<td>
+<a class="btn btn-sm btn-outline-info" aria-label="تعديل الفيديو" href="?edit=<?php echo (int)$v['id']; ?>">✏️</a>
+<a class="btn btn-sm btn-outline-danger" aria-label="حذف الفيديو" href="?delete=<?php echo (int)$v['id']; ?>">🗑</a>
+</td>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+<?php endif; ?>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
 
 <?php require_once __DIR__ . '/layout/app_end.php'; ?>

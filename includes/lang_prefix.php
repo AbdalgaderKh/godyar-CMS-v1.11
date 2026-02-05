@@ -86,3 +86,52 @@ if (!headers_sent()) {
 	        . '; HttpOnly';
 	    header('Set-Cookie: ' . $cookie, false);
 }
+// ------------------------------------------------------------
+// URL helper: build language-switch links safely
+// Used by frontend header (language picker).
+// ------------------------------------------------------------
+if (function_exists('gdy_lang_url') === false) {
+    /**
+     * Build URL/path for switching language while keeping current path + query.
+     * - Public: /ar/... -> /en/... (or /en/ if home)
+     * - Admin: keeps path and uses ?lang=xx (no prefix rewrite)
+     */
+    function gdy_lang_url(string $targetLang): string
+    {
+        $lang = strtolower(trim($targetLang));
+        if (!in_array($lang, ['ar','en','fr'], true)) { $lang = 'ar'; }
+
+        $uri  = (string)($_SERVER['REQUEST_URI'] ?? '/');
+        $path = (string)(parse_url($uri, PHP_URL_PATH) ?: '/');
+        $qs   = (string)(parse_url($uri, PHP_URL_QUERY) ?: '');
+
+        // Admin routes: use query param
+        $isAdmin = str_starts_with($path, '/admin') || str_starts_with($path, '/v16/admin');
+        if ($isAdmin) {
+            $q = [];
+            if ($qs !== '') { parse_str($qs, $q); }
+            $q['lang'] = $lang;
+            $newQs = http_build_query($q);
+            return $path . ($newQs !== '' ? ('?' . $newQs) : '');
+        }
+
+        // Public routes: replace leading language prefix if present
+        $rest = preg_replace('#^/(ar|en|fr)(/|$)#i', '/', $path);
+        if ($rest === '' || $rest[0] !== '/') { $rest = '/' . ltrim($rest, '/'); }
+
+        // Normalize: avoid double slashes
+        $rest = '/' . ltrim($rest, '/');
+        if ($rest === '//') { $rest = '/'; }
+
+        $newPath = '/' . $lang;
+        if ($rest !== '/' && $rest !== '') {
+            $newPath .= $rest;
+        } else {
+            $newPath .= '/';
+        }
+
+        // Keep existing query string
+        return $newPath . ($qs !== '' ? ('?' . $qs) : '');
+    }
+}
+

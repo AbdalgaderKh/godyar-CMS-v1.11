@@ -208,7 +208,7 @@ foreach ($presetGuess as $k => $v) {
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_admin_theme_label', 'ستايل لوحة التحكم')); ?></label>
+              <label class="form-label" for="admin_theme"><?php echo h(__('t_admin_theme_label', 'ستايل لوحة التحكم')); ?></label>
               <select class="form-select" name="admin_theme" id="admin_theme">
                 <option value="blue"  <?php echo $admin_theme === 'blue'  ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_blue', 'أزرق - Blue')); ?></option>
                 <option value="red"   <?php echo $admin_theme === 'red'   ? 'selected' : ''; ?>><?php echo h(__('t_admin_theme_red', 'أحمر - Red')); ?></option>
@@ -237,7 +237,7 @@ foreach ($presetGuess as $k => $v) {
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_front_theme_layout', 'ستايل الواجهة')); ?></label>
+              <label class="form-label" for="front_theme"><?php echo h(__('t_front_theme_layout', 'ستايل الواجهة')); ?></label>
               <select class="form-select" name="front_theme" id="front_theme">
                 <option value="default" <?php echo $front_theme === 'default' ? 'selected' : ''; ?>>Default</option>
                 <option value="light" <?php echo $front_theme === 'light' ? 'selected' : ''; ?>>light</option>
@@ -251,8 +251,8 @@ foreach ($presetGuess as $k => $v) {
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_bc7df01a60', 'عرض المحتوى')); ?></label>
-              <select class="form-select" name="container_width">
+              <label class="form-label" for="container_width"><?php echo h(__('t_bc7df01a60', 'عرض المحتوى')); ?></label>
+              <select class="form-select" name="container_width" id="container_width">
                 <option value="boxed" <?php echo $container_width === 'boxed' ? 'selected' : ''; ?>><?php echo h(__('t_1018afa3c4', 'مربع (Boxed)')); ?></option>
                 <option value="full" <?php echo $container_width === 'full' ? 'selected' : ''; ?>><?php echo h(__('t_acc87fcc65', 'كامل العرض')); ?></option>
               </select>
@@ -261,7 +261,7 @@ foreach ($presetGuess as $k => $v) {
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_front_color_preset', 'لون الهوية (Preset)')); ?></label>
+              <label class="form-label" for="front_preset"><?php echo h(__('t_front_color_preset', 'لون الهوية (Preset)')); ?></label>
               <select class="form-select" name="front_preset" id="front_preset">
                 <option value="custom" <?php echo $front_preset === 'custom' ? 'selected' : ''; ?>><?php echo h(__('t_preset_custom', 'مخصص (Custom)')); ?></option>
                 <option value="default" <?php echo $front_preset === 'default' ? 'selected' : ''; ?>>Default</option>
@@ -284,15 +284,15 @@ foreach ($presetGuess as $k => $v) {
 
           <div class="row">
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?php echo h(__('t_a71da15dca', 'اللون الأساسي')); ?></label>
+              <label class="form-label" for="primary_color"><?php echo h(__('t_a71da15dca', 'اللون الأساسي')); ?></label>
               <input type="color" class="form-control form-control-color" name="primary_color" id="primary_color" value="<?php echo h($primary_color); ?>">
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?php echo h(__('t_dac6ead9fa', 'لون التمييز')); ?></label>
+              <label class="form-label" for="accent_color"><?php echo h(__('t_dac6ead9fa', 'لون التمييز')); ?></label>
               <input type="color" class="form-control form-control-color" name="accent_color" id="accent_color" value="<?php echo h($accent_color); ?>">
             </div>
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?php echo h(__('t_primary_dark', 'اللون الداكن (اختياري)')); ?></label>
+              <label class="form-label" for="primary_dark"><?php echo h(__('t_primary_dark', 'اللون الداكن (اختياري)')); ?></label>
               <input type="color" class="form-control form-control-color" name="primary_dark" id="primary_dark" value="<?php echo h($primary_dark ?: $primary_color); ?>">
               <div class="form-text"><?php echo h(__('t_primary_dark_note', 'إن تركته مناسباً سيُحسب تلقائياً.')); ?></div>
             </div>
@@ -300,15 +300,15 @@ foreach ($presetGuess as $k => $v) {
 
           <div class="row">
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_8851fd9015', 'ستايل الهيدر')); ?></label>
-              <select class="form-select" name="header_style">
+              <label class="form-label" for="header_style"><?php echo h(__('t_8851fd9015', 'ستايل الهيدر')); ?></label>
+              <select class="form-select" name="header_style" id="header_style">
                 <option value="dark" <?php echo $header_style === 'dark' ? 'selected' : ''; ?>><?php echo h(__('t_31546428bd', 'داكن')); ?></option>
                 <option value="light" <?php echo $header_style === 'light' ? 'selected' : ''; ?>><?php echo h(__('t_f9d987e7c7', 'فاتح')); ?></option>
               </select>
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_018b082610', 'ستايل الفوتر')); ?></label>
-              <select class="form-select" name="footer_style">
+              <label class="form-label" for="footer_style"><?php echo h(__('t_018b082610', 'ستايل الفوتر')); ?></label>
+              <select class="form-select" name="footer_style" id="footer_style">
                 <option value="dark" <?php echo $footer_style === 'dark' ? 'selected' : ''; ?>><?php echo h(__('t_31546428bd', 'داكن')); ?></option>
                 <option value="light" <?php echo $footer_style === 'light' ? 'selected' : ''; ?>><?php echo h(__('t_f9d987e7c7', 'فاتح')); ?></option>
               </select>
@@ -331,22 +331,22 @@ foreach ($presetGuess as $k => $v) {
             </div>
 
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?php echo h(__('t_hdrbg_source', 'المصدر')); ?></label>
-              <select class="form-select" name="header_bg_source">
+              <label class="form-label" for="header_bg_source"><?php echo h(__('t_hdrbg_source', 'المصدر')); ?></label>
+              <select class="form-select" name="header_bg_source" id="header_bg_source">
                 <option value="upload" <?php echo $header_bg_source === 'upload' ? 'selected' : ''; ?>><?php echo h(__('t_hdrbg_upload', 'رفع من الكمبيوتر')); ?></option>
                 <option value="url" <?php echo $header_bg_source === 'url' ? 'selected' : ''; ?>><?php echo h(__('t_hdrbg_url', 'رابط مباشر')); ?></option>
               </select>
             </div>
 
             <div class="col-md-4 mb-3">
-              <label class="form-label"><?php echo h(__('t_hdrbg_url_label', 'رابط الصورة')); ?></label>
-              <input class="form-control" name="header_bg_url" value="<?php echo h($header_bg_url); ?>" placeholder="https://...">
+              <label class="form-label" for="header_bg_url"><?php echo h(__('t_hdrbg_url_label', 'رابط الصورة')); ?></label>
+              <input class="form-control" name="header_bg_url" id="header_bg_url" value="<?php echo h($header_bg_url); ?>" placeholder="https://...">
               <div class="form-text"><?php echo h(__('t_hdrbg_url_note', 'يُستخدم عند اختيار (رابط مباشر).')); ?></div>
             </div>
 
             <div class="col-md-6 mb-3">
-              <label class="form-label"><?php echo h(__('t_hdrbg_upload_label', 'رفع صورة')); ?></label>
-              <input class="form-control" type="file" name="header_bg_file" accept="image/*">
+              <label class="form-label" for="header_bg_file"><?php echo h(__('t_hdrbg_upload_label', 'رفع صورة')); ?></label>
+              <input class="form-control" type="file" name="header_bg_file" id="header_bg_file" accept="image/*">
               <div class="form-text"><?php echo h(__('t_hdrbg_upload_note', 'PNG/JPG/WebP — يُفضّل أبعاد كبيرة لتظهر بجودة.')); ?></div>
             </div>
 

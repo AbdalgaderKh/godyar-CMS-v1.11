@@ -211,13 +211,7 @@ if (!empty($siteLogo) && !preg_match('~^https?://~i', (string)$siteLogo)) {
 $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
 $frontPreset = (string)($siteSettings['front_preset'] ?? $siteSettings['settings.front_preset'] ?? ($rawSettings['front_preset'] ?? '') ?? ($rawSettings['settings.front_preset'] ?? ''));
 $frontPreset = strtolower(trim($frontPreset)) ?: 'default';
-$primaryColor = $primaryColor ?? ($siteSettings['primary_color'] ?? ($siteSettings['theme_primary'] ?? '#111111'));
-// If preset is NOT custom, force the new Default palette (beige + gold + black)
-if ($frontPreset !== 'custom') {
-    $primaryColor = '#111111';
-    $primaryDark  = '#000000';
-    $primaryRgb   = '17,17,17';
-}
+$primaryColor = $primaryColor ?? (string)(($siteSettings['primary_color'] ?? null) ?? ($siteSettings['theme_primary'] ?? null) ?? ($rawSettings['theme.primary'] ?? null) ?? ($rawSettings['theme_primary'] ?? null) ?? '#111111');
 
 // Primary dark (optional from settings). If not provided (unset/empty/null), compute a darker shade.
 // NOTE: Avoid chained strict-comparisons like "$x === null === false" which cause PHP parse errors.
@@ -237,7 +231,7 @@ if (!isset($primaryDark) || $primaryDark === '' || $primaryDark === null) {
 }
 
 // Primary RGB (for rgba() usage in CSS). Used by front themes.
-$primaryRgb = '214, 157, 16';
+$primaryRgb = $primaryRgb ?? '';
 try {
     $hex = ltrim((string)$primaryColor, '#');
     if (preg_match('/^[0-9a-f]{6}$/i', $hex)) {
@@ -247,7 +241,8 @@ try {
         $primaryRgb = $r . ', ' . $g . ', ' . $b;
     }
 } catch (Throwable $e) {
-    $primaryRgb = '214, 157, 16';
+    // fallback derived from primaryColor (or default black)
+    $primaryRgb = '17,17,17';
 }
 
 $themeClass   = $themeClass   ?? 'theme-default';
@@ -547,15 +542,19 @@ $cspNonce = defined('GDY_CSP_NONCE') ? (string)GDY_CSP_NONCE : '';
     <?php
       // Front-end theme stylesheet (optional)
       // ✅ مهم جداً: لا نحقن --primary في :root إذا كان ملف الثيم موجوداً، حتى لا يطغى اللون الافتراضي.
-      // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + theme.front + theme_front
+      // Keys supported: frontend_theme (المطلوب) + settings.frontend_theme + frontendTheme (camel) + theme.front (legacy)
       $rawSettings = (isset($siteSettings['raw']) && is_array($siteSettings['raw'])) ? $siteSettings['raw'] : [];
+
+      // NOTE: لا تستخدم "?? ''" هنا لأن '' قيمة غير null وتمنع fallback إلى مفاتيح أخرى.
       $themeFront = (string)(
-        $siteSettings['frontend_theme']
-          ?? $siteSettings['settings.frontend_theme']
-          ?? ($rawSettings['frontend_theme'] ?? '')
-          ?? $siteSettings['theme_front']
-          ?? ($rawSettings['theme.front'] ?? '')
-          ?? ($siteSettings['theme.front'] ?? 'default')
+        ($siteSettings['frontend_theme'] ?? null)
+        ?? ($siteSettings['settings.frontend_theme'] ?? null)
+        ?? ($siteSettings['frontendTheme'] ?? null)
+        ?? ($rawSettings['frontend_theme'] ?? null)
+        ?? ($rawSettings['settings.frontend_theme'] ?? null)
+        ?? ($siteSettings['theme_front'] ?? null)
+        ?? ($rawSettings['theme.front'] ?? null)
+        ?? ($siteSettings['theme.front'] ?? 'default')
       );
 
       $themeFront = strtolower(trim($themeFront)) ?: 'default';

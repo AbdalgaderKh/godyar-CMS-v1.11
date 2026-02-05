@@ -22,7 +22,8 @@ if (!function_exists('settings_get')) {
         }
 
         try {
-            $stmt = $pdo->prepare("SELECT value FROM settings WHERE setting_key = ? LIMIT 1");
+            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value';
+            $stmt = $pdo->prepare("SELECT {$col} FROM settings WHERE setting_key = ? LIMIT 1");
             $stmt->execute([$key]);
             $v = $stmt->fetchColumn();
             return ($v === false) ? $default : $v;
@@ -45,19 +46,32 @@ if (!function_exists('settings_save')) {
             $pdo->beginTransaction();
 
             $now = date('Y-m-d H:i:s');
+            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value';
+
+            // Detect optional updated_at column (legacy schema)
+            $hasUpdatedAt = false;
+            try {
+                $cols = $pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
+                $hasUpdatedAt = (is_array($cols) && in_array('updated_at', $cols, true));
+            } catch (Throwable $e) {
+                $hasUpdatedAt = false;
+            }
 
             foreach ($pairs as $k => $v) {
-                gdy_db_upsert(
-                    $pdo,
-                    'settings',
-                    [
-                        'setting_key' => (string)$k,
-                        'value'       => (string)$v,
-                        'updated_at'  => $now,
-                    ],
-                    ['setting_key'],
-                    ['value', 'updated_at']
-                );
+                $data = [
+                    'setting_key' => (string)$k,
+                    $col          => (string)$v,
+                ];
+                if ($hasUpdatedAt) {
+                    $data['updated_at'] = $now;
+                }
+
+                $updateCols = [$col];
+                if ($hasUpdatedAt) {
+                    $updateCols[] = 'updated_at';
+                }
+
+                gdy_db_upsert($pdo, 'settings', $data, ['setting_key'], $updateCols);
             }
 
             $pdo->commit();
@@ -69,3 +83,4 @@ if (!function_exists('settings_save')) {
         }
     }
 }
+

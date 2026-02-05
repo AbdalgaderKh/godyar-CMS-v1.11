@@ -98,6 +98,41 @@ if (!function_exists('gdy_pdo_is_pgsql')) {
     }
 }
 
+
+if (!function_exists('gdy_settings_value_column')) {
+    /**
+     * Detect the value column used by `settings` table.
+     * Supports both legacy schema (value, updated_at) and new schema (setting_value).
+     */
+    function gdy_settings_value_column(PDO $pdo): string {
+        static $cache = null;
+        if (is_string($cache) && $cache !== '') {
+            return $cache;
+        }
+
+        $cache = 'value';
+        try {
+            $isPg = gdy_pdo_is_pgsql($pdo);
+            if ($isPg) {
+                $cols = $pdo->query("SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='settings'")
+                            ->fetchAll(PDO::FETCH_COLUMN);
+                $cols = is_array($cols) ? $cols : [];
+                if (in_array('setting_value', $cols, true)) return $cache = 'setting_value';
+                if (in_array('value', $cols, true)) return $cache = 'value';
+            } else {
+                $cols = $pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
+                $cols = is_array($cols) ? $cols : [];
+                if (in_array('setting_value', $cols, true)) return $cache = 'setting_value';
+                if (in_array('value', $cols, true)) return $cache = 'value';
+            }
+        } catch (Throwable $e) {
+            // ignore, keep default
+        }
+
+        return $cache;
+    }
+}
+
 if (!function_exists('gdy_ensure_settings_table')) {
     function gdy_ensure_settings_table(PDO $pdo): void {
         $isPg = gdy_pdo_is_pgsql($pdo);

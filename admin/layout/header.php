@@ -20,8 +20,53 @@ if (!in_array($lang, ['ar', 'en', 'fr'], true)) {
 }
 $dir = ($lang === 'ar') ? 'rtl' : 'ltr';
 
-$base = defined('GODYAR_BASE_URL') ? rtrim((string)GODYAR_BASE_URL, '/') : '';
-$adminBase = $base . '/admin';
+$base = '';
+if (defined('ROOT_URL')) {
+    $base = rtrim((string)ROOT_URL, '/');
+} elseif (defined('BASE_URL')) {
+    $base = rtrim((string)BASE_URL, '/');
+} elseif (defined('GODYAR_BASE_URL')) {
+    $base = rtrim((string)GODYAR_BASE_URL, '/');
+}
+
+// Derive base from server if constants are empty
+if ($base === '') {
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host   = (string)($_SERVER['HTTP_HOST'] ?? '');
+    if ($host !== '') {
+        $base = $scheme . '://' . $host;
+    }
+}
+
+/**
+ * Normalize base:
+ * - Remove trailing /admin if present (prevents /admin/admin assets).
+ * - Remove trailing language prefix (e.g. /ar, /en, /fr) if base was built from a prefixed URL.
+ */
+if ($base !== '') {
+    $scheme = parse_url($base, PHP_URL_SCHEME);
+    $host   = parse_url($base, PHP_URL_HOST);
+    $port   = parse_url($base, PHP_URL_PORT);
+    $path   = (string)(parse_url($base, PHP_URL_PATH) ?? '');
+    $path   = rtrim($path, '/');
+
+    // strip /admin
+    if (preg_match('~/(admin)$~i', $path)) {
+        $path = preg_replace('~/admin$~i', '', $path);
+    }
+    // strip trailing language code (2 letters)
+    if (preg_match('~/(ar|en|fr)$~i', $path)) {
+        $path = preg_replace('~/(ar|en|fr)$~i', '', $path);
+    }
+
+    if ($scheme && $host) {
+        $base = $scheme . '://' . $host . ($port ? ':' . $port : '') . $path;
+    } else {
+        $base = $path;
+    }
+}
+
+$adminBase = ($base !== '' ? $base : '') . '/admin';
 
 $pageTitle = $pageTitle ?? (function_exists('__') ? __('dashboard', [], 'لوحة التحكم') : 'لوحة التحكم');
 

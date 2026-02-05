@@ -39,10 +39,13 @@ if (isset($_GET['action']) && $_GET['action'] === 'export') {
         if (($pdo instanceof PDO) === false) {
             throw new RuntimeException('DB not available');
         }
-        $rows = $pdo->query("SELECT setting_key, value FROM settings ORDER BY setting_key ASC")->fetchAll(PDO::FETCH_ASSOC);
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'value';
+        $rows = $pdo->query("SELECT setting_key, {$col} AS value FROM settings ORDER BY setting_key ASC")->fetchAll(PDO::FETCH_ASSOC);
         $out = [];
         foreach ($rows as $r) {
-            $out[(string)$r['key']] = (string)($r['value'] ?? '');
+            $k = (string)($r['setting_key'] ?? '');
+            if ($k === '') continue;
+            $out[$k] = (string)($r['value'] ?? '');
         }
         header('Content-Type: application/json; charset=UTF-8');
         header('Content-Disposition: attachment; filename="settings-export-' . date('Ymd-His') . '.json"');

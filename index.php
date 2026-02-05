@@ -22,10 +22,13 @@ $siteSettings = [];
 
 if ($pdo instanceof PDO) {
     try {
-        $stmt = $pdo->query("SELECT setting_key, `value` FROM `settings`");
-        if ((empty($stmt) === false)) {
-            // ترجع مصفوفة بالشكل ['site.name' => 'xxx', 'site.desc' => 'yyy', ...]
-            $rawSettings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
+        // Use unified settings loader (supports both `value` and `setting_value`)
+        if (function_exists('gdy_load_settings')) {
+            $rawSettings = gdy_load_settings($pdo, true);
+        } else {
+            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'value';
+            $stmt = $pdo->query("SELECT setting_key, {$col} AS v FROM settings");
+            $rawSettings = $stmt ? ($stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: []) : [];
         }
     } catch (Throwable $e) {
         error_log('[front.index] settings load error: ' . $e->getMessage());
@@ -78,7 +81,7 @@ $siteTagline  = $siteSettings['site_desc'];
 $siteLogo     = $siteSettings['site_logo'];
 $primaryColor = $siteSettings['theme_primary'];
 $primaryDark  = $siteSettings['theme_primary_dark'];
-$themeClass   = 'theme-' . ((empty($siteSettings['theme_front']) === false) ?: 'default');
+$themeClass   = 'theme-' . (!empty($siteSettings['theme_front']) ? (string)$siteSettings['theme_front'] : 'default');
 
 // تأمين baseUrl عالمي (لمن يحتاجه في القوالب)
 if (isset($GLOBALS['baseUrl']) === false) {

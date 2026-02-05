@@ -92,9 +92,11 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
 
 ?>
 
+<?php if (defined('GDY_HEADER_RENDERED')): ?>
       </div><!-- /.container من الهيدر -->
     </div><!-- /.page-shell -->
   </main>
+<?php endif; ?>
 
   <style>
     /* Footer (Light, theme-aware) */
@@ -462,7 +464,7 @@ $isSearchPage = strpos($currentScript, 'search.php') !== false
         gap: 4px;
         border: 0;
         background: transparent;
-        color: var(--footer-text, #0f172a);
+        color: #e2e8f0;
         font-size: 12px;
         line-height: 1;
         padding: 6px 2px;

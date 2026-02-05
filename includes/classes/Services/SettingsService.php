@@ -20,11 +20,19 @@ final class SettingsService
         $this->pdo = $pdo;
     }
 
+
 private function loadAllCached(int $ttl = 600): array
 {
     $loader = function (): array {
         $out = [];
-        $st = $this->pdo->query("SELECT setting_key, `value` FROM settings");
+
+        $col = function_exists('gdy_settings_value_column')
+            ? gdy_settings_value_column($this->pdo)
+            : 'value';
+
+        // Use an alias to keep downstream logic unchanged.
+        $st = $this->pdo->query("SELECT setting_key, {$col} AS value FROM settings");
+
         foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
             $k = (string)($row['setting_key'] ?? '');
             if ($k === '') { continue; }
@@ -39,7 +47,7 @@ private function loadAllCached(int $ttl = 600): array
         return $out;
     };
 
-    if (class_exists('\Cache')) {
+    if (class_exists('\\Cache')) {
         return \Cache::remember('settings_all_v1', $ttl, $loader);
     }
     return $loader();
@@ -58,6 +66,12 @@ private function loadAllCached(int $ttl = 600): array
 
     public function setValue(string $key, $value): void
     {
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'value';
+        $hasUpdatedAt = false;
+        try {
+            $cols = $this->pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
+            $hasUpdatedAt = (is_array($cols) && in_array('updated_at', $cols, true));
+        } catch (\Throwable $e) { $hasUpdatedAt = false; }
         $val = is_array($value)
             ? json_encode($value, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT)
             : (string)$value;
@@ -68,17 +82,23 @@ gdy_db_upsert(
             'settings',
             [
                 'setting_key' => $key,
-                'value'       => $val,
+                $col          => $val,
                 'updated_at'  => $now,
             ],
             ['setting_key'],
-            ['value','updated_at']
+            array_filter([$col, $hasUpdatedAt ? 'updated_at' : null])
         );
 }
 
     /** @param array<string, mixed> $pairs */
     public function setMany(array $pairs): void
     {
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'value';
+        $hasUpdatedAt = false;
+        try {
+            $cols = $this->pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
+            $hasUpdatedAt = (is_array($cols) && in_array('updated_at', $cols, true));
+        } catch (\Throwable $e) { $hasUpdatedAt = false; }
         $this->pdo->beginTransaction();
         try {
             $now = date('Y-m-d H:i:s');
@@ -92,11 +112,11 @@ foreach ($pairs as $k => $v) {
                     'settings',
                     [
                         'setting_key' => $k,
-                        'value'       => $val,
+                        $col          => $val,
                         'updated_at'  => $now,
                     ],
                     ['setting_key'],
-                    ['value','updated_at']
+                    array_filter([$col, $hasUpdatedAt ? 'updated_at' : null])
                 );
             }
 $this->pdo->commit();

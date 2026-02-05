@@ -242,4 +242,17 @@ svg.gdy-icon{
   height:56px;
   opacity:.9;
 }
-
+/* Hard safety net: prevent any inline <svg> (FontAwesome sprite) from defaulting to 300x150 inside Admin */
+.admin-shell svg:not([data-chart]):not(.recharts-surface):not(.chart):not(.chartjs-render-monitor){
+  width: 1.2em;
+  height: 1.2em;
+  max-width: 26px;
+  max-height: 26px;
+}
+/* If a card intentionally uses a big decorative icon, it should opt-in via .gdy-icon--xl */
+.admin-shell .gdy-icon--xl{
+  width: 72px !important;
+  height: 72px !important;
+  max-width: 72px !important;
+  max-height: 72px !important;
+}

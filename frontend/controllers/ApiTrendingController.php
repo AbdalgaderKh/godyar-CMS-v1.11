@@ -16,7 +16,8 @@ if (function_exists('h') === false) {
 $settings = [];
 try {
     if ($pdo instanceof PDO) {
-        $stmt = $pdo->query("SELECT setting_key, `value` FROM settings");
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'value';
+        $stmt = $pdo->query("SELECT setting_key, {$col} AS value FROM settings");
 		    foreach ($stmt as $row) {
 		        $k = (string)($row['setting_key'] ?? '');
 		        if ($k !== '') {

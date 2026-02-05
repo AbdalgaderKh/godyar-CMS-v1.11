@@ -14,7 +14,7 @@ $settings = [];
 try {
   if (class_exists('Settings') === true) { $settings = Settings::getAll(); }
   elseif (isset($pdo) === true) {
-    $st = $pdo->query("SELECT setting_key,`value` FROM settings");
+    $st = $pdo->query("SELECT setting_key, " . (function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value') . " AS value FROM settings");
     foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $k = (string)($row['setting_key'] ?? '');
         if ($k !== '') {

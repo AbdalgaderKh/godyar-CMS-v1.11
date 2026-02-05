@@ -68,6 +68,14 @@ if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', dirname(__DIR__));
 }
 
+// --- Language prefix router (SAFE) ---
+// Strips a leading language segment from REQUEST_URI (e.g. /ar/, /en/, /fr/)
+// early so the rest of the app routes correctly and avoids edge-case 500 errors.
+// This does NOT access the DB and does not output anything.
+if (is_file(ROOT_PATH . '/language_prefix_router.php')) {
+    require_once ROOT_PATH . '/language_prefix_router.php';
+}
+
 require_once ROOT_PATH . '/includes/fs.php';
 
 // Cache (portable file/APCu)

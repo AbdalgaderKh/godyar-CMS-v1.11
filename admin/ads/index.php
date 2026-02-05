@@ -64,11 +64,12 @@ if ($pdo instanceof PDO) {
     try {
         $checkTable = gdy_db_stmt_table_exists($pdo, 'settings')->fetchColumn();
         if ((empty($checkTable) === false)) {
-            $stmt = $pdo->prepare("SELECT `value` FROM settings WHERE setting_key = 'sidebar_ad_enabled'");
+            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value';
+            $stmt = $pdo->prepare("SELECT {$col} AS v FROM settings WHERE setting_key = 'sidebar_ad_enabled'");
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if ((empty($result) === false)) {
-                $sidebarAdEnabled = (int)$result['value'];
+                $sidebarAdEnabled = (int)($result['v'] ?? 0);
             }
         }
     } catch (Exception $e) {

@@ -1434,7 +1434,7 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
                   if ($isOpinionLink) {
                       $href = rtrim($rootUrl, '/') . '/opinion_author.php';
                   } else {
-                      $href = rtrim($navBaseUrl, '/') . '/category/' . rawurlencode($catSlug);
+                      $href = gdy_lang_route_href((string)$navBaseUrl, 'category', ['slug' => $catSlug]);
                   }
                   // تمييز القسم النشط في الهيدر
                   $isActive = false;
@@ -1472,19 +1472,19 @@ $__gdySwUrl       = ($__gdyBasePath === '' ? '' : $__gdyBasePath) . '/sw.js';
             <?php endforeach; ?>
 
           <?php else: ?>
-            <a href="<?php echo h($navBaseUrl); ?>/category/general-news" class="cats-link">
+            <a href="<?php echo h(gdy_lang_route_href((string)$navBaseUrl, 'category', ['slug'=>'general-news'])); ?>" class="cats-link">
               <svg class="gdy-icon" aria-hidden="true" focusable="false"><use href="#news"></use></svg>
               <span><?php echo h(__('أخبار عامة')); ?></span>
             </a>
-            <a href="<?php echo h($navBaseUrl); ?>/category/politics" class="cats-link">
+            <a href="<?php echo h(gdy_lang_route_href((string)$navBaseUrl, 'category', ['slug'=>'politics'])); ?>" class="cats-link">
               
               <span><?php echo h(__('سياسة')); ?></span>
             </a>
-            <a href="<?php echo h($navBaseUrl); ?>/category/business" class="cats-link cats-link--business">
+            <a href="<?php echo h(gdy_lang_route_href((string)$navBaseUrl, 'category', ['slug'=>'business'])); ?>" class="cats-link cats-link--business">
               
               <span><?php echo h(__('اقتصاد')); ?></span>
             </a>
-            <a href="<?php echo h($navBaseUrl); ?>/category/sports" class="cats-link cats-link--sports">
+            <a href="<?php echo h(gdy_lang_route_href((string)$navBaseUrl, 'category', ['slug'=>'sports'])); ?>" class="cats-link cats-link--sports">
               
               <span><?php echo h(__('رياضة')); ?></span>
             </a>

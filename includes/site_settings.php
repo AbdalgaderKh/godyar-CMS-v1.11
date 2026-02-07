@@ -99,7 +99,7 @@ if (!function_exists('gdy_pdo_is_pgsql')) {
 }
 
 
-if (function_exists('gdy_settings_value_column') === false) {
+if (!function_exists('gdy_settings_value_column')) {
     /**
      * Detect the value column used by `settings` table.
      * Supports both legacy schema (value, updated_at) and new schema (setting_value).

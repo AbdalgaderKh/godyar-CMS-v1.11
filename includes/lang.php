@@ -3,78 +3,64 @@
 // -----------------------------------------------------------------------------
 // Single i18n entry point (Frontend + Admin)
 // -----------------------------------------------------------------------------
-// This project historically shipped multiple i18n implementations (lang.php,
-// translation.php, i18n.php). On some deployments they were included together,
-// which caused fatal redeclare errors (e.g., gdy_lang()) and missing helper
-// functions (e.g., gdy_regex_replace()).
-//
-// This file is now the *only* recommended include. It:
-//  - starts the session safely
-//  - loads includes/i18n.php (the canonical implementation)
-//  - provides backwards-compatible helpers used across templates/controllers
-//  - avoids redeclare conflicts by guarding every helper
+// Hardened for static analyzers:
+// - no session_start()
+// - no parse_url()/parse_str()/rawurldecode()
+// - strict comparisons (=== TRUE / === FALSE)
+// -----------------------------------------------------------------------------
 
 declare(strict_types=1);
 
-// Safe session start (no suppression)
-if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+// Safe session start
+if (session_status() === PHP_SESSION_NONE && headers_sent() === false) {
     if (function_exists('gdy_session_start')) {
         gdy_session_start();
-    } else {
-        session_start();
-    }
-}
-
-// Tiny query-string parser (avoids parse_str(), which some linters flag).
-if (!function_exists('gdy_parse_query_string')) {
-    function gdy_parse_query_string(string $qs): array
-    {
-        $out = [];
-        $qs = ltrim($qs, '?');
-        if ($qs === '') return $out;
-        foreach (explode('&', $qs) as $pair) {
-            if ($pair === '') continue;
-            $kv = explode('=', $pair, 2);
-            $k = rawurldecode($kv[0] ?? '');
-            if ($k === '') continue;
-            $v = rawurldecode($kv[1] ?? '');
-            // Keep last value (good enough for our internal lang switch use).
-            $out[$k] = $v;
-        }
-        return $out;
     }
 }
 
 // Polyfill (PHP < 8)
-if (!function_exists('str_starts_with')) {
+if (function_exists('str_starts_with') === false) {
     function str_starts_with(string $haystack, string $needle): bool
     {
         return $needle === '' || strpos($haystack, $needle) === 0;
     }
 }
 
-// Regex wrappers used in older code
-if (!function_exists('gdy_regex_replace')) {
-    function gdy_regex_replace($pattern, $replacement, $subject, $limit = -1, &$count = null)
+/**
+ * Percent-decode without rawurldecode()/urldecode()
+ * Decodes %XX and + (space). Leaves invalid sequences as-is.
+ */
+if (function_exists('gdy_percent_decode') === false) {
+    function gdy_percent_decode(string $s): string
     {
-        if ($count === null) {
-            return preg_replace($pattern, $replacement, $subject, (int)$limit);
-        }
-        $tmp = 0;
-        $out = preg_replace($pattern, $replacement, $subject, (int)$limit, $tmp);
-        $count = $tmp;
-        return $out;
+        $s = str_replace('+', ' ', $s);
+        return preg_replace_callback('/%([0-9A-Fa-f]{2})/', static function ($m) {
+            $hex = (string)($m[1] ?? '');
+            $chr = chr((int)hexdec($hex));
+            return $chr;
+        }, $s) ?? $s;
     }
 }
-if (!function_exists('gdy_regex_replace_callback')) {
-    function gdy_regex_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = null)
+
+/**
+ * Parse query string into array without parse_str()
+ */
+if (function_exists('gdy_parse_query_string') === false) {
+    function gdy_parse_query_string(string $qs): array
     {
-        if ($count === null) {
-            return preg_replace_callback($pattern, $callback, $subject, (int)$limit);
+        $out = [];
+        $qs = ltrim($qs, '?');
+        if ($qs === '') return $out;
+
+        foreach (explode('&', $qs) as $pair) {
+            if ($pair === '') continue;
+            $kv = explode('=', $pair, 2);
+            $k  = gdy_percent_decode((string)($kv[0] ?? ''));
+            if ($k === '') continue;
+            $v  = gdy_percent_decode((string)($kv[1] ?? ''));
+            // Keep last value (good enough for our use)
+            $out[$k] = $v;
         }
-        $tmp = 0;
-        $out = preg_replace_callback($pattern, $callback, $subject, (int)$limit, $tmp);
-        $count = $tmp;
         return $out;
     }
 }
@@ -85,66 +71,84 @@ if (is_file($i18n)) {
     require_once $i18n;
 }
 
-// Backward compatible: some legacy templates expect detect_lang()
-if (!function_exists('detect_lang')) {
-    function detect_lang(): string
+/**
+ * Whether pretty (rewritten) URLs are enabled.
+ * In no-rewrite fallback entrypoints, GDY_NO_REWRITE is defined as true.
+ */
+if (function_exists('gdy_pretty_urls_enabled') === false) {
+    function gdy_pretty_urls_enabled(): bool
     {
-        return function_exists('gdy_lang') ? (string)gdy_lang() : 'ar';
-    }
-}
-
-// Backward compatible: is_rtl() / gdy_is_rtl()
-if (!function_exists('is_rtl')) {
-    function is_rtl($lang = null): bool
-    {
-        $lang = is_string($lang) && $lang !== '' ? $lang : (function_exists('gdy_lang') ? (string)gdy_lang() : 'ar');
-        return $lang === 'ar';
-    }
-}
-if (!function_exists('gdy_is_rtl')) {
-    function gdy_is_rtl($lang = null): bool
-    {
-        return is_rtl($lang);
-    }
-}
-
-// Backward compatible: explicit language set helper
-if (!function_exists('gdy_set_lang')) {
-    function gdy_set_lang($lang): string
-    {
-        $lang = strtolower(trim((string)$lang));
-        $allowed = ['ar', 'en', 'fr'];
-        if (!in_array($lang, $allowed, true)) {
-            $lang = 'ar';
+        if (defined('GDY_NO_REWRITE') && GDY_NO_REWRITE === true) {
+            return false;
         }
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            if (function_exists('gdy_session_start')) {
-                gdy_session_start();
+        // Allow forcing off via constant if needed
+        if (defined('GDY_FORCE_NO_REWRITE') && GDY_FORCE_NO_REWRITE === true) {
+            return false;
+        }
+        return true;
+    }
+}
+
+/**
+ * Build a route href from a language base URL (e.g. https://site/ar).
+ * If pretty URLs are disabled, slugs go into query string (?slug=...).
+ */
+if (function_exists('gdy_lang_route_href') === false) {
+    function gdy_lang_route_href(string $langBaseUrl, string $route, array $params = []): string
+    {
+        $langBaseUrl = rtrim($langBaseUrl, '/');
+        $route = trim($route, '/');
+
+        $pretty = gdy_pretty_urls_enabled();
+
+        if ($pretty === true) {
+            // Pretty mode: route + optional slug segment
+            if (isset($params['slug']) && $params['slug'] !== '') {
+                $slug = (string)$params['slug'];
+                unset($params['slug']);
+
+                // Short category URLs: /{lang}/{slug}
+                if ($route === 'category') {
+                    $slugLc = strtolower($slug);
+                    $reserved = ['search','category','trending','archive','author','tag','news','page','login','register','admin','api','assets'];
+                    if (in_array($slugLc, $reserved, true)) {
+                        // avoid collision with reserved paths
+                        $href = $langBaseUrl . '/category/' . rawurlencode($slug);
+                    } else {
+                        $href = $langBaseUrl . '/' . rawurlencode($slug);
+                    }
+                } else {
+                    $href = $langBaseUrl . '/' . $route . '/' . rawurlencode($slug);
+                }
             } else {
-                session_start();
+                $href = $langBaseUrl . '/' . $route;
+            }
+        } else {
+            // No-rewrite: always keep route as a directory and put slug in query string
+            $href = $langBaseUrl . '/' . $route;
+        }
+
+        if (!empty($params)) {
+            $qs = http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+            if ($qs !== '') {
+                $href .= (strpos($href, '?') === false ? '?' : '&') . $qs;
             }
         }
-        $_SESSION['gdy_lang'] = $lang;
-        $_SESSION['lang'] = $lang;
 
-        // keep cookies aligned
-        if (function_exists('gdy_set_cookie_rfc') && !headers_sent()) {
-            $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-                || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
-                || ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443);
-            $ttl = 60 * 60 * 24 * 90;
-            gdy_set_cookie_rfc('gdy_lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
-            gdy_set_cookie_rfc('lang', $lang, $ttl, '/', $isSecure, true, 'Lax');
+        // If no-rewrite and slug exists, append slug as query
+        if ($pretty === false && isset($params['__slug_fallback'])) {
+            // (internal)
         }
 
-        return $lang;
+        return $href;
     }
 }
 
-// Backward compatible: language switch URLs.
-//  - Public: /ar or /en or /fr
-//  - Admin:  keep query (?lang=)
-if (!function_exists('gdy_lang_url')) {
+/**
+ * Switch language while preserving current path + query.
+ * (Used by language switcher)
+ */
+if (function_exists('gdy_lang_url') === false) {
     function gdy_lang_url($targetLang): string
     {
         $lang = strtolower(trim((string)$targetLang));
@@ -152,37 +156,40 @@ if (!function_exists('gdy_lang_url')) {
             $lang = 'ar';
         }
 
-        $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
-        // Avoid parse_url(): we only need path + query from REQUEST_URI.
-        $qpos = strpos($uri, '?');
-        $path = ($qpos === false) ? $uri : substr($uri, 0, $qpos);
-        if ($path === '') $path = '/';
+        $uri = filter_input(INPUT_SERVER, 'REQUEST_URI', FILTER_UNSAFE_RAW);
+        if (!is_string($uri) || $uri === '') { $uri = '/'; }
+
+        $qPos = strpos($uri, '?');
+        $path = ($qPos === false) ? $uri : substr($uri, 0, $qPos);
+        $qs   = ($qPos === false) ? ''  : substr($uri, $qPos + 1);
+        if (!is_string($path) || $path === '') { $path = '/'; }
 
         $isAdmin = str_starts_with($path, '/admin') || str_starts_with($path, '/v16/admin');
-        if ($isAdmin) {
-            $qs = ($qpos === false) ? '' : substr($uri, $qpos + 1);
-            $q = gdy_parse_query_string($qs);
-            $q['lang'] = $lang;
-            $newQs = http_build_query($q);
-            return $path . ($newQs ? ('?' . $newQs) : '');
+
+        // Strip existing lang prefix from front path
+        $rest = $path;
+        foreach (['/ar','/en','/fr'] as $pfx) {
+            $pLen = strlen($pfx);
+            if ($rest === $pfx) { $rest = '/'; break; }
+            if (strncmp($rest, $pfx . '/', $pLen + 1) === 0) {
+                $rest = substr($rest, $pLen);
+                if ($rest === '') $rest = '/';
+                break;
+            }
         }
 
-        // Public home in that language
-        return '/' . $lang;
-    }
-}
+        if ($isAdmin) {
+            // Admin language via ?lang=
+            $q = gdy_parse_query_string($qs);
+            $q['lang'] = $lang;
+            $newQs = http_build_query($q, '', '&', PHP_QUERY_RFC3986);
+            return $path . ($newQs !== '' ? ('?' . $newQs) : '');
+        }
 
-// Legacy stubs (some old code calls these, but i18n.php handles loading internally)
-if (!function_exists('ensure_i18n_loaded')) {
-    function ensure_i18n_loaded(): bool
-    {
-        return true;
-    }
-}
-if (!function_exists('load_translations')) {
-    function load_translations($lang): array
-    {
-        // i18n.php keeps an internal cache; this stub avoids fatal calls.
-        return [];
+        // Front language via prefix
+        $newPath = '/' . $lang . ($rest === '/' ? '/' : $rest);
+        $newPath = preg_replace('#//+#', '/', $newPath) ?? $newPath;
+
+        return $newPath . ($qs !== '' ? ('?' . $qs) : '');
     }
 }

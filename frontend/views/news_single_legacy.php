@@ -74,7 +74,7 @@ if (!function_exists('gdy_image_url')) {
 
 $coverUrl = gdy_image_url($baseUrl, $cover) ?: null;
 
-$categoryUrl = $baseUrl . '/category/' . rawurlencode($categorySlug);
+$categoryUrl = $baseUrl . '/category' . rawurlencode($categorySlug);
 $homeUrl     = $baseUrl . '/';
 
 // SEO metadata (used by the unified header)

@@ -52,7 +52,7 @@ $makeUrl = function (string $sortVal, string $periodVal = 'all') use ($slug, $ba
         'sort'   => $sortVal,
         'period' => $periodVal,
     ];
-    return rtrim($baseUrl, '/') . '/category/' . rawurlencode($slug) . '?' . http_build_query(['sort' => $sortVal, 'period' => $periodVal]);
+    return rtrim($baseUrl, '/') . '/category' . rawurlencode($slug) . '?' . http_build_query(['sort' => $sortVal, 'period' => $periodVal]);
 };
 
 ?>

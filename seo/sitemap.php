@@ -57,7 +57,7 @@ if ($pdo instanceof PDO) {
                 $ts = gdy_strtotime($u);
                 if ((empty($ts) === false)) $lm = gmdate('c', $ts);
             }
-            $urls[] = ['loc' => $baseUrl . '/category/' . rawurlencode($slug), 'lastmod' => $lm];
+            $urls[] = ['loc' => $baseUrl . '/category' . rawurlencode($slug), 'lastmod' => $lm];
         }
     } catch (Throwable $e) {
         // ignore

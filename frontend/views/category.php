@@ -57,7 +57,7 @@ $categoryName = $category['name'] ?? 'أخبار عامة';
 // روابط
 $homeUrl        = $baseUrl . '/';
 $generalNewsUrl = $baseUrl . '/category/general-news';
-$categoryUrl    = $baseUrl . '/category/' . rawurlencode($categorySlug);
+$categoryUrl    = $baseUrl . '/category' . rawurlencode($categorySlug);
 
 // بناء روابط الترقيم مع الحفاظ على sort/period إن وُجدت
 $__queryBase = [];
@@ -117,7 +117,7 @@ $pageSeo = [
         ],
     ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT|JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
 ];
-$pageSeo['rss'] = rtrim((string)base_url(), '/') . '/rss/category/' . rawurlencode((string)($category['slug'] ?? '')) . '.xml';
+$pageSeo['rss'] = rtrim((string)base_url(), '/') . '/rss/category' . rawurlencode((string)($category['slug'] ?? '')) . '.xml';
 
 if (!defined('GDY_TPL_WRAPPED') && is_file($header)) {
     require $header;

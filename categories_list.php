@@ -132,7 +132,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
       <?php foreach ($tree as $cat): ?>
         <?php
           $slug = $cat['slug'] ?: (string)$cat['id'];
-          $url = rtrim($navBaseUrl, '/') . '/category/' . rawurlencode($slug);
+          $url = rtrim($navBaseUrl, '/') . '/category' . rawurlencode($slug);
         ?>
         <section class="gdy-catcard" data-name="<?php echo h(mb_strtolower($cat['name'])); ?>" style="border:1px solid rgba(0,0,0,.10); border-radius: 18px; padding: 14px; background: rgba(255,255,255,.9);">
           <a href="<?php echo h($url); ?>" style="text-decoration:none;color:inherit;display:flex;align-items:center;justify-content:space-between;gap:10px;">
@@ -145,7 +145,7 @@ require __DIR__ . '/frontend/views/partials/header.php';
               <?php foreach ($cat['children'] as $ch): ?>
                 <?php
                   $chSlug = $ch['slug'] ?: (string)$ch['id'];
-                  $chUrl = rtrim($navBaseUrl, '/') . '/category/' . rawurlencode($chSlug);
+                  $chUrl = rtrim($navBaseUrl, '/') . '/category' . rawurlencode($chSlug);
                 ?>
                 <a href="<?php echo h($chUrl); ?>" class="badge" style="text-decoration:none; padding: 8px 10px; border-radius: 999px; background: rgba(0,0,0,.06);">
                   <?php echo h($ch['name']); ?>

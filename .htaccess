@@ -1,40 +1,95 @@
 Options -Indexes
 DirectoryIndex index.php
 
+<IfModule mod_negotiation.c>
+  Options -MultiViews
+</IfModule>
+
 # =========================
-# Security headers snippet
+# Security headers (compatible)
 # =========================
 <IfModule mod_headers.c>
-  Header always unset X-Powered-By
   Header unset X-Powered-By
-  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # HSTS only when HTTPS is on (avoid issues on some hosts)
+  SetEnvIfNoCase HTTPS on HTTPS_ON=1
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS_ON
+
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
+
+# Avoid missing custom error documents (prevents noisy logs on some hosts)
+# Comment out if you intentionally use 404.shtml/500.shtml
+ErrorDocument 404 default
+ErrorDocument 500 default
+ErrorDocument 403 default
+
+# Ensure common public files are accessible
+<Files "sw.js">
+  <IfModule mod_authz_core.c>
+    Require all granted
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Allow from all
+  </IfModule>
+</Files>
+<Files "robots.txt">
+  <IfModule mod_authz_core.c>
+    Require all granted
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Allow from all
+  </IfModule>
+</Files>
 
 # =========================
 # Rewrite routing
 # =========================
 <IfModule mod_rewrite.c>
   RewriteEngine On
-
-  # لو موقعك داخل https://domain.com/ (ليس داخل subfolder)
   RewriteBase /
 
-  # لا تعيد كتابة الملفات/المجلدات الموجودة
+  # Do not rewrite existing files/dirs
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  # Friendly routes
+  # Friendly routes (root)
   RewriteRule ^login/?$ login.php [L,QSA]
   RewriteRule ^register/?$ register.php [L,QSA]
+  RewriteRule ^logout/?$ logout.php [L,QSA]
 
-  # توجيه كل الروابط إلى front controller
-  RewriteRule ^ index.php [L]
+  # -----------------------------------------
+  # Short URLs for categories:
+  # /ar/<slug> -> /ar/category/<slug>
+  # /en/<slug> -> /en/category/<slug>
+  # /fr/<slug> -> /fr/category/<slug>
+  # -----------------------------------------
+  # Exclude reserved paths so they don't get treated as category slugs
+  RewriteCond %{REQUEST_URI} !^/(ar|en|fr)/(search|category|trending|archive|author|tag|news|page|login|register|admin|api|assets)(/|$) [NC]
+  RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|sw\.js|favicon\.ico)$ [NC]
+  RewriteRule ^(ar|en|fr)/([^/]+)/?$ $1/category/$2 [L,QSA,NC]
+
+  # Language prefixes -> language entrypoints
+  RewriteRule ^(ar|en|fr)(/.*)?$ $1/index.php [L,QSA]
+
+  # Everything else -> front controller
+  RewriteRule . index.php [L,QSA]
 </IfModule>
 
 # =========================
-# Protect sensitive files
+# Protect sensitive files (Apache 2.4 + 2.2)
 # =========================
-<FilesMatch "(\.env|composer\.json|composer\.lock|package\.json|package-lock\.json|yarn\.lock|\.sql|\.bak|\.ini|\.log)$">
-  Require all denied
+<FilesMatch "(^\.env$|composer\.(json|lock)$|package(-lock)?\.json$|yarn\.lock$|.*\.(sql|bak|ini|log)$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
 </FilesMatch>

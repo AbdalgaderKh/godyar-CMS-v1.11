@@ -724,19 +724,3 @@ html.gdy-font-160{ --gdy-article-font-size: 1.52rem; }
   height: 1px;
   pointer-events: none;
 }
-
-/* ------------------------------------------------------------------
-   Mobile browsing fixes (prevent "page distortion" / horizontal scroll)
-   ------------------------------------------------------------------ */
-img, video, canvas, svg{ max-width:100%; height:auto; }
-table{ max-width:100%; }
-
-/* Long URLs / code / titles shouldn't blow up the layout */
-.gdy-article-body, .gdy-card, .post-card, .news-card, .comment-box{ overflow-wrap:anywhere; word-break:break-word; }
-
-/* Make wide tables scrollable on small screens */
-@media (max-width: 768px){
-  .table-responsive, .gdy-table-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .table-responsive table, .gdy-table-scroll table{ min-width:600px; }
-  body{ overflow-x:hidden; }
-}

@@ -118,7 +118,7 @@ final class CategoryController
         $categoryName = (string)($category['name'] ?? '');
         $categoryDescription = (string)($category['description'] ?? '');
 
-        $currentCategoryUrl = $baseUrl . '/category/' . rawurlencode($slug);
+        $currentCategoryUrl = $baseUrl . '/category' . rawurlencode($slug);
         $canonicalUrl = $currentCategoryUrl . $this->canonicalQuery($page, $sort, $period);
 
         $viewData = [
@@ -141,7 +141,7 @@ final class CategoryController
             'metaDescription' => $category['meta_description']
                 ?? ($categoryDescription !== '' ? $categoryDescription : 'أحدث الأخبار في قسم ' . ($categoryName ?: $slug)),
             'canonicalUrl' => $canonicalUrl,
-            'rss' => $baseUrl . '/rss/category/' . rawurlencode((string)($category['slug'] ?? $slug)) . '.xml',
+            'rss' => $baseUrl . '/rss/category' . rawurlencode((string)($category['slug'] ?? $slug)) . '.xml',
         ];
 
         $viewPath = dirname(__DIR__, 3) . '/frontend/views/category.php';

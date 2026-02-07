@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
+
 /**
- * Fallback router when .htaccess rewrite is not applied by the server.
- * This file simply executes /login.php from the project root.
+ * Fallback for hosts where /login/ is treated as a physical directory request.
+ * We intentionally include the canonical script to avoid routing ambiguity.
  */
-@chdir(dirname(__DIR__)); // go to public_html
-require 'login.php';
+
+$__target = dirname(__DIR__) . '/login.php';
+if (is_file($__target)) {
+    require $__target;
+    exit;
+}
+
+http_response_code(500);
+echo 'login.php not found.';

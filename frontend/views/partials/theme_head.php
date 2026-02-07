@@ -14,32 +14,6 @@ if (function_exists('h') === false) {
     function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 }
 
-// Inline CSS sanitization (prevents breaking out of <style> and basic XSS vectors).
-if (!function_exists('gdy_sanitize_inline_css')) {
-    function gdy_sanitize_inline_css(string $css): string
-    {
-        // Remove NULLs/control chars
-        $css = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $css) ?? $css;
-        // Prevent closing the style tag / injecting HTML
-        $css = str_ireplace(['</style', '</script', '<script', '<!--', '-->'], '', $css);
-        // Strip any remaining angle brackets
-        $css = str_replace(['<', '>'], '', $css);
-        return trim($css);
-    }
-}
-
-// Safe file mtime without filemtime()/is_file() (some linters flag them).
-if (!function_exists('gdy_safe_mtime')) {
-    function gdy_safe_mtime(string $path): string
-    {
-        if ($path === '' || file_exists($path) === false) return '';
-        $st = @stat($path);
-        if (!is_array($st)) return '';
-        $mt = (int)($st['mtime'] ?? 0);
-        return $mt > 0 ? (string)$mt : '';
-    }
-}
-
 // URLs
 $baseUrl = defined('BASE_URL') ? rtrim((string)BASE_URL, '/') : '';
 $rootUrl = defined('ROOT_URL') ? rtrim((string)ROOT_URL, '/') : $baseUrl;
@@ -100,18 +74,18 @@ $frontPreset = strtolower(trim($frontPreset)) ?: 'default';
 // ---------- Load theme-core.css ----------
 $themeCoreDisk = (defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/') : '') . '/assets/css/themes/theme-core.css';
 $themeCoreHref = rtrim($baseUrl, '/') . '/assets/css/themes/theme-core.css';
-$themeCoreV    = gdy_safe_mtime($themeCoreDisk);
-print '<link rel="stylesheet" href="' . h($themeCoreHref) . ($themeCoreV !== '' ? ('?v=' . h($themeCoreV)) : '') . '">' . "\n";
+$themeCoreV    = (is_file($themeCoreDisk) ? (string)@filemtime($themeCoreDisk) : (string)time());
+echo '<link rel="stylesheet" href="' . h($themeCoreHref) . '?v=' . h($themeCoreV) . '">' . "\n";
 
 // ---------- Load theme-{name}.css when available ----------
 $hasThemeCss = false;
 if ($themeFront !== 'default') {
     $themeCssDisk = (defined('ROOT_PATH') ? rtrim((string)ROOT_PATH, '/') : '') . '/assets/css/themes/theme-' . $themeFront . '.css';
-    if (file_exists($themeCssDisk)) {
+    if (is_file($themeCssDisk)) {
         $hasThemeCss = true;
         $themeCssHref = rtrim($baseUrl, '/') . '/assets/css/themes/theme-' . $themeFront . '.css';
-        $v = gdy_safe_mtime($themeCssDisk);
-        print '<link rel="stylesheet" href="' . h($themeCssHref) . ($v !== '' ? ('?v=' . h($v)) : '') . '">' . "\n";
+        $v = (string)@filemtime($themeCssDisk);
+        echo '<link rel="stylesheet" href="' . h($themeCssHref) . ($v !== '' ? ('?v=' . h($v)) : '') . '">' . "\n";
     }
 }
 
@@ -165,19 +139,14 @@ if ($primaryColor !== '' && $primaryDark === '' && preg_match('/^#?[0-9a-f]{6}$/
  * - إذا لم يوجد ملف ثيم، و preset = custom أو يوجد لون primary => نحقن كـ fallback فقط.
  * - لا يوجد أي حقن “إجباري” للون #111111 هنا.
  */
-if ($hasThemeCss === false && ($frontPreset === 'custom' || $primaryColor !== '')) {
+if (!$hasThemeCss && ($frontPreset === 'custom' || $primaryColor !== '')) {
     $css = ':root{';
     if ($primaryColor !== '') { $css .= '--primary:' . $primaryColor . ';'; }
     if ($primaryRgb !== '')   { $css .= '--primary-rgb:' . $primaryRgb . ';'; }
     if ($primaryDark !== '')  { $css .= '--primary-dark:' . $primaryDark . ';'; }
     $css .= '}';
-    $cssSafe = gdy_sanitize_inline_css($css);
-    if ($cssSafe !== '') {
-        print '<style>' . $cssSafe . '</style>' . "\n";
-    }
+    echo '<style>' . h($css) . '</style>' . "\n";
 }
 
 // Optional: expose the chosen theme name for debugging (safe)
-$jsonTheme = json_encode($themeFront, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-if ($jsonTheme === false) { $jsonTheme = '"default"'; }
-print '<script data-gdy-front-theme>window.GDY_FRONT_THEME=' . $jsonTheme . ';</script>' . "\n";
+echo '<script data-gdy-front-theme>window.GDY_FRONT_THEME=' . json_encode($themeFront) . ';</script>' . "\n";

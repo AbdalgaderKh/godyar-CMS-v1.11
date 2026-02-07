@@ -55,7 +55,7 @@ if ((empty($pdo) === false)) {
       $id = (int)($r['id'] ?? 0);
       $name = trim((string)($r['name'] ?? ''));
       $slug = trim((string)($r['slug'] ?? ''));
-      $url = $slug !== '' ? ($base . '/category/' . rawurlencode($slug)) : ($base . '/category/id/' . $id);
+      $url = $slug !== '' ? ($base . '/category' . rawurlencode($slug)) : ($base . '/category/id/' . $id);
       if ($name !== '') $items['categories'][] = ['title' => $name, 'url' => $url];
     }
 

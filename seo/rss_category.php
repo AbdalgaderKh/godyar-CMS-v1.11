@@ -35,7 +35,7 @@ if ($pdo instanceof PDO && $slug !== '') {
             $cid = (int)($cat['id'] ?? 0);
             $cname = (string)($cat['name'] ?? $slug);
             $feedTitleSuffix = ' — ' . $cname;
-            $feedLink = $baseUrl . '/category/' . rawurlencode($slug);
+            $feedLink = $baseUrl . '/category' . rawurlencode($slug);
             $sql = "SELECT id, title, excerpt, summary, date, created_at, updated_at
                     FROM news
                     WHERE (status = 'published' OR status IS NULL)

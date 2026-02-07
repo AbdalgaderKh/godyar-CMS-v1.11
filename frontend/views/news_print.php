@@ -109,7 +109,7 @@ $tmpImg = preg_replace('~<img\b(?![^>]*\bloading=)([^>]*?)>~i', '<img loading="l
 if ($tmpImg !== null) { $contentClean = $tmpImg; }
 $catName = is_array($category) ? (string)($category['name'] ?? '') : '';
 $catSlug = is_array($category) ? (string)($category['slug'] ?? '') : '';
-$catUrl  = ($catSlug !== '') ? ($baseUrl . '/category/' . rawurlencode($catSlug)) : '';
+$catUrl  = ($catSlug !== '') ? ($baseUrl . '/category' . rawurlencode($catSlug)) : '';
 
 ?><!doctype html>
 <html lang="ar" dir="rtl">

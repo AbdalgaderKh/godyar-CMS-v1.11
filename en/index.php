@@ -28,6 +28,9 @@ if (strncmp($__path, $__prefix . '/', strlen($__prefix) + 1) === 0) {
     $__path = '/';
 }
 
+// Force no-rewrite mode (used by URL builders)
+// Pretty URLs are handled by .htaccess; do not force query-string routing.
+
 // Pass language + path overrides to the app (consumed by includes/lang_prefix.php)
 $_GET['__lang'] = $__lang;
 $_GET['__path'] = $__path;

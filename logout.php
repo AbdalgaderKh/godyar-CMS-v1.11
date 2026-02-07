@@ -3,69 +3,59 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
 
+// Ensure session is available
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    gdy_session_start();
-}
-
-$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
-if ($baseUrl === '') {
-    $baseUrl = '/';
-}
-
-// Clear known user session keys
-unset(
-    $_SESSION['user'],
-    $_SESSION['is_member_logged'],
-    $_SESSION['user_id'],
-    $_SESSION['user_email'],
-    $_SESSION['user_role'],
-    $_SESSION['user_name'],
-    $_SESSION['csrf_token'],
-    $_SESSION['csrf_token_ts']
-);
-
-// If the app provides a dedicated clearer, call it too.
-if (function_exists('auth_clear_user_session')) {
-    try {
-        auth_clear_user_session();
-    } catch (Throwable $e) {
-        // ignore
+    if (function_exists('gdy_session_start')) {
+        gdy_session_start();
+    } else {
+        @session_start();
     }
 }
 
-// Destroy session properly (fixes "تذكرني" session cookie persisting)
-$_SESSION = [];
+// Clear app-level auth/session state
+if (function_exists('auth_clear_user_session')) {
+    auth_clear_user_session();
+}
 
-$useCookies = (bool)ini_get('session.use_cookies');
-if ($useCookies) {
-    $params  = session_get_cookie_params();
-    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-
-    // Clear the session cookie with the same attributes used on login
-    setcookie(
-        session_name(),
-        '',
-        [
-            'expires'  => time() - 3600,
-            'path'     => $params['path'] ?? '/',
-            'domain'   => $params['domain'] ?? '',
-            'secure'   => $isSecure,
-            'httponly' => (bool)($params['httponly'] ?? true),
-            // Login uses Strict; keep it consistent so the browser actually removes it.
-            'samesite' => 'Strict',
-        ]
+// Clear common session keys (member + admin safety)
+if (isset($_SESSION) && is_array($_SESSION)) {
+    unset(
+        $_SESSION['user'],
+        $_SESSION['is_member_logged'],
+        $_SESSION['user_id'],
+        $_SESSION['user_email'],
+        $_SESSION['user_role'],
+        $_SESSION['user_name'],
+        $_SESSION['admin'],
+        $_SESSION['is_admin_logged']
     );
+    $_SESSION = [];
 }
 
-// Finally destroy server-side session
+// Remove session cookie + destroy session
 if (session_status() === PHP_SESSION_ACTIVE) {
-    session_destroy();
+    if ((int)ini_get('session.use_cookies') === 1) {
+        $p = session_get_cookie_params();
+        setcookie(session_name(), '', [
+            'expires'  => time() - 42000,
+            'path'     => $p['path'] ?? '/',
+            'domain'   => $p['domain'] ?? '',
+            'secure'   => (bool)($p['secure'] ?? false),
+            'httponly' => (bool)($p['httponly'] ?? true),
+            'samesite' => 'Lax',
+        ]);
+    }
+
+    @session_destroy();
 }
 
-// Rotate ID to prevent fixation (best-effort)
-if (function_exists('session_regenerate_id')) {
-    @session_regenerate_id(true);
+// Redirect back to language home if possible
+$baseUrl = function_exists('base_url') ? rtrim((string)base_url(), '/') : '';
+$lang    = defined('GDY_LANG') ? (string)GDY_LANG : '';
+$to      = ($baseUrl !== '' ? $baseUrl : '') . '/';
+if ($lang === 'ar' || $lang === 'en' || $lang === 'fr') {
+    $to = ($baseUrl !== '' ? $baseUrl : '') . '/' . $lang . '/';
 }
 
-header('Location: ' . $baseUrl . '/');
+header('Location: ' . $to);
 exit;

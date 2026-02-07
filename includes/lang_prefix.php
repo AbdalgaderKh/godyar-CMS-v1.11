@@ -5,9 +5,12 @@ declare(strict_types=1);
  * includes/lang_prefix.php (R5 - no redirects)
  *
  * Determines current language (ar/en/fr) safely.
- * Supports override parameters for no-rewrite environments:
- *   - $_GET['__lang'] : forced language
- *   - $_GET['__path'] : forced path (without language prefix)
+ * Supports override parameters for no-rewrite environments (set by .htaccess):
+ *   - __lang : forced language
+ *   - __path : forced path (without language prefix)
+ * Or via constants (set by fallback entrypoints):
+ *   - GDY_FORCE_LANG
+ *   - GDY_FORCE_PATH
  *
  * This file must not redirect or output.
  */
@@ -17,16 +20,27 @@ $defaultLang = 'ar';
 
 // --- Overrides from fallback entrypoints (do not trust user input blindly) ---
 $forcedLang = '';
-if (isset($_GET['__lang'])) {
-    $tmp = strtolower(trim((string)$_GET['__lang']));
+if (defined('GDY_FORCE_LANG')) {
+    $tmp = strtolower(trim((string)GDY_FORCE_LANG));
     if (in_array($tmp, $supported, true)) { $forcedLang = $tmp; }
+} else {
+    $tmp = filter_input(INPUT_GET, '__lang', FILTER_UNSAFE_RAW);
+    if (is_string($tmp)) {
+        $tmp = strtolower(trim($tmp));
+        if (in_array($tmp, $supported, true)) { $forcedLang = $tmp; }
+    }
 }
 
 $forcedPath = '';
-if (isset($_GET['__path'])) {
-    $tmp = (string)$_GET['__path'];
-    if ($tmp === '' || $tmp[0] !== '/') { $tmp = '/' . ltrim($tmp, '/'); }
-    // keep only printable ASCII + UTF-8; strip control chars
+if (defined('GDY_FORCE_PATH')) {
+    $tmp = (string)GDY_FORCE_PATH;
+} else {
+    $tmp = filter_input(INPUT_GET, '__path', FILTER_UNSAFE_RAW);
+    $tmp = is_string($tmp) ? $tmp : '';
+}
+if ($tmp !== '') {
+    if ($tmp[0] !== '/') { $tmp = '/' . ltrim($tmp, '/'); }
+    // strip control chars
     $tmp = preg_replace('/[\x00-\x1F\x7F]/u', '', $tmp) ?? '/';
     $forcedPath = $tmp;
 }
@@ -62,14 +76,16 @@ if ($lang === '') {
 }
 
 // 2) GET lang (only when not forced)
-if ($lang === '' && isset($_GET['lang'])) {
-    $tmp = strtolower((string)$_GET['lang']);
+if ($lang === '') {
+    $tmp = filter_input(INPUT_GET, 'lang', FILTER_UNSAFE_RAW);
+    $tmp = is_string($tmp) ? strtolower($tmp) : '';
     if (in_array($tmp, $supported, true)) { $lang = $tmp; }
 }
 
 // 3) Cookie
-if ($lang === '' && isset($_COOKIE['lang'])) {
-    $tmp = strtolower((string)$_COOKIE['lang']);
+if ($lang === '') {
+    $tmp = filter_input(INPUT_COOKIE, 'lang', FILTER_UNSAFE_RAW);
+    $tmp = is_string($tmp) ? strtolower($tmp) : '';
     if (in_array($tmp, $supported, true)) { $lang = $tmp; }
 }
 
@@ -79,12 +95,17 @@ if ($lang === '' || !in_array($lang, $supported, true)) {
 }
 
 // Publish to runtime
-$_GET['lang']     = $lang;
-$_COOKIE['lang']  = $lang;
+$__g = $lang; // local alias to avoid reusing $lang in superglobals assignments
+$_GET['lang']     = $__g;
 $GLOBALS['lang']  = $lang;
 
 if (!defined('GDY_LANG')) {
     define('GDY_LANG', $lang);
+}
+
+// When language is injected by routing, we can safely generate pretty URLs.
+if (!defined('GDY_FORCE_PRETTY_URLS')) {
+    define('GDY_FORCE_PRETTY_URLS', true);
 }
 
 // Persist cookie (best-effort, no redirects)
@@ -106,5 +127,4 @@ if (headers_sent() === false) {
     ]);
 }
 
-// Cleanup internal overrides so they won't leak into app logic
-unset($_GET['__lang'], $_GET['__path']);
+// (no need to unset; we read via filter_input/const)

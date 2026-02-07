@@ -9,6 +9,8 @@ declare(strict_types=1);
 $__lang = 'ar';
 $__forcedPath = '/page';
 
+// Pretty URLs are handled by .htaccess; do not force query-string routing.
+
 $_GET['__lang'] = $__lang;
 $_GET['__path'] = $__forcedPath;
 

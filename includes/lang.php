@@ -78,6 +78,10 @@ if (is_file($i18n)) {
 if (function_exists('gdy_pretty_urls_enabled') === false) {
     function gdy_pretty_urls_enabled(): bool
     {
+        // Explicit override (e.g., when routing is known to work via .htaccess)
+        if (defined('GDY_FORCE_PRETTY_URLS') && GDY_FORCE_PRETTY_URLS === true) {
+            return true;
+        }
         if (defined('GDY_NO_REWRITE') && GDY_NO_REWRITE === true) {
             return false;
         }
@@ -106,20 +110,7 @@ if (function_exists('gdy_lang_route_href') === false) {
             if (isset($params['slug']) && $params['slug'] !== '') {
                 $slug = (string)$params['slug'];
                 unset($params['slug']);
-
-                // Short category URLs: /{lang}/{slug}
-                if ($route === 'category') {
-                    $slugLc = strtolower($slug);
-                    $reserved = ['search','category','trending','archive','author','tag','news','page','login','register','admin','api','assets'];
-                    if (in_array($slugLc, $reserved, true)) {
-                        // avoid collision with reserved paths
-                        $href = $langBaseUrl . '/category/' . rawurlencode($slug);
-                    } else {
-                        $href = $langBaseUrl . '/' . rawurlencode($slug);
-                    }
-                } else {
-                    $href = $langBaseUrl . '/' . $route . '/' . rawurlencode($slug);
-                }
+                $href = $langBaseUrl . '/' . $route . '/' . rawurlencode($slug);
             } else {
                 $href = $langBaseUrl . '/' . $route;
             }

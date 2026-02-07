@@ -2,15 +2,23 @@
 declare(strict_types=1);
 
 /**
- * Fallback for hosts where /register/ is treated as a physical directory request.
- * We intentionally include the canonical script to avoid routing ambiguity.
+ * Language route fallback (no rewrite environments).
+ * Forwards to main front controller while forcing language + route path.
  */
 
-$__target = dirname(__DIR__) . '/register.php';
-if (is_file($__target)) {
-    require $__target;
-    exit;
-}
+$__lang = 'ar';
+$__forcedPath = '/register';
 
-http_response_code(500);
-echo 'register.php not found.';
+if (!defined('GDY_NO_REWRITE')) { define('GDY_NO_REWRITE', true); }
+
+$_GET['__lang'] = $__lang;
+$_GET['__path'] = $__forcedPath;
+
+$__root = dirname(__DIR__);
+$__front = $__root . '/index.php';
+if (is_file($__front)) {
+    require $__front;
+} else {
+    http_response_code(500);
+    echo 'Front controller not found.';
+}

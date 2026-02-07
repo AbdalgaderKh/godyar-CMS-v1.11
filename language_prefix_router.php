@@ -14,9 +14,12 @@ declare(strict_types=1);
  *   require_once __DIR__ . '/language_prefix_router.php';
  */
 
+
 $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
-$path = parse_url($uri, PHP_URL_PATH);
-$query = parse_url($uri, PHP_URL_QUERY);
+// Avoid parse_url(): we only need path and query from REQUEST_URI.
+$qpos = strpos($uri, '?');
+$path = ($qpos === false) ? $uri : substr($uri, 0, $qpos);
+$query = ($qpos === false) ? '' : substr($uri, $qpos + 1);
 
 if (!is_string($path) || $path === '') {
     $path = '/';

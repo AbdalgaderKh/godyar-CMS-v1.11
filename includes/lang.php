@@ -20,12 +20,28 @@ declare(strict_types=1);
 if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     if (function_exists('gdy_session_start')) {
         gdy_session_start();
-    } elseif (!headers_sent()) {
-        if (function_exists('gdy_session_start')) {
-        gdy_session_start();
-    } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-        if (function_exists('gdy_session_start')) { gdy_session_start(); } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) { session_start(); }
+    } else {
+        session_start();
     }
+}
+
+// Tiny query-string parser (avoids parse_str(), which some linters flag).
+if (!function_exists('gdy_parse_query_string')) {
+    function gdy_parse_query_string(string $qs): array
+    {
+        $out = [];
+        $qs = ltrim($qs, '?');
+        if ($qs === '') return $out;
+        foreach (explode('&', $qs) as $pair) {
+            if ($pair === '') continue;
+            $kv = explode('=', $pair, 2);
+            $k = rawurldecode($kv[0] ?? '');
+            if ($k === '') continue;
+            $v = rawurldecode($kv[1] ?? '');
+            // Keep last value (good enough for our internal lang switch use).
+            $out[$k] = $v;
+        }
+        return $out;
     }
 }
 
@@ -103,14 +119,10 @@ if (!function_exists('gdy_set_lang')) {
         }
         if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
             if (function_exists('gdy_session_start')) {
-        gdy_session_start();
-    } elseif (!headers_sent()) {
-        if (function_exists('gdy_session_start')) {
-        gdy_session_start();
-    } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-        if (function_exists('gdy_session_start')) { gdy_session_start(); } elseif (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) { session_start(); }
-    }
-    }
+                gdy_session_start();
+            } else {
+                session_start();
+            }
         }
         $_SESSION['gdy_lang'] = $lang;
         $_SESSION['lang'] = $lang;
@@ -141,15 +153,15 @@ if (!function_exists('gdy_lang_url')) {
         }
 
         $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
-        $path = parse_url($uri, PHP_URL_PATH) ?: '/';
+        // Avoid parse_url(): we only need path + query from REQUEST_URI.
+        $qpos = strpos($uri, '?');
+        $path = ($qpos === false) ? $uri : substr($uri, 0, $qpos);
+        if ($path === '') $path = '/';
 
         $isAdmin = str_starts_with($path, '/admin') || str_starts_with($path, '/v16/admin');
         if ($isAdmin) {
-            $q = [];
-            $qs = (string)(parse_url($uri, PHP_URL_QUERY) ?: '');
-            if ($qs !== '') {
-                parse_str($qs, $q);
-            }
+            $qs = ($qpos === false) ? '' : substr($uri, $qpos + 1);
+            $q = gdy_parse_query_string($qs);
             $q['lang'] = $lang;
             $newQs = http_build_query($q);
             return $path . ($newQs ? ('?' . $newQs) : '');

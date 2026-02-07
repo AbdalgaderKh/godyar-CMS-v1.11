@@ -26,7 +26,7 @@ if ($pdo instanceof PDO) {
         if (function_exists('gdy_load_settings')) {
             $rawSettings = gdy_load_settings($pdo, true);
         } else {
-            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'value';
+            $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value';
             $stmt = $pdo->query("SELECT setting_key, {$col} AS v FROM settings");
             $rawSettings = $stmt ? ($stmt->fetchAll(PDO::FETCH_KEY_PAIR) ?: []) : [];
         }

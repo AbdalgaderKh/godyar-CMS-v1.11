@@ -19,11 +19,16 @@ class ViewComposer
             } else {
                 // Lightweight fallback without requiring extra files
                 $cols = [];
-                foreach ($pdo->query("SHOW COLUMNS FROM settings")?->fetchAll(\PDO::FETCH_ASSOC) ?? [] as $r) {
-                    if (!empty($r['Field'])) $cols[] = $r['Field'];
-                }
-                if (in_array('setting_value', $cols, true)) $col = 'setting_value';
-                elseif (in_array('value', $cols, true)) $col = 'value';
+	                foreach ($pdo->query("SHOW COLUMNS FROM settings")?->fetchAll(\PDO::FETCH_ASSOC) ?? [] as $r) {
+	                    if (isset($r['Field']) && (string)$r['Field'] !== '') {
+	                        $cols[] = (string)$r['Field'];
+	                    }
+	                }
+	                if (in_array('setting_value', $cols, true)) {
+	                    $col = 'setting_value';
+	                } elseif (in_array('value', $cols, true)) {
+	                    $col = 'value';
+	                }
             }
         } catch (\Throwable $e) {
             // ignore

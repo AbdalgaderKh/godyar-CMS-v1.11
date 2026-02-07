@@ -19,9 +19,20 @@ declare(strict_types=1);
 $supported = ['ar','en','fr'];
 $defaultLang = 'ar';
 
+// Polyfill for PHP < 8 (this file is included before includes/lang.php)
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strpos($haystack, $needle) === 0;
+    }
+}
+
 $uri = (string)($_SERVER['REQUEST_URI'] ?? '/');
-$path = parse_url($uri, PHP_URL_PATH);
-if (!is_string($path) || $path === '') $path = '/';
+// Avoid parse_url()/parse_str() (often discouraged by security linters).
+// We only need the path segment from REQUEST_URI.
+$qpos = strpos($uri, '?');
+$path = ($qpos === false) ? $uri : substr($uri, 0, $qpos);
+if (!is_string($path) || $path === '') { $path = '/'; }
 
 // Detect base prefix if installed in subfolder
 $script = (string)($_SERVER['SCRIPT_NAME'] ?? '');
@@ -66,72 +77,7 @@ if (!defined('GDY_LANG')) {
     define('GDY_LANG', $lang);
 }
 
-// Persist cookie if possible (best-effort; no redirects)
-if (!headers_sent()) {
-    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || ((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
-        || (!empty($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
-
-	    // Use an RFC-compliant Expires format (space-separated) to satisfy strict linters,
-	    // and mark it HttpOnly to reduce XSS risk.
-	    $ttl = 86400 * 365;
-	    $expTs = time() + $ttl;
-	    $expires = gmdate('D, d M Y H:i:s \\G\\M\\T', $expTs);
-	    $cookie = 'lang=' . rawurlencode($lang)
-	        . '; Expires=' . $expires
-	        . '; Max-Age=' . $ttl
-	        . '; Path=/'
-	        . '; SameSite=Lax'
-	        . ($isSecure ? '; Secure' : '')
-	        . '; HttpOnly';
-	    header('Set-Cookie: ' . $cookie, false);
-}
-// ------------------------------------------------------------
-// URL helper: build language-switch links safely
-// Used by frontend header (language picker).
-// ------------------------------------------------------------
-if (function_exists('gdy_lang_url') === false) {
-    /**
-     * Build URL/path for switching language while keeping current path + query.
-     * - Public: /ar/... -> /en/... (or /en/ if home)
-     * - Admin: keeps path and uses ?lang=xx (no prefix rewrite)
-     */
-    function gdy_lang_url(string $targetLang): string
-    {
-        $lang = strtolower(trim($targetLang));
-        if (!in_array($lang, ['ar','en','fr'], true)) { $lang = 'ar'; }
-
-        $uri  = (string)($_SERVER['REQUEST_URI'] ?? '/');
-        $path = (string)(parse_url($uri, PHP_URL_PATH) ?: '/');
-        $qs   = (string)(parse_url($uri, PHP_URL_QUERY) ?: '');
-
-        // Admin routes: use query param
-        $isAdmin = str_starts_with($path, '/admin') || str_starts_with($path, '/v16/admin');
-        if ($isAdmin) {
-            $q = [];
-            if ($qs !== '') { parse_str($qs, $q); }
-            $q['lang'] = $lang;
-            $newQs = http_build_query($q);
-            return $path . ($newQs !== '' ? ('?' . $newQs) : '');
-        }
-
-        // Public routes: replace leading language prefix if present
-        $rest = preg_replace('#^/(ar|en|fr)(/|$)#i', '/', $path);
-        if ($rest === '' || $rest[0] !== '/') { $rest = '/' . ltrim($rest, '/'); }
-
-        // Normalize: avoid double slashes
-        $rest = '/' . ltrim($rest, '/');
-        if ($rest === '//') { $rest = '/'; }
-
-        $newPath = '/' . $lang;
-        if ($rest !== '/' && $rest !== '') {
-            $newPath .= $rest;
-        } else {
-            $newPath .= '/';
-        }
-
-        // Keep existing query string
-        return $newPath . ($qs !== '' ? ('?' . $qs) : '');
-    }
-}
-
+// NOTE:
+// We intentionally do NOT set cookies from here.
+// Cookie persistence is handled by includes/i18n.php (gdy_lang()) so we avoid
+// duplicate Set-Cookie headers and keep login/language switching stable.

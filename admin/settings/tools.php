@@ -39,7 +39,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'export') {
         if (($pdo instanceof PDO) === false) {
             throw new RuntimeException('DB not available');
         }
-        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'value';
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($pdo) : 'setting_value';
         $rows = $pdo->query("SELECT setting_key, {$col} AS value FROM settings ORDER BY setting_key ASC")->fetchAll(PDO::FETCH_ASSOC);
         $out = [];
         foreach ($rows as $r) {

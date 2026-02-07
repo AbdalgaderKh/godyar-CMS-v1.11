@@ -28,7 +28,7 @@ private function loadAllCached(int $ttl = 600): array
 
         $col = function_exists('gdy_settings_value_column')
             ? gdy_settings_value_column($this->pdo)
-            : 'value';
+            : 'setting_value';
 
         // Use an alias to keep downstream logic unchanged.
         $st = $this->pdo->query("SELECT setting_key, {$col} AS value FROM settings");
@@ -66,7 +66,7 @@ private function loadAllCached(int $ttl = 600): array
 
     public function setValue(string $key, $value): void
     {
-        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'value';
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'setting_value';
         $hasUpdatedAt = false;
         try {
             $cols = $this->pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
@@ -86,14 +86,14 @@ gdy_db_upsert(
                 'updated_at'  => $now,
             ],
             ['setting_key'],
-            array_filter([$col, $hasUpdatedAt ? 'updated_at' : null])
+	            array_filter([$col, ($hasUpdatedAt === true) ? 'updated_at' : null])
         );
 }
 
     /** @param array<string, mixed> $pairs */
     public function setMany(array $pairs): void
     {
-        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'value';
+        $col = function_exists('gdy_settings_value_column') ? gdy_settings_value_column($this->pdo) : 'setting_value';
         $hasUpdatedAt = false;
         try {
             $cols = $this->pdo->query("SHOW COLUMNS FROM settings")->fetchAll(PDO::FETCH_COLUMN);
@@ -116,7 +116,7 @@ foreach ($pairs as $k => $v) {
                         'updated_at'  => $now,
                     ],
                     ['setting_key'],
-                    array_filter([$col, $hasUpdatedAt ? 'updated_at' : null])
+	                    array_filter([$col, ($hasUpdatedAt === true) ? 'updated_at' : null])
                 );
             }
 $this->pdo->commit();

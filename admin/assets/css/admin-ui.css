@@ -243,7 +243,7 @@ svg.gdy-icon{
   opacity:.9;
 }
 /* Hard safety net: prevent any inline <svg> (FontAwesome sprite) from defaulting to 300x150 inside Admin */
-.admin-shell svg:not([data-chart]):not(.recharts-surface):not(.chart):not(.chartjs-render-monitor){
+.admin-shell svg:not([data-chart], .recharts-surface, .chart, .chartjs-render-monitor){
   width: 1.2em;
   height: 1.2em;
   max-width: 26px;

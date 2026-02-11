@@ -35,12 +35,12 @@ class Security
             && hash_equals($_SESSION['csrf_token'], $token);
     }
 
-        public static function headers(): void
+    public static function headers(): void
         {
-            header('X-Frame-Options: SAMEORIGIN');
-            header('X-Content-Type-Options: nosniff');
-            header('Referrer-Policy: strict-origin-when-cross-origin');
-            header('X-XSS-Protection: 1; mode=block');
+        header('X-Frame-Options: SAMEORIGIN');
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: strict-origin-when-cross-origin');
+        header('X-XSS-Protection: 1; mode=block');
 
         $strict = getenv('CSP_STRICT') === '1'
             || strtolower((string) getenv('CSP_STRICT')) === 'true';
@@ -65,10 +65,10 @@ class Security
                  . "style-src 'self' 'nonce-{$nonce}'; style-src-elem 'self' https://www.gstatic.com; "
                  . "script-src 'self' 'nonce-{$nonce}';";
 
-            header('Content-Security-Policy: ' . $csp);
+        header('Content-Security-Policy: ' . $csp);
         } else {
             // Legacy (compatible with existing templates)
-            header(
+        header(
                 "Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; "
               . "frame-ancestors 'self'; frame-src 'self'; img-src 'self' data: blob: https:; "
               . "style-src 'self' 'unsafe-inline' https:; style-src-elem 'self' 'unsafe-inline' https: https://www.gstatic.com; "

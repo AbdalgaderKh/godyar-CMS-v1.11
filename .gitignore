@@ -1,9 +1,22 @@
+# Environment / secrets
 .env
-/storage/cache/*
-/storage/logs/*
-/cache/*
-/uploads/*
-/webroot/uploads/*
-/assets/uploads/*
-*.log
+.env.*
+
+# Runtime
+storage/logs/*
+storage/cache/*
+cache/*
+admin/cache/*
+
+# Uploads
+uploads/*
+webroot/uploads/*
+assets/uploads/*
+admin/uploads/*
+
+# Vendor (if you install via Composer)
+vendor/
+
+# OS
 .DS_Store
+Thumbs.db

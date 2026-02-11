@@ -4,6 +4,44 @@
 RewriteEngine On
 RewriteBase /
 
+
+# =========================
+# Godyar CMS — Security hardening
+# =========================
+Options -Indexes
+
+# Block access to hidden files (except .well-known)
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule (^|/)\. - [F]
+
+# Block sensitive files
+<FilesMatch "(?i)^(\.env|\.env\..*|composer\.(json|lock)|package\.(json|lock)|phpunit\.xml|\.gitignore|\.gitattributes|\.htaccess\.bak|\.DS_Store)$">
+  Require all denied
+</FilesMatch>
+
+# Block internal directories that should never be served directly
+RewriteRule ^(vendor|includes|src|database|docs|storage|cache|tools)(/|$) - [F,L]
+
+# Basic security headers (Apache)
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Cache static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/png  "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType text/css   "access plus 14 days"
+  ExpiresByType application/javascript "access plus 14 days"
+  ExpiresByType font/woff2 "access plus 180 days"
+</IfModule>
+
 # Serve existing files/directories as-is
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

@@ -54,13 +54,22 @@ final class FeedImportService
                 $hashBase = ($link !== '') ? $link : ($title . '|' . $date . '|' . (string)($feed['id'] ?? '0'));
                 $hash = hash('sha256', $hashBase);
 
-                
+
                 if ($this->hasImported($hash)) { $skipped++; continue; }
 
                 // 2) Already exists in DB (by link/title)? Mark as imported to prevent future duplicates.
                 $existingId = $this->findExistingNewsId($link, $title, $hash);
                 if ($existingId > 0) {
-                    try { $this->markImported($existingId, (int)$feed['id'], $hash, $link); } catch (Exception $e) { error_log('[FeedImportService] ' . $e->getMessage()); }
+                    try {
+                        $this->markImported(
+                            $existingId,
+                            (int) ($feed['id'] ?? 0),
+                            $hash,
+                            $link
+                        );
+                    } catch (Exception $e) {
+                        error_log('[FeedImportService] ' . $e->getMessage());
+                    }
                     $skipped++;
                     continue;
                 }

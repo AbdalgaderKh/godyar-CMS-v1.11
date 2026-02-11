@@ -65,15 +65,15 @@ class Security
                  . "style-src 'self' 'nonce-{$nonce}'; style-src-elem 'self' https://www.gstatic.com; "
                  . "script-src 'self' 'nonce-{$nonce}';";
 
-        header('Content-Security-Policy: ' . $csp);
+            header('Content-Security-Policy: ' . $csp);
         } else {
             // Legacy (compatible with existing templates)
-        header(
+            header(
                 "Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; "
-              . "frame-ancestors 'self'; frame-src 'self'; img-src 'self' data: blob: https:; "
-              . "style-src 'self' 'unsafe-inline' https:; style-src-elem 'self' 'unsafe-inline' https: https://www.gstatic.com; "
-              . "script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; font-src 'self' data: https:; "
-              . "media-src 'self' data: blob:; form-action 'self'; upgrade-insecure-requests"
+                    . "frame-ancestors 'self'; frame-src 'self'; img-src 'self' data: blob: https:; "
+                    . "style-src 'self' 'unsafe-inline' https:; style-src-elem 'self' 'unsafe-inline' https: https://www.gstatic.com; "
+                    . "script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; font-src 'self' data: https:; "
+                    . "media-src 'self' data: blob:; form-action 'self'; upgrade-insecure-requests"
             );
         }
     }

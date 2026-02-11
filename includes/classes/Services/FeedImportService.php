@@ -49,21 +49,18 @@ final class FeedImportService
                 $link    = self::normalizeLink($linkRaw);
 
                 $title = (string)($it['title'] ?? '');
+                $date = (string)($it['date'] ?? ($it['pubDate'] ?? ''));
                 // Hash is based on normalized link; if missing, fall back to a stable fingerprint
                 $hashBase = ($link !== '') ? $link : ($title . '|' . $date . '|' . (string)($feed['id'] ?? '0'));
                 $hash = hash('sha256', $hashBase);
 
-                // Hash is based on normalized link; if missing, fall back to a stable fingerprint
-                $hashBase = ($link !== '') ? $link : ($title . '|' . $date . '|' . (string)($feed['id'] ?? '0'));
-                $hash = hash('sha256', $hashBase);
-
-        curl_close($ch);
+                
                 if ($this->hasImported($hash)) { $skipped++; continue; }
 
                 // 2) Already exists in DB (by link/title)? Mark as imported to prevent future duplicates.
                 $existingId = $this->findExistingNewsId($link, $title, $hash);
                 if ($existingId > 0) {
-                    try { $this->markImported($existingId, (int)$feed['id'], $hash, $link); } catch (Exception $e) {}
+                    try { $this->markImported($existingId, (int)$feed['id'], $hash, $link); } catch (Exception $e) { error_log('[FeedImportService] ' . $e->getMessage()); }
                     $skipped++;
                     continue;
                 }
@@ -463,8 +460,6 @@ final class FeedImportService
         ]);
         $resp = curl_exec($ch);
         $status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
         if (($resp === false) || (empty($status) === false) >= 400) {
             error_log('[FeedImportService] OpenAI error status ' . $status . ' resp: ' . (string)$resp);
             return null;

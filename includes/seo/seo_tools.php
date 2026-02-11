@@ -93,8 +93,8 @@ if (!function_exists('gdy_ping_sitemap')) {
         // Bing ping
         $b = 'https://www.bing.com/ping?sitemap=' . rawurlencode($sitemapUrl);
 
-        try { gdy_http_get($g, 4); } catch (Exception $e) {}
-        try { gdy_http_get($b, 4); } catch (Exception $e) {}
+        try { gdy_http_get($g, 4); } catch (Exception $e) { error_log('[SEO] ' . $e->getMessage()); }
+        try { gdy_http_get($b, 4); } catch (Exception $e) { error_log('[SEO] ' . $e->getMessage()); }
     }
 }
 
@@ -139,8 +139,8 @@ if (!function_exists('gdy_seo_notify_publish')) {
         $base = rtrim((string)base_url(), '/');
         $sitemap = $base . '/sitemap.xml';
         $sitemapNews = $base . '/sitemap-news.xml';
-        try { gdy_ping_sitemap($sitemap); } catch (Exception $e) {}
+        try { gdy_ping_sitemap($sitemap); } catch (Exception $e) { error_log('[SEO] ' . $e->getMessage()); }
         // 2) IndexNow (Bing and some other engines)
-        try { gdy_indexnow_submit([$publicUrl], $base); } catch (Exception $e) {}
+        try { gdy_indexnow_submit([$publicUrl], $base); } catch (Exception $e) { error_log('[SEO] ' . $e->getMessage()); }
     }
 }

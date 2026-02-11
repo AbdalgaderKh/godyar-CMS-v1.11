@@ -1,17 +1,28 @@
-# Codacy configuration to avoid false-positives on view/templates and legacy scripts.
-# We keep analysis focused on core logic (src/, includes/classes/, includes/services/).
+# Codacy configuration for Godyar CMS (v1.11)
+# Notes:
+# - This project is NOT WordPress. Input/escaping rules differ.
+# - We exclude template-heavy folders to reduce false positives and noisy duplication/complexity signals.
 exclude_paths:
-  - "admin/**"
+  - "vendor/**"
+  - "storage/**"
+  - "cache/**"
+  - "logs/**"
+  - "uploads/**"
+  - "webroot/uploads/**"
+  - "assets/uploads/**"
+
   - "frontend/views/**"
   - "frontend/templates/**"
-  - "frontend/views/templates/**"
-  - "public/**"
-  - "seo/**"
-  - "oauth/**"
-  - "plugins/**"
+  - "admin/frontend/views/**"
+  - "admin/**/views/**"
+
   - "tools/**"
-  - "webroot/**"
-  - "assets/**"
-  - "uploads/**"
-  - "cache/**"
-  - "storage/**"
+  - "oauth/**"
+  - "seo/**"
+  - "sitemap*.php"
+  - "rss*.php"
+  - "og_image.php"
+
+  - ".github/**"
+  - "**/*.min.js"
+  - "**/*.min.css"

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="Godyar">
+  <description>PHPCS rules for Godyar CMS</description>
+
+  <rule ref="PSR12"/>
+
+  <exclude-pattern>vendor/*</exclude-pattern>
+  <exclude-pattern>storage/*</exclude-pattern>
+  <exclude-pattern>cache/*</exclude-pattern>
+  <exclude-pattern>logs/*</exclude-pattern>
+  <exclude-pattern>uploads/*</exclude-pattern>
+  <exclude-pattern>webroot/uploads/*</exclude-pattern>
+  <exclude-pattern>assets/uploads/*</exclude-pattern>
+
+  <exclude-pattern>frontend/views/*</exclude-pattern>
+  <exclude-pattern>frontend/templates/*</exclude-pattern>
+  <exclude-pattern>admin/*</exclude-pattern>
+  <exclude-pattern>tools/*</exclude-pattern>
+  <exclude-pattern>oauth/*</exclude-pattern>
+  <exclude-pattern>seo/*</exclude-pattern>
+</ruleset>

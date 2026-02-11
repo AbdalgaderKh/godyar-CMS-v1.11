@@ -1,0 +1,17 @@
+# Codacy configuration to avoid false-positives on view/templates and legacy scripts.
+# We keep analysis focused on core logic (src/, includes/classes/, includes/services/).
+exclude_paths:
+  - "admin/**"
+  - "frontend/views/**"
+  - "frontend/templates/**"
+  - "frontend/views/templates/**"
+  - "public/**"
+  - "seo/**"
+  - "oauth/**"
+  - "plugins/**"
+  - "tools/**"
+  - "webroot/**"
+  - "assets/**"
+  - "uploads/**"
+  - "cache/**"
+  - "storage/**"

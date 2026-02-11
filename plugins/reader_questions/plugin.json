@@ -1,9 +1,0 @@
-{
-  "name": "Reader Questions",
-  "slug": "reader_questions",
-  "enabled": true,
-  "version": "1.0.1",
-  "description": "Reader questions / Ask the writer (moderation + anti-spam basics).",
-  "author": "Godyar",
-  "schema_version": 3
-}

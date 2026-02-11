@@ -1,0 +1,9 @@
+.env
+/storage/cache/*
+/storage/logs/*
+/cache/*
+/uploads/*
+/webroot/uploads/*
+/assets/uploads/*
+*.log
+.DS_Store

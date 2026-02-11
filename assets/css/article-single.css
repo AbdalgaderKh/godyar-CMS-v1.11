@@ -1,0 +1,51 @@
+/* Article single page layout (safe defaults) */
+.article-single{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.article-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+  font-size:14px;
+  color:#777;
+  margin-bottom:20px;
+}
+
+.article-image{
+  width:100%;
+  margin-bottom:20px;
+  overflow:hidden;
+  border-radius:12px;
+  background:#f3f4f6;
+}
+
+.article-image img{
+  width:100%;
+  height:auto;
+  display:block;
+  max-height:520px;
+  object-fit:contain;
+}
+
+/* cover mode if enabled in template */
+.article-image.is-cover img{
+  height:420px;
+  max-height:none;
+  object-fit:cover;
+}
+
+.article-content img{
+  max-width:100%;
+  height:auto;
+  display:block;
+  margin:12px auto;
+  border-radius:8px;
+}
+
+@media (max-width:768px){
+  .article-image.is-cover img{height:240px;}
+  .article-image img{max-height:320px;}
+}

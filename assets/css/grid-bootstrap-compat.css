@@ -1,0 +1,79 @@
+/* =========================================================
+   grid-bootstrap-compat.css
+   Adds missing Bootstrap-like utilities used by templates:
+   .col-*, .col-md-*, gutters (.g-*), and ratio helpers.
+   Designed to be small and safe to load alongside grid.css
+   ========================================================= */
+
+:root { --gdy-gutter: 1rem; }
+
+/* Gutters */
+.row { --gdy-gutter-x: var(--gdy-gutter); --gdy-gutter-y: var(--gdy-gutter); }
+.g-0 { --gdy-gutter-x: 0; --gdy-gutter-y: 0; }
+.g-1 { --gdy-gutter-x: .25rem; --gdy-gutter-y: .25rem; }
+.g-2 { --gdy-gutter-x: .5rem;  --gdy-gutter-y: .5rem;  }
+.g-3 { --gdy-gutter-x: 1rem;  --gdy-gutter-y: 1rem;  }
+.g-4 { --gdy-gutter-x: 1.5rem; --gdy-gutter-y: 1.5rem; }
+
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  margin-right: calc(var(--gdy-gutter-x) * -0.5);
+  margin-left:  calc(var(--gdy-gutter-x) * -0.5);
+  margin-top:   calc(var(--gdy-gutter-y) * -1);
+}
+.row > *{
+  box-sizing:border-box;
+  padding-right: calc(var(--gdy-gutter-x) * 0.5);
+  padding-left:  calc(var(--gdy-gutter-x) * 0.5);
+  margin-top:    var(--gdy-gutter-y);
+  min-width: 0;
+}
+
+/* Base cols */
+.col{ flex: 1 0 0%; }
+.col-12{ flex: 0 0 auto; width: 100%; }
+.col-6 { flex: 0 0 auto; width: 50%; }
+.col-4 { flex: 0 0 auto; width: 33.333333%; }
+.col-3 { flex: 0 0 auto; width: 25%; }
+
+/* Medium breakpoint */
+@media (min-width: 768px){
+  .col-md-6{ flex: 0 0 auto; width: 50%; }
+  .col-md-4{ flex: 0 0 auto; width: 33.333333%; }
+  .col-md-3{ flex: 0 0 auto; width: 25%; }
+  .col-md-12{ flex: 0 0 auto; width: 100%; }
+}
+
+/* Ratio helpers */
+.ratio{
+  position: relative;
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+.ratio::before{
+  content:"";
+  display:block;
+  padding-top: var(--gdy-ratio, 56.25%); /* default 16:9 */
+}
+.ratio-1x1{ --gdy-ratio: 100%; }
+.ratio-16x9{ --gdy-ratio: 56.25%; }
+.ratio-4x3{ --gdy-ratio: 75%; }
+.ratio > img,
+.ratio > video,
+.ratio > iframe,
+.ratio > .ratio-inner{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+/* Ensure images behave inside ratio even with inline styles */
+.ratio img{
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover;
+  display:block;
+}

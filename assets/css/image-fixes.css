@@ -1,0 +1,160 @@
+/* assets/css/image-fixes.css */
+/* Professional MediaFix v20260211
+   هدفه: إيقاف أي صورة "تفلت" وتصبح ضخمة سواء كانت غلافاً أو داخل المحتوى أو داخل بطاقات.
+   يعتمد على selectors واسعة + !important لكسر أي inline legacy قديم. */
+
+/* منع الانزلاق الأفقي */
+html, body { max-width: 100% !important; overflow-x: hidden !important; }
+
+/* قاعدة عامة */
+img { max-width: 100% !important; height: auto !important; }
+
+/* نطاق المحتوى */
+#mainContent, .page-shell, .container { max-width: 100%; }
+
+/* أي عنصر قد يسبب تمدد */
+#mainContent * { max-width: 100%; }
+
+/* ====== Bootstrap ratio / cards thumbs ====== */
+.ratio{ overflow:hidden !important; }
+.ratio > img,
+.ratio img{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display:block !important;
+}
+
+/* ====== Article/News cover hero ====== */
+/* نغطي معظم الأسماء المحتملة حتى لو تغيّر القالب */
+.article-cover, .article-hero, .news-hero, .post-hero,
+.article-cover-card, .article-cover-inner,
+.gdy-article-cover, .gdy-news-cover{
+  width:100% !important;
+  max-width:100% !important;
+}
+
+.article-cover-inner,
+.article-hero,
+.news-hero,
+.gdy-article-cover{
+  overflow:hidden !important;
+  border-radius: 14px;
+  background: #0b1220;
+  /* ارتفاع احترافي لا يسمح بالتضخيم */
+  max-height: clamp(220px, 42vw, 520px) !important;
+}
+
+.article-cover-inner img,
+.article-hero img,
+.news-hero img,
+.gdy-article-cover img{
+  width: 100% !important;
+  height: 100% !important;
+  max-height: clamp(220px, 42vw, 520px) !important;
+  object-fit: cover !important;
+  display:block !important;
+}
+
+/* ====== Images inside article body ====== */
+.article-body, .article-content, .post-content, .news-content{
+  overflow:hidden !important;
+}
+
+.article-body img,
+.article-content img,
+.post-content img,
+.news-content img{
+  display:block;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* لو جاءت الصورة من المحرر بعرض ثابت/ستايل */
+.article-body img[width],
+.article-body img[height],
+.article-content img[width],
+.article-content img[height],
+.post-content img[width],
+.post-content img[height],
+.news-content img[width],
+.news-content img[height],
+img[width], img[height]{
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.article-body img[style*="width"],
+.article-content img[style*="width"],
+.post-content img[style*="width"],
+.news-content img[style*="width"]{
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* تحسين مظهر صور المقال */
+.article-body img,
+.article-content img,
+.post-content img,
+.news-content img{
+  border-radius: 10px;
+  margin: 14px auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+}
+
+/* جداول/iframes داخل المقال */
+.article-body table, .article-content table, .post-content table, .news-content table{
+  width:100% !important;
+  max-width:100% !important;
+  display:block;
+  overflow-x:auto;
+}
+.article-body iframe, .article-content iframe, .post-content iframe, .news-content iframe{
+  max-width:100% !important;
+}
+
+/* موبايل */
+@media (max-width: 768px){
+  .article-cover-inner,
+  .article-hero,
+  .news-hero,
+  .gdy-article-cover{
+    border-radius: 10px;
+    max-height: clamp(200px, 60vw, 420px) !important;
+  }
+  .article-cover-inner img,
+  .article-hero img,
+  .news-hero img,
+  .gdy-article-cover img{
+    max-height: clamp(200px, 60vw, 420px) !important;
+  }
+}
+
+
+/* ====== Fix: image_fallback.js may add a second <img> without sizing ====== */
+img[data-gdy-fallback-bound],
+img[data-gdy-hide-onerror]{
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* If inside ratio/card thumbs, keep cover sizing */
+.ratio img[data-gdy-fallback-bound],
+.ratio img[data-gdy-hide-onerror],
+.card img[data-gdy-fallback-bound],
+.card img[data-gdy-hide-onerror]{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+
+/* GDY_DUP_FIX_20260211: if fallback script injects a duplicate image in the same media container, JS will hide it.
+   This CSS prevents duplicate from stretching layouts before JS runs (safe: keeps it constrained). */
+img[data-gdy-fallback-bound],
+img[data-gdy-hide-onerror]{
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}

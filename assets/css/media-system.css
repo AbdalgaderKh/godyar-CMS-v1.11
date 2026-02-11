@@ -1,0 +1,82 @@
+/* =========================================================
+   media-system.css
+   Professional media sizing rules for news thumbnails + article images.
+   Works across AR/EN/FR without relying on Bootstrap.
+   ========================================================= */
+
+/* Global: never overflow the layout */
+img, video{
+  max-width: 100%;
+  height: auto;
+}
+
+/* If width/height attributes exist, keep them responsive */
+img[width], img[height]{
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* Home/Listing thumbnails */
+article.card img,
+.gdy-card-thumb img,
+.post-thumbnail img,
+.post-thumb img,
+.news-thumb img{
+  display:block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* Ensure card thumb container actually constrains the image */
+.gdy-card-thumb,
+.post-thumbnail,
+.post-thumb,
+.news-thumb{
+  overflow:hidden;
+  border-radius: 14px;
+}
+
+/* Article cover */
+.article-cover-card{ width: 100%; }
+.article-cover-inner{
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  /* modern browsers */
+  aspect-ratio: 16 / 9;
+  background: rgba(2,6,23,.04);
+}
+.article-cover-inner img{
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display:block;
+}
+
+/* Fallback for browsers without aspect-ratio */
+@supports not (aspect-ratio: 16 / 9){
+  .article-cover-inner{ position: relative; }
+  .article-cover-inner::before{ content:""; display:block; padding-top:56.25%; }
+  .article-cover-inner img{ position:absolute; inset:0; }
+}
+
+/* Article content images: readable max width */
+.article-content img,
+.news-content img,
+.content img{
+  max-width: min(100%, 860px) !important;
+  height: auto !important;
+  display:block;
+  margin: 16px auto;
+  border-radius: 12px;
+}
+
+/* RTL nuance (keep images aligned naturally) */
+html[dir="rtl"] .article-content img,
+html[dir="rtl"] .news-content img,
+html[dir="rtl"] .content img{
+  margin-right: auto;
+  margin-left: 0;
+}

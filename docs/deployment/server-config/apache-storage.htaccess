@@ -1,0 +1,3 @@
+# ضع هذا الملف داخل /storage
+Options -Indexes
+Require all denied

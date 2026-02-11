@@ -1,0 +1,67 @@
+/*
+  Godyar CMS - app.css (compat bundle)
+  -----------------------------------
+  الهدف: منع أخطاء 404/MIME لملف app.css في الصفحات التي تستدعيه.
+  لا يغير الهوية البصرية؛ فقط يجمع الملفات الحالية عبر @import.
+*/
+
+@import url('/assets/css/compat.css');
+@import url('/assets/css/front.css');
+@import url('/assets/css/hotfix-icons.css');
+@import url('/assets/css/godyar_hotfix_footer_icons.css');
+
+/* GODYAR_CSS_AUDIT_PATCH_v1 */
+/* Global media safety net */
+img { max-width: 100%; height: auto; }
+
+/* Prevent gigantic featured images in articles/posts/news */
+.article-image img,
+.article-single .article-image img,
+.article-content img,
+.article-body img,
+.post-content img,
+.news-content img,
+.single img,
+main .article-image img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Featured image default: contain (no crop) with max-height */
+.article-image {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f3f4f6;
+}
+.article-image img {
+  max-height: 520px;
+  object-fit: contain;
+}
+
+/* Optional cover mode */
+.article-image.is-cover img {
+  height: 420px;
+  max-height: none;
+  object-fit: cover;
+}
+
+/* Responsive tables inside content */
+.article-content table,
+.post-content table,
+.news-content table {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .article-image.is-cover img { height: 240px; }
+  .article-image img { max-height: 320px; }
+}
+/* END PATCH */

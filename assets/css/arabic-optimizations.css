@@ -1,0 +1,28 @@
+/* assets/css/arabic-optimizations.css */
+/* Hotfix v20260211_2 */
+
+html[lang="ar"], body[dir="rtl"]{
+  font-family: "Cairo","Noto Naskh Arabic",Tahoma,Arial,sans-serif;
+  line-height: 1.85;
+}
+
+body[dir="rtl"] .article-content{
+  font-size: 1.05rem;
+  line-height: 1.95;
+  word-spacing: .06em;
+}
+
+body[dir="rtl"] h1,
+body[dir="rtl"] h2,
+body[dir="rtl"] h3,
+body[dir="rtl"] h4,
+body[dir="rtl"] h5,
+body[dir="rtl"] h6{
+  line-height: 1.35;
+}
+
+body[dir="rtl"] blockquote{
+  border-right: 4px solid currentColor;
+  border-left: 0;
+  padding: 12px 16px;
+}

@@ -1,0 +1,47 @@
+/* ===================================================
+   Article Image Guard – Global & Future-proof
+   =================================================== */
+
+/* أي صورة داخل محتوى مقال/خبر */
+.article img,
+.article-content img,
+.article-body img,
+.news-article img,
+.news-content img,
+.post img,
+.post-content img,
+.single img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    /* يمنع التضخم */
+    max-height: 420px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+
+    margin: 0 auto 16px auto;
+    border-radius: 12px;
+}
+
+/* حماية إضافية لو الصورة مباشرة داخل main */
+main img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* للجوال */
+@media (max-width: 768px) {
+    .article img,
+    .article-content img,
+    .article-body img,
+    .news-article img,
+    .news-content img,
+    .post img,
+    .post-content img,
+    .single img {
+        max-height: 240px;
+        aspect-ratio: 16 / 10;
+    }
+}
